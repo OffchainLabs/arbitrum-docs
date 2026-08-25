@@ -33,14 +33,14 @@ Call all four methods on the <a data-quicklook-from="precompile">precompile</a> 
 | ----------------------------------------------- | ------------------------------------------------------------------ | ------------------- |
 | `setL1PricingInertia(uint64 inertia)`           | How much the algorithm smooths each price adjustment               | `10`                |
 | `setL1PricingEquilibrationUnits(uint256 units)` | The time horizon, in data units, for eliminating the surplus       | `160,000,000`       |
-| `setL1BaseFeeEstimateInertia(uint64 inertia)`   | How slowly ArbOS updates its estimate of the parent chain base fee | Set at genesis      |
+| `setL1BaseFeeEstimateInertia(uint64 inertia)`   | How slowly ArbOS updates its estimate of the parent chain base fee |        `10`         |
 | `setAmortizedCostCapBips(uint64 cap)`           | A ceiling on the amortized cost the chain charges, in basis points | `0`, meaning no cap |
 
 The `160,000,000` default for equilibration units applies from ArbOS 6 onward. Chains initialized before ArbOS 6 used `96,000,000`.
 
 <VanillaAdmonition type="warning">
 
-`setL1PricingInertia` has no matching getter. You cannot read the current value back from any <a data-quicklook-from="precompile">precompile</a>, so record the value whenever you change it.
+`setL1PricingInertia` and `setL1BaseFeeEstimateInertia` write the same stored value. To read it back, call `ArbGasInfo.getL1BaseFeeEstimateInertia()`.
 
 `ArbGasInfo.getPricingInertia()` does not return this value. It returns the congestion pricing inertia set by `setL2GasPricingInertia`, which is a different parameter for a different algorithm. Refer to [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx#parameters-that-only-the-single-gas-target-model-uses).
 
@@ -48,7 +48,7 @@ The `160,000,000` default for equilibration units applies from ArbOS 6 onward. C
 
 ## Read the current values
 
-Three of the four parameters have a getter on `ArbGasInfo`, at address `0x000000000000000000000000000000000000006c`:
+All of these parameters can be read back through `ArbGasInfo`, at address `0x000000000000000000000000000000000000006c`. The inertia value set by either setter is returned by `getL1BaseFeeEstimateInertia()`:
 
 ```shell
 cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getL1PricingEquilibrationUnits()"

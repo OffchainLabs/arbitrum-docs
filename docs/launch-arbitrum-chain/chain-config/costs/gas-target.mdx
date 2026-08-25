@@ -45,7 +45,7 @@ Before you change anything, find out which pricing model your chain runs. The mo
 | Single gas target    | `ArbOwner.setSpeedLimit(uint64 limit)`           | `ArbGasInfo.getGasAccountingParams()`   |
 | Multiple gas targets | `ArbOwner.setGasPricingConstraints(uint64[3][])` | `ArbGasInfo.getGasPricingConstraints()` |
 
-Call `ArbGasInfo.getGasPricingConstraints()` first. If it returns an empty array, your chain uses a single gas target and `setSpeedLimit` applies. If it returns one or more constraints, your chain uses multiple gas targets.
+Call `ArbGasInfo.getGasPricingConstraints()` first (available from ArbOS 51 onward; on earlier versions the call reverts and your chain always uses a single gas target). If it returns an empty array, your chain uses a single gas target and `setSpeedLimit` applies. If it returns one or more constraints, your chain uses multiple gas targets.
 
 <VanillaAdmonition type="warning">
 
