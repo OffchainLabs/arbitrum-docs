@@ -1061,14 +1061,9 @@ const sidebars = {
               label: 'BoLD overview',
             },
             {
-              type: 'link',
-              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-              label: 'Deploy a validator on testnet',
-            },
-            {
-              type: 'link',
-              href: 'https://arxiv.org/abs/2404.10491',
-              label: 'BoLD Whitepaper',
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/bold-faq',
+              label: 'FAQ',
             },
             {
               type: 'doc',
@@ -1087,8 +1082,8 @@ const sidebars = {
             },
             {
               type: 'link',
-              href: 'https://github.com/OffchainLabs/bold',
-              label: 'Specification on Github',
+              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+              label: 'Deploy a validator on testnet',
             },
           ],
         },
