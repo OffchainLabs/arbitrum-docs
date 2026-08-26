@@ -63,13 +63,19 @@ Given the mandatory delay of one hour between assertions posted onchain, and eac
 
 #### Trustless bonding pools
 
-A large upfront assertion bond is critical for discouraging malicious actors from attacking Arbitrum and spamming the network (e.g., delay attacks), especially because malicious actors will always lose challenges and their entire bond. On the other hand, requiring such a high upfront assertion bond may be prohibitive for a single honest entity to put up—especially since the cost to defend Arbitrum is proportional to the number of malicious entities and ongoing challenges at any given point in time.
+A large upfront assertion bond is critical for discouraging malicious actors from attacking Arbitrum and spamming the network (e.g., delay attacks), especially because malicious actors will always lose challenges and their entire bond. On the other hand, requiring such a high upfront assertion bond may be prohibitive for a single honest entity to put up—since the cost to defend Arbitrum is proportional to the number of malicious entities and ongoing challenges at any given point in time.
 
-To address this, there is a [contract](https://github.com/OffchainLabs/bold/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) that anyone can use to deploy a <a data-quicklook-from="trustless">trustless</a>, bonding (or staking) pool as a way of crowdsourcing funds from others who wish to help defend Arbitrum, but who may otherwise not individually be able to put up the sizeable upfront bond itself.
+To address this, there is a [staking (bond) pool contract](https://github.com/OffchainLabs/bold/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) that anyone can use to deploy a <a data-quicklook-from="trustless">trustless</a>, bonding pool as a way of crowdsourcing funds from others who wish to help defend Arbitrum, but who may otherwise not individually be able to put up the sizeable upfront bond itself.
 
-Anyone can deploy an assertion bonding pool using the `AssertionStakingPoolCreator.sol` contract as a means to crowdsource funds for bonding funds to an assertion. To defend Arbitrum using one of these pools, an entity would first deploy this pool with the assertion they believe is correct and wish to bond on to challenge an adversary's assertion. Then, anyone can verify that the claimed assertion is correct by running the inputs through their node's <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF). If other parties agree that the assertion is correct, they can deposit their funds into the contract. When enough funds have been deposited, anyone can trigger the creation of the assertion onchain to start the challenge in a trustless manner. Finally, once the dispute protocol confirms the honest parties' assertion, all involved entities will get their funds reimbursed and can withdraw.
+Anyone can deploy an assertion bonding pool using the `AssertionStakingPoolCreator.sol` contract as a means to crowdsource funds for bonding funds to an assertion. To defend Arbitrum using one of these pools, an entity would first deploy this pool with the assertion they believe is correct and wish to bond on to challenge an adversary's assertion. Then, anyone can verify that the claimed assertion is correct by running the inputs through their node's <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF).
 
-Note that with bonding pools, there is no minimum **WETH** requirement and once the entire bond amount is raised (either 3600, 555, or 79 **ETH** for Arbitrum One), then the assertion can be posted by anyone trustlessly. Additionally, there is an optional feature in the Nitro node validator software that enables both the automatic deployment of a bonding pool contract and depositing of funds to challenge an observed invalid assertion.
+If other parties agree that the assertion is correct, they can deposit their funds into the contract. When enough funds have been deposited, anyone can trigger the creation of the assertion onchain to start the challenge in a trustless manner. Finally, once the dispute protocol confirms the honest parties' assertion, all involved entities will get their funds reimbursed and can withdraw.
+
+:::note With bonding pools
+
+There is no minimum **WETH** requirement and once the entire bond amount is raised (either 3600, 555, or 79 **ETH** for Arbitrum One), then the assertion can be posted by anyone trustlessly. Additionally, there is an optional feature in the Nitro node validator software that enables both the automatic deployment of a bonding pool contract and depositing of funds to challenge an observed invalid assertion.
+
+:::
 
 Trustless bonding pools can also be created to open challenges
 and make moves on challenges without sacrificing decentralization.
@@ -86,11 +92,9 @@ Recall that a challenge is a fundamental disagreement about an assertion posted 
 
 At its core, the disagreement between validators looks something like this:
 
-- Common parent assertion: `batch 5, blockhash 0xabc`
-
-- Alice’s assertion: `batch 10, blockhash 0x123`
-
-- Bob’s assertion: `batch 10, blockhash 0x456`
+- **Common parent assertion**: `batch 5, blockhash 0xabc`
+- **Alice’s assertion**: `batch 10, blockhash 0x123`
+- **Bob’s assertion**: `batch 10, blockhash 0x456`
 
 Their disagreement is about an Arbitrum block somewhere between batch 5 and batch 10. Here’s how the actual challenge begins in this example:
 
