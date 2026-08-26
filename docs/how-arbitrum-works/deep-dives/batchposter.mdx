@@ -11,7 +11,7 @@ Batch posting is a fundamental process for the <a data-quicklook-from="sequencer
 
 ## How it works
 
-<ImageZoom src="/img/batchposter-path.svg" alt="Batch poster path. The batch poster pulls sequenced messages from the TransactionStreamer, builds a block, routes the data to a data availability provider, encodes the L1 transaction as calldata or blobs with a delay proof, verifies the batch, posts the transaction, and lands it in the L1 SequencerInbox contract. Building a block expands into four substeps: compute L1 block bounds, fill batch segments and compress them with adaptive Brotli, decide whether to post now or wait, and CloseAndGetBytes to recompress at a higher level, which returns to building the block. Posting expands into three substeps: fee calculation, nonce management, and sign and send, which returns to posting the transaction." className="img-600px" />
+<ImageZoom src="/img/batchposter-path.svg" alt="Batch poster path. The batch poster pulls sequenced messages from the `TransactionStreamer`, builds a block, routes the data to a data availability provider, encodes the L1 transaction as calldata or blobs with a delay proof, verifies the batch, posts the transaction, and lands it in the L1 SequencerInbox contract. Building a block expands into four substeps: compute L1 block bounds, fill batch segments and compress them with adaptive Brotli, decide whether to post now or wait, and CloseAndGetBytes to recompress at a higher level, which returns to building the block. Posting expands into three substeps: fee calculation, nonce management, and sign and send, which returns to posting the transaction." className="img-600px" />
 
 #### 1. Messages arrive (upstream handoff)
 
