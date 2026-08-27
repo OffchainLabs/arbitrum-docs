@@ -101,7 +101,7 @@
   },
   "assertion": {
     "title": "Assertion",
-    "text": "<p>A bonded claim made by a <a href=\"/intro/glossary#validator\">validator</a> about an Arbitrum chain&#39;s execution state, posted to the <a href=\"/intro/glossary#rollup-contract\">Rollup contract</a>. An assertion may propose a new state, or may be a step in a <a href=\"/intro/glossary#challenge\">challenge</a>. Each assertion consumes messages from the <a href=\"/intro/glossary#sequencer-inbox\">Sequencer inbox</a>. Gaining the right to post assertions requires a large, one-time <a href=\"/intro/glossary#bonding\">bond</a>, which the poster loses if a competing assertion is confirmed.</p>\n<p>Assertions can have different states:</p>\n<ul>\n<li><strong>Proposed</strong>: a validator submits the assertion.</li>\n<li><strong>Challenged</strong>: another validator disputes the assertion, which starts an interactive fraud proof.</li>\n<li><strong>Confirmed</strong>: nobody challenged the assertion within the <a href=\"/intro/glossary#challenge-period\">challenge period</a> of 6.4 days. A <a href=\"/intro/glossary#bold\">BoLD</a> challenge adds at most one more challenge period.</li>\n</ul>\n"
+    "text": "<p>A bonded claim made by a <a href=\"/intro/glossary#validator\">validator</a> about an Arbitrum chain&#39;s execution state, posted to the <a href=\"/intro/glossary#rollup-contract\">Rollup contract</a>. An assertion may propose a new state or may be a step in a <a href=\"/intro/glossary#challenge\">challenge</a>. Each assertion consumes messages from the <a href=\"/intro/glossary#sequencer-inbox\">Sequencer inbox</a>. Gaining the right to post assertions requires a large, one-time <a href=\"/intro/glossary#bonding\">bond</a>, which the poster loses if a competing assertion is confirmed.</p>\n<p>An assertion moves through several states:</p>\n<ul>\n<li><strong>Proposed</strong>: a validator submits the assertion.</li>\n<li><strong>Challenged</strong>: another validator disputes the assertion, which starts an interactive fraud proof.</li>\n<li><strong>Confirmed</strong>: nobody challenged the assertion within the <a href=\"/intro/glossary#challenge-period\">challenge period</a>, which is 6.4 days on Arbitrum One. A <a href=\"/intro/glossary#bold\">BoLD</a> challenge adds at most one more challenge period.</li>\n</ul>\n"
   },
   "auction-contract": {
     "title": "Auction Contract",
@@ -145,7 +145,7 @@
   },
   "bonding": {
     "title": "Bonding",
-    "text": "<p>Locking WETH in the <a href=\"/intro/glossary#rollup-contract\">Rollup contract</a> to gain the right to post <a href=\"/intro/glossary#assertion\">assertions</a>. A party joins the validator set by posting one large assertion bond. Later assertions from the same party need no further bond, because the protocol treats each <a href=\"/intro/glossary#bonder\">bonder</a> as bonded to their latest assertion. Opening a sub-challenge needs a smaller <a href=\"/intro/glossary#challenge-bond\">challenge bond</a>. Bonded funds are lost if a competing assertion is confirmed, and can be withdrawn once the bonded assertion is confirmed.</p>\n"
+    "text": "<p>Locking WETH in the <a href=\"/intro/glossary#rollup-contract\">Rollup contract</a> to gain the right to post <a href=\"/intro/glossary#assertion\">assertions</a>. A party joins the validator set by posting one large assertion bond. Later assertions from the same party need no further bond, because the protocol treats each <a href=\"/intro/glossary#bonder\">bonder</a> as bonded to their latest assertion. Opening a sub-challenge requires a smaller <a href=\"/intro/glossary#challenge-bond\">challenge bond</a>. You lose your bonded funds if a competing assertion is confirmed. You can withdraw them once the assertion you bonded on is confirmed.</p>\n"
   },
   "bridge": {
     "title": "Bridge",
@@ -153,7 +153,7 @@
   },
   "chain-bindings": {
     "title": "Chain bindings",
-    "text": "<p>Software that calls and sends transactions to the onchain contracts a validator needs to take part in the <a href=\"/intro/glossary#challenge-protocol\">challenge protocol</a>. Arbitrum uses go-ethereum&#39;s <code>abigen</code> utility to generate Go bindings for these contracts, plus a few developer-friendly wrappers.</p>\n"
+    "text": "<p>Software that calls the onchain contracts, and sends transactions to them, so a validator can take part in the <a href=\"/intro/glossary#challenge-protocol\">challenge protocol</a>. Arbitrum uses go-ethereum&#39;s <code>abigen</code> utility to generate Go bindings for these contracts, plus a few developer-friendly wrappers.</p>\n"
   },
   "chain-owner": {
     "title": "Chain Owner",
@@ -173,15 +173,15 @@
   },
   "challenge-manager-client": {
     "title": "Challenge manager client",
-    "text": "<p>Software that manages the life cycle of every challenge an <a href=\"/intro/glossary#active-validator\">active validator</a> takes part in. It tracks many challenges at once and acts on, confirms, or rejects each <a href=\"/intro/glossary#edge\">edge</a> as the <a href=\"/intro/glossary#challenge-protocol\">challenge protocol</a> allows.</p>\n"
+    "text": "<p>Software that manages the lifecycle of every challenge an <a href=\"/intro/glossary#active-validator\">active validator</a> takes part in. It tracks many challenges at once and acts on, confirms, or rejects each <a href=\"/intro/glossary#edge\">edge</a> as the <a href=\"/intro/glossary#challenge-protocol\">challenge protocol</a> allows.</p>\n"
   },
   "challenge-period": {
     "title": "Challenge Period",
-    "text": "<p>The window over which anyone can challenge an <a href=\"/intro/glossary#assertion\">assertion</a>, after which the assertion can be confirmed. On Arbitrum One it is <a href=\"/arbitrum-essentials/reference/chain-params.mdx\">6.4 days</a>. The <a href=\"/intro/glossary#arbitrum-dao\">Arbitrum DAO</a> can configure this value. A <a href=\"/intro/glossary#bold\">BoLD</a> challenge adds at most one more challenge period before an assertion confirms.</p>\n"
+    "text": "<p>The window during which anyone can challenge an <a href=\"/intro/glossary#assertion\">assertion</a>, after which the assertion can be confirmed. On Arbitrum One it is <a href=\"/arbitrum-essentials/reference/chain-params.mdx\">6.4 days</a>. The <a href=\"/intro/glossary#arbitrum-dao\">Arbitrum DAO</a> can configure this value. A <a href=\"/intro/glossary#bold\">BoLD</a> challenge adds at most one more challenge period before an assertion confirms.</p>\n"
   },
   "challenge-protocol": {
     "title": "Challenge protocol",
-    "text": "<p>The rules by which assertions are submitted, disputed, and confirmed, with the <a href=\"/intro/glossary#parent-chain\">parent chain</a> as the final arbiter. The protocol guarantees that only valid <a href=\"/intro/glossary#assertion\">assertions</a> are confirmed, provided at least one honest <a href=\"/intro/glossary#active-validator\">active validator</a> takes part. Ethereum&#39;s VM verifies <a href=\"/intro/glossary#one-step-proof\">one step proofs</a> of deterministic computation, which decide the winner of a challenge once the <a href=\"/intro/glossary#challenge-period\">challenge period</a> has elapsed.</p>\n"
+    "text": "<p>The rules for submitting, disputing, and confirming <a href=\"/intro/glossary#assertion\">assertions</a>, with the <a href=\"/intro/glossary#parent-chain\">parent chain</a> as the final arbiter. The protocol guarantees that only valid assertions are confirmed, provided at least one honest <a href=\"/intro/glossary#active-validator\">active validator</a> takes part. Ethereum&#39;s VM verifies <a href=\"/intro/glossary#one-step-proof\">one-step proofs</a> of deterministic computation, which decide the winner of a challenge once the <a href=\"/intro/glossary#challenge-period\">challenge period</a> has elapsed.</p>\n"
   },
   "challenge-manager": {
     "title": "ChallengeManager",
@@ -241,7 +241,7 @@
   },
   "delay-attack": {
     "title": "Delay attack",
-    "text": "<p>An attack in which one or more malicious parties follow the <a href=\"/intro/glossary#challenge-protocol\">challenge protocol</a> to delay <a href=\"/intro/glossary#confirmation\">confirmation</a> of results to the <a href=\"/intro/glossary#parent-chain\">parent chain</a>. The protocol used before <a href=\"/intro/glossary#bold\">BoLD</a> allowed this, because an honest party had to play a separate 1-vs-1 challenge against each adversary. BoLD sets a constant upper bound on confirmation time: one honest validator defends a single assertion against any number of malicious claims. Solving delay attacks is what makes <a href=\"/intro/glossary#permissionless-validation\">permissionless validation</a> safe.</p>\n"
+    "text": "<p>An attack in which one or more malicious parties follow the <a href=\"/intro/glossary#challenge-protocol\">challenge protocol</a> to delay <a href=\"/intro/glossary#confirmation\">confirmation</a> of results on the <a href=\"/intro/glossary#parent-chain\">parent chain</a>. The protocol used before <a href=\"/intro/glossary#bold\">BoLD</a> allowed this, because an honest party had to play a separate 1-vs-1 challenge against each adversary. BoLD sets a constant upper bound on confirmation time: one honest validator defends a single assertion against any number of malicious claims. Preventing delay attacks is what makes <a href=\"/intro/glossary#permissionless-validation\">permissionless validation</a> safe.</p>\n"
   },
   "delayed-inbox": {
     "title": "Delayed Inbox",
@@ -309,7 +309,7 @@
   },
   "fraud-proof": {
     "title": "Fraud proof",
-    "text": "<p>A proof that shows whether an invalid state transition has taken place. Challenge participants generate fraud proofs and submit them to the <a href=\"/intro/glossary#parent-chain\">parent chain</a>, where a <a href=\"/intro/glossary#smart-contract\">smart contract</a> verifies them. An Arbitrum chain that settles to Ethereum therefore makes Ethereum the final arbiter of any disagreement over an <a href=\"/intro/glossary#assertion\">assertion</a>. No party can falsify a fraud proof, because executing a <a href=\"/intro/glossary#wasm\">WASM</a> instruction on a given pre-state has exactly one correct result. Challenges execute a variant of WASM called <a href=\"/intro/glossary#wavm\">WAVM</a>.</p>\n"
+    "text": "<p>A proof that an invalid state transition took place. Challenge participants generate fraud proofs and submit them to the <a href=\"/intro/glossary#parent-chain\">parent chain</a>, where a <a href=\"/intro/glossary#smart-contract\">smart contract</a> verifies them. An Arbitrum chain that settles to Ethereum therefore makes Ethereum the final arbiter of any disagreement over an <a href=\"/intro/glossary#assertion\">assertion</a>. No party can falsify a fraud proof, because executing a <a href=\"/intro/glossary#wasm\">WASM</a> instruction on a given pre-state has exactly one correct result. Challenges execute a variant of WASM called <a href=\"/intro/glossary#wavm\">WAVM</a>.</p>\n"
   },
   "gas-price-floor": {
     "title": "Gas Price Floor",
@@ -413,7 +413,7 @@
   },
   "one-step-prover": {
     "title": "OneStepProver",
-    "text": "<p>The set of <a href=\"/intro/glossary#parent-chain\">parent chain</a> contracts that implement a miniature <a href=\"/intro/glossary#wasm\">WASM</a> VM, often shortened to <code>OSP</code>. The VM executes a <a href=\"/intro/glossary#one-step-proof\">one step proof</a> of the <a href=\"/intro/glossary#child-chain\">child chain</a> <a href=\"/intro/glossary#state-transition-function\">state transition function</a>, which settles a challenge. It is written in Solidity. <a href=\"/intro/glossary#bold\">BoLD</a> needs no changes to these contracts.</p>\n"
+    "text": "<p>The set of <a href=\"/intro/glossary#parent-chain\">parent chain</a> contracts that implement a miniature <a href=\"/intro/glossary#wasm\">WASM</a> VM, often shortened to OSP. The VM executes a <a href=\"/intro/glossary#one-step-proof\">one-step proof</a> of the <a href=\"/intro/glossary#child-chain\">child chain</a> <a href=\"/intro/glossary#state-transition-function\">state transition function</a>, which settles a challenge. It is written in Solidity. <a href=\"/intro/glossary#bold\">BoLD</a> needs no changes to these contracts.</p>\n"
   },
   "oracle": {
     "title": "Oracle",
@@ -437,7 +437,7 @@
   },
   "permissionless-validation": {
     "title": "Permissionless validation",
-    "text": "<p>The ability for anyone to post <a href=\"/intro/glossary#assertion\">assertions</a> to the <a href=\"/intro/glossary#rollup-contract\">Rollup contract</a> and challenge the assertions of others, without needing permission. Before <a href=\"/intro/glossary#bold\">BoLD</a>, the Rollup contract held an allowlist of validators. BoLD removes that allowlist, because it bounds how long a <a href=\"/intro/glossary#delay-attack\">delay attack</a> can postpone confirmation.</p>\n"
+    "text": "<p>The ability for anyone to post <a href=\"/intro/glossary#assertion\">assertions</a> to the <a href=\"/intro/glossary#rollup-contract\">Rollup contract</a> and challenge the assertions of others. Before <a href=\"/intro/glossary#bold\">BoLD</a>, the Rollup contract held an allowlist of validators. BoLD removes that allowlist, because it bounds how long a <a href=\"/intro/glossary#delay-attack\">delay attack</a> can postpone confirmation.</p>\n"
   },
   "portal": {
     "title": "Portal",
@@ -493,7 +493,7 @@
   },
   "rollup-contract": {
     "title": "Rollup contract",
-    "text": "<p>The smart contract on the <a href=\"/intro/glossary#parent-chain\">parent chain</a> where validators post and bond on <a href=\"/intro/glossary#assertion\">assertions</a> about an Arbitrum chain&#39;s state. It is implemented as <a href=\"https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol\"><code>RollupCore.sol</code></a>. Under <a href=\"/intro/glossary#bold\">BoLD</a> it holds a reference to a <a href=\"/intro/glossary#challenge-manager\">ChallengeManager</a> contract. The wider set of Rollup contracts also serves as the data availability layer for the chain, and confirms each assertion once its <a href=\"/intro/glossary#challenge-period\">challenge period</a> has passed.</p>\n"
+    "text": "<p>The smart contract on the <a href=\"/intro/glossary#parent-chain\">parent chain</a> where validators post <a href=\"/intro/glossary#assertion\">assertions</a> about an Arbitrum chain&#39;s state and bond on them. It is implemented as <a href=\"https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol\"><code>RollupCore.sol</code></a>. Under <a href=\"/intro/glossary#bold\">BoLD</a> it holds a reference to a <a href=\"/intro/glossary#challenge-manager\">ChallengeManager</a> contract. The wider set of Rollup contracts also serves as the data availability layer for the chain and confirms each assertion once its <a href=\"/intro/glossary#challenge-period\">challenge period</a> has passed.</p>\n"
   },
   "rollup-event-inbox": {
     "title": "Rollup Event Inbox",
@@ -561,7 +561,7 @@
   },
   "timer": {
     "title": "Timer",
-    "text": "<p>The count of blocks an <a href=\"/intro/glossary#edge\">edge</a> has stayed unrivaled. The protocol measures time in blocks of the first non-Arbitrum ancestor chain, so Ethereum blocks for L2 chains and for L3 chains that settle to an Arbitrum chain. An edge&#39;s timer stops when a <a href=\"/intro/glossary#rival\">rival</a> edge appears onchain. Two edges are rivals when they agree on some prefix of a computation from the same start state, but disagree on the rest of it. The protocol confirms an <a href=\"/intro/glossary#assertion\">assertion</a> once the timer of its unrivaled edge reaches the <a href=\"/intro/glossary#challenge-period\">challenge period</a>.</p>\n"
+    "text": "<p>The count of blocks an <a href=\"/intro/glossary#edge\">edge</a> has stayed unrivaled. The protocol measures time in blocks of the first non-Arbitrum ancestor chain — Ethereum blocks for L2 chains, and for L3 chains that settle to an Arbitrum chain. An edge&#39;s timer stops when a <a href=\"/intro/glossary#rival\">rival</a> edge appears onchain. Two edges are rivals when they agree on some prefix of a computation from the same start state, but disagree on the rest of it. The protocol confirms an <a href=\"/intro/glossary#assertion\">assertion</a> once the timer of its unrivaled edge reaches the <a href=\"/intro/glossary#challenge-period\">challenge period</a>.</p>\n"
   },
   "token-gateway": {
     "title": "Token Gateway",
@@ -597,7 +597,7 @@
   },
   "validating-bridge": {
     "title": "Validating bridge",
-    "text": "<p>The <a href=\"/intro/glossary#bridge\">bridge</a> smart contract that uses the <a href=\"/intro/glossary#parent-chain\">parent chain</a>&#39;s security and censorship resistance to unlock bridged assets. Assets unlock only after an <a href=\"/intro/glossary#assertion\">assertion</a> showing that the assets left the <a href=\"/intro/glossary#child-chain\">child chain</a> is posted and confirmed.</p>\n"
+    "text": "<p>The <a href=\"/intro/glossary#bridge\">bridge</a> smart contract that uses the <a href=\"/intro/glossary#parent-chain\">parent chain</a>&#39;s security and censorship resistance to unlock bridged assets. Assets unlock only after the chain posts and confirms an <a href=\"/intro/glossary#assertion\">assertion</a> showing that the assets left the <a href=\"/intro/glossary#child-chain\">child chain</a>.</p>\n"
   },
   "validator": {
     "title": "Validator",

@@ -109,13 +109,13 @@ An [Arbitrum full node](/intro/glossary#arbitrum-full-node) that retains every h
 
 ### Assertion {#assertion}
 
-A bonded claim made by a [validator](/intro/glossary#validator) about an Arbitrum chain's execution state, posted to the [Rollup contract](/intro/glossary#rollup-contract). An assertion may propose a new state, or may be a step in a [challenge](/intro/glossary#challenge). Each assertion consumes messages from the [Sequencer inbox](/intro/glossary#sequencer-inbox). Gaining the right to post assertions requires a large, one-time [bond](/intro/glossary#bonding), which the poster loses if a competing assertion is confirmed.
+A bonded claim made by a [validator](/intro/glossary#validator) about an Arbitrum chain's execution state, posted to the [Rollup contract](/intro/glossary#rollup-contract). An assertion may propose a new state or may be a step in a [challenge](/intro/glossary#challenge). Each assertion consumes messages from the [Sequencer inbox](/intro/glossary#sequencer-inbox). Gaining the right to post assertions requires a large, one-time [bond](/intro/glossary#bonding), which the poster loses if a competing assertion is confirmed.
 
-Assertions can have different states:
+An assertion moves through several states:
 
 - **Proposed**: a validator submits the assertion.
 - **Challenged**: another validator disputes the assertion, which starts an interactive fraud proof.
-- **Confirmed**: nobody challenged the assertion within the [challenge period](/intro/glossary#challenge-period) of 6.4 days. A [BoLD](/intro/glossary#bold) challenge adds at most one more challenge period.
+- **Confirmed**: nobody challenged the assertion within the [challenge period](/intro/glossary#challenge-period), which is 6.4 days on Arbitrum One. A [BoLD](/intro/glossary#bold) challenge adds at most one more challenge period.
 
 ### Auction Contract {#auction-contract}
 
@@ -160,7 +160,7 @@ _Also known as: staker_
 
 ### Bonding {#bonding}
 
-Locking WETH in the [Rollup contract](/intro/glossary#rollup-contract) to gain the right to post [assertions](/intro/glossary#assertion). A party joins the validator set by posting one large assertion bond. Later assertions from the same party need no further bond, because the protocol treats each [bonder](/intro/glossary#bonder) as bonded to their latest assertion. Opening a sub-challenge needs a smaller [challenge bond](/intro/glossary#challenge-bond). Bonded funds are lost if a competing assertion is confirmed, and can be withdrawn once the bonded assertion is confirmed.
+Locking WETH in the [Rollup contract](/intro/glossary#rollup-contract) to gain the right to post [assertions](/intro/glossary#assertion). A party joins the validator set by posting one large assertion bond. Later assertions from the same party need no further bond, because the protocol treats each [bonder](/intro/glossary#bonder) as bonded to their latest assertion. Opening a sub-challenge requires a smaller [challenge bond](/intro/glossary#challenge-bond). You lose your bonded funds if a competing assertion is confirmed. You can withdraw them once the assertion you bonded on is confirmed.
 
 ### Bridge {#bridge}
 
@@ -168,7 +168,7 @@ A set of smart contracts for sending [Cross-chain messages](/intro/glossary#cros
 
 ### Chain bindings {#chain-bindings}
 
-Software that calls and sends transactions to the onchain contracts a validator needs to take part in the [challenge protocol](/intro/glossary#challenge-protocol). Arbitrum uses go-ethereum's `abigen` utility to generate Go bindings for these contracts, plus a few developer-friendly wrappers.
+Software that calls the onchain contracts, and sends transactions to them, so a validator can take part in the [challenge protocol](/intro/glossary#challenge-protocol). Arbitrum uses go-ethereum's `abigen` utility to generate Go bindings for these contracts, plus a few developer-friendly wrappers.
 
 ### Chain Owner {#chain-owner}
 
@@ -188,15 +188,15 @@ The per-level [bond](/intro/glossary#bonder) required to open or move within a s
 
 ### Challenge manager client {#challenge-manager-client}
 
-Software that manages the life cycle of every challenge an [active validator](/intro/glossary#active-validator) takes part in. It tracks many challenges at once and acts on, confirms, or rejects each [edge](/intro/glossary#edge) as the [challenge protocol](/intro/glossary#challenge-protocol) allows.
+Software that manages the lifecycle of every challenge an [active validator](/intro/glossary#active-validator) takes part in. It tracks many challenges at once and acts on, confirms, or rejects each [edge](/intro/glossary#edge) as the [challenge protocol](/intro/glossary#challenge-protocol) allows.
 
 ### Challenge Period {#challenge-period}
 
-The window over which anyone can challenge an [assertion](/intro/glossary#assertion), after which the assertion can be confirmed. On Arbitrum One it is [6.4 days](/arbitrum-essentials/reference/chain-params.mdx). The [Arbitrum DAO](/intro/glossary#arbitrum-dao) can configure this value. A [BoLD](/intro/glossary#bold) challenge adds at most one more challenge period before an assertion confirms.
+The window during which anyone can challenge an [assertion](/intro/glossary#assertion), after which the assertion can be confirmed. On Arbitrum One it is [6.4 days](/arbitrum-essentials/reference/chain-params.mdx). The [Arbitrum DAO](/intro/glossary#arbitrum-dao) can configure this value. A [BoLD](/intro/glossary#bold) challenge adds at most one more challenge period before an assertion confirms.
 
 ### Challenge protocol {#challenge-protocol}
 
-The rules by which assertions are submitted, disputed, and confirmed, with the [parent chain](/intro/glossary#parent-chain) as the final arbiter. The protocol guarantees that only valid [assertions](/intro/glossary#assertion) are confirmed, provided at least one honest [active validator](/intro/glossary#active-validator) takes part. Ethereum's VM verifies [one step proofs](/intro/glossary#one-step-proof) of deterministic computation, which decide the winner of a challenge once the [challenge period](/intro/glossary#challenge-period) has elapsed.
+The rules for submitting, disputing, and confirming [assertions](/intro/glossary#assertion), with the [parent chain](/intro/glossary#parent-chain) as the final arbiter. The protocol guarantees that only valid assertions are confirmed, provided at least one honest [active validator](/intro/glossary#active-validator) takes part. Ethereum's VM verifies [one-step proofs](/intro/glossary#one-step-proof) of deterministic computation, which decide the winner of a challenge once the [challenge period](/intro/glossary#challenge-period) has elapsed.
 
 ### ChallengeManager {#challenge-manager}
 
@@ -258,7 +258,7 @@ A [Validator](/intro/glossary#validator) that watches an Arbitrum chain and take
 
 ### Delay attack {#delay-attack}
 
-An attack in which one or more malicious parties follow the [challenge protocol](/intro/glossary#challenge-protocol) to delay [confirmation](/intro/glossary#confirmation) of results to the [parent chain](/intro/glossary#parent-chain). The protocol used before [BoLD](/intro/glossary#bold) allowed this, because an honest party had to play a separate 1-vs-1 challenge against each adversary. BoLD sets a constant upper bound on confirmation time: one honest validator defends a single assertion against any number of malicious claims. Solving delay attacks is what makes [permissionless validation](/intro/glossary#permissionless-validation) safe.
+An attack in which one or more malicious parties follow the [challenge protocol](/intro/glossary#challenge-protocol) to delay [confirmation](/intro/glossary#confirmation) of results on the [parent chain](/intro/glossary#parent-chain). The protocol used before [BoLD](/intro/glossary#bold) allowed this, because an honest party had to play a separate 1-vs-1 challenge against each adversary. BoLD sets a constant upper bound on confirmation time: one honest validator defends a single assertion against any number of malicious claims. Preventing delay attacks is what makes [permissionless validation](/intro/glossary#permissionless-validation) safe.
 
 ### Delayed Inbox {#delayed-inbox}
 
@@ -332,7 +332,7 @@ In Arbitrum, a forwarder is a component that forwards user transactions to the S
 
 ### Fraud proof {#fraud-proof}
 
-A proof that shows whether an invalid state transition has taken place. Challenge participants generate fraud proofs and submit them to the [parent chain](/intro/glossary#parent-chain), where a [smart contract](/intro/glossary#smart-contract) verifies them. An Arbitrum chain that settles to Ethereum therefore makes Ethereum the final arbiter of any disagreement over an [assertion](/intro/glossary#assertion). No party can falsify a fraud proof, because executing a [WASM](/intro/glossary#wasm) instruction on a given pre-state has exactly one correct result. Challenges execute a variant of WASM called [WAVM](/intro/glossary#wavm).
+A proof that an invalid state transition took place. Challenge participants generate fraud proofs and submit them to the [parent chain](/intro/glossary#parent-chain), where a [smart contract](/intro/glossary#smart-contract) verifies them. An Arbitrum chain that settles to Ethereum therefore makes Ethereum the final arbiter of any disagreement over an [assertion](/intro/glossary#assertion). No party can falsify a fraud proof, because executing a [WASM](/intro/glossary#wasm) instruction on a given pre-state has exactly one correct result. Challenges execute a variant of WASM called [WAVM](/intro/glossary#wavm).
 
 ### Gas Price Floor {#gas-price-floor}
 
@@ -442,7 +442,7 @@ Final step in a challenge; a single operation of the Arbitrum VM ([WASM](/intro/
 
 ### OneStepProver {#one-step-prover}
 
-The set of [parent chain](/intro/glossary#parent-chain) contracts that implement a miniature [WASM](/intro/glossary#wasm) VM, often shortened to `OSP`. The VM executes a [one step proof](/intro/glossary#one-step-proof) of the [child chain](/intro/glossary#child-chain) [state transition function](/intro/glossary#state-transition-function), which settles a challenge. It is written in Solidity. [BoLD](/intro/glossary#bold) needs no changes to these contracts.
+The set of [parent chain](/intro/glossary#parent-chain) contracts that implement a miniature [WASM](/intro/glossary#wasm) VM, often shortened to OSP. The VM executes a [one-step proof](/intro/glossary#one-step-proof) of the [child chain](/intro/glossary#child-chain) [state transition function](/intro/glossary#state-transition-function), which settles a challenge. It is written in Solidity. [BoLD](/intro/glossary#bold) needs no changes to these contracts.
 
 ### Oracle {#oracle}
 
@@ -466,7 +466,7 @@ The key-value store Nitro uses for its on-disk database. Pebble allocates its bl
 
 ### Permissionless validation {#permissionless-validation}
 
-The ability for anyone to post [assertions](/intro/glossary#assertion) to the [Rollup contract](/intro/glossary#rollup-contract) and challenge the assertions of others, without needing permission. Before [BoLD](/intro/glossary#bold), the Rollup contract held an allowlist of validators. BoLD removes that allowlist, because it bounds how long a [delay attack](/intro/glossary#delay-attack) can postpone confirmation.
+The ability for anyone to post [assertions](/intro/glossary#assertion) to the [Rollup contract](/intro/glossary#rollup-contract) and challenge the assertions of others. Before [BoLD](/intro/glossary#bold), the Rollup contract held an allowlist of validators. BoLD removes that allowlist, because it bounds how long a [delay attack](/intro/glossary#delay-attack) can postpone confirmation.
 
 ### Portal {#portal}
 
@@ -524,7 +524,7 @@ In the [BoLD](/intro/glossary#bold) [Challenge Protocol](/intro/glossary#challen
 
 ### Rollup contract {#rollup-contract}
 
-The smart contract on the [parent chain](/intro/glossary#parent-chain) where validators post and bond on [assertions](/intro/glossary#assertion) about an Arbitrum chain's state. It is implemented as [`RollupCore.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). Under [BoLD](/intro/glossary#bold) it holds a reference to a [ChallengeManager](/intro/glossary#challenge-manager) contract. The wider set of Rollup contracts also serves as the data availability layer for the chain, and confirms each assertion once its [challenge period](/intro/glossary#challenge-period) has passed.
+The smart contract on the [parent chain](/intro/glossary#parent-chain) where validators post [assertions](/intro/glossary#assertion) about an Arbitrum chain's state and bond on them. It is implemented as [`RollupCore.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). Under [BoLD](/intro/glossary#bold) it holds a reference to a [ChallengeManager](/intro/glossary#challenge-manager) contract. The wider set of Rollup contracts also serves as the data availability layer for the chain and confirms each assertion once its [challenge period](/intro/glossary#challenge-period) has passed.
 
 ### Rollup Event Inbox {#rollup-event-inbox}
 
@@ -598,7 +598,7 @@ A transaction ordering policy in which entities can bid for the right to access 
 
 ### Timer {#timer}
 
-The count of blocks an [edge](/intro/glossary#edge) has stayed unrivaled. The protocol measures time in blocks of the first non-Arbitrum ancestor chain, so Ethereum blocks for L2 chains and for L3 chains that settle to an Arbitrum chain. An edge's timer stops when a [rival](/intro/glossary#rival) edge appears onchain. Two edges are rivals when they agree on some prefix of a computation from the same start state, but disagree on the rest of it. The protocol confirms an [assertion](/intro/glossary#assertion) once the timer of its unrivaled edge reaches the [challenge period](/intro/glossary#challenge-period).
+The count of blocks an [edge](/intro/glossary#edge) has stayed unrivaled. The protocol measures time in blocks of the first non-Arbitrum ancestor chain — Ethereum blocks for L2 chains, and for L3 chains that settle to an Arbitrum chain. An edge's timer stops when a [rival](/intro/glossary#rival) edge appears onchain. Two edges are rivals when they agree on some prefix of a computation from the same start state, but disagree on the rest of it. The protocol confirms an [assertion](/intro/glossary#assertion) once the timer of its unrivaled edge reaches the [challenge period](/intro/glossary#challenge-period).
 
 ### Token Gateway {#token-gateway}
 
@@ -636,7 +636,7 @@ The single privileged contract—deployed once per [Arbitrum chain](/intro/gloss
 
 ### Validating bridge {#validating-bridge}
 
-The [bridge](/intro/glossary#bridge) smart contract that uses the [parent chain](/intro/glossary#parent-chain)'s security and censorship resistance to unlock bridged assets. Assets unlock only after an [assertion](/intro/glossary#assertion) showing that the assets left the [child chain](/intro/glossary#child-chain) is posted and confirmed.
+The [bridge](/intro/glossary#bridge) smart contract that uses the [parent chain](/intro/glossary#parent-chain)'s security and censorship resistance to unlock bridged assets. Assets unlock only after the chain posts and confirms an [assertion](/intro/glossary#assertion) showing that the assets left the [child chain](/intro/glossary#child-chain).
 
 ### Validator {#validator}
 

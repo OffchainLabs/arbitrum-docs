@@ -4,10 +4,10 @@ key: assertion
 titleforSort: Assertion
 ---
 
-A bonded claim made by a [validator](/intro/glossary#validator) about an Arbitrum chain's execution state, posted to the [Rollup contract](/intro/glossary#rollup-contract). An assertion may propose a new state, or may be a step in a [challenge](/intro/glossary#challenge). Each assertion consumes messages from the [Sequencer inbox](/intro/glossary#sequencer-inbox). Gaining the right to post assertions requires a large, one-time [bond](/intro/glossary#bonding), which the poster loses if a competing assertion is confirmed.
+A bonded claim made by a [validator](/intro/glossary#validator) about an Arbitrum chain's execution state, posted to the [Rollup contract](/intro/glossary#rollup-contract). An assertion may propose a new state or may be a step in a [challenge](/intro/glossary#challenge). Each assertion consumes messages from the [Sequencer inbox](/intro/glossary#sequencer-inbox). Gaining the right to post assertions requires a large, one-time [bond](/intro/glossary#bonding), which the poster loses if a competing assertion is confirmed.
 
-Assertions can have different states:
+An assertion moves through several states:
 
 - **Proposed**: a validator submits the assertion.
 - **Challenged**: another validator disputes the assertion, which starts an interactive fraud proof.
-- **Confirmed**: nobody challenged the assertion within the [challenge period](/intro/glossary#challenge-period) of 6.4 days. A [BoLD](/intro/glossary#bold) challenge adds at most one more challenge period.
+- **Confirmed**: nobody challenged the assertion within the [challenge period](/intro/glossary#challenge-period), which is 6.4 days on Arbitrum One. A [BoLD](/intro/glossary#bold) challenge adds at most one more challenge period.
