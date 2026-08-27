@@ -10,13 +10,15 @@ sme: leeederek
 sidebar_position: 1
 ---
 
-<a data-quicklook-from="arbitrum">Arbitrum</a>'s former dispute protocol involved defending against challengers individually in a 1-vs-1 tournament setting. In contrast, <a data-quicklook-from="bold">BoLD</a> enables an all-vs-all battle royale between good and evil, with a single winner always determined. This dynamic is made possible by BoLD's time-bounded, permissionless validation using deterministic Merkle proofs and hashes. This allows any party to place a bond on the correct state and prove their claim through interactive fraud proofs, ensuring that a single honest party that bonds on the correct state will always win a dispute.
+<a data-quicklook-from="arbitrum">Arbitrum</a>'s former dispute protocol involved defending against challengers individually in a 1-vs-1 tournament setting. In contrast, <a data-quicklook-from="bold">BoLD</a> enables an all-vs-all battle royale between good and evil, with a single deterministic winner.
 
-Validators on Arbitrum can post their claim on the validity of state roots, known as **assertions**. Ethereum, of course, does not know anything about the validity of these Arbitrum state roots, but it _can_ help prove their correctness. _Anyone_ in the world can initiate a <a data-quicklook-from="challenge">challenge</a> over any unconfirmed <a data-quicklook-from="assertion">assertion</a> to start a challenge.
+BoLD’s time-bounded, permissionless validation makes this dynamic possible through deterministic Merkle proofs and hashes. This allows any party to place a bond on the correct state and prove their claim through interactive fraud proofs, ensuring that a single honest party that bonds on the correct state will always win a dispute.
 
-The assertions being disputed concern block hashes of an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> at a given <a data-quicklook-from="batch">batch</a> or inbox position. Given that Arbitrum chains are deterministic, there is only one correct history for anyone running the standard Nitro software. Using the notion of one-step proof, Ethereum can check whether someone is making a fraudulent assertion after an interactive game plays out that narrows down a dispute.
+Validators on Arbitrum can post their claim on the validity of state roots, known as **assertions**. Ethereum, of course, does not know anything about the validity of these Arbitrum state roots, but it _can_ help prove their correctness. _Anyone_ can initiate a <a data-quicklook-from="challenge">challenge</a> against any unconfirmed <a data-quicklook-from="assertion">assertion</a>.
 
-If a claim is honest, it can be confirmed on Ethereum after a @@arbOneDisputeWindowDays=6.4@@-day period (the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can challenge it within that @@arbOneDisputeWindowDays=6.4@@-day window _and always win_ within a <a data-quicklook-from="challenge-period">challenge period</a> plus a small delta.
+The disputed assertions concern block hashes on an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> at a given <a data-quicklook-from="batch">batch</a> or inbox position. Because Arbitrum chains are deterministic, only one history is correct for anyone running the standard Nitro software. Using the notion of a one-step proof, Ethereum can check whether someone is making a fraudulent assertion after an interactive game narrows down a dispute to a single winner.
+
+If a claim is honest, Ethereum can confirm it after @@arbOneDisputeWindowDays=6.4@@ days period (the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can challenge it within that @@arbOneDisputeWindowDays=6.4@@-day window _and always win_ within a <a data-quicklook-from="challenge-period">challenge period</a> (plus a small delta).
 
 The current implementation of BoLD involves both onchain and offchain components:
 
@@ -26,54 +28,58 @@ The current implementation of BoLD involves both onchain and offchain components
 
 ### How BoLD leverages Ethereum
 
-When it comes to implementing the protocol, BoLD needs to be deployed on a credible, neutral, censorship-resistant backend to ensure fairness to all participants. Ethereum fits the bill, as it's currently the most decentralized, secure, smart contract-enabled <a data-quicklook-from="blockchain">blockchain</a> to which the full protocol can be deployed, with challenge moves performed as transactions to the protocol’s smart contracts.
+To implement the BoLD protocol, it must be deployed on a credible, neutral, censorship-resistant backend to ensure fairness for all participants. Ethereum fits the requirements, as it's currently the most decentralized, secure, smart contract-enabled <a data-quicklook-from="blockchain">blockchain</a> to which the full protocol can be deployed, with challenge moves performed as transactions to the protocol's smart contracts.
+
+A helpful mental model for understanding the system is: Ethereum itself is the referee for deciding assertion results. Participants in the challenge protocol can disagree over the _results of the child-chain state transitions_ and provide proofs to the protocol's smart contracts on Ethereum to determine which result is correct. Because computation is deterministic, there will always be a single correct result.
 
 A helpful mental model for understanding the system is that it uses Ethereum itself as the referee for deciding assertion results. Participants in the challenge protocol can disagree over the _results of child chain state transitions_ and provide proofs to the protocol's smart contracts on Ethereum to determine which result is correct. Because computation is deterministic, there will always be a single correct result.
 
-<ImageZoom src="/img/haw-transaction-lifecycle.svg" alt="Transaction lifecycle diagram showing various pathways for submitting transactions" className="img-600px" />
+<ImageZoom src="/img/haw-transaction-lifecycle.png" alt="Transaction lifecycle diagram showing various pathways for submitting transactions" className="img-600px" />
 
 _From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. Parent chain blocks are “settled to the parent chain” after a @@arbOneDisputeWindowDays=6.4@@ day period has elapsed and nobody has challenged their validity on Ethereum._
 
-In effect, there is a miniature Arbitrum state-transition VM [deployed as an Ethereum smart contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/osp/OneStepProofEntry.sol) to prove which assertions are correct. However, computation on Ethereum is expensive, which is why this mini-VM is built to handle “one-step proofs” consisting of a single step of WebAssembly (WASM) code. The Arbitrum state transition logic, written in Golang, is also compiled to WASM and will therefore obtain the same results as the VM found in the onchain smart contract. The soundness of the protocol depends on the assumptions that computation is deterministic and equivalent between the onchain VM and the Golang state transition compiled to WASM.
+In effect, a miniature Arbitrum state-transition VM [deployed as an Ethereum smart contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/osp/OneStepProofEntry.sol) is **deployed as an Ethereum smart contract** to prove which assertions are correct. However, computation on Ethereum is expensive, so this mini-VM is built to handle "one-step proofs" consisting of a single step of WebAssembly (WASM) code. The Arbitrum state transition logic, written in Golang, is also compiled to WASM and will therefore obtain the same results as the VM found in the onchain smart contract. The protocol's soundness depends on the assumption that computation is determinsitic and equivalent between the onchain VM and the Golang state transition compiled to WASM.
 
-All participants in the protocol have a local state from which they can produce valid proofs, and all honest parties will have the same local state. Malicious entities, however, can deviate from the honest parties in attempts to confirm invalid states through the protocol. Both the protocol and the honest validator client’s job is to allow honest parties to always win against any number of malicious participants by always claiming the absolute truth.
+All participants in the protocol have a local state from which they can produce valid proofs, and all honest parties will have the same local state. However, malicious entities can deviate from the honest parties in attempts to confirm invalid states through the protocol. The protocol and the honest validator client's job is to ensure honest parties always win against any number of malicious participants by always claiming the absolute truth.
 
 ## Assertions
 
-A key responsibility for Arbitrum proposers is to regularly post claims about the Arbitrum chains’ state to Ethereum at certain checkpoints. These are known as assertions (and are sometimes called _child chain state roots_). Assertions contain data, most critically:
+A key responsibility for Arbitrum proposers is to regularly post claims about the Arbitrum chains’ state to Ethereum at certain checkpoints. These are known as assertions (called _child-chain state roots_). Assertions contain data, most critically:
 
-1. The child chain block hash being claimed
+1. The child chain block hash being claimed.
 2. A "history commitment" combining hashes of the chain's intermediate state after every block the assertion covers. This is essentially a Merkle-like data structure, a tree from which the asserter only needs to provide the root when posting the assertion.
-3. The batch number it corresponds to for the Arbitrum chain
-4. The number of messages in the Arbitrum <a data-quicklook-from="sequencer">Sequencer</a> inbox at the time the assertion is created
+3. The batch number it corresponds to for the Arbitrum chain.
+4. The number of messages in the Arbitrum <a data-quicklook-from="sequencer">Sequencer</a> inbox at the time the assertion is created.
 
 The assertion to be posted onchain must consume the specified number of inbox messages from the previous assertion. There is a required delay measured in blocks of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for L2 chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain) for assertion posting. Currently, this value is set to equal one hour for BoLD.
 
-Anyone can confirm assertions after a period of @@arbOneDisputeWindowDays=6.4@@ days if they have not been challenged. In particular, assertions facilitate the process of [withdrawing from Arbitrum back to Ethereum](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). Arbitrum withdrawals require specifying a blockhash, which must be confirmed as an assertion onchain. This is why withdrawals have a delay of @@arbOneDisputeWindowDays=6.4@@ days if they are not actively challenged.
+Anyone can confirm assertions after @@arbOneDisputeWindowDays=6.4@@ days if they have not been challenged. In particular, assertions facilitate [withdrawing from Arbitrum back to Ethereum](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). Arbitrum withdrawals require specifying a blockhash, which must be confirmed onchain as an assertion. This is why withdrawals have a @@arbOneDisputeWindowDays=6.4@@ day delay if they are not actively challenged.
 
-Validators must become proposers in the rollup contract before being allowed to post assertions. For <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, this involves placing a one-time bond of 3600 **WETH** that is locked in the contract until they choose to withdraw. Validators can only withdraw their bond if their latest posted assertion receives confirmation. Every assertion a validator posts will become their latest bonded assertion. Subsequent bonds are not needed to post more assertions, instead, the protocol “moves” a validator’s bonds to their latest posted assertion.
+Anyone can confirm assertions after a period of days if they have not been challenged. In particular, assertions facilitate the process of [withdrawing from Arbitrum back to Ethereum](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). Arbitrum withdrawals require specifying a blockhash, which must be confirmed as an assertion onchain. This is why withdrawals have a delay of @@arbOneDisputeWindowDays=6.4@@ days if they are not actively challenged.
+
+Validators must become proposers in the rollup contract before they can post assertions. For <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, this involves placing a one-time bond of 3600 **WETH**, locked in the contract until they choose to withdraw. Validators can only withdraw their bond if their latest bonded assertion; instead, the protocol "moves" a validator's bonds to their latest posted assertion.
 
 Assertions form a chain where there can be forks. For instance, a validator might disagree on the history commitment of block state hashes, which an assertion contains. All <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> nodes are configured to warn users if they observe an assertion they disagree with posted onchain.
 
-However, suppose a node is configured as a validator and has deposited a bond to the [`Rollup` contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). In that case, that validator can post the correct rival assertion to any invalid one it observes. The validator will also be able to initiate a challenge by posting a challenge bond and other data to the `ChallengeManager`, signaling it is disputing an assertion.
+However, suppose a node is configured as a validator and has deposited a bond to the [`Rollup` contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). In that case, that validator can post the correct rival assertion to any invalid one it observes. The validator can also initiate a challenge by posting a challenge bond and other data to the `ChallengeManager`, signaling that it is disputing an assertion.
 
 #### Overflow assertions
 
-Given the mandatory delay of one hour between assertions posted onchain, and each assertion is claimed to a specific Arbitrum batch, there could be a very large number of blocks in between assertions. However, a single assertion only supports a maximum of 2^26 Arbitrum blocks since the previous assertion. If this value is overflowed, one or more follow-up overflow assertions needs to be posted to consume the rest of the blocks above the maximum. This overflow assertion will not be subject to the mandatory one-hour delay between assertions.
+Given the mandatory delay of one hour between assertions posted onchain, and each assertion is claimed to a specific Arbitrum batch, there could be a very large number of blocks in between assertions. However, a single assertion supports at most 2^26 Arbitrum blocks since the previous assertion. If this value overflows, one or more follow-up overflow assertions need to be posted to consume the rest of the blocks above the maximum. This overflow assertion will not be subject to the mandatory one-hour delay between assertions.
 
 #### Trustless bonding pools
 
-A large upfront assertion bond is critical for discouraging malicious actors from attacking Arbitrum and spamming the network (e.g., delay attacks), especially because malicious actors will always lose challenges and their entire bond. On the other hand, requiring such a high upfront assertion bond may be prohibitive for a single honest entity to put up—since the cost to defend Arbitrum is proportional to the number of malicious entities and ongoing challenges at any given point in time.
+A large upfront assertion bond is critical to discourage malicious actors from attacking Arbitrum and spamming the network (e.g., delay attacks), especially because malicious actors will always lose challenges and their entire bond. On the other hand, requiring such a high upfront assertion bond may be prohibitive for a single honest entity to put up—since the cost to defend Arbitrum is proportional to the number of malicious entities and ongoing challenges at any given point in time.
 
-To address this, there is a [staking (bond) pool contract](https://github.com/OffchainLabs/bold/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) that anyone can use to deploy a <a data-quicklook-from="trustless">trustless</a>, bonding pool as a way of crowdsourcing funds from others who wish to help defend Arbitrum, but who may otherwise not individually be able to put up the sizeable upfront bond itself.
+To address this, a [staking (bond) pool contract](https://github.com/OffchainLabs/bold/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) lets anyone deploy a <a data-quicklook-from="trustless">trustless</a> bonding pool to crowdsource funds from others who want to help defend Arbitrum but may not be able to post the sizable upfront bond themselves.
 
-Anyone can deploy an assertion bonding pool using the `AssertionStakingPoolCreator.sol` contract as a means to crowdsource funds for bonding funds to an assertion. To defend Arbitrum using one of these pools, an entity would first deploy this pool with the assertion they believe is correct and wish to bond on to challenge an adversary's assertion. Then, anyone can verify that the claimed assertion is correct by running the inputs through their node's <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF).
+Anyone can deploy an assertion bonding pool using the `AssertionStakingPoolCreator.sol` contract to crowdsource bonding funds for an assertion. To defend Arbitrum using one of these pools, an entity would first deploy this pool with the assertion they believe is correct nad wish to bond on to challenge an adversary's assertion. Then, anyone can verify that the claimed assertion is correct by running the inputs through their node's <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF).
 
-If other parties agree that the assertion is correct, they can deposit their funds into the contract. When enough funds have been deposited, anyone can trigger the creation of the assertion onchain to start the challenge in a trustless manner. Finally, once the dispute protocol confirms the honest parties' assertion, all involved entities will get their funds reimbursed and can withdraw.
+If other parties agree that the assertion is correct, they can deposit their funds into the contract. When enough funds have been deposited, anyone can trigger the creation of the assertion onchain to start the challenge in a trustless manner. Once the dispute protocol confirms the honest parties' assertion, all participants who contributed to the bonding pool will be promptly reimbursed and able to withdraw their funds.
 
 :::note With bonding pools
 
-There is no minimum **WETH** requirement and once the entire bond amount is raised (either 3600, 555, or 79 **ETH** for Arbitrum One), then the assertion can be posted by anyone trustlessly. Additionally, there is an optional feature in the Nitro node validator software that enables both the automatic deployment of a bonding pool contract and depositing of funds to challenge an observed invalid assertion.
+There is no minimum **WETH** requirement, and once the entire bond amount is raised (either 3600, 555, or 79 **ETH** for Arbitrum One), anyone can post the assertion trustlessly. Additionally, the Nitro node validator software includes an optional feature that enables both automatic deployment of a bonding pool contract and depositing funds to challenge an observed invalid assertion.
 
 :::
 
@@ -82,35 +88,36 @@ and make moves on challenges without sacrificing decentralization.
 
 ### Opening challenges
 
-To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on the parent chain.
+To initiate a challenge, the assertion chain must first fork within the Arbitrum Rollup contracts. However, a challenge actually starts when you create an edge claim and post it to tghe `ChallengeManager` contract on the parent chain.
+
+If there is a fork in the assertion chain (a "top-level" dispute), anyone can begin a challenge by creating a challenge edge. No bond is needed: each branch of the fork has a unique assertion, with an attached bond, and that assertion contains enough information to uniquely determine its challenge edge; that is, there is no "wiggle room" that an adversary can use to create multiple challenge edges from a single assertion (if this were possible, it could lead to spam attacks on the protocol).
+
+Anyone can open a sub-challenge on an assertion without needing to be a bonder in the Rollup contract, so long as they post a challenge bond and an edge claiming intent to start the challenge. This challenge bond is much lower than the one required to become an assertion proposer. Challenges aren't tied to specific addresses or parties; anyone can participate.
 
 If there is a fork in the assertion chain (a "top-level" dispute), anyone can begin a challenge by creating a challenge edge. No bond is needed: each branch of the fork has a unique assertion, with an attached bond, and that assertion contains enough information to uniquely determine its challenge edge; that is, there is no "wiggle room" that an adversary can use to create multiple challenge edges from a single assertion (if this were possible, it could lead to spam attacks on the protocol).
 
 Anyone can open a sub-challenge on an assertion without needing to be a bonder in the Rollup contract, so long as they post a challenge bond and an edge claiming intent to start the challenge. This challenge bond is much lower than the one required to become an assertion proposer. Challenges are not tied to specific addresses or parties—instead, anyone can participate.
 
-Recall that a challenge is a fundamental disagreement about an assertion posted to the Arbitrum chain. At its core, validators essentially disagree about the blockhash at a certain block number, and the BoLD protocol allows them to interactively narrow down their disagreement via fraud proofs such that Ethereum can be the final referee and claim a winner.
+Recall that a challenge is a fundamental disagreement about an assertion posted to the Arbitrum chain. At its core, validators disagree about the blockhash at a certain block number, and the BoLD protocol lets them interactively narrow that disagreement via fraud proofs so Ethereum can be the final referee and declare a winner.
 
 At its core, the disagreement between validators looks something like this:
 
 - **Common parent assertion**: `batch 5, blockhash 0xabc`
-- **Alice’s assertion**: `batch 10, blockhash 0x123`
-- **Bob’s assertion**: `batch 10, blockhash 0x456`
+- **Alice's assertion**: `batch 10, blockhash 0x123`
+- **Bob's assertion**: `batch 10, blockhash 0x456`
 
 Their disagreement is about an Arbitrum block somewhere between batch 5 and batch 10. Here’s how the actual challenge begins in this example:
 
-Validators have to fetch all blocks between batch 5 and batch 10 and create a Merkle commitment out of them as a Merkle tree with `2^26+1` leaves. If there are fewer than 2^26 blocks in between the assertions, the last block is repeated to pad the leaves of the tree to that value. Validators then create an “edge” data structure, which contains the following fields:
+Validators have to fetch all blocks between batch 5 and batch 10 and create a Merkle commitment out of them as a Merkle tree with `2^26+1` leaves. If there are fewer than 2^26 blocks between the assertions, the last block is repeated to pad the leaves of the tree to that value. Validators then create an “edge” data structure, which contains the following fields:
 
-- **start_hash:** the start_hash of the claimed assertion and is also the end_hash of the previous assertion
-
-- **end_hash:** the end hash of the last block in the child assertion that a validator claims is correct.
-
-- **merkle_root:** the Merkle root that results from committing to a Merkle tree from the start block hash to the end block hash
-
-- **inclusion_proofs:** Merkle proofs that the end hashes are indeed leaves of the Merkle tree committing to a root
+- **start_hash**: the start_hash of the claimed assertion and is also the end_hash of the previous assertion
+- **end_hash**: the end hash of the last block in the child assertion that a validator claims is correct.
+- **merkle_root**: the Merkle root that results from committing to a Merkle tree from the start block hash to the end block hash
+- **inclusion_proofs**: Merkle proofs that the end hashes are indeed leaves of the Merkle tree committing to a root
 
 The concept of a history commitment is at the core of challenges and BoLD itself.
 
-The validators above provide a Merkle proof of their commitment to some history. In this case, all the Arbitrum block hashes from batch 5 to batch 10. Using this tree, validators can narrow their disagreement to a single block using Merkle proofs by iteratively bisecting the Merkle root and creating edges which have their own history commitments to each half of the tree.
+The validators above provide a Merkle proof of their commitment to some history. In this case, all the Arbitrum block hashes from batch 5 to batch 10. Using this tree, validators can narrow their disagreement to a single block by iteratively bisecting the Merkle root and creating edges that have their own history commitments for each half of the tree.
 
 ### Challenge resolution
 
@@ -118,7 +125,7 @@ The fundamental unit in a challenge is an edge data structure.
 
 #### Initiation
 
-The first validator to create an edge initiates a challenge. The smart contracts validate the Merkle inclusion proofs and hashes provided to prove this challenge is about a specific fork in the assertion chain in the Rollup contract.
+The first validator to create an edge initiates a challenge. The smart contracts validate the Merkle inclusion proofs and hashes provided to prove that the challenge targets a specific fork in the assertion chain in the Rollup contract.
 
 #### Bisections
 
