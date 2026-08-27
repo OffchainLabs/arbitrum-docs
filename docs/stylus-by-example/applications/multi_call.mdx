@@ -63,7 +63,7 @@ pub enum MultiCallErrors {
     CallFailed(CallFailed),
 }
 
-#[external]
+#[public]
 impl MultiCall {
     pub fn multicall(
         &self,

@@ -115,9 +115,9 @@ Previously, all public methods were required to return a `Result` type with `Vec
 In the following example, `owner` is a public function that returns the contract owner's address. Since this function is infallible (i.e., it cannot produce an error), it does not need to return a `Result` type.
 
 ```rust
-#[external]
+#[public]
 impl Contract {
-    // Define an external function to get the owner of the contract
+    // Define a public function to get the owner of the contract
     pub fn owner(&self) -> Address {
         self.owner.get()
     }
