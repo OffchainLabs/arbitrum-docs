@@ -1,0 +1,7 @@
+---
+title: Rollup contract
+key: rollup-contract
+titleforSort: Rollup contract
+---
+
+The smart contract on the [parent chain](/intro/glossary#parent-chain) where validators post and bond on [assertions](/intro/glossary#assertion) about an Arbitrum chain's state. It is implemented as [`RollupCore.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). Under [BoLD](/intro/glossary#bold) it holds a reference to a [ChallengeManager](/intro/glossary#challenge-manager) contract. The wider set of Rollup contracts also serves as the data availability layer for the chain, and confirms each assertion once its [challenge period](/intro/glossary#challenge-period) has passed.

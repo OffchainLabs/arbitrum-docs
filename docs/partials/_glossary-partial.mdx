@@ -158,9 +158,17 @@ Short for "Bounded Liquidity Delay"; latest version of the Arbitrum [Challenge p
 A [Validator](/intro/glossary#validator) who deposits a bond (in Ether on [Arbitrum One](/intro/glossary#arbitrum-one) and [Arbitrum Nova](/intro/glossary#arbitrum-nova) ) to vouch for a particular [assertion](/intro/glossary#assertion) in an Arbitrum Chain. A validator who bonds on a false assertion can expect to lose their bond. An honest bonder can recover their bond once the assertion they are bonded on has been confirmed.
 _Also known as: staker_
 
+### Bonding {#bonding}
+
+Locking WETH in the [Rollup contract](/intro/glossary#rollup-contract) to gain the right to post [assertions](/intro/glossary#assertion). A party joins the validator set by posting one large assertion bond. Later assertions from the same party need no further bond, because the protocol treats each [bonder](/intro/glossary#bonder) as bonded to their latest assertion. Opening a sub-challenge needs a smaller [challenge bond](/intro/glossary#challenge-bond). Bonded funds are lost if a competing assertion is confirmed, and can be withdrawn once the bonded assertion is confirmed.
+
 ### Bridge {#bridge}
 
 A set of smart contracts for sending [Cross-chain messages](/intro/glossary#crosschain-message) between blockchains. Every [Arbitrum chain](/intro/glossary#arbitrum-chain) includes a bridge to/from its [Parent chain](/intro/glossary#parent-chain).
+
+### Chain bindings {#chain-bindings}
+
+Software that calls and sends transactions to the onchain contracts a validator needs to take part in the [challenge protocol](/intro/glossary#challenge-protocol). Arbitrum uses go-ethereum's `abigen` utility to generate Go bindings for these contracts, plus a few developer-friendly wrappers.
 
 ### Chain Owner {#chain-owner}
 
@@ -178,6 +186,10 @@ When two [bonders](/intro/glossary#bonder) disagree about the correct verdict on
 
 The per-level [bond](/intro/glossary#bonder) required to open or move within a sub-challenge under [BoLD](/intro/glossary#bold). Each level of the dispute tree has its own configured bond amount, set at chain deployment. Challenge bonds are distinct from the larger assertion bond that backs the proposed [Assertion](/intro/glossary#assertion) itself.
 
+### Challenge manager client {#challenge-manager-client}
+
+Software that manages the life cycle of every challenge an [active validator](/intro/glossary#active-validator) takes part in. It tracks many challenges at once and acts on, confirms, or rejects each [edge](/intro/glossary#edge) as the [challenge protocol](/intro/glossary#challenge-protocol) allows.
+
 ### Challenge Period {#challenge-period}
 
 Window of time (one week on Arbitrum One) over which an [Assertion](/intro/glossary#assertion) can be challenged, and after which the assertion can be confirmed.
@@ -185,6 +197,10 @@ Window of time (one week on Arbitrum One) over which an [Assertion](/intro/gloss
 ### Challenge protocol {#challenge-protocol}
 
 The protocol by which assertions are submitted, disputed, and ultimately confirmed. The Challenge Protocol guarantees that only valid [assertions](/intro/glossary#assertion) will be confirmed provided that there is at least one honest [active validator](/intro/glossary#active-validator).
+
+### ChallengeManager {#challenge-manager}
+
+The [BoLD](/intro/glossary#bold) smart contract on the [parent chain](/intro/glossary#parent-chain) that starts challenges on [assertions](/intro/glossary#assertion) and lets anyone join a challenge without permission. It holds the entry points for making challenge moves, opening [edges](/intro/glossary#edge), creating sub-challenges, and confirming challenges.
 
 ### Child chain {#child-chain}
 
@@ -239,6 +255,10 @@ An archive of a Nitro database published so a new node can initialize without sy
 ### Defensive Validator {#defensive-validator}
 
 A [Validator](/intro/glossary#validator) that watches an Arbitrum chain and takes action (i.e., bonds and challenges) only when and if an invalid [Assertion](/intro/glossary#assertion) occurs.
+
+### Delay attack {#delay-attack}
+
+An attack in which one or more malicious parties follow the [challenge protocol](/intro/glossary#challenge-protocol) to delay [confirmation](/intro/glossary#confirmation) of results to the [parent chain](/intro/glossary#parent-chain). The protocol used before [BoLD](/intro/glossary#bold) allowed this, because an honest party had to play a separate 1-vs-1 challenge against each adversary. BoLD sets a constant upper bound on confirmation time: one honest validator defends a single assertion against any number of malicious claims. Solving delay attacks is what makes [permissionless validation](/intro/glossary#permissionless-validation) safe.
 
 ### Delayed Inbox {#delayed-inbox}
 
@@ -346,6 +366,10 @@ Nitro's default [state scheme](/intro/glossary#state-scheme), which stores the s
 
 A Merkle-tree root committing to a sequence of execution states—either block hashes or instruction-level state hashes, depending on the level of the dispute. Each [BoLD](/intro/glossary#bold) [edge](/intro/glossary#edge) carries a start and end history commitment to represent a claim over a range of chain history.
 
+### Honest validator {#honest-validator}
+
+A [validator](/intro/glossary#validator) that knows the correct state of the [child chain](/intro/glossary#child-chain) and acts on it. It creates [assertions](/intro/glossary#assertion), confirms valid ones, and challenges invalid ones. It runs an [Arbitrum full node](/intro/glossary#arbitrum-full-node) in `MakeNodes`, `Defensive`, `StakeLatest`, or `ResolveNodes` mode. Every chain needs at least one [proposer](/intro/glossary#proposer) in `MakeNodes` mode to advance the chain.
+
 ### Host I/O {#host-io}
 
 The set of low-level imports that a [Stylus](/intro/glossary#stylus) [WASM](/intro/glossary#wasm) program uses to access chain state and runtime services—the equivalent of EVM opcodes for Solidity contracts. Host I/O calls cover storage access, account info, environment data, math primitives, and re-entrancy controls. Each call has a fixed [ink](/intro/glossary#ink) cost.
@@ -415,6 +439,10 @@ The initial builders Arbitrum; current contributors to the Arbitrum ecosystem an
 ### One Step Proof {#one-step-proof}
 
 Final step in a challenge; a single operation of the Arbitrum VM ([WASM](/intro/glossary#wasm)) is executed on the underlying chain, and the validity of its state transition is verified.
+
+### OneStepProver {#one-step-prover}
+
+The set of [parent chain](/intro/glossary#parent-chain) contracts that implement a miniature [WASM](/intro/glossary#wasm) VM, often shortened to `OSP`. The VM executes a [one step proof](/intro/glossary#one-step-proof) of the [child chain](/intro/glossary#child-chain) [state transition function](/intro/glossary#state-transition-function), which settles a challenge. It is written in Solidity. [BoLD](/intro/glossary#bold) needs no changes to these contracts.
 
 ### Oracle {#oracle}
 
@@ -494,6 +522,10 @@ A [Token Gateway](/intro/glossary#token-gateway) in which the [Child chain](/int
 
 In the [BoLD](/intro/glossary#bold) [Challenge Protocol](/intro/glossary#challenge-protocol), two [edges](/intro/glossary#edge) are _rivals_ when they share a starting point but make incompatible claims about the same range of chain history. Rivaling an edge stops its unrivaled timer and unlocks [bisection](/intro/glossary#bisection) moves to resolve the disagreement.
 
+### Rollup contract {#rollup-contract}
+
+The smart contract on the [parent chain](/intro/glossary#parent-chain) where validators post and bond on [assertions](/intro/glossary#assertion) about an Arbitrum chain's state. It is implemented as [`RollupCore.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). Under [BoLD](/intro/glossary#bold) it holds a reference to a [ChallengeManager](/intro/glossary#challenge-manager) contract. The wider set of Rollup contracts also serves as the data availability layer for the chain, and confirms each assertion once its [challenge period](/intro/glossary#challenge-period) has passed.
+
 ### Rollup Event Inbox {#rollup-event-inbox}
 
 A parent chain contract (one per [Arbitrum chain](/intro/glossary#arbitrum-chain)) that serves as an authorized [delayed inbox](/intro/glossary#delayed-inbox) used exclusively by the Rollup contract to communicate chain-level protocol events to the child chain. It is separate from the regular `Inbox`, `Bridge`, and `SequencerInbox` contracts that handle user transactions.
@@ -540,6 +572,10 @@ An token contract on an Arbitrum chain deployed via the [`StandardERC20` gateway
 
 [Token Gateway](/intro/glossary#token-gateway) via which any underlying chain's **ERC-20** token can permissionlessly bridge; the `StandardERC20` gateway contracts deploy a [Standard Arb-Token](/intro/glossary#standard-arbtoken) on the [Child chain](/intro/glossary#child-chain) for each bridged token.
 
+### State manager backend {#state-manager-backend}
+
+Software that retrieves [child chain](/intro/glossary#child-chain) states and produces commitments to [WAVM](/intro/glossary#wavm) execution histories. The [validator client](/intro/glossary#validator-client) reads from a state manager backend to make its moves in a challenge.
+
 ### State Pruning {#state-pruning}
 
 Removing historical [chain state](/intro/glossary#chain-state) a node no longer needs, to keep its database from growing without bound. On [HashDB](/intro/glossary#hashdb) you prune manually with `--init.prune` and the node is offline while it runs. On [PathDB](/intro/glossary#pathdb) Nitro prunes online as the node runs, with no intervention and no downtime. An [archive node](/intro/glossary#archive-node) prunes nothing by definition.
@@ -559,6 +595,10 @@ Upgrade to the [Arbitrum Nitro](/intro/glossary#arbitrum-nitro) virtual machine 
 ### Timeboost {#timeboost}
 
 A transaction ordering policy in which entities can bid for the right to access an express lane on the [Sequencer](/intro/glossary#sequencer) for faster transaction inclusion. See the [research specification](https://github.com/OffchainLabs/timeboost-design/tree/main) to learn more.
+
+### Timer {#timer}
+
+The count of blocks an [edge](/intro/glossary#edge) has stayed unrivaled. The protocol measures time in blocks of the first non-Arbitrum ancestor chain, so Ethereum blocks for L2 chains and for L3 chains that settle to an Arbitrum chain. An edge's timer stops when a [rival](/intro/glossary#rival) edge appears onchain. The protocol confirms an [assertion](/intro/glossary#assertion) once the timer of its unrivaled edge reaches the [challenge period](/intro/glossary#challenge-period).
 
 ### Token Gateway {#token-gateway}
 
@@ -594,9 +634,18 @@ Synonymous with [Parent chain](/intro/glossary#parent-chain).
 
 The single privileged contract—deployed once per [Arbitrum chain](/intro/glossary#arbitrum-chain) by the rollup creator—that authorizes protocol upgrades and admin actions. The Upgrade Executor owns both the chain's rollup contracts and its `ProxyAdmin`, so every privileged call to the core contracts is routed through it. Its admin role is typically held by the [chain owner](/intro/glossary#chain-owner).
 
+### Validating bridge {#validating-bridge}
+
+The [bridge](/intro/glossary#bridge) smart contract that uses the [parent chain](/intro/glossary#parent-chain)'s security and censorship resistance to unlock bridged assets. Assets unlock only after an [assertion](/intro/glossary#assertion) showing that the assets left the [child chain](/intro/glossary#child-chain) is posted and confirmed.
+
 ### Validator {#validator}
 
 An [Arbitrum Full Node](/intro/glossary#arbitrum-full-node) that tracks the status of the chains' [Assertion](/intro/glossary#assertion)s. A validator may be a [Watchtower Validator](/intro/glossary#watchtower-validator), a [Defensive Validator](/intro/glossary#defensive-validator), or an [Active Validator](/intro/glossary#active-validator).
+
+### Validator client {#validator-client}
+
+The software an [honest validator](/intro/glossary#honest-validator) runs. It learns the correct [child chain](/intro/glossary#child-chain) history from a [state manager backend](/intro/glossary#state-manager-backend), then posts [assertions](/intro/glossary#assertion) to the [parent chain](/intro/glossary#parent-chain) by bonding a claim. It reaches the contracts through [chain bindings](/intro/glossary#chain-bindings). It tracks the [Rollup contract](/intro/glossary#rollup-contract) for posted assertions and, if you configure it to do so, opens challenges against invalid ones. Under [BoLD](/intro/glossary#bold) it also joins challenges that other honest validators started. Every [Arbitrum full node](/intro/glossary#arbitrum-full-node) is a [watchtower validator](/intro/glossary#watchtower-validator) by default: it posts nothing, but warns you when it detects an invalid assertion.
+_Also known as: validator software_
 
 ### Wallet {#wallet}
 
