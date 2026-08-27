@@ -7,7 +7,7 @@ description: 'How to log events to the chain using the Arbitrum Stylus Rust SDK.
 
 # Events
 
-Events allow for data to be logged publicly to the blockchain. Log entries provide the contract's address, a series of up to four topics, and some arbitrary length binary data. The Stylus Rust SDK provides a few ways to publish event logs described below.
+Events allow for data to be logged publicly to the blockchain. Log entries provide the contract's address, a series of up to four topics, and some arbitrary length binary data. The Stylus Rust SDK provides a few ways to publish event logs described below. Note that as of Stylus v0.1.0, the `logging` library flag is no longer required for event logging.
 
 ## Learn More
 
@@ -17,7 +17,7 @@ Events allow for data to be logged publicly to the blockchain. Log entries provi
 
 ## Log
 
-Using the `evm::log` function in the Stylus SDK is the preferred way to log events. It ensures that an event will be logged in a Solidity ABI-compatible format. The `log` function takes any type that implements Alloy `SolEvent` trait. It's not recommended to attempt to implement this trait on your own. Instead, make use of the provided `sol!` macro to declare your Events and their schema using Solidity-style syntax to declare the parameter types. Alloy will create ABI-compatible Rust types which you can instantiate and pass to the `evm::log` function.
+Using the `self.vm().log` function in the Stylus SDK is the preferred way to log events. It ensures that an event will be logged in a Solidity ABI-compatible format. The `log` function takes any type that implements Alloy `SolEvent` trait. It's not recommended to attempt to implement this trait on your own. Instead, make use of the provided `sol!` macro to declare your Events and their schema using Solidity-style syntax to declare the parameter types. Alloy will create ABI-compatible Rust types which you can instantiate and pass to the `self.vm().log` function.
 
 ### Log Usage
 
@@ -40,18 +40,18 @@ pub struct Events {}
 
 #[public]
 impl Events {
-fn user_main(_input: Vec<u8>) -> ArbResult {
-    // emits a 'Log' event, defined above in the sol! macro
-    evm::log(Log {
-        sender: Address::from([0x11; 20]),
-        message: "Hello world!".to_string(),
-    });
+    pub fn user_main(&mut self, _input: Vec<u8>) -> ArbResult {
+        // emits a 'Log' event, defined above in the sol! macro
+        self.vm().log(Log {
+            sender: Address::from([0x11; 20]),
+            message: "Hello world!".to_string(),
+        });
 
-    // no data, but 'AnotherLog' event will still emit to the chain
-    evm::log(AnotherLog {});
+        // no data, but 'AnotherLog' event will still emit to the chain
+        self.vm().log(AnotherLog {});
 
-    Ok(vec![])
-}
+        Ok(vec![])
+    }
 }
 ```
 
@@ -77,9 +77,9 @@ let mut data: Vec<u8> = vec![];
 // to_be_bytes means 'to big endian bytes'
 data.extend_from_slice(balance.to_be_bytes::<32>().to_vec().as_slice());
 
-// unwrap() here 'consumes' the Result
-evm::raw_log(topics.as_slice(), data.as_ref()).unwrap();
-```
+    // unwrap() here 'consumes' the Result
+    self.vm().raw_log(topics.to_vec(), data).unwrap();
+    ```
 
 ## Result
 
@@ -154,34 +154,34 @@ pub struct Events {}
 
 #[public]
 impl Events {
-fn user_main(_input: Vec<u8>) -> ArbResult {
-    // emits a 'Log' event, defined above in the sol! macro
-    evm::log(Log {
-        sender: Address::from([0x11; 20]),
-        message: "Hello world!".to_string(),
-    });
+    pub fn user_main(&mut self, _input: Vec<u8>) -> ArbResult {
+        // emits a 'Log' event, defined above in the sol! macro
+        self.vm().log(Log {
+            sender: Address::from([0x11; 20]),
+            message: "Hello world!".to_string(),
+        });
 
-    // no data, but event will still log to the chain
-    evm::log(AnotherLog {});
+        // no data, but event will still log to the chain
+        self.vm().log(AnotherLog {});
 
-    // set up local variables
-    let user = Address::from([0x22; 20]);
-    let balance = U256::from(10_000_000);
+        // set up local variables
+        let user = Address::from([0x22; 20]);
+        let balance = U256::from(10_000_000);
 
-    // declare up to 4 topics
-    // topics must be of type FixedBytes<32>
-    let topics = &[user.into_word()];
+        // declare up to 4 topics
+        // topics must be of type FixedBytes<32>
+        let topics = vec![user.into_word()];
 
-    // store non-indexed data in a byte Vec
-    let mut data: Vec<u8> = vec![];
-    // to_be_bytes means 'to big endian bytes'
-    data.extend_from_slice(balance.to_be_bytes::<32>().to_vec().as_slice());
+        // store non-indexed data in a byte Vec
+        let mut data: Vec<u8> = vec![];
+        // to_be_bytes means 'to big endian bytes'
+        data.extend_from_slice(balance.to_be_bytes::<32>().to_vec().as_slice());
 
-    // unwrap() here 'consumes' the Result
-    evm::raw_log(topics.as_slice(), data.as_ref()).unwrap();
+        // unwrap() here 'consumes' the Result
+        self.vm().raw_log(topics, data).unwrap();
 
-    Ok(Vec::new())
-}
+        Ok(Vec::new())
+    }
 }
 ```
 
@@ -199,7 +199,7 @@ keywords = ["arbitrum", "ethereum", "stylus", "alloy"]
 alloy-primitives = "=0.7.6"
 alloy-sol-types = "=0.7.6"
 mini-alloc = "0.4.2"
-stylus-sdk = "0.6.0"
+stylus-sdk = "@@stylusSdkVersion=0.10.7@@"
 hex = "0.4.3"
 
 [dev-dependencies]
