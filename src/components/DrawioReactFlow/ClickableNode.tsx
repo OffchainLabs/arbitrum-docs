@@ -1,0 +1,161 @@
+import React from 'react';
+import { NodeProps, Handle, Position } from 'reactflow';
+import { NodeData } from './types';
+import { DiagramHoverModal } from './DiagramHoverModal';
+
+export function ClickableNode({ data }: NodeProps<NodeData>) {
+  const { label, shape, link, centerable, colorToken, onNavigate, hoverContentComponent } = data;
+  const isClickable = !!link || !!centerable;
+
+  const handleClick = () => {
+    if (link && onNavigate) {
+      onNavigate(link);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (isClickable && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      if (link && onNavigate) {
+        onNavigate(link);
+      }
+    }
+  };
+
+  // Resolve text alignment — explicit NodeData hints win, then the legacy `topAligned`
+  // shortcut from drawio, then default (centered)
+  const alignItems: React.CSSProperties['alignItems'] =
+    data.verticalAlign === 'top' || data.topAligned
+      ? 'flex-start'
+      : data.verticalAlign === 'bottom'
+      ? 'flex-end'
+      : 'center';
+  const justifyContent: React.CSSProperties['justifyContent'] =
+    data.textAlign === 'left' ? 'flex-start' : data.textAlign === 'right' ? 'flex-end' : 'center';
+  const paddingTop = alignItems === 'flex-start' ? '4px' : undefined;
+  const paddingBottom = alignItems === 'flex-end' ? '4px' : undefined;
+  const paddingLeft = justifyContent === 'flex-start' ? '6px' : undefined;
+  const paddingRight = justifyContent === 'flex-end' ? '6px' : undefined;
+
+  const baseStyle: React.CSSProperties = {
+    cursor: isClickable ? 'pointer' : 'default',
+    alignItems,
+    justifyContent,
+    ...(paddingTop ? { paddingTop } : {}),
+    ...(paddingBottom ? { paddingBottom } : {}),
+    ...(paddingLeft ? { paddingLeft } : {}),
+    ...(paddingRight ? { paddingRight } : {}),
+  };
+
+  // Apply shape-specific transforms
+  let shapeStyle: React.CSSProperties = {};
+  if (shape === 'diamond') {
+    shapeStyle = {
+      transform: 'rotate(45deg)',
+    };
+  }
+
+  const contentStyle: React.CSSProperties =
+    shape === 'diamond' ? { transform: 'rotate(-45deg)' } : {};
+
+  const labelContent = hoverContentComponent ? (
+    <DiagramHoverModal ContentComponent={hoverContentComponent}>{label}</DiagramHoverModal>
+  ) : (
+    label
+  );
+
+  return (
+    <div
+      className={`custom-node ${isClickable ? 'node-clickable' : 'node-static'} shape-${shape}${
+        colorToken ? ` color-${colorToken}` : ''
+      }`}
+      style={{ ...baseStyle, ...shapeStyle }}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role={isClickable ? 'button' : undefined}
+      tabIndex={isClickable ? 0 : -1}
+      aria-label={isClickable ? `Navigate to ${link || label}` : label}
+    >
+      {/* Connection handles — 4 sides, 3 positions per side (20/50/80%), plus legacy
+          midpoint-only ids (e.g. "top-source") for the draw.io converter that doesn't
+          emit along-side offsets. */}
+      {/* Top — legacy midpoint */}
+      <Handle id="top-target" type="target" position={Position.Top} />
+      <Handle id="top-source" type="source" position={Position.Top} />
+      {/* Top — 20/50/80 */}
+      <Handle id="top-20-target" type="target" position={Position.Top} style={{ left: '20%' }} />
+      <Handle id="top-20-source" type="source" position={Position.Top} style={{ left: '20%' }} />
+      <Handle id="top-50-target" type="target" position={Position.Top} style={{ left: '50%' }} />
+      <Handle id="top-50-source" type="source" position={Position.Top} style={{ left: '50%' }} />
+      <Handle id="top-80-target" type="target" position={Position.Top} style={{ left: '80%' }} />
+      <Handle id="top-80-source" type="source" position={Position.Top} style={{ left: '80%' }} />
+
+      {/* Right — legacy midpoint */}
+      <Handle id="right-target" type="target" position={Position.Right} />
+      <Handle id="right-source" type="source" position={Position.Right} />
+      {/* Right — 20/50/80 */}
+      <Handle id="right-20-target" type="target" position={Position.Right} style={{ top: '20%' }} />
+      <Handle id="right-20-source" type="source" position={Position.Right} style={{ top: '20%' }} />
+      <Handle id="right-50-target" type="target" position={Position.Right} style={{ top: '50%' }} />
+      <Handle id="right-50-source" type="source" position={Position.Right} style={{ top: '50%' }} />
+      <Handle id="right-80-target" type="target" position={Position.Right} style={{ top: '80%' }} />
+      <Handle id="right-80-source" type="source" position={Position.Right} style={{ top: '80%' }} />
+
+      {/* Bottom — legacy midpoint */}
+      <Handle id="bottom-target" type="target" position={Position.Bottom} />
+      <Handle id="bottom-source" type="source" position={Position.Bottom} />
+      {/* Bottom — 20/50/80 */}
+      <Handle
+        id="bottom-20-target"
+        type="target"
+        position={Position.Bottom}
+        style={{ left: '20%' }}
+      />
+      <Handle
+        id="bottom-20-source"
+        type="source"
+        position={Position.Bottom}
+        style={{ left: '20%' }}
+      />
+      <Handle
+        id="bottom-50-target"
+        type="target"
+        position={Position.Bottom}
+        style={{ left: '50%' }}
+      />
+      <Handle
+        id="bottom-50-source"
+        type="source"
+        position={Position.Bottom}
+        style={{ left: '50%' }}
+      />
+      <Handle
+        id="bottom-80-target"
+        type="target"
+        position={Position.Bottom}
+        style={{ left: '80%' }}
+      />
+      <Handle
+        id="bottom-80-source"
+        type="source"
+        position={Position.Bottom}
+        style={{ left: '80%' }}
+      />
+
+      {/* Left — legacy midpoint */}
+      <Handle id="left-target" type="target" position={Position.Left} />
+      <Handle id="left-source" type="source" position={Position.Left} />
+      {/* Left — 20/50/80 */}
+      <Handle id="left-20-target" type="target" position={Position.Left} style={{ top: '20%' }} />
+      <Handle id="left-20-source" type="source" position={Position.Left} style={{ top: '20%' }} />
+      <Handle id="left-50-target" type="target" position={Position.Left} style={{ top: '50%' }} />
+      <Handle id="left-50-source" type="source" position={Position.Left} style={{ top: '50%' }} />
+      <Handle id="left-80-target" type="target" position={Position.Left} style={{ top: '80%' }} />
+      <Handle id="left-80-source" type="source" position={Position.Left} style={{ top: '80%' }} />
+
+      <div className="node-content" style={contentStyle}>
+        {labelContent}
+      </div>
+    </div>
+  );
+}
