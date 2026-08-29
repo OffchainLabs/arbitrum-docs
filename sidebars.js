@@ -1846,6 +1846,43 @@ const sidebars = {
     },
   ],
 
+  // Enterprise solutions sidebar
+  enterpriseSolutionsSidebar: [
+    {
+      type: 'category',
+      label: 'Enterprise solutions',
+      collapsed: false,
+      items: [
+        {
+          type: 'category',
+          label: 'Financial Institutions',
+          collapsed: false,
+          link: {
+            type: 'doc',
+            id: 'solutions/financial-institutions',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'solutions/financial-institutions/prove-your-first-compliant-chain',
+              label: 'Testnet walkthrough',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Consumer Fintech',
+          collapsed: false,
+          link: {
+            type: 'doc',
+            id: 'solutions/consumer-fintech',
+          },
+          items: [],
+        },
+      ],
+    },
+  ],
+
   // Notices sidebar
   noticeSidebar: [
     {
