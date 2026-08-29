@@ -455,6 +455,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/deploy/token-bridge',
               label: `Token bridge`,
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/yield-bridge',
+              label: `Yield bridge`,
+            },
           ],
         },
         {
