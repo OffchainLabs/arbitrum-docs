@@ -1,0 +1,149 @@
+---
+title: 'Token bridge troubleshooting'
+sidebar_label: 'Token bridge troubleshooting'
+description: 'Diagnose and resolve common token bridge problems including ENS errors on non-Ethereum parent chains, unverified WETH contracts, bridged USDC routing to the wrong gateway, custom gateway registration failures, and outboundTransfer reverts.'
+author: pete-vielhaber
+sme: jose-franco
+user_story: As an Arbitrum chain operator, I need to diagnose and resolve common token bridge deployment and registration problems so that tokens bridge through the gateways I intended.
+content_type: troubleshooting
+---
+
+This guide covers problems that operators encounter when deploying, verifying, and registering contracts for the canonical <a data-quicklook-from="arb-token-bridge">token bridge</a>. For the deployment procedure itself, see [Deploy a token bridge using the Chain SDK](/launch-arbitrum-chain/deploy/token-bridge.mdx). To learn how the bridge is designed, see [Token bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx).
+
+Most routing problems in this guide trace back to a single behavior: the <a data-quicklook-from="gateway-router">gateway router</a> falls back to a default gateway instead of failing when a token has no registration. We’ll first cover issues related to how a gateway router chooses a specific gateway for a given token.
+
+## Concept: How the TokenBridge router picks a gateway
+
+Each side of the bridge has a router (`L1GatewayRouter` on the <a data-quicklook-from="parent-chain">parent chain</a>, `L2GatewayRouter` on the <a data-quicklook-from="child-chain">child chain</a>) holding an `l1TokenToGateway` mapping from a parent chain token address to the gateway that handles it.
+
+The mapping isn't a list of every bridgeable token. It holds only the tokens that someone registered to a <a data-quicklook-from="custom-gateway">custom gateway</a>, so a given **ERC-20** token may or may not have an entry. When you bridge a token, the router calls `getGateway`, which resolves in this order:
+
+1. If `l1TokenToGateway` has an entry for the token, use that gateway.
+2. If it has no entry, fall back to `defaultGateway`—the <a data-quicklook-from="standarderc20-gateway">standard **ERC-20** gateway</a>.
+3. If the resolved gateway is explicitly disabled, return the zero address.
+
+<VanillaAdmonition type="warning" title="Unregistered tokens fail silently, not loudly">
+
+Step 2 is the reason misrouting is so hard to spot. A token you believe is registered to a custom gateway—but isn't—still bridges successfully through the standard gateway, minting a _different_ child chain token than the one you deployed. Nothing reverts and no event signals the mistake. If a bridge transfer succeeds but the tokens land at an unexpected address, suspect a missing registration before you suspect a bug.
+
+</VanillaAdmonition>
+
+## Bridged USDC routes to the standard gateway
+
+As part of the USDC bridge deployment script, the custom USDC gateway is registered in the `TokenBridge` router. If that process fails, the `TokenBridge` won't be able to choose the right gateway for USDC, falling back to the default gateway.
+
+### What causes this problem
+
+The deployment script's final registration step is conditional. It performs these operations in order:
+
+1. Load deployer wallets for both chains and register the networks in the SDK.
+2. Deploy and initialize bridged **USDC** on the child chain using Circle's implementation.
+3. Deploy new proxy admins on both chains.
+
+### Resolution
+
+1. **Query the router directly.** Call `getGateway` on `L1GatewayRouter` with your parent chain **USDC** address. If it returns the standard **ERC-20** gateway rather than your **USDC** gateway, registration never landed.
+2. **Execute `registerUsdcGatewayTx.json`.** Submit the stored calldata through your `UpgradeExecutor` using the account holding the executor role.
+3. **Check both sides.** Registration crosses chains via a <a data-quicklook-from="retryable-ticket">retryable ticket</a>, so confirm the child chain router resolves correctly too. See [Registration succeeded on one chain only](#registration-succeeded-on-one-chain-only).
+
+## Custom gateway registration fails
+
+Registering a token or gateway involves sending specific transactions to the `TokenBridge` router or gateway. This section will cover common troubleshooting, for a deeper understanding refer to the [Generic custom gateway](/arbitrum-essentials/bridging/configure-token-gateway/generic-custom.mdx) page.
+
+| Entry point              | Contract          | Guard             | Who can call it                                            |
+| :----------------------- | :---------------- | :---------------- | :--------------------------------------------------------- |
+| `registerTokenToL2`      | `L1CustomGateway` | `NOT_ARB_ENABLED` | The token contract itself, not an externally owned account |
+| `forceRegisterTokenToL2` | `L1CustomGateway` | `ONLY_OWNER`      | The gateway owner, normally the `UpgradeExecutor`          |
+| `setGateway`             | `L1GatewayRouter` | `NOT_ARB_ENABLED` | The token contract itself                                  |
+| `setGateways`            | `L1GatewayRouter` | `ONLY_OWNER`      | The router owner, normally the `UpgradeExecutor`           |
+
+### Wrong caller for the registration path
+
+`registerTokenToL2` and `setGateway` are designed to be called _by the token_. They revert with `NOT_ARB_ENABLED` unless the caller implements the <a data-quicklook-from="custom-arbtoken">custom token</a> interface and returns the expected value from `isArbitrumEnabled()`. Calling either from an externally owned account fails no matter how that account is funded or permissioned.
+
+For a token that can't be modified, use the chain-owner-side path instead. `forceRegisterTokenToL2` takes parallel arrays and bypasses the token-side check:
+
+```solidity
+function forceRegisterTokenToL2(
+    address[] calldata _l1Addresses,
+    address[] calldata _l2Addresses,
+    uint256 _maxGas,
+    uint256 _gasPriceBid,
+    uint256 _maxSubmissionCost
+) external payable virtual onlyOwner returns (uint256)
+```
+
+Because it's `onlyOwner` and the owner is the `UpgradeExecutor` on chains deployed by the creator, the call must be routed through the executor rather than sent from the <a data-quicklook-from="chain-owner">chain owner</a>'s account directly.
+
+### Registration succeeded on one chain only
+
+Because registration is asynchronous, the parent chain transaction can succeed while the child chain retryable fails or expires unredeemed. The result is a half-applied registration: one router resolves your custom gateway, and the other falls back to its default. Deposits and withdrawals then disagree about which gateway owns the token.
+
+After any registration, confirm `getGateway` returns the same gateway on both routers. If the child chain side is missing, locate the retryable ticket from the parent chain transaction and redeem it. To learn how redemption works, see [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
+
+### Array length and remapping errors
+
+- `NO_UPDATE_TO_DIFFERENT_ADDR` means the token already maps to a _different_ child chain address. Registration is not a general-purpose update mechanism—re-registering with the same address is accepted, but pointing an already-registered token at a new child chain address is rejected. Confirm the intended mapping before the first registration.
+- `NOT_TO_CONTRACT` means the gateway address you supplied has no code.
+- `TOKEN_NOT_HANDLED_BY_GATEWAY` means the gateway doesn't recognize the token you're pointing it at. This is an ordering problem: register the token with the gateway first, then register the gateway with the router.
+
+## A WETH gateway is missing
+
+Your chain has no <a data-quicklook-from="weth-gateway">WETH gateway</a>, no child chain `aeWETH`, and no **WETH** bridging path.
+
+If your chain uses a <a data-quicklook-from="custom-gas-token">custom gas token</a>, it doesn't need a WETH gateway since ETH is not the native token of the chain and doesn't require specific handling. In a custom gas token chain, WETH can be bridge through the default gateway.
+
+On an **ETH**-based chain, the gateway is wired to the **WETH** address stored by the creator you deployed through, not to one you choose at chain creation time. To learn which creator you used, see [Canonical factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx).
+
+## `network does not support ENS` when deploying the creator
+
+Deploying the token bridge creator against a non-Ethereum parent chain fails with output like this:
+
+```console
+Deploying token bridge creator...
+Error: network does not support ENS (operation="getResolver", network="unknown", code=UNSUPPORTED_OPERATION, version=providers/5.7.2)
+```
+
+### What causes this error
+
+A malformed address. The deploy script hands two configuration values to the provider as addresses, and anything that isn't valid hex gets treated as a name to look up instead. A custom parent chain has no ENS registry, so the lookup fails rather than reporting the bad value.
+
+Check these two variables:
+
+- `BASECHAIN_WETH`, the parent chain **WETH** address the creator stores.
+- `ROLLUP_ADDRESS`, read only when you leave `GAS_LIMIT_FOR_L2_FACTORY_DEPLOYMENT` unset.
+
+A _missing_ variable produces a clear error instead, such as `Missing BASECHAIN_WETH in env vars`. Seeing the ENS error means the variable is set but malformed.
+
+### Resolution
+
+Verify that each address is a bare, checksummed hex string: no quotes, no whitespace, `0x` prefixed, 42 characters. Placeholder text, a missing `0x` prefix, and a truncated address are the common defects.
+
+## Calling `outboundTransfer` directly on the child chain gateway reverts or moves the wrong tokens
+
+Scripts that call `outboundTransfer` directly on a child chain gateway, bypassing the router, may not work. `L2ArbitrumGateway.outboundTransfer` branches on whether the caller is the router:
+
+```solidity
+if (isRouter(msg.sender)) {
+    (_from, _extraData) = GatewayMessageHandler.parseFromRouterToGateway(_data);
+} else {
+    _from = msg.sender;
+    _extraData = _data;
+}
+require(_extraData.length == 0, "EXTRA_DATA_DISABLED");
+```
+
+Direct callers take the `else` branch, which produces three distinct problems:
+
+- Direct calls must pass empty bytes as `_data`, otherwise the call reverts with `EXTRA_DATA_DISABLED`.
+- With no router, `_from` becomes `msg.sender`. A contract calling the gateway on a user's behalf has its own balance debited, not the user's.
+  `_l1Token` is always the **parent chain** token address, even when calling the child chain gateway. Passing the child chain token address resolves to the wrong token or no token at all.
+
+Two further details are easy to miss:
+
+- `_l1Token` is always the **parent chain** token address, even when calling the child chain gateway. Passing the child chain token address resolves to the wrong token or no token at all.
+- `ONLY_COUNTERPART_GATEWAY` comes from `finalizeInboundTransfer`, which only accepts calls from the aliased counterpart gateway. It's not a function to call yourself.
+
+### Resolution
+
+The recommended path is to transfer tokens through the TokenBridge router, not the gateway directly. If you're bypassing the router because it resolves the wrong gateway, verify whether the token has been correctly registered in the router. If it is (for example, because a new gateway has been deployed for that token), follow the recommendation above to send your transaction.
