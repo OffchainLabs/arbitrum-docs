@@ -99,7 +99,9 @@ The Sequencer's <a data-quicklook-from="batch">batches</a> are compressed using 
 
 The second key design idea in Nitro is "Geth at the core." Here, "Geth" refers to [go-ethereum](/how-arbitrum-works/reference/geth.mdx), the most common node software for Ethereum. As its name would suggest, go-ethereum is written in the Go programming language, as is almost all of Nitro.
 
-<VanillaAdmonition type="info">In Ethereum's post-Merge architecture, Geth is an **execution <a data-quicklook-from="client">client</a>**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles in Geth's execution core as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.</VanillaAdmonition>
+<VanillaAdmonition type="info">
+  In Ethereum's post-Merge architecture, Geth is an **execution <a data-quicklook-from="client">client</a>**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles in Geth's execution core as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.
+</VanillaAdmonition>
 
 <ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
 
