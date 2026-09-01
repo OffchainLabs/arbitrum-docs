@@ -1025,8 +1025,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/reference/stf-inputs',
+              label: 'STF',
+              id: 'how-arbitrum-works/deep-dives/stf',
             },
           ],
         },
@@ -1048,6 +1048,11 @@ const sidebars = {
               type: 'doc',
               label: 'Finality and reorgs',
               id: 'how-arbitrum-works/reference/finality-and-reorgs',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
             },
           ],
         },
