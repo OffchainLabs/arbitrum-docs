@@ -16,7 +16,7 @@ When enabled, Timeboost serves different groups of parties with varying degrees 
 
 #### For regular users:
 
-The only difference users should experience is a small delay when submitting their transactions. The default configuration for this delay is 200ms, and a chain's owner can adjust it.
+The only difference users should experience is a small delay when submitting their transactions. The default configuration for this delay is @@timeboostNonExpressDelayMs=200@@ms, and a chain's owner can adjust it.
 
 The delay intends to give the express lane controller an advantage, allowing them to include transactions slightly quicker than others. Importantly, user transactions will remain private until after they are sequenced, meaning that the express lane controller cannot frontrun or sandwich other users.
 
@@ -66,15 +66,15 @@ For example, Timeboost does not enable transaction reordering in a way that faci
 
 #### Does Timeboost give the auction winner an unfair advantage or power around transaction ordering?
 
-Winning a Timeboost auction gives you a time advantage — specifically, a proposed 200ms “head start” — but it does not ensure your transaction will always be the first in every block. The perceived value of the express lane is determined by its holder and the amount they choose to bid to win control of it; it’s a use-it-or-lose-it privilege. Let’s be clear on what Timeboost does not do:
+Winning a Timeboost auction gives you a time advantage — specifically, a proposed @@timeboostNonExpressDelayMs=200@@ms “head start” — but it does not ensure your transaction will always be the first in every block. The perceived value of the express lane is determined by its holder and the amount they choose to bid to win control of it; it’s a use-it-or-lose-it privilege. Let’s be clear on what Timeboost does not do:
 
 - It does not give anyone the right to reorder transactions. It does not allow you to view others’ transactions until they are sequenced (because the mempool remains private).
 - It does not ensure your transaction will always be the first in every block.
-- It does not mean your transaction will have absolutely zero total time delay. Winning the bid means you won’t experience the 200ms artificial delay others face, but natural delays — such as processing time or network distance — still apply.
+- It does not mean your transaction will have absolutely zero total time delay. Winning the bid means you won’t experience the @@timeboostNonExpressDelayMs=200@@ms artificial delay others face, but natural delays — such as processing time or network distance — still apply.
 
 #### Is it expected for powerful, centralized entities to monopolize the Timeboost express lane? Could this lead to harmful outcomes?
 
-Timeboost's design is an auction-based system that encourages open competition. Although the idea of a monopoly can be intimidating, the auction process remains competitive. If one player dominates, they will be required to outbid other users, which prevents them from maintaining complete static control continuously. Additionally, the express lane only gives a 200ms time advantage. The system is designed to incentivize rational actors to participate when they believe there is an advantage to controlling the express lane and only bid up to the value they are willing to pay for that advantage (since it is a sealed-bid auction).
+Timeboost's design is an auction-based system that encourages open competition. Although the idea of a monopoly can be intimidating, the auction process remains competitive. If one player dominates, they will be required to outbid other users, which prevents them from maintaining complete static control continuously. Additionally, the express lane only gives a @@timeboostNonExpressDelayMs=200@@ms time advantage. The system is designed to incentivize rational actors to participate when they believe there is an advantage to controlling the express lane and only bid up to the value they are willing to pay for that advantage (since it is a sealed-bid auction).
 
 Finally, Timeboost is entirely optional, meaning that Arbitrum chains can still function normally without it. Should Timeboost need to be disabled, the network would smoothly revert to FCFS transaction ordering, maintaining its current security and efficiency. Every chain can make its own decision about whether to enable Timeboost–your chain, your rules.
 
@@ -84,7 +84,7 @@ Finally, Timeboost is entirely optional, meaning that Arbitrum chains can still 
 
 Before answering this question, it is worth clarifying that the participant will likely attempt to predict the amount of MEV generated between 15 seconds and 1 minute 15 seconds in the future, not 1 minute later. This assumption is because the auction is closed and resolved within a maximum of 15 seconds before the start of the next round (as proposed in the current proposal).
 
-The expectation is willing participants will bid continuously for the right to use the express lane in advance so that they (the participant) can profit from both (1) MEV opportunities they predict between 15s and 1min 15s in the future **and** (2) MEV opportunities in real-time during the period that the participant is in control of the express lane that they didn’t otherwise predict in advance (proposed duration: 1 minute). Suppose the participant does not win control of the express lane. In that case, opportunities that they see in real-time are still exploitable, but with a 200ms delay, similar to all other transactions (since only the express lane controller’s transactions get sequenced with no delay).
+The expectation is willing participants will bid continuously for the right to use the express lane in advance so that they (the participant) can profit from both (1) MEV opportunities they predict between 15s and 1min 15s in the future **and** (2) MEV opportunities in real-time during the period that the participant is in control of the express lane that they didn’t otherwise predict in advance (proposed duration: 1 minute). Suppose the participant does not win control of the express lane. In that case, opportunities that they see in real-time are still exploitable, but with a @@timeboostNonExpressDelayMs=200@@ms delay, similar to all other transactions (since only the express lane controller’s transactions get sequenced with no delay).
 
 #### What are the different variations of Timeboost?
 
@@ -98,15 +98,15 @@ Yes. Timeboost is compatible with both the current centralized sequencer and a f
 
 For the first point about a more straightforward user interface, users can subscribe to the [sequencer feed](/how-arbitrum-works/deep-dives/sequencer.mdx#real-time-sequencer-feed) to view, in real time, the final order of transactions. Using the sequencer feed is a sufficient solution for helping users understand the logic behind how their transactions get sorted. Additional documentation and diagrams will be forthcoming to help illustrate this workflow.
 
-To the second point, chain owners can adjust the amount of time that non-express lane transactions get delayed. This parameter, defined as `NonExpressDelayMsec`, is denominated in milliseconds and is proposed to be 200ms initially.
+To the second point, chain owners can adjust the amount of time that non-express lane transactions get delayed. This parameter, defined as `NonExpressDelayMsec`, is denominated in milliseconds and is proposed to be @@timeboostNonExpressDelayMs=200@@ms initially.
 
 #### How will Timeboost affect block time finality on Arbitrum chains? Does this mean that an Arbitrum chain's new block time will be 450ms?
 
-Recall that Arbitrum chains have two types of finality: (1) a trusted or soft confirmation and (2) Ethereum-equivalent finality. A trusted or soft confirmation for a user’s transaction relies on the user trusting the sequencer and the near-instant transaction receipt issued by the sequencer, which takes approximately 250ms. For (2), the user can use the Ethereum-equivalent finality heuristic once their child chain transaction becomes finalized on the parent chain as part of a batch of transactions posted to Ethereum, which can take two epochs, or roughly 13 minutes, in today’s Proof-of-Stake Ethereum. Read more about these two types of finality in [Finality](/how-arbitrum-works/deep-dives/sequencer.mdx#finality).
+Recall that Arbitrum chains have two types of finality: (1) a trusted or soft confirmation and (2) Ethereum-equivalent finality. A trusted or soft confirmation for a user’s transaction relies on the user trusting the sequencer and the near-instant transaction receipt issued by the sequencer, which takes approximately @@l2BlockTimeMs=250@@ms. For (2), the user can use the Ethereum-equivalent finality heuristic once their child chain transaction becomes finalized on the parent chain as part of a batch of transactions posted to Ethereum, which can take two epochs, or roughly 13 minutes, in today’s Proof-of-Stake Ethereum. Read more about these two types of finality in [Finality](/how-arbitrum-works/deep-dives/sequencer.mdx#finality).
 
-With Timeboost, both finality timelines for non-express lane transactions (250ms for soft finality and ~13 minutes for Ethereum-equivalent finality) will extend by the default 200ms delay proposed in Timeboost, which will be roughly ~450ms and ~13 minutes & 0.2 seconds for soft finality and Ethereum-equivalent finality, respectively.
+With Timeboost, both finality timelines for non-express lane transactions (@@l2BlockTimeMs=250@@ms for soft finality and ~13 minutes for Ethereum-equivalent finality) will extend by the default @@timeboostNonExpressDelayMs=200@@ms delay proposed in Timeboost, which will be roughly ~450ms and ~13 minutes & 0.2 seconds for soft finality and Ethereum-equivalent finality, respectively.
 
-For express lane transactions, there will be no impact on transaction finality, meaning that finality will remain at 250ms and ~13 minutes for soft finality and Etheruem-equivalent finality, respectively.
+For express lane transactions, there will be no impact on transaction finality, meaning that finality will remain at @@l2BlockTimeMs=250@@ms and ~13 minutes for soft finality and Etheruem-equivalent finality, respectively.
 
 #### Is there a way to track the time (milliseconds, etc.) it takes for a transaction to be sent and received by the sequencer?
 
@@ -138,15 +138,15 @@ Yes. We recommend that teams monitor and verify transaction receipts to obtain f
 
 #### For Timeboost, is there a limit on the number of transactions that can receive a boost from the winner in a round?
 
-There is no transaction limit, but there is a block-based limit: if your Timeboosted transactions do not get sequenced within five Arbitrum blocks (1250ms) from the time that the sequencer received them, then they will get dropped. The 200ms Timeboost time advantage only lasts for 1000ms anyway, so this is a safe limit that people will not hit. Note that the block gas limit may be a reason why your transaction(s) doesn't get included in an Arbitrum block. More details on this limit can be found in the [Timeboost troubleshooting guide](/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx).
+There is no transaction limit, but there is a block-based limit: if your Timeboosted transactions do not get sequenced within five Arbitrum blocks (1250ms) from the time that the sequencer received them, then they will get dropped. The @@timeboostNonExpressDelayMs=200@@ms Timeboost time advantage only lasts for 1000ms anyway, so this is a safe limit that people will not hit. Note that the block gas limit may be a reason why your transaction(s) doesn't get included in an Arbitrum block. More details on this limit can be found in the [Timeboost troubleshooting guide](/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx).
 
 #### If a transaction is Timeboosted and we assume it arrived in the current block creation period, which includes other non-express lane transactions, would that Timeboosted transaction queue in front of those other non-express lane transactions that have already arrived but not included yet?
 
-It depends on the arrival timestamp of all the transactions. "Regular" transactions will receive a 200ms delay before being sequenced, while Timeboosted transactions will receive zero delay before being sequenced. In this scenario, if the "regular" transactions had arrived 200 milliseconds earlier than the Timeboosted transaction, they would get sequenced alongside the Timeboosted transaction based on their arrival timestamps. In this case, for that block, some "regular" transactions may indeed be ahead of Timeboosted transactions due to the timestamps. For additional information, read this [document that explains how Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
+It depends on the arrival timestamp of all the transactions. "Regular" transactions will receive a @@timeboostNonExpressDelayMs=200@@ms delay before being sequenced, while Timeboosted transactions will receive zero delay before being sequenced. In this scenario, if the "regular" transactions had arrived @@timeboostNonExpressDelayMs=200@@ milliseconds earlier than the Timeboosted transaction, they would get sequenced alongside the Timeboosted transaction based on their arrival timestamps. In this case, for that block, some "regular" transactions may indeed be ahead of Timeboosted transactions due to the timestamps. For additional information, read this [document that explains how Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
 
 #### Apart from Timeboost, are there any other mechanisms or factors that can affect transaction priority or latency?
 
-There are many factors, including how your infrastructure is set up and built, as well as where you are sending transactions from. Latency is something that top teams will optimize for, so spend time focusing on this to ensure you can maximize the benefits of Timeboost. The 200ms time advantage you receive from using Timeboost is likely more than enough to exploit the arbitrage opportunities onchain (ahead of competitors who are not using Timeboost).
+There are many factors, including how your infrastructure is set up and built, as well as where you are sending transactions from. Latency is something that top teams will optimize for, so spend time focusing on this to ensure you can maximize the benefits of Timeboost. The @@timeboostNonExpressDelayMs=200@@ms time advantage you receive from using Timeboost is likely more than enough to exploit the arbitrage opportunities onchain (ahead of competitors who are not using Timeboost).
 
 #### Are there any recommendations for submitting transactions to Arbitrum with lower latency in addition to Timeboost?
 

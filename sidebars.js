@@ -371,6 +371,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference',
+                  label: `Sequencer configuration reference`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
@@ -545,6 +550,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/post-launch-deployments',
               label: 'Post-launch deployments',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/sequencer-troubleshooting',
+              label: 'Sequencer troubleshooting',
             },
             {
               type: 'doc',
@@ -1010,6 +1020,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Token bridging',
+              id: 'how-arbitrum-works/deep-dives/token-bridging',
+            },
+            {
+              type: 'doc',
               label: 'Gas and fees',
               id: 'how-arbitrum-works/deep-dives/gas-and-fees',
             },
@@ -1051,14 +1066,9 @@ const sidebars = {
               label: 'BoLD overview',
             },
             {
-              type: 'link',
-              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-              label: 'Deploy a validator on testnet',
-            },
-            {
-              type: 'link',
-              href: 'https://arxiv.org/abs/2404.10491',
-              label: 'BoLD Whitepaper',
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/bold-faq',
+              label: 'FAQ',
             },
             {
               type: 'doc',
@@ -1077,18 +1087,8 @@ const sidebars = {
             },
             {
               type: 'link',
-              href: 'https://github.com/OffchainLabs/bold',
-              label: 'Specification on Github',
-            },
-            {
-              type: 'link',
-              href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
-              label: 'Audit Report by Trail of Bits',
-            },
-            {
-              type: 'link',
-              href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
-              label: 'Audit Report by Code4rena',
+              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+              label: 'Deploy a validator on testnet',
             },
           ],
         },

@@ -103,7 +103,7 @@ After a reorg, the same block _number_ can hold different transactions with a di
 
 Child-chain reorg depth is bounded by parent-chain reorg depth, not by anything on the child chain and not by how often you post <a data-quicklook-from="assertion">assertions</a>.
 
-A common misconception is to reason from the assertion (state-root) cadence: "we post state roots every hour, which at 250 ms blocks is ~14,400 blocks, so a reorg could be 14,400 blocks deep." That conflates two independent things:
+A common misconception is to reason from the assertion (state-root) cadence: "we post state roots every hour, which at @@l2BlockTimeMs=250@@ ms blocks is ~14,400 blocks, so a reorg could be 14,400 blocks deep." That conflates two independent things:
 
 - **Assertions / state roots** are periodic settlement checkpoints posted to the Rollup contract for the dispute protocol. They do **not** cause or bound reorgs, and their cadence is irrelevant to reorg depth.
 - **Batches (data)** are posted continuously by the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx)—not on the assertion cadence. Reorgs are driven by parent-chain reorgs of these batches, and only for the batches that are not yet final on the parent chain.
