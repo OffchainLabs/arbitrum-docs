@@ -12,17 +12,17 @@ sidebar_position: 1
 
 <a data-quicklook-from="arbitrum">Arbitrum</a>'s former dispute protocol involved defending against challengers individually in a 1-vs-1 tournament setting. In contrast, <a data-quicklook-from="bold">BoLD</a> enables an all-vs-all battle royale between good and evil, with a single deterministic winner.
 
-BoLD’s time-bounded, permissionless validation makes this dynamic possible through deterministic Merkle proofs and hashes. This allows any party to place a bond on the correct state and prove their claim through interactive fraud proofs, ensuring that a single honest party that bonds on the correct state will always win a dispute.
+BoLD’s time-bounded, <a data-quicklook-from="permissionless-validation">permissionless validation</a> makes this dynamic possible through deterministic Merkle proofs and hashes. This allows any party to place a bond on the correct state and prove their claim through interactive fraud proofs, ensuring that a single honest party that bonds on the correct state will always win a dispute.
 
-Validators on Arbitrum can post their claim on the validity of state roots, known as **assertions**. Ethereum, of course, does not know anything about the validity of these Arbitrum state roots, but it _can_ help prove their correctness. _Anyone_ can initiate a <a data-quicklook-from="challenge">challenge</a> against any unconfirmed <a data-quicklook-from="assertion">assertion</a>.
+Validators on Arbitrum can post their claim on the validity of state roots, known as **assertions**. Ethereum does not know anything about the validity of these Arbitrum state roots, but it _can_ help prove their correctness. _Anyone_ can initiate a <a data-quicklook-from="challenge">challenge</a> against any unconfirmed <a data-quicklook-from="assertion">assertion</a>.
 
-The disputed assertions concern block hashes on an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> at a given <a data-quicklook-from="batch">batch</a> or inbox position. Because Arbitrum chains are deterministic, only one history is correct for anyone running the standard Nitro software. Using the notion of a one-step proof, Ethereum can check whether someone is making a fraudulent assertion after an interactive game narrows down a dispute to a single winner.
+The disputed assertions concern block hashes on an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> at a given <a data-quicklook-from="batch">batch</a> or inbox position. Because <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> are deterministic, only one history is correct for anyone running the standard Nitro software. Using the notion of a one-step proof, Ethereum can check whether someone is making a fraudulent assertion after an interactive game narrows down a dispute to a single winner.
 
 If a claim is honest, Ethereum can confirm it after a @@arbOneDisputeWindowDays=6.4@@ day period (the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can challenge it within that @@arbOneDisputeWindowDays=6.4@@-day window _and always win_ within a <a data-quicklook-from="challenge-period">challenge period</a> (plus a small delta).
 
 The current implementation of BoLD involves both onchain and offchain components:
 
-1. Rollup contracts deployed on Ethereum
+1. <a data-quicklook-from="rollup-contract">Rollup contracts</a> deployed on Ethereum
 2. New challenge management contracts deployed on Ethereum
 3. [Honest validator software](https://github.com/OffchainLabs/nitro) equipped to submit assertions and perform challenges on any assertions it disagrees with.
 
@@ -30,15 +30,15 @@ The current implementation of BoLD involves both onchain and offchain components
 
 To implement the BoLD protocol, it must be deployed on a credible, neutral, censorship-resistant backend to ensure fairness for all participants. Ethereum fits the requirements, as it's currently the most decentralized, secure, smart contract-enabled <a data-quicklook-from="blockchain">blockchain</a> to which the full protocol can be deployed, with challenge moves performed as transactions to the protocol's smart contracts.
 
-A helpful mental model for understanding the system is: Ethereum itself is the referee for deciding assertion results. Participants in the challenge protocol can disagree over the _results of the child-chain state transitions_ and provide proofs to the protocol's smart contracts on Ethereum to determine which result is correct. Because computation is deterministic, there will always be a single correct result.
+A helpful mental model for understanding the system is: Ethereum itself is the referee for deciding assertion results. Participants in the <a data-quicklook-from="challenge-protocol">challenge protocol</a> can disagree over the _results of the child-chain state transitions_ and provide proofs to the protocol's smart contracts on Ethereum to determine which result is correct. Because computation is deterministic, there will always be a single correct result.
 
 <ImageZoom src="/img/haw-transaction-lifecycle.png" alt="Transaction lifecycle diagram showing various pathways for submitting transactions" className="img-600px" />
 
 _From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. Parent chain blocks are “settled to the parent chain” after a @@arbOneDisputeWindowDays=6.4@@ day period has elapsed and nobody has challenged their validity on Ethereum._
 
-In effect, a miniature Arbitrum state-transition VM is [deployed as an Ethereum smart contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/osp/OneStepProofEntry.sol) to prove which assertions are correct. However, computation on Ethereum is expensive, so this mini-VM is built to handle "one-step proofs" consisting of a single step of WebAssembly (WASM) code. The Arbitrum state transition logic, written in Golang, is also compiled to WASM and will therefore obtain the same results as the VM found in the onchain smart contract. The protocol's soundness depends on the assumption that computation is deterministic and equivalent between the onchain VM and the Golang state transition compiled to WASM.
+In effect, a miniature Arbitrum state-transition VM is [deployed as an Ethereum smart contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/osp/OneStepProofEntry.sol) to prove which assertions are correct. However, computation on Ethereum is expensive, so this mini-VM is built to handle "one-step proofs" consisting of a single step of WebAssembly (<a data-quicklook-from="wasm">WASM</a>) code. The Arbitrum state transition logic, written in Golang, is also compiled to WASM and will therefore obtain the same results as the VM found in the onchain smart contract. The protocol's soundness depends on the assumption that computation is deterministic and equivalent between the onchain VM and the Golang state transition compiled to WASM.
 
-All participants in the protocol have a local state from which they can produce valid proofs, and all honest parties will have the same local state. However, malicious entities can deviate from the honest parties in attempts to confirm invalid states through the protocol. The protocol and the honest validator client's job is to ensure honest parties always win against any number of malicious participants by always claiming the absolute truth.
+All participants in the protocol have a local state from which they can produce valid proofs, and all honest parties will have the same local state. However, malicious entities can deviate from the honest parties in attempts to confirm invalid states through the protocol. The protocol and the <a data-quicklook-from="honest-validator">honest validator</a> client's job is to ensure honest parties always win against any number of malicious participants by always claiming the absolute truth.
 
 ## Assertions
 
