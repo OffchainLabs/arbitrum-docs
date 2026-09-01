@@ -18,7 +18,7 @@ In this section, we will explore the Sequencer's operations in detail. The topic
   - [Batching](#batching-and-compression)
   - [Compression](#compression)
   - [Submitting to the Sequencer Inbox contract](#submitting-to-the-sequencer-inbox-contract)
-- [Finality](#finality): Understanding how transaction finality is achieved in Arbitrum through soft and hard finality mechanisms, ensuring that transactions are confirmed securely and reliably (not as a Sequencer task).
+- [Finality](#finality): A summary of the soft and <a data-quicklook-from="hard-finality">hard finality</a> levels, with a pointer to the full [Finality](/how-arbitrum-works/deep-dives/finality.mdx) page (not a Sequencer task).
 - [Censorship Timeout](#censorship-timeout): A brief introduction to a special feature that aims to limit the negative effects of prolonged sequencer censorship or unexpected sequencer outages.
 
 By examining these aspects, you will understand the Sequencer’s role within the Arbitrum ecosystem, including how it enhances transaction throughput, reduces latency, and maintains a fair and decentralized network.
@@ -181,7 +181,7 @@ The Sequencer continuously monitors network conditions to select the most cost-e
 
 ### Authority and finality
 
-- **Exclusive access**: Only the Sequencer can call these methods on the Sequencer Inbox contract. This exclusivity ensures that no other party can include messages directly.
+- **Exclusive access**: Only authorized batch posters can call these methods on the Sequencer Inbox contract. The contract gates access through its `isBatchPoster` mapping, a role distinct from the Sequencer, though the same party typically operates both. This exclusivity ensures that no other party can include messages directly.
 - **Soft-confirmation receipts**: The Sequencer’s unique ability to immediately process and include transactions allows it to provide users with instant, “soft-confirmation” receipts
 - **Parent chain finality**: Once batches post, the transactions achieve parent-chain-level finality, secured by the parent chain’s consensus mechanism.
 
@@ -189,77 +189,14 @@ By efficiently sending compressed transaction batches to the Sequencer Inbox con
 
 ## Finality
 
-Finality in blockchain systems refers to the point at which a transaction becomes irreversible and is permanently included in the blockchain’s ledger. In the context of Arbitrum’s Nitro architecture, understanding finality is crucial for developers and users to make informed decisions about transaction confirmations, security guarantees, and application design.
-
 Arbitrum offers two levels of finality:
 
-1. **Soft finality**: Provided by the Sequencer’s real-time feed, offering immediate but provisional transaction confirmations.
-2. **Hard finality**: Occurs when transactions are included in batches posted to and finalized on the parent chain, providing strong security assurances. Final settlement on the parent chain happens via [assertions](/how-arbitrum-works/deep-dives/assertions.mdx) confirmed by the Rollup protocol.
+1. **Soft finality**: The Sequencer’s real-time feed confirms transactions almost instantly, but those confirmations are provisional. They rely on the Sequencer sequencing honestly and staying available.
+2. **Hard finality**: The Sequencer's batches are posted to and finalized on the parent chain, and the batch's transactions inherit the parent chain's security. Final settlement happens when the Rollup protocol confirms the containing [assertion](/how-arbitrum-works/deep-dives/assertions.mdx), after the [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) challenge period.
 
-This section explores the concepts of soft and hard finality, their implications, trust considerations, and guidance for utilizing them effectively within the Arbitrum network.
+Posting a batch is not itself final settlement. The transaction data becomes available and inherits the parent chain’s data-layer security, but the resulting child <a data-quicklook-from="chain-state">chain state</a> settles only once an assertion is confirmed.
 
-### Soft finality
-
-Soft finality refers to the preliminary confirmation of transactions based on the Sequencer’s real-time feed. Key characteristics include:
-
-- **Immediate confirmation**: Transactions are confirmed almost instantly as they are accepted and ordered by the Sequencer.
-- **Provisional assurance**: The confirmations are provisional and rely on the Sequencer’s integrity and availability.
-- **High performance**: Enables applications to offer rapid responses and real-time interactions, enhancing user experience.
-
-#### Advantages of soft finality
-
-- **Low latency**: Users receive immediate feedback on transaction status.
-- **Optimized for speed**: Ideal for applications where responsiveness is critical.
-- **Improved user experience**: Reduces waiting times and uncertainty.
-
-#### Limitations of soft finality
-
-- **Trust dependency**: Relies on the Sequencer’s honesty and ability to maintain uptime.
-- **Potential for reordering**: In rare cases, if the Sequencer acts maliciously or encounters issues, the provisional ordering could change.
-- **Not suitable for high-value transactions**: For transactions requiring strong security guarantees, soft finality may not suffice.
-
-### Hard finality
-
-Hard finality occurs when batched transactions get posted to the parent chain. Key characteristics include:
-
-- **Strong security guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain’s security assurances.
-- **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
-- **Data availability**: All transaction data is recorded onchain, ensuring transparency and verifiability.
-
-#### Advantages of hard finality
-
-- **Maximum security**: Protected by the robustness of the parent chain’s consensus mechanism.
-- **Trust minimization**: This does not require trust in the Sequencer; the underlying blockchain provides security.
-- **Suitable for high-value transactions**: Ideal for scenarios where security and immutability are paramount.
-
-#### Limitations of hard finality
-
-- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. The challenge protocol that backs this guarantee is described in [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx).
-- **Cost considerations**: Posting batches to the parent chain incurs fees, potentially increasing transaction costs.
-
-### Trust considerations
-
-Understanding the trust assumptions associated with each level of finality is essential:
-
-- **Soft finality trust model**:
-  - **Reliance on the Sequencer**: Users must trust that the Sequencer operates honestly, sequences transactions correctly, and remains available.
-  - **Risk of misbehavior**: If the Sequencer acts maliciously, it could reorder or censor certain transactions before they achieve hard finality.
-- **Hard finality trust model**:
-  - **Reliance on the parent chain**: Security is based on the consensus and integrity of the parent chain.
-  - **Reduced trust in Sequencer**: Even if the Sequencer misbehaves, transactions included in posted batches are secured once finalized on the parent chain.
-
-### Application implications
-
-Developers and users should consider the appropriate level of finality based on their specific use cases:
-
-- **When to rely on soft finality**:
-  - **Low-risk transactions**: For transactions where the potential impact of reordering or delays is minimal.
-  - **User experience priority**: Applications where responsiveness and immediacy enhance user engagement, such as gaming or social platforms.
-  - **Frequent transactions**: Scenarios involving a high volume of small transactions where waiting for hard finality is impractical.
-- **When to require hard finality**:
-  - **High-value transactions**: Financial transfers, large trades, or any transaction where security is critical.
-  - **Regulatory compliance**: Situations requiring strict adherence to security standards and auditable records.
-  - **Centralized exchanges (CeXs)**: For deposit and withdrawal operations where certainty of transaction finality is mandatory.
+For the full treatment—latency at each stage, the trust model behind each level, force inclusion, AnyTrust data availability, and guidance on which level your application should wait for—see [Finality](/how-arbitrum-works/deep-dives/finality.mdx).
 
 ## Censorship Timeout
 
