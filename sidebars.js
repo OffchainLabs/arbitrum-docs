@@ -1000,6 +1000,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Batch poster',
+              id: 'how-arbitrum-works/deep-dives/batchposter',
+            },
+            {
+              type: 'doc',
               label: 'Parent to Child chain Messaging',
               id: 'how-arbitrum-works/deep-dives/l1-to-l2-messaging',
             },
