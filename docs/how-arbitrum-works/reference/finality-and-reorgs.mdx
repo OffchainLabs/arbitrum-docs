@@ -80,7 +80,7 @@ On an AnyTrust chain the <a data-quicklook-from="batch-poster">batch poster</a> 
 
 - **Does not change the finality model.** Finality still tracks the parent chain. A DACert reaching parent-chain finality is what makes the block final; the DAC signature by itself is a data-availability guarantee.
 - **Does not change reorg behavior.** A DACert is posted to the Sequencer Inbox exactly like a full-data batch, so the reorg rules below apply unchanged.
-- **Affects liveness under DAC failure.** If the batch poster cannot collect enough signatures within a few minutes, it falls back to posting the full batch data directly to the parent chain as calldata, and the chain keeps producing and finalizing blocks. Fallback can be disabled (`disable-dap-fallback-store-data-on-chain: true`), in which case a DAC outage halts batch posting. See [DAC and DAS operations](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx) for the full failure-mode table.
+- **Affects liveness under DAC failure.** If the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx#4-the-data-is-routed-to-storage-da-handoff) cannot collect enough signatures within a few minutes, it falls back to posting the full batch data directly to the parent chain as calldata, and the chain keeps producing and finalizing blocks. Fallback can be disabled (`disable-dap-fallback-store-data-on-chain: true`), in which case a DAC outage halts batch posting. See [DAC and DAS operations](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx) for the full failure-mode table.
 
 ## The reorg model
 
@@ -106,7 +106,7 @@ Child-chain reorg depth is bounded by parent-chain reorg depth, not by anything 
 A common misconception is to reason from the assertion (state-root) cadence: "we post state roots every hour, which at @@l2BlockTimeMs=250@@ ms blocks is ~14,400 blocks, so a reorg could be 14,400 blocks deep." That conflates two independent things:
 
 - **Assertions / state roots** are periodic settlement checkpoints posted to the Rollup contract for the dispute protocol. They do **not** cause or bound reorgs, and their cadence is irrelevant to reorg depth.
-- **Batches (data)** are posted continuously by the batch poster—not on the assertion cadence. Reorgs are driven by parent-chain reorgs of these batches, and only for the batches that are not yet final on the parent chain.
+- **Batches (data)** are posted continuously by the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx)—not on the assertion cadence. Reorgs are driven by parent-chain reorgs of these batches, and only for the batches that are not yet final on the parent chain.
 
 So the practical bound on a child-chain reorg is: **the child blocks whose batches were posted within the parent chain's unfinalized window.** For an indexer, this collapses to a simple rule:
 
@@ -188,11 +188,14 @@ This halts batch posting **only if fallback is disabled** (`disable-dap-fallback
 
 The Sequencer keeps producing soft-confirmed blocks on the feed, and the batch poster retries until it can post. Until a batch reaches parent-chain finality, those blocks are soft only—treat them as reversible for indexing purposes, even though they appear immediately on the feed.
 
+One case does not retry: if a posted batch reverts on the parent chain, the batch poster halts all posting and waits for an operator. See [Finality and feedback](/how-arbitrum-works/deep-dives/batchposter.mdx#7-finality-and-feedback).
+
 ## Related resources
 
 - [Exchange integration checklist](/launch-arbitrum-chain/integrations/exchange-integration-checklist.mdx) — end-to-end deposit/withdrawal detection built on this model.
 - [Geth at the core](/how-arbitrum-works/reference/geth.mdx) — transaction types, `ArbitrumInternalTx`, and `ReorgToOldBlock`.
 - [The Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) — soft vs hard finality and batch posting.
+- [The batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) — batch building, the DA handoff, and the revert watcher that halts posting.
 - [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) — <a data-quicklook-from="keyset">keysets</a>, DACerts, and the fallback to Rollup mode.
 - [DAC and DAS operations](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx) — DAC failure modes and fallback behavior.
 - [Block numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time.mdx) — parent-chain block numbers on the child chain.
