@@ -92,6 +92,8 @@ In this section, we will explore the batch posting process in detail, covering t
 - **Compression**: The methods used to compress transaction data, minimizing the amount of data that needs to be posted on the parent chain and thereby reducing costs.
 - **Sending to Sequencer Inbox contract**: The procedure for submitting compressed batches to the Sequencer Inbox contract on the parent chain, ensuring secure and reliable recording of transactions.
 
+This section covers batch posting from the Sequencer's side. For the <a data-quicklook-from="batch-poster">batch poster</a>'s internals, see [The batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx). That page traces one batch from the transaction streamer to the parent chain transaction.
+
 Understanding batch posting is essential for grasping how Arbitrum achieves scalability and cost-efficiency without compromising security. By delving into these subtopics, you’ll gain insight into the Sequencer’s role in optimizing transaction throughput and minimizing fees, as well as the innovative solutions implemented to address the challenges of parent chain data pricing.
 
 ## Batching and compression
@@ -140,13 +142,13 @@ The compression level on Arbitrum is dynamically adjusted based on the current b
 
 This trade-off prioritizes speed over compression efficiency, enabling faster processing and transmission of pending batches. Doing so clears the buffer more quickly, ensuring smoother overall system performance.
 
-Now that transactions are batched and compressed, they pass to the batch poster for transmission to the parent chain.
+Now that transactions are batched and compressed, they pass to the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) to transmit them to the parent chain.
 
 ## Submitting to the Sequencer Inbox contract
 
-After batching and compressing transactions, the Sequencer posts these batches to the parent chain to ensure security and finality. This process involves the **batch poster**, an Externally Owned Account (EOA) controlled by the Sequencer. The batch poster is responsible for submitting the compressed transaction batches to the Sequencer Inbox contract on the parent chain. Batch posting costs are reimbursed through ArbOS's parent-chain pricer — see [Parent chain gas pricing](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing) and [ArbOS state](/how-arbitrum-works/deep-dives/arbos.mdx#arbos-state).
+After batching and compressing transactions, the Sequencer posts these batches to the parent chain to ensure security and finality. This process involves the **[batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx)**, an Externally Owned Account (EOA) controlled by the Sequencer. The batch poster is responsible for submitting the compressed transaction batches to the Sequencer Inbox contract on the parent chain. Batch posting costs are reimbursed through <a data-quicklook-from="arbos">ArbOS</a>'s parent-chain pricer — see [Parent chain gas pricing](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing) and [ArbOS state](/how-arbitrum-works/deep-dives/arbos.mdx#arbos-state).
 
-There are two primary methods the Sequencer uses to send batches to the parent chain, depending on whether the chain supports [EIP-4844 (Proto-Danksharding)](https://eips.ethereum.org/EIPS/eip-4844) and the current network conditions:
+The Sequencer uses two primary methods to send batches to the parent chain, depending on whether the chain supports [EIP-4844 (Proto-Danksharding)](https://eips.ethereum.org/EIPS/eip-4844) and the current network conditions. For how the batch poster encodes a batch for each method and self-checks it before sending, see [The batch is wrapped for the parent chain](/how-arbitrum-works/deep-dives/batchposter.mdx#5-the-batch-is-wrapped-for-l1-and-self-checked).
 
 <ImageZoom src="/img/haw-submit-to-sequencer-inbox.svg" alt="Submit to Sequencer inbox" className="img-600px" />
 
