@@ -42,44 +42,44 @@ All participants in the protocol have a local state from which they can produce 
 
 ## Assertions
 
-A key responsibility for Arbitrum proposers is to regularly post claims about the Arbitrum chains’ state to Ethereum at certain checkpoints. These are known as assertions (called _child-chain state roots_). Assertions contain data, most critically:
+A key responsibility for Arbitrum <a data-quicklook-from="proposer">proposers</a> is to regularly post claims about the Arbitrum chains’ state to Ethereum at certain checkpoints. These are known as assertions (called _child-chain state roots_). Assertions contain data, most critically:
 
 1. The child chain block hash being claimed.
-2. A "history commitment" combining hashes of the chain's intermediate state after every block the assertion covers. This is essentially a Merkle-like data structure, a tree from which the asserter only needs to provide the root when posting the assertion.
+2. A "<a data-quicklook-from="history-commitment">history commitment</a>" combining hashes of the chain's intermediate state after every block the assertion covers. This is essentially a Merkle-like data structure, a tree from which the asserter only needs to provide the root when posting the assertion.
 3. The batch number it corresponds to for the Arbitrum chain.
 4. The number of messages in the Arbitrum <a data-quicklook-from="sequencer">Sequencer</a> inbox at the time the assertion is created.
 
-The assertion to be posted onchain must consume the specified number of inbox messages from the previous assertion. There is a required delay measured in blocks of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for L2 chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain) for assertion posting. Currently, this value is set to equal one hour for BoLD.
+The assertion to be posted onchain must consume the specified number of inbox messages from the previous assertion. There is a required delay measured in blocks of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for <a data-quicklook-from="L2">L2</a> chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain) for assertion posting. Currently, this value is set to equal one hour for BoLD.
 
-Anyone can confirm assertions after @@arbOneDisputeWindowDays=6.4@@ days if they have not been challenged. In particular, assertions facilitate [withdrawing from Arbitrum back to Ethereum](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). Arbitrum withdrawals require specifying a blockhash, which must be confirmed onchain as an assertion. This is why withdrawals have a @@arbOneDisputeWindowDays=6.4@@ day delay if they are not actively challenged.
+Anyone can confirm assertions after @@arbOneDisputeWindowDays=6.4@@ days if they have not been challenged. In particular, assertions help with [withdrawing from Arbitrum back to Ethereum](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). Arbitrum withdrawals require specifying a blockhash, which must be confirmed onchain as an assertion. This is why withdrawals have a @@arbOneDisputeWindowDays=6.4@@ day delay if they are not actively challenged.
 
 Validators must become proposers in the rollup contract before they can post assertions. For <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, this involves placing a one-time bond of 3600 **WETH**, locked in the contract until they choose to withdraw. Validators can only withdraw their bond once the protocol confirms their latest bonded assertion. Posting a new assertion does not require a new bond; instead, the protocol "moves" a validator's bond to their latest posted assertion.
 
 Assertions form a chain where there can be forks. For instance, a validator might disagree on the history commitment of block state hashes, which an assertion contains. All <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> nodes are configured to warn users if they observe an assertion they disagree with posted onchain.
 
-However, suppose a node is configured as a validator and has deposited a bond to the [`Rollup` contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). In that case, that validator can post the correct rival assertion to any invalid one it observes. The validator can also initiate a challenge by posting a challenge bond and other data to the `ChallengeManager`, signaling that it is disputing an assertion.
+However, suppose a node is configured as a validator and has deposited a bond to the [`Rollup` contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). In that case, that validator can post the correct <a data-quicklook-from="rival">rival</a> assertion to any invalid one it observes. The validator can also initiate a challenge by posting a challenge bond and other data to the `ChallengeManager`, signaling that it is disputing an assertion.
 
 #### Overflow assertions
 
-Given the mandatory delay of one hour between assertions posted onchain, and each assertion is claimed to a specific Arbitrum batch, there could be a very large number of blocks in between assertions. However, a single assertion supports at most 2^26 Arbitrum blocks since the previous assertion. If this value overflows, one or more follow-up overflow assertions need to be posted to consume the rest of the blocks above the maximum. This overflow assertion will not be subject to the mandatory one-hour delay between assertions.
+Given the mandatory delay of one hour between assertions posted onchain, and that each assertion is a claim to a specific Arbitrum batch, there could be a very large number of blocks between assertions. However, a single assertion supports at most 2^26 Arbitrum blocks since the previous assertion. If this value overflows, one or more follow-up overflow assertions need to be posted to consume the rest of the blocks above the maximum. This overflow assertion will not be subject to the mandatory one-hour delay between assertions.
 
 #### Trustless bonding pools
 
-A large upfront assertion bond is critical to discourage malicious actors from attacking Arbitrum and spamming the network (e.g., delay attacks), especially because malicious actors will always lose challenges and their entire bond. On the other hand, requiring such a high upfront assertion bond may be prohibitive for a single honest entity to put up—since the cost to defend Arbitrum is proportional to the number of malicious entities and ongoing challenges at any given point in time.
+A large upfront assertion bond is critical to discourage malicious actors from attacking Arbitrum and spamming the network (e.g., <a data-quicklook-from="delay-attack">delay attacks</a>), especially because malicious actors will always lose challenges and their entire bond. On the other hand, requiring such a high upfront assertion bond may be prohibitive for a single honest entity to put up—since the cost to defend Arbitrum is proportional to the number of malicious entities and ongoing challenges at any given point in time.
 
-To address this, a [staking (bond) pool contract](https://github.com/OffchainLabs/bold/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) lets anyone deploy a <a data-quicklook-from="trustless">trustless</a> bonding pool to crowdsource funds from others who want to help defend Arbitrum but may not be able to post the sizable upfront bond themselves.
+To address this, a [staking (bond) pool contract](https://github.com/OffchainLabs/bold/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) lets anyone deploy a <a data-quicklook-from="trustless">trustless</a> <a data-quicklook-from="bonding">bonding</a> pool to crowdsource funds from others who want to help defend Arbitrum but may not be able to post the sizable upfront bond themselves.
 
 Anyone can deploy an assertion bonding pool using the `AssertionStakingPoolCreator.sol` contract to crowdsource bonding funds for an assertion. To defend Arbitrum using one of these pools, an entity would first deploy this pool with the assertion they believe is correct and wish to bond on to challenge an adversary's assertion. Then, anyone can verify that the claimed assertion is correct by running the inputs through their node's <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF).
 
 If other parties agree that the assertion is correct, they can deposit their funds into the contract. When enough funds have been deposited, anyone can trigger the creation of the assertion onchain to start the challenge in a trustless manner. Once the dispute protocol confirms the honest parties' assertion, all participants who contributed to the bonding pool will be promptly reimbursed and able to withdraw their funds.
 
-:::note With bonding pools
+<VanillaAdmonition type="note" title="With bonding pools">
 
 There is no minimum **WETH** requirement, and once the entire bond amount is raised (either 3600, 555, or 79 **ETH** for Arbitrum One), anyone can post the assertion trustlessly. Additionally, the Nitro node validator software includes an optional feature that enables both automatic deployment of a bonding pool contract and depositing funds to challenge an observed invalid assertion.
 
-:::
+</VanillaAdmonition>
 
-Trustless bonding pools can also be created to open challenges
+<a data-quicklook-from="trustless-bonding-pool">Trustless bonding pools</a> can also be created to open challenges
 and make moves on challenges without sacrificing decentralization.
 
 ### Opening challenges
@@ -88,7 +88,7 @@ To initiate a challenge, the assertion chain must first fork within the Arbitrum
 
 If there is a fork in the assertion chain (a "top-level" dispute), anyone can begin a challenge by creating a challenge edge. No bond is needed: each branch of the fork has a unique assertion, with an attached bond, and that assertion contains enough information to uniquely determine its challenge edge; that is, there is no "wiggle room" that an adversary can use to create multiple challenge edges from a single assertion (if this were possible, it could lead to spam attacks on the protocol).
 
-Anyone can open a sub-challenge on an assertion without needing to be a bonder in the Rollup contract, so long as they post a challenge bond and an edge claiming intent to start the challenge. This challenge bond is much lower than the one required to become an assertion proposer. Challenges aren't tied to specific addresses or parties; anyone can participate.
+Anyone can open a sub-challenge on an assertion without needing to be a <a data-quicklook-from="bonder">bonder</a> in the Rollup contract, so long as they post a challenge bond and an edge claiming intent to start the challenge. This challenge bond is much lower than the one required to become an assertion proposer. Challenges aren't tied to specific addresses or parties; anyone can participate.
 
 Recall that a challenge is a fundamental disagreement about an assertion posted to the Arbitrum chain. At its core, validators disagree about the blockhash at a certain block number, and the BoLD protocol lets them interactively narrow that disagreement via fraud proofs so Ethereum can be the final referee and declare a winner.
 
@@ -123,7 +123,7 @@ The first validator to create an edge initiates a challenge. The smart contracts
 
 When an edge is created, it claims some history from point `A` to point `B`, which validators can agree or disagree on. Other validators can claim some history from point `A` to `B'`, where `B'` is a different end state. A history commitment is a Merkle commitment to a list of hashes.
 
-To narrow down a disagreement, validators have to figure out what exact hash they disagree with. To do this, the game essentially takes turns between validators playing binary search. Each move is known as a "bisection" because it splits a history commitment in half. For an interactive walkthrough that replays real onchain bisections, see [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx).
+To narrow down a disagreement, validators have to figure out what exact hash they disagree with. To do this, the game essentially takes turns between validators playing binary search. Each move is known as a "<a data-quicklook-from="bisection">bisection</a>" because it splits a history commitment in half. For an interactive walkthrough that replays real onchain bisections, see [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx).
 
 For instance:
 
@@ -138,17 +138,17 @@ A validator can make a bisection move on an edge as long as that edge is "rivale
 
 The number of execution steps at which validators could disagree within a single Arbitrum block has a max of `2^42`. Playing a game of bisections on this number of hashes would be unreasonable from a space requirement standpoint, as each history commitment would require 4.35TB worth of hashes. Instead, BoLD plays the bisection game over different levels of granularity within this space of `2^42` hashes, which we call sub-challenges and can view as recursive execution of the dispute resolution process.
 
-As a reminder, the bisection game is an iterative and interactive process. The first sub-challenge is at the block level, where validators disagree over Arbitrum blocks between two assertions. The disagreeing validators create "edges" containing history commitments to all the blocks in between those two assertions, which is a maximum of `2^26` child chain blocks, and commence the bisection game. As they progressively narrow down to a single block of disagreement, the validators begin the next phase of the challenge process by opening a sub-challenge over up to `2^19` **BigSteps**, every `2^23` steps of WASM execution. Once they reach a single disagreement at the BigStep level, they open a final sub-challenge over up to `2^23` SmallSteps, each a single step of WASM execution. The bisection game is the same at each sub-challenge level, and opening a sub-challenge requires placing another "challenge bond." Challenge bond magnitudes differ at each sub-challenge level. See [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx) for a visual replay of these levels in action.
+As a reminder, the bisection game is an iterative and interactive process. The first sub-challenge is at the block level, where validators disagree over Arbitrum blocks between two assertions. The disagreeing validators create "edges" containing history commitments to all the blocks in between those two assertions, which is a maximum of `2^26` child chain blocks, and start the bisection game. As they progressively narrow down to a single block of disagreement, the validators begin the next phase of the challenge process by opening a sub-challenge over up to `2^19` **BigSteps**, each representing `2^23` steps of WASM execution. Once they reach a single disagreement at the BigStep level, they open a final sub-challenge over up to `2^23` SmallSteps, each a single step of WASM execution. The bisection game is the same at each sub-challenge level, and opening a sub-challenge requires placing another "challenge bond." Challenge bond magnitudes differ at each sub-challenge level. See [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx) for a visual replay of these levels in action.
 
 #### One step proof
 
 Once validators reach a single step of disagreement at the deepest sub-challenge level, they need to provide something called a <a data-quicklook-from="one-step-proof">One Step Proof</a>, or OSP. This proof shows WASM execution and demonstrates that running the Arbitrum State Transition Function (STF) at machine hash `A` leads to machine hash `B`. The parent chain, like Ethereum for Arbitrum One, then runs a WASM emulator using a smart contract for this step and declares a winner. An evil party cannot forge a one-step proof, and unless there is a critical bug in the smart contract, the honest party will always win.
 
-At this stage, the honest party's one-step proven edge is confirmed, leaving the dishonest party with no further actions to take. Next, the honest party's "branch" of edges, from the top to the one-step proven edge, will have an ever-increasing time until the top edge is confirmed by time.
+At this stage, the honest party's one-step proven edge is confirmed, leaving the dishonest party with no further actions to take. Next, the honest party's "branch" of edges, from the top to the one-step proven edge, will have an ever-increasing timer until the top edge is confirmed by time.
 
 #### Timers
 
-Once a validator creates an edge, if no rival edge contests it, that edge gets a time that ticks up called its **unrivaled timer**. Time in the protocol is measured in blocks of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for L2 chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain), and block numbers are used. An edge's timer stops ticking when a rival edge is created onchain.
+Once a validator creates an edge, if no rival edge contests it, that edge gets a timer that ticks up called its **unrivaled timer**. Time in the protocol is measured in blocks of the first non-Arbitrum ancestor chain (that is, Ethereum blocks for L2 chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain), and block numbers are used. An edge's timer stops ticking when a rival edge is created onchain.
 
 Edges also have an **inherited timer**, which is the sum of its unrivaled timer + the minimum inherited timer of an edge's children (recursive definition). Once one of the top-level edges that initiated a challenge has achieved an inherited `timer >= a CHALLENGE_PERIOD`, it can be confirmed. At this point, its assertion can also be confirmed, as its associated challenge has completed. A minor but important detail is that edges also inherit the time their claimed assertion was unrivaled.
 
