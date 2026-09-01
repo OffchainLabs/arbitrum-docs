@@ -37,7 +37,7 @@ The submission process for a transaction on Arbitrum starts with the user sendin
 
 This path accommodates various submission methods, including [public RPC](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#public-rpc) for development and light usage, [third-party RPCs](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#third-party-rpc) for improved throughput, [direct Sequencer endpoints](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#sequencer-endpoint) for minimal latency in critical operations, and [self-hosted Arbitrum nodes](/run-arbitrum-node/02-run-full-node.mdx) for ultimate privacy and customization.
 
-Alternatively, to mitigate the risks of exclusion or delays by the Sequencer, users can submit directly to the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on Ethereum, thereby bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed for more than 24 hours, any network participant can [force inclusion](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#force-inclusion-after-delays) into the main inbox, limiting the Sequencer's ability to block transactions permanently—it can only add a temporary delay.
+Alternatively, to mitigate the risks of exclusion or delays by the Sequencer, users can submit directly to the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on Ethereum, thereby bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed for more than @@arbOneForceIncludePeriodHours=24@@ hours, any network participant can [force inclusion](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#force-inclusion-after-delays) into the main inbox, limiting the Sequencer's ability to block transactions permanently—it can only add a temporary delay.
 
 While the Sequencer route offers faster soft finality and streamlines workflows, the Delayed Inbox path doubles processing time but emphasizes censorship resistance (blocking transactions). Overall, the Sequencer’s <a data-quicklook-from="commitment">commitment</a> to ordered inclusion provides “soft finality” for a responsive experience, complemented by these alternatives for robust, flexible operations across applications.
 
@@ -149,7 +149,7 @@ For more details, refer to the [Stylus gentle introduction](/stylus/gentle-intro
 
 ### Timeboost
 
-<a data-quicklook-from="timeboost">Timeboost</a> refines ordering to capture MEV (maximum extractable value) for chain operators, protects users from attacks such as front-running, reduces spam-related congestion, and enables customizable policies. Timeboost preserves fast block times (250ms default).
+<a data-quicklook-from="timeboost">Timeboost</a> refines ordering to capture MEV (maximum extractable value) for chain operators, protects users from attacks such as front-running, reduces spam-related congestion, and enables customizable policies. Timeboost preserves fast block times (@@l2BlockTimeMs=250@@ms default).
 
 #### Timeboost references
 

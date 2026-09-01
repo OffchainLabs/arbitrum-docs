@@ -45,7 +45,7 @@ Only one node on the chain actively sequences transactions at any given time (in
 
 Unlike Ethereum, there is **no traditional mempool**. Transactions are not gossiped between nodes, do not sit in a public pending pool, and are not reordered by gas price. The Sequencer receives transactions directly into an in-memory queue and processes them on a first-come, first-served basis.
 
-First-come, first-served is the default ordering policy, and the FIFO behavior described on this page assumes it. Chains that enable <a data-quicklook-from="timeboost">Timeboost</a> modify the ordering: transactions from the current <a data-quicklook-from="express-lane-controller">express lane controller</a> are sequenced as soon as they arrive, while every other transaction has its arrival timestamp delayed (by default, 200 milliseconds) before taking its place in the queue. To learn how the <a data-quicklook-from="express-lane">express lane</a> and its auction work, see [Timeboost's gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
+First-come, first-served is the default ordering policy, and the FIFO behavior described on this page assumes it. Chains that enable <a data-quicklook-from="timeboost">Timeboost</a> modify the ordering: transactions from the current <a data-quicklook-from="express-lane-controller">express lane controller</a> are sequenced as soon as they arrive, while every other transaction has its arrival timestamp delayed (by default, @@timeboostNonExpressDelayMs=200@@ milliseconds) before taking its place in the queue. To learn how the <a data-quicklook-from="express-lane">express lane</a> and its auction work, see [Timeboost's gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
 
 ## The transaction queue
 
@@ -72,7 +72,7 @@ In both cases, the caller receives an error containing the string `context deadl
 
 The Sequencer produces blocks from a single loop: attempt to create a block; if a block was produced, wait until `max-block-speed` has elapsed since the attempt started before trying again; if not, retry immediately ([`sequencer.go#L1773-L1781`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L1773-L1781)).
 
-`--execution.sequencer.max-block-speed` (default `250ms`) is therefore the **minimum delay between blocks**, which caps block production at four blocks per second by default. It is not a block time:
+`--execution.sequencer.max-block-speed` (default `@@l2BlockTimeMs=250@@ms`) is therefore the **minimum delay between blocks**, which caps block production at four blocks per second by default. It is not a block time:
 
 - **When the queue is empty**, the block creation routine simply blocks waiting for the next transaction to arrive ([`sequencer.go#L1314-L1341`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L1314-L1341)). No transactions means no blocks: the Sequencer does not produce empty blocks, and `createBlock` reports that no block was made unless at least one transaction was successfully sequenced.
 - **When blocks are heavy**, the actual interval stretches beyond `max-block-speed`, because execution itself takes time and the timer only sets a floor.
@@ -90,7 +90,7 @@ When building a block, transactions are executed **one at a time** through the <
 Suppose 100,000 transactions arrive at effectively the same moment, with default settings:
 
 1. The first `1024` transactions occupy the queue. The rest wait at the queue boundary, each holding its own 12-second deadline, with no ordering guarantee among them.
-2. Every `250ms` or more, the Sequencer drains a batch of queued transactions into a block, executing them sequentially. Freed slots are claimed by waiting transactions.
+2. Every `@@l2BlockTimeMs=250@@ms` or more, the Sequencer drains a batch of queued transactions into a block, executing them sequentially. Freed slots are claimed by waiting transactions.
 3. Any transaction that cannot make it through the queue and into a block within its 12-second deadline fails with `context deadline exceeded`.
 
 The queue is deliberately a short buffer, not a mempool: with default settings it never holds more than about 12 seconds' worth of work. Everything beyond what the chain can execute in that window is shed back to the submitter, who is expected to retry. This keeps latency bounded and predictable for the transactions that do get in, at the cost of pushing burst-absorption out to the edges (RPC clients, or an operator-run relayer, described below).
@@ -107,7 +107,7 @@ For chains with different traffic profiles than Arbitrum One, the queue paramete
 
 - `--execution.sequencer.queue-size` (default `1024`): raising it lets the Sequencer absorb larger instantaneous bursts without making submitters wait at the queue boundary. The limit to keep in mind: the queue-timeout deadline keeps counting while a transaction sits in the queue, so a queue deeper than what the chain can execute within `queue-timeout` only moves rejections from enqueue time to dequeue time. Size the queue to roughly what your chain can drain in one timeout window.
 - `--execution.sequencer.queue-timeout` (default `12s`): raising it lets transactions ride out longer spikes at the cost of slower failure feedback and longer-held connections; lowering it makes overload fail fast. Whatever you choose, communicate it to integration partners so their client timeouts and retry logic stay consistent with it.
-- `--execution.sequencer.max-block-speed` (default `250ms`): lowering it raises the block production cap and reduces best-case latency; it does not increase execution throughput, which stays bounded by sequential execution and the per-block gas limit.
+- `--execution.sequencer.max-block-speed` (default `@@l2BlockTimeMs=250@@ms`): lowering it raises the block production cap and reduces best-case latency; it does not increase execution throughput, which stays bounded by sequential execution and the per-block gas limit.
 
 ### Operator-run relayer cache
 
