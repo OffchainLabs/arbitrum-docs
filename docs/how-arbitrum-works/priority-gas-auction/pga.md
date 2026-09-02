@@ -30,14 +30,17 @@ Participating in an ahead-of-time auction requires building custom tooling and f
 
 Emerging DeFi primitives such as proprietary AMMs (propAMMs) need cheap, frequent, priority-ordered inclusion to keep onchain parameters fresh. An express lane held by a single controller for 60 seconds at a time is incompatible with these new AMMs
 
-### What are PGA’s benefits over Timeboost?
+### What are PGA’s benefits?
 
-In short, these benefits are:
+#### PGA preserves the great UX that Arbitrum chains are known for
 
-- Allowing latency-sensitive applications to integrate with Arbitrum chains
-- Allowing more participants to compete in helpful MEV activity (arbitrageurs, Liquidators of undercollateralized positions, keepers)
+The default block time for Arbitrum chains continues to be industry-leading at 250ms, and further response times can be further reduced due to the addition of PGA rounds of 125ms.
 
-#### PGA opens the entry for ordering competition
+#### PGA preserves Arbitrum's fast block times
+
+The nominal block time on Arbitrum One remains 250ms with the addition of PGA rounds which are shared at 125ms increments. Arbitrum chains have the flexibility of selecting the number of rounds based on their preferences. In the case of Arbitrum One, there are only 2 PGA rounds, which means, under heavy load, blocks that fill early are issued immediately, so the chain can produce up to 8 blocks per second.
+
+#### PGA allows more participants to ordering competition
 
 Bidding happens per transaction, just-in-time, using a standard <a data-quicklook-from="eip-1559">EIP-1559</a> field. There is no separate auction to register for, no ahead-of-time forecast to make. Searchers and applications can participate through tips.
 
@@ -48,16 +51,6 @@ Different from Ethereum, a transaction doesn't need to pay tips to get included,
 #### PGA maintains a value accrual path for the chain owners
 
 Chain owners may use PGA to capture a portion of the available MEV on their chain that would have otherwise gone entirely to searchers. Priority fees are collected by the chain owner rather than accruing entirely to whoever captures MEV.
-
-<VanillaAdmonition type="note"  >
-
-With PGA, Arbitrum's throughput stays just as high:
-
-    The default block time for Arbitrum chains remains industry-leading at 250ms, and response times can be reduced further by adding PGA rounds of 125ms.
-    In the case of Arbitrum One, there are only 2 PGA rounds, so under heavy load, blocks that fill early are issued immediately, allowing the chain to produce up to 8 blocks per second.
-    Arbitrum chains have the flexibility of selecting the number of rounds based on their preferences.
-
-</VanillaAdmonition>
 
 ## How does it work?
 
