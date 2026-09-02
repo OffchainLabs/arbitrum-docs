@@ -7,6 +7,17 @@
  * due to Vercel's caching behavior.
  */
 
+// Two distinct figures, deliberately kept apart:
+//
+// - L1_SLOT_TIME_SECONDS (12) is Ethereum's nominal slot time. This is the number
+//   docs mean when they say "12 seconds"; use `l1SlotTimeSeconds` in prose.
+// - L1_BLOCK_TIME_SECONDS (12.1) is the observed average, which is slightly higher
+//   than the slot time because slots are occasionally missed. Duration math below
+//   uses it so the derived windows match the published figures.
+//
+// Both round to the same rendered values (6.4 days, 4.0 minutes), so swapping them
+// changes nothing today — but they answer different questions, so don't merge them.
+const L1_SLOT_TIME_SECONDS = 12;
 const L1_BLOCK_TIME_SECONDS = 12.1;
 
 const arbOneDisputeWindowBlocks = 45818;
@@ -20,6 +31,10 @@ const goerliForceIncludePeriodBlocks = 5760;
 const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
+  // block timing
+  l1SlotTimeSeconds: L1_SLOT_TIME_SECONDS,
+  l1AvgBlockTimeSeconds: L1_BLOCK_TIME_SECONDS,
+
   // Node docker images
   latestNitroNodeImage: 'offchainlabs/nitro-node:v3.11.3-beb2108',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.6-551a39b3',
@@ -96,6 +111,39 @@ const globalVars = {
   novaBlockGasLimit: '32,000,000',
   goerliBlockGasLimit: '20,000,000',
   sepoliaBlockGasLimit: '32,000,000',
+
+  // child chain block time
+  l2BlockTimeMs: 250,
+
+  // execution limits.
+  // Deliberately no `maxCodeSizeKb`: "24KB" names three different constants in
+  // these docs — the EVM MaxCodeSize, EIP-170's Ethereum limit, and Stylus's
+  // compressed WASM limit — so one variable would conflate them.
+  maxCodeSizeBytes: '24,576',
+  gasTargetSpeedLimit: '7,000,000',
+
+  // Inbox message size limit, which differs by parent chain
+  maxDataSizeL2: 117964,
+  maxDataSizeL3: 104857,
+
+  // AnyTrust DA
+  dasMaxStoreChunkBytes: 5242880,
+
+  // Timeboost
+  timeboostRoundSeconds: 60,
+  timeboostAuctionClosingSeconds: 15,
+  timeboostNonExpressDelayMs: 200,
+
+  // Stylus toolchain. cargo-stylus (the CLI) and stylus-sdk (the crate) are
+  // separate products that happen to share a version today — keep them apart so
+  // bumping one does not silently bump the other in every Cargo.toml example.
+  stylusRustToolchain: '1.91',
+  stylusRustToolchainFull: '1.91.0',
+  cargoStylusVersion: '0.10.7',
+  stylusSdkVersion: '0.10.7',
+
+  // Arbitrum Expansion Program revenue share
+  aepRevenueSharePercent: 10,
 
   // portal application form
   portalApplicationForm:
