@@ -416,6 +416,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                   label: `Fast withdrawals`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/validation/test-chain-configuration',
+                  label: `Test chain configuration`,
+                },
               ],
             },
             {
@@ -530,6 +535,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/bold-upgrade-playbook',
               label: 'BoLD upgrade playbook',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/error-index',
+              label: 'Error index',
             },
             {
               type: 'doc',
