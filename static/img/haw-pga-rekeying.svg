@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" role="img">
+<title>The queue is re-keyed every block</title>
+<desc>A transaction's priority fee is the smaller of its max priority fee and its max fee minus the block base fee. When the base fee rises from 0.10 to 1.20 gwei, transaction A's priority fee falls from 2.0 to 1.3 gwei and B overtakes it, so the queue order changes.</desc>
+<defs>
+<linearGradient id="brandbg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#152c4e"/><stop offset="0.55" stop-color="#1b4add"/><stop offset="1" stop-color="#12aaff"/>
+</linearGradient>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0 L10 5 L0 10 z" fill="#9dcced"/>
+</marker>
+</defs>
+<rect x="0" y="0" width="900" height="400" fill="url(#brandbg)"/>
+<g font-family="Inter, ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<text x="450" y="44" font-size="19" font-weight="600" fill="#9dcced" text-anchor="middle">A new base fee re-orders the queue</text>
+<rect x="30" y="68" width="360" height="272" rx="16" fill="#ffffff" opacity="0.06"/>
+<rect x="30" y="68" width="360" height="272" rx="16" fill="none" stroke="#9dcced" stroke-width="1" opacity="0.45"/>
+<text x="210" y="100" font-size="21" font-weight="600" fill="#ffffff" text-anchor="middle">Block N</text>
+<text x="210" y="126" font-size="17" font-weight="500" fill="#c9dcef" text-anchor="middle">Base fee 0.10 gwei</text>
+<rect x="50" y="144" width="320" height="48" rx="10" fill="#12aaff"/>
+<text x="210" y="175" font-size="17" font-weight="600" fill="#0b1b2e" text-anchor="middle">A · priority fee 2.0 gwei</text>
+<rect x="50" y="206" width="320" height="48" rx="10" fill="#9dcced"/>
+<text x="210" y="237" font-size="17" font-weight="600" fill="#0b1b2e" text-anchor="middle">B · priority fee 1.5 gwei</text>
+<rect x="50" y="268" width="320" height="48" rx="10" fill="#213147"/>
+<text x="210" y="299" font-size="17" font-weight="600" fill="#ffffff" text-anchor="middle">C · priority fee 0.5 gwei</text>
+<rect x="510" y="68" width="360" height="272" rx="16" fill="#ffffff" opacity="0.06"/>
+<rect x="510" y="68" width="360" height="272" rx="16" fill="none" stroke="#9dcced" stroke-width="1" opacity="0.45"/>
+<text x="690" y="100" font-size="21" font-weight="600" fill="#ffffff" text-anchor="middle">Block N + 1</text>
+<text x="690" y="126" font-size="17" font-weight="500" fill="#c9dcef" text-anchor="middle">Base fee 1.20 gwei</text>
+<rect x="530" y="144" width="320" height="48" rx="10" fill="#9dcced"/>
+<text x="690" y="175" font-size="17" font-weight="600" fill="#0b1b2e" text-anchor="middle">B · priority fee 1.5 gwei</text>
+<rect x="530" y="206" width="320" height="48" rx="10" fill="#12aaff"/>
+<text x="690" y="237" font-size="17" font-weight="600" fill="#0b1b2e" text-anchor="middle">A · priority fee 1.3 gwei</text>
+<rect x="530" y="268" width="320" height="48" rx="10" fill="#213147"/>
+<text x="690" y="299" font-size="17" font-weight="600" fill="#ffffff" text-anchor="middle">C · priority fee 0.5 gwei</text>
+<path d="M390 204 L503 204" fill="none" stroke="#9dcced" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="388.0" y="160" width="110" height="25" rx="6" fill="#152c4e" opacity="0.92"/>
+<text x="443" y="178" font-size="15" font-weight="600" fill="#eaf5ff" text-anchor="middle">New base fee</text>
+<rect x="241.0" y="357" width="418" height="25" rx="6" fill="#152c4e" opacity="0.92"/>
+<text x="450" y="375" font-size="16" font-weight="600" fill="#eaf5ff" text-anchor="middle">The queue is re-keyed at the start of every block</text>
+</g>
+</svg>
