@@ -11,22 +11,20 @@ content_type: gentle-introduction
 ## What is PGA?
 
 PGA is an ordering policy in which users bid for ordering by attaching a priority fee to each transaction. Ordering becomes a continuous, permissionless, per-transaction competition.
-
 PGA is set to replace Timeboost across Arbitrum chains.
 
-### Why deprecate Timeboost?
+### Why sunset Timeboost?
 
 Arbitrum One has used Timeboost since April 2025. Timeboost auctions off a 60-second "express lane" in a sealed-bid, second-price auction and falls back to first-come, first-served (FCFS) ordering for everything else.
-
 This policy served to reduce latency-race spam and create the first sequencing revenue stream for the Arbitrum DAO.
 
 However, some design limitations became clear:
 
-#### The barrier to entry is high:
+#### The barrier to entry is high
 
 Participating in an ahead-of-time auction requires building custom tooling and forecasting MEV for an entire upcoming round.
 
-#### It does not serve latency-sensitive applications well:
+#### It does not serve latency-sensitive applications well
 
 Emerging DeFi primitives such as proprietary AMMs (propAMMs) need cheap, frequent, priority-ordered inclusion to keep onchain parameters fresh. An express lane held by a single controller for 60 seconds at a time is incompatible with these new AMMs
 
@@ -52,7 +50,7 @@ Different from Ethereum, a transaction doesn't need to pay tips to get included,
 
 Chain owners may use PGA to capture a portion of the available MEV on their chain that would have otherwise gone entirely to searchers. Priority fees are collected by the chain owner rather than accruing entirely to whoever captures MEV.
 
-## How does it work?
+### How PGA works
 
 PGA is a **transaction ordering policy**: a set of rules the [Sequencer](https://docs.arbitrum.io/how-arbitrum-works/deep-dives/Sequencer) is trusted to follow when ordering transactions submitted by users.
 As with FCFS and Timeboost, the Sequencer's job is unchanged:
@@ -74,7 +72,7 @@ PGA uses three components that work together:
 
 <ImageZoom src="/img/haw-pga-three-components.svg" alt="PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125 ms, then transfer the queue into the block. An anti-starvation boost raises the queue position of transactions still waiting after each round, never the fee charged, and that feeds the next round. On Arbitrum One the block time is 250 ms with 2 rounds per block." className="img-900px" />
 
-## The two-stage mempool
+### The two-stage mempool
 
 Transactions arriving at the Sequencer land first in an **unordered waiting list**. Intake runs continuously and independently of any ordering work.
 
@@ -97,7 +95,7 @@ The queue is re-keyed against the new base fee at the start of every block Becau
 
 Transactions remain subject to the prevailing base fee, and the mempool remains private. PGA does not grant anyone the right to view or reorder other users' transactions, so the protections against harmful MEV that Arbitrum users rely on are unchanged.
 
-## PGA rounds
+### PGA rounds
 
 PGA rounds are defined by the following parameters:
 
@@ -130,7 +128,7 @@ If a block fills before its last round, the Sequencer finalizes it immediately a
   Your browser does not support the video tag.
 </video>
 
-## The anti-starvation priority boost
+### The anti-starvation priority boost
 
 At the end of every round in which the priority queue is non-empty, each transaction still waiting receives a priority boost of `p / (2K)`, where `p` is the priority of the last transaction included in the previous round (or zero if that round included none) and `K` is the number of rounds per block.
 
