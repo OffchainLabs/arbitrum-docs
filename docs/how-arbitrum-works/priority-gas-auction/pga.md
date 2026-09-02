@@ -43,7 +43,7 @@ Bidding happens per transaction, just-in-time, using a standard EIP-1559 field. 
 
 ### PGA protects low-fee transactions from starvation
 
-Different from Ethereum, a transaction doesn't need to pay tips to get included, and paying no priority fee does not mean waiting indefinitely. An anti-starvation boost raises the effective ordering position of transactions left waiting after each round, so ordinary transactions are included within a small number of blocks. The boost is virtual: it changes position in the queue, never the fee actually charged.
+Different from Ethereum, a transaction doesn't need to pay tips to get included, and paying no priority fee does not mean waiting indefinitely. An anti-starvation boost raises the effective ordering position of transactions left waiting after each round, so ordinary transactions are included within a small number of blocks. The boost changes position in the queue, never the fee actually charged.
 
 ### PGA maintains a value accrual path for the chain owners
 
@@ -77,9 +77,11 @@ PGA uses three components that work together:
 
     - **A two-stage mempool:** an unordered waiting list that includes arriving transactions, and a priority queue keyed on each transaction's priority fee.
     - **PGA rounds:** short, fixed-length ordering rounds that can run multiple times per block. Each round promotes the waiting list into the priority queue and transfers the queue into the block being built.
-    - **An anti-starvation priority boost:** a virtual increase applied at the end of each round to whatever is still waiting, so low-fee and zero-fee transactions rise over time.
+    - **An anti-starvation priority boost:** a position increase applied at the end of each round to whatever is still waiting, so low-fee and zero-fee transactions rise over time.
 
     On Arbitrum One, the block time `B` is 250ms and the proposed number of rounds per block `K` is 2, giving a nominal round length of **125ms**. Let's look at each component.
+
+<ImageZoom src="/img/haw-pga-three-components.svg" alt="PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125 ms, then drain the queue into the block. An anti-starvation boost lifts whatever is still waiting after each round, which feeds the next round. On Arbitrum One the block time is 250 ms with 2 rounds per block." className="img-900px" />
 
 ## The two-stage mempool
 
@@ -141,5 +143,5 @@ At the end of every round in which the priority queue is non-empty, each transac
 
 Two properties are worth emphasizing:
 
-- **The boost is virtual.** It shifts a transaction's position in the queue and nothing else. The fee charged on inclusion is unaffected.
+- \*\*The boost shifts a transaction's position in the queue and nothing else. The fee charged on inclusion is unaffected.
 - **It compounds across rounds.** A transaction paying no priority fee accumulates boost each round until it outranks the marginal paying transaction, which is what bounds its wait to a small number of blocks. The exact wait depends on the round parameters and on the priority fee the transaction expressed.
