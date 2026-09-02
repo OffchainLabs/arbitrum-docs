@@ -56,3 +56,18 @@ Once the chain is deployed, you'll need to generate the configuration to run its
 ## 4. Deploy your Arbitrum chain's token bridge
 
 Your Arbitrum chain's token bridge contracts allow **ERC-20** tokens to move between your Arbitrum chain and its underlying parent chain. Read [Deploy your Arbitrum chain's token bridge](/launch-arbitrum-chain/deploy/token-bridge.mdx) to learn how to set up your bridge.
+
+## How the two factory contracts relate
+
+The four steps above run through two separate factory contracts, in order. Knowing which one does what makes the deployment sequence easier to reason about when something fails partway.
+
+`RollupCreator` runs first. It deploys your chain's core contracts — the Rollup, the <a data-quicklook-from="sequencer-inbox">sequencer inbox</a>, the <a data-quicklook-from="delayed-inbox">delayed inbox</a>, the <a data-quicklook-from="outbox">outbox</a>, and the bridge — and sends the initialization messages that bring the chain to life.
+
+`TokenBridgeCreator` runs afterward. It depends on `RollupCreator` having already run: the factory contract takes your chain's `inbox` address as input (the SDK accepts your `rollup` address and resolves the inbox for you), deploys the parent chain half of the token bridge, and sends messages to the <a data-quicklook-from="child-chain">child chain</a> to deploy the counterpart contracts there.
+
+Two consequences follow from that ordering:
+
+- **The token bridge cannot be deployed first, or in parallel.** It needs an inbox to send messages through, and that inbox does not exist until `RollupCreator` has run.
+- **The token bridge step sends retryable tickets, so it needs gas on the child chain.** On a chain using a custom gas token, this means granting `TokenBridgeCreator` an allowance for that token before calling it, because it has to pay for execution on the far side. To learn how, see [Deploy your Arbitrum chain's token bridge](/launch-arbitrum-chain/deploy/token-bridge.mdx).
+
+For the addresses of both factories on each supported parent chain, see [Canonical factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx).

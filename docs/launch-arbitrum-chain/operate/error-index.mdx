@@ -1,0 +1,108 @@
+---
+title: 'Common error messages'
+sidebar_label: 'Error index'
+description: 'An index of error and log messages emitted by Arbitrum chain infrastructure, mapping each message to the guide that explains its cause and resolution.'
+user_story: As an Arbitrum chain operator, I want to paste an error message I am seeing and find the guide that explains it.
+content_type: troubleshooting
+author: pete-vielhaber
+sme: TBD
+---
+
+This page indexes error and log messages emitted by Arbitrum chain infrastructure. Find your message below and follow the link for the cause and resolution.
+
+Messages are grouped by the component that emits them. If you do not know which component produced a message, use your browser's find-in-page to search for a distinctive fragment of it.
+
+<VanillaAdmonition type="note" title="This page is an index, not a guide">
+
+Each entry links to the guide that explains the message in full. This page deliberately carries no resolution steps of its own, so that it cannot fall out of step with those guides.
+
+</VanillaAdmonition>
+
+Log levels in the linked guides are worth reading closely. Many <a data-quicklook-from="batch-poster">batch poster</a> messages are logged quietly at first. If they persist, they escalate to `WARN` or `ERROR`. A single `WARN` is usually noise. A sustained one that reaches `ERROR` is the real signal. To learn how that escalation works, see [The escalation rule to remember](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#the-escalation-rule-to-remember).
+
+## Batch poster
+
+### Mempool and balance
+
+| Message                                                                | Likely cause                                                                                                             | Where to look                                                                                                   |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `Posting this transaction will exceed max mempool size`                | Nitro's own in-flight window (`max-mempool-transactions`) is full, usually because the parent chain is confirming slowly | [Mempool errors](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#exceeds-max-mempool-size)      |
+| `ErrExceedsMaxMempoolSize` / `error posting batch`                     | In-flight transaction window full; parent chain confirming slowly                                                        | [Mempool errors](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#err-exceeds-max-mempool-size)  |
+| `lack of L1 balance prevents posting transaction with desired fee cap` | Parent chain wallet cannot cover the target max cost                                                                     | [Mempool errors](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#lack-of-l1-balance)            |
+| `a large batch posting backlog exists`                                 | Posting is not keeping up with sequencing                                                                                | [Backlog diagnosis](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#large-backlog-exists)       |
+| `error fetching batch poster wallet balance`                           | Parent chain RPC hiccup; monitoring gap only                                                                             | [Mempool errors](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#error-fetching-wallet-balance) |
+
+### Retries, nonces, and sync
+
+| Message                                                                         | Likely cause                                                                       | Where to look                                                                                                |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `Failed to re-send transaction`                                                 | Nonce already consumed, stale storage, or underpriced replacement                  | [Retry errors](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#failed-to-resend-transaction) |
+| `failed to update nonce with queue empty; falling back to using a recent block` | Finality data unavailable; safe because the queue is empty                         | [Nonce and sync](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#nonce-update-queue-empty)   |
+| `Failed to get current nonce`                                                   | Parent chain RPC; non-fatal, a previous nonce exists                               | [Nonce and sync](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#failed-current-nonce)       |
+| `Failed to get latest nonce`                                                    | Transient RPC; the iteration backs off                                             | [Nonce and sync](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#failed-latest-nonce)        |
+| `failed to update tx poster balance` / `failed to update tx poster nonce`       | Periodic state refresh failed; loop backs off                                      | [Nonce and sync](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#failed-tx-poster-state)     |
+| `DataPoster failed to send transaction`                                         | Mempool rejection or RPC issue; transaction stays queued                           | [Nonce and sync](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#dataposter-send-failed)     |
+| `failed to replace-by-fee transaction`                                          | Per-nonce RBF error that escalates if it persists                                  | [Nonce and sync](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#maybelogerror-family)       |
+| `DataPoster is avoiding creating a mempool nonce gap`                           | Deliberate <a data-quicklook-from="reorg">reorg</a> safety; transaction is retried | [Parent chain bounds](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#avoiding-nonce-gap)    |
+
+### Reverts and halting
+
+| Message                                                                            | Likely cause                                                     | Where to look                                                                                                          |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `Transaction from batch poster reverted`                                           | Contract rejected the batch; halts posting on persistent storage | [Reverts and halting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#poster-transaction-reverted)     |
+| `Large gap between last seen and current block number, skipping check for reverts` | Node lag; reverts in the skipped window go undetected            | [Reverts and halting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#large-gap-skipping-revert-check) |
+| `Error checking batch reverts`                                                     | Revert check failed; benign when it contains `not found`         | [Reverts and halting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#error-checking-batch-reverts)    |
+
+### Fees and pricing
+
+| Message                                                                   | Likely cause                                                  | Where to look                                                                                                   |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `can't meet data poster fee cap obligations with current target max cost` | Parent chain fees spiked above the escalation target          | [Fees and pricing](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#cannot-meet-fee-cap)         |
+| `submitting transaction with GasFeeCap less than latest basefee`          | Posting with a cap below current fees, expecting fees to fall | [Fees and pricing](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#gasfeecap-below-basefee)     |
+| `unable to fetch suggestedTipCap from l1 client`                          | Metric gap only, not a posting failure                        | [Fees and pricing](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#suggestedtipcap-unavailable) |
+
+### Parent chain bounds and reorg
+
+| Message                                                                            | Likely cause                                               | Where to look                                                                                                        |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `Disabling batch posting due to batch being within reorg resistance margin`        | Expected safety guard near the lower parent chain bound    | [Parent chain bounds](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#reorg-resistance-margin-block) |
+| `disabling L1 bound as batch posting message is close to the maximum delay`        | Bound overridden to avoid stalling near `max-delay`        | [Parent chain bounds](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#l1-bound-disabled-max-delay)   |
+| `not posting more messages because block number or timestamp exceed L1 bounds`     | Normal bounding behavior                                   | [Parent chain bounds](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#messages-exceed-l1-bounds)     |
+| `error getting max time variation on L1 bound block; falling back on latest block` | Parent chain node could not serve state at the bound block | [Parent chain bounds](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#max-time-variation-fallback)   |
+| `unknown L1 block bound config value; falling back on using finalized`             | Invalid `l1-block-bound` config value                      | [Parent chain bounds](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#unknown-l1-block-bound)        |
+
+### Data availability
+
+| Message                                      | Likely cause                                         | Where to look                                                                                                    |
+| -------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `DA writer failed, operator action required` | Non-fallback DA writer error; posting stops          | [Data availability fallback](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#da-writer-failed)   |
+| `DA writer explicitly requested fallback`    | DA backend requested fallback; check provider health | [Data availability fallback](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#da-writer-fallback) |
+
+### Coordination, gas estimation, and startup
+
+| Message                                                                                            | Likely cause                                                                               | Where to look                                                                                                         |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `Error checking if we could acquire redis lock`                                                    | Redis connectivity; the poster tries anyway                                                | [Lock and coordination](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#redis-lock-check-failed)      |
+| `Not posting batches right now because another batch poster has the lock or this node is behind`   | Normal on backup posters                                                                   | [Lock and coordination](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#another-poster-holds-lock)    |
+| `Failed to estimate gas for EIP-7623 check`                                                        | The probe Nitro uses to auto-detect EIP-7623 support failed; can occur on any parent chain | [Lock and coordination](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#eip-7623-gas-estimate-failed) |
+| `error estimating gas for batch`                                                                   | Parent chain state lag or inbox not caught up                                              | [Lock and coordination](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#error-estimating-batch-gas)   |
+| `max-size is deprecated; use max-calldata-batch-size`                                              | Deprecated flag in use                                                                     | [Config and startup](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#max-size-deprecated)             |
+| `Disabling data poster storage, as parent chain appears to be an Arbitrum chain without a mempool` | Expected when your parent chain is an Arbitrum chain                                       | [Config and startup](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#data-poster-storage-disabled)    |
+| `messagesPerBatch is somehow zero`                                                                 | Defensive guard; benign unless recurring                                                   | [Config and startup](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx#messages-per-batch-zero)         |
+
+## Validator
+
+| Message                                                                                          | Likely cause                                                                                 | Where to look                                                                                                   |
+| ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `error initializing staker: could not create assertion chain: no contract code at given address` | Reading at `finalized` before the Rollup deployment is finalized, or a stale `rollup.rollup` | [Parent chain read consistency](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#no-contract-code)  |
+| `ASSERTION_NOT_EXIST`                                                                            | Unsynced node, inconsistent parent chain RPC, or reorg exposure                              | [Assertion errors](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#assertion-not-exist)            |
+| `found incorrect assertion in watchtower mode` (legacy staker)                                   | Local state disagrees with an onchain <a data-quicklook-from="assertion">assertion</a>       | [Assertion errors](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#incorrect-assertion-watchtower) |
+| `Detected invalid assertion, but not configured to post a rival stake` (BoLD staker)             | Local state disagrees with an onchain assertion                                              | [Assertion errors](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx#incorrect-assertion-watchtower) |
+
+## Messages not listed here
+
+This index covers Arbitrum chain infrastructure that you operate. For errors from other areas, start with the guide for that area:
+
+- **Stylus contracts** — build, deployment, activation, and runtime errors are covered in [Common Stylus issues](/stylus/troubleshooting/common-issues.mdx).
+- **Running a node** — sync and startup questions are covered in [Node troubleshooting](/run-arbitrum-node/06-troubleshooting.mdx).
+- **Bridging** — deposit and withdrawal issues are covered in [Bridge troubleshooting](/arbitrum-bridge/03-troubleshooting.mdx).
