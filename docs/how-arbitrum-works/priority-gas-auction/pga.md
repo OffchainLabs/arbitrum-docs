@@ -107,8 +107,6 @@ Because the priority fee depends on the base fee, which changes between blocks, 
 The queue is re-keyed against the new base fee at the start of every block
 Because the priority fee depends on the base fee, which changes between blocks.
 
-<ImageZoom src="/img/haw-pga-rekeying.svg" alt="A transaction's priority fee is the smaller of its max priority fee and its max fee minus the block base fee. When the base fee rises from 0.10 to 1.20 gwei, transaction A's priority fee falls from 2.0 to 1.3 gwei and transaction B overtakes it, so the queue order changes." className="img-900px" />
-
 Transactions remain subject to the prevailing base fee, and the mempool remains private. PGA does not grant anyone the right to view or reorder other users' transactions, so the protections against harmful MEV that Arbitrum users rely on are unchanged.
 
 ## PGA rounds
