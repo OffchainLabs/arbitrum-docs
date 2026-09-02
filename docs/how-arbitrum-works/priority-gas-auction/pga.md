@@ -125,7 +125,10 @@ The block hard limit is 64 Mgas, and an individual transaction is capped at 32 M
 
 If a block fills before its last round, the Sequencer finalizes it immediately and starts the first round of the next block rather than idling for the remainder of the window. This is what allows the chain to exceed its nominal block rate under load. Block production is capped at 8 blocks per second; keeping the spacing between rounds consistent makes the anti-starvation policy behave predictably, since building faster would give older transactions an unfair advantage over newer ones.
 
-<!-- [pga-rounds-animation-brand.mp4](Tech%20docs%20PGA/pga-rounds-animation-brand.mp4) -->
+<video controls width="900" preload="metadata" style={{ maxWidth: '100%' }}>
+  <source src="/img/pga-rounds-animation-brand.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
 
 ## The anti-starvation priority boost
 
