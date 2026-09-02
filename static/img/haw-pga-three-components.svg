@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 410" width="900" height="410" role="img">
+<title>The three components of PGA</title>
+<desc>PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125 ms, then drain the queue into the block. An anti-starvation boost lifts whatever is still waiting after each round, and that feeds the next round.</desc>
+<defs>
+<linearGradient id="brandbg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#152c4e"/><stop offset="0.55" stop-color="#1b4add"/><stop offset="1" stop-color="#12aaff"/>
+</linearGradient>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0 L10 5 L0 10 z" fill="#9dcced"/>
+</marker>
+</defs>
+<rect x="0" y="0" width="900" height="410" fill="url(#brandbg)"/>
+<g font-family="Inter, ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<text x="450" y="44" font-size="19" font-weight="600" fill="#9dcced" text-anchor="middle">Three components work together</text>
+<rect x="25" y="85" width="250" height="150" rx="14" fill="#213147"/>
+<circle cx="150" cy="112" r="16" fill="#ffffff"/>
+<text x="150" y="119" font-size="18" font-weight="600" fill="#0b1b2e" text-anchor="middle">1</text>
+<text x="150" y="160" font-size="19" font-weight="600" fill="#ffffff" text-anchor="middle">Two-stage mempool</text>
+<text x="150" y="190" font-size="15" font-weight="500" fill="#c9dcef" text-anchor="middle">Waiting list, then a</text>
+<text x="150" y="214" font-size="15" font-weight="500" fill="#c9dcef" text-anchor="middle">queue keyed on the fee</text>
+<rect x="325" y="85" width="250" height="150" rx="14" fill="#12aaff"/>
+<circle cx="450" cy="112" r="16" fill="#213147"/>
+<text x="450" y="119" font-size="18" font-weight="600" fill="#ffffff" text-anchor="middle">2</text>
+<text x="450" y="160" font-size="19" font-weight="600" fill="#0b1b2e" text-anchor="middle">PGA rounds</text>
+<text x="450" y="190" font-size="15" font-weight="500" fill="#0b2438" text-anchor="middle">Every 125 ms: promote,</text>
+<text x="450" y="214" font-size="15" font-weight="500" fill="#0b2438" text-anchor="middle">then drain into the block</text>
+<rect x="625" y="85" width="250" height="150" rx="14" fill="#9dcced"/>
+<circle cx="750" cy="112" r="16" fill="#213147"/>
+<text x="750" y="119" font-size="18" font-weight="600" fill="#ffffff" text-anchor="middle">3</text>
+<text x="750" y="160" font-size="19" font-weight="600" fill="#0b1b2e" text-anchor="middle">Anti-starvation boost</text>
+<text x="750" y="190" font-size="15" font-weight="500" fill="#0b2438" text-anchor="middle">Lifts whatever is still</text>
+<text x="750" y="214" font-size="15" font-weight="500" fill="#0b2438" text-anchor="middle">waiting. Virtual only.</text>
+<path d="M275 160 L320 160" fill="none" stroke="#9dcced" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M575 160 L620 160" fill="none" stroke="#9dcced" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M750 235 L750 288 Q750 300 738 300 L162 300 Q150 300 150 288 L150 239" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke="#9dcced" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="316.0" y="282" width="268" height="25" rx="6" fill="#152c4e" opacity="0.92"/>
+<text x="450" y="300" font-size="15" font-weight="600" fill="#eaf5ff" text-anchor="middle">Still waiting after the round</text>
+<rect x="152.0" y="360" width="596" height="25" rx="6" fill="#152c4e" opacity="0.92"/>
+<text x="450" y="378" font-size="16" font-weight="600" fill="#eaf5ff" text-anchor="middle">Arbitrum One: block time 250 ms, 2 rounds per block, 125 ms per round</text>
+</g>
+</svg>
