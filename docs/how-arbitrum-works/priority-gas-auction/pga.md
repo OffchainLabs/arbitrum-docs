@@ -63,7 +63,7 @@ PGA doesn't alter popular Arbitrum properties:
 
 ## How does it work?
 
-PGA is a _transaction ordering policy_: a set of rules the [Sequencer](https://docs.arbitrum.io/how-arbitrum-works/deep-dives/Sequencer) is trusted to follow when ordering transactions submitted by users.
+PGA is a **transaction ordering policy**: a set of rules the [Sequencer](https://docs.arbitrum.io/how-arbitrum-works/deep-dives/Sequencer) is trusted to follow when ordering transactions submitted by users.
 As with FCFS and Timeboost, the Sequencer's job is unchanged:
 
 1. Accept valid transactions
@@ -125,8 +125,8 @@ The drain loop ends when the queue is empty, the block is full, or the round's t
 
 Blocks fill greedily until they reach one of the is reached:
 
-- The **32 Mgas gas limittarget**limit
-- The **95,000-byte calldata limit**limit
+- The **32 Mgas gas limit target**
+- The **95,000-byte calldata limit**
 - The end of the round.
 
 The block hard limit is 64 Mgas, and an individual transaction is capped at 32 Mgas.
