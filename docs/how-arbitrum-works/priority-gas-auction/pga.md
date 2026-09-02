@@ -1,5 +1,5 @@
 ---
-title: 'How PGA works'
+title: 'Introduction to PGA (Priority Gas Auctions)'
 sidebar_label: 'Introduction to PGA'
 description: 'Learn how PGA works and how it can benefit your Arbitrum-based project.'
 author: anegg0
@@ -8,7 +8,7 @@ user_story: As a current or prospective Arbitrum user, I want to understand how 
 content_type: gentle-introduction
 ---
 
-## What is PGA (Priority Gas Auctions)?
+## What is PGA?
 
 PGA is an ordering policy in which users bid for ordering by attaching a priority fee to each transaction. Ordering becomes a continuous, permissionless, per-transaction competition.
 
