@@ -285,6 +285,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing',
+                  label: 'Parent chain data fee pricing',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
                   label: `Priority fees`,
                 },
@@ -416,6 +421,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                   label: `Fast withdrawals`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/validation/test-chain-configuration',
+                  label: `Test chain configuration`,
+                },
               ],
             },
             {
@@ -530,6 +540,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/bold-upgrade-playbook',
               label: 'BoLD upgrade playbook',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/error-index',
+              label: 'Error index',
             },
             {
               type: 'doc',

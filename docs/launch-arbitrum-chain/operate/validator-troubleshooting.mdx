@@ -16,17 +16,17 @@ Most of this guide applies to both the legacy staker and the <a data-quicklook-f
 
 The [validator setup guide](/run-arbitrum-node/more-types/02-run-validator-node.mdx#validation-strategies) describes what each strategy does. This section covers the operational consequences that are easy to get wrong.
 
-| Strategy       | Operational notes                                                                                                                                                                                                                                                 |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Watchtower`   | Default. Takes no onchain action and needs no <a data-quicklook-from="wallet">wallet</a> or bond. Logs: `found incorrect assertion in watchtower mode` (legacy) or `Detected invalid assertion, but not configured to post a rival stake` (BoLD) on disagreement. |
-| `Defensive`    | Bonds and challenges only when it finds a bad <a data-quicklook-from="assertion">assertion</a>. Idle in normal operation, so an absence of onchain activity is not a fault signal.                                                                                |
-| `StakeLatest`  | Pre-BoLD chains only. Not available on BoLD chains.                                                                                                                                                                                                               |
-| `ResolveNodes` | Bonds and resolves assertions **that already exist**. It never creates new ones, so a chain whose validators are all `ResolveNodes` will stop advancing. At least one `MakeNodes` validator is required to post new assertions.                                   |
-| `MakeNodes`    | Creates assertions, resolves unconfirmed ones, and challenges bad ones.                                                                                                                                                                                           |
+| Strategy       | Operational notes                                                                                                                                                                                                                                                                                                                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Watchtower`   | Default. Takes no onchain action and needs no <a data-quicklook-from="wallet">wallet</a> or bond. Logs: `found incorrect assertion in watchtower mode` (legacy) or `Detected invalid assertion, but not configured to post a rival stake` (BoLD) on disagreement.                                                                                                                                     |
+| `Defensive`    | Acts only when it finds a bad <a data-quicklook-from="assertion">assertion</a>: it bonds and posts the correct rival assertion. On a BoLD chain it does not open the <a data-quicklook-from="challenge">challenge</a> itself — that requires `ResolveNodes` or `MakeNodes`. Idle in normal operation, so an absence of onchain activity is not a fault signal.                                        |
+| `StakeLatest`  | Pre-BoLD chains only. Not available on BoLD chains.                                                                                                                                                                                                                                                                                                                                                   |
+| `ResolveNodes` | Resolves assertions **that already exist** — on legacy chains it bonds on them; on BoLD chains it confirms them and can open challenges. It does not create routine successor assertions (it still posts the correct rival when it detects a bad one), so a chain whose validators are all `ResolveNodes` will stop advancing. At least one `MakeNodes` validator is required to post new assertions. |
+| `MakeNodes`    | Creates assertions, resolves unconfirmed ones, and challenges bad ones.                                                                                                                                                                                                                                                                                                                               |
 
 <VanillaAdmonition type="note" title="Switching strategy does not re-bond">
 
-A validator bonds once. Changing strategy—for example from `MakeNodes` to `Defensive`—does not place a new bond, and does not require one. If you are troubleshooting a validator that will not act after a strategy change, the bond is not the thing to check; look at <a data-quicklook-from="wallet">wallet</a> gas balance, allowlist membership, and parent-chain connectivity instead.
+A validator bonds once. Changing strategy—for example from `MakeNodes` to `Defensive`—does not place a new bond, and does not require one. If you are troubleshooting a validator that will not act after a strategy change, the bond is not the thing to check; look at wallet gas balance, allowlist membership, and parent-chain connectivity instead.
 
 </VanillaAdmonition>
 
@@ -40,16 +40,16 @@ If more than one `MakeNodes` validator runs on the same chain, they may attempt 
 
 Four flags control assertion timing, and they are frequently confused with one another. None of them takes a `-duration` suffix, despite that form circulating in support threads.
 
-| Flag                                          | Default  | Applies to    | What it controls                                                                                                                                                                                 |
-| --------------------------------------------- | -------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--node.bold.assertion-posting-interval`      | `15m0s`  | BoLD staker   | How often this validator posts a new assertion.                                                                                                                                                  |
-| `--node.staker.make-assertion-interval`       | `1h0m0s` | Legacy staker | How often a `MakeNodes` validator creates assertions. Bypassed during a dispute. Has no effect on BoLD chains.                                                                                   |
-| `--node.bold.minimum-gap-to-parent-assertion` | `1m0s`   | BoLD staker   | Minimum time to wait after the parent assertion was created before posting a child. A floor between consecutive assertions, distinct from the posting cadence above.                             |
-| `--node.bold.assertion-confirming-interval`   | `1m0s`   | BoLD staker   | How often the validator checks whether a pending assertion can be confirmed. This is a polling interval, not a delay before <a data-quicklook-from="confirmation">confirmation</a> is permitted. |
+| Flag                                          | Default  | Applies to    | What it controls                                                                                                                                                     |
+| --------------------------------------------- | -------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.bold.assertion-posting-interval`      | `15m0s`  | BoLD staker   | How often this validator posts a new assertion.                                                                                                                      |
+| `--node.staker.make-assertion-interval`       | `1h0m0s` | Legacy staker | How often a `MakeNodes` validator creates assertions. Bypassed during a dispute. Has no effect on BoLD chains.                                                       |
+| `--node.bold.minimum-gap-to-parent-assertion` | `1m0s`   | BoLD staker   | Minimum time to wait after the parent assertion was created before posting a child. A floor between consecutive assertions, distinct from the posting cadence above. |
+| `--node.bold.assertion-confirming-interval`   | `1m0s`   | BoLD staker   | How often the validator checks whether a pending assertion can be confirmed. This is a polling interval, not a delay before confirmation is permitted.               |
 
 Two rules to check when tuning these:
 
-- **The posting interval must exceed the Rollup contract's `minimumAssertionPeriod`.** That is an onchain constraint measured in <a data-quicklook-from="parent-chain">parent chain</a> blocks; posting faster than it results in reverted transactions. Read `minimumAssertionPeriod` from your Rollup contract rather than assuming the default.
+- **The posting interval must exceed the Rollup contract's `minimumAssertionPeriod`.** That is an onchain constraint measured in <a data-quicklook-from="parent-chain">parent-chain</a> blocks (`block.number` units — on an Arbitrum parent these track the underlying L1 block number, not the Arbitrum block height). The validator checks it before posting and waits until enough blocks have passed, so a shorter posting interval silently caps you at the onchain floor rather than causing reverted transactions. Read `minimumAssertionPeriod` from your Rollup contract rather than assuming the default.
 - **Do not tune the confirming interval to make confirmations happen sooner.** Confirmation timing is governed onchain by `confirmPeriodBlocks` and, where a challenge occurred, `challengeGracePeriodBlocks`. Lowering `--node.bold.assertion-confirming-interval` only increases how often the validator checks, which adds parent-chain RPC load without advancing anything.
 
 For the full flag list, see the [Nitro CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx). For the onchain parameters, see the parameter table in [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold.mdx#table-of-arbitrum-bold-parameters).
@@ -64,7 +64,7 @@ For the full flag list, see the [Nitro CLI flags reference](/run-arbitrum-node/n
 | `safe`      | Shorter lag, small <a data-quicklook-from="reorg">reorg</a> exposure.                                                                                         |
 | `latest`    | No lag, full <a data-quicklook-from="reorg">reorg</a> exposure. The validator may act on data that later disappears.                                          |
 
-### `error initializing staker: could not create assertion chain: no contract code at given address`
+### `error initializing staker: could not create assertion chain: no contract code at given address` {#no-contract-code}
 
 This is the most common symptom of the default `finalized` setting, and it usually appears immediately after a BoLD upgrade.
 
@@ -76,7 +76,7 @@ Check as well that `rollup.rollup` in `--chain.info-json` points at the new Roll
 
 ## Assertion errors
 
-### `ASSERTION_NOT_EXIST`
+### `ASSERTION_NOT_EXIST` {#assertion-not-exist}
 
 A revert from the Rollup contract. It originates in `requireExists`, which rejects any assertion whose status is `NoAssertion`:
 
@@ -94,9 +94,9 @@ In other words, the validator referenced an assertion hash that the Rollup contr
 
 **Resolution:** confirm the node is fully synced, verify the parent-chain endpoint returns consistent results, and confirm the Rollup address in `--chain.info-json` is correct. Move to `finalized` if you are running `latest`.
 
-### `Detected invalid assertion, but not configured to post a rival stake`
+### `found incorrect assertion in watchtower mode` {#incorrect-assertion-watchtower}
 
-The node's locally computed state disagrees with an assertion posted onchain. On a healthy chain this warrants immediate investigation—it is the signal watchtower mode exists to produce.
+The node's locally computed state disagrees with an assertion posted onchain. The legacy staker logs `found incorrect assertion in watchtower mode`; on a BoLD chain the same condition is logged as `Detected invalid assertion, but not configured to post a rival stake`. On a healthy chain this warrants immediate investigation—it is the signal watchtower mode exists to produce.
 
 Before escalating, rule out local causes: an unsynced or partially synced node, a mismatched Nitro version, or a wrong `--chain.info-json` will all produce local state that legitimately disagrees with a correct onchain assertion. Confirm the disagreement against a second, independently operated node before treating it as a real dispute.
 
@@ -106,14 +106,14 @@ If a validator transaction has been pending for more than roughly 10 minutes, it
 
 <VanillaAdmonition type="caution" title="The staker queues only one transaction by default">
 
-`--node.staker.data-poster.max-mempool-transactions` defaults to **`1`**, compared to `18` for the <a data-quicklook-from="batch-poster">batch poster</a>. A single stuck transaction therefore blocks every subsequent validator action until it clears. This is the first thing to check, and the difference from <a data-quicklook-from="batch">batch</a> poster behavior surprises most operators.
+`--node.staker.data-poster.max-mempool-transactions` defaults to **`1`**, compared to `18` for the <a data-quicklook-from="batch-poster">batch poster</a>. A single stuck transaction therefore blocks every subsequent validator action until it clears. This is the first thing to check, and the difference from batch poster behavior surprises most operators.
 
 </VanillaAdmonition>
 
 Work through these in order:
 
 1. **Raise the queue depth.** Increase `--node.staker.data-poster.max-mempool-transactions` so that one pending transaction does not stall the whole validator. Increase it deliberately rather than setting `0` (unlimited), which removes the backpressure that prevents runaway submission.
-2. **Check the fee cap against current parent-chain gas prices.** If parent-chain gas has risen above what the data poster will bid, the transaction cannot be included. Raise the relevant fee cap.
+2. **Check the fee cap against current parent-chain gas prices.** If parent-chain gas has risen above what the data poster will bid, the network will not include the transaction. Raise the relevant fee cap.
 3. **Accelerate the transaction manually.** Resubmit at a higher gas price from the same account and nonce to replace it. Keep the nonce identical—submitting a new nonce leaves the original stuck and creates a gap.
 4. **Confirm the wallet is funded.** The validator needs parent-chain native currency for gas, separately from its ERC-20 bond token. Watch `arb/staker/balance`.
 
@@ -136,7 +136,7 @@ Treat this as a recovery tool, not a routine operation. A healthy validator conf
 
 Before attempting it, note the constraints:
 
-- **It is not permissionless.** `onlyValidator` restricts the caller to the allowlist on a permissioned chain. If your allowlist has been misconfigured, fixing the allowlist comes first.
+- **It is not permissionless.** `onlyValidator` restricts the caller to the allowlist on a permissioned chain. If you misconfigured the allowlist, fix it first.
 - **`prevAssertionHash` must be the current latest confirmed assertion.** Assertions confirm in order; you cannot skip ahead.
 - **`confirmPeriodBlocks` must have elapsed** since the assertion was created.
 - **If the parent assertion has more than one child**, a <a data-quicklook-from="challenge">challenge</a> occurred. The winning <a data-quicklook-from="edge">edge</a> must be confirmed, and `challengeGracePeriodBlocks` must have elapsed since that edge was confirmed. The grace period exists to give the <a data-quicklook-from="chain-owner">chain owner</a> or security council a window to intervene—do not attempt to route around it.
