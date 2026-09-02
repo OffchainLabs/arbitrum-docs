@@ -18,7 +18,7 @@ PGA is set to replace Timeboost across Arbitrum chains.
 
 Arbitrum One has used Timeboost since April 2025. Timeboost auctions off a 60-second "express lane" in a sealed-bid, second-price auction and falls back to first-come, first-served (FCFS) ordering for everything else.
 
-This policy served to protect users from harmful MEV, such as front-running and sandwich attacks, reduce latency-race spam, and create the first sequencing revenue stream for the Arbitrum DAO.
+This policy served to reduce latency-race spam and create the first sequencing revenue stream for the Arbitrum DAO.
 
 However, some design limitations became clear:
 
