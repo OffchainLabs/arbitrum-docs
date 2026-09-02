@@ -77,11 +77,11 @@ PGA uses three components that work together:
 
     - **A two-stage mempool:** an unordered waiting list that includes arriving transactions, and a priority queue keyed on each transaction's priority fee.
     - **PGA rounds:** short, fixed-length ordering rounds that can run multiple times per block. Each round promotes the waiting list into the priority queue and transfers the queue into the block being built.
-    - **An anti-starvation priority boost:** a position increase applied at the end of each round to whatever is still waiting, so low-fee and zero-fee transactions rise over time.
+    - **An anti-starvation priority boost:** a position increase applied at the end of each round to transactions that are still waiting, so low-fee and zero-fee transactions rise over time.
 
     On Arbitrum One, the block time `B` is 250ms and the proposed number of rounds per block `K` is 2, giving a nominal round length of **125ms**. Let's look at each component.
 
-<ImageZoom src="/img/haw-pga-three-components.svg" alt="PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125 ms, then drain the queue into the block. An anti-starvation boost lifts whatever is still waiting after each round, which feeds the next round. On Arbitrum One the block time is 250 ms with 2 rounds per block." className="img-900px" />
+<ImageZoom src="/img/haw-pga-three-components.svg" alt="PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125 ms, then transfer the queue into the block. An anti-starvation boost lifts whatever is still waiting after each round, which feeds the next round. On Arbitrum One the block time is 250 ms with 2 rounds per block." className="img-900px" />
 
 ## The two-stage mempool
 
@@ -121,9 +121,9 @@ PGA rounds are defined by the following parameters:
 A new round begins every `B/K` , in the case of Arbitrum One, block times `B` is 250ms, and the number of rounds `K` is 2, meaning rounds are 125ms. Each round has two phases:
 
 - The **intake phase** runs for the full round window, absorbing new arrivals into the waiting list. It overlaps with the previous round's execute phase.
-- The **execute phase** begins as soon as intake closes. The waiting list is moved into the priority queue, and the Sequencer drains the queue into the block, highest priority first.
+- The **execute phase** begins as soon as intake closes. The waiting list is moved into the priority queue, and the Sequencer transfers the queue into the block, highest priority first.
 
-The drain loop ends when the queue is empty, the block is full, or the round's time is up. Anything still queued simply waits for the next round.
+The transfer loop ends when the queue is empty, the block is full, or the round's time is up. Anything still queued simply waits for the next round.
 
 Blocks fill greedily until they reach one of the is reached:
 
