@@ -46,7 +46,14 @@ Limitations:
 - **Fast, local NVMe SSD storage is required** for reasonable sync speed.
 - **`--init.latest` cannot download a PathDB snapshot.** Use `--init.url`, as described in [Initialize a PathDB archive node](#initialize-a-pathdb-archive-node).
 
-To enable PathDB on your archive node, start it with these flags:
+Block validation is not yet supported with the path-based state scheme. In other words, validators cannot use PathDB yet.
+
+- Fast, local NVMe SSD storage is required for reasonable sync speed.
+- PathDB snapshot auto-downloads with `--init.latest` are not yet supported.
+
+For guidance on tuning cache sizes and memory usage on PathDB archive nodes, see [node tuning](/run-arbitrum-node/nitro/node-tuning.mdx).
+
+To enable PathDB on your archive node, start your node with the following flags:
 
 | Flag                                    | Purpose                                                                                              |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -61,7 +68,7 @@ Before v3.10.0 it defaulted to 24 hours' worth of blocks even in archive mode. N
 
 </VanillaAdmonition>
 
-For cache sizing and memory tuning that applies to archive nodes generally, see [node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
+For cache sizing and memory tuning that applies to archive nodes generally, see [node tuning](/run-arbitrum-node/nitro/node-tuning.mdx).
 
 ### Initialize a PathDB archive node
 
