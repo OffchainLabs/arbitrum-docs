@@ -116,7 +116,11 @@ PGA rounds are defined by the following parameters:
 - the block time `B`
 - the proposed number of rounds per block `K`
 
-A new round begins every `B/K` , in the case of Arbitrum One, block times `B` is 250ms, and the number of rounds `K` is 2, meaning rounds are 125ms. Each round has two phases:
+A new round begins every `B/K` , in the case of Arbitrum One, block times `B` is 250ms, and the number of rounds `K` is 2, meaning rounds are 125ms.
+
+`K` remains adjustable for two years after PGA activates, to any value from 1 to 10 inclusive. That gives round lengths from 250ms down to 25ms.
+
+Each round has two phases:
 
 - The **intake phase** runs for the full round window, absorbing new arrivals into the waiting list. It overlaps with the previous round's execute phase.
 - The **execute phase** begins as soon as intake closes. The waiting list is moved into the priority queue, and the Sequencer transfers the queue into the block, highest priority first.
@@ -143,3 +147,14 @@ Two properties are worth emphasizing:
 
 - \*\*The boost shifts a transaction's position in the queue and nothing else. The fee charged on inclusion is unaffected.
 - **It compounds across rounds.** A transaction paying no priority fee accumulates boost each round until it outranks the marginal paying transaction, which is what bounds its wait to a small number of blocks. The exact wait depends on the round parameters and on the priority fee the transaction expressed.
+
+## What changes when PGA activates
+
+PGA activates on Arbitrum One some time after the onchain vote passes. On the same day, Timeboost's express lane and its delay logic are decommissioned:
+
+- The Timeboost autonomous auctioneer stops accepting new bids.
+- The express lane endpoint shuts down.
+- The Sequencer stops enforcing the 200ms delay on transactions outside the express lane. That delay only applied while an express lane controller held the round.
+- You can withdraw funds you still have locked in the Timeboost auction contract at any time.
+
+On Arbitrum One, PGA sends 97% of the priority fees it collects to the Arbitrum DAO treasury and 3% to the Arbitrum Developer Guild. The DAO accounts for these proceeds periodically and distributes them through a separate vote every six months.
