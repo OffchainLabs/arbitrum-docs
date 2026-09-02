@@ -163,16 +163,16 @@ If the user withdraws to the parent chain (for example, from Arbitrum One to Eth
 
 Maintain at least one fixture per detection path so you can assert that your indexer credits the right amount and rejects everything else. Capture each fixture from a live node (Arbitrum Sepolia is preferred because it receives ArbOS upgrades first) and pin it to the stated Nitro and ArbOS versions.
 
-| #    | Scenario                                                                 | Expected result                              |
+| TV # | Scenario                                                                 | Expected result                              |
 | ---- | ------------------------------------------------------------------------ | -------------------------------------------- |
-| TV-1 | Native **ETH** transfer to a platform deposit address, `status` `0x1`    | Credit **ETH** equal to `value / 10^18`      |
-| TV-2 | **ERC-20** `transfer()` to a supported token with a valid `Transfer` log | Credit token equal to `amount / 10^decimals` |
-| TV-3 | **ERC-20** `transfer()` that reverts (`status` `0x0`)                    | No credit                                    |
-| TV-4 | Token moved through an internal call (no top-level `transfer()`)         | Credit through the log scan in C             |
-| TV-5 | **ETH** moved to a user through an internal call frame                   | Credit through the trace scan in C           |
-| TV-6 | `ArbitrumDepositTx` (`0x64`) to a platform address                       | Credit **ETH** from the bridge deposit       |
-| TV-7 | `ArbitrumInternalTx` (`0x6A`) system transaction                         | No credit                                    |
-| TV-8 | `Transfer` event emitted by an unsupported or spoofed contract           | No credit (address not in the set)           |
+| 1    | Native **ETH** transfer to a platform deposit address, `status` `0x1`    | Credit **ETH** equal to `value / 10^18`      |
+| 2    | **ERC-20** `transfer()` to a supported token with a valid `Transfer` log | Credit token equal to `amount / 10^decimals` |
+| 3    | **ERC-20** `transfer()` that reverts (`status` `0x0`)                    | No credit                                    |
+| 4    | Token moved through an internal call (no top-level `transfer()`)         | Credit through the log scan in C             |
+| 5    | **ETH** moved to a user through an internal call frame                   | Credit through the trace scan in C           |
+| 6    | `ArbitrumDepositTx` (`0x64`) to a platform address                       | Credit **ETH** from the bridge deposit       |
+| 7    | `ArbitrumInternalTx` (`0x6A`) system transaction                         | No credit                                    |
+| 8    | `Transfer` event emitted by an unsupported or spoofed contract           | No credit (address not in the set)           |
 
 Each fixture should record the block hash, the transaction hash, the raw `eth_getTransactionByHash` and `eth_getTransactionReceipt` responses, the relevant slice of `debug_traceBlockByHash`, and the expected credit or rejection.
 

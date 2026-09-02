@@ -1000,6 +1000,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Finality',
+              id: 'how-arbitrum-works/deep-dives/finality',
+            },
+            {
+              type: 'doc',
               label: 'Batch poster',
               id: 'how-arbitrum-works/deep-dives/batchposter',
             },
