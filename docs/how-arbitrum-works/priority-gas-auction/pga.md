@@ -8,15 +8,12 @@ user_story: As a current or prospective Arbitrum user, I want to understand how 
 content_type: gentle-introduction
 ---
 
-## What is PGA?
-
-PGA is an ordering policy in which users bid for ordering by attaching a priority fee to each transaction. Ordering becomes a continuous, permissionless, per-transaction competition.
-PGA is set to replace Timeboost across Arbitrum chains.
+PGA is an ordering policy in which users bid for ordering by attaching a priority fee to each <a data-quicklook-from="transaction">transaction</a>. Ordering becomes a continuous, permissionless, per-transaction competition.
+PGA is set to replace <a data-quicklook-from="timeboost">Timeboost</a> across Arbitrum chains.
 
 ### Why sunset Timeboost?
 
-Arbitrum One has used Timeboost since April 2025. Timeboost auctions off a 60-second "express lane" in a sealed-bid, second-price auction and falls back to first-come, first-served (FCFS) ordering for everything else.
-This policy served to reduce latency-race spam and create the first sequencing revenue stream for the Arbitrum DAO.
+<a data-quicklook-from="arbitrum-one">Arbitrum One</a> has used Timeboost since April 2025. Timeboost auctions off a 60-second "<a data-quicklook-from="express-lane">express lane</a>" in a sealed-bid, second-price auction and falls back to first-come, first-served (FCFS) ordering for everything else. This policy served to reduce latency-race spam and create the first sequencing revenue stream for the <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a>.
 
 However, some design limitations became clear:
 
@@ -26,13 +23,13 @@ Participating in an ahead-of-time auction requires building custom tooling and f
 
 #### It does not serve latency-sensitive applications well
 
-Emerging DeFi primitives such as proprietary AMMs (propAMMs) need cheap, frequent, priority-ordered inclusion to keep onchain parameters fresh. An express lane held by a single controller for 60 seconds at a time is incompatible with these new AMMs
+Emerging DeFi primitives such as proprietary AMMs (propAMMs) need cheap, frequent, priority-ordered inclusion to keep onchain parameters fresh. An express lane held by a single controller for 60 seconds at a time is incompatible with these new AMMs.
 
 ### What are PGA’s benefits?
 
 #### PGA preserves the great UX that Arbitrum chains are known for
 
-The default block time for Arbitrum chains continues to be industry-leading at 250ms, and further response times can be further reduced due to the addition of PGA rounds of 125ms.
+The default block time for Arbitrum chains continues to be industry-leading at 250ms, and response times can be further reduced by adding 125ms PGA rounds.
 
 #### PGA preserves Arbitrum's fast block times
 
@@ -48,17 +45,17 @@ Different from Ethereum, a transaction doesn't need to pay tips to get included,
 
 #### PGA maintains a value accrual path for the chain owners
 
-Chain owners may use PGA to capture a portion of the available MEV on their chain that would have otherwise gone entirely to searchers. Priority fees are collected by the chain owner rather than accruing entirely to whoever captures MEV.
+<a data-quicklook-from="chain-owner">Chain owners</a> may use PGA to capture a portion of the available MEV on their chain that would have otherwise gone entirely to searchers. Priority fees are collected by the chain owner rather than accruing entirely to whoever captures MEV.
 
 ### How PGA works
 
-PGA is a **transaction ordering policy**: a set of rules the [Sequencer](https://docs.arbitrum.io/how-arbitrum-works/deep-dives/Sequencer) is trusted to follow when ordering transactions submitted by users.
-As with FCFS and Timeboost, the Sequencer's job is unchanged:
+PGA is a **<a data-quicklook-from="transaction-ordering-policy">transaction ordering policy</a>**: a set of rules the [Sequencer](https://docs.arbitrum.io/how-arbitrum-works/deep-dives/Sequencer) is trusted to follow when ordering transactions submitted by users.
+As with FCFS and Timeboost, the <a data-quicklook-from="sequencer">Sequencer</a>'s job is unchanged:
 
 1. Accept valid transactions
 2. Place them in an order dictated by the policy
 3. Publish the resulting sequence to a feed
-4. Publish transactions in compressed batches to the chain's data availability layer
+4. Publish transactions in compressed <a data-quicklook-from="batch">batches</a> to the chain's data availability layer
 
 With PGA, the priority fee determines transactions' order, evaluated in short ordering rounds that run multiple times per block. This is an ordering model that should be familiar to users of other EVM chains (Base, OP Mainnet, and Unichain).
 
@@ -134,16 +131,16 @@ At the end of every round in which the priority queue is non-empty, each transac
 
 Two properties are worth emphasizing:
 
-- \*\*The boost shifts a transaction's position in the queue and nothing else. The fee charged on inclusion is unaffected.
+- **The boost shifts a transaction's position in the queue and nothing else.** The fee charged on inclusion is unaffected.
 - **It compounds across rounds.** A transaction paying no priority fee accumulates boost each round until it outranks the marginal paying transaction, which is what bounds its wait to a small number of blocks. The exact wait depends on the round parameters and on the priority fee the transaction expressed.
 
 ## What changes when PGA activates
 
 PGA activates on Arbitrum One some time after the onchain vote passes. On the same day, Timeboost's express lane and its delay logic are decommissioned:
 
-- The Timeboost autonomous auctioneer stops accepting new bids.
+- The Timeboost <a data-quicklook-from="autonomous-auctioneer">autonomous auctioneer</a> stops accepting new bids.
 - The express lane endpoint shuts down.
-- The Sequencer stops enforcing the 200ms delay on transactions outside the express lane. That delay only applied while an express lane controller held the round.
-- You can withdraw funds you still have locked in the Timeboost auction contract at any time.
+- The Sequencer stops enforcing the 200ms delay on transactions outside the express lane. That delay only applied while an <a data-quicklook-from="express-lane-controller">express lane controller</a> held the round.
+- You can withdraw funds you still have locked in the Timeboost <a data-quicklook-from="auction-contract">auction contract</a> at any time.
 
 On Arbitrum One, PGA sends 97% of the priority fees it collects to the Arbitrum DAO treasury and 3% to the Arbitrum Developer Guild. The DAO accounts for these proceeds periodically and distributes them through a separate vote every six months.
