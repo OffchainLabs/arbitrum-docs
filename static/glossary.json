@@ -263,6 +263,10 @@
     "title": "Edge",
     "text": "<p>A primitive in the <a href=\"/intro/glossary#bold\">BoLD</a> <a href=\"/intro/glossary#challenge-protocol\">Challenge Protocol</a>. An edge is a claim about a portion of an Arbitrum chain&#39;s history, identified by a starting and ending <a href=\"/intro/glossary#history-commitment\">history commitment</a>. Validators bisect edges to narrow disagreement down to a single execution step.</p>\n"
   },
+  "eip-1559": {
+    "title": "EIP-1559",
+    "text": "<p>An Ethereum Improvement Proposal, live since Ethereum&#39;s London upgrade in 2021, that splits the gas price into two parts: a base fee per gas that the protocol sets and adjusts with demand, and a priority fee per gas that you set as a tip to bid for earlier inclusion. A transaction declares both limits as <code>max_fee_per_gas</code> and <code>max_priority_fee_per_gas</code>. Arbitrum chains use the same fields, and under PGA the priority fee decides the order in which the <a href=\"/intro/glossary#sequencer\">Sequencer</a> includes transactions.</p>\n"
+  },
   "ethereum-wallet": {
     "title": "Ethereum Wallet",
     "text": "<p>A software application used for transacting with the Ethereum <a href=\"/intro/glossary#blockchain\">Blockchain</a>.</p>\n"
