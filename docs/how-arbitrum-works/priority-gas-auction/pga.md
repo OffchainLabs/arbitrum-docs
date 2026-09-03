@@ -136,7 +136,7 @@ Two properties are worth emphasizing:
 
 ## What changes when PGA activates
 
-PGA activates on Arbitrum One some time after the onchain vote passes. On the same day, Timeboost's express lane and its delay logic are decommissioned:
+PGA activates on Arbitrum One some time after the onchain vote passes. On the same day, Timeboost's express lane and its delay logic will be decommissioned:
 
 - The Timeboost <a data-quicklook-from="autonomous-auctioneer">autonomous auctioneer</a> stops accepting new bids.
 - The express lane endpoint shuts down.
