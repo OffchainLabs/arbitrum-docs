@@ -8,14 +8,14 @@ author: anegg0
 sme: gligneul
 ---
 
-Priority Gas Auctions (PGA) is an optional transaction-ordering policy that can be enabled on any Arbitrum chain. Under PGA, the sequencer orders transactions by the priority fee attached to each, draining a priority queue during short ordering rounds that run several times per block.
+Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that can be enabled on any Arbitrum chain. Under PGA, the sequencer orders transactions by the priority fee attached to each, draining a priority queue during short ordering rounds that run several times per block.
 You can learn more in our [introduction to PGA](../../../how-arbitrum-works/priority-gas-auction/pga)
 
-PGA can be activated by changing the sequencer configuration. There is no added operational overhead, which makes it viable for a much wider range of chains than Timeboost.
+PGA can be activated by changing the sequencer configuration. There is no added operational overhead, which makes it viable for a much wider range of chains than <a data-quicklook-from="timeboost">Timeboost</a>.
 
-The critical prerequisite is that your chain must actually collect priority fees (priority fee collection is available on ArbOs 61). PGA orders transactions by tips.
+The critical prerequisite is that your chain must actually collect priority fees (priority fee collection is available on <a data-quicklook-from="arbos">ArbOS</a> 61). PGA orders transactions by tips.
 
-As with all features on the Arbitrum stack, Arbitrum chains can adopt PGA at their own discretion and on their own timeline.
+As with all features on the Arbitrum stack, <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> can adopt PGA at their own discretion and on their own timeline.
 
 ### Recommended adoption path
 
@@ -26,11 +26,11 @@ PGA is worth considering for any chain with meaningful contention for block spac
 
 ### Benefits
 
-PGA enables a chain owner to capture a portion of the available MEV on their blockchain, while preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy.
+PGA enables a <a data-quicklook-from="chain-owner">chain owner</a> to capture a portion of the available MEV on their blockchain, while preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy.
 
 ### Familiar mechanics and a low barrier to entry
 
-Participants bid by setting `maxPriorityFeePerGas` on a standard EIP-1559 type 2 transaction. There is no auction to register for, and no custom tooling to build. Anyone already running a searcher on another EVM chain should be able to participate on day one.
+Participants bid by setting `maxPriorityFeePerGas` on a standard <a data-quicklook-from="eip-1559">EIP-1559</a> type 2 transaction. There is no auction to register for, and no custom tooling to build. Anyone already running a searcher on another EVM chain should be able to participate on day one.
 
 ### Near-zero operational cost
 
@@ -60,7 +60,7 @@ For a conceptual introduction, see the gentle introduction to PGA.
 Before starting, ensure you have:
 
 1. **ArbOS 61 or newer.** This release supports priority fee collection. PGA orders by tips, so running it on an earlier ArbOS means ordering by fees the chain never collects.
-2. **Priority fee collection enabled.** Collection requires all three of: ArbOS 61+, the chain's collect-tips flag set, and the batch poster coinbase configured. On Arbitrum One, this is toggled via an `ArbOwner` precompile call to `setCollectTips`.
+2. **Priority fee collection enabled.** Collection requires all three of: ArbOS 61+, the chain's collect-tips flag set, and the <a data-quicklook-from="batch-poster">batch poster</a> coinbase configured. On Arbitrum One, this is toggled via an `ArbOwner` precompile call to `setCollectTips`.
 3. **Timeboost disabled.** Configurations enabling Timeboost and PGA will behave unpredictably.
 4. **A Nitro build that includes PGA.** Confirm the release you are running supports it.
 
