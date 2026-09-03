@@ -17,13 +17,9 @@ PGA is set to replace <a data-quicklook-from="timeboost">Timeboost</a> across Ar
 
 However, some design limitations became clear:
 
-#### The barrier to entry is high
+**The barrier to entry is high**: Participating in an ahead-of-time auction requires building custom tooling and forecasting MEV for an entire upcoming round.
 
-Participating in an ahead-of-time auction requires building custom tooling and forecasting MEV for an entire upcoming round.
-
-#### It does not serve latency-sensitive applications well
-
-Emerging DeFi primitives such as proprietary AMMs (propAMMs) need cheap, frequent, priority-ordered inclusion to keep onchain parameters fresh. An express lane held by a single controller for 60 seconds at a time is incompatible with these new AMMs.
+**It does not serve latency-sensitive applications well**: Emerging DeFi primitives such as proprietary AMMs (propAMMs) need cheap, frequent, priority-ordered inclusion to keep onchain parameters fresh. An express lane held by a single controller for 60 seconds at a time is incompatible with these new AMMs.
 
 ### What are PGA’s benefits?
 
