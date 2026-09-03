@@ -127,7 +127,7 @@ If a block fills before its last round, the Sequencer finalizes it immediately a
 
 ### The anti-starvation priority boost
 
-At the end of every round in which the priority queue is non-empty, each transaction still waiting receives a priority boost of `p / (2K)`, where `p` is the priority of the last transaction included in the previous round (or zero if that round included none) and `K` is the number of rounds per block.
+At the end of every round in which the priority queue is not empty, each transaction still waiting receives a priority boost of `p / (2K)`, where `p` is the priority of the last transaction included in the previous round (or zero if that round included none). `K` is the number of rounds per block.
 
 Two properties are worth emphasizing:
 
