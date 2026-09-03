@@ -67,7 +67,7 @@ PGA uses three components that work together:
 
     On Arbitrum One, the block time `B` is 250ms and the proposed number of rounds per block `K` is 2, giving a nominal round length of **125ms**. Let's look at each component.
 
-<ImageZoom src="/img/haw-pga-three-components.svg" alt="PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125 ms, then transfer the queue into the block. An anti-starvation boost raises the queue position of transactions still waiting after each round, never the fee charged, and that feeds the next round. On Arbitrum One the block time is 250 ms with 2 rounds per block." className="img-900px" />
+<ImageZoom src="/img/haw-pga-three-components.svg" alt="PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125ms, then transfer the queue into the block. An anti-starvation boost raises the queue position of transactions still waiting after each round, never the fee charged, and that feeds the next round. On Arbitrum One the block time is 250ms with 2 rounds per block." className="img-900px" />
 
 ### The two-stage mempool
 
