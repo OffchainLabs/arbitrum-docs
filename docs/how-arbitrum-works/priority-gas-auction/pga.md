@@ -43,7 +43,7 @@ Bidding happens per transaction, just-in-time, using a standard <a data-quickloo
 
 Different from Ethereum, a transaction doesn't need to pay tips to get included, and paying no priority fee does not mean waiting indefinitely. An anti-starvation boost raises the effective ordering position of transactions left waiting after each round, so ordinary transactions are included within a small number of blocks. The boost changes position in the queue, never the fee actually charged.
 
-#### PGA maintains a value accrual path for the chain owners
+#### PGA maintains a value accrual path for chain owners
 
 <a data-quicklook-from="chain-owner">Chain owners</a> may use PGA to capture a portion of the available MEV on their chain that would have otherwise gone entirely to searchers. Priority fees are collected by the chain owner rather than accruing entirely to whoever captures MEV.
 
