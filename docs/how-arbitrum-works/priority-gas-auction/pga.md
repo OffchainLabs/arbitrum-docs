@@ -33,7 +33,7 @@ The default block time for Arbitrum chains continues to be industry-leading at 2
 
 #### PGA preserves Arbitrum's fast block times
 
-The nominal block time on Arbitrum One remains 250ms with the addition of PGA rounds which are shared at 125ms increments. Arbitrum chains have the flexibility of selecting the number of rounds based on their preferences. In the case of Arbitrum One, there are only 2 PGA rounds, which means, under heavy load, blocks that fill early are issued immediately, so the chain can produce up to 8 blocks per second.
+The nominal block time on Arbitrum One remains 250ms, with PGA rounds added at 125ms increments. Arbitrum chains can select the number of rounds based on their needs. On Arbitrum One, there are only 2 PGA rounds, which means that under heavy load, blocks that fill early are issued immediately so that the chain can produce up to 8 blocks per second.
 
 #### PGA allows more participants to order competition
 
