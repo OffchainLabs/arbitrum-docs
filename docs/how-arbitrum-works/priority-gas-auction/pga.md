@@ -61,7 +61,7 @@ With PGA, the priority fee determines transactions' order, evaluated in short or
 
 PGA uses three components that work together:
 
-    - **A two-stage mempool:** an unordered waiting list that includes arriving transactions, and a priority queue keyed on each transaction's priority fee.
+- **A two-stage mempool:** an unordered waiting list that includes arriving transactions, and a priority queue keyed on each transaction's priority fee.
     - **PGA rounds:** short, fixed-length ordering rounds that can run multiple times per block. Each round promotes the waiting list into the priority queue and transfers the queue into the block being built.
     - **An anti-starvation priority boost:** a position increase applied at the end of each round to transactions that are still waiting, so low-fee and zero-fee transactions rise over time.
 
