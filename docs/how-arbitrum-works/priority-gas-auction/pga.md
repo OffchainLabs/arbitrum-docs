@@ -108,7 +108,7 @@ Each round has two phases:
 - The **intake phase** runs for the full round window, absorbing new arrivals into the waiting list. It overlaps with the previous round's execute phase.
 - The **execute phase** begins as soon as intake closes. The waiting list is moved into the priority queue, and the Sequencer transfers the queue into the block, highest priority first.
 
-The transfer loop ends when the queue is empty, the block is full, or the round's time is up. Anything still queued simply waits for the next round.
+The transfer loop ends when the queue is empty, the block is full, or the round's time is up. Anything still queued waits for the next round.
 
 Blocks fill until they reach one of the following:
 
