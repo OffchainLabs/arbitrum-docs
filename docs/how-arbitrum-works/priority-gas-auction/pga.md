@@ -110,7 +110,7 @@ Each round has two phases:
 
 The transfer loop ends when the queue is empty, the block is full, or the round's time is up. Anything still queued simply waits for the next round.
 
-Blocks fill greedily until they reach one of the is reached:
+Blocks fill until they reach one of the following:
 
 - The **32 Mgas gas limit target**
 - The **95,000-byte calldata limit**
