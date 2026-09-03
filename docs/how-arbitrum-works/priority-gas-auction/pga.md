@@ -99,7 +99,7 @@ PGA rounds are defined by the following parameters:
 - the block time `B`
 - the proposed number of rounds per block `K`
 
-A new round begins every `B/K` , in the case of Arbitrum One, block times `B` is 250ms, and the number of rounds `K` is 2, meaning rounds are 125ms.
+A new round begins every `B/K`. In Arbitrum One, block time `B` is 250ms, and the number of rounds `K` is 2, meaning rounds are 125ms.
 
 `K` remains adjustable for two years after PGA activates, to any value from 1 to 10 inclusively. That gives round lengths from 250ms down to 25ms.
 
