@@ -94,7 +94,7 @@ Transactions remain subject to the prevailing base fee, and the mempool remains 
 
 ### PGA rounds
 
-PGA rounds are defined by the following parameters:
+The following parameters define PGA rounds:
 
 - the block time `B`
 - the proposed number of rounds per block `K`
