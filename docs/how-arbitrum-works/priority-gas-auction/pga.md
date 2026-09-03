@@ -84,7 +84,7 @@ priority_fee_per_gas = min(
 
 <ImageZoom src="/img/haw-pga-two-stage-mempool.svg" alt="Transactions arrive into an unordered waiting list. At the start of each PGA round, the Sequencer moves the whole waiting list into a priority queue keyed on each transaction's priority fee, highest first." className="img-900px" />
 
-Ties are broken by the fine-grained arrival timestamp recorded when the transaction first reached the Sequencer, not when it entered the queue.
+Ties are broken by the arrival timestamp recorded when the transaction first reached the Sequencer, not when it entered the queue.
 
 <ImageZoom src="/img/haw-pga-tie-breaking.svg" alt="Three transactions carry the same priority fee of 2 gwei. The Sequencer orders them by the arrival timestamp it recorded when each transaction first reached it, so the earliest arrival goes first." className="img-900px" />
 
