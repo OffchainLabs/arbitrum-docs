@@ -88,7 +88,7 @@ Ties are broken by the arrival timestamp recorded when the transaction first rea
 
 <ImageZoom src="/img/haw-pga-tie-breaking.svg" alt="Three transactions carry the same priority fee of 2 gwei. The Sequencer orders them by the arrival timestamp it recorded when each transaction first reached it, so the earliest arrival goes first." className="img-900px" />
 
-The queue is re-keyed against the new base fee at the start of every block Because the priority fee depends on the base fee, which changes between blocks.
+The queue is re-keyed against the new base fee at the start of every block because the priority fee depends on the base fee, which changes between blocks.
 
 Transactions remain subject to the prevailing base fee, and the mempool remains private. PGA does not grant anyone the right to view or reorder other users' transactions, so the protections against harmful MEV that Arbitrum users rely on are unchanged.
 
