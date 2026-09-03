@@ -9,9 +9,9 @@ content_type: concept
 
 ## The Rollup chain assertions vs. child chain blocks
 
-The Rollup chain consists of assertions, which serve as checkpoints summarizing multiple child chain blocks. Assertions are what give Arbitrum its hard finality guarantee — for the broader soft- vs. hard-finality picture, see [Finality](/how-arbitrum-works/deep-dives/sequencer.mdx#finality).
+The Rollup chain consists of <a data-quicklook-from="assertion">assertions</a>, which serve as checkpoints summarizing multiple child chain blocks. Assertions are what give Arbitrum its hard finality guarantee — for the broader soft- vs. hard-finality picture, see [Finality](/how-arbitrum-works/deep-dives/finality.mdx).
 
-- Child chain blocks contain individual transaction data
+- Child chain blocks contain individual <a data-quicklook-from="transaction">transaction</a> data
 - Assertions provide state summaries recorded on Ethereum
 - Each assertion may represent multiple child chain blocks, optimizing gas costs and reducing Ethereum storage usage.
 
@@ -94,7 +94,7 @@ Multiple disputes may be active simultaneously if conflicting assertions arise i
 
 - **Honest validators can continue asserting**, building on the last correct assertion.
 - **Users can keep transacting** on the child chain without disruption.
-- **Child-to-parent chain withdrawals** may experience delays; typically, withdrawals experience a single challenge period (6.4 days). A key property of BoLD is that, in the common case, withdrawals (messages) will experience only a one-challenge-period delay. In the event of a dispute, withdrawals will be delayed by no more than two challenge periods, regardless of the adversaries' behavior during the challenge.
+- **Child-to-parent chain withdrawals** may experience delays; typically, withdrawals experience a single challenge period (@@arbOneDisputeWindowDays=6.4@@ days). A key property of BoLD is that, in the common case, withdrawals (messages) will experience only a one-challenge-period delay. In the event of a dispute, withdrawals will be delayed by no more than two challenge periods, regardless of the adversaries' behavior during the challenge.
 
 Despite these delays, Arbitrum guarantees that honest assertions always succeed, maintaining Ethereum-level security.
 

@@ -40,12 +40,12 @@ uint256 gasPriceBid
 
 The following table describes these parameters:
 
-| Parameter            | Type    | Description                                                                                                               |
-| :------------------- | :------ | :------------------------------------------------------------------------------------------------------------------------ |
-| `inbox`              | address | Address of the Inbox contract of the chain. This is used to uniquely identify the chain.                                  |
-| `rollupOwner`        | address | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain. |
-| `maxGasForContracts` | uint256 | Gas limit used for executing the retryable ticket on the child chain.                                                     |
-| `gasPriceBid`        | uint256 | Max gas price used for executing the retryable ticket on the child chain.                                                 |
+| Parameter            | Type      | Description                                                                                                               |
+| :------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------ |
+| `inbox`              | `address` | Address of the Inbox contract of the chain. This is used to uniquely identify the chain.                                  |
+| `rollupOwner`        | `address` | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain. |
+| `maxGasForContracts` | `uint256` | Gas limit used for executing the retryable ticket on the child chain.                                                     |
+| `gasPriceBid`        | `uint256` | Max gas price used for executing the retryable ticket on the child chain.                                                 |
 
 When creating the token bridge through the Chain SDK, the parameters `maxGasForContracts` and `gasPriceBid` don't need to be configured, since the SDK will calculate the right values.
 
