@@ -1162,11 +1162,6 @@ const sidebars = {
               id: 'how-arbitrum-works/priority-gas-auction/pga',
               label: 'How PGA works',
             },
-            // {
-            //   type: 'doc',
-            //   label: 'Use Timeboost',
-            //   id: 'how-arbitrum-works/timeboost/how-to-use-timeboost',
-            // },
           ],
         },
       ],
