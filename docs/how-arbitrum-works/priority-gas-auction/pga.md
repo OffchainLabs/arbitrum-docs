@@ -23,6 +23,18 @@ However, some design limitations became clear:
 
 ### What are PGA’s benefits?
 
+#### Familiar mechanics and a low barrier to entry
+
+Participants bid by setting `maxPriorityFeePerGas` on a standard <a data-quicklook-from="eip-1559">EIP-1559</a> type 2 transaction. There is no auction to register for and no custom tooling to build. Anyone who already runs a searcher on another EVM chain can participate on day one.
+
+#### Near-zero operational cost
+
+PGA adds no infrastructure to run. PGA is a Sequencer flag plus a round-count parameter.
+
+#### Faster blocks under load
+
+The Sequencer issues each block as soon as it fills, rather than idling for the remainder of the block window. On a chain with `B=250ms` and `K=2`, this yields between 4 and 8 blocks per second: a minimum of `1/B` and a maximum of `K/B`. Under heavy load, your chain confirms faster than its nominal block time.
+
 #### PGA preserves the great UX that Arbitrum chains are known for
 
 The default block time for Arbitrum chains continues to be industry-leading at 250ms, and response times can be further reduced by adding 125ms PGA rounds.
@@ -38,6 +50,8 @@ Bidding happens per transaction, just-in-time, using a standard <a data-quickloo
 #### PGA protects low-fee transactions from starvation
 
 Different from Ethereum, a transaction doesn't need to pay tips to get included, and paying no priority fee does not mean waiting indefinitely. An anti-starvation boost raises the effective ordering position of transactions left waiting after each round, so ordinary transactions are included within a small number of blocks. The boost changes position in the queue, never the fee actually charged.
+
+The Sequencer includes transactions that pay no priority fee within a small number of blocks. PGA's anti-starvation boost raises the ordering position of every transaction still waiting at the end of each round. The boost changes position in the queue, never the fee charged on inclusion.
 
 #### PGA maintains a value accrual path for chain owners
 
