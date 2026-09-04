@@ -8,7 +8,7 @@ author: anegg0
 sme: gligneul
 ---
 
-Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that you can enable on any <a data-quicklook-from="arbitrum-chains">Arbitrum chain</a>. Under PGA, the <a data-quicklook-from="sequencer">sequencer</a> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the sequencer transfers the priority queue into the block it is building.
+Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that you can enable on any <a data-quicklook-from="arbitrum-chains">Arbitrum chain</a>. Under PGA, the <a data-quicklook-from="Sequencer">Sequencer</a> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the Sequencer transfers the priority queue into the block it is building.
 
 Activating PGA requires changing the Sequencer configuration. PGA adds no operational overhead, which makes it viable for a much wider range of chains than <a data-quicklook-from="timeboost">Timeboost</a>.
 
@@ -35,11 +35,11 @@ Participants bid by setting `maxPriorityFeePerGas` on a standard <a data-quicklo
 
 ### Near-zero operational cost
 
-PGA adds no infrastructure to run. PGA is a sequencer flag plus a round-count parameter.
+PGA adds no infrastructure to run. PGA is a Sequencer flag plus a round-count parameter.
 
 ### Faster blocks under load
 
-The sequencer issues each block as soon as it fills, rather than idling for the remainder of the block window. On a chain with `B=250ms` and `K=2`, this yields between 4 and 8 blocks per second: a minimum of `1/B` and a maximum of `K/B`. Under heavy load, your chain confirms faster than its nominal block time.
+The Sequencer issues each block as soon as it fills, rather than idling for the remainder of the block window. On a chain with `B=250ms` and `K=2`, this yields between 4 and 8 blocks per second: a minimum of `1/B` and a maximum of `K/B`. Under heavy load, your chain confirms faster than its nominal block time.
 
 ### Starvation protection built in
 
@@ -49,7 +49,7 @@ The Sequencer includes transactions that pay no priority fee within a small numb
 
 ### Costs
 
-Under <a data-quicklook-from="first-come-first-serve-fcfs">first come first serve (FCFS)</a> ordering, arrival time determines the order. Under PGA, willingness to pay determines it. Whenever your chain is congested, the sequencer orders transactions that pay no priority fee behind those that do. The anti-starvation boost bounds how long they wait, but does not restore parity.
+Under <a data-quicklook-from="first-come-first-serve-fcfs">first come first serve (FCFS)</a> ordering, arrival time determines the order. Under PGA, willingness to pay determines it. Whenever your chain is congested, the Sequencer orders transactions that pay no priority fee behind those that do. The anti-starvation boost bounds how long they wait, but does not restore parity.
 
 ### Revenue
 
@@ -77,7 +77,7 @@ Before you start, confirm all four of the following:
 To enable PGA, complete two steps:
 
 1. Confirm that priority fee collection is active on your chain.
-2. Configure your sequencer node to enable PGA and set the rounds-per-block parameter.
+2. Configure your Sequencer node to enable PGA and set the rounds-per-block parameter.
 
 ### Step 1: Confirm priority fee collection
 
@@ -89,14 +89,14 @@ Complete Step 1 before you start Step 2. PGA orders by tips, so a chain that doe
 
 </VanillaAdmonition>
 
-### Step 2: Configure your sequencer node for PGA
+### Step 2: Configure your Sequencer node for PGA
 
-Add the following to your sequencer's node configuration file:
+Add the following to your Sequencer's node configuration file:
 
 ```js
 {
   "execution": {
-    "sequencer": {
+    "Sequencer": {
       "pga": {
         "enable": true,
         "rounds-per-block": 2
