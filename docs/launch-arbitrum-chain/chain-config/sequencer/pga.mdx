@@ -1,80 +1,93 @@
 ---
 title: 'PGA for Arbitrum chains'
 sidebar_label: 'PGA for Arbitrum chains'
-description: 'Guidance & best practices for using PGA on Arbitrum chains'
+description: 'Guidance and best practices for using PGA on Arbitrum chains'
 user_story: 'As an Arbitrum chain owner-operator, I want to know how to set up PGA, a new transaction ordering policy for Arbitrum chains'
 content_type: how-to
 author: anegg0
 sme: gligneul
 ---
 
-Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that can be enabled on any Arbitrum chain. Under PGA, the sequencer orders transactions by the priority fee attached to each, draining a priority queue during short ordering rounds that run several times per block.
-You can learn more in our [introduction to PGA](../../../how-arbitrum-works/priority-gas-auction/pga)
+Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that you can enable on any <a data-quicklook-from="arbitrum-chains">Arbitrum chain</a>. Under PGA, the <a data-quicklook-from="sequencer">sequencer</a> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the sequencer transfers the priority queue into the block it is building.
 
-PGA can be activated by changing the sequencer configuration. There is no added operational overhead, which makes it viable for a much wider range of chains than <a data-quicklook-from="timeboost">Timeboost</a>.
+Activating PGA requires changing the Sequencer configuration. PGA adds no operational overhead, which makes it viable for a much wider range of chains than <a data-quicklook-from="timeboost">Timeboost</a>.
 
-The critical prerequisite is that your chain must actually collect priority fees (priority fee collection is available on <a data-quicklook-from="arbos">ArbOS</a> 61). PGA orders transactions by tips.
+Your chain must collect priority fees, which <a data-quicklook-from="arbos">ArbOS</a> 61 supports. PGA orders transactions by tips.
 
-As with all features on the Arbitrum stack, <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a> can adopt PGA at their own discretion and on their own timeline.
+As with all features on the Arbitrum stack, you can adopt PGA at your own discretion and on your own timeline.
 
-### Recommended adoption path
+To learn how PGA works, see the [introduction to PGA](../../../how-arbitrum-works/priority-gas-auction/pga).
 
-PGA is worth considering for any chain with meaningful contention for block space, that is, where transactions actually compete for ordering. Some cases include:
+## Recommended adoption path
 
-- **Chains with active DeFi, arbitrage, or liquidation activity** are good candidates. PGA converts latency competition into fee competition and routes the proceeds to your chain's fee collector.
-- **Chains with latency-sensitive applications,** such as proposer-based AMMs (propAMMs), benefit from per-transaction, just-in-time bidding, which suits workloads that require frequent priority-ordered inclusion.
+Consider PGA for any chain with meaningful contention for block space, that is, where transactions compete for ordering. These chains are good candidates:
 
-### Benefits
+- **Chains with active DeFi, arbitrage, or liquidation activity.** PGA converts latency competition into fee competition and routes the proceeds to your chain's fee collector.
+- **Chains with latency-sensitive applications,** such as proposer-based automated market makers (propAMMs). Per-transaction, just-in-time bidding suits workloads that need frequent priority-ordered inclusion.
 
-PGA enables a <a data-quicklook-from="chain-owner">chain owner</a> to capture a portion of the available MEV on their blockchain, while preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy.
+## Benefits
+
+PGA lets a <a data-quicklook-from="chain-owner">chain owner</a> capture a portion of the maximal extractable value (MEV) available on their chain. It preserves the built-in protections and the user experience that Arbitrum users expect.
 
 ### Familiar mechanics and a low barrier to entry
 
-Participants bid by setting `maxPriorityFeePerGas` on a standard <a data-quicklook-from="eip-1559">EIP-1559</a> type 2 transaction. There is no auction to register for, and no custom tooling to build. Anyone already running a searcher on another EVM chain should be able to participate on day one.
+Participants bid by setting `maxPriorityFeePerGas` on a standard <a data-quicklook-from="eip-1559">EIP-1559</a> type 2 transaction. There is no auction to register for and no custom tooling to build. Anyone who already runs a searcher on another EVM chain can participate on day one.
 
 ### Near-zero operational cost
 
-There is no additional infrastructure to run with PGA. PGA is a sequencer flag plus a round-count parameter.
+PGA adds no infrastructure to run. PGA is a sequencer flag plus a round-count parameter.
 
 ### Faster blocks under load
 
-Blocks are issued as soon as they fill rather than idling for the remainder of the block window. On a chain with `B=250ms` and `K=2`, this yields between 4 and 8 blocks per second: a minimum of `1/B` and a maximum of `K/B`. Under heavy load, your chain confirms faster than its nominal block time.
+The sequencer issues each block as soon as it fills, rather than idling for the remainder of the block window. On a chain with `B=250ms` and `K=2`, this yields between 4 and 8 blocks per second: a minimum of `1/B` and a maximum of `K/B`. Under heavy load, your chain confirms faster than its nominal block time.
 
 ### Starvation protection built in
 
-Transactions paying no priority fee are not left behind indefinitely. An anti-starvation boost raises the effective ordering position of anything left waiting at the end of each round, so ordinary transactions are included within a small number of blocks. The boost is virtual; it moves a transaction's position in the queue without changing the fee charged on inclusion.
-**Tradeoffs**
+The Sequencer includes transactions that pay no priority fee within a small number of blocks. PGA's anti-starvation boost raises the ordering position of every transaction still waiting at the end of each round. The boost changes position in the queue, never the fee charged on inclusion.
+
+## Tradeoffs
 
 ### Costs
 
-Under FIFO, ordering is determined by arrival time; under PGA, it is determined by willingness to pay. Users who do not attach a priority fee will be ordered behind those who do whenever the chain is congested. The anti-starvation boost bounds how long they wait, but it does not restore parity.
+Under <a data-quicklook-from="first-come-first-serve-fcfs">first come first serve (FCFS)</a> ordering, arrival time determines the order. Under PGA, willingness to pay determines it. Whenever your chain is congested, the sequencer orders transactions that pay no priority fee behind those that do. The anti-starvation boost bounds how long they wait, but does not restore parity.
 
 ### Revenue
 
-PGA revenue depends on there being MEV and contention to compete over. A chain with no congestion will collect little in priority fees.
-**Enabling PGA for your Arbitrum chain**
-For a conceptual introduction, see the gentle introduction to PGA.
+PGA revenue depends on MEV and contention to compete over. A chain with no congestion collects little in priority fees.
+
+## Enable PGA on your chain
 
 ### Prerequisites
 
-Before starting, ensure you have:
+Before you start, confirm all four of the following:
 
-1. **ArbOS 61 or newer.** This release supports priority fee collection. PGA orders by tips, so running it on an earlier ArbOS means ordering by fees the chain never collects.
-2. **Priority fee collection enabled.** Collection requires all three of: ArbOS 61+, the chain's collect-tips flag set, and the <a data-quicklook-from="batch-poster">batch poster</a> coinbase configured. On Arbitrum One, this is toggled via an `ArbOwner` precompile call to `setCollectTips`.
-3. **Timeboost disabled.** Configurations enabling Timeboost and PGA will behave unpredictably.
-4. **A Nitro build that includes PGA.** Confirm the release you are running supports it.
+1. **ArbOS 61 or newer.** This release supports priority fee collection. PGA orders by tips, so an earlier ArbOS orders by fees your chain never collects.
+2. **Priority fee collection enabled.** Collection requires all three of the following:
+   - ArbOS 61 or newer
+   - The chain's collect-tips flag set
+   - The <a data-quicklook-from="batch-poster">batch poster</a> coinbase configured
+
+   On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, you toggle collection with an `ArbOwner` precompile call to `setCollectTips`.
+
+3. **Timeboost disabled.** A configuration that enables both Timeboost and PGA behaves unpredictably.
+4. **A Nitro build that includes PGA.** Confirm that the release you run supports it.
 
 ### Overview
 
-Enabling PGA requires completing these two steps:
+To enable PGA, complete two steps:
 
-1. Confirm priority fee collection is active on your chain
-2. Configure your sequencer node to enable PGA and set the rounds-per-block parameter
+1. Confirm that priority fee collection is active on your chain.
+2. Configure your sequencer node to enable PGA and set the rounds-per-block parameter.
 
 ### Step 1: Confirm priority fee collection
 
-Verify that your chain is on ArbOS 61 or newer and that tip collection is switched on. If your chain has a toggler contract for this, use it; otherwise, this is an `ArbOwner` precompile call to `setCollectTips`. Confirm that the batch poster coinbase is configured, since collection depends on it.
-Do not proceed to Step 2 until this is confirmed.
+Verify that your chain runs ArbOS 61 or newer and that tip collection is on. If your chain has a toggler contract for this, use it. Otherwise, make an `ArbOwner` precompile call to `setCollectTips`. Confirm that the batch poster coinbase is configured, because collection depends on it.
+
+<VanillaAdmonition type="caution">
+
+Complete Step 1 before you start Step 2. PGA orders by tips, so a chain that does not collect them orders by fees it never receives.
+
+</VanillaAdmonition>
 
 ### Step 2: Configure your sequencer node for PGA
 
