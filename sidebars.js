@@ -389,6 +389,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/sequencer/timeboost',
                   label: `Timeboost`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/pga',
+                  label: `PGA`,
+                },
               ],
             },
             {
