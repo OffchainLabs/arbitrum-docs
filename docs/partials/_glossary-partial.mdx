@@ -314,6 +314,10 @@ An externally owned account (EOA) is the account (public/private key pairs) that
 
 A means by which a user can bypass an Arbitrum chain's [Challenge Period](/intro/glossary#challenge-period) when withdrawing fungible assets (or more generally, executing some "fungible" child chain-to-parent chain operation); for trustless fast exits, a liquidity provider facilitates an atomic swap of the asset on a child chain directly to a parent chain.
 
+### Fast Feed {#fast-feed}
+
+A paid, authenticated data stream on [Arbitrum One](/intro/glossary#arbitrum-one) that publishes individual transactions, their relative ordering, and related metadata after the [Sequencer](/intro/glossary#sequencer) orders them, and before the block that contains them is published on the [Sequencer Feed](/intro/glossary#sequencer-feed). Subscribers buy timed access through the Fast Feed Payment Contract.
+
 ### Fast withdrawals {#fast-withdrawals}
 
 A protocol-level withdrawal path on an [Arbitrum chain](/intro/glossary#arbitrum-chain) in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full [challenge period](/intro/glossary#challenge-period). Distinct from a [fast-exit liquidity exit](/intro/glossary#fast-exit--liquidity-exit), which is a third-party liquidity provider rather than a protocol primitive.
@@ -490,6 +494,14 @@ A precompile is a predefined smart contract with a special address that provides
 
 The last confirmed valid state of the chain.
 
+### Priority Fee {#priority-fee}
+
+The per-gas tip you add on top of the base fee to bid for earlier inclusion, set in the `max_priority_fee_per_gas` field of an [EIP-1559](/intro/glossary#eip-1559) transaction. The chain computes the effective value as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`. Under PGA, the [Sequencer](/intro/glossary#sequencer) orders transactions by this value, highest first.
+
+### propAMM {#propamm}
+
+A proprietary automated market maker. A constant-product automated market maker relies on arbitrageurs to correct its prices. A propAMM instead updates its onchain quotes from an external trusted price source, and usually supplies its own liquidity. propAMMs need cheap, frequent, priority-ordered inclusion to keep those quotes current, so they depend on an ordering policy that sells priority, such as PGA.
+
 ### Proposer {#proposer}
 
 A [Validator](/intro/glossary#validator) configured to actively submit new [Assertions](/intro/glossary#assertion) to the parent chain under [BoLD](/intro/glossary#bold). Proposers post the largest bonds in the staking hierarchy to deter delay attacks. Contrast with a [Watchtower Validator](/intro/glossary#watchtower-validator), which only observes, and a [Defensive Validator](/intro/glossary#defensive-validator), which acts only to counter an invalid claim.
@@ -543,6 +555,10 @@ In some support contexts the contract is informally referred to as "rollupEventB
 ### Rollup Improvement Proposal {#rollup-improvement-proposal}
 
 A Rollup Improvement Proposal (RIP) is a process for proposing, discussing, and recording changes or additions to Ethereum’s rollup ecosystem.
+
+### Searcher {#searcher}
+
+A participant who runs automated strategies to find and capture profitable onchain opportunities, such as arbitrage between a centralized and a decentralized exchange, liquidations, and back-running. Under PGA, searchers compete for ordering by attaching a [priority fee](/intro/glossary#priority-fee) to each transaction.
 
 ### Sequencer {#sequencer}
 

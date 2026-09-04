@@ -1155,12 +1155,17 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'PGA',
+          label: 'PGA and Fast Feed',
           items: [
             {
               type: 'doc',
               id: 'how-arbitrum-works/priority-gas-auction/pga',
               label: 'How PGA works',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/fast-feed',
+              label: 'Introduction to the Fast Feed',
             },
           ],
         },

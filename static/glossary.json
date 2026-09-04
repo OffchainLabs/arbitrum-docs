@@ -291,6 +291,10 @@
     "title": "Fast Exit / Liquidity Exit",
     "text": "<p>A means by which a user can bypass an Arbitrum chain&#39;s <a href=\"/intro/glossary#challenge-period\">Challenge Period</a> when withdrawing fungible assets (or more generally, executing some &quot;fungible&quot; child chain-to-parent chain operation); for trustless fast exits, a liquidity provider facilitates an atomic swap of the asset on a child chain directly to a parent chain.</p>\n"
   },
+  "fast-feed": {
+    "title": "Fast Feed",
+    "text": "<p>A paid, authenticated data stream on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> that publishes individual transactions, their relative ordering, and related metadata after the <a href=\"/intro/glossary#sequencer\">Sequencer</a> orders them, and before the block that contains them is published on the <a href=\"/intro/glossary#sequencer-feed\">Sequencer Feed</a>. Subscribers buy timed access through the Fast Feed Payment Contract.</p>\n"
+  },
   "fast-withdrawals": {
     "title": "Fast withdrawals",
     "text": "<p>A protocol-level withdrawal path on an <a href=\"/intro/glossary#arbitrum-chain\">Arbitrum chain</a> in which a configured validator committee attests to the withdrawn amount, allowing child-to-parent exits to settle in minutes rather than waiting out the full <a href=\"/intro/glossary#challenge-period\">challenge period</a>. Distinct from a <a href=\"/intro/glossary#fast-exit--liquidity-exit\">fast-exit liquidity exit</a>, which is a third-party liquidity provider rather than a protocol primitive.</p>\n"
@@ -459,6 +463,14 @@
     "title": "Predecessor Assertion",
     "text": "<p>The last confirmed valid state of the chain.</p>\n"
   },
+  "priority-fee": {
+    "title": "Priority Fee",
+    "text": "<p>The per-gas tip you add on top of the base fee to bid for earlier inclusion, set in the <code>max_priority_fee_per_gas</code> field of an <a href=\"/intro/glossary#eip-1559\">EIP-1559</a> transaction. The chain computes the effective value as <code>min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)</code>. Under PGA, the <a href=\"/intro/glossary#sequencer\">Sequencer</a> orders transactions by this value, highest first.</p>\n"
+  },
+  "propamm": {
+    "title": "propAMM",
+    "text": "<p>A proprietary automated market maker. A constant-product automated market maker relies on arbitrageurs to correct its prices. A propAMM instead updates its onchain quotes from an external trusted price source, and usually supplies its own liquidity. propAMMs need cheap, frequent, priority-ordered inclusion to keep those quotes current, so they depend on an ordering policy that sells priority, such as PGA.</p>\n"
+  },
   "proposer": {
     "title": "Proposer",
     "text": "<p>A <a href=\"/intro/glossary#validator\">Validator</a> configured to actively submit new <a href=\"/intro/glossary#assertion\">Assertions</a> to the parent chain under <a href=\"/intro/glossary#bold\">BoLD</a>. Proposers post the largest bonds in the staking hierarchy to deter delay attacks. Contrast with a <a href=\"/intro/glossary#watchtower-validator\">Watchtower Validator</a>, which only observes, and a <a href=\"/intro/glossary#defensive-validator\">Defensive Validator</a>, which acts only to counter an invalid claim.</p>\n"
@@ -506,6 +518,10 @@
   "rollup-improvement-proposal": {
     "title": "Rollup Improvement Proposal",
     "text": "<p>A Rollup Improvement Proposal (RIP) is a process for proposing, discussing, and recording changes or additions to Ethereum’s rollup ecosystem.</p>\n"
+  },
+  "searcher": {
+    "title": "Searcher",
+    "text": "<p>A participant who runs automated strategies to find and capture profitable onchain opportunities, such as arbitrage between a centralized and a decentralized exchange, liquidations, and back-running. Under PGA, searchers compete for ordering by attaching a <a href=\"/intro/glossary#priority-fee\">priority fee</a> to each transaction.</p>\n"
   },
   "sequencer": {
     "title": "Sequencer",
