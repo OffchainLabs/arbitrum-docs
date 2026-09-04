@@ -8,7 +8,7 @@ author: anegg0
 sme: gligneul
 ---
 
-Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that you can enable on any <a data-quicklook-from="arbitrum-chains">Arbitrum chain</a>. Under PGA, the <a data-quicklook-from="Sequencer">Sequencer</a> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the Sequencer transfers the priority queue into the block it is building.
+Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that you can enable on any <a data-quicklook-from="arbitrum-chains">Arbitrum chain</a>. Under PGA, the <a data-quicklook-from="sequencer">Sequencer</a> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the Sequencer transfers the priority queue into the block it is building.
 
 Activating PGA requires changing the Sequencer configuration. PGA adds no operational overhead, which makes it viable for a much wider range of chains than <a data-quicklook-from="timeboost">Timeboost</a>.
 
@@ -41,16 +41,16 @@ PGA revenue depends on MEV and competition for ordering. A chain with no congest
 
 Before you start, confirm all four of the following:
 
-1. **ArbOS 61 or newer.** This release supports priority fee collection. PGA orders by tips, so an earlier ArbOS orders by fees your chain never collects.
+1. **ArbOS 61 or newer.** This release supports priority fee collection. PGA orders by tips, so an earlier ArbOS orders by fees your chain never collects. To check what your chain runs and what the release contains, see [ArbOS 61 Elara](/run-arbitrum-node/arbos-releases/arbos61) and the [ArbOS software releases overview](/run-arbitrum-node/arbos-releases/overview).
 2. **Priority fee collection enabled.** Collection requires all three of the following:
    - ArbOS 61 or newer
    - The chain's collect-tips flag set
    - The <a data-quicklook-from="batch-poster">batch poster</a> coinbase configured
 
-   On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, you toggle collection with an `ArbOwner` precompile call to `setCollectTips`.
+   On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, you toggle collection with an `ArbOwner` precompile call to `setCollectTips`. For the call itself, the access-control rules, and a timing caveat that affects the enabling transaction, see [priority fees collection](/launch-arbitrum-chain/chain-config/costs/priority-fees). The [`ArbOwner` precompile reference](/arbitrum-essentials/precompiles/reference#arbowner) lists every method.
 
-3. **Timeboost disabled.** A configuration that enables both Timeboost and PGA behaves unpredictably.
-4. **A Nitro build that includes PGA.** Confirm that the release you run supports it.
+3. **Timeboost disabled.** A configuration that enables both Timeboost and PGA behaves unpredictably. To find your current setting, see [Timeboost for Arbitrum chains](/launch-arbitrum-chain/chain-config/sequencer/timeboost).
+4. **A Nitro build that includes PGA.** Confirm that the release you run supports it. The [ArbOS software releases overview](/run-arbitrum-node/arbos-releases/overview) maps Nitro versions to ArbOS versions, and the [Nitro support policy](/run-arbitrum-node/nitro-support-policy) tells you which releases are supported.
 
 ### Overview
 
@@ -76,7 +76,7 @@ Add the following to your Sequencer's node configuration file:
 ```js
 {
   "execution": {
-    "Sequencer": {
+    "sequencer": {
       "pga": {
         "enable": true,
         "rounds-per-block": 2
