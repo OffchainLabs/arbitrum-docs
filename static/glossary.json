@@ -267,6 +267,10 @@
     "title": "EIP-1559",
     "text": "<p>An Ethereum Improvement Proposal, live since Ethereum&#39;s London upgrade in 2021, that splits the gas price into two parts: a base fee per gas that the protocol sets and adjusts with demand, and a priority fee per gas that you set as a tip to bid for earlier inclusion. A transaction declares both limits as <code>max_fee_per_gas</code> and <code>max_priority_fee_per_gas</code>. Arbitrum chains use the same fields, and under PGA the priority fee decides the order in which the <a href=\"/intro/glossary#sequencer\">Sequencer</a> includes transactions.</p>\n"
   },
+  "eip-4844": {
+    "title": "EIP-4844",
+    "text": "<p>An Ethereum Improvement Proposal, also called Proto-Danksharding, live since Ethereum&#39;s Dencun upgrade in March 2024. It adds <a href=\"/intro/glossary#blob\">blobs</a>, a data format priced in a fee market of its own: each block measures blob usage against a target, then moves the blob base fee along an exponential curve, up when usage runs above the target and down when it runs below. Arbitrum uses EIP-4844 in two separate ways. <a href=\"/intro/glossary#batch\">Batches</a> post as blobs from <a href=\"/intro/glossary#arbos\">ArbOS</a> 20 &quot;Atlas&quot; onward, and the <a href=\"/intro/glossary#fast-feed\">Fast Feed</a> borrows the pricing curve, rather than blobs themselves, to price subscription tickets. Read the proposal at <a href=\"https://eips.ethereum.org/EIPS/eip-4844\">EIP-4844</a>.</p>\n"
+  },
   "ethereum-wallet": {
     "title": "Ethereum Wallet",
     "text": "<p>A software application used for transacting with the Ethereum <a href=\"/intro/glossary#blockchain\">Blockchain</a>.</p>\n"

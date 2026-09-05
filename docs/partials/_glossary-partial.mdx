@@ -290,6 +290,10 @@ A primitive in the [BoLD](/intro/glossary#bold) [Challenge Protocol](/intro/glos
 
 An Ethereum Improvement Proposal, live since Ethereum's London upgrade in 2021, that splits the gas price into two parts: a base fee per gas that the protocol sets and adjusts with demand, and a priority fee per gas that you set as a tip to bid for earlier inclusion. A transaction declares both limits as `max_fee_per_gas` and `max_priority_fee_per_gas`. Arbitrum chains use the same fields, and under PGA the priority fee decides the order in which the [Sequencer](/intro/glossary#sequencer) includes transactions.
 
+### EIP-4844 {#eip-4844}
+
+An Ethereum Improvement Proposal, also called Proto-Danksharding, live since Ethereum's Dencun upgrade in March 2024. It adds [blobs](/intro/glossary#blob), a data format priced in a fee market of its own: each block measures blob usage against a target, then moves the blob base fee along an exponential curve, up when usage runs above the target and down when it runs below. Arbitrum uses EIP-4844 in two separate ways. [Batches](/intro/glossary#batch) post as blobs from [ArbOS](/intro/glossary#arbos) 20 "Atlas" onward, and the [Fast Feed](/intro/glossary#fast-feed) borrows the pricing curve, rather than blobs themselves, to price subscription tickets. Read the proposal at [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844).
+
 ### Ethereum Wallet {#ethereum-wallet}
 
 A software application used for transacting with the Ethereum [Blockchain](/intro/glossary#blockchain).

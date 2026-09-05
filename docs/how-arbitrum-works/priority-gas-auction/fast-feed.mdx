@@ -26,13 +26,13 @@ Three expectations are worth correcting before the details.
 
 ## Who the Fast Feed serves
 
-Subscribe to the Fast Feed if earlier sight of ordered transaction flow changes what you can do:
+Subscribe to the Fast Feed if earlier view of ordered transaction helps you:
 
 - **<a data-quicklook-from="searcher">Searchers</a>** react to ordered transactions sooner, whether they run arbitrage between a centralized and a decentralized exchange, liquidations, or back-running strategies.
 - **<a data-quicklook-from="propamm">propAMMs</a>** and other latency-sensitive apps refresh onchain quotes and parameters against fresher data.
 - **Market makers** update pricing models earlier in the round.
 
-If you send ordinary transactions through a wallet or an app, the Fast Feed does not affect you. It changes no ordering, no inclusion guarantee, and no fee that anyone pays.
+If you send ordinary transactions through a wallet or an app, the Fast Feed does not affect you. It doesn't change the ordering, the inclusion guarantee, or the fee that anyone pays.
 
 ## What the Fast Feed publishes
 
@@ -67,7 +67,7 @@ The Fast Feed trades guarantees for speed. Three consequences shape how you writ
 
 **There is no replay.** The Fast Feed caches nothing. You subscribe at the head and receive only the messages sent from that point onward. If your connection drops, the messages sent while you were away are gone.
 
-<VanillaAdmonition type="caution">
+<VanillaAdmonition type="note">
 
 Treat the Fast Feed as an early signal, not as a record. Confirm final state against a node or the standard sequencer feed.
 
@@ -85,7 +85,7 @@ Your access starts at the end of the round in which you buy the ticket. You can 
 
 ### Rounds and pricing
 
-The contract sells tickets in fixed rounds and prices them with the mechanism defined in [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844). Every ticket in a round costs the same. Demand in one round sets the price for the next: sales above the target push the price up, sales below it push the price down, and the price never falls below the floor.
+The contract sells tickets in fixed rounds and prices them with the mechanism defined in <a data-quicklook-from="eip-4844">EIP-4844</a>. Every ticket in a round costs the same. Demand in one round sets the price for the next: sales above the target push the price up, sales below it push the price down, and the price never falls below the floor.
 
 | Parameter                   | Proposed default     |
 | --------------------------- | -------------------- |
