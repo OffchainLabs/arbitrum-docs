@@ -1876,6 +1876,11 @@ const sidebars = {
   noticeSidebar: [
     {
       type: 'doc',
+      id: 'notices/pga-fast-feed-notice',
+      label: 'Notice for PGA and the Fast Feed',
+    },
+    {
+      type: 'doc',
       id: 'notices/arbos61-upgrade-notice',
       label: 'Upgrade notice for ArbOS 61',
     },
