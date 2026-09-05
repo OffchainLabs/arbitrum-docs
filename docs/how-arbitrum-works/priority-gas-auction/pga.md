@@ -67,7 +67,7 @@ As with FCFS and Timeboost, the <a data-quicklook-from="sequencer">Sequencer</a>
 3. Publish the resulting sequence to a feed
 4. Publish transactions in compressed <a data-quicklook-from="batch">batches</a> to the chain's data availability layer
 
-With PGA, the priority fee determines transactions' order, evaluated in short ordering rounds that run multiple times per block. This is an ordering model that should be familiar to users of other EVM chains (Base, OP Mainnet, and Unichain).
+With PGA, the priority fee determines transactions' order, evaluated in short ordering rounds that run multiple times per block. This ordering model should be familiar to users of other EVM chains (Base, OP Mainnet, and Unichain).
 
 PGA uses three components that work together:
 
