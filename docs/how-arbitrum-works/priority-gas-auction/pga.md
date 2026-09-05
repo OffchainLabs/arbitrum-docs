@@ -49,7 +49,7 @@ Bidding happens per transaction, just-in-time, using a standard <a data-quickloo
 
 #### PGA protects low-fee transactions from starvation
 
-Different from Ethereum, a transaction doesn't need to pay tips to get included, and paying no priority fee does not mean waiting indefinitely. An anti-starvation boost raises the effective ordering position of transactions left waiting after each round, so ordinary transactions are included within a small number of blocks. The boost changes position in the queue, never the fee actually charged.
+Unlike Ethereum, a transaction doesn’t need to pay tips to get included, and paying no priority fee doesn't mean waiting indefinitely. An anti-starvation boost raises the effective ordering position of transactions left waiting after each round, so ordinary transactions are included within a small number of blocks. The boost changes position in the queue, never the fee actually charged.
 
 The Sequencer includes transactions that pay no priority fee within a small number of blocks. PGA's anti-starvation boost raises the ordering position of every transaction still waiting at the end of each round. The boost changes position in the queue, never the fee charged on inclusion.
 
