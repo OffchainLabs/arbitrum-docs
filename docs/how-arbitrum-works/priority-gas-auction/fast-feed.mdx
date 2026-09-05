@@ -20,7 +20,7 @@ Three expectations are worth correcting before the details.
 
 **It is not a view into the mempool.** The Fast Feed publishes a transaction only after the Sequencer has ordered it and enqueued it for execution. Nobody can influence or change that order afterward, so the Fast Feed does not enable frontrunning or sandwich attacks. The Sequencer's mempool stays private.
 
-**It does not publish state.** You receive a list of transactions and an incomplete receipt for each one. You do not receive state changes or partial blocks.
+**It does not publish state.** You receive a list of transactions and a partial receipt for each one. You do not receive state changes or partial blocks.
 
 **You cannot follow the chain with it.** A Nitro node cannot consume the Fast Feed, and the Fast Feed gives you no way to track chain state. Subscribers write their own client. To follow the chain, use the standard sequencer feed instead.
 
@@ -63,7 +63,7 @@ The Fast Feed trades guarantees for speed. Three consequences shape how you writ
 
 **Inclusion is not guaranteed.** The `block_number` you receive is tentative. The Sequencer publishes a transaction to the Fast Feed before it stores that transaction, which is part of what makes the feed fast. If the Sequencer fails partway through a block, the transactions it already published are lost, and another Sequencer starts a new block from scratch.
 
-**Receipts are incomplete.** A receipt omits `block_hash`, because the block is not final when the Sequencer publishes it.
+**Receipts are partial.** A receipt omits `block_hash`, because the block is not final when the Sequencer publishes it.
 
 **There is no replay.** The Fast Feed caches nothing. You subscribe at the head and receive only the messages sent from that point onward. If your connection drops, the messages sent while you were away are gone.
 
