@@ -73,7 +73,17 @@ Priority fees collected under PGA and subscription proceeds from the Fast Feed b
 
 The two use different mechanisms. Fast Feed proceeds route through a dedicated RewardDistributor contract and emit an onchain event for each payment. Priority fees arrive bundled with other transaction fees, so the <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a> accounts for them periodically and distributes them through a separate vote every six months.
 
-Trail of Bits audited the `TipCollectionToggler`, the Fast Feed Payment Contract, and the RewardDistributor. Reports are on the [audit reports page](/audit-reports). Contract addresses are published in the Arbitrum One developer documentation after deployment.
+Trail of Bits audited each contract involved. The summary reports are published here:
+
+| Contract                   | Audit report                                                                                                                                 | Date       |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `TipCollectionToggler`     | [Tip Collection Toggler](../hosted-pdfs/audit-reports/2026_08_14_trail_of_bits_tip_collection_toggler_final_summary_report.pdf)              | 08/14/2026 |
+| Fast Feed Payment Contract | [Sequencer Feed Ticketing](../hosted-pdfs/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf)                              | 07/31/2026 |
+| RewardDistributor          | [Reward Distributor Fixes](../hosted-pdfs/audit-reports/2026_06_16_trail_of_bits_security_audit_reward_distributor_fixes_summary_report.pdf) | 06/16/2026 |
+
+The Fast Feed Payment Contract is audited under the name "Sequencer Feed Ticketing". For every Arbitrum audit, see the [security audit reports page](/audit-reports).
+
+Contract addresses are published in the Arbitrum One developer documentation after deployment.
 
 ## Learn more
 
