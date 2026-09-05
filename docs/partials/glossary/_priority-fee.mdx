@@ -1,0 +1,7 @@
+---
+title: Priority Fee
+key: priority-fee
+titleforSort: Priority Fee
+---
+
+The per-gas tip you add on top of the base fee to bid for earlier inclusion, set in the `max_priority_fee_per_gas` field of an [EIP-1559](/intro/glossary#eip-1559) transaction. The chain computes the effective value as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`. Under PGA, the [Sequencer](/intro/glossary#sequencer) orders transactions by this value, highest first.
