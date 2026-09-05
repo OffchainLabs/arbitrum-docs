@@ -9,7 +9,7 @@ content_type: gentle-introduction
 ---
 
 PGA is an ordering policy in which users bid for ordering by attaching a priority fee to each <a data-quicklook-from="transaction">transaction</a>. Ordering becomes a continuous, permissionless, per-transaction competition.
-PGA is set to replace <a data-quicklook-from="timeboost">Timeboost</a> across Arbitrum chains.
+PGA is now available for activation across all Arbitrum chains.
 
 ### Why sunset Timeboost?
 
