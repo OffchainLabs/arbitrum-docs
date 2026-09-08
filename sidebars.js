@@ -869,7 +869,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/node-tuning-and-monitoring',
+          id: 'run-arbitrum-node/operation/node-tuning-and-monitoring',
           label: 'Node tuning and monitoring',
         },
         {

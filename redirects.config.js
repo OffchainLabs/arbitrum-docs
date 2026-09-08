@@ -455,5 +455,9 @@ export const redirects = [
     from: '/run-arbitrum-node/assign-node-roles',
     to: '/run-arbitrum-node/operation/assign-node-roles',
   },
+  {
+    from: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    to: '/run-arbitrum-node/operation/node-tuning-and-monitoring',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
