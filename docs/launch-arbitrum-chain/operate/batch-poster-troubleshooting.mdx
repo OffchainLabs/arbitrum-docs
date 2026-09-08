@@ -41,7 +41,7 @@ There is no universally recommended balance threshold—the appropriate level de
 
 ## Mempool errors
 
-### "Posting this transaction will exceed max mempool size"
+### "Posting this transaction will exceed max mempool size" {#exceeds-max-mempool-size}
 
 This error indicates that the parent chain node's mempool has rejected a transaction from the batch poster because it was at capacity.
 
@@ -63,26 +63,26 @@ The exact mempool weight limits depend on the parent chain node's configuration,
 
 </VanillaAdmonition>
 
-#### `ErrExceedsMaxMempoolSize` → "error posting batch"
+#### `ErrExceedsMaxMempoolSize` → "error posting batch" {#err-exceeds-max-mempool-size}
 
 - [DEBUG→WARN→ERROR over 5 min]—The next batch's nonce would exceed `unconfirmed nonce + max-mempool-transactions`, so it's held back.
 - [CAUSE]—<a data-quicklook-from="L1">L1</a> is confirming the poster's transactions slowly, and the in-flight window (default: 18) is filled.
 - [MEANING]—Normal back-pressure short-term; sustained means posts are stuck.
 - [ACTION]—If persistent, check L1 confirmation/fees, consider raising `max-mempool-transactions`.
 
-#### `lack of L1 balance prevents posting transaction with desired fee cap`
+#### `lack of L1 balance prevents posting transaction with desired fee cap` {#lack-of-l1-balance}
 
 - [WARN]—The poster's wallet can't cover the target max cost, so the bid is capped at the available balance.
 - [CAUSE]—Low parent-chain balance and/or high L1 fees.
 - [ACTION]—Fund the L1 wallet (`send-l1`); watch `arb/batchposter/wallet/eth`.
 
-#### `a large batch posting backlog exists`
+#### `a large batch posting backlog exists` {#large-backlog-exists}
 
 - [INFO/WARN/ERROR]—Unposted messages are piling up; `INFO` if it recently hit L1 bounds, `WARN` at backlog > 10, `ERROR` at > 30.
 - [CAUSE]—Posts not keeping up (fees, mempool cap, L1 congestion, or the poster is behind).
 - [ACTION]—Investigate why posting is throttled; `ERROR` is an alerting threshold.
 
-#### `error fetching batch poster wallet balance` / `...gas refunder balance`
+#### `error fetching batch poster wallet balance` / `...gas refunder balance` {#error-fetching-wallet-balance}
 
 - [WARN]—Balance gauge update failed.
 - [CAUSE]—L1 RPC hiccup.
@@ -125,7 +125,7 @@ The specific log messages and metrics that indicate a backlog depend on the Nitr
 
 ## Retry errors
 
-### "Failed to re-send transaction"
+### "Failed to re-send transaction" {#failed-to-resend-transaction}
 
 This error appears when the data poster attempts to resubmit a batch posting transaction (typically as part of RBF), and the resubmission fails.
 
@@ -150,21 +150,21 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 
 ## Reverts and halting
 
-#### `Large gap between last seen and current block number, skipping check for reverts`
+#### `Large gap between last seen and current block number, skipping check for reverts` {#large-gap-skipping-revert-check}
 
 - [WARN]—`pollForReverts` fell > 100 blocks behind the chain, so it skipped scanning the intervening blocks for reverted poster transactions and fast-forwarded.
 - [CAUSE]—Node lag, a long pause, or a header-subscription stall.
 - [MEANING]—Reverts in that skipped window won't be detected.
 - [ACTION]—Usually transient; if frequent, investigate node sync/L1 RPC health.
 
-#### `Transaction from batch poster reverted`
+#### `Transaction from batch poster reverted` {#poster-transaction-reverted}
 
 - [WARN→ERROR]—A batch posting transaction got a failed receipt on L1.
 - [ERROR (not WARN)]—When using persistent storage, it sets `batchReverted` and **halts** all further posting.
 - [CAUSE]—Contract rejected the batch (e.g., message-count mismatch, bad sequence number, gas/blob issue).
 - [ACTION]—Investigate `txErr`; restart clears the halt flag; a count mismatch after <a data-quicklook-from="forceinclusion">force-inclusion</a> may need `allow-posting-first-batch-when-sequencer-message-count-mismatch`.
 
-#### `Error checking batch reverts`
+#### `Error checking batch reverts` {#error-checking-batch-reverts}
 
 - [DEBUG/WARN]—Revert check failed.
 - [DEBUG]—If the error contains "not found" (a benign parent-node inconsistency where one node served a header, another lacks it), else WARN.
@@ -172,54 +172,54 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 
 ## Nonce/sync
 
-#### `failed to update nonce with queue empty; falling back to using a recent block`
+#### `failed to update nonce with queue empty; falling back to using a recent block` {#nonce-update-queue-empty}
 
 - [WARN]—Couldn't get the finalized nonce, so it used a recent block instead. Safe because the queue is empty.
 - [CAUSE]—Finality data unavailable/RPC issue.
 - [ACTION]—Benign one-off; investigate if constant.
 
-#### `Failed to get current nonce`
+#### `Failed to get current nonce` {#failed-current-nonce}
 
 - [WARN]—Nonce refresh failed, but a previous nonce exists, so it's non-fatal.
 - [CAUSE]—L1 RPC.
 - [ACTION]—Ignore if transient.
 
-#### `Failed to get latest nonce`
+#### `Failed to get latest nonce` {#failed-latest-nonce}
 
 - [WARN]—Couldn't fetch the unconfirmed nonce this loop; the iteration backs off 10s (`minWait`).
 - [ACTION]—Transient RPC.
 
-#### `failed to update tx poster balance` / `failed to update tx poster nonce`
+#### `failed to update tx poster balance` / `failed to update tx poster nonce` {#failed-tx-poster-state}
 
 - [WARN]—Periodic state refresh in the data-poster loop failed; on balance failure, the loop backs off 10s.
 - [ACTION]—Transient RPC.
 
-#### `DataPoster failed to send transaction`
+#### `DataPoster failed to send transaction` {#dataposter-send-failed}
 
 - [WARN]—The RPC `SendTransaction` call errored.
 - [CAUSE]—Mempool rejection, underpriced, RPC issue.
 - [MEANING]—The transaction stays queued and is retried.
 - [ACTION]—Watch for repetition.
 
-#### `maybeLogError` family—`failed to replace-by-fee transaction` / `failed to re-send transaction`
+#### `maybeLogError` family—`failed to replace-by-fee transaction` / `failed to re-send transaction` {#maybelogerror-family}
 
 - [DEBUG/INFO → WARN/ERROR after 20 consecutive]—Per-nonce send/RBF errors that escalate if they persist. `storage.ErrStorageRace` starts `DEBUG`; `ErrFutureReplacePending`/`ErrNonceTooHigh` start `INFO`; anything else is immediate `ERROR`.
 - [ACTION]—The escalated `WARN/ERROR` is the real signal—investigate then.
 
 ## Fee/pricing
 
-#### `can't meet data poster fee cap obligations with current target max cost` / `can't meet current parent chain fees with current target max cost`
+#### `can't meet data poster fee cap obligations with current target max cost` / `can't meet current parent chain fees with current target max cost` {#cannot-meet-fee-cap}
 
 - [INFO]—The computed fee cap can't cover the current L1 base fee/required cost.
 - [CAUSE]—L1 fees spiked above the poster's escalation target, or balanced-capped.
 - [ACTION]—If posts stall, tune the fee formula (`target-price-gwei`, `urgency-gwei`, `max-fee-bid-multiple-bips`) or fund the wallet.
 
-#### `submitting transaction with GasFeeCap less than latest basefee` / `...BlobGasFeeCap less than latest blobfee`
+#### `submitting transaction with GasFeeCap less than latest basefee` / `...BlobGasFeeCap less than latest blobfee` {#gasfeecap-below-basefee}
 
 - [INFO]—Posting anyway with a cap below the current fee, expecting it to confirm as fees drop.
 - [ACTION]—Normal during fee volatility; concerning only if posts never confirm.
 
-#### `unable to fetch suggestedTipCap from l1 client to update arb/batchposter/suggestedtipcap metric`
+#### `unable to fetch suggestedTipCap from l1 client to update arb/batchposter/suggestedtipcap metric` {#suggestedtipcap-unavailable}
 
 - [WARN]—Couldn't get a tip suggestion for the metric.
 - [MEANING]—Metric gap only.
@@ -227,44 +227,44 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 
 ## L1 bounds/reorg
 
-#### `Disabling batch posting due to batch being within reorg resistance margin from layer 1 minimum block or timestamp bounds`
+#### `Disabling batch posting due to batch being within reorg resistance margin from layer 1 minimum block or timestamp bounds` {#reorg-resistance-margin-block}
 
 - [ERROR]—The batch's first message is within `reorg-resistance-margin` of the L1 minimum bound, so posting is refused this round.
 - [CAUSE]—The margin guard (default 10m) protects against <a data-quicklook-from="reorg">reorgs</a> near the lower bound.
-- [ACTION]—Expected safety behavior; set margin to `0` only if you accept the reorg risk.
+- [ACTION]—Expected safety behavior; set margin to `0` only if you accept the <a data-quicklook-from="reorg">reorg</a> risk.
 
-#### `disabling L1 bound as batch posting message is close to the maximum delay`
+#### `disabling L1 bound as batch posting message is close to the maximum delay` {#l1-bound-disabled-max-delay}
 
 - [ERROR]—Overriding the L1 block bound because messages are near `max-delay`; the `l1-block-bound-bypass` margin kicked in to avoid stalling.
 - [ACTION]—Informational; means it chose to post over respecting the bounds.
 
-#### `not posting more messages because block number or timestamp exceed L1 bounds`
+#### `not posting more messages because block number or timestamp exceed L1 bounds` {#messages-exceed-l1-bounds}
 
 - [INFO]—Stopped adding messages that fall outside the current L1 bound window.
 - [ACTION]—Normal bounding behavior.
 
-#### `error getting max time variation on L1 bound block; falling back on latest block`
+#### `error getting max time variation on L1 bound block; falling back on latest block` {#max-time-variation-fallback}
 
 The L1 node couldn't give state at the finalized bound block, so it falls back to the latest block—usually transient.
 
-#### `unknown L1 block bound config value; falling back on using finalized`
+#### `unknown L1 block bound config value; falling back on using finalized` {#unknown-l1-block-bound}
 
 - [ERROR]—Bound resolution issues; the latter means a bad `l1-block-bound` config value.
 - [ACTION]—Fix the config value for the `ERROR`.
 
-#### `DataPoster is avoiding creating a mempool nonce gap`
+#### `DataPoster is avoiding creating a mempool nonce gap` {#avoiding-nonce-gap}
 
 - [INFO]—Held a transaction back rather than create a nonce gap that a reorg could expose (predecessor not yet reorg-resistant).
 - [ACTION]—Normal reorg-safety; the transaction is retried.
 
 ## DA/fallback (AnyTrust/AltDA)
 
-#### `DA writer failed, operator action required`
+#### `DA writer failed, operator action required` {#da-writer-failed}
 
 - [ERROR]—A non-fallback DA writer error; posting stops.
 - [ACTION]—**Investigate immediately**—this is an explicit operator-action alert.
 
-#### `DA writer explicitly requested fallback`
+#### `DA writer explicitly requested fallback` {#da-writer-fallback}
 
 - [WARN]—A DA backend requested a fallback; the poster moves to the next writer/EthDA.
 - [ACTION]—Check DA provider health; sustained fallback means degraded DA.
@@ -280,23 +280,23 @@ The L1 node couldn't give state at the finalized bound block, so it falls back t
 
 ## Lock/coordination and gas estimation
 
-#### `Error checking if we could acquire redis lock`
+#### `Error checking if we could acquire redis lock` {#redis-lock-check-failed}
 
 - [WARN]—Redis lock check failed; it optimistically tries anyway.
 - [CAUSE]—Redis connectivity.
 - [ACTION]—Check Redis if high availability matters.
 
-#### `Not posting batches right now because another batch poster has the lock or this node is behind`
+#### `Not posting batches right now because another batch poster has the lock or this node is behind` {#another-poster-holds-lock}
 
 - [DEBUG]—Normal on backup posters/when behind.
 - [ACTION]—Expected; not an error.
 
-#### `Failed to estimate gas for EIP-7623 check 1/2`
+#### `Failed to estimate gas for EIP-7623 check 1/2` {#eip-7623-gas-estimate-failed}
 
 - [WARN]—An EIP-7623 calldata-cost estimation probe failed.
 - [ACTION]—Usually transient; relevant only on EIP-7623 parent chains.
 
-#### `error estimating gas for batch`
+#### `error estimating gas for batch` {#error-estimating-batch-gas}
 
 - [escalates via ephemeral handler]—Gas estimation failed (`ErrNormalGasEstimationFailed`); DEBUG→WARN→ERROR over 5 min.
 - [CAUSE]—L1 state lag, reverting estimation, inbox not caught up.
@@ -304,17 +304,17 @@ The L1 node couldn't give state at the finalized bound block, so it falls back t
 
 ## Config/startup
 
-#### `max-size is deprecated; use max-calldata-batch-size...`
+#### `max-size is deprecated; use max-calldata-batch-size...` {#max-size-deprecated}
 
 - [ERROR]—Deprecated flag in use.
 - [ACTION]—Migrate to `max-calldata-batch-size`.
 
-#### `Disabling data poster storage, as parent chain appears to be an Arbitrum chain without a mempool`
+#### `Disabling data poster storage, as parent chain appears to be an Arbitrum chain without a mempool` {#data-poster-storage-disabled}
 
 - [INFO]—Auto-switched to no-op storage on an Arbitrum parent.
 - [ACTION]—Expected for L3s.
 
-#### `messagesPerBatch is somehow zero`
+#### `messagesPerBatch is somehow zero` {#messages-per-batch-zero}
 
 - [WARN]—Defensive guard against a should-be-impossible state; defaults to `1`.
 - [ACTION]—Benign unless recurring.
