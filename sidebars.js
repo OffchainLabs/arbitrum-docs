@@ -743,7 +743,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
+          id: 'run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers',
           label: 'L1 Ethereum RPC providers',
         },
         {
@@ -859,7 +859,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
+          id: 'run-arbitrum-node/reference/nitro-database-snapshots',
           label: 'Database snapshots',
         },
         {
@@ -874,17 +874,17 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/configuration-system',
+          id: 'run-arbitrum-node/reference/configuration-system',
           label: 'Configuration system',
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/da-tools-reference',
+          id: 'run-arbitrum-node/reference/da-tools-reference',
           label: 'DA tools reference',
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/cli-flags-reference',
+          id: 'run-arbitrum-node/reference/cli-flags-reference',
           label: 'CLI flags reference',
         },
         {

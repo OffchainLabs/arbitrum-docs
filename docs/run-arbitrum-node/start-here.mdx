@@ -63,7 +63,7 @@ Snapshots are published per state scheme, and a snapshot only works with a node 
 
 Only the HashDB kinds distinguish pruned from unpruned. PathDB prunes as it runs, so every PathDB snapshot is already pruned to its state-history window—there is no separate unpruned variant to publish. The `pruned` kind exists because a HashDB database is pruned manually, and the published HashDB full node snapshots happen to be pruned ones.
 
-`--init.latest` cannot download the PathDB kinds. See [PathDB snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
+`--init.latest` cannot download the PathDB kinds. See [PathDB snapshots](/run-arbitrum-node/reference/nitro-database-snapshots.mdx#pathdb-snapshots).
 
 Database snapshots for other Arbitrum chains may be available at the discretion of the chain's team. Get in touch with them if you're interested in using a database snapshot for their chains.
 
@@ -71,12 +71,12 @@ Database snapshots for other Arbitrum chains may be available at the discretion 
 
 Supplying a database snapshot when starting your node for the first time is required for Arbitrum One (to provide information from the Classic era) but is optional for other chains. Supplying a database snapshot on the first run will provide the state and data for that chain up to a specific block, allowing the node to sync faster to the head of the chain.
 
-We provide a summary of the available parameters here, but it is recommended to read the [complete guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx) if you plan to use snapshots.
+We provide a summary of the available parameters here, but it is recommended to read the [complete guide](/run-arbitrum-node/reference/nitro-database-snapshots.mdx) if you plan to use snapshots.
 
 - Use the parameter `--init.latest <snapshot type>` (accepted values: `archive`, `pruned`, `genesis`) to instruct your node to download the corresponding snapshot from the configured URL
 - Optionally, use the parameter `--init.latest-base` to set the base URL when searching for the latest snapshot
 - Note that these parameters get ignored if a database already exists
-- When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
+- When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/reference/nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
 - Only snapshots formatted with your node's specified state scheme are compatible. In other words, a PathDB snapshot won't work for a node using HashDB, and vice versa. Each snapshot directory publishes a `metadata.json` file naming its `state_scheme`; check it before downloading.
 
 :::tip Which initialization mode should I use?
@@ -91,7 +91,7 @@ We provide a summary of the available parameters here, but it is recommended to 
 | Hosting one snapshot for **multiple nodes**     | Download manually, then use `--init.url file:///path/to/archive.tar` on each node                                                                                                   |
 | Using a **custom snapshot URL**                 | `--init.url https://your-snapshot-url/archive.tar`                                                                                                                                  |
 
-For more details on snapshot downloading and initialization, see the [complete snapshot guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx).
+For more details on snapshot downloading and initialization, see the [complete snapshot guide](/run-arbitrum-node/reference/nitro-database-snapshots.mdx).
 
 :::
 

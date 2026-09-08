@@ -23,7 +23,7 @@ If you want to run a node with Docker instead of Kubernetes, see [How to run a f
 
 ## Prerequisites
 
-- **Parent chain access:** an execution RPC endpoint for the chain's parent. For Arbitrum One, Nova, and Sepolia, the parent is Ethereum, so you also need an **L1 beacon/blob** endpoint (see [L1 Ethereum RPC providers](/run-arbitrum-node/04-l1-ethereum-beacon-chain-rpc-providers.mdx)). For an Arbitrum chain whose parent is another chain, use the RPC of that parent chain; a beacon endpoint is required only when the chain posts blobs to its parent chain.
+- **Parent chain access:** an execution RPC endpoint for the chain's parent. For Arbitrum One, Nova, and Sepolia, the parent is Ethereum, so you also need an **L1 beacon/blob** endpoint (see [L1 Ethereum RPC providers](/run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers.mdx)). For an Arbitrum chain whose parent is another chain, use the RPC of that parent chain; a beacon endpoint is required only when the chain posts blobs to its parent chain.
 - **Cluster:** Kubernetes with Helm installed.
 - **Disk:** size storage for the chain you're running. A node's database size varies widely from chain to chain and grows over time, so check the expected size with your chain operator before provisioning (for Arbitrum One, it runs to multiple TB). Raise the chart's default `persistence.size` (`500Gi`) accordingly, and allow roughly 2× the snapshot size for an additional temporary disk for extraction on the first run.
 
@@ -130,7 +130,7 @@ Whether a snapshot is required depends on the chain:
 - **Nova and Sepolia** have published snapshots that speed up the initial sync but aren't strictly required.
 - **Your Arbitrum chain** typically syncs from genesis with no snapshot, unless you provide one via `init.url`.
 
-When using a snapshot, the default base is `https://snapshot.arbitrum.foundation/`. Initial sync takes a while. The init flag is ignored once a database already exists, so it's safe to leave it in place across restarts. Confirm the current snapshot type and download details in the [Nitro database snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx) guide.
+When using a snapshot, the default base is `https://snapshot.arbitrum.foundation/`. Initial sync takes a while. The init flag is ignored once a database already exists, so it's safe to leave it in place across restarts. Confirm the current snapshot type and download details in the [Nitro database snapshots](/run-arbitrum-node/reference/nitro-database-snapshots.mdx) guide.
 
 ## Step 4: Enable monitoring
 

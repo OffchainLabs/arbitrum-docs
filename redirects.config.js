@@ -431,5 +431,25 @@ export const redirects = [
     from: '/run-arbitrum-node/beacon-nodes-historical-blobs',
     to: '/run-arbitrum-node/data-availability/beacon-nodes-historical-blobs',
   },
+  {
+    from: '/run-arbitrum-node/nitro/cli-flags-reference',
+    to: '/run-arbitrum-node/reference/cli-flags-reference',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/da-tools-reference',
+    to: '/run-arbitrum-node/reference/da-tools-reference',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/nitro-database-snapshots',
+    to: '/run-arbitrum-node/reference/nitro-database-snapshots',
+  },
+  {
+    from: '/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
+    to: '/run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/configuration-system',
+    to: '/run-arbitrum-node/reference/configuration-system',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

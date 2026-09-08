@@ -546,6 +546,31 @@
       "destination": "/run-arbitrum-node/data-availability/beacon-nodes-historical-blobs",
       "permanent": false
     },
+    {
+      "source": "/run-arbitrum-node/nitro/cli-flags-reference",
+      "destination": "/run-arbitrum-node/reference/cli-flags-reference",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/da-tools-reference",
+      "destination": "/run-arbitrum-node/reference/da-tools-reference",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/nitro-database-snapshots",
+      "destination": "/run-arbitrum-node/reference/nitro-database-snapshots",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers",
+      "destination": "/run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/configuration-system",
+      "destination": "/run-arbitrum-node/reference/configuration-system",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
