@@ -30,15 +30,11 @@ Step 2 is the reason misrouting is so hard to spot. A token you believe is regis
 
 ## Bridged USDC routes to the standard gateway
 
-As part of the USDC bridge deployment script, the custom USDC gateway is registered in the `TokenBridge` router. If that process fails, the `TokenBridge` won't be able to choose the right gateway for USDC, falling back to the default gateway.
+You deployed a bridged **USDC** gateway following [the bridged USDC standard](/launch-arbitrum-chain/integrations/bridged-usdc.mdx), but the SDK and bridge UI keep sending **USDC** through the standard **ERC-20** gateway, producing the default bridged token rather than the Circle-standard one.
 
 ### What causes this problem
 
-The deployment script's final registration step is conditional. It performs these operations in order:
-
-1. Load deployer wallets for both chains and register the networks in the SDK.
-2. Deploy and initialize bridged **USDC** on the child chain using Circle's implementation.
-3. Deploy new proxy admins on both chains.
+As part of the **USDC** bridge deployment script, the custom **USDC** gateway is registered in the `TokenBridge` router. If that process fails, the `TokenBridge` can't choose the right gateway for **USDC**, so it falls back to the default gateway.
 
 ### Resolution
 
