@@ -721,7 +721,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/assign-node-roles',
+          id: 'run-arbitrum-node/operation/assign-node-roles',
           label: 'Assign node roles',
         },
         {

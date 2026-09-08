@@ -451,5 +451,9 @@ export const redirects = [
     from: '/run-arbitrum-node/nitro/configuration-system',
     to: '/run-arbitrum-node/reference/configuration-system',
   },
+  {
+    from: '/run-arbitrum-node/assign-node-roles',
+    to: '/run-arbitrum-node/operation/assign-node-roles',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

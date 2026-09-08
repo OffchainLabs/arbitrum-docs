@@ -571,6 +571,11 @@
       "destination": "/run-arbitrum-node/reference/configuration-system",
       "permanent": false
     },
+    {
+      "source": "/run-arbitrum-node/assign-node-roles",
+      "destination": "/run-arbitrum-node/operation/assign-node-roles",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
