@@ -46,13 +46,6 @@ As part of the **USDC** bridge deployment script, the custom **USDC** gateway is
 
 Registering a token or gateway involves sending specific transactions to the `TokenBridge` router or gateway. This section will cover common troubleshooting, for a deeper understanding refer to the [Generic custom gateway](/arbitrum-essentials/bridging/configure-token-gateway/generic-custom.mdx) page.
 
-| Entry point              | Contract          | Guard             | Who can call it                                            |
-| :----------------------- | :---------------- | :---------------- | :--------------------------------------------------------- |
-| `registerTokenToL2`      | `L1CustomGateway` | `NOT_ARB_ENABLED` | The token contract itself, not an externally owned account |
-| `forceRegisterTokenToL2` | `L1CustomGateway` | `ONLY_OWNER`      | The gateway owner, normally the `UpgradeExecutor`          |
-| `setGateway`             | `L1GatewayRouter` | `NOT_ARB_ENABLED` | The token contract itself                                  |
-| `setGateways`            | `L1GatewayRouter` | `ONLY_OWNER`      | The router owner, normally the `UpgradeExecutor`           |
-
 ### Wrong caller for the registration path
 
 `registerTokenToL2` and `setGateway` are designed to be called _by the token_. They revert with `NOT_ARB_ENABLED` unless the caller implements the <a data-quicklook-from="custom-arbtoken">custom token</a> interface and returns the expected value from `isArbitrumEnabled()`. Calling either from an externally owned account fails no matter how that account is funded or permissioned.
