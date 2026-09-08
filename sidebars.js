@@ -854,7 +854,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
+          id: 'run-arbitrum-node/operation/migrate-state-and-history-from-classic',
           label: 'Migrate to Nitro from Classic',
         },
         {

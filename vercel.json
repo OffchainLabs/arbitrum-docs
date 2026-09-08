@@ -586,6 +586,11 @@
       "destination": "/run-arbitrum-node/operation/how-to-convert-databases-from-leveldb-to-pebble",
       "permanent": false
     },
+    {
+      "source": "/run-arbitrum-node/nitro/migrate-state-and-history-from-classic",
+      "destination": "/run-arbitrum-node/operation/migrate-state-and-history-from-classic",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

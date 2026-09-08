@@ -463,5 +463,9 @@ export const redirects = [
     from: '/run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
     to: '/run-arbitrum-node/operation/how-to-convert-databases-from-leveldb-to-pebble',
   },
+  {
+    from: '/run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
+    to: '/run-arbitrum-node/operation/migrate-state-and-history-from-classic',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
