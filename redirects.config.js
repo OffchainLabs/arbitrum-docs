@@ -471,5 +471,9 @@ export const redirects = [
     from: '/run-arbitrum-node/nitro/build-nitro-locally',
     to: '/run-arbitrum-node/build-nitro-locally',
   },
+  {
+    from: '/run-arbitrum-node/nitro/docker-and-cli-binaries',
+    to: '/run-arbitrum-node/reference/docker-and-cli-binaries',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
