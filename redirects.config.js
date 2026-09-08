@@ -423,5 +423,13 @@ export const redirects = [
     from: '/launch-arbitrum-chain/chain-config/validation/compliance-filtering',
     to: '/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
   },
+  {
+    from: '/run-arbitrum-node/run-feed-relay',
+    to: '/run-arbitrum-node/data-availability/run-feed-relay',
+  },
+  {
+    from: '/run-arbitrum-node/beacon-nodes-historical-blobs',
+    to: '/run-arbitrum-node/data-availability/beacon-nodes-historical-blobs',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

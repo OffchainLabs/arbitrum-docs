@@ -28,7 +28,7 @@ Roles can combine on a single node (a sequencer can also post batches, for examp
 | Batch poster                         | `--node.batch-poster.enable`                                                    | Funded parent-chain wallet; no bond                       | One active (Redis lock coordinates a set) | [Run a batch poster](/launch-arbitrum-chain/run-a-node/batch-poster.mdx)                 |
 | Validator (staker)                   | `--node.staker.strategy` set to an active value                                 | Funded wallet and bond for active strategies only         | One active per wallet                     | [Run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx)               |
 | Validation server (split validation) | `nitro-val` binary + `--node.block-validator.validation-server.url` on the node | No wallet, no bond (all onchain action stays on the node) | Many (one node can use several)           | [Run a split validator node](/launch-arbitrum-chain/run-a-node/split-validator-node.mdx) |
-| Feed relay                           | `relay` binary + `--node.feed.input.url` + `--chain.id`                         | No wallet, no bond, no parent-chain connection            | Many (stateless fan-out)                  | [Run a feed relay](/run-arbitrum-node/run-feed-relay.mdx)                                |
+| Feed relay                           | `relay` binary + `--node.feed.input.url` + `--chain.id`                         | No wallet, no bond, no parent-chain connection            | Many (stateless fan-out)                  | [Run a feed relay](/run-arbitrum-node/data-availability/run-feed-relay.mdx)              |
 
 Every role except the feed relay and the split-validation server needs a parent-chain connection through `--parent-chain.connection.url`. Nodes whose parent chain is Ethereum <a data-quicklook-from="L1">L1</a> also need `--parent-chain.blob-client.beacon-url` to read batches posted as EIP-4844 <a data-quicklook-from="blob">blobs</a>. For well-known chains, setting `--chain.id` or `--chain.name` auto-fills defaults such as `--execution.forwarding-target` and `--node.feed.input.url` from the chain info embedded in the binary (the forwarding target is only auto-filled when the sequencer is disabled).
 
@@ -185,7 +185,7 @@ The feed relay is not a mode of the `nitro` binary. It is a separate `relay` bin
 
 Downstream nodes then point their own `--node.feed.input.url` at the relay. You can run as many relays as you like: each one independently subscribes upstream and serves its downstream clients, and relays can even be chained. A node connected to multiple feeds or relays deduplicates messages by sequence number, so redundant feed sources are safe.
 
-For setup, Docker commands, and Kubernetes charts, see [How to run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+For setup, Docker commands, and Kubernetes charts, see [How to run a feed relay](/run-arbitrum-node/data-availability/run-feed-relay.mdx).
 
 ## Converting between roles
 

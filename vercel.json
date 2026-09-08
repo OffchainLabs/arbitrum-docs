@@ -536,6 +536,16 @@
       "destination": "/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering",
       "permanent": false
     },
+    {
+      "source": "/run-arbitrum-node/run-feed-relay",
+      "destination": "/run-arbitrum-node/data-availability/run-feed-relay",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/beacon-nodes-historical-blobs",
+      "destination": "/run-arbitrum-node/data-availability/beacon-nodes-historical-blobs",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

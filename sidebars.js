@@ -753,12 +753,12 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/run-feed-relay',
+          id: 'run-arbitrum-node/data-availability/run-feed-relay',
           label: 'Run a feed relay',
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/beacon-nodes-historical-blobs',
+          id: 'run-arbitrum-node/data-availability/beacon-nodes-historical-blobs',
           label: 'Historical blobs',
         },
         {
