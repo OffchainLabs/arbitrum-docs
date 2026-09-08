@@ -1,0 +1,7 @@
+---
+title: PathDB
+key: pathdb
+titleforSort: PathDB
+---
+
+A [state scheme](/intro/glossary#state-scheme) that stores Nitro's state trie by path, enabled with `--execution.caching.state-scheme=path` and available from Nitro v3.9.x. PathDB [prunes](/intro/glossary#state-pruning) automatically while the node runs, so disk use stays within the window set by `--execution.caching.state-history` and the node keeps serving RPC. It cuts [archive node](/intro/glossary#archive-node) disk use substantially, but it cannot validate blocks.

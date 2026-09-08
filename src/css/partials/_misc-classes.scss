@@ -18,6 +18,19 @@
   font-family: var(--arbitrum-mono-font);
 }
 
+// Aeonik Fono is proportional, so column-aligned text drifts and it carries no
+// box-drawing glyphs. Diagrams that depend on alignment opt into a real
+// fixed-width stack, which also keeps every glyph in a single font.
+.ascii-diagram {
+  pre,
+  pre code,
+  code {
+    font-family:
+      ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', monospace !important;
+    font-variant-ligatures: none;
+  }
+}
+
 pre[class*='language-'] {
   border-radius: var(--arbitrum-border-radius, 12px);
 }

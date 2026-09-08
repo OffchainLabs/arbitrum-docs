@@ -26,6 +26,7 @@ Choose the right content type based on your audience and purpose:
 
 | Principle                     | Description                                               | Good Example                                                                                                                                                     | Avoid                                                                                                 |
 | ----------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **Use American English**      | Use American english spelling and syntax                  | "Choose the right color"                                                                                                                                         | "Choose the right colour"                                                                             |
 | **Use sentence case**         | First letter capitalized, rest lowercase                  | "Deploy your smart contract"                                                                                                                                     | "Deploy Your Smart Contract"                                                                          |
 | **Write descriptive links**   | Links describe their destination                          | "See our [deployment tutorial]"                                                                                                                                  | "Find more [here]"                                                                                    |
 | **Minimize technical jargon** | Use plain language when possible                          | "How to reuse contract methods"                                                                                                                                  | "How to leverage trait-based composition"                                                             |
@@ -99,6 +100,7 @@ Never write "simply", "just", "easy", "obvious", or "of course". When the step d
 ### Authoring conventions
 
 - Use `<VanillaAdmonition type="…">` instead of Docusaurus `:::info` / `:::note` for callouts in MDX. The component is registered globally via `src/theme/MDXComponents.js`, so no import is needed.
+- Wrap a term in a Quicklook (`<a data-quicklook-from='…'>`) once per file, on its first mention. Leave every later mention of that same term as plain text. A second Quicklook on the same term tells the reader nothing new and turns the page into a field of links.
 
 ## Terminology guide
 

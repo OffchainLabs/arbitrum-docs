@@ -37,7 +37,7 @@ The submission process for a transaction on Arbitrum starts with the user sendin
 
 This path accommodates various submission methods, including [public RPC](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#public-rpc) for development and light usage, [third-party RPCs](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#third-party-rpc) for improved throughput, [direct Sequencer endpoints](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#sequencer-endpoint) for minimal latency in critical operations, and [self-hosted Arbitrum nodes](/run-arbitrum-node/02-run-full-node.mdx) for ultimate privacy and customization.
 
-Alternatively, to mitigate the risks of exclusion or delays by the Sequencer, users can submit directly to the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on Ethereum, thereby bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed for more than 24 hours, any network participant can [force inclusion](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#force-inclusion-after-delays) into the main inbox, limiting the Sequencer's ability to block transactions permanently—it can only add a temporary delay.
+Alternatively, to mitigate the risks of exclusion or delays by the Sequencer, users can submit directly to the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on Ethereum, thereby bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed for more than @@arbOneForceIncludePeriodHours=24@@ hours, any network participant can [force inclusion](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#force-inclusion-after-delays) into the main inbox, limiting the Sequencer's ability to block transactions permanently—it can only add a temporary delay.
 
 While the Sequencer route offers faster soft finality and streamlines workflows, the Delayed Inbox path doubles processing time but emphasizes censorship resistance (blocking transactions). Overall, the Sequencer’s <a data-quicklook-from="commitment">commitment</a> to ordered inclusion provides “soft finality” for a responsive experience, complemented by these alternatives for robust, flexible operations across applications.
 
@@ -57,7 +57,7 @@ After batches and compression, the data posts to Ethereum through the <a data-qu
 
 2. As a fallback, calldata transactions embed data directly, ensuring compatibility even if blob fees rise or [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blobs are unavailable. This process yields 10-100 times the cost savings over individual postings and adapts to network conditions for consistent efficiency.
 
-For a deeper look at how the Sequencer orders, batches, and posts transactions, see the [Sequencer deep dive](/how-arbitrum-works/deep-dives/sequencer.mdx). For details on how <a data-quicklook-from="parent-chain">parent chain</a> costs are calculated and priced, including the adaptive pricing algorithm, see the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
+For a deeper look at how the Sequencer orders, batches, and posts transactions, see the [Sequencer deep dive](/how-arbitrum-works/deep-dives/sequencer.mdx). For the component that builds and ships each batch, see the [batch poster deep dive](/how-arbitrum-works/deep-dives/batchposter.mdx). For details on how <a data-quicklook-from="parent-chain">parent chain</a> costs are calculated and priced, including the adaptive pricing algorithm, see the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
 
 ## Step 3: Execution phase: State Transition Function
 
@@ -91,7 +91,7 @@ At this stage, the transaction achieves two complementary levels of finality, ea
 
 The dual model combines quick "soft finality" for a better user experience with Ethereum-level safeguards for hard finality, along with censorship-resistant paths for assured inclusion. This balance delivers immediate feedback alongside strong protections, which is ideal for high-stakes transactions.
 
-For more on how assertions work, see the [Assertions deep dive](/how-arbitrum-works/deep-dives/assertions.mdx) page.
+For more on how assertions work, see the [Assertions deep dive](/how-arbitrum-works/deep-dives/assertions.mdx) page. For the full treatment of both levels—latency figures, trust models, and guidance on which level your app should wait for—see [Finality](/how-arbitrum-works/deep-dives/finality.mdx).
 
 ## Step 5: Validation and dispute resolution
 
@@ -149,7 +149,7 @@ For more details, refer to the [Stylus gentle introduction](/stylus/gentle-intro
 
 ### Timeboost
 
-<a data-quicklook-from="timeboost">Timeboost</a> refines ordering to capture MEV (maximum extractable value) for chain operators, protects users from attacks such as front-running, reduces spam-related congestion, and enables customizable policies. Timeboost preserves fast block times (250ms default).
+<a data-quicklook-from="timeboost">Timeboost</a> refines ordering to capture MEV (maximum extractable value) for chain operators, protects users from attacks such as front-running, reduces spam-related congestion, and enables customizable policies. Timeboost preserves fast block times (@@l2BlockTimeMs=250@@ms default).
 
 #### Timeboost references
 
@@ -173,6 +173,8 @@ In this overview, you've learned about the complete transaction journey through 
 
 - [Transaction Lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx): Detailed transaction lifecycle from submission to finality
 - [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx): How the Sequencer orders, batches, and posts transactions
+- [Finality](/how-arbitrum-works/deep-dives/finality.mdx): Soft and hard finality, trust models, and when to wait for each
+- [Batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx): How a sequenced batch is built, compressed, and posted to the parent chain
 - [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx): Gas pricing, fee calculations, and adaptive pricing algorithm
 - [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx): Foundational concepts of the STF
 - [Geth](/how-arbitrum-works/reference/geth.mdx): Geth core and EVM compatibility

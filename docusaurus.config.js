@@ -268,26 +268,15 @@ const config = {
         style: 'dark',
         links: [
           {
+            title: 'Ecosystem',
             items: [
               {
                 label: 'Arbitrum.io',
                 to: 'https://arbitrum.io/',
               },
               {
-                label: 'Arbitrum Rollup',
-                to: 'https://arbitrum.io/rollup',
-              },
-              {
-                label: 'Arbitrum AnyTrust',
-                to: 'https://arbitrum.io/anytrust',
-              },
-              {
                 label: 'Arbitrum chains',
                 to: 'https://arbitrum.io/launch-chain',
-              },
-              {
-                label: 'Arbitrum Stylus',
-                to: 'https://arbitrum.io/stylus',
               },
               {
                 label: 'Arbitrum Foundation',
@@ -299,11 +288,8 @@ const config = {
             ],
           },
           {
+            title: 'Products',
             items: [
-              {
-                label: 'Network status',
-                to: 'https://status.arbitrum.io/',
-              },
               {
                 label: 'Portal',
                 to: 'https://portal.arbitrum.io/',
@@ -313,24 +299,17 @@ const config = {
                 to: 'https://bridge.arbitrum.io/',
               },
               {
+                label: 'Network status',
+                to: 'https://status.arbitrum.io/',
+              },
+              {
                 label: 'Governance docs',
                 to: 'https://docs.arbitrum.foundation/',
-              },
-              {
-                label: 'Careers',
-                to: 'https://offchainlabs.com/careers/',
-              },
-              {
-                label: 'Support',
-                to: 'https://support.arbitrum.io/',
-              },
-              {
-                label: 'Bug Bounties',
-                to: 'https://immunefi.com/bounty/arbitrum/',
               },
             ],
           },
           {
+            title: 'Community',
             items: [
               {
                 label: 'Discord',
@@ -348,22 +327,33 @@ const config = {
                 label: 'Medium Blog',
                 to: 'https://medium.com/offchainlabs',
               },
+            ],
+          },
+          {
+            title: 'Resources',
+            items: [
+              {
+                label: 'Support',
+                to: 'https://support.arbitrum.io/',
+              },
+              {
+                label: 'Bug Bounties',
+                to: 'https://immunefi.com/bounty/arbitrum/',
+              },
               {
                 label: 'Research forum',
                 to: 'https://research.arbitrum.io/',
               },
               {
-                label: 'Privacy Policy',
-                to: 'https://arbitrum.io/privacy',
-              },
-              {
-                label: 'Terms of Service',
-                to: 'https://arbitrum.io/tos',
+                label: 'Careers',
+                to: 'https://offchainlabs.com/careers/',
               },
             ],
           },
         ],
-        copyright: `© ${new Date().getFullYear()} Offchain Labs`,
+        // Legal links live in the copyright row, not a column, so the four
+        // link columns stay even. Rendered as raw HTML by Docusaurus.
+        copyright: `© ${new Date().getFullYear()} Offchain Labs · <a href="https://arbitrum.io/privacy">Privacy Policy</a> · <a href="https://arbitrum.io/tos">Terms of Service</a>`,
       },
       prism: {
         additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],

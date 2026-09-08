@@ -36,7 +36,7 @@ It is possible for an Arbitrum chain Rollup to adopt fast withdrawals. However, 
 
 ### Minimum validator and DAC nodes
 
-We recommend that any Fast Withdrawals-enabled chain have at least three DAC members and three validators acting in the fast withdrawals committee. Given that fast withdrawals will enable confirmation of new Rollup state much faster than the usual 6.4-day challenge period (15 minutes for BoLD-enabled L2s and L3s, and 15 seconds for pre-BoLD L3s), it becomes even more important to have additional parties involved in validation to further reduce trust assumptions. This requirement can be be met with three total operators, who each run a single DAS node and a single validator.
+We recommend that any Fast Withdrawals-enabled chain have at least three DAC members and three validators acting in the fast withdrawals committee. Given that fast withdrawals will enable confirmation of new Rollup state much faster than the usual 6.4-day challenge period (roughly 30–40 minutes for BoLD-enabled L2s and L3s, and 15 seconds for pre-BoLD L3s), it becomes even more important to have additional parties involved in validation to further reduce trust assumptions. This requirement can be be met with three total operators, who each run a single DAS node and a single validator.
 
 ## Technical lower bound for fast withdrawals
 
@@ -46,7 +46,7 @@ Once fast withdrawals is enabled, the committee will confirm transactions at the
   - For low-to-medium activity chains (< 1 Mgas/s), 15 seconds is considered to be the sustained lower bound for Fast Withdrawals.
   - For chains with higher throughput (>1 Mgas/s), the practical lower bound for fast withdrawals is between 1-2 minutes.
 - **BoLD enabled chains**
-  - For all L3s utilizing BoLD, the practical lower bound for fast withdrawals is 15 minutes. This is because BoLD-enabled chains cannot handle a reorg of the parent chain. Hence, assertions must be posted on an L2 block that has already achieved finality on L1. For L2s settling on Ethereum, this takes ~15 minutes.
+  - For all L3s utilizing BoLD, the practical lower bound for fast withdrawals is **two rounds of parent chain finality** — roughly **30–40 minutes** for chains settling to Ethereum. BoLD validators by default only act on finalized parent chain state, so a validator waits for parent chain finality twice: once for the assertion it is confirming, and again for its own `approveHash` signature on the fast confirmation multisig. Each round is ~15 minutes for chains settling to Ethereum.
 
 Chain owners and operators should be aware that the fast withdrawals committee may take longer to confirm new assertions under conditions with greater network load. This behavior is to be expected and does not interfere with the security or trust model of the fast withdrawals committee.
 
@@ -54,11 +54,11 @@ Chain owners and operators should be aware that the fast withdrawals committee m
 
 While a fast withdrawals-enabled chain can be configured to finality in as little as 15 seconds (pre-BoLD only), there are externalities on the parent chain and from cross-chain messaging layers that must be considered.
 
-For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that <a data-quicklook-from="l1">L1</a>.
+For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that <a data-quicklook-from="L1">L1</a>.
 
 For an <a data-quicklook-from="arbitrum-one">Arbitrum One</a>-based Layer-3, there are three tiers of finality to consider:
 
-1. Soft finality from the [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx)'s confirmation of <a data-quicklook-from="transaction">transaction</a> inclusion (~250ms)
+1. Soft finality from the [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx)'s confirmation of <a data-quicklook-from="transaction">transaction</a> inclusion (~@@l2BlockTimeMs=250@@ms)
 2. Safe finality from <a data-quicklook-from="batch">batch</a> inclusion after Arbitrum One's [assertion](/how-arbitrum-works/deep-dives/assertions.mdx) is included in an Ethereum block.
 3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes). For BoLD-enabled chains, this finality is a mandatory threshold for fast withdrawals.
 
@@ -113,7 +113,7 @@ To configure the script, you need to specify the following environment variables
 | `PARENT_CHAIN_ID`          | ChainId of the parent chain.                                                                                                                                                                                                                                                                                                                                                                 |
 | `ROLLUP_ADDRESS`           | Address of the Rollup contract.                                                                                                                                                                                                                                                                                                                                                              |
 | `FC_VALIDATORS`            | Array of fast-withdrawal validators. They will be added as signers to the multisig Safe wallet and to the Rollup's validator allowlist. It is recommended that these are DAC members of the AnyTrust chain.                                                                                                                                                                                  |
-| `MINIMUM_ASSERTION_PERIOD` | Optional parameter that defaults to 75 blocks (~15 minutes). Minimum number of blocks that have to pass in between assertions (measured in block number of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for <a data-quicklook-from="l2">L2</a> chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain)). |
+| `MINIMUM_ASSERTION_PERIOD` | Optional parameter that defaults to 75 blocks (~15 minutes). Minimum number of blocks that have to pass in between assertions (measured in block number of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for <a data-quicklook-from="L2">L2</a> chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain)). |
 
 Finally, follow these steps to execute the script (from the `examples/setup-fast-withdrawal` folder):
 

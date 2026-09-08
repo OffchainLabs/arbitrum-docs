@@ -36,6 +36,11 @@ Once you have the WASM module root and have identified the required `nitro-contr
 
 The `WASM module root` is a 32-byte hash created from the Merkelized Go replay binary and its dependencies. When ArbOS is upgraded, a new WASM module root is generated due to modifications in the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF). This new WASM module root must be set in the rollup contract on the parent chain. For example, the WASM module root for ArbOS 51 Dia is `0xc2c02df561d4afaf9a1d6785f70098ec3874765c638e3cb6dbe8d3c83333e14c` (consensus-v51.1).
 
+<!-- Note: ArbOS 51 has two valid consensus tags with different WASM module roots:
+     consensus-v51 (0x8a7513bf...) and consensus-v51.1 (0xc2c02df5...).
+     This page and arbos51.mdx both cite v51.1. Keep them in sync if the
+     recommended tag changes. -->
+
 To set the WASM module root manually (i.e., not using the above guide), use the `Rollup proxy` contract's [`setWasmModuleRoot`](https://github.com/OffchainLabs/nitro-contracts/blob/38a70a5e14f8b52478eb5db08e7551a82ced14fe/src/rollup/RollupAdminLogic.sol#L321) method. Note that the `upgrade executor` contract on the parent chain is the designated owner of the Rollup contract, so the **<a data-quicklook-from="chain-owner">chain owner</a> account** needs to initiate a call to the `upgrade executor` contract in order to perform the upgrade. This call should include the correct calldata for setting the new WASM module root.
 
 <VanillaAdmonition type="tip" title="Backward compatibility">
