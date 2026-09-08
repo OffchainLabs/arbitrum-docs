@@ -459,5 +459,9 @@ export const redirects = [
     from: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
     to: '/run-arbitrum-node/operation/node-tuning-and-monitoring',
   },
+  {
+    from: '/run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
+    to: '/run-arbitrum-node/operation/how-to-convert-databases-from-leveldb-to-pebble',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
