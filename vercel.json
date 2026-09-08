@@ -591,6 +591,11 @@
       "destination": "/run-arbitrum-node/operation/migrate-state-and-history-from-classic",
       "permanent": false
     },
+    {
+      "source": "/run-arbitrum-node/nitro/build-nitro-locally",
+      "destination": "/run-arbitrum-node/build-nitro-locally",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

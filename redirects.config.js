@@ -467,5 +467,9 @@ export const redirects = [
     from: '/run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
     to: '/run-arbitrum-node/operation/migrate-state-and-history-from-classic',
   },
+  {
+    from: '/run-arbitrum-node/nitro/build-nitro-locally',
+    to: '/run-arbitrum-node/build-nitro-locally',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
