@@ -480,4 +480,9 @@ export const redirects = [
     to: '/how-arbitrum-works/deep-dives/data-availability',
   },
   // AUTO-GENERATED REDIRECTS END
+  // Manual redirect — "Prepare to run a node" merged into the full node how-to
+  {
+    from: '/run-arbitrum-node/start-here',
+    to: '/run-arbitrum-node/run-full-node',
+  },
 ];

@@ -606,6 +606,11 @@
       "destination": "/how-arbitrum-works/deep-dives/data-availability",
       "permanent": false
     },
+    {
+      "source": "/run-arbitrum-node/start-here",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
