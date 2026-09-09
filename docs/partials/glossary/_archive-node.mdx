@@ -1,0 +1,7 @@
+---
+title: Archive Node
+key: archive-node
+titleforSort: Archive Node
+---
+
+An [Arbitrum full node](/intro/glossary#arbitrum-full-node) that retains every historical [chain state](/intro/glossary#chain-state) instead of discarding old ones, so it can serve `eth_call`, balance, and trace queries at any past block. An archive node is a storage variant of a full node rather than a separate protocol role: it runs the same `nitro` binary with `--execution.caching.archive` enabled. The trade-off is disk — an Arbitrum One archive database is measured in terabytes.

@@ -4,7 +4,6 @@
  * deterministic Prettier-formatted output, a `--check` mode for CI, and uniform
  * success/failure handling.
  */
-
 import fs from 'fs';
 import path from 'path';
 import prettier from 'prettier';
@@ -36,8 +35,8 @@ export async function writeOrCheck(
   { check }: { check: boolean },
 ): Promise<void> {
   const config = await prettier.resolveConfig(filePath);
-  // prettier v2's format() is synchronous; resolveConfig() is not.
-  const formatted = prettier.format(content, { ...config, filepath: filePath });
+  // Both resolveConfig() and, as of prettier v3, format() are async.
+  const formatted = await prettier.format(content, { ...config, filepath: filePath });
 
   if (check) {
     const current = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf-8') : '';

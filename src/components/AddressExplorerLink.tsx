@@ -1,5 +1,5 @@
-import React from 'react';
 import { getAddress, isAddress } from '@ethersproject/address';
+import React from 'react';
 
 type ChainID = 1 | 42161 | 42170 | 8453 | 11155111 | 421614 | 84532;
 

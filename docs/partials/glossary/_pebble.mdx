@@ -1,0 +1,7 @@
+---
+title: Pebble
+key: pebble
+titleforSort: Pebble
+---
+
+The key-value store Nitro uses for its on-disk database. Pebble allocates its block cache and memtables through CGO calls, so that memory sits outside Go's memory tracking and outside what `GOMEMLIMIT` governs. The `database-cache` parameter sets the block cache size directly and also determines memtable size.

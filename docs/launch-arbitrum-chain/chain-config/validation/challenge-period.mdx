@@ -8,7 +8,7 @@ content_type: how-to
 
 The challenge period defines the time frame during which state updates ([assertions](/how-arbitrum-works/deep-dives/assertions.mdx)) submitted to the <a data-quicklook-from="parent-chain">parent chain</a> remain open for scrutiny and potential <a data-quicklook-from="challenge">challenges</a> before they are finalized. This mechanism ensures that participants in the system have the opportunity to verify the validity of state updates and raise challenges if necessary.
 
-The length of the <a data-quicklook-from="challenge-period">Challenge Period</a> is measured based on the parent chain's notion of time, typically reflected in `block.number`. For L3s settling to <a data-quicklook-from="arbitrum-chain">Arbitrum chains</a>, this period is determined by <a data-quicklook-from="l1">L1</a> block progression rather than Arbitrum's (<a data-quicklook-from="l2">L2</a>) blocks.
+The length of the <a data-quicklook-from="challenge-period">Challenge Period</a> is measured based on the parent chain's notion of time, typically reflected in `block.number`. For L3s settling to <a data-quicklook-from="arbitrum-chain">Arbitrum chains</a>, this period is determined by <a data-quicklook-from="L1">L1</a> block progression rather than Arbitrum's (<a data-quicklook-from="L2">L2</a>) blocks.
 
 In addition to the main challenge period, **an extra challenge period** provides a buffer to resolve any pending challenges after the main period ends. Together, these parameters help balance security and confirm the chain's state.
 
@@ -20,7 +20,7 @@ Chains settling to Ethereum or Arbitrum chains use `block.number` for all block 
 
 :::
 
-By default, the challenge period lasts approximately one week, which equates to roughly 45,818 L1 blocks for chains that settle to Ethereum or an Arbitrum chain. The default duration design is to provide sufficient time for validators to detect and challenge fraudulent assertions.
+By default, the challenge period lasts approximately one week, which equates to roughly @@arbOneDisputeWindowBlocks=45818@@ L1 blocks for chains that settle to Ethereum or an Arbitrum chain. The default duration design is to provide sufficient time for validators to detect and challenge fraudulent assertions.
 
 On the other hand, the extra challenge period adds a buffer of 40 minutes by default, 200 L1 blocks for chains settling to Ethereum or an Arbitrum chain. This time ensures that any last-minute challenges or ongoing dispute resolution processes can be completed before the Rollup finalizes its state.
 
@@ -66,7 +66,7 @@ Replace:
 
 For Arbitrum chains aligned with Arbitrum One's configuration, the recommended settings are:
 
-- **Challenge period blocks**: 45,818 Ethereum blocks (approximately one week).
+- **Challenge period blocks**: @@arbOneDisputeWindowBlocks=45818@@ Ethereum blocks (approximately one week).
 - **Extra challenge period blocks**: 200 Ethereum blocks (approximately 40 minutes).
 
 These values offer a robust and balanced setup for most Rollup use cases. Developers should consider their application’s requirements when adjusting these parameters:

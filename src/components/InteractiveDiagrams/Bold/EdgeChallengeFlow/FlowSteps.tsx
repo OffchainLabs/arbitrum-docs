@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { FLOW_STEPS } from './constants';
 
 interface FlowStepsProps {

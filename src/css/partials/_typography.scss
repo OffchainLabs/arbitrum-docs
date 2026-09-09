@@ -27,7 +27,10 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
 }
 
 // ========================================
@@ -61,7 +64,10 @@ article .markdown {
   font-size: 1rem;
   line-height: 1.75;
   max-width: none;
-  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'calt' 1;
 
   // ========================================
   // Headings
@@ -73,7 +79,10 @@ article .markdown {
   h4,
   h5,
   h6 {
-    font-feature-settings: 'kern' 1, 'liga' 1, 'ss01' 1;
+    font-feature-settings:
+      'kern' 1,
+      'liga' 1,
+      'ss01' 1;
     text-wrap: balance;
     scroll-margin-top: 80px;
   }
@@ -233,7 +242,8 @@ article .markdown {
     text-underline-offset: 4px;
     text-decoration-color: var(--arbitrum-color-primary);
     text-decoration-thickness: 2px;
-    transition: text-decoration-color var(--arbitrum-transition-normal),
+    transition:
+      text-decoration-color var(--arbitrum-transition-normal),
       color var(--arbitrum-transition-normal);
 
     &:hover {

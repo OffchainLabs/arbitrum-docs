@@ -1,5 +1,6 @@
-import React from 'react';
 import Details from '@theme/Details';
+import React from 'react';
+
 import styles from './styles.module.css';
 
 interface Props {

@@ -1,19 +1,20 @@
-import React, { useState, cloneElement } from 'react';
 import {
-  useFloating,
-  useHover,
-  useFocus,
-  useDismiss,
-  useRole,
-  useInteractions,
   FloatingPortal,
-  offset,
-  flip,
-  shift,
   autoUpdate,
+  flip,
+  offset,
+  shift,
+  useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
   useMergeRefs,
+  useRole,
 } from '@floating-ui/react';
 import { MDXProvider } from '@mdx-js/react';
+import React, { cloneElement, useState } from 'react';
+
 // Remove Link import - we'll use a span instead to avoid Docusaurus broken link detection (Docusaurus's build will fail if a <Link> points to a non-existent page)
 import './styles.css';
 

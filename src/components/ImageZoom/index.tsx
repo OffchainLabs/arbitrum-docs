@@ -3,8 +3,7 @@
  *
  * A React component that adds a click-to-zoom feature to images with smooth animations.
  */
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ImageZoomProps {

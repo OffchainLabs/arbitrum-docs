@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 // @ts-ignore – module alias resolved by Docusaurus at build time
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import type { EdgeChallengeData } from './types';
-import { useEdgeChallengeState } from './useEdgeChallengeState';
+import React, { useEffect, useState } from 'react';
+
 import ControlBar from './ControlBar';
+import D3EdgeTree from './D3EdgeTree';
+import EventTimeline from './EventTimeline';
 import FlowSteps from './FlowSteps';
 import NodeDetailsPanel from './NodeDetailsPanel';
-import EventTimeline from './EventTimeline';
-import D3EdgeTree from './D3EdgeTree';
 import { ARBISCAN_BASE_URL } from './constants';
+import type { EdgeChallengeData } from './types';
+import { useEdgeChallengeState } from './useEdgeChallengeState';
 
 function EdgeChallengeFlowInner() {
   const [data, setData] = useState<EdgeChallengeData | null>(null);

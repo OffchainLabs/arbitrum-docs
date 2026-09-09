@@ -1,12 +1,12 @@
 import type {
+  AppliedState,
   DecodedEvent,
   EdgeAddedMeta,
   EdgeState,
-  AppliedState,
-  RangeNode,
-  RangeIndex,
-  LevelMeta,
   LevelGroup,
+  LevelMeta,
+  RangeIndex,
+  RangeNode,
   TreeNode,
 } from './types';
 
@@ -228,7 +228,7 @@ export function buildRangeIndex(
     if (!node) {
       node = {
         rangeKey,
-        level: Number.isFinite(added?.level) ? added!.level : edge.level ?? '-',
+        level: Number.isFinite(added?.level) ? added!.level : (edge.level ?? '-'),
         startHeight: derivedStart ?? edge.startHeight ?? null,
         endHeight: derivedEnd ?? edge.endHeight ?? null,
         length: added?.length ?? derivedLength ?? edge.length ?? null,
@@ -511,7 +511,7 @@ export function applyEvents(
       const edge: EdgeState = {
         id: ev.edgeId,
         parentId: inferredParent || existing?.parentId || null,
-        level: Number.isFinite(ev.level) ? ev.level : existing?.level ?? '-',
+        level: Number.isFinite(ev.level) ? ev.level : (existing?.level ?? '-'),
         length: ev.length ?? existing?.length ?? null,
         hasRival: ev.hasRival ?? existing?.hasRival ?? false,
         isLayerZero: ev.isLayerZero ?? existing?.isLayerZero ?? false,

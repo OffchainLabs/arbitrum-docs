@@ -23,7 +23,7 @@ To use the express lane for faster transaction inclusion, you must win an auctio
 
 <VanillaAdmonition type="note">
 
-Remember that, by default, each round lasts 60 seconds, and the auction for a specific round closes 15 seconds before the start of the round. These default values can be configured on a chain using the `roundDurationSeconds` and `auctionClosingSeconds` parameters.
+Remember that, by default, each round lasts @@timeboostRoundSeconds=60@@ seconds, and the auction for a specific round closes @@timeboostAuctionClosingSeconds=15@@ seconds before the start of the round. These default values can be configured on a chain using the `roundDurationSeconds` and `auctionClosingSeconds` parameters.
 
 </VanillaAdmonition>
 
@@ -172,7 +172,7 @@ let currentAuctionRoundIsClosed = await publicClient.readContract({
 
 :::note
 
-Remember that, by default, auctions for a given round open 60 seconds before that round starts and close 15 seconds before the round starts, so there might be no auctions opened at certain times.
+Remember that, by default, auctions for a given round open @@timeboostRoundSeconds=60@@ seconds before that round starts and close @@timeboostAuctionClosingSeconds=15@@ seconds before the round starts, so there might be no auctions opened at certain times.
 
 :::
 
@@ -315,11 +315,11 @@ const newExpressLaneController = logs[0].args.newExpressLaneController;
 console.log(`New express lane controller: ${newExpressLaneController}`);
 ```
 
-If you won the auction, congratulations! You are the express lane controller for the next round, which, by default, will start 15 seconds after the auction closes. The following section explains how we can submit a transaction to the express lane.
+If you won the auction, congratulations! You are the express lane controller for the next round, which, by default, will start @@timeboostAuctionClosingSeconds=15@@ seconds after the auction closes. The following section explains how we can submit a transaction to the express lane.
 
 ## How to submit transactions to the express lane
 
-The sequencer immediately sequences transactions sent to the express lane, while regular transactions are delayed 200ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction as the express lane controller for a given round. For background on default sequencer ordering and the feed, see [Sequencing and broadcasting](/how-arbitrum-works/deep-dives/sequencer.mdx#sequencing-and-broadcasting).
+The sequencer immediately sequences transactions sent to the express lane, while regular transactions are delayed @@timeboostNonExpressDelayMs=200@@ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction as the express lane controller for a given round. For background on default sequencer ordering and the feed, see [Sequencing and broadcasting](/how-arbitrum-works/deep-dives/sequencer.mdx#sequencing-and-broadcasting).
 
 The sequencer handles the express lane. When sending transactions to the Sequencer endpoint, we need to send a `timeboost_sendExpressLaneTransaction` request with the following information:
 
@@ -547,15 +547,15 @@ download: s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/09
 
 Below are a few of the default Timeboost parameters mentioned earlier. All these parameters and more are configurable by the chain owner.
 
-| Parameter name          | Description                                                                                                                                                                                                                      | Recommended default value                  |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                               | 60 seconds                                 |
-| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                               | 15 seconds                                 |
-| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                              | An address controlled by the chain's owner |
-| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any **ERC-20** token (assuming the token chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard **ERC-20** logic). | **WETH**                                   |
-| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                                 | 0.2 seconds, or 200 milliseconds           |
-| `reservePrice`          | The minimum bid amount accepted by the auction contract for the current Timeboost auction, denominated in `_biddingToken`.                                                                                                       | None                                       |
-| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                      | 0.001 **WETH**                             |
+| Parameter name          | Description                                                                                                                                                                                                                      | Recommended default value                                       |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                               | @@timeboostRoundSeconds=60@@ seconds                            |
+| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                               | @@timeboostAuctionClosingSeconds=15@@ seconds                   |
+| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                              | An address controlled by the chain's owner                      |
+| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any **ERC-20** token (assuming the token chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard **ERC-20** logic). | **WETH**                                                        |
+| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                                 | 0.2 seconds, or @@timeboostNonExpressDelayMs=200@@ milliseconds |
+| `reservePrice`          | The minimum bid amount accepted by the auction contract for the current Timeboost auction, denominated in `_biddingToken`.                                                                                                       | None                                                            |
+| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                      | 0.001 **WETH**                                                  |
 
 ## Troubleshooting and best practices
 
