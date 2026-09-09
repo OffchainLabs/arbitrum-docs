@@ -601,6 +601,11 @@
       "destination": "/run-arbitrum-node/reference/docker-and-cli-binaries",
       "permanent": false
     },
+    {
+      "source": "/run-arbitrum-node/data-availability",
+      "destination": "/how-arbitrum-works/deep-dives/data-availability",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",

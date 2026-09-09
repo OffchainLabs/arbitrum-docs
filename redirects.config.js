@@ -475,5 +475,9 @@ export const redirects = [
     from: '/run-arbitrum-node/nitro/docker-and-cli-binaries',
     to: '/run-arbitrum-node/reference/docker-and-cli-binaries',
   },
+  {
+    from: '/run-arbitrum-node/data-availability',
+    to: '/how-arbitrum-works/deep-dives/data-availability',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];
