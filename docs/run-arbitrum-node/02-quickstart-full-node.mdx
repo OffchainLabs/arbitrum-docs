@@ -1,0 +1,153 @@
+---
+title: 'Quickstart: run an Arbitrum full node'
+description: Start an Arbitrum One full node with Docker using recommended default settings
+user_story: As a node operator, I want to get an Arbitrum full node running quickly with sensible defaults
+content_type: quickstart
+sidebar_position: 2
+---
+
+import HardwarePartial from '../partials/_hardware-requirements.mdx';
+
+This quickstart starts an <a data-quicklook-from="arbitrum-one">Arbitrum One</a> full node with Docker, using the settings we recommend for a node that serves RPC requests. It takes four steps: prepare a data directory, start the node, confirm it syncs, and shut it down cleanly.
+
+Every choice here is a default you can change later. To run a different chain, tune performance, or pick a different state scheme, read [how to run a full node for an Arbitrum chain](/run-arbitrum-node/02-run-full-node.mdx).
+
+<VanillaAdmonition type="info">
+
+If you want to access an Arbitrum chain without running your own node, see [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx) for fully managed nodes hosted by a third party.
+
+</VanillaAdmonition>
+
+## What you need
+
+- **A parent chain RPC endpoint.** Your node reads Ethereum through it. Self-host a client or use a provider.
+- **An Ethereum beacon chain RPC endpoint.** See the [list of beacon chain RPC providers](/run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers.mdx).
+- **Docker**, and a user account that can run it.
+- **About 5 TB of free disk space** for Arbitrum One. Read [plan your disk space](#plan-your-disk-space) before you provision the volume.
+- **Hardware** that meets these minimums:
+
+<HardwarePartial />
+
+## The defaults this quickstart uses
+
+| Setting            | This quickstart                                         | Why                                                                                                                                                   |
+| :----------------- | :------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chain              | Arbitrum One (`arb1`)                                   | The most common choice. To [run a different chain](#run-a-different-chain), change one flag.                                                          |
+| State scheme       | <a data-quicklook-from="hashdb">HashDB</a>, the default | Simplest to initialize, and it supports block validation. [Compare it with PathDB](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).    |
+| Initialization     | `--init.latest=pruned`                                  | Downloads, verifies, and extracts the latest full node snapshot for you.                                                                              |
+| Validator strategy | Watchtower, the default                                 | Your node checks onchain assertions and logs any disagreement. [Read about watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode). |
+| Exposed ports      | `8547` (HTTP), `8548` (WebSocket)                       | The standard RPC ports.                                                                                                                               |
+
+<VanillaAdmonition type="caution" title="Keep RPC endpoints off untrusted networks">
+
+The command below binds RPC to `0.0.0.0` so you can reach the node from your own machine. Public exposure raises the risk of out-of-memory crashes and of the node falling behind the chain. Keep the node behind a firewall.
+
+</VanillaAdmonition>
+
+## Plan your disk space
+
+Arbitrum One requires a <a data-quicklook-from="database-snapshot">database snapshot</a> on the first run, because the snapshot supplies state from the Classic era. The `pruned` snapshot is about 2.3 TB. Nitro needs room for the download and the extracted database at the same time, so plan for about 2x the snapshot size, then add headroom for chain growth.
+
+Two problems account for most failed first runs, and you can avoid both:
+
+- **`--init.download-path` defaults to `/tmp/`.** Inside a container, `/tmp/` sits on the image's writable layer, not on your mounted volume. The command below points this flag at the mounted volume, so the archive lands on your large disk.
+- **The 2x requirement is temporary.** Nitro deletes the archive after it extracts, so the peak applies only during initialization.
+
+<VanillaAdmonition type="tip" title="Running your first node? Start with Arbitrum Sepolia">
+
+On Arbitrum One, the download and extraction take hours to days. To rehearse the whole flow against a much smaller snapshot, run Arbitrum Sepolia first, then repeat on Arbitrum One. See [run a different chain](#run-a-different-chain).
+
+</VanillaAdmonition>
+
+## 1. Create the data directory
+
+<a data-quicklook-from="arbitrum-nitro">Nitro</a> stores its database at `/home/user/.arbitrum` inside the container. Mount a host directory there so the database survives restarts.
+
+Create that directory **before** you start Docker. Otherwise Docker creates it as `root`, and the container, which runs as UID 1000, cannot write to it.
+
+```shell
+mkdir -p /some/local/dir/arbitrum/downloads
+```
+
+If you still get permission errors, see [note on permissions](/run-arbitrum-node/02-run-full-node.mdx#note-on-permissions).
+
+## 2. Start the node
+
+Replace the two endpoint placeholders with your own, then run:
+
+```shell
+docker run --rm -it \
+  -v /some/local/dir/arbitrum:/home/user/.arbitrum \
+  -p 0.0.0.0:8547:8547 \
+  -p 0.0.0.0:8548:8548 \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ \
+  --parent-chain.connection.url=<Ethereum RPC URL> \
+  --parent-chain.blob-client.beacon-url=<Ethereum beacon chain RPC URL> \
+  --chain.name=arb1 \
+  --init.latest=pruned \
+  --init.download-path=/home/user/.arbitrum/downloads \
+  --http.api=net,web3,eth \
+  --http.addr=0.0.0.0 \
+  --http.vhosts=* \
+  --http.corsdomain=*
+```
+
+The node downloads the snapshot, verifies its checksum, extracts it, and then syncs to the head of the chain.
+
+<VanillaAdmonition type="note">
+
+If your parent chain client runs on `localhost`, add `--network host` immediately after `docker run` so the container can reach it.
+
+</VanillaAdmonition>
+
+## 3. Confirm the node is syncing
+
+After initialization finishes, ask the node for its block number:
+
+```shell
+curl -X POST http://localhost:8547 \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}'
+```
+
+A result that climbs on repeated calls means the node follows the chain. Compare it against the [Arbitrum One block explorer](https://arbiscan.io/) to see how far behind you are.
+
+To check whether the node still considers itself out of date, call `eth_syncing`:
+
+```shell
+curl -X POST http://localhost:8547 \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"eth_syncing","params":[]}'
+```
+
+A `false` result means the node has caught up.
+
+## 4. Shut down cleanly
+
+Give the node time to write its current state to disk. An abrupt stop can corrupt the database and force you to initialize from a snapshot again.
+
+```shell
+docker stop --time=1800 $(docker ps -aq)
+```
+
+## Run a different chain
+
+To run a different DAO-governed chain, change `--chain.name`:
+
+| Chain            | Flag                          |
+| :--------------- | :---------------------------- |
+| Arbitrum One     | `--chain.name=arb1`           |
+| Arbitrum Nova    | `--chain.name=nova`           |
+| Arbitrum Sepolia | `--chain.name=sepolia-rollup` |
+
+To run a node for your own Arbitrum chain, the flags differ. You supply the chain's configuration, a <a data-quicklook-from="sequencer-feed">sequencer feed</a> URL, and a forwarding target. See the [required parameters](/run-arbitrum-node/02-run-full-node.mdx#required-parameters) in the full how-to.
+
+## Next steps
+
+- **Tune the node.** [Memory management](/run-arbitrum-node/02-run-full-node.mdx#memory-management) and [node tuning and monitoring](/run-arbitrum-node/operation/node-tuning-and-monitoring.mdx) cover the settings that keep a node healthy under RPC load.
+- **See every flag.** The full how-to lists the [optional parameters](/run-arbitrum-node/02-run-full-node.mdx#optional-parameters), and `--help` prints all of them.
+- **Reclaim disk space.** HashDB prunes manually, and your node stops serving RPC requests while it prunes. See [pruning](/run-arbitrum-node/02-run-full-node.mdx#pruning).
+- **Run more than one node.** Also [run a feed relay](/run-arbitrum-node/data-availability/run-feed-relay.mdx), and host the snapshot locally instead of downloading it once per node. See [downloading the snapshot manually](/run-arbitrum-node/reference/nitro-database-snapshots.mdx#downloading-the-snapshot-manually).
+- **Need historical state?** Run an [archive node](/run-arbitrum-node/more-types/01-run-archive-node.mdx) instead.
+- **Deploying to production?** [Run a full node with Helm on Kubernetes](/launch-arbitrum-chain/run-a-node/run-full-node-with-helm.mdx) covers monitoring, log signals, and network egress.
+- **Something broken?** See [troubleshooting](/run-arbitrum-node/06-troubleshooting.mdx).

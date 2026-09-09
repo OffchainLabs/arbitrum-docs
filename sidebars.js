@@ -711,6 +711,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'run-arbitrum-node/quickstart-full-node',
+          label: 'Quickstart: run a full node',
+        },
+        {
+          type: 'doc',
           id: 'run-arbitrum-node/run-full-node',
           label: 'Run a full node',
         },
