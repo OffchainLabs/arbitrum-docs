@@ -270,6 +270,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/revenue-routing',
+                  label: `Revenue routing`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-optimization',
                   label: `Gas optimization`,
                 },
@@ -277,6 +282,16 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/gas-target',
                   label: 'Gas target',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing',
+                  label: 'Parent chain data fee pricing',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
+                  label: `Priority fees`,
                 },
               ],
             },
@@ -356,6 +371,16 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
+                  label: 'Compliance filtering',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference',
+                  label: `Sequencer configuration reference`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
                   label: `Sequencer timing adjustments`,
                 },
@@ -398,8 +423,8 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/chain-config/validation/compliance-filtering',
-                  label: 'Compliance filtering',
+                  id: 'launch-arbitrum-chain/chain-config/validation/test-chain-configuration',
+                  label: `Test chain configuration`,
                 },
               ],
             },
@@ -439,6 +464,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/deploy/token-bridge',
               label: `Token bridge`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/token-bridge-troubleshooting',
+              label: `Token bridge troubleshooting`,
             },
           ],
         },
@@ -513,6 +543,16 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/bold-upgrade-playbook',
+              label: 'BoLD upgrade playbook',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/error-index',
+              label: 'Error index',
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/key-rotation',
               label: 'Key rotation',
             },
@@ -533,34 +573,49 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/sequencer-troubleshooting',
+              label: 'Sequencer troubleshooting',
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/state-growth',
               label: 'State growth',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/upgrade-runbook',
+              label: 'Upgrade runbook',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/validator-troubleshooting',
+              label: 'Validator troubleshooting',
             },
           ],
         },
         {
           type: 'category',
-          label: 'Protocol hacks',
+          label: 'Extend the protocol',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/arbos',
+              id: 'launch-arbitrum-chain/extend-the-protocol/arbos',
               label: `ArbOS`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/da-api-guide',
+              id: 'launch-arbitrum-chain/extend-the-protocol/da-api-guide',
               label: 'DA API guide',
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/precompiles',
+              id: 'launch-arbitrum-chain/extend-the-protocol/precompiles',
               label: `Precompiles`,
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/protocol-hacks/stf',
+              id: 'launch-arbitrum-chain/extend-the-protocol/stf',
               label: `State Transition Function`,
             },
           ],
@@ -720,6 +775,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/overview',
               label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos61',
+              label: 'Elara (ArbOS 61)',
             },
             {
               type: 'doc',
@@ -890,6 +950,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'arbitrum-bridge/withdrawal-monitoring',
+          label: 'Monitoring withdrawals',
+        },
+        {
+          type: 'doc',
           id: 'arbitrum-bridge/troubleshooting',
           label: 'Troubleshooting',
         },
@@ -950,6 +1015,16 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Finality',
+              id: 'how-arbitrum-works/deep-dives/finality',
+            },
+            {
+              type: 'doc',
+              label: 'Batch poster',
+              id: 'how-arbitrum-works/deep-dives/batchposter',
+            },
+            {
+              type: 'doc',
               label: 'Parent to Child chain Messaging',
               id: 'how-arbitrum-works/deep-dives/l1-to-l2-messaging',
             },
@@ -967,6 +1042,11 @@ const sidebars = {
               type: 'doc',
               label: 'Sequencer transaction flow',
               id: 'how-arbitrum-works/deep-dives/sequencer-transaction-flow',
+            },
+            {
+              type: 'doc',
+              label: 'Token bridging',
+              id: 'how-arbitrum-works/deep-dives/token-bridging',
             },
             {
               type: 'doc',
@@ -994,6 +1074,11 @@ const sidebars = {
               label: 'Geth',
               id: 'how-arbitrum-works/reference/geth',
             },
+            {
+              type: 'doc',
+              label: 'Finality and reorgs',
+              id: 'how-arbitrum-works/reference/finality-and-reorgs',
+            },
           ],
         },
         {
@@ -1006,14 +1091,9 @@ const sidebars = {
               label: 'BoLD overview',
             },
             {
-              type: 'link',
-              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-              label: 'Deploy a validator on testnet',
-            },
-            {
-              type: 'link',
-              href: 'https://arxiv.org/abs/2404.10491',
-              label: 'BoLD Whitepaper',
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/bold-faq',
+              label: 'FAQ',
             },
             {
               type: 'doc',
@@ -1032,18 +1112,8 @@ const sidebars = {
             },
             {
               type: 'link',
-              href: 'https://github.com/OffchainLabs/bold',
-              label: 'Specification on Github',
-            },
-            {
-              type: 'link',
-              href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
-              label: 'Audit Report by Trail of Bits',
-            },
-            {
-              type: 'link',
-              href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
-              label: 'Audit Report by Code4rena',
+              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+              label: 'Deploy a validator on testnet',
             },
           ],
         },
@@ -1797,11 +1867,6 @@ const sidebars = {
       type: 'doc',
       id: 'notices/arbos61-upgrade-notice',
       label: 'Upgrade notice for ArbOS 61',
-    },
-    {
-      type: 'doc',
-      id: 'notices/arbos60-upgrade-notice',
-      label: 'Upgrade notice for ArbOS 60',
     },
     {
       type: 'doc',

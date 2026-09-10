@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import type { RangeNode, AppliedState, LevelMeta, EdgeAddedMeta } from './types';
-import { shortHex, normalizeHex, formatRangeText, resolveLevelType } from './edgeChallengeLogic';
+
 import { ARBISCAN_BASE_URL } from './constants';
+import { formatRangeText, normalizeHex, resolveLevelType, shortHex } from './edgeChallengeLogic';
+import type { AppliedState, EdgeAddedMeta, LevelMeta, RangeNode } from './types';
 
 interface NodeDetailsPanelProps {
   selectedNodeKey: string | null;

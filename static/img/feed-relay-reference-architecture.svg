@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 540" width="800" height="540" role="img">
+<title>Feed relay reference architecture</title>
+<desc>The upstream feed endpoint feeds two relays, relay A in region 1 and relay B in region 2. Each relay holds two primary upstream connections from a distinct egress IP. Nodes in each region connect to both relays as primary feeds: their local relay and the relay in the other region.</desc>
+<defs><linearGradient id="brandbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#152c4e"/><stop offset="0.55" stop-color="#1b4add"/><stop offset="1" stop-color="#12aaff"/></linearGradient><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#eaf5ff"/></marker></defs>
+<rect x="0" y="0" width="800" height="540" fill="url(#brandbg)"/>
+<g font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<rect x="250" y="36" width="300" height="56" rx="10" fill="#12aaff"/>
+<text x="400" y="71" font-size="20" font-weight="600" fill="#0b1b2e" text-anchor="middle">Upstream feed endpoint</text>
+<path d="M320 92 L180 186" fill="none" stroke="#eaf5ff" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M355 92 L220 186" fill="none" stroke="#eaf5ff" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M445 92 L580 186" fill="none" stroke="#eaf5ff" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M480 92 L620 186" fill="none" stroke="#eaf5ff" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="80" y="190" width="240" height="96" rx="10" fill="#213147"/>
+<text x="200" y="222" font-size="20" font-weight="600" fill="#ffffff" text-anchor="middle">Relay A (region 1)</text>
+<text x="200" y="248" font-size="15" fill="#c9dcef" text-anchor="middle">Two upstream connections</text>
+<text x="200" y="270" font-size="15" fill="#c9dcef" text-anchor="middle">Distinct egress IP</text>
+<rect x="480" y="190" width="240" height="96" rx="10" fill="#213147"/>
+<text x="600" y="222" font-size="20" font-weight="600" fill="#ffffff" text-anchor="middle">Relay B (region 2)</text>
+<text x="600" y="248" font-size="15" fill="#c9dcef" text-anchor="middle">Two upstream connections</text>
+<text x="600" y="270" font-size="15" fill="#c9dcef" text-anchor="middle">Distinct egress IP</text>
+<path d="M160 286 L160 416" fill="none" stroke="#eaf5ff" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M260 286 L560 416" fill="none" stroke="#eaf5ff" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M640 286 L640 416" fill="none" stroke="#eaf5ff" stroke-width="2.5" marker-end="url(#arrow)"/>
+<path d="M540 286 L240 416" fill="none" stroke="#eaf5ff" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="80" y="420" width="240" height="56" rx="10" fill="#9dcced" stroke="#152c4e" stroke-width="1.5"/>
+<text x="200" y="455" font-size="20" font-weight="600" fill="#0b1b2e" text-anchor="middle">Nodes in region 1</text>
+<rect x="480" y="420" width="240" height="56" rx="10" fill="#9dcced" stroke="#152c4e" stroke-width="1.5"/>
+<text x="600" y="455" font-size="20" font-weight="600" fill="#0b1b2e" text-anchor="middle">Nodes in region 2</text>
+</g></svg>

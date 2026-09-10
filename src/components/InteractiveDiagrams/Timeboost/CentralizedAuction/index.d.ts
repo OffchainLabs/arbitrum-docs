@@ -1,5 +1,4 @@
 /** Type declarations for index.jsx (legacy untyped JSX module). */
-
 import type { FC, SVGProps } from 'react';
 
 declare const CentralizedAuction: FC;

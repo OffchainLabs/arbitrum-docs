@@ -1,6 +1,7 @@
 import React from 'react';
-import CentralizedAuction from './Timeboost/CentralizedAuction';
+
 import EdgeChallengeFlow from './Bold/EdgeChallengeFlow';
+import CentralizedAuction from './Timeboost/CentralizedAuction';
 
 interface InteractiveDiagramsProps {
   type: string;

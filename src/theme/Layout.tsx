@@ -1,7 +1,8 @@
-import React from 'react';
-import OriginalLayout from '@theme-original/Layout';
 import Head from '@docusaurus/Head';
 import { useLocation } from '@docusaurus/router';
+import OriginalLayout from '@theme-original/Layout';
+import React from 'react';
+
 // import { PostHogProvider } from '@site/src/components/PostHogProvider';
 
 const pathNameToPreviewText = (pathName: string) => {

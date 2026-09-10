@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import clsx from 'clsx';
 import Translate from '@docusaurus/Translate';
-import type { Props } from '@theme/NotFound/Content';
 import Heading from '@theme/Heading';
+import type { Props } from '@theme/NotFound/Content';
+import clsx from 'clsx';
 import { usePostHog } from 'posthog-js/react';
+import React, { useEffect } from 'react';
 
 export default function NotFoundContent({ className }: Props): React.ReactElement {
   const posthog = usePostHog();

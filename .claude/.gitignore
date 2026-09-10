@@ -1,0 +1,23 @@
+# Everything in .claude/ that is machine-local, not project config.
+#
+# The tracked files here (settings.json, hooks/, agents/, skills/) are shared
+# project tooling. The paths below are per-developer state and must stay out of
+# the repo. Add your own skills or agents deliberately with `git add`.
+
+# Per-developer permissions, env, and MCP grants. settings.json is the shared
+# file; this one is yours alone and routinely holds absolute local paths.
+settings.local.json
+
+# Editor/run configuration, personal to whoever created it.
+launch.json
+
+# Agent worktrees. These are full checkouts and can reach hundreds of MB.
+worktrees/
+
+# Packaged skill bundles. They duplicate the live directories and go stale.
+*.zip
+
+# Build and OS noise.
+__pycache__/
+*.py[cod]
+.DS_Store

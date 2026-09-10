@@ -1,6 +1,6 @@
-import React from 'react';
-import { PostHogProvider as BasePostHogProvider } from 'posthog-js/react';
 import type { PostHogConfig } from 'posthog-js';
+import { PostHogProvider as BasePostHogProvider } from 'posthog-js/react';
+import React from 'react';
 
 const options: Partial<PostHogConfig> = {
   api_host: 'https://app.posthog.com',

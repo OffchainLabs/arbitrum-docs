@@ -9,7 +9,7 @@ content_type: how-to
 
 ## Overview
 
-A local full-chain simulation allows you to deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of setting up and running a complete development environment on your local machine, including a Nitro node, a dev-mode Geth parent chain, and multiple instances with different roles.
+A local full-chain simulation allows you to deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of setting up and running a complete development environment on your local machine, including a Nitro node, a dev-mode <a data-quicklook-from="geth">Geth</a> <a data-quicklook-from="parent-chain">parent chain</a>, and multiple instances with different roles.
 
 Note that the node is now Stylus-enabled by default, and the setup instructions remain the same as for running a Stylus dev node.
 
@@ -19,7 +19,7 @@ You'll need [Docker](https://docs.docker.com/get-docker/) and [docker compose](h
 
 ## Step 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
 
-<p>You'll need the `release` branch.</p>
+You'll need the `release` branch.
 
 ```bash
   `git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode`
@@ -69,7 +69,7 @@ docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
 
 ## Running an L3 chain
 
-An L3 chain can be deployed on top of the child chain (L2), by using the parameter `--l3node`. Its chain configuration can be found by running:
+An <a data-quicklook-from="layer-3-l3">L3</a> chain can be deployed on top of the <a data-quicklook-from="child-chain">child chain</a> (L2), by using the parameter `--l3node`. Its chain configuration can be found by running:
 
 ```bash
 docker exec nitro-testnode-sequencer-1 cat /config/l3_chain_info.json
@@ -77,7 +77,7 @@ docker exec nitro-testnode-sequencer-1 cat /config/l3_chain_info.json
 
 When deploying an L3 chain, the following parameters are also available:
 
-`--l3-fee-token`: Uses a custom gas token for the L3 (symbol $APP), deployed on L2 at address `0x9b7c0fcc305ca36412f87fd6bd08c194909a7d4e`
+`--l3-fee-token`: Uses a <a data-quicklook-from="custom-gas-token">custom gas token</a> for the L3 (symbol $APP), deployed on L2 at address `0x9b7c0fcc305ca36412f87fd6bd08c194909a7d4e`
 `--l3-token-bridge`: Deploys an L2-L3 token bridge. The list of contracts can be found by running `docker compose run --entrypoint sh tokenbridge -c "cat l2l3_network.json"`.
 
 ## Additional arguments

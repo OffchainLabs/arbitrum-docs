@@ -129,7 +129,7 @@ The <a data-quicklook-from="parent-chain">parent chain</a> connection settings (
 | Key                            | Default    | Description                                                                         |
 | ------------------------------ | ---------- | ----------------------------------------------------------------------------------- |
 | `delay-on-error`               | `1s`       | Wait time before retrying after sync error                                          |
-| `eager`                        | `false`    | Eagerly sync batch data using <a data-quicklook-from="l1">L1</a> as index (vs lazy) |
+| `eager`                        | `false`    | Eagerly sync batch data using <a data-quicklook-from="L1">L1</a> as index (vs lazy) |
 | `eager-lower-bound-block`      | —          | Starting L1 block for eager sync (only if no prior state)                           |
 | `ignore-write-errors`          | `true`     | Log-only on write failures during sync                                              |
 | `parent-chain-blocks-per-read` | `100`      | Max L1 blocks to read per eager sync poll                                           |
@@ -154,9 +154,9 @@ The <a data-quicklook-from="parent-chain">parent chain</a> connection settings (
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client.data-stream`
 
-| Key                         | Default          | Description                      |
-| --------------------------- | ---------------- | -------------------------------- |
-| `max-store-chunk-body-size` | `5242880` (5 MB) | Maximum HTTP body size per chunk |
+| Key                         | Default                                    | Description                      |
+| --------------------------- | ------------------------------------------ | -------------------------------- |
+| `max-store-chunk-body-size` | `@@dasMaxStoreChunkBytes=5242880@@` (5 MB) | Maximum HTTP body size per chunk |
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods`
 
@@ -196,9 +196,9 @@ The <a data-quicklook-from="parent-chain">parent chain</a> connection settings (
 
 ### `node.da.external-provider.data-stream`
 
-| Key                         | Default          | Description                      |
-| --------------------------- | ---------------- | -------------------------------- |
-| `max-store-chunk-body-size` | `5242880` (5 MB) | Maximum HTTP body size per chunk |
+| Key                         | Default                                    | Description                      |
+| --------------------------- | ------------------------------------------ | -------------------------------- |
+| `max-store-chunk-body-size` | `@@dasMaxStoreChunkBytes=5242880@@` (5 MB) | Maximum HTTP body size per chunk |
 
 ### `node.da.external-provider.data-stream.rpc-methods`
 

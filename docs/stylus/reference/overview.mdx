@@ -10,7 +10,7 @@ content_type: 'reference'
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
 
-The [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs) (v0.10.7) lets you write Solidity ABI-equivalent smart contracts in Rust, compiled to WebAssembly and executed on Arbitrum chains. For a conceptual introduction, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first contract, see the [Quickstart](../quickstart.mdx).
+The [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs) (v@@stylusSdkVersion=0.10.7@@) lets you write Solidity ABI-equivalent smart contracts in Rust, compiled to WebAssembly and executed on Arbitrum chains. For a conceptual introduction, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first contract, see the [Quickstart](../quickstart.mdx).
 
 The SDK is built on [Alloy](https://docs.rs/alloy-primitives/latest/alloy_primitives/), the standard Rust Ethereum primitive library. Because both share the same types, Stylus contracts are compatible with the broader Rust Ethereum ecosystem.
 
@@ -35,7 +35,7 @@ The SDK is a Cargo workspace of six crates. Most developers only interact with `
 | `stylus-tools`                                                | Deployment, activation, verification, and caching operations (used by `cargo-stylus`)               |
 | `cargo-stylus`                                                | CLI tool for building, deploying, debugging, and managing Stylus contracts                          |
 
-**Requirements:** Rust 1.91.0 or later (pinned in `rust-toolchain.toml`). Contracts compile to the `wasm32-unknown-unknown` target.
+**Requirements:** Rust @@stylusRustToolchainFull=1.91.0@@ or later (pinned in `rust-toolchain.toml`). Contracts compile to the `wasm32-unknown-unknown` target.
 
 ## Feature flags
 

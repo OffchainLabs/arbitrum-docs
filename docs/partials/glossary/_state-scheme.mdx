@@ -1,0 +1,7 @@
+---
+title: State Scheme
+key: state-scheme
+titleforSort: State Scheme
+---
+
+The layout Nitro uses to store its state trie on disk, selected with `--execution.caching.state-scheme`. Nitro supports two: [HashDB](/intro/glossary#hashdb) (the default) and [PathDB](/intro/glossary#pathdb). The two are not interchangeable — a node can only start from a [database snapshot](/intro/glossary#database-snapshot) built with the same state scheme, so switching means re-initializing the database.

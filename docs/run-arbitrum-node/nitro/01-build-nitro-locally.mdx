@@ -6,7 +6,7 @@ sidebar_position: 7
 content_type: how-to
 ---
 
-Arbitrum Nitro is the software that powers all Arbitrum chains. This how-to shows how you can build a Docker image, or binaries, directly from Nitro's source code. If you want to run a node for one of the Arbitrum chains, however, it is recommended that you use the docker image available on DockerHub, as explained in [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx).
+<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> is the software that powers all <a data-quicklook-from="arbitrum-chains">Arbitrum chains</a>. This how-to shows how you can build a Docker image, or binaries, directly from Nitro's source code. If you want to run a node for one of the Arbitrum chains, however, it is recommended that you use the docker image available on DockerHub, as explained in [How to run a full node](/run-arbitrum-node/02-run-full-node.mdx).
 
 This how-to assumes that you're running one of the following operating systems:
 
@@ -39,7 +39,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo service docker start
 ```
 
-:::note
+:::info
 
 If you are running Ubuntu 22.04, you might get an `Unable to locate package docker-buildx-plugin` error. Try `sudo apt install docker-buildx` instead.
 
@@ -64,7 +64,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.11.2@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.11.3@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -234,7 +234,7 @@ To run your node using the generated binaries, use the following command from th
 
 #### WASM module root error (v2.3.4 or later)
 
-Since v2.3.4, the State Transition Function (STF) contains code that is not yet activated on the current mainnet and testnet chains. Because of that, you might receive the following error when connecting your built node to those chains:
+Since v2.3.4, the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) contains code that is not yet activated on the current mainnet and testnet chains. Because of that, you might receive the following error when connecting your built node to those chains:
 
 ```shell
 ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-chain WASM module root err="stat {WASM_MODULE_ROOT}: no such file or directory"
