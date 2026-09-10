@@ -32,7 +32,7 @@ If you want to access an Arbitrum chain without running your own node, see [RPC 
 
 | Setting            | This quickstart                                         | Why                                                                                                                                                   |
 | :----------------- | :------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Chain              | Arbitrum One (`arb1`)                                   | The most common choice. To [run a different chain](#run-a-different-chain), change one flag.                                                          |
+| Chain              | Arbitrum One (`arb1`)                                   | The most common choice. To [run a different chain](#run-a-different-chain), change `--chain.name` and the parent chain endpoints.                     |
 | State scheme       | <a data-quicklook-from="hashdb">HashDB</a>, the default | Simplest to initialize, and it supports block validation. [Compare it with PathDB](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).    |
 | Initialization     | `--init.latest=pruned`                                  | Downloads, verifies, and extracts the latest full node snapshot for you.                                                                              |
 | Validator strategy | Watchtower, the default                                 | Your node checks onchain assertions and logs any disagreement. [Read about watchtower mode](/run-arbitrum-node/02-run-full-node.mdx#watchtower-mode). |
@@ -46,16 +46,26 @@ The command below binds RPC to `0.0.0.0` so you can reach the node from your own
 
 ## Plan your disk space
 
-Arbitrum One requires a <a data-quicklook-from="database-snapshot">database snapshot</a> on the first run, because the snapshot supplies state from the Classic era. The `pruned` snapshot is about 2.3 TB. Nitro needs room for the download and the extracted database at the same time, so plan for about 2x the snapshot size, then add headroom for chain growth.
+Arbitrum One requires a <a data-quicklook-from="database-snapshot">database snapshot</a> on the first run, because the snapshot supplies state from the Classic era. The `pruned` snapshot is about 2.4 TB. Nitro needs room for the download and the extracted database at the same time, so plan for about 2x the snapshot size, then add headroom for chain growth.
 
 Two problems account for most failed first runs, and you can avoid both:
 
 - **`--init.download-path` defaults to `/tmp/`.** Inside a container, `/tmp/` sits on the image's writable layer, not on your mounted volume. The command below points this flag at the mounted volume, so the archive lands on your large disk.
 - **The 2x requirement is temporary.** Nitro deletes the archive after it extracts, so the peak applies only during initialization.
 
-<VanillaAdmonition type="tip" title="Running your first node? Start with Arbitrum Sepolia">
+<VanillaAdmonition type="tip" title="Running your first node? Start with Arbitrum Nova">
 
-On Arbitrum One, the download and extraction take hours to days. To rehearse the whole flow against a much smaller snapshot, run Arbitrum Sepolia first, then repeat on Arbitrum One. See [run a different chain](#run-a-different-chain).
+On Arbitrum One, the download and extraction take hours to days. Arbitrum Nova has the smallest snapshot of the DAO-governed chains, so it rehearses the whole flow fastest:
+
+| Chain            | Pruned snapshot |
+| :--------------- | :-------------- |
+| Arbitrum One     | About 2.4 TB    |
+| Arbitrum Sepolia | About 1.6 TB    |
+| Arbitrum Nova    | About 580 GB    |
+
+A testnet chain is not a small chain here. Arbitrum Sepolia still needs about 1.6 TB, so it saves you little over Arbitrum One. Run Nova first, then repeat on the chain you want. See [run a different chain](#run-a-different-chain).
+
+Snapshots grow over time. Each one publishes a `metadata.json` that gives its current total size. Read it before you provision a disk. See [Nitro database snapshots](/run-arbitrum-node/reference/nitro-database-snapshots.mdx#downloading-the-snapshot-from-a-url).
 
 </VanillaAdmonition>
 
@@ -77,6 +87,7 @@ Replace the two endpoint placeholders with your own, then run:
 
 ```shell
 docker run --rm -it \
+  --name arbitrum-node \
   -v /some/local/dir/arbitrum:/home/user/.arbitrum \
   -p 0.0.0.0:8547:8547 \
   -p 0.0.0.0:8548:8548 \
@@ -126,19 +137,33 @@ A `false` result means the node has caught up.
 
 Give the node time to write its current state to disk. An abrupt stop can corrupt the database and force you to initialize from a snapshot again.
 
+Stop the node by name, and give it up to 30 minutes to finish writing:
+
 ```shell
-docker stop --time=1800 $(docker ps -aq)
+docker stop --timeout=1800 arbitrum-node
 ```
+
+<VanillaAdmonition type="caution" title="Do not stop every container at once">
+
+You may see `docker stop --time=1800 $(docker ps -aq)` in older instructions. Avoid it. `docker ps -aq` returns every container on the host, so the command stops your other workloads too. Docker also deprecated `--time` in favor of `--timeout`.
+
+</VanillaAdmonition>
 
 ## Run a different chain
 
-To run a different DAO-governed chain, change `--chain.name`:
+To run a different DAO-governed chain, change `--chain.name` and point the parent chain flags at that chain's parent:
 
-| Chain            | Flag                          |
-| :--------------- | :---------------------------- |
-| Arbitrum One     | `--chain.name=arb1`           |
-| Arbitrum Nova    | `--chain.name=nova`           |
-| Arbitrum Sepolia | `--chain.name=sepolia-rollup` |
+| Chain            | Flag                          | Parent chain     |
+| :--------------- | :---------------------------- | :--------------- |
+| Arbitrum One     | `--chain.name=arb1`           | Ethereum mainnet |
+| Arbitrum Nova    | `--chain.name=nova`           | Ethereum mainnet |
+| Arbitrum Sepolia | `--chain.name=sepolia-rollup` | Ethereum Sepolia |
+
+Arbitrum Sepolia settles to Ethereum Sepolia, so it needs Sepolia endpoints for both `--parent-chain.connection.url` and `--parent-chain.blob-client.beacon-url`. If you change only `--chain.name`, the node reads the wrong parent chain and exits at startup:
+
+```text
+CRIT [00-00|00:00:00.000] L1 chainID doesn't fit config    found=1 expected=11,155,111
+```
 
 To run a node for your own Arbitrum chain, the flags differ. You supply the chain's configuration, a <a data-quicklook-from="sequencer-feed">sequencer feed</a> URL, and a forwarding target. See the [required parameters](/run-arbitrum-node/02-run-full-node.mdx#required-parameters) in the full how-to.
 
