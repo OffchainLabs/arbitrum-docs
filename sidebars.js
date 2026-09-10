@@ -716,18 +716,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/run-local-full-chain-simulation',
+          id: 'build-decentralized-apps/run-local-full-chain-simulation',
           label: 'Run a local full chain simulation',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/run-nitro-dev-node',
-          label: 'Run a local dev node',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/build-nitro-locally',
-          label: 'Build Nitro locally',
         },
         {
           type: 'doc',
@@ -1202,6 +1192,16 @@ const sidebars = {
           type: 'doc',
           id: 'build-decentralized-apps/quickstart-create-a-token',
           label: 'Create a token',
+        },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/run-nitro-dev-node',
+          label: 'Run a local dev node',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/build-nitro-locally',
+          label: 'Build Nitro locally',
         },
         {
           type: 'ref',

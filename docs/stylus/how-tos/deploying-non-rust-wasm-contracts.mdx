@@ -506,7 +506,7 @@ Build the Zig library to a freestanding WASM file for onchain deployment:
 zig build-lib ./src/main.zig -target wasm32-freestanding -dynamic --export=user_entrypoint -OReleaseSmall --export=mark_unused
 ```
 
-Deploy it with the Stylus CLI tool. This example deploys to Arbitrum Sepolia; you can also target a [local Stylus devnode](/run-arbitrum-node/run-local-full-chain-simulation) at `http://localhost:8547`:
+Deploy it with the Stylus CLI tool. This example deploys to Arbitrum Sepolia; you can also target a [local Stylus devnode](/build-decentralized-apps/run-local-full-chain-simulation) at `http://localhost:8547`:
 
 ```shell
 cargo stylus deploy \

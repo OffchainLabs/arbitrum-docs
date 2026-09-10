@@ -484,6 +484,14 @@ export const redirects = [
     from: '/run-arbitrum-node/data-availability',
     to: '/how-arbitrum-works/deep-dives/data-availability',
   },
+  {
+    from: '/run-arbitrum-node/run-local-full-chain-simulation',
+    to: '/build-decentralized-apps/run-local-full-chain-simulation',
+  },
+  {
+    from: '/run-arbitrum-node/run-nitro-dev-node',
+    to: '/build-decentralized-apps/run-nitro-dev-node',
+  },
   // AUTO-GENERATED REDIRECTS END
   // Manual redirect — "Prepare to run a node" merged into the full node how-to
   {

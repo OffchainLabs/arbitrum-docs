@@ -612,6 +612,16 @@
       "permanent": false
     },
     {
+      "source": "/run-arbitrum-node/run-local-full-chain-simulation",
+      "destination": "/build-decentralized-apps/run-local-full-chain-simulation",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/run-nitro-dev-node",
+      "destination": "/build-decentralized-apps/run-nitro-dev-node",
+      "permanent": false
+    },
+    {
       "source": "/run-arbitrum-node/start-here",
       "destination": "/run-arbitrum-node/run-full-node",
       "permanent": false
