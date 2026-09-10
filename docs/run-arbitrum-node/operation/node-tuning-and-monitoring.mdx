@@ -249,6 +249,25 @@ spec:
       interval: 5s
 ```
 
+The [community Helm chart](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/nitro) wires this for you when you set `serviceMonitor.enabled=true`.
+
+### Grafana dashboard
+
+The chart repository's README points to the Grafana dashboard on its [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases). If a release does not attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
+
+```shell
+git clone https://github.com/OffchainLabs/community-helm-charts
+git -C community-helm-charts show 430a2cc~1:operations/grafana/dashboards/overview.json > overview.json
+```
+
+Then in Grafana, go to **Dashboards → Import** and paste `overview.json`.
+
+<VanillaAdmonition type="caution">
+
+This exported dashboard has no `__inputs` datasource prompt, and its `Source` variable is hard-pinned to an internal Mimir UID. After importing, you **must** repoint the `Source` variable at your own Prometheus instance, or every panel reads "No data." Then set `nitronodejob` to this node's scrape job, and leave `sequencerjob`, `validatorjob`, and `relayjob` empty so only the full-node rows render.
+
+</VanillaAdmonition>
+
 ## Health check patterns
 
 Nitro components expose health information through different mechanisms depending on the binary.
@@ -284,6 +303,47 @@ startupProbe:
 ```
 
 This configuration allows up to 28 days (2,419,200 seconds) for the node to become responsive. Once the startup probe succeeds, standard liveness and readiness probes take over.
+
+## Log signals to watch
+
+The following INFO, WARN, and ERROR strings distinguish a healthy node from a broken one on any Arbitrum chain, whichever way you deploy it. The sequencer hostnames in the examples below are Arbitrum One's; your chain's differ. To get structured output, set `log-type=json`. The community Helm chart sets it for you.
+
+| Event                              | Healthy signal                                                                              | Broken or warning signal                                                                                                                              |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **New block created**              | `INFO created block` with `l2Block` / `l2BlockHash`, advancing continuously while producing | No advancing `created block` line → block production stalled                                                                                          |
+| **User tx forwarded to sequencer** | Success is not logged                                                                       | `WARN error forwarding transaction trying different target`; `ERROR Failed to publish transaction to any of the forwarding targets`                   |
+| **Sequencer feed message**         | `INFO Feed connected`; `DEBUG received batch item`                                          | `WARN failed connect to sequencer broadcast, waiting and retrying`; `ERROR Server connection timed out without receiving data`                        |
+| **Inbox messages (parent chain)**  | `INFO InboxTracker` with `sequencerBatchCount` / `messageCount` / `l1Block` advancing       | `WARN error reading inbox`. **Note**: `backwards reorg of delayed messages` is logged at INFO level—it's normal on parent-chain reorgs, not an alert. |
+
+### Why a full node can't forward transactions to the sequencer
+
+A full node forwards user transactions to the <a data-quicklook-from="sequencer">sequencer</a>. When forwarding fails, the cause falls into one of three buckets. Forwarding failures are **log-based, not metric-based**—the forwarder emits no metrics—so alert by grepping the log strings below.
+
+| Cause                                                                                      | Signal                                                                                                                                         |
+| :----------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| **All forwarding targets unreachable** (egress blocked, or sequencer + all fallbacks down) | `ERROR Failed to publish transaction to any of the forwarding targets`, preceded by per-target `WARN` lines                                    |
+| **Sequencer returns a business error** (non-connection, for example `nonce too low`)       | `WARN error forwarding transaction trying different target` with the sequencer's `err`—not escalated; the error is returned to the caller      |
+| **Memory 429 throttling** (rejected before forwarding)                                     | The client receives `HTTP 429 Too many requests` and the metric `arb/rpc/limitcheck/failure` increments. There is **no per-request log line**. |
+
+Representative log lines (hostnames shown are Arbitrum One's):
+
+```text
+# (a) ALL TARGETS UNREACHABLE — egress blocked, or sequencer + all fallbacks down
+WARN  error forwarding transaction trying different target  current target=https://arb1-sequencer.arbitrum.io/rpc  err="dial tcp: lookup ...: no such host"
+WARN  error forwarding transaction to a backup target        target=https://arb1-sequencer-fallback-1.arbitrum.io/rpc  pos=1 total targets=6  err="timeout exceeded"
+ERROR Failed to publish transaction to any of the forwarding targets   numTargets=6
+
+# (b) SEQUENCER RETURNS A BUSINESS ERROR (non-connection) — logged once, NOT escalated, returned to caller
+WARN  error forwarding transaction trying different target  current target=https://arb1-sequencer.arbitrum.io/rpc  err="nonce too low: address 0x..., tx: 5 state: 7"
+#   (no "Failed to publish..." line follows — the error is handed straight back to the RPC client)
+
+# (c) MEMORY 429 THROTTLING — rejected BEFORE it reaches the forwarder; no per-request log line.
+#     The signals are an HTTP 429 to the client and an increment of arb/rpc/limitcheck/failure.
+INFO  Cgroups v2 detected, enabling memory limit RPC throttling     # startup, confirms throttling is active
+ERROR Error checking memory limit  err=...  checker=CgroupsMemoryLimitChecker   # only if the cgroup read fails
+```
+
+For error strings mapped to specific fixes, see [troubleshooting](/run-arbitrum-node/06-troubleshooting.mdx).
 
 ## Tuning recommendations
 

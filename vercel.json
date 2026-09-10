@@ -7,6 +7,11 @@
   "redirects": [
     { "source": "/__redirects-autogen-start__", "destination": "/", "permanent": false },
     {
+      "source": "/launch-arbitrum-chain/run-a-node/run-full-node-with-helm",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
       "source": "/stylus/using-cli",
       "destination": "/stylus/cli-tools/overview",
       "permanent": false

@@ -9,6 +9,11 @@
  * webpack's build-dependency cache; `redirects.config.d.ts` supplies the types for the tooling.
  */
 export const redirects = [
+  // Manual redirect — the Helm/Kubernetes guide merged into the full node how-to as a tab
+  {
+    from: '/launch-arbitrum-chain/run-a-node/run-full-node-with-helm',
+    to: '/run-arbitrum-node/run-full-node',
+  },
   // Manual redirects — Stylus docs modernization (retired/merged pages)
   { from: '/stylus/using-cli', to: '/stylus/cli-tools/overview' },
   { from: '/stylus/concepts/public-preview-expectations', to: '/stylus/gentle-introduction' },

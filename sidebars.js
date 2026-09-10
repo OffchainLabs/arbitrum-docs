@@ -623,14 +623,9 @@ const sidebars = {
             {
               type: 'html',
               value:
-                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-full-node">Run a full node <span class="other-section-icon">↓</span></a>',
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-full-node">Run a full node (Docker or Helm) <span class="other-section-icon">↓</span></a>',
               // q: why use an anchor html tag here?
               // a: see note at end of file
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/run-a-node/run-full-node-with-helm',
-              label: 'Run a full node (Helm/Kubernetes)',
             },
             {
               type: 'html',
@@ -723,13 +718,6 @@ const sidebars = {
           type: 'doc',
           id: 'run-arbitrum-node/run-local-full-chain-simulation',
           label: 'Run a local full chain simulation',
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/launch-arbitrum-chain/run-a-node/run-full-node-with-helm">Run a full node with helm<span class="other-section-icon">↓</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
         },
         {
           type: 'doc',

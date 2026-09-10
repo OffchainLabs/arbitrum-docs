@@ -12,9 +12,38 @@ Nitro stores the <a data-quicklook-from="chain-state">chain state</a> and data i
 
 For an overview of snapshots in the context of initial node setup, see the [Database snapshots section of How to run a full node](/run-arbitrum-node/02-run-full-node.mdx#database-snapshots).
 
+## Snapshot kinds
+
+Each chain publishes snapshots per <a data-quicklook-from="state-scheme">state scheme</a>, and a snapshot only works with a node running the same scheme:
+
+| Snapshot kind  | Node type | State scheme                               | Available for               |
+| :------------- | :-------- | :----------------------------------------- | :-------------------------- |
+| `pruned`       | Full node | <a data-quicklook-from="hashdb">HashDB</a> | Arbitrum One, Nova, Sepolia |
+| `full-path`    | Full node | <a data-quicklook-from="pathdb">PathDB</a> | Arbitrum One, Nova, Sepolia |
+| `archive`      | Archive   | HashDB                                     | Arbitrum One, Nova, Sepolia |
+| `archive-path` | Archive   | PathDB                                     | Arbitrum One, Sepolia       |
+
+Only the HashDB kinds distinguish pruned from unpruned. PathDB prunes as the node runs, so every PathDB snapshot is already pruned to its state-history window, and there is no separate unpruned variant to publish. The `pruned` kind exists because you prune a HashDB database manually, and the published HashDB full node snapshots happen to be pruned ones.
+
+HashDB and PathDB full node snapshots are close in size at comparable dates, so size alone is not a reason to prefer one scheme. Sizes grow over time, so read the `metadata.json` in a snapshot directory for its current total before you provision a disk.
+
+Snapshots for other Arbitrum chains may be available at the discretion of the chain's team. Ask them if you want to use one.
+
 ## Supply the snapshot URL to Nitro
 
 There are multiple ways to supply Nitro with the database snapshot. The most straightforward way is to provide the configuration, so Nitro downloads the snapshot by itself. It is also possible to download the database manually and supply it to Nitro.
+
+### Which initialization mode should I use?
+
+| Scenario                                        | Recommended parameter                                                                                                                                                               |
+| :---------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Setting up a new **full node** on **HashDB**    | `--init.latest pruned`                                                                                                                                                              |
+| Setting up a new **full node** on **PathDB**    | The `full-path` snapshot with `--init.url`. `--init.latest` does not accept this kind.                                                                                              |
+| Setting up a new **archive** node on **HashDB** | `--init.latest archive`. The publicly hosted `archive` snapshot is outdated on Arbitrum One and Sepolia.                                                                            |
+| Setting up a new **archive** node on **PathDB** | The `archive-path` snapshot with `--init.url`, on Arbitrum One and Sepolia. It is smaller and more current than the HashDB `archive` snapshot. Nova has no `archive-path` snapshot. |
+| Reducing disk usage on an **existing** node     | `--init.prune full` (or `minimal`). HashDB only; PathDB prunes the state trie automatically.                                                                                        |
+| Hosting one snapshot for **multiple nodes**     | Download manually, then use `--init.url file:///path/to/archive.tar` on each node.                                                                                                  |
+| Using a **custom snapshot URL**                 | `--init.url https://your-snapshot-url/archive.tar`                                                                                                                                  |
 
 ## Downloading the latest snapshot
 
@@ -22,7 +51,7 @@ Nitro has a CLI configuration for downloading the latest snapshot from a remote 
 
 :::info
 
-All three kinds that `--init.latest` accepts resolve to <a data-quicklook-from="hashdb">HashDB</a> snapshots, so `--init.latest` cannot bootstrap a <a data-quicklook-from="pathdb">PathDB</a> node. See [PathDB snapshots](#pathdb-snapshots).
+All three kinds that `--init.latest` accepts resolve to HashDB snapshots, so `--init.latest` cannot bootstrap a PathDB node. See [PathDB snapshots](#pathdb-snapshots).
 
 :::
 
@@ -44,14 +73,9 @@ Nitro also supports importing files from the local file system. In this case, yo
 
 ## PathDB snapshots
 
-A snapshot only works with a node whose <a data-quicklook-from="state-scheme">state scheme</a> matches the snapshot's. A PathDB snapshot won't initialize a HashDB node, and the reverse also fails.
+A snapshot only works with a node whose state scheme matches the snapshot's. A PathDB snapshot won't initialize a HashDB node, and the reverse also fails.
 
-`--init.latest` can't help you here: it accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots. Snapshots built with the `path` scheme are published under two separate kinds that `--init.latest` doesn't accept:
-
-| Kind           | Node type | Available for               |
-| :------------- | :-------- | :-------------------------- |
-| `full-path`    | Full node | Arbitrum One, Nova, Sepolia |
-| `archive-path` | Archive   | Arbitrum One, Sepolia       |
+`--init.latest` can't help you here: it accepts only `archive`, `pruned`, and `genesis`, and all three resolve to HashDB snapshots. Snapshots built with the `path` scheme are published under the separate `full-path` and `archive-path` kinds, which `--init.latest` doesn't accept. See [Snapshot kinds](#snapshot-kinds) for which chains publish each one.
 
 Every PathDB snapshot is <a data-quicklook-from="state-pruning">pruned</a> to its state-history window, because PathDB prunes as the node runs. There is no unpruned `path` variant to publish.
 
