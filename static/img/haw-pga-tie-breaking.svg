@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300" role="img">
+<title>Ties break on arrival time</title>
+<desc>Three transactions carry the same priority fee of 2 gwei. The Sequencer orders them by the arrival timestamp it recorded when each transaction first reached it, so the earliest arrival goes first.</desc>
+<defs>
+<linearGradient id="brandbg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#152c4e"/><stop offset="0.55" stop-color="#1b4add"/><stop offset="1" stop-color="#12aaff"/>
+</linearGradient>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0 L10 5 L0 10 z" fill="#9dcced"/>
+</marker>
+</defs>
+<rect x="0" y="0" width="900" height="300" fill="url(#brandbg)"/>
+<g font-family="Inter, ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<text x="450" y="46" font-size="19" font-weight="600" fill="#9dcced" text-anchor="middle">Equal priority fees break on arrival time</text>
+<rect x="45" y="80" width="220" height="120" rx="14" fill="#12aaff"/>
+<circle cx="79" cy="111" r="17" fill="#ffffff"/>
+<text x="79" y="118" font-size="19" font-weight="600" fill="#0b1b2e" text-anchor="middle">1</text>
+<text x="105" y="119" font-size="20" font-weight="600" fill="#0b1b2e" text-anchor="start">Transaction A</text>
+<text x="155" y="152" font-size="16" font-weight="500" fill="#0b2438" text-anchor="middle">Priority fee 2 gwei</text>
+<text x="155" y="178" font-size="16" font-weight="500" fill="#0b2438" text-anchor="middle">Arrived 12.4 ms</text>
+<rect x="340" y="80" width="220" height="120" rx="14" fill="#12aaff"/>
+<circle cx="374" cy="111" r="17" fill="#ffffff"/>
+<text x="374" y="118" font-size="19" font-weight="600" fill="#0b1b2e" text-anchor="middle">2</text>
+<text x="400" y="119" font-size="20" font-weight="600" fill="#0b1b2e" text-anchor="start">Transaction B</text>
+<text x="450" y="152" font-size="16" font-weight="500" fill="#0b2438" text-anchor="middle">Priority fee 2 gwei</text>
+<text x="450" y="178" font-size="16" font-weight="500" fill="#0b2438" text-anchor="middle">Arrived 41.2 ms</text>
+<rect x="635" y="80" width="220" height="120" rx="14" fill="#12aaff"/>
+<circle cx="669" cy="111" r="17" fill="#ffffff"/>
+<text x="669" y="118" font-size="19" font-weight="600" fill="#0b1b2e" text-anchor="middle">3</text>
+<text x="695" y="119" font-size="20" font-weight="600" fill="#0b1b2e" text-anchor="start">Transaction C</text>
+<text x="745" y="152" font-size="16" font-weight="500" fill="#0b2438" text-anchor="middle">Priority fee 2 gwei</text>
+<text x="745" y="178" font-size="16" font-weight="500" fill="#0b2438" text-anchor="middle">Arrived 88.7 ms</text>
+<rect x="172.0" y="237" width="556" height="25" rx="6" fill="#152c4e" opacity="0.92"/>
+<text x="450" y="255" font-size="16" font-weight="600" fill="#eaf5ff" text-anchor="middle">The Sequencer records arrival when a transaction first reaches it</text>
+</g>
+</svg>
