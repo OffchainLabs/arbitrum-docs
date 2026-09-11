@@ -628,14 +628,9 @@ const sidebars = {
             {
               type: 'html',
               value:
-                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-full-node">Run a full node <span class="other-section-icon">↓</span></a>',
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-full-node">Run a full node (Docker or Helm) <span class="other-section-icon">↓</span></a>',
               // q: why use an anchor html tag here?
               // a: see note at end of file
-            },
-            {
-              type: 'doc',
-              id: 'launch-arbitrum-chain/run-a-node/run-full-node-with-helm',
-              label: 'Run a full node (Helm/Kubernetes)',
             },
             {
               type: 'html',
@@ -716,8 +711,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/start-here',
-          label: 'Start here',
+          id: 'run-arbitrum-node/quickstart-full-node',
+          label: 'Quickstart: run a full node',
         },
         {
           type: 'doc',
@@ -726,45 +721,18 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/assign-node-roles',
-          label: 'Assign node roles',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/run-local-full-chain-simulation',
+          id: 'build-decentralized-apps/run-local-full-chain-simulation',
           label: 'Run a local full chain simulation',
         },
         {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/launch-arbitrum-chain/run-a-node/run-full-node-with-helm">Run a full node with helm<span class="other-section-icon">↓</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
+          type: 'doc',
+          id: 'run-arbitrum-node/troubleshooting',
+          label: 'Troubleshooting',
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/run-nitro-dev-node',
-          label: 'Run a local dev node',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
-          label: 'L1 Ethereum RPC providers',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/data-availability',
-          label: 'Data Availability',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/run-feed-relay',
-          label: 'Run a feed relay',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/beacon-nodes-historical-blobs',
-          label: 'Historical blobs',
+          label: 'FAQ',
+          id: 'node-running/faq',
         },
         {
           type: 'category',
@@ -810,6 +778,23 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Data availability',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability/beacon-nodes-historical-blobs',
+              label: 'Historical blobs',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability/run-feed-relay',
+              label: 'Run feed relay',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'More node types',
           collapsed: true,
           items: [
@@ -827,6 +812,70 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Operation',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/operation/assign-node-roles',
+              label: 'Assign node roles',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/operation/how-to-convert-databases-from-leveldb-to-pebble',
+              label: 'Convert LevelDB to PebbleDB',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/operation/migrate-state-and-history-from-classic',
+              label: 'Migrate state history from Classic',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/operation/node-tuning-and-monitoring',
+              label: 'Node tuning and monitoring',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/reference/cli-flags-reference',
+              label: 'CLI flags',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/reference/configuration-system',
+              label: 'Configuration system',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/reference/da-tools-reference',
+              label: 'DA tools',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/reference/docker-and-cli-binaries',
+              label: 'Docker and CLI binaries',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers',
+              label: 'Ethereum beacon chain RPC providers',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/reference/nitro-database-snapshots',
+              label: 'Database snapshots',
             },
           ],
         },
@@ -851,56 +900,6 @@ const sidebars = {
               label: 'Run a Sequencer Coordination Manager (SQM)',
             },
           ],
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/nitro/build-nitro-locally',
-          label: 'Build Nitro locally',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
-          label: 'Migrate to Nitro from Classic',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
-          label: 'Database snapshots',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
-          label: 'Convert databases from LevelDB to Pebble',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/nitro/node-tuning-and-monitoring',
-          label: 'Node tuning and monitoring',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/nitro/configuration-system',
-          label: 'Configuration system',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/nitro/da-tools-reference',
-          label: 'DA tools reference',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/nitro/cli-flags-reference',
-          label: 'CLI flags reference',
-        },
-        {
-          type: 'doc',
-          id: 'run-arbitrum-node/troubleshooting',
-          label: 'Troubleshooting',
-        },
-        {
-          type: 'doc',
-          label: 'FAQ',
-          id: 'node-running/faq',
         },
       ],
     },
@@ -1055,6 +1054,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Data availability',
+              id: 'how-arbitrum-works/deep-dives/data-availability',
+            },
+            {
+              type: 'doc',
               label: 'STF inputs',
               id: 'how-arbitrum-works/reference/stf-inputs',
             },
@@ -1193,6 +1197,16 @@ const sidebars = {
           type: 'doc',
           id: 'build-decentralized-apps/quickstart-create-a-token',
           label: 'Create a token',
+        },
+        {
+          type: 'doc',
+          id: 'build-decentralized-apps/run-nitro-dev-node',
+          label: 'Run a local dev node',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/build-nitro-locally',
+          label: 'Build Nitro locally',
         },
         {
           type: 'ref',
