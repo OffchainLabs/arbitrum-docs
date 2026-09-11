@@ -1,0 +1,136 @@
+---
+title: 'Introduction to the Fast Feed'
+sidebar_label: 'Introduction to the Fast Feed'
+description: 'Learn what the Fast Feed publishes, who it serves, and how paid subscription access works.'
+author: anegg0
+sme: gligneul
+user_story: As a latency-sensitive participant on Arbitrum One, I want to understand what the Fast Feed publishes and how to subscribe to it.
+content_type: gentle-introduction
+---
+
+The Fast Feed is a paid, authenticated WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> orders it, before the block that contains it reaches the standard <a data-quicklook-from="sequencer-feed">sequencer feed</a>.
+
+On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, Priority Gas Auction (PGA) rounds run every 125ms inside a 250ms block. The Fast Feed publishes within those rounds, so you see ordered transactions without waiting for the block to close.
+
+PGA rounds set the cadence of the Fast Feed. To understand the rounds themselves, read the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) first.
+
+## What the Fast Feed is not
+
+Three expectations are worth correcting before the details.
+
+**It is not a view into the mempool.** The Fast Feed publishes a transaction only after the Sequencer has ordered it and enqueued it for execution. Nobody can influence or change that order afterward, so the Fast Feed does not enable frontrunning or sandwich attacks. The Sequencer's mempool stays private.
+
+**It does not publish state.** You receive a list of transactions and a partial receipt for each one. You do not receive state changes or partial blocks.
+
+**You cannot follow the chain with it.** A Nitro node cannot consume the Fast Feed, and the Fast Feed gives you no way to track chain state. Subscribers write their own client. To follow the chain, use the standard sequencer feed instead.
+
+## Who the Fast Feed serves
+
+Subscribe to the Fast Feed if an earlier view of ordered transactions helps you:
+
+- **<a data-quicklook-from="searcher">Searchers</a>** react to ordered transactions sooner, whether they run arbitrage between a centralized and a decentralized exchange, liquidations, or back-running strategies.
+- **<a data-quicklook-from="propamm">propAMMs</a>** and other latency-sensitive apps refresh onchain quotes and parameters against fresher data.
+- **Market makers** update pricing models earlier in the round.
+
+If you send ordinary transactions through a wallet or an app, the Fast Feed does not affect you. It doesn't change the ordering, the inclusion guarantee, or the fee that anyone pays.
+
+## What the Fast Feed publishes
+
+Each message is a `FeedMessage` envelope that carries one transaction plus the metadata you need to place it in time and in order.
+
+| Field          | Type     | Description                                                      |
+| -------------- | -------- | ---------------------------------------------------------------- |
+| `version`      | `uint32` | Protocol version, for forward compatibility                      |
+| `timestamp_ms` | `uint64` | Unix time in milliseconds when the Sequencer created the message |
+| `pga_round`    | `uint64` | The PGA round this transaction belongs to, within the block      |
+| `transaction`  | object   | The transaction data and its incomplete receipt                  |
+
+The `transaction` object carries the transaction itself:
+
+| Field          | Type      | Description                                        |
+| -------------- | --------- | -------------------------------------------------- |
+| `block_number` | `uint64`  | Tentative block number, not guaranteed to be final |
+| `tx_index`     | `uint32`  | Position within the block so far                   |
+| `raw_tx`       | `bytes`   | RLP-encoded signed transaction                     |
+| `tx_hash`      | `bytes32` | Transaction hash                                   |
+| `receipt`      | object    | Execution result                                   |
+
+The receipt reports `status`, `gas_used`, `gas_used_for_l1`, `cumulative_gas_used`, `effective_gas_price`, `base_fee`, any `contract_address` the transaction created, and the event `logs` it emitted.
+
+## Limits to design for
+
+The Fast Feed trades guarantees for speed. Three consequences shape how you write a client.
+
+**Inclusion is not guaranteed.** The `block_number` you receive is tentative. The Sequencer publishes a transaction to the Fast Feed before it stores that transaction, which is part of what makes the feed fast. If the Sequencer fails partway through a block, the transactions it already published are lost, and another Sequencer starts a new block from scratch.
+
+**Receipts are partial.** A receipt omits `block_hash`, because the block is not final when the Sequencer publishes it.
+
+**There is no replay.** The Fast Feed caches nothing. You subscribe at the head and receive only the messages sent from that point onward. If your connection drops, the messages sent while you were away are gone.
+
+<VanillaAdmonition type="note">
+
+Treat the Fast Feed as an early signal, not as a record. Confirm final state against a node or the standard sequencer feed.
+
+</VanillaAdmonition>
+
+## How subscription access works
+
+Access runs on tickets sold by the Fast Feed Payment Contract, an audited contract on Arbitrum One. You prove your subscription with an API key that never appears onchain.
+
+1. **Generate an API key.** Keep the key itself private.
+2. **Buy a ticket.** Send a payment transaction to the Fast Feed Payment Contract that includes the Keccak-256 hash of your key. The contract records that hash as your Subscription Credential.
+3. **Connect.** Present your raw API key to the Fast Feed endpoint. The endpoint hashes it with Keccak-256 and compares the result against the recorded credential to admit or deny the connection.
+
+Your access starts at the end of the round in which you buy the ticket. You can rotate your credential only when you buy a ticket for a new round.
+
+### Rounds and pricing
+
+The contract sells tickets in fixed rounds and prices them with the mechanism defined in <a data-quicklook-from="eip-4844">EIP-4844</a>. Every ticket in a round costs the same. Demand in one round sets the price for the next: sales above the target push the price up, sales below it push the price down, and the price never falls below the floor.
+
+| Parameter                   | Proposed default     |
+| --------------------------- | -------------------- |
+| Round duration              | 24 hours             |
+| Target tickets per round    | 100                  |
+| Maximum tickets per round   | 200                  |
+| Minimum price               | 17 USD               |
+| Price update fraction       | 144                  |
+| Grandfather period fraction | About half the round |
+
+A price update fraction of 144 means the next round can cost at most about twice the current price, and at least about half of it.
+
+Each round opens with a grandfather period that covers about half its length. During that period, only subscribers from the previous round can buy, up to the number of tickets they held. Sales then open to everyone until the round hits its maximum.
+
+<VanillaAdmonition type="info">
+
+The <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a> controls these parameters and can change any of them. A change takes effect at the next round, so it can wait up to 24 hours.
+
+</VanillaAdmonition>
+
+## Where the revenue goes
+
+The contract accepts payment in an ERC-20, USD-backed stablecoin. It sends proceeds to a dedicated RewardDistributor contract, which routes 97% to the Arbitrum DAO Treasury and 3% to the Arbitrum Developer Guild. Every subscription payment and every distribution emits an onchain event, so anyone can audit the flow.
+
+This split follows the framework that Timeboost established, which keeps Arbitrum's ordering-related revenue products aligned.
+
+<VanillaAdmonition type="info">
+
+The Arbitrum Treasury Management (ATM) Council and OAT select the stablecoin. Contract deployment follows that choice, and all contract addresses appear in the Arbitrum One developer documentation once the contracts are live.
+
+</VanillaAdmonition>
+
+Trail of Bits audited both contracts before deployment. The Fast Feed Payment Contract is audited under the name "Sequencer Feed Ticketing", so read the [Sequencer Feed Ticketing report](../../hosted-pdfs/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf) for that contract, and the [Reward Distributor Fixes report](../../hosted-pdfs/audit-reports/2026_06_16_trail_of_bits_security_audit_reward_distributor_fixes_summary_report.pdf) for the RewardDistributor. The [security audit reports page](/audit-reports) lists every Arbitrum audit.
+
+## Fast Feed compared with the sequencer feed
+
+The two feeds serve different jobs. Running one does not replace the other.
+
+| Property        | Sequencer feed                                                | Fast Feed                             |
+| --------------- | ------------------------------------------------------------- | ------------------------------------- |
+| Cost            | Free                                                          | Paid subscription                     |
+| Authentication  | None                                                          | API key against an onchain credential |
+| Granularity     | Per block                                                     | Per transaction, within a PGA round   |
+| Client          | Nitro node or [feed relay](/run-arbitrum-node/run-feed-relay) | Your own client                       |
+| Follows a chain | Yes                                                           | No                                    |
+| Availability    | Every Arbitrum chain                                          | Arbitrum One                          |
+
+To work with the standard feed, see [how to read the sequencer feed](/run-arbitrum-node/sequencer/read-sequencer-feed).
