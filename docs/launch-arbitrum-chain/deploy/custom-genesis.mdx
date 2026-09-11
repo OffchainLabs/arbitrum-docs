@@ -1,0 +1,178 @@
+---
+title: 'Generate a custom genesis file with the Chain SDK'
+sidebar_label: 'Custom genesis'
+description: 'Generate a custom Arbitrum chain genesis file, carry its state into the Rollup deployment, and initialize Nitro nodes from it.'
+author: alxdca
+sme: alxdca
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
+user_story: As an Arbitrum chain deployer, I need to predeploy contracts and allocate accounts at genesis while keeping the genesis file, Rollup configuration, and node initialization consistent.
+content_type: how-to
+---
+
+A custom genesis file lets you launch an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> with contracts, balances, and storage already present. The Arbitrum Chain SDK Docker image generates the file and the two hashes required by the Rollup contract: the genesis block hash and send root.
+
+You must use the same generated values in three places:
+
+1. The `genesis.json` file used to initialize every Nitro node.
+2. The `chainConfig` and initial L1 base fee passed to `createRollup`.
+3. The genesis assertion state passed to `createRollup`.
+
+<VanillaAdmonition type="caution" title="Generate the genesis before deploying the chain">
+
+The Rollup contract commits to the genesis state during deployment. If you change an allocation or any genesis parameter afterward, the resulting block hash no longer matches the onchain genesis assertion. Generate and review the final file before you call `createRollup`.
+
+</VanillaAdmonition>
+
+## Prerequisites
+
+Install:
+
+- [Docker](https://docs.docker.com/engine/install/)
+- [`jq`](https://jqlang.org/download/), to separate the genesis file from the hashes returned by the SDK
+
+The `generateGenesis` command requires Chain SDK `v0.28.0` or later. Pull and pin the corresponding image:
+
+```shell
+export CHAIN_SDK_IMAGE=offchainlabs/arbitrum-chain-sdk:v0.28.0
+docker pull "$CHAIN_SDK_IMAGE"
+```
+
+Use the same image tag or digest for every operator so that they use the same genesis generator and Nitro `genesis-generator` binary.
+
+## 1. Define custom account allocations
+
+Create `custom-alloc.json` if you want to add balances, bytecode, nonces, or storage. The file must contain an object keyed by account address. It must not contain an outer `alloc` property.
+
+```json title="custom-alloc.json"
+{
+  "0x1111111111111111111111111111111111111111": {
+    "balance": "1000000000000000000"
+  },
+  "0x2222222222222222222222222222222222222222": {
+    "nonce": "1",
+    "code": "0x<deployed-bytecode>",
+    "storage": {
+      "0x<32-byte-slot>": "0x<32-byte-value>"
+    }
+  }
+}
+```
+
+If a custom allocation uses the same address as a default predeploy, the custom allocation replaces the default entry at that address.
+
+## 2. Configure the `generateGenesis` command
+
+Create `genesis-input.json` in the same directory as `custom-alloc.json`. This file supplies the arguments to the SDK's Docker-only `generateGenesis` command. The example below configures a Rollup chain, loads the SDK's default predeploys, and merges `custom-alloc.json` into the genesis allocation.
+
+```json title="genesis-input.json"
+{
+  "chainId": "123456",
+  "arbosVersion": "51",
+  "chainOwner": "0x3333333333333333333333333333333333333333",
+  "l1BaseFee": "1000000000",
+  "isAnyTrust": false,
+  "loadDefaultPredeploys": true,
+  "enableNativeTokenSupply": false,
+  "enableTransactionFiltering": false,
+  "customAllocAccountFile": "custom-alloc.json",
+  "maxCodeSize": "24576",
+  "maxInitCodeSize": "49152"
+}
+```
+
+The generator accepts these fields:
+
+| Field                        | Type      | Required | Default | Description                                                                                  |
+| ---------------------------- | --------- | -------- | ------- | -------------------------------------------------------------------------------------------- |
+| `chainId`                    | `string`  | Yes      | —       | Unique chain ID.                                                                             |
+| `arbosVersion`               | `string`  | Yes      | —       | Initial ArbOS version. Use a version supported by the Nitro release that will run the chain. |
+| `chainOwner`                 | `string`  | Yes      | —       | Initial owner stored in ArbOS.                                                               |
+| `l1BaseFee`                  | `string`  | Yes      | —       | Initial parent-chain base fee in wei. Use a nonzero value.                                   |
+| `isAnyTrust`                 | `boolean` | No       | `false` | Set to `true` for an AnyTrust chain.                                                         |
+| `loadDefaultPredeploys`      | `boolean` | No       | `false` | Include the default contracts supplied by the genesis file generator.                        |
+| `enableNativeTokenSupply`    | `boolean` | No       | `false` | Enable native-token supply management at genesis.                                            |
+| `enableTransactionFiltering` | `boolean` | No       | `false` | Enable transaction filtering at genesis.                                                     |
+| `customAllocAccountFile`     | `string`  | No       | —       | Path to the custom allocation file, relative to the container's working directory.           |
+| `maxCodeSize`                | `string`  | No       | `24576` | Maximum deployed contract bytecode size in bytes.                                            |
+| `maxInitCodeSize`            | `string`  | No       | `49152` | Maximum contract initialization bytecode size in bytes.                                      |
+
+The `chainId`, chain owner, ArbOS version, chain type, and code-size limits become part of `serializedChainConfig`. Keep them identical when you prepare the Rollup deployment.
+
+## 3. Generate the genesis file and hashes
+
+Run the SDK's `generateGenesis` command through the Docker image. Genesis generation is not exported as a function from the SDK's public TypeScript entry point because it depends on tools bundled only in the image.
+
+Mount the working directory so the command can read both input files. The CLI reserves standard output for its JSON result, so redirecting it produces a valid result file.
+
+```shell
+docker run --rm \
+  -v "$(pwd):/work" \
+  -w /work \
+  "$CHAIN_SDK_IMAGE" \
+  generateGenesis @genesis-input.json > genesis-result.json
+```
+
+The result contains:
+
+```json
+{
+  "genesis": { "...": "generated genesis object" },
+  "blockHash": "0x<genesis-block-hash>",
+  "sendRoot": "0x<genesis-send-root>"
+}
+```
+
+Extract the file that Nitro consumes and record the two hashes:
+
+```shell
+jq '.genesis' genesis-result.json > genesis.json
+jq '{blockHash, sendRoot}' genesis-result.json
+```
+
+Store `genesis-result.json` with your deployment records. It ties the exact genesis file to the values committed on the parent chain.
+
+## 4. Prepare the Rollup deployment
+
+Map the generated values into `createRollupPrepareDeploymentParamsConfig`. The first global-state value is the block hash. The second is the send root. A custom genesis starts after batch `1` at position `0`.
+
+```typescript
+import { readFileSync } from 'node:fs';
+import { zeroHash } from 'viem';
+import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/chain-sdk';
+
+const { genesis, blockHash, sendRoot } = JSON.parse(readFileSync('genesis-result.json', 'utf8'));
+const chainConfig = JSON.parse(genesis.serializedChainConfig);
+
+const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+  chainId: BigInt(chainConfig.chainId),
+  owner: rollupOwner,
+  chainConfig,
+  dataCostEstimate: BigInt(genesis.arbOSInit.initialL1BaseFee),
+  genesisAssertionState: {
+    globalState: {
+      bytes32Vals: [blockHash, sendRoot],
+      u64Vals: [1n, 0n],
+    },
+    machineStatus: 1,
+    endHistoryRoot: zeroHash,
+  },
+});
+```
+
+Continue with [`createRollup` in the chain deployment guide](/launch-arbitrum-chain/deploy/deploy-chain.mdx#2-deploy-the-arbitrum-chain), passing `createRollupConfig` as `params.config`.
+
+<VanillaAdmonition type="caution" title="Preserve the generated chain configuration and base fee">
+
+Pass the parsed `serializedChainConfig` without changing its values. Set `dataCostEstimate` to the generated `arbOSInit.initialL1BaseFee`, and keep it non-zero. If either value differs from the genesis file, validators can fail to find the onchain genesis assertion when they stake on the first assertion.
+
+</VanillaAdmonition>
+
+## 5. Initialize every Nitro node
+
+Give every node the same `genesis.json` on its first startup. Set `--init.genesis-json-file` to the mounted path of the file alongside the node configuration described in [Configure your Arbitrum chain's node](/launch-arbitrum-chain/deploy/configure-node.mdx).
+
+```shell
+nitro --conf.file nodeConfig.json --init.genesis-json-file /path/to/genesis.json
+```
+
+Keep Nitro's default genesis-assertion validation enabled. The node recalculates the genesis block hash and verifies it against the assertion posted during Rollup deployment. A mismatch means that the node received a different genesis file or deployment configuration.

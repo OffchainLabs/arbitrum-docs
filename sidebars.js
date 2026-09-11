@@ -447,6 +447,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/custom-genesis',
+              label: `Custom genesis`,
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/deploy/deploy-chain',
               label: `Deploy`,
             },
@@ -540,6 +545,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/monitoring',
               label: 'Monitoring',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/nitro-contracts-upgrade',
+              label: 'Nitro contracts upgrade',
             },
             {
               type: 'doc',
