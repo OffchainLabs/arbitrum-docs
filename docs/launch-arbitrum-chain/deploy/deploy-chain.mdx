@@ -24,6 +24,8 @@ Upon deployment, an Arbitrum chain can be configured as a <a data-quicklook-from
 
 This page explains how to deploy an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> using the Arbitrum Chain SDK. See the [Overview](/launch-arbitrum-chain/quickstart/sdk-introduction.mdx) for an introduction to the process of creating and configuring an Arbitrum chain.
 
+If you want to launch with predeployed contracts, balances, or storage, first [generate a custom genesis file with the Chain SDK](/launch-arbitrum-chain/deploy/custom-genesis.mdx). The generated block hash, send root, chain configuration, and initial L1 base fee must be included in the deployment configuration described below.
+
 :::info About custom gas token Arbitrum chains
 
 Custom gas token Arbitrum chains let participants pay transaction fees in an **ERC-20** token instead of **ETH**. Standard **ERC-20** tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. Remember that the **ERC-20** token to be used must be deployed on your chain's parent chain.

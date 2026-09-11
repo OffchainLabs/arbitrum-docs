@@ -15,6 +15,7 @@ Deploying new <a data-quicklook-from='arbitrum-chain'>Arbitrum chains</a> is don
 
 - Configuration and deployment of your Arbitrum chain's core contracts
 - Configuration and deployment of the chain's TokenBridge contracts
+- Generation of custom genesis files with predeployed contracts and account allocations
 - Initialization of your chain and management of its configuration post-deployment
 
 This overview describes the process for creating a new Arbitrum chain, with each step linking to the appropriate guide to follow. You'll find guides to use the Arbitrum chain SDK for deploying a new chain, configuring your node, initializing your chain's configuration, and creating a token bridge.
@@ -48,6 +49,8 @@ Additionally, Arbitrum chains can be configured to use **ETH** or any standard *
 ## 2. Deploy your chain
 
 After selecting a chain type, follow the [chain deployment guide](/launch-arbitrum-chain/deploy/deploy-chain.mdx) to deploy your chain using the Chain SDK.
+
+If your chain needs contracts, balances, or storage at genesis, [generate a custom genesis file](/launch-arbitrum-chain/deploy/custom-genesis.mdx) before you deploy the chain.
 
 ## 3. Configure your Arbitrum chain's node
 

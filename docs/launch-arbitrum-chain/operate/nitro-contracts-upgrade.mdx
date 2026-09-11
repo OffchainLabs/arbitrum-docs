@@ -1,0 +1,141 @@
+---
+title: 'Upgrade Nitro contracts with the Chain SDK CLI'
+sidebar_label: 'Nitro contracts upgrade'
+description: 'Deploy, execute, and verify a supported Nitro contracts upgrade with the Arbitrum Chain SDK CLI.'
+author: alxdca
+sme: alxdca
+target_audience: 'Developers maintaining Arbitrum chains.'
+user_story: As an Arbitrum chain operator, I need to run a supported Nitro contracts upgrade from a packaged CLI and verify that it succeeded.
+content_type: how-to
+---
+
+The Arbitrum Chain SDK CLI can deploy an upgrade action, execute it through the parent-chain <a data-quicklook-from="upgrade-executor">upgrade executor</a>, and verify the resulting Nitro contracts version. The SDK Docker image includes the Chain Actions scripts and Foundry binaries required by this workflow.
+
+The commands currently support the Nitro contracts `3.2.0` upgrade. This action upgrades `RollupAdminLogic` and `RollupUserLogic` from `3.1.0` to `3.2.0`. It does not upgrade the bridge, inbox, sequencer inbox, outbox, or challenge manager, and it does not require an ArbOS upgrade.
+
+<VanillaAdmonition type="caution" title="Confirm the upgrade path first">
+
+Run the [Chain Actions version checks](https://github.com/OffchainLabs/chain-actions?tab=readme-ov-file#check-version-and-upgrade-path) before you execute an upgrade. The `3.2.0` action expects the supported source versions listed in the [Nitro contracts 3.2.0 upgrade requirements](https://github.com/OffchainLabs/chain-actions/tree/main/scripts/foundry/contract-upgrades/3.2.0#requirements).
+
+</VanillaAdmonition>
+
+## Prerequisites
+
+Gather:
+
+- The parent-chain RPC URL.
+- The parent-chain ID.
+- The Rollup proxy address.
+- The parent-chain upgrade executor address that owns the Rollup proxy.
+- A dedicated account with the executor role on that upgrade executor.
+- A funded deployment account if you need to deploy the upgrade action.
+- [`jq`](https://jqlang.org/download/), to construct command input without putting a private key in the command arguments.
+
+The Nitro contracts upgrade commands require Chain SDK `v0.28.0` or later. Pull and pin the corresponding image:
+
+```shell
+export CHAIN_SDK_IMAGE=offchainlabs/arbitrum-chain-sdk:v0.28.0
+docker pull "$CHAIN_SDK_IMAGE"
+```
+
+<VanillaAdmonition type="caution" title="Keep signing keys out of command history">
+
+The deploy and execute CLI commands require a raw, `0x`-prefixed private key. The examples read the key without displaying it and pass it through standard input, keeping it out of shell history and Docker's process arguments. Use dedicated, minimally funded accounts and unset each key immediately after the command finishes.
+
+</VanillaAdmonition>
+
+## 1. Inspect the command schemas
+
+The CLI validates every JSON input before running a command. Inspect the schemas when you upgrade the SDK:
+
+```shell
+docker run --rm "$CHAIN_SDK_IMAGE" \
+  deployNitroContractsUpgradeAction --schema
+
+docker run --rm "$CHAIN_SDK_IMAGE" \
+  executeNitroContractsUpgrade --schema
+
+docker run --rm "$CHAIN_SDK_IMAGE" \
+  verifyNitroContractsUpgrade --schema
+```
+
+## 2. Deploy the upgrade action if necessary
+
+First check the [deployed `3.2.0` upgrade action instances](https://github.com/OffchainLabs/chain-actions/tree/main/scripts/foundry/contract-upgrades/3.2.0#deployed-instances). If your parent chain has an instance, record its address and continue to step 3.
+
+For another parent chain, deploy the action with a funded account:
+
+```shell
+read -rsp 'Deployment account private key: ' deployment_private_key
+printf '\n'
+
+printf '%s\n' "$deployment_private_key" |
+  jq -R '{
+    version: "3.2.0",
+    parentChainRpcUrl: "https://parent-chain.example/rpc",
+    parentChainId: 11155111,
+    privateKey: .
+  }' |
+  docker run --rm -i "$CHAIN_SDK_IMAGE" \
+    deployNitroContractsUpgradeAction -
+
+unset deployment_private_key
+```
+
+Replace `11155111` with your parent-chain ID. The command returns the transaction hash, transaction receipt, and upgrade action address:
+
+```json
+{
+  "transactionHash": "0x<deployment-transaction-hash>",
+  "transactionReceipt": { "...": "transaction receipt" },
+  "upgradeActionAddress": "0x<upgrade-action-address>"
+}
+```
+
+Record `upgradeActionAddress` for the execution step.
+
+## 3. Execute the upgrade
+
+Use an account with the executor role on the parent-chain upgrade executor:
+
+```shell
+read -rsp 'Executor private key: ' executor_private_key
+printf '\n'
+
+printf '%s\n' "$executor_private_key" |
+  jq -R '{
+    version: "3.2.0",
+    parentChainRpcUrl: "https://parent-chain.example/rpc",
+    parentChainId: 11155111,
+    privateKey: .,
+    rollupAddress: "<ROLLUP_PROXY_ADDRESS>",
+    parentUpgradeExecutorAddress: "<PARENT_UPGRADE_EXECUTOR_ADDRESS>",
+    upgradeActionAddress: "<UPGRADE_ACTION_ADDRESS>"
+  }' |
+  docker run --rm -i "$CHAIN_SDK_IMAGE" \
+    executeNitroContractsUpgrade -
+
+unset executor_private_key
+```
+
+The command signs and broadcasts the upgrade transaction, waits for its receipt, and returns `transactionHash` and `transactionReceipt`.
+
+If a multisig or hardware wallet holds the executor role, do not run the direct execution command. Use the SDK's `executeNitroContractsUpgradePrepareTransactionRequest` TypeScript function to prepare an unsigned request, then submit its `to`, `data`, and `value` fields through your signer.
+
+## 4. Verify the upgrade
+
+Run the read-only verification command against the Rollup proxy:
+
+```shell
+docker run --rm "$CHAIN_SDK_IMAGE" \
+  verifyNitroContractsUpgrade '{
+    "version": "3.2.0",
+    "parentChainRpcUrl": "https://parent-chain.example/rpc",
+    "parentChainId": 11155111,
+    "rollupAddress": "<ROLLUP_PROXY_ADDRESS>"
+  }'
+```
+
+The verification command simulates behavior introduced in `RollupAdminLogic` `3.2.0`. A successful command returns exit code `0`. A revert or nonzero exit indicates that the Rollup still uses the previous implementation or that the upgrade configuration is incorrect.
+
+After verification, complete the operational checks in the [Arbitrum chain upgrade runbook](/launch-arbitrum-chain/operate/upgrade-runbook.mdx#post-upgrade-verification).
