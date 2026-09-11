@@ -9,7 +9,7 @@ content_type: gentle-introduction
 ---
 
 PGA is an ordering policy in which users bid for ordering by attaching a priority fee to each <a data-quicklook-from="transaction">transaction</a>. Ordering becomes a continuous, permissionless, per-transaction competition.
-PGA is set to replace <a data-quicklook-from="timeboost">Timeboost</a> across Arbitrum chains.
+PGA is now available for activation across all Arbitrum chains.
 
 ### Why sunset Timeboost?
 
@@ -49,7 +49,7 @@ Bidding happens per transaction, just-in-time, using a standard <a data-quickloo
 
 #### PGA protects low-fee transactions from starvation
 
-Different from Ethereum, a transaction doesn't need to pay tips to get included, and paying no priority fee does not mean waiting indefinitely. An anti-starvation boost raises the effective ordering position of transactions left waiting after each round, so ordinary transactions are included within a small number of blocks. The boost changes position in the queue, never the fee actually charged.
+Unlike Ethereum, a transaction doesn’t need to pay tips to get included, and paying no priority fee doesn't mean waiting indefinitely. An anti-starvation boost raises the effective ordering position of transactions left waiting after each round, so ordinary transactions are included within a small number of blocks. The boost changes position in the queue, never the fee actually charged.
 
 The Sequencer includes transactions that pay no priority fee within a small number of blocks. PGA's anti-starvation boost raises the ordering position of every transaction still waiting at the end of each round. The boost changes position in the queue, never the fee charged on inclusion.
 
@@ -67,7 +67,7 @@ As with FCFS and Timeboost, the <a data-quicklook-from="sequencer">Sequencer</a>
 3. Publish the resulting sequence to a feed
 4. Publish transactions in compressed <a data-quicklook-from="batch">batches</a> to the chain's data availability layer
 
-With PGA, the priority fee determines transactions' order, evaluated in short ordering rounds that run multiple times per block. This is an ordering model that should be familiar to users of other EVM chains (Base, OP Mainnet, and Unichain).
+With PGA, the priority fee determines transactions' order, evaluated in short ordering rounds that run multiple times per block. This ordering model should be familiar to users of other EVM chains (Base, OP Mainnet, and Unichain).
 
 PGA uses three components that work together:
 
