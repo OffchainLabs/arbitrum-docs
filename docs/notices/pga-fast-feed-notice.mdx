@@ -1,0 +1,92 @@
+---
+title: 'Notice for the PGA transition and the Fast Feed'
+description: What changes for Timeboost users, searchers, and integrators when Arbitrum One moves to Priority Gas Auctions and the Fast Feed goes live
+user_story: As a Timeboost user, searcher, or integrator on Arbitrum One, I want to know what changes when PGA and the Fast Feed activate, and what I must do before then.
+content_type: notice
+---
+
+The ArbitrumDAO is voting on one Constitutional proposal that combines two changes to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>: replacing <a data-quicklook-from="timeboost">Timeboost</a> with Priority Gas Auctions (PGA), and establishing the <a data-quicklook-from="fast-feed">Fast Feed</a>. The same proposal sunsets Timeboost on <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> without adopting PGA there.
+
+The onchain vote opened on August 20, 2026 on Alt Arbitrum Gov. Both components passed separate Snapshot temperature checks before they were combined.
+
+<VanillaAdmonition type="warning" title="Action required for Timeboost users">
+
+If you hold funds in the Timeboost <a data-quicklook-from="auction-contract">auction contract</a> on Arbitrum One or Arbitrum Nova, withdraw them. You can withdraw at any time, including today.
+
+If you submit transactions to the <a data-quicklook-from="express-lane">express lane</a> endpoint, migrate to standard transaction submission. The endpoint is decommissioned when the change activates, and it rejects transactions after that.
+
+</VanillaAdmonition>
+
+## No activation date is set
+
+The proposal grants authority to activate. It does not itself switch anything on.
+
+Priority fee collection is controlled by a `TipCollectionToggler` contract, through an `ArbOwner` precompile call to `setCollectTips`. Offchain enables PGA and priority fee collection after the vote executes onchain and system testing concludes, and holds that authority for two years. The Fast Feed waits on a separate track: the Arbitrum Treasury Management (ATM) Council and OAT must select the stablecoin used for payment before the Fast Feed Payment Contract can deploy.
+
+Neither track has a published date. The two activate independently, so PGA and the Fast Feed can go live on different days.
+
+Watch the [PGA proposal thread](https://forum.arbitrum.foundation/t/constitutional-aip-transition-arbitrum-one-ordering-policy-to-priority-gas-auctions-pga/30942) and the [Fast Feed proposal thread](https://forum.arbitrum.foundation/t/constitutional-aip-fast-feed/31003) for the announcement.
+
+## What changes when PGA activates
+
+On the day PGA activates, Timeboost ends on Arbitrum One and Arbitrum Nova:
+
+- The <a data-quicklook-from="autonomous-auctioneer">autonomous auctioneer</a> stops accepting bids.
+- The express lane endpoint is decommissioned and rejects any transaction sent to it.
+- The <a data-quicklook-from="sequencer">Sequencer</a> stops applying the 200ms delay to transactions outside the express lane. That delay only applied while an <a data-quicklook-from="express-lane-controller">express lane controller</a> held the round.
+- Funds locked in the auction contract remain withdrawable.
+
+Arbitrum One then orders transactions by the <a data-quicklook-from="priority-fee">priority fee</a> on each transaction, in 125ms rounds inside a 250ms block, with ties broken by arrival time. An anti-starvation boost raises the queue position of transactions still waiting after each round, so transactions that pay no priority fee are still included within a small number of blocks.
+
+Arbitrum Nova returns to first-come, first-served ordering. Nova does not adopt PGA.
+
+## Actions by audience
+
+| Audience                                        | Action                                                                                                                                    |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Timeboost bidders on One or Nova                | Withdraw auction contract deposits and stop using the express lane endpoint                                                               |
+| <a data-quicklook-from="searcher">Searchers</a> | Bid by setting `maxPriorityFeePerGas` on standard EIP-1559 type 2 transactions, as on other EVM chains                                    |
+| Wallets and apps                                | None. Transaction formats do not change                                                                                                   |
+| Everyday users                                  | None. Ordering, inclusion, and fees for transactions that pay no priority fee are unaffected                                              |
+| Node operators                                  | None for PGA itself. Confirm your chain runs <a data-quicklook-from="arbos">ArbOS</a> 61 or newer, which supports priority fee collection |
+| Arbitrum chain operators                        | None. PGA is opt-in per chain and this proposal applies only to Arbitrum One and Arbitrum Nova                                            |
+
+## Governance timeline
+
+Only confirmed dates appear below.
+
+| Date                | Event                                                                    |
+| ------------------- | ------------------------------------------------------------------------ |
+| June 3, 2026        | PGA proposal posted to the Arbitrum governance forum                     |
+| June 18 to 25, 2026 | PGA Snapshot temperature check, passed                                   |
+| June 19, 2026       | Fast Feed proposal posted to the forum                                   |
+| July 2026           | Fast Feed Snapshot temperature check, passed                             |
+| July 28, 2026       | PGA proposal amended: activation moved behind the `TipCollectionToggler` |
+| August 17, 2026     | Both proposals consolidated into one Constitutional AIP and one payload  |
+| August 20, 2026     | Consolidated onchain vote opened on Alt Arbitrum Gov                     |
+
+Execution follows the waiting periods set out in the ArbitrumDAO Constitution. Activation follows execution, on the schedule described above.
+
+## Revenue
+
+Priority fees collected under PGA and subscription proceeds from the Fast Feed both split 97% to the ArbitrumDAO Treasury and 3% to the Arbitrum Developer Guild, following the split ratified for Timeboost.
+
+The two use different mechanisms. Fast Feed proceeds route through a dedicated RewardDistributor contract and emit an onchain event for each payment. Priority fees arrive bundled with other transaction fees, so the <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a> accounts for them periodically and distributes them through a separate vote every six months.
+
+Trail of Bits audited each contract involved. The summary reports are published here:
+
+| Contract                   | Audit report                                                                                                                                 | Date       |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| `TipCollectionToggler`     | [Tip Collection Toggler](../hosted-pdfs/audit-reports/2026_08_14_trail_of_bits_tip_collection_toggler_final_summary_report.pdf)              | 08/14/2026 |
+| Fast Feed Payment Contract | [Sequencer Feed Ticketing](../hosted-pdfs/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf)                              | 07/31/2026 |
+| RewardDistributor          | [Reward Distributor Fixes](../hosted-pdfs/audit-reports/2026_06_16_trail_of_bits_security_audit_reward_distributor_fixes_summary_report.pdf) | 06/16/2026 |
+
+The Fast Feed Payment Contract is audited under the name "Sequencer Feed Ticketing". For every Arbitrum audit, see the [security audit reports page](/audit-reports).
+
+Contract addresses are published in the Arbitrum One developer documentation after deployment.
+
+## Learn more
+
+- [Introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) explains rounds, ordering, and the anti-starvation boost.
+- [Introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) covers what the feed publishes and how subscription access works.
+- The [Arbitrum DAO network upgrades table](https://docs.arbitrum.foundation/network-upgrades) records execution timestamps.
