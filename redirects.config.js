@@ -16,6 +16,10 @@ export const redirects = [
     from: '/stylus/how-tos/adding-support-for-new-languages',
     to: '/stylus/how-tos/deploying-non-rust-wasm-contracts',
   },
+  {
+    from: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    to: '/run-arbitrum-node/nitro/node-tuning',
+  },
   // AUTO-GENERATED REDIRECTS START
   {
     from: '/build-decentralized-apps/how-to-estimate-gas',
