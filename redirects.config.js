@@ -423,5 +423,61 @@ export const redirects = [
     from: '/launch-arbitrum-chain/chain-config/validation/compliance-filtering',
     to: '/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering',
   },
+  {
+    from: '/run-arbitrum-node/run-feed-relay',
+    to: '/run-arbitrum-node/data-availability/run-feed-relay',
+  },
+  {
+    from: '/run-arbitrum-node/beacon-nodes-historical-blobs',
+    to: '/run-arbitrum-node/data-availability/beacon-nodes-historical-blobs',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/cli-flags-reference',
+    to: '/run-arbitrum-node/reference/cli-flags-reference',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/da-tools-reference',
+    to: '/run-arbitrum-node/reference/da-tools-reference',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/nitro-database-snapshots',
+    to: '/run-arbitrum-node/reference/nitro-database-snapshots',
+  },
+  {
+    from: '/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
+    to: '/run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/configuration-system',
+    to: '/run-arbitrum-node/reference/configuration-system',
+  },
+  {
+    from: '/run-arbitrum-node/assign-node-roles',
+    to: '/run-arbitrum-node/operation/assign-node-roles',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
+    to: '/run-arbitrum-node/operation/node-tuning-and-monitoring',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
+    to: '/run-arbitrum-node/operation/how-to-convert-databases-from-leveldb-to-pebble',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
+    to: '/run-arbitrum-node/operation/migrate-state-and-history-from-classic',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/build-nitro-locally',
+    to: '/run-arbitrum-node/build-nitro-locally',
+  },
+  {
+    from: '/run-arbitrum-node/nitro/docker-and-cli-binaries',
+    to: '/run-arbitrum-node/reference/docker-and-cli-binaries',
+  },
+  {
+    from: '/run-arbitrum-node/data-availability',
+    to: '/how-arbitrum-works/deep-dives/data-availability',
+  },
   // AUTO-GENERATED REDIRECTS END
 ];

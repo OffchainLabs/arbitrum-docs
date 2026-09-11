@@ -16,7 +16,7 @@ This page assumes that you've completed the steps from the [Start here](/run-arb
 
 To view the short and long term support policy, visit the [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx) page.
 
-If you're looking to run a node with a different role — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, <a data-quicklook-from="archive-node">archive node</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—see [How to assign roles to a Nitro node](/run-arbitrum-node/assign-node-roles.mdx) for the flags that define each role.
+If you're looking to run a node with a different role — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, <a data-quicklook-from="archive-node">archive node</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—see [How to assign roles to a Nitro node](/run-arbitrum-node/operation/assign-node-roles.mdx) for the flags that define each role.
 
 :::
 
@@ -61,7 +61,7 @@ A default full node is unaffected: it runs the watchtower strategy, which does n
 
 :::warning Caution
 
-If you are running more than one node, you should [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+If you are running more than one node, you should [run a feed relay](/run-arbitrum-node/data-availability/run-feed-relay.mdx).
 
 :::
 
@@ -69,7 +69,7 @@ If you are running more than one node, you should [run a feed relay](/run-arbitr
 
 `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and every snapshot it resolves for those kinds uses HashDB. Adding `--execution.caching.state-scheme=path` to the examples below fails, because the downloaded snapshot's scheme won't match.
 
-PathDB snapshots are published under the separate `full-path` and `archive-path` kinds, which `--init.latest` does not accept. To initialize a PathDB database, pass the snapshot URL to `--init.url` instead. See [PathDB snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
+PathDB snapshots are published under the separate `full-path` and `archive-path` kinds, which `--init.latest` does not accept. To initialize a PathDB database, pass the snapshot URL to `--init.url` instead. See [PathDB snapshots](/run-arbitrum-node/reference/nitro-database-snapshots.mdx#pathdb-snapshots).
 
 :::
 
@@ -174,7 +174,7 @@ Under heavy RPC load or during operations such as large `debug_traceBlockByNumbe
 - `--node.resource-mgmt.mem-free-limit`: Declines incoming RPC requests when free system memory drops below the specified threshold (e.g., `--node.resource-mgmt.mem-free-limit=4GiB`). This helps protect the node from OOM under high request load.
 - `GOMEMLIMIT` environment variable: Sets a soft memory limit for the Go runtime garbage collector (e.g., `GOMEMLIMIT=48GiB` for a 64 GB machine), helping reduce memory spikes.
 
-For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
+For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning and monitoring](/run-arbitrum-node/operation/node-tuning-and-monitoring.mdx).
 
 :::tip
 For Docker deployments, you can set these in your `docker run` command:
