@@ -1,0 +1,234 @@
+---
+title: 'Running your own chain'
+sidebar_label: 'Consumer Fintech'
+description: 'A decision map for consumer fintechs weighing whether to keep renting blockspace, join a consortium chain, or run a dedicated Arbitrum chain of their own.'
+user_story: 'As the CTO of a consumer fintech already running crypto rails, I want an honest map of the own-versus-join-versus-rent decision so I can tell whether a dedicated chain is worth the operational lift.'
+content_type: concept
+author: anegg0
+sme: gmehta2
+---
+
+If you run a consumer fintech at scale, you are already onchain. The pieces are typically in place:
+
+- A crypto exchange, and the trading flows that come with it.
+- Stablecoin settlement volume, often growing faster than the rest of the business.
+- One or two integrations with public chains.
+- Institutional custody already wired in.
+
+All of it settles on infrastructure someone else owns and operates. Whether to change that — specifically, whether to run a <a data-quicklook-from="arbitrum-chain">dedicated Arbitrum chain</a> of your own — is the decision everything below turns on.
+
+Three postures are available, and none of them is free:
+
+- **Rent** — keep settling on public chains you do not control. Nothing to operate, nothing captured.
+- **Join** — take a seat on a consortium chain governed with peers. Shared cost, shared say, shared compliance posture.
+- **Own** — run a dedicated chain. Effectively all the fee capture, and all of the operational weight that produces it.
+
+For most firms at this scale the first two are not really open questions: you are already renting, and a consortium seat is a negotiation rather than a build. Owning is the one that demands a decision — and the cost of reversing it is unlike the cost of reversing either of the others.
+
+## Where this doesn't apply
+
+Some conditions rule out a dedicated chain regardless of the economics. If any of these describe you, the decisions below are premature.
+
+- **Your onchain volume is limited.** A chain has a fixed operating floor — sequencing, data availability, validation, monitoring — that does not scale down. Below a certain throughput you are paying a fixed cost to avoid a variable one.
+- **Your dominant flow is settlement between institutions.** Value that moves across firms settles better on infrastructure those firms jointly govern. A chain you control alone doesn't wouldn't support your use case.
+- **You cannot name the activity that fills the chain on day one.** Chains launched on distribution alone tend to attract speculative volume first, and the flows you wanted arrive late or not at all. If the answer is "our users will find uses for it," you do not have an answer — and the early activity you get may be activity your brand and your licenses cannot host.
+- **Your regulatory perimeter is still moving.** A charter in process, a license under review, or a stablecoin in a sandbox each constrain what you can host. Configuration set at genesis is hard to revisit.
+- **You have no operator.** In-house or contracted, someone holds a 24/7 pager. If that is unassigned, nothing below matters.
+
+## Decision 1 — Rent, join, or own
+
+|                                | Rent                                                                             | Join a consortium                                                    | Own                                                                                                            |
+| ------------------------------ | -------------------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Fee capture**                | None. Sequencing and settlement revenue accrues to the chain operator.           | Shared on agreed terms — a slice, not the whole.                     | Nearly all of it, less settlement cost to the <a data-quicklook-from="parent-chain">parent chain</a>.          |
+| **Effect on revenue mix**      | No change.                                                                       | A diluted infrastructure line.                                       | A usage-linked infrastructure line, less correlated with trading cycles than a brokerage segment.              |
+| **Ops burden**                 | None beyond integration.                                                         | Shared; you inherit the consortium's operating model.                | Yours to run or contract out — and yours to answer for either way.                                             |
+| **Time to live**               | Shortest; in most cases already done.                                            | Set by consortium onboarding, not by you.                            | Longest. Genesis configuration, audits, liquidity, monitoring.                                                 |
+| **Governance say**             | None. Your roadmap is someone else's backlog.                                    | One voice among several; outcomes are negotiated.                    | Complete — including the decisions you would rather not have to make.                                          |
+| **Regulatory surface you own** | You inherit the operator's posture.                                              | Jointly defined, and it may not match your strictest market.         | All of it. Every market you serve becomes your problem at the infrastructure layer too.                        |
+| **Counterparty exposure**      | You pay fees to operators, some of whom compete with you for the same customers. | Shared with peers who are also competitors, under a joint agreement. | Removed externally, concentrated internally instead.                                                           |
+| **Exit cost**                  | Low. Redeploy and move liquidity.                                                | Set by the consortium's terms.                                       | High. Users, liquidity, and third-party integrations sit on infrastructure you would have to unwind in public. |
+
+### Renting only makes sense if all of these are true
+
+- Fees paid are immaterial next to the engineering cost of moving.
+- You are indifferent to the operator's roadmap, fee policy, and compliance posture.
+- No material flow of yours runs on infrastructure owned by a direct competitor — or it does, and you accept that.
+
+### Joining only makes sense if all of these are true
+
+- Your dominant use case is settlement with the other members.
+- You can live with a compliance posture and roadmap set by negotiation.
+- Being one voice among several is acceptable on the decisions you care most about.
+- Shared governance reads to your regulators as a strength rather than a complication.
+
+### Owning only makes sense if all of these are true
+
+- You can name day-one flows large enough to clear the operating floor.
+- Someone owns a 24/7 pager, in-house or contracted.
+- Your licenses cover the activity you intend to host, in the markets you intend to host it.
+- You would still want the chain if fee capture were zero — because control, not revenue, is the point.
+
+### On ordering revenue
+
+A dedicated chain can price the right to transact first. <a data-quicklook-from="timeboost">Timeboost</a> turns transaction ordering into an auctioned resource rather than a first-come race, and the revenue is real. So is the consequence: the buyers are arbitrageurs and latency-sensitive traders. On rails carrying retail payments, decide whether you want that participant before you decide you want their money.
+
+**The argument against.** Infrastructure ownership is a bet that your distribution will still be yours in five years. Rented blockspace is a variable cost that falls as chains compete for tenants; an owned chain is a fixed cost carried through every cycle, including the ones where your volumes fall. Firms that vertically integrated at the wrong point on a cost curve spent years subsidizing infrastructure their competitors rented more cheaply. The fee capture is real, and so is the possibility that you are buying at the top.
+
+**How reversible this is.**
+
+- Rent to own is reversible — expensive in engineering time, cheap in commitments.
+- Joining is reversible on the consortium's terms. Read the exit clauses before the technical specifications.
+- Owning is the hardest to undo, and it hardens the day external parties start depending on your chain — not the day you deploy it.
+
+Everything from here assumes you answered **own**. The four decisions that follow are what running a dedicated chain actually commits you to, and each is materially cheaper to settle before genesis than after it.
+
+## Decision 2 — How much of it you actually operate
+
+Owning a chain and running a chain are separable, and conflating them is what makes the engineering lift look prohibitive. The roles unbundle:
+
+- **<a data-quicklook-from="sequencer">Sequencer</a>** — orders and executes transactions. Can be operated for you.
+- **<a data-quicklook-from="batch-poster">Batch poster</a>** — publishes batches to the parent chain. Can be operated for you.
+- **<a data-quicklook-from="validator">Validators</a>** — watch the chain and challenge invalid assertions. Can be operated for you, though running one yourself is inexpensive insurance.
+- **<a data-quicklook-from="chain-owner">Chain owner</a> and <a data-quicklook-from="upgrade-executor">upgrade executor</a>** — hold upgrade authority. These stay yours. Contracting out operations does not contract out control, and a provider holding your upgrade keys is not a vendor, it is a partner with a veto.
+
+[Infrastructure providers](/launch-arbitrum-chain/integrations/infrastructure-providers.mdx) run the first three under contract.
+
+### What you are operating
+
+Two shapes of chain, differing in where transaction data lives:
+
+- **<a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a>** — data posted to Ethereum. Highest cost per transaction, no added trust assumption, exits governed by the <a data-quicklook-from="challenge-period">challenge period</a> and measured in days.
+- **<a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a>** — a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee</a> holds the data. Materially lower cost per transaction, and it makes <a data-quicklook-from="fast-withdrawals">Fast Withdrawals</a> available without adding a party you were not already trusting.
+
+What pulls each way at consumer volumes:
+
+- **Toward AnyTrust** — per-transaction data cost is usually the dominant term in unit economics, and multi-day exits are hard to explain to retail users.
+- **Toward a Rollup** — its trust-minimization posture is publicly legible in a way a committee's is not. Where that standing is itself a business asset, it is worth paying for.
+
+**The argument against.** A contracted operator is a single dependency holding your product's uptime, and an SLA is worth what you can enforce. Teams that outsourced early have found that operational knowledge they never built became knowledge they could not hire, and that the second contract was negotiated from a weaker position than the first.
+
+**How reversible this is.**
+
+- Operators are swappable. [Migrating between providers](/launch-arbitrum-chain/migrate/between-raases.mdx) is a defined path, not a rebuild.
+- The data availability model is not a runtime toggle. Moving between Rollup and AnyTrust is a chain-level change with real coordination cost.
+- Retaining the chain owner role is what keeps everything else here reversible. Give it away and you have not outsourced operations, you have sold the chain.
+
+## Decision 3 — One chain, many jurisdictions
+
+Your chain is one technical perimeter. Your business is dozens of legal ones. The resolution is not to encode forty rulebooks into a protocol — it is to keep the protocol layer thin and leave jurisdiction where jurisdiction already lives.
+
+You hold an advantage here that a first-time institutional issuer does not:
+
+- **Your licenses are already the gate.** KYC, geo-fencing, product eligibility, and suitability are enforced in an application you already operate, under permissions you already hold. That machinery does not need to move onchain to keep working.
+- **The protocol layer can stay neutral.** A permissionless base with a permissioned application above it keeps market-by-market rule changes in the layer that can absorb them at deployment speed.
+
+What the application layer cannot reach:
+
+- Transactions force-included through the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> bypass your sequencer entirely. <a data-quicklook-from="forceinclusion">Force inclusion</a> exists precisely so that it cannot be blocked.
+- Direct contract calls from wallets you did not issue.
+
+[Compliance Filtering](/launch-arbitrum-chain/chain-config/validation/compliance-filtering.mdx) closes those paths at the protocol layer, screening twice:
+
+- In the sequencer, before a transaction is sequenced.
+- In the state transition function, catching anything force-included past it.
+
+Whether you need it turns on whether "every path is screened" is a claim you must make to a regulator, or one you would merely prefer to be able to make.
+
+<VanillaAdmonition type="note">
+  Compliance Filtering ships in <a data-quicklook-from="arbos">ArbOS</a> 61 and is off by default. The Delayed Inbox Sentinel must be activated at chain deployment — adding it later requires an ArbOS upgrade, which makes it one of the few compliance decisions you cannot defer past genesis.
+</VanillaAdmonition>
+
+**The argument against.** Protocol-level screening puts sanctions logic in the consensus path of your own chain. A false positive stops being a declined transaction in an application you can hotfix and becomes a transaction the chain itself will not process, governed by a list updated through a privileged role. Some regulators read that as strong control. Others will ask who can change it and how quickly, and "the compliance admin key" is a thin answer.
+
+**How reversible this is.**
+
+- Application-layer rules change at deployment speed. Put anything market-specific there.
+- The Delayed Inbox Sentinel is a genesis decision, reversible only through an ArbOS upgrade.
+- Adding a market later is routine. Discovering that a market's rules conflict with a genesis choice is not.
+
+## Decision 4 — Coexistence with what you already run
+
+None of this is greenfield:
+
+- You hold balances on public chains.
+- You run an exchange with its own custody model.
+- You serve users who will not tolerate a migration they can perceive.
+
+A new chain joins that estate long before it replaces any of it.
+
+- **Canonical supply.** Assets that exist on your chain and elsewhere need one authoritative supply. A mint-and-burn model preserves that; lock-and-mint creates a wrapped representation you will spend years explaining.
+- **Dollar liquidity on day one.** Native USDC over the [canonical bridge](/launch-arbitrum-chain/integrations/bridged-usdc.mdx), with market makers committed in advance. Third-party bridge liquidity is reliable until launch-day demand tests it.
+- **Exits.** Fast Withdrawals on an AnyTrust chain confirm in roughly fifteen minutes through the committee you already rely on for data availability. The same feature on a Rollup introduces a committee you did not previously have. Identical mechanism, different trust implication.
+- **Custody stays where it is.** An institutional custody provider already integrated with your exchange treats a dedicated chain as another network, not a new custody model.
+- **The migration you can defer.** Existing flows need not move at launch, and moving them is usually the last step rather than the first.
+
+**The argument against.** Two settlement estates means two reconciliation processes, two liquidity pools, two incident surfaces, and a support organization that has to know which one a given customer is on. The transitional period is not a quarter. Firms have run split estates for years and found the coexistence cost exceeded the fee capture that justified the move.
+
+**How reversible this is.**
+
+- Flows you have not migrated are flows you can decline to migrate. Sequencing the move product by product keeps the option open at every step.
+- Liquidity commitments are contractual and time-bound. Read them that way.
+- The point of no return is user-held balances. Before that you have a second network; after it, an obligation.
+
+## Decision 5 — Accounts and access at consumer scale
+
+A dedicated chain lets you decide how your users hold accounts on it, and at tens of millions of users that account layer is the product. Little about self-custody UX survives contact with a mainstream base that has never held a seed phrase and will not start.
+
+- **Smart accounts over <a data-quicklook-from="externally-owned-accounts">externally owned accounts</a>.** Passkey and social login, account recovery, policy controls — the guarantees your existing app already makes. Retrofitting this later means migrating accounts that hold value.
+- **Gas should be invisible.** Sponsorship, or fees paid in a stablecoin. Requiring a mainstream user to acquire a native token to move their own money is the largest single drop-off in consumer onchain products.
+- **Institutional signing plugs in.** Custodial signers, server-side spending policies, and session-key permissions let existing custody and controls reach the account layer instead of being bypassed by it.
+- **Programmatic and agent-driven access.** Automated flows — sweeping idle balances, rebalancing, scheduled conversions — want dedicated accounts with scoped session keys and hard spend limits, not shared credentials. Design that surface deliberately, or it gets built around you.
+
+### On a custom gas token
+
+Using your own stablecoin as the chain's <a data-quicklook-from="custom-gas-token">gas token</a> is supported. The constraints arrive before the benefits:
+
+- **It is fixed at genesis.** The [gas token is set at deployment](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust.mdx) and cannot be changed afterward.
+- **Your treasury holds the float** the network needs to operate.
+- **Your accounting team owns a new reconciliation.**
+
+The alignment argument is real, and none of the above goes away because of it.
+
+**The argument against.** Abstracting away keys, gas, and signing leaves users holding assets on infrastructure whose failure modes they cannot see and you now own entirely. Every convenience is a support obligation and a recovery path that has to work at 3am. Teams that shipped seed phrases had a worse product and a smaller liability.
+
+**How reversible this is.**
+
+- The gas token is fixed at genesis. This is the least reversible decision here.
+- Account infrastructure is swappable in principle and painful in practice once users hold balances under it.
+- Sponsorship policies and spend limits are configuration. Change them freely.
+
+## A configuration to react to {#a-configuration-to-react-to}
+
+A concrete starting point, offered to argue with rather than adopt. Each line names what would move it.
+
+| Layer                 | Starting point                                                                                                                                                               | What would move it                                                                                               |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **Posture**           | A dedicated Arbitrum chain                                                                                                                                                   | Settlement with peers dominating your volume points to a consortium; immaterial onchain volume points to renting |
+| **Data availability** | AnyTrust                                                                                                                                                                     | A publicly legible trust-minimization posture worth more to you than per-transaction cost                        |
+| **Operations**        | Contracted sequencer and batch poster; at least one validator of your own; chain owner and upgrade roles retained in-house                                                   | Platform-infrastructure depth you already have and can absorb more of                                            |
+| **Compliance**        | Application-layer permissioning under your existing licenses; Delayed Inbox Sentinel activated at genesis; protocol-level screening only if you must claim complete coverage | A single-market product with no force-inclusion exposure in scope                                                |
+| **Coexistence**       | New flows first, existing flows unmigrated; native USDC with committed market makers; Fast Withdrawals through the committee                                                 | Constraints on holding user balances on new infrastructure, calling for a longer parallel run                    |
+| **Accounts**          | Smart accounts with sponsored gas; existing custody as signer; scoped session keys for automated flows                                                                       | An institutional rather than retail user base                                                                    |
+| **Gas token**         | The chain's native token at genesis                                                                                                                                          | A live regulated stablecoin already central to your flows — decided before deployment, not after                 |
+
+## Implement it {#implement-it}
+
+In the order the decisions resolve.
+
+1. **Posture and foundation** — [launch an Arbitrum chain](/launch-arbitrum-chain/overview/introduction.mdx), the [SDK quickstart](/launch-arbitrum-chain/quickstart/sdk-introduction.mdx), [data availability configuration](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx), and [how AnyTrust works](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx).
+2. **Operations** — [infrastructure providers](/launch-arbitrum-chain/integrations/infrastructure-providers.mdx), [ownership and access controls](/launch-arbitrum-chain/operate/ownership-and-access.mdx), and [migrating between providers](/launch-arbitrum-chain/migrate/between-raases.mdx).
+3. **Compliance** — [Compliance Filtering](/launch-arbitrum-chain/chain-config/validation/compliance-filtering.mdx) and [Delayed Inbox finality](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx).
+4. **Coexistence and liquidity** — [Fast Withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx) and [bridged USDC](/launch-arbitrum-chain/integrations/bridged-usdc.mdx).
+5. **Economics** — [fee management](/launch-arbitrum-chain/chain-config/costs/fee-management.mdx), [reporting on fees](/launch-arbitrum-chain/chain-config/costs/reporting-on-fees.mdx), [custom gas token](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust.mdx), and [Timeboost](/launch-arbitrum-chain/chain-config/sequencer/timeboost.mdx).
+
+If committee sign-off rather than the operating model is your binding constraint, the [financial institutions blueprint](/solutions/financial-institutions) covers that path instead.
+
+<VanillaAdmonition type="info">
+
+These are scoped directly with the Offchain Labs Enterprise Services team:
+
+- Mint-and-burn interop for tokenized assets.
+- Running an account-abstraction stack on a dedicated chain.
+- A fully operated chain with an SLA.
+
+</VanillaAdmonition>
