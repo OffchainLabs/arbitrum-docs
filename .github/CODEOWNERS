@@ -1,0 +1,22 @@
+# CODEOWNERS — reviewer ROUTING only (auto-requests reviewers on a PR).
+#
+# This file does NOT enforce "both teams must approve": when code-owner review
+# is required, GitHub is satisfied by an approval from ANY single listed owner.
+# The dual gate is enforced elsewhere:
+#   - Editorial (TW) gate: a branch ruleset requiring 1 approval from
+#     @OffchainLabs/technical-writing on docs/** (applied by eng/infra).
+#   - SME (technical) gate: the `sme-review-gate` status check (region/path aware,
+#     see .github/workflows/sme-review-gate.yml + scripts/sme-review-gate.ts).
+#
+# The per-domain SME teams referenced below must exist in the OffchainLabs org
+# WITH write access, or GitHub ignores the entry. Until eng/infra creates them,
+# those lines are inert — the technical-writing routing still works.
+
+# Editorial review on all docs
+/docs/**                         @OffchainLabs/technical-writing
+
+# Pilot technical sections — also auto-request the relevant per-domain SME team
+/docs/how-arbitrum-works/**      @OffchainLabs/technical-writing @OffchainLabs/protocol-sme
+/docs/stylus/**                  @OffchainLabs/technical-writing @OffchainLabs/stylus-sme
+/docs/stylus-by-example/**       @OffchainLabs/technical-writing @OffchainLabs/stylus-sme
+/docs/launch-arbitrum-chain/**   @OffchainLabs/technical-writing @OffchainLabs/chain-sme
