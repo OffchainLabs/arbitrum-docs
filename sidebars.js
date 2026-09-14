@@ -457,11 +457,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy/custom-genesis',
-              label: `Custom genesis`,
-            },
-            {
-              type: 'doc',
               id: 'launch-arbitrum-chain/deploy/deploy-chain',
               label: `Deploy`,
             },
