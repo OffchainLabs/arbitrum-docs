@@ -23,6 +23,8 @@ Before reading this guide, we recommend:
 - Becoming familiar with the general process of creating new chains explained in [How to deploy an Arbitrum chain](/launch-arbitrum-chain/deploy/deploy-chain.mdx)
 - Learning about the canonical token bridge in the [Token bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx) section
 
+If you hit a problem while deploying, verifying, or registering token bridge contracts, see [Token bridge troubleshooting](/launch-arbitrum-chain/deploy/token-bridge-troubleshooting.mdx).
+
 ## Parameters used when deploying a token bridge
 
 Before we describe the process of deploying a token bridge using the Chain SDK, let's look at the parameters we need to pass to the token bridge creator contract.
@@ -40,12 +42,12 @@ uint256 gasPriceBid
 
 The following table describes these parameters:
 
-| Parameter            | Type    | Description                                                                                                               |
-| :------------------- | :------ | :------------------------------------------------------------------------------------------------------------------------ |
-| `inbox`              | address | Address of the Inbox contract of the chain. This is used to uniquely identify the chain.                                  |
-| `rollupOwner`        | address | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain. |
-| `maxGasForContracts` | uint256 | Gas limit used for executing the retryable ticket on the child chain.                                                     |
-| `gasPriceBid`        | uint256 | Max gas price used for executing the retryable ticket on the child chain.                                                 |
+| Parameter            | Type      | Description                                                                                                               |
+| :------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------ |
+| `inbox`              | `address` | Address of the Inbox contract of the chain. This is used to uniquely identify the chain.                                  |
+| `rollupOwner`        | `address` | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain. |
+| `maxGasForContracts` | `uint256` | Gas limit used for executing the retryable ticket on the child chain.                                                     |
+| `gasPriceBid`        | `uint256` | Max gas price used for executing the retryable ticket on the child chain.                                                 |
 
 When creating the token bridge through the Chain SDK, the parameters `maxGasForContracts` and `gasPriceBid` don't need to be configured, since the SDK will calculate the right values.
 

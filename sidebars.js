@@ -285,6 +285,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing',
+                  label: 'Parent chain data fee pricing',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/costs/priority-fees',
                   label: `Priority fees`,
                 },
@@ -416,6 +421,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
                   label: `Fast withdrawals`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/validation/test-chain-configuration',
+                  label: `Test chain configuration`,
+                },
               ],
             },
             {
@@ -459,6 +469,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/deploy/token-bridge',
               label: `Token bridge`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/token-bridge-troubleshooting',
+              label: `Token bridge troubleshooting`,
             },
           ],
         },
@@ -535,6 +550,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/operate/bold-upgrade-playbook',
               label: 'BoLD upgrade playbook',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/operate/error-index',
+              label: 'Error index',
             },
             {
               type: 'doc',
@@ -1000,6 +1020,16 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Finality',
+              id: 'how-arbitrum-works/deep-dives/finality',
+            },
+            {
+              type: 'doc',
+              label: 'Batch poster',
+              id: 'how-arbitrum-works/deep-dives/batchposter',
+            },
+            {
+              type: 'doc',
               label: 'Parent to Child chain Messaging',
               id: 'how-arbitrum-works/deep-dives/l1-to-l2-messaging',
             },
@@ -1066,14 +1096,9 @@ const sidebars = {
               label: 'BoLD overview',
             },
             {
-              type: 'link',
-              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-              label: 'Deploy a validator on testnet',
-            },
-            {
-              type: 'link',
-              href: 'https://arxiv.org/abs/2404.10491',
-              label: 'BoLD Whitepaper',
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/bold-faq',
+              label: 'FAQ',
             },
             {
               type: 'doc',
@@ -1092,18 +1117,8 @@ const sidebars = {
             },
             {
               type: 'link',
-              href: 'https://github.com/OffchainLabs/bold',
-              label: 'Specification on Github',
-            },
-            {
-              type: 'link',
-              href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
-              label: 'Audit Report by Trail of Bits',
-            },
-            {
-              type: 'link',
-              href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
-              label: 'Audit Report by Code4rena',
+              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+              label: 'Deploy a validator on testnet',
             },
           ],
         },
