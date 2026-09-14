@@ -604,24 +604,6 @@ article .markdown {
     word-break: break-word;
   }
 
-  // A column whose cells are each a single code chip (`Type`, `Default`) has the
-  // same max-content and min-content, so auto table layout gives it none of the
-  // leftover width — a verbose `Description` neighbour takes all of it. The
-  // `anywhere` above then collapses the cell's min-content to one character, so
-  // the column settles at the width of its header and a chip like `boolean`
-  // breaks mid-word as "boolea / n".
-  //
-  // A min-width floor fixes that without changing how long chips behave: it
-  // raises the column's lower bound but never caps its growth, so address and
-  // CLI-flag columns still wrap exactly as before. Desktop only — tables have no
-  // horizontal scroll container, so narrow viewports need every column to stay
-  // fully collapsible.
-  @media (min-width: 997px) {
-    tbody td:has(> code:only-child) {
-      min-width: 6.5rem;
-    }
-  }
-
   tbody tr {
     border-bottom: 1px solid color-mix(in oklab, var(--arbitrum-border) 50%, transparent);
   }
