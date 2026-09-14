@@ -502,6 +502,11 @@ const sidebars = {
               id: 'launch-arbitrum-chain/integrations/exchange-integration-checklist',
               label: 'Exchange integration checklist',
             },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/integrations/block-explorer-compatibility',
+              label: 'Block explorer compatibility',
+            },
           ],
         },
         {

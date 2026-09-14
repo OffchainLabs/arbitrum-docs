@@ -1,0 +1,215 @@
+---
+title: 'Block explorer compatibility'
+description: 'Blockscout version requirements, required Arbitrum settings, default ports, and troubleshooting for running a self-hosted block explorer on your Arbitrum chain.'
+user_story: As an Arbitrum chain operator, I want to know which Blockscout versions and settings work with my Arbitrum chain so that my block explorer indexes it correctly.
+content_type: reference
+author: pete-vielhaber
+sme: TBD
+sidebar_position: 6
+---
+
+Most Arbitrum chains use [Blockscout](https://www.blockscout.com/) as their block explorer. To index an Arbitrum chain correctly, Blockscout needs three things:
+
+- A backend version that recognizes the Arbitrum chain type.
+- The Arbitrum indexer settings turned on. You must set several of them explicitly, because their defaults do not enable indexing.
+- Its microservices reachable at the right addresses.
+
+This page lists the version floors, the required settings, the default ports, and fixes for the errors operators hit most often.
+
+<VanillaAdmonition type="info" title="Blockscout is third-party software">
+
+Blockscout releases on its own schedule, and the version numbers below reflect its published documentation. Before you pin a version, confirm the current requirements in the [Blockscout release notes](https://github.com/blockscout/blockscout/releases) and the [Blockscout rollup deployment guide](https://docs.blockscout.com/setup/deployment/rollup-deployment).
+
+</VanillaAdmonition>
+
+## Version compatibility
+
+### Arbitrum chain support and blob viewing are different requirements
+
+Operators often quote the wrong version number, because Blockscout has two separate Arbitrum-related capabilities:
+
+| Capability                      | What it does                                                                                                                 | Minimum version                            |
+| :------------------------------ | :--------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------- |
+| **Arbitrum chain type support** | Indexes your chain's batches, cross-chain messages, and <a data-quicklook-from="parent-chain">parent chain</a> confirmations | Backend v6.7.0, with `CHAIN_TYPE=arbitrum` |
+| **Blob viewing**                | Displays the EIP-4844 blob data that a <a data-quicklook-from="batch-poster">batch poster</a> posts to Ethereum              | Backend v6.2.0, frontend v1.2.6            |
+
+The blob viewing versions, v6.2.0 and v1.2.6, appear in the [ArbOS 20 Atlas release notes](/run-arbitrum-node/arbos-releases/arbos20.mdx#block-explorers). They describe an explorer that can show blob data on Ethereum. They do not describe an explorer that can index your Arbitrum chain.
+
+If you run your own explorer for your own chain, use the chain type floor of **backend v6.7.0**.
+
+### Backend features by version
+
+| Backend version | What it adds for Arbitrum chains                                                                                                                                                    |
+| :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **v6.7.0**      | Arbitrum chain type (`CHAIN_TYPE=arbitrum`), batch tracking, cross-chain message tracking, and the core `INDEXER_ARBITRUM_*` settings                                               |
+| **v6.8.0**      | <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> and Celestia as data availability solutions for batches, richer message status, and WebSocket updates for new batches |
+| **v6.10.0**     | Child-to-parent chain messaging in the backend, customizable parent chain transaction status labels, and <a data-quicklook-from="stylus">Stylus</a> contract verification           |
+| **v7.0.0**      | Arbitrum data backfill (`INDEXER_ARBITRUM_DATA_BACKFILL_ENABLED`), which fills in Arbitrum-specific data on blocks you already indexed                                              |
+
+### Frontend
+
+Set `NEXT_PUBLIC_ROLLUP_TYPE=arbitrum` on the frontend. Rollup support requires **frontend v1.24.0** or later.
+
+Blockscout does not publish an Arbitrum-specific frontend floor. For a known-good starting point, use the pair named in Blockscout's [upgrade guide](https://docs.blockscout.com/setup/deployment/upgrade-guide-v7.0): **backend v7.0.2 with frontend v1.38.0**.
+
+<VanillaAdmonition type="caution" title="Rollup variables were renamed in v7.0">
+
+Between backend v6.10.x and v7.0.x, Blockscout merged `NEXT_PUBLIC_ROLLUP_L1_BASE_URL` and `NEXT_PUBLIC_ROLLUP_PARENT_CHAIN_NAME` into one variable:
+
+```env
+NEXT_PUBLIC_ROLLUP_PARENT_CHAIN={'name':'<chain-name>','baseUrl':'<parent-chain-url>'}
+```
+
+The rename applies only to the v6.10.x to v7.0.x step. If you upgrade across a wider range, read the release notes for every minor version in between. Each one can rename or deprecate its own variables.
+
+</VanillaAdmonition>
+
+## Required Arbitrum configuration
+
+Set `CHAIN_TYPE=arbitrum` on the backend, then configure the variables below.
+
+You must set these two variables to `true` explicitly. Their defaults leave the fetchers off, so the explorer starts and indexes nothing:
+
+| Variable                                            | Required value |
+| :-------------------------------------------------- | :------------- |
+| `INDEXER_ARBITRUM_BATCHES_TRACKING_ENABLED`         | `true`         |
+| `INDEXER_ARBITRUM_BRIDGE_MESSAGES_TRACKING_ENABLED` | `true`         |
+
+This variable has no default, so you must supply it:
+
+| Variable                              | What to set it to                                                                                    |
+| :------------------------------------ | :--------------------------------------------------------------------------------------------------- |
+| `INDEXER_ARBITRUM_L1_ROLLUP_CONTRACT` | Your chain's Rollup contract address on the parent chain. Find it in your chain's deployment output. |
+
+The remaining variables have working defaults. Review them against your parent chain RPC provider's rate limits:
+
+| Variable                                                          | Purpose                                                                     | Minimum backend |
+| :---------------------------------------------------------------- | :-------------------------------------------------------------------------- | :-------------- |
+| `INDEXER_ARBITRUM_L1_RPC`                                         | Parent chain RPC endpoint used to read batches, confirmations, and messages | v6.7.0          |
+| `INDEXER_ARBITRUM_L1_RPC_CHUNK_SIZE`                              | Batch call size against the parent chain RPC                                | v6.7.0          |
+| `INDEXER_ARBITRUM_ROLLUP_CHUNK_SIZE`                              | Batch call size against your chain's own RPC                                | v6.7.0          |
+| `INDEXER_ARBITRUM_L1_RPC_HISTORICAL_BLOCKS_RANGE`                 | Block range per `eth_getLogs` request                                       | v6.7.0          |
+| `INDEXER_ARBITRUM_L1_ROLLUP_INIT_BLOCK`                           | Parent chain block where you deployed your Rollup contract                  | v6.7.0          |
+| `INDEXER_ARBITRUM_ARBSYS_CONTRACT`                                | `ArbSys` <a data-quicklook-from="precompile">precompile</a> address         | v6.7.0          |
+| `INDEXER_ARBITRUM_NODE_INTERFACE_CONTRACT`                        | `NodeInterface` contract address                                            | v6.8.0          |
+| `INDEXER_ARBITRUM_L1_FINALIZATION_THRESHOLD`                      | Threshold for treating parent chain blocks as non-finalized                 | v6.8.0          |
+| `INDEXER_ARBITRUM_MISSED_MESSAGES_RECHECK_INTERVAL`               | How often to re-check for historical messages, in seconds                   | v6.7.0          |
+| `INDEXER_ARBITRUM_BATCHES_TRACKING_RECHECK_INTERVAL`              | How often to re-check for batches, in seconds                               | v6.7.0          |
+| `INDEXER_ARBITRUM_BATCHES_TRACKING_L1_FINALIZATION_CHECK_ENABLED` | Whether to monitor parent chain finalization                                | v6.7.0          |
+
+<VanillaAdmonition type="note" title="Chunk sizes trade throughput against rate limits">
+
+Larger chunk sizes send fewer, bigger requests, and can trigger rate-limit errors from your RPC provider. Smaller chunk sizes stay under the limits but add network delay and slow down indexing. Tune them to your provider's limits.
+
+</VanillaAdmonition>
+
+For the full variable list, see Blockscout's [chain-specific backend variables](https://docs.blockscout.com/setup/env-variables/backend-envs-chain-specific).
+
+## Default ports
+
+Blockscout runs as a backend, a frontend, and several microservices behind an Nginx proxy. These are the defaults in Blockscout's Docker Compose deployment:
+
+| Service                  | Container port | Published on host           |
+| :----------------------- | :------------- | :-------------------------- |
+| Nginx proxy (the app)    | 80             | 80                          |
+| Nginx proxy (stats)      | 8080           | 8080                        |
+| Nginx proxy (visualizer) | 8081           | 8081                        |
+| Backend API              | 4000           | Through the proxy at `/api` |
+| Frontend                 | 3000           | Through the proxy at `/`    |
+| Stats service (HTTP)     | 8050           | 8080, through the proxy     |
+| Visualizer               | 8050           | 8081, through the proxy     |
+| Stats service (gRPC)     | 8051           | Disabled by default         |
+| Stats metrics            | 6060           | Disabled by default         |
+| Main Postgres            | 5432           | 7432                        |
+| Stats Postgres           | 5432           | 7433                        |
+
+<VanillaAdmonition type="caution" title="Point your load balancer at the proxy, not the backend">
+
+The backend listens on port `4000`, but that port serves only the API. A load balancer or ingress that targets `4000` gives your users the API instead of the explorer.
+
+Target the Nginx proxy on port `80`. It routes `/api` to the backend on `4000` and everything else to the frontend on `3000`. If you replace the bundled proxy with a cloud load balancer, reproduce both routes.
+
+</VanillaAdmonition>
+
+## Troubleshooting
+
+### The stats container exits with a missing Blockscout API URL
+
+The stats service fails to start and logs:
+
+```text
+stats  | Error: Blockscout API URL has not been provided. Please specify it with corresponding env variable (STATS__BLOCKSCOUT_API_URL) or set STATS__IGNORE_BLOCKSCOUT_API_ABSENCE=true to disable functionality depending on the API.
+stats  | ERROR stats_server: service failed with error: Blockscout API URL has not been provided.
+```
+
+**Cause.** `STATS__BLOCKSCOUT_API_URL` defaults to null. The stats service uses it to decide when to start a chart update, so the service treats it as required. Blockscout's bundled `common-stats.env` already sets this variable. This error usually means your stats container started without that env file, or your deployment dropped the variable.
+
+**Fix.** Point the variable at your backend API. In a Docker Compose deployment on the default network:
+
+```env
+STATS__BLOCKSCOUT_API_URL=http://backend:4000
+```
+
+If your stats service runs outside Compose, use an address where it can reach the backend, such as your proxy's public URL.
+
+<VanillaAdmonition type="warning" title="The ignore flag hides the problem instead of fixing it">
+
+Setting `STATS__IGNORE_BLOCKSCOUT_API_ABSENCE=true` stops the error, and it also turns off every feature that depends on the backend API. Your explorer then starts with empty charts and counters. Use this flag only to get a deployment running temporarily, then set the API URL properly.
+
+</VanillaAdmonition>
+
+### Charts and counters stay empty after indexing
+
+The stats service calculates its charts when it starts. If it ran while your chain was still indexing, it stored partial results and keeps them until you force an update.
+
+After indexing finishes, restart the stats service once with:
+
+```env
+STATS__FORCE_UPDATE_ON_START=true
+```
+
+Then remove the setting, so later restarts stay fast.
+
+Also confirm your frontend points at the stats service. The default is `NEXT_PUBLIC_STATS_API_HOST=http://localhost:8080`, which matches the proxy's stats port rather than the service's own port `8050`.
+
+### Batches and cross-chain messages never appear
+
+Check that both tracking variables are set to `true`. Their defaults leave the fetchers off, so the explorer indexes blocks and transactions normally while showing no batch or message data:
+
+```env
+INDEXER_ARBITRUM_BATCHES_TRACKING_ENABLED=true
+INDEXER_ARBITRUM_BRIDGE_MESSAGES_TRACKING_ENABLED=true
+```
+
+Then confirm `INDEXER_ARBITRUM_L1_ROLLUP_CONTRACT` holds your chain's Rollup contract address, and that `INDEXER_ARBITRUM_L1_RPC` reaches your parent chain.
+
+## Arbitrum-specific display quirks
+
+### "Gas used for L1" is an estimate
+
+Blockscout shows a per transaction **Gas used for L1** value and a matching fee. This value is an estimate, and ArbOS never corrects it afterward.
+
+<a data-quicklook-from="arbos">ArbOS</a> charges the parent chain component of a transaction's fee before the batch containing that transaction exists. It estimates the cost from the price per data unit of the previously posted batch, records the result in the receipt as `gasUsedForL1`, and explorers display that field. ArbOS never attributes the transaction's actual share of batch posting costs back to it.
+
+The fee also does not go straight to the batch poster. ArbOS credits it to the `L1PricerFundsPoolAddress` system pool, which pays the batch poster's fee collector later, when a batch posting report arrives.
+
+For the full mechanism, see [Estimated versus actual fees](/launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx#estimated-versus-actual-fees).
+
+### Network verification type does not apply
+
+`NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE` accepts `validation`, `mining`, or `fee reception`. On Arbitrum chains the verification type is always `posting`, so this variable has no effect. Leave it unset.
+
+### Parent chain labels may name the wrong chain
+
+By default, Blockscout's transaction status labels read as though Ethereum is the parent chain. If your chain settles to Arbitrum One or another chain, set the `name` property of `NEXT_PUBLIC_ROLLUP_PARENT_CHAIN` so the interface names your actual parent chain, as in "Sent to Arbitrum One". Blockscout applies this setting only to Arbitrum-based chains.
+
+### Celestia batch links need a namespace
+
+If your chain posts batches to Celestia, set `NEXT_PUBLIC_ROLLUP_DA_CELESTIA_NAMESPACE` (frontend v1.38.0 or later) so Blockscout can link each batch to the [Celenium explorer](https://celenium.io). The value is a 60-character hex string in `0x` format. Blockscout offers this variable only for Arbitrum chains.
+
+## See also
+
+- [Third-party Arbitrum chain infrastructure providers](/launch-arbitrum-chain/integrations/infrastructure-providers.mdx) — explorers and Rollup-as-a-Service providers that support Arbitrum chains
+- [Monitoring tools and block explorers](/arbitrum-essentials/reference/monitoring-tools-block-explorers.mdx) — hosted explorers for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia
+- [Revenue routing](/launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx) — where transaction fees go, and why explorer fee fields are estimates
+- [ArbOS 20 Atlas](/run-arbitrum-node/arbos-releases/arbos20.mdx) — blob support and the explorer versions that display blob data
