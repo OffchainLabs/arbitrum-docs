@@ -7,18 +7,18 @@ content_type: how-to
 user_story: 'As an Arbitrum chain operator, I want to create a chain with a custom genesis state.'
 ---
 
-Arbitrum chain operators are increasingly seeking to deploy chains with pre-existing state by loading an initial state in a file such as `genesis.json`. Specifically, chain operators want to predeploy smart contracts (like Gnosis Safe) to an Arbitrum chain so they exist from genesis, before any user interaction or post-launch governance.
+Arbitrum chain operators are increasingly seeking to deploy chains with pre-existing state by loading an initial state in a file such as `genesis.json`. Specifically, chain operators want to predeploy smart contracts (like Gnosis Safe) to an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> so they exist from genesis, before any user interaction or post-launch governance.
 
-Initializing from a genesis state would be helpful in the following scenarios:
+Initializing from a genesis state helps in the following scenarios:
 
 1. Redeploying a new testnet with the pre-existing state if the current testnet is broken.
-2. Deploying additional sibling chains with pre-existing contracts.
-3. Simplifying self-serve backends for RaaSes, such that hundreds of testnets can be deployed with similar contracts.
-4. Reducing lift on third-party infrastructure teams to redeploy contracts for new chains.
+2. Deploying more sibling chains with pre-existing contracts.
+3. Simplifying self-serve backends for <a data-quicklook-from="raas">Rollup-as-a-Service (RaaS)</a> providers, so that hundreds of testnets can be deployed with similar contracts.
+4. Reducing the work for third-party infrastructure teams that redeploy contracts for new chains.
 
 ## Why should I use a custom genesis state?
 
-Using a custom genesis allows you to initialize a new blockchain with a customized genesis state and network configuration through the following options:
+A custom genesis lets you start your Arbitrum chain with a customized genesis state and network configuration:
 
 - **Predeployed contracts**: standard chains start without any smart contracts. This feature allows you to preload contract bytecode in the very first block, so infrastructure is available at launch.
 - **Initial account state (allocations)**: you can pre-configure the ledger—including account balances and contract storage—before the network opens for transactions.
@@ -26,7 +26,7 @@ Using a custom genesis allows you to initialize a new blockchain with a customiz
 
 <VanillaAdmonition type="danger" title="Preallocated balances are not backed by the parent chain">
 
-Preallocating account balances in the genesis state credits **ETH** (or your custom gas token) on your Arbitrum chain **without** depositing anything into the parent-chain bridge. The protocol does **not** require the bridge to hold ETH equal to the balances you preallocate, and there is no deploy-time check.
+Preallocating account balances in the genesis state credits **ETH** (or your <a data-quicklook-from="custom-gas-token">custom gas token</a>) on your Arbitrum chain **without** depositing anything into the <a data-quicklook-from="parent-chain">parent-chain</a> bridge. The protocol does **not** require the bridge to hold ETH equal to the balances you preallocate, and there is no deploy-time check.
 
 If your chain will accept user deposits, a chain whose total preallocated balances exceed the bridge's backing is **insolvent from genesis**: withdrawals can fail once the bridge is drained. Only preallocate non-zero balances if you accept responsibility for backing them—for example, a private or test chain, or one where you deposit the equivalent amount into the bridge before opening it to users.
 
@@ -34,55 +34,58 @@ If your chain will accept user deposits, a chain whose total preallocated balanc
 
 ## How to configure
 
-:::info Prerequisites
+<VanillaAdmonition type="info" title="Prerequisites">
 
 - [Nitro contracts](https://github.com/OffchainLabs/nitro-contracts) >= v3.2
-  - first version to include full support for custom initialization in `genesis.json`
+  - First version to include full support for custom initialization in `genesis.json`.
 - [Nitro node](/run-arbitrum-node/02-run-full-node.mdx) >= v3.11.0 is needed for using custom-genesis.
-- [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) >= v0.28.0 **or**
+
+Choose **one** of these two tools:
+
+- [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) >= v0.28.0
   - The Chain SDK Docker image supports predeployed contracts and custom account allocations.
 - [genesis-file-generator tool](https://hub.docker.com/r/offchainlabs/genesis-file-generator)
 
-  - You can also use the `genesis-file-generator` to customize the `genesis.json` file or pass accounts/custom chain config.
+  - Use the `genesis-file-generator` to customize the `genesis.json` file or pass accounts/custom chain config.
 
-  **Note**: The chain configuration must be exactly the same at the string level, including the order of fields, potential whitespace, or special characters for the `serializedChainConfig` string
+  **Note**: The chain configuration must be exactly the same at the string level, including the order of fields, potential whitespace, or special characters for the `serializedChainConfig` string.
 
-:::
+</VanillaAdmonition>
 
 ### Use the Chain SDK
 
 The Docker command completes the following automated steps:
 
-- Generates a `genesis.json` file with the pre-deployed contracts when `loadDefaultPredeploys` is enabled. You can also supply custom account allocations.
+- Generates a `genesis.json` file with the predeployed contracts when `loadDefaultPredeploys` is enabled. You can also supply custom account allocations.
 - Calculates the `blockHash` and `sendRoot` hash and returns them for your use.
 
-You can use the output from the previous step to set up the chain separately. Deploying the rollup is a separate SDK call; the Docker command does not prompt you to deploy it.
+You can use the output from the previous step to set up the chain separately. Deploying the Rollup is a separate SDK call; the Docker command does not prompt you to deploy it.
 
-#### Core configuration ref
+#### Core configuration reference
 
-The following parameters configure the `genesis.json` file. The environment variable names below are used by the standalone generator; the Chain SDK Docker command takes the corresponding JSON fields listed in the [Docker command reference](#docker-command-reference). Its image bundles the Nitro binary, so `NITRO_NODE_IMAGE` is only needed when calculating hashes separately.
+The following parameters configure the `genesis.json` file. The environment variable names below are used by the standalone generator; the Chain SDK Docker command takes the corresponding JSON fields listed in the [Docker command reference](#docker-command-reference). The Chain SDK Docker image bundles the Nitro binary, so you only need `NITRO_NODE_IMAGE` when you calculate hashes separately.
 
-| Variable                       | Description                                                                                                                                                                                                       |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CHAIN_ID`                     | The unique numeric identifier for your chain.                                                                                                                                                                     |
-| `IS_ANYTRUST`                  | Whether the chain is an AnyTrust (`true`) or rollup (`false`).                                                                                                                                                    |
-| `ARBOS_VERSION`                | The version of ArbOS to use for the genesis block.                                                                                                                                                                |
-| `CHAIN_OWNER`                  | The address that will have admin ownership of the deployed chain.                                                                                                                                                 |
-| `L1_BASE_FEE`                  | The initial L1 gas price (in wei) used to calibrate the chain initiation.                                                                                                                                         |
-| `NITRO_NODE_IMAGE`             | The Nitro node Docker image used for hashing and node operations.                                                                                                                                                 |
-| `ENABLE_NATIVE_TOKEN_SUPPLY`   | Flag to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx) via third-party protocols. |
-| `ENABLE_TRANSACTION_FILTERING` | Flag to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._                               |
+| Variable                       | Description                                                                                                                                                                             |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CHAIN_ID`                     | The unique numeric identifier for your chain.                                                                                                                                           |
+| `IS_ANYTRUST`                  | Whether the chain is an AnyTrust chain (`true`) or a Rollup chain (`false`).                                                                                                            |
+| `ARBOS_VERSION`                | The version of ArbOS to use for the genesis block.                                                                                                                                      |
+| `CHAIN_OWNER`                  | The address that has admin ownership of the deployed chain.                                                                                                                             |
+| `L1_BASE_FEE`                  | The initial L1 gas price (in wei) used to calibrate the chain creation.                                                                                                                 |
+| `NITRO_NODE_IMAGE`             | The Nitro node Docker image used for hashing and node operations.                                                                                                                       |
+| `ENABLE_NATIVE_TOKEN_SUPPLY`   | Flag to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx). |
+| `ENABLE_TRANSACTION_FILTERING` | Flag to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._     |
 
 #### Deployment configuration (optional)
 
-This step is only required if you choose to deploy the rollup to the parent chain (Step 3 below).
+This step is only required if you choose to deploy the Rollup to the parent chain (Step 3 below).
 
-| Variable                 | Description                                                            |
-| ------------------------ | ---------------------------------------------------------------------- |
-| DEPLOYER_PRIVATE_KEY     | Private key of the account responsible for the rollup deployment.      |
-| BATCH_POSTER_PRIVATE_KEY | Private key for the sequencer's batch-posting address.                 |
-| VALIDATOR_PRIVATE_KEY    | Private key for the validator/bonder address                           |
-| PARENT_CHAIN_RPC         | RPC endpoint for the parent chain (e.g., Arbitrum Sepolia or Ethereum) |
+| Variable                   | Description                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------ |
+| `DEPLOYER_PRIVATE_KEY`     | Private key of the account responsible for the Rollup deployment.              |
+| `BATCH_POSTER_PRIVATE_KEY` | Private key for the sequencer's batch-posting address.                         |
+| `VALIDATOR_PRIVATE_KEY`    | Private key for the validator/bonder address.                                  |
+| `PARENT_CHAIN_RPC`         | RPC endpoint for the parent chain (for example, Arbitrum Sepolia or Ethereum). |
 
 <VanillaAdmonition type="warning" title="Keep private keys out of version control">
 
@@ -101,20 +104,21 @@ This step is only required if you choose to deploy the rollup to the parent chai
 2. Generate genesis
 
    - Ensure your `genesis-input.json` is configured and run the Docker command below.
-   - To preallocate custom accounts, set `customAllocAccountFile` to `custom-alloc.json` in `genesis-input.json` and place the file (standard Geth `alloc` format) in the working directory. See the [`genesis-file-generator` section](#use-the-genesis-file-generator-tool) below for a sample, and review the solvency warning above before setting non-zero balances.
-     :::info Configuration
+   - To preallocate custom accounts, set `customAllocAccountFile` to `custom-alloc.json` in `genesis-input.json` and place the file (standard <a data-quicklook-from="geth">Geth</a> `alloc` format) in the working directory. See the [`genesis-file-generator` section](#use-the-genesis-file-generator-tool) below for a sample, and review the solvency warning above before setting non-zero balances.
+
+     <VanillaAdmonition type="info" title="Configuration">
 
      Double-check that your configuration values match your intended chain specs before running the command.
 
-     :::
+     </VanillaAdmonition>
 
-3. Create rollup (optional)
-   - After generating the `genesis.json` file, use the Chain SDK to deploy your rollup as shown in [Prepare the Rollup deployment](#4-prepare-the-rollup-deployment), or deploy the rollup later.
+3. Create Rollup (optional)
+   - After generating the `genesis.json` file, use the Chain SDK to deploy your Rollup as shown in [Prepare the Rollup deployment](#4-prepare-the-rollup-deployment), or deploy the Rollup later.
 4. Configure and launch your node:
    - Set up your node as usual (see the [full node guide](/run-arbitrum-node/02-run-full-node.mdx)), but include the following properties to point to your custom state:
      - `--init.genesis-json-file=/path/to/genesis.json`: the path to your custom `genesis.json` file
      - `--init.empty=false`: **(Required)** Forces the node to load the provided genesis file instead of initializing a blank state.
-5. Start your chain, with the correct preloaded state.
+5. Start your chain with the correct preloaded state.
 
 <VanillaAdmonition type="info" title="Loading your custom genesis at start-up">
 
@@ -122,7 +126,7 @@ Your custom genesis is loaded via the `--init.genesis-json-file` and `--init.emp
 
 </VanillaAdmonition>
 
-Give every node the same `genesis.json` on its first startup. Keep Nitro's default genesis-assertion validation enabled. The node recalculates the genesis block hash and verifies it against the assertion posted during Rollup deployment. A mismatch means that the node received a different genesis file or deployment configuration.
+Give every node the same `genesis.json` on its first startup. Keep <a data-quicklook-from="arbitrum-nitro">Nitro</a>'s default genesis-assertion validation enabled. The node recalculates the genesis block hash and verifies it against the <a data-quicklook-from="assertion">assertion</a> posted during Rollup deployment. A mismatch means that the node received a different genesis file or deployment configuration.
 
 <VanillaAdmonition type="caution" title="Generate the genesis before deploying the chain">
 
@@ -146,7 +150,7 @@ export CHAIN_SDK_IMAGE=offchainlabs/arbitrum-chain-sdk:v0.28.0
 docker pull "$CHAIN_SDK_IMAGE"
 ```
 
-Use the same image tag or digest for every operator so that they use the same genesis generator and Nitro `genesis-generator` binary.
+Pin the same image tag or digest for every operator. Different versions of the bundled Nitro `genesis-generator` binary can produce a different genesis block hash.
 
 ##### 1. Define custom account allocations
 
@@ -191,21 +195,21 @@ Create `genesis-input.json` in the same directory as `custom-alloc.json`. This f
 
 The generator accepts these fields:
 
-| Field                        | Type      | Required | Default | Description                                                                                                                                                                                                       |
-| ---------------------------- | --------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                    | `string`  | Yes      | —       | The unique numeric identifier for your chain.                                                                                                                                                                     |
-| `arbosVersion`               | `string`  | Yes      | —       | The version of ArbOS to use for the genesis block.                                                                                                                                                                |
-| `chainOwner`                 | `string`  | Yes      | —       | The address that will have admin ownership of the deployed chain.                                                                                                                                                 |
-| `l1BaseFee`                  | `string`  | Yes      | —       | The initial L1 gas price (in wei) used to calibrate the chain initiation. Use a nonzero value.                                                                                                                    |
-| `isAnyTrust`                 | `boolean` | No       | `false` | Whether the chain is an AnyTrust (`true`) or rollup (`false`).                                                                                                                                                    |
-| `loadDefaultPredeploys`      | `boolean` | No       | `false` | Include the default contracts supplied by the genesis file generator.                                                                                                                                             |
-| `enableNativeTokenSupply`    | `boolean` | No       | `false` | Flag to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx) via third-party protocols. |
-| `enableTransactionFiltering` | `boolean` | No       | `false` | Flag to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._                               |
-| `customAllocAccountFile`     | `string`  | No       | —       | Path to the custom allocation file, relative to the container's working directory.                                                                                                                                |
-| `maxCodeSize`                | `string`  | No       | `24576` | Maximum deployed contract bytecode size in bytes.                                                                                                                                                                 |
-| `maxInitCodeSize`            | `string`  | No       | `49152` | Maximum contract initialization bytecode size in bytes.                                                                                                                                                           |
+| Field                        | Type      | Required | Default | Description                                                                                                                                                                             |
+| ---------------------------- | --------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chainId`                    | `string`  | Yes      | —       | The unique numeric identifier for your chain.                                                                                                                                           |
+| `arbosVersion`               | `string`  | Yes      | —       | The version of ArbOS to use for the genesis block.                                                                                                                                      |
+| `chainOwner`                 | `string`  | Yes      | —       | The address that has admin ownership of the deployed chain.                                                                                                                             |
+| `l1BaseFee`                  | `string`  | Yes      | —       | The initial L1 gas price (in wei) used to calibrate the chain creation. Use a nonzero value.                                                                                            |
+| `isAnyTrust`                 | `boolean` | No       | `false` | Whether the chain is an AnyTrust chain (`true`) or a Rollup chain (`false`).                                                                                                            |
+| `loadDefaultPredeploys`      | `boolean` | No       | `false` | Include the default contracts supplied by the genesis file generator.                                                                                                                   |
+| `enableNativeTokenSupply`    | `boolean` | No       | `false` | Flag to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx). |
+| `enableTransactionFiltering` | `boolean` | No       | `false` | Flag to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._     |
+| `customAllocAccountFile`     | `string`  | No       | —       | Path to the custom allocation file, relative to the container's working directory.                                                                                                      |
+| `maxCodeSize`                | `string`  | No       | `24576` | Maximum deployed contract bytecode size in bytes.                                                                                                                                       |
+| `maxInitCodeSize`            | `string`  | No       | `49152` | Maximum contract initialization bytecode size in bytes.                                                                                                                                 |
 
-The `chainId`, chain owner, ArbOS version, chain type, and code-size limits become part of `serializedChainConfig`. Keep them identical when you prepare the Rollup deployment.
+The `chainId`, <a data-quicklook-from="chain-owner">chain owner</a>, ArbOS version, chain type, and code-size limits become part of `serializedChainConfig`. Keep them identical when you prepare the Rollup deployment.
 
 ##### 3. Generate the genesis file and hashes
 
@@ -280,27 +284,27 @@ Pass the parsed `serializedChainConfig` without changing its values. Set `dataCo
 
 #### Environment variables reference (.env)
 
-These parameters define the identify of your chain
+These parameters define the identity of your chain.
 
-| Variable                       | Description                                                                                                                                                                                                                                       | Default               |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `CHAIN_ID`                     | The unique numeric identifier for your new chain.                                                                                                                                                                                                 | `31337`               |
-| `IS_ANYTRUST`                  | Whether the chain is an AnyTrust (`true`) or a rollup (`false`).                                                                                                                                                                                  | `false`               |
-| `ARBOS_VERSION`                | The version of ArbOS to use for the genesis block.                                                                                                                                                                                                | `51`                  |
-| `CHAIN_OWNER`                  | The address that will have admin ownership of the deployed chain.                                                                                                                                                                                 | --                    |
-| `L1_BASE_FEE`                  | The initial L1 gas price (in wei) used to calibrate the chain creation.                                                                                                                                                                           | `1000000000` (1 gwei) |
-| `NITRO_NODE_IMAGE`             | The Nitro node Docker image used for hashing and node operations.                                                                                                                                                                                 | --                    |
-| `CUSTOM_ALLOC_ACCOUNT_FILE`    | (optional) Path to a JSON file containing your own account balances, contract bytecode, and storage slots. The file should be in the the standard Geth `alloc` format.                                                                            | `" "` (empty)         |
-| `ENABLE_NATIVE_TOKEN_SUPPLY`   | (optional) Set to `true` if you want to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx) via third-party protocols. | `false`               |
-| `LOAD_DEFAULT_PREDEPLOYS`      | (optional) Set to `false` if you don't want the default predeploys.                                                                                                                                                                               | `true`                |
-| `ENABLE_TRANSACTION_FILTERING` | (optional) Set to `true` if you want to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._                               | `false`               |
+| Variable                       | Description                                                                                                                                                                                                             | Default               |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `CHAIN_ID`                     | The unique numeric identifier for your new chain.                                                                                                                                                                       | `31337`               |
+| `IS_ANYTRUST`                  | Whether the chain is an AnyTrust chain (`true`) or a Rollup chain (`false`).                                                                                                                                            | `false`               |
+| `ARBOS_VERSION`                | The version of ArbOS to use for the genesis block.                                                                                                                                                                      | `51`                  |
+| `CHAIN_OWNER`                  | The address that has admin ownership of the deployed chain.                                                                                                                                                             | --                    |
+| `L1_BASE_FEE`                  | The initial L1 gas price (in wei) used to calibrate the chain creation.                                                                                                                                                 | `1000000000` (1 gwei) |
+| `NITRO_NODE_IMAGE`             | The Nitro node Docker image used for hashing and node operations.                                                                                                                                                       | --                    |
+| `CUSTOM_ALLOC_ACCOUNT_FILE`    | (optional) Path to a JSON file containing your own account balances, contract bytecode, and storage slots. The file should be in the standard Geth `alloc` format.                                                      | `" "` (empty)         |
+| `ENABLE_NATIVE_TOKEN_SUPPLY`   | (optional) Set to `true` if you want to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx). | `false`               |
+| `LOAD_DEFAULT_PREDEPLOYS`      | (optional) Set to `false` if you don't want the default predeploys.                                                                                                                                                     | `true`                |
+| `ENABLE_TRANSACTION_FILTERING` | (optional) Set to `true` if you want to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._     | `false`               |
 
-#### Execution process
+#### Execution steps
 
 1. Prepare the genesis state
 
    - Set up the `.env` file with the required parameters.
-   - Run the [`genesis-file-generator`](https://hub.docker.com/r/offchainlabs/genesis-file-generator/tags) Docker image to generate a `genesis.json` file with the required pre-deployed contracts and additional configurations.
+   - Run the [`genesis-file-generator`](https://hub.docker.com/r/offchainlabs/genesis-file-generator/tags) Docker image to generate a `genesis.json` file with the required predeployed contracts and more configurations.
 
    ```shell
    mkdir -p genesis
@@ -333,7 +337,7 @@ These parameters define the identify of your chain
 
 2. Generate the required hashes:
 
-   - After the `genesis.json` file is created, run the Nitro container to compute the genesis `blockhash` with the `genesis-generator` endpoint:
+   - After the `genesis.json` file is created, run the Nitro container to compute the genesis `blockHash` with the `genesis-generator` endpoint:
 
    ```shell
    source .env
@@ -342,18 +346,18 @@ These parameters define the identify of your chain
      -v "$(pwd)/genesis":/data/genesisDir \
      --entrypoint genesis-generator \
      "$NITRO_NODE_IMAGE" \
-     --genesis-json-file /data/genesisDir/genesis.json \
+     --genesis-json-file /data/genesisDir/genesis.json
    ```
 
-   - This bind-mounts the current directory into the container so it can read the `genesis.json` file generated in the previous step, and outputs the genesis `blockhash` and `sendRoot` hash. The `blockhash` and `sendRoot` hash will be logged as:
+   - This bind-mounts the current directory into the container so it can read the `genesis.json` file generated in the previous step, and outputs the genesis `blockHash` and `sendRoot` hash. The container logs both values as:
 
    ```shell
    genesis-hash-calculator  | BlockHash: 0xd636d2cae7a75bf41f471639f1cbf98fe2a24216147792510e664a65496f27ed, SendRoot: 0x0000000000000000000000000000000000000000000000000000000000000000, Batch: 1, PosInBatch: 0
    ```
 
-3. Deploy the rollup:
-   - Use the `blockhash`, `sendRoot`, `Batch`, and `PosInBatch` in the Chain SDK. The SDK will use these to generate the `assertion_hash` needed to register your rollup's core smart contracts on the parent chain.
-   - If you write your own deploy script with `@arbitrum/chain-sdk` (instead of the bundled `generate-genesis-file` example), make sure the rollup config includes the `dataCostEstimate` field. The bundled example sets it, and omitting it is a common cause of failed custom-genesis deployments.
+3. Deploy the Rollup:
+   - Use the `blockHash`, `sendRoot`, `Batch`, and `PosInBatch` in the Chain SDK. The SDK uses these to generate the `assertion_hash` needed to register your Rollup's core smart contracts on the parent chain.
+   - If you write your own deploy script with `@arbitrum/chain-sdk` (instead of the bundled `generate-genesis-file` example), make sure the Rollup config includes the `dataCostEstimate` field. The bundled example sets it, and omitting it is a common cause of failed custom-genesis deployments.
    ```javascript
    const genesisAssertionState = {
        globalState: {
@@ -372,13 +376,13 @@ These parameters define the identify of your chain
    - Set up your node as usual (see the [full node guide](/run-arbitrum-node/02-run-full-node.mdx)), but include the following properties to point to your custom state:
      - `--init.genesis-json-file=/path/to/genesis.json`: the path to your custom `genesis.json` file
      - `--init.empty=false`: **(Required)** Forces the node to load the provided genesis file instead of initializing a blank state.
-5. Start your chain, with the correct preloaded state.
+5. Start your chain with the correct preloaded state.
 
-### Pre-deployed contracts registry
+### Predeployed contracts registry
 
 The following contracts are included by default in the standard `genesis.json` file. For the authoritative, maintained list—and details on how each contract is deployed—see the [`genesis-file-generator` README](https://github.com/OffchainLabs/genesis-file-generator#pre-deployed-contracts).
 
-| Category            | Contract Name                        | Address                                      | Note                                    |
+| Category            | Contract name                        | Address                                      | Note                                    |
 | :------------------ | :----------------------------------- | :------------------------------------------- | :-------------------------------------- |
 | **Factories**       | Safe Singleton Factory v1.0.43       | `0x914d7Fec6aaC8cd542e72Bca78B30650d45643d7` | Deterministic Proxy (Safe Key)          |
 |                     | Create2Deployer                      | `0x13b0D85CcB8bf860b6b79AF3029fCA081AE9beF2` | CREATE (Deployer: `0x5542...`, Nonce 0) |
@@ -408,9 +412,9 @@ The following contracts are included by default in the standard `genesis.json` f
 |                     | EntryPoint v0.8.0                    | `0x4337084d9e255ff0702461cf8895ce9e3b5ff108` | Standard v0.8                           |
 |                     | SenderCreator v0.8.0                 | `0x449ED7C3e6Fee6a97311d4b55475DF59C44AdD33` | Created during EP v0.8.0 deploy         |
 | **Account Modules** | Safe Module Setup v0.3.0             | `0x2dd68b007B46fBe91B9A7c3EDa5A7a1063cB5b47` | ERC-4337 Initializer                    |
-|                     | Safe 4337 Module v0.3.0              | `0x75cf11467937ce3F2f357CE24ffc3DBF8fD5c226` | Associated with Entrypoint v0.7.0       |
-|                     | Kernel v3.3                          | `0xd6CEDDe84be40893d153Be9d467CD6aD37875b28` | Associated with Entrypoint v0.7.0       |
-|                     | KernelFactory v3.3                   | `0x2577507b78c2008Ff367261CB6285d44ba5eF2E9` | Associated with Entrypoint v0.7.0       |
+|                     | Safe 4337 Module v0.3.0              | `0x75cf11467937ce3F2f357CE24ffc3DBF8fD5c226` | Associated with EntryPoint v0.7.0       |
+|                     | Kernel v3.3                          | `0xd6CEDDe84be40893d153Be9d467CD6aD37875b28` | Associated with EntryPoint v0.7.0       |
+|                     | KernelFactory v3.3                   | `0x2577507b78c2008Ff367261CB6285d44ba5eF2E9` | Associated with EntryPoint v0.7.0       |
 |                     | MetaFactory v3.0                     | `0xd703aaE79538628d27099B8c4f621bE4CCd142d5` | ZeroDev FactoryStaker                   |
 |                     | ECDSAValidator v3.1                  | `0x845ADb2C711129d4f3966735eD98a9F09fC4cE57` | Compiled from commit 8f7fd99            |
 | **Infrastructure**  | Multicall3                           | `0xcA11bde05977b3631167028862bE2a173976CA11` | Pre-signed Transaction                  |
