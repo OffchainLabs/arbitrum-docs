@@ -8,7 +8,7 @@ user_story: As a latency-sensitive participant on Arbitrum One, I want to unders
 content_type: gentle-introduction
 ---
 
-The Fast Feed is a paid, authenticated WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> orders it, before the block that contains it reaches the standard <a data-quicklook-from="sequencer-feed">sequencer feed</a>.
+The Fast Feed is a paid, authenticated WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> has ordered and executed it, before the block that contains it reaches the standard <a data-quicklook-from="sequencer-feed">sequencer feed</a>.
 
 On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, Priority Gas Auction (PGA) rounds run every 125ms inside a 250ms block. The Fast Feed publishes within those rounds, so you see ordered transactions without waiting for the block to close.
 
@@ -16,7 +16,7 @@ PGA rounds set the cadence of the Fast Feed. To understand the rounds themselves
 
 ## What the Fast Feed does not do
 
-- **It does not give you a view into the mempool.** The Fast Feed publishes a transaction only after the Sequencer has ordered it and enqueued it for execution. Nobody can influence or change that order afterward, so the Fast Feed does not enable frontrunning or sandwich attacks. The Sequencer's mempool stays private.
+- **It does not give you a view into the mempool.** The Fast Feed publishes a transaction only after the Sequencer has ordered and executed it. Nobody can influence or change that order afterward, so the Fast Feed does not enable frontrunning or sandwich attacks. The Sequencer's mempool stays private.
 - **It does not publish state.** You receive a list of transactions and a partial receipt for each one. You do not receive state changes or partial blocks.
 - **It does not let you follow the chain.** A Nitro node cannot consume the Fast Feed, and the Fast Feed gives you no way to track chain state. Subscribers write their own client. To follow the chain, use the standard sequencer feed instead.
 
@@ -32,24 +32,24 @@ If you send ordinary transactions through a wallet or an app, the Fast Feed does
 
 ## What the Fast Feed publishes
 
-Each message is a `FeedMessage` envelope that carries one transaction plus the metadata you need to place it in time and in order.
+Each message is a `FeedMessage` envelope that carries one transaction plus the metadata you need to place it in time and in order. The Sequencer sends each message as a JSON object inside a binary WebSocket frame, so byte fields arrive as hex-encoded strings.
 
-| Field          | Type     | Description                                                      |
-| -------------- | -------- | ---------------------------------------------------------------- |
-| `version`      | `uint32` | Protocol version, for forward compatibility                      |
-| `timestamp_ms` | `uint64` | Unix time in milliseconds when the Sequencer created the message |
-| `pga_round`    | `uint64` | The PGA round this transaction belongs to, within the block      |
-| `transaction`  | object   | The transaction data and its incomplete receipt                  |
+| Field          | Type             | Description                                                                |
+| -------------- | ---------------- | -------------------------------------------------------------------------- |
+| `version`      | number           | Protocol version, for forward compatibility (currently `1`)                |
+| `timestamp_ms` | number           | Unix time in milliseconds when the Sequencer created the message           |
+| `pga_round`    | number, optional | The PGA round this transaction belongs to, within the block, starting at 1 |
+| `transaction`  | object           | The transaction data and its partial receipt                               |
 
 The `transaction` object carries the transaction itself:
 
-| Field          | Type      | Description                                        |
-| -------------- | --------- | -------------------------------------------------- |
-| `block_number` | `uint64`  | Tentative block number, not guaranteed to be final |
-| `tx_index`     | `uint32`  | Position within the block so far                   |
-| `raw_tx`       | `bytes`   | RLP-encoded signed transaction                     |
-| `tx_hash`      | `bytes32` | Transaction hash                                   |
-| `receipt`      | object    | Execution result                                   |
+| Field          | Type   | Description                                        |
+| -------------- | ------ | -------------------------------------------------- |
+| `block_number` | number | Tentative block number, not guaranteed to be final |
+| `tx_index`     | number | Position within the block so far                   |
+| `raw_tx`       | string | Hex-encoded, RLP-encoded signed transaction        |
+| `tx_hash`      | string | Hex-encoded transaction hash                       |
+| `receipt`      | object | Execution result                                   |
 
 The receipt reports `status`, `gas_used`, `gas_used_for_l1`, `cumulative_gas_used`, `effective_gas_price`, `base_fee`, any `contract_address` the transaction created, and the event `logs` it emitted.
 
