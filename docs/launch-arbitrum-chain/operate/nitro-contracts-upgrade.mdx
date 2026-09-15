@@ -9,7 +9,7 @@ user_story: As an Arbitrum chain operator, I need to run a supported Nitro contr
 content_type: how-to
 ---
 
-The Arbitrum Chain SDK CLI can deploy an upgrade action, execute it through the parent-chain <a data-quicklook-from="upgrade-executor">upgrade executor</a>, and verify the resulting Nitro contracts version. The SDK Docker image includes the Chain Actions scripts and Foundry binaries required by this workflow.
+The Arbitrum Chain SDK CLI can deploy an upgrade action, execute it through the parent-chain <a data-quicklook-from="upgrade-executor">upgrade executor</a>, and verify the resulting Nitro contracts version. The SDK Docker image includes the Chain Actions scripts and Foundry binaries this workflow requires.
 
 The commands currently support the Nitro contracts `3.2.0` upgrade. This action upgrades `RollupAdminLogic` and `RollupUserLogic` from `3.1.0` to `3.2.0`. It does not upgrade the bridge, inbox, sequencer inbox, outbox, or challenge manager, and it does not require an ArbOS upgrade.
 
@@ -61,7 +61,7 @@ docker run --rm "$CHAIN_SDK_IMAGE" \
 
 ## 2. Deploy the upgrade action if necessary
 
-First check the [deployed `3.2.0` upgrade action instances](https://github.com/OffchainLabs/chain-actions/tree/main/scripts/foundry/contract-upgrades/3.2.0#deployed-instances). If your parent chain has an instance, record its address and continue to step 3.
+First, check the [deployed `3.2.0` upgrade action instances](https://github.com/OffchainLabs/chain-actions/tree/main/scripts/foundry/contract-upgrades/3.2.0#deployed-instances). If your parent chain has an instance, record its address and continue to step 3.
 
 For another parent chain, deploy the action with a funded account:
 
@@ -120,7 +120,7 @@ unset executor_private_key
 
 The command signs and broadcasts the upgrade transaction, waits for its receipt, and returns `transactionHash` and `transactionReceipt`.
 
-If a multisig or hardware wallet holds the executor role, do not run the direct execution command. Use the SDK's `executeNitroContractsUpgradePrepareTransactionRequest` TypeScript function to prepare an unsigned request, then submit its `to`, `data`, and `value` fields through your signer.
+If a multisig or hardware wallet holds the executor role, do not run the direct execution command. Use the SDK's `executeNitroContractsUpgradePrepareTransactionRequest` TypeScript function to prepare an unsigned request, then submit the `to`, `data`, and `value` fields through your signer.
 
 ## 4. Verify the upgrade
 
