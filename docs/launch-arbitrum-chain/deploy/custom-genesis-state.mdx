@@ -93,7 +93,8 @@ Create `custom-alloc.json` if you want to add balances, bytecode, nonces, or sto
     "code": "0x<deployed-bytecode>",
     "storage": {
       "0x<32-byte-slot>": "0x<32-byte-value>"
-    }
+    },
+    "balance": "0"
   }
 }
 ```
@@ -217,7 +218,7 @@ These parameters define the identity of your chain.
    docker run --rm \
    --env-file .env \
    -v "$(pwd)/genesis":/app/genesis \
-   offchainlabs/genesis-file-generator:v0.0.3-rc-deffec7
+   offchainlabs/genesis-file-generator:v0.0.5-4d999ea
    ```
 
    - You can also generate your own `genesis.json` file, but carefully read [this notice about the chain configuration property](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
@@ -229,7 +230,7 @@ These parameters define the identity of your chain.
    --env-file .env \
    -v "$(pwd)/genesis":/app/genesis \
    -v "$(pwd)/custom-alloc.json":/app/custom-alloc.json:ro \
-   offchainlabs/genesis-file-generator:v0.0.3-rc-deffec7
+   offchainlabs/genesis-file-generator:v0.0.5-4d999ea
    ```
 
    Example `custom-alloc.json` (preallocates 1 ETH—review the solvency warning above before setting non-zero balances):
@@ -351,12 +352,16 @@ The following contracts are included by default in the standard `genesis.json` f
 |                     | SafeProxyFactory                     | `0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67` | Via Safe Singleton Factory              |
 |                     | MultiSend v1.4.1                     | `0x38869bf66a61cF6bDB996A6aE40D5853Fd43B526` | Via Safe Singleton Factory              |
 |                     | MultiSendCallOnly v1.4.1             | `0x9641d764fc13c8B624c04430C7356C1C7C8102e2` | Via Safe Singleton Factory              |
+|                     | CompatibilityFallbackHandler v1.4.1  | `0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99` | Via Safe Singleton Factory              |
+|                     | SafeToL2Setup v1.4.1                 | `0xBD89A1CE4DDe368FFAB0eC35506eEcE0b1fFdc54` | Via Safe Singleton Factory              |
 | **ERC-4337 Core**   | EntryPoint v0.6.0                    | `0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789` | Standard v0.6                           |
 |                     | SenderCreator v0.6.0                 | `0x7fc98430eAEdbb6070B35B39D798725049088348` | Created during EP v0.6.0 deploy         |
 |                     | EntryPoint v0.7.0                    | `0x0000000071727De22E5E9d8BAf0edAc6f37da032` | Standard v0.7                           |
 |                     | SenderCreator v0.7.0                 | `0xEFC2c1444eBCC4Db75e7613d20C6a62fF67A167C` | Created during EP v0.7.0 deploy         |
 |                     | EntryPoint v0.8.0                    | `0x4337084d9e255ff0702461cf8895ce9e3b5ff108` | Standard v0.8                           |
 |                     | SenderCreator v0.8.0                 | `0x449ED7C3e6Fee6a97311d4b55475DF59C44AdD33` | Created during EP v0.8.0 deploy         |
+|                     | EntryPoint v0.9.0                    | `0x433709009B8330FDa32311DF1C2AFA402eD8D009` | Standard v0.9                           |
+|                     | SenderCreator v0.9.0                 | `0x0A630a99Df908A81115A3022927Be82f9299987e` | Created during EP v0.9.0 deploy         |
 | **Account Modules** | Safe Module Setup v0.3.0             | `0x2dd68b007B46fBe91B9A7c3EDa5A7a1063cB5b47` | ERC-4337 Initializer                    |
 |                     | Safe 4337 Module v0.3.0              | `0x75cf11467937ce3F2f357CE24ffc3DBF8fD5c226` | Associated with EntryPoint v0.7.0       |
 |                     | Kernel v3.3                          | `0xd6CEDDe84be40893d153Be9d467CD6aD37875b28` | Associated with EntryPoint v0.7.0       |
