@@ -1163,6 +1163,17 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'PGA',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/pga',
+              label: 'How PGA works',
+            },
+          ],
+        },
       ],
     },
     {

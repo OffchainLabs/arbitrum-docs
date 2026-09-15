@@ -286,6 +286,10 @@ A step in the [Challenge protocol](/intro/glossary#challenge-protocol) in which 
 
 A primitive in the [BoLD](/intro/glossary#bold) [Challenge Protocol](/intro/glossary#challenge-protocol). An edge is a claim about a portion of an Arbitrum chain's history, identified by a starting and ending [history commitment](/intro/glossary#history-commitment). Validators bisect edges to narrow disagreement down to a single execution step.
 
+### EIP-1559 {#eip-1559}
+
+An Ethereum Improvement Proposal, live since Ethereum's London upgrade in 2021, that splits the gas price into two parts: a base fee per gas that the protocol sets and adjusts with demand, and a priority fee per gas that you set as a tip to bid for earlier inclusion. A transaction declares both limits as `max_fee_per_gas` and `max_priority_fee_per_gas`. Arbitrum chains use the same fields, and under PGA the priority fee decides the order in which the [Sequencer](/intro/glossary#sequencer) includes transactions.
+
 ### Ethereum Wallet {#ethereum-wallet}
 
 A software application used for transacting with the Ethereum [Blockchain](/intro/glossary#blockchain).

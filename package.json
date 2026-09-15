@@ -133,7 +133,7 @@
     "development": [
       "last 3 chrome version",
       "last 3 firefox version",
-      "last 5 safari version"
+      "last 3 safari version"
     ]
   },
   "engines": {
