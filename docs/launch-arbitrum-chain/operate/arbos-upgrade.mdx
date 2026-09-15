@@ -34,6 +34,8 @@ To update the WASM module root and deploy your chain's Nitro contracts to the pa
 
 Once you have the WASM module root and have identified the required `nitro-contracts` version for the target ArbOS release, if any, [please follow the instructions in this guide](https://github.com/OffchainLabs/chain-actions?tab=readme-ov-file#nitro-contracts-upgrades) for specific actions based on the `nitro-contracts` version you are deploying. Note that each ArbOS release will require performing this step with a different WASM module root and may require a different version of `nitro-contracts`. The guide linked above will be kept updated with the instructions for each specific ArbOS release.
 
+For a supported upgrade, you can also use the [Arbitrum Chain SDK CLI to deploy, execute, and verify the Nitro contracts upgrade](/launch-arbitrum-chain/operate/nitro-contracts-upgrade.mdx). Check the guide's supported version before using this path.
+
 The `WASM module root` is a 32-byte hash created from the Merkelized Go replay binary and its dependencies. When ArbOS is upgraded, a new WASM module root is generated due to modifications in the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF). This new WASM module root must be set in the rollup contract on the parent chain. For example, the WASM module root for ArbOS 51 Dia is `0xc2c02df561d4afaf9a1d6785f70098ec3874765c638e3cb6dbe8d3c83333e14c` (consensus-v51.1).
 
 <!-- Note: ArbOS 51 has two valid consensus tags with different WASM module roots:
