@@ -10,17 +10,17 @@ The `--parent-chain.connection.url` parameter needs to provide a standard RPC en
 --parent-chain.connection.url=<Parent chain RPC URL>
 ```
 
-:::info Try it out
-
-If you choose to self-host an EVM node, the [Prysm client software](https://www.offchainlabs.com/prysm/docs) is a great choice. It's straightforward, efficient, and effective—ensuring your setup runs smoothly!
-
-:::
-
 Additionally, if the chain is a Layer-2 (L2) chain on top of Ethereum and uses <a data-quicklook-from="blob">blobs</a> to post calldata, use the parameter `--parent-chain.blob-client.beacon-url` to provide a beacon chain RPC endpoint:
 
 ```shell
 --parent-chain.blob-client.beacon-url=<Parent chain beacon chain RPC URL>
 ```
+
+<VanillaAdmonition type="tip" title="Self-hosting the Ethereum node">
+
+If you self-host the Ethereum node, you need both an execution layer client and a consensus layer client. For the consensus layer, the [Prysm client software](https://www.offchainlabs.com/prysm/docs) is a great choice. It's straightforward, efficient, and effective—ensuring your setup runs smoothly!
+
+</VanillaAdmonition>
 
 :::info Public Arbitrum RPC endpoints
 
