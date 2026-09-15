@@ -14,22 +14,18 @@ On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, Priority Gas Auction 
 
 PGA rounds set the cadence of the Fast Feed. To understand the rounds themselves, read the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) first.
 
-## What the Fast Feed is not
+## What the Fast Feed does not do
 
-Three expectations are worth correcting before the details.
+- **It does not give you a view into the mempool.** The Fast Feed publishes a transaction only after the Sequencer has ordered it and enqueued it for execution. Nobody can influence or change that order afterward, so the Fast Feed does not enable frontrunning or sandwich attacks. The Sequencer's mempool stays private.
+- **It does not publish state.** You receive a list of transactions and a partial receipt for each one. You do not receive state changes or partial blocks.
+- **It does not let you follow the chain.** A Nitro node cannot consume the Fast Feed, and the Fast Feed gives you no way to track chain state. Subscribers write their own client. To follow the chain, use the standard sequencer feed instead.
 
-**It is not a view into the mempool.** The Fast Feed publishes a transaction only after the Sequencer has ordered it and enqueued it for execution. Nobody can influence or change that order afterward, so the Fast Feed does not enable frontrunning or sandwich attacks. The Sequencer's mempool stays private.
+## Who is the Fast Feed for
 
-**It does not publish state.** You receive a list of transactions and a partial receipt for each one. You do not receive state changes or partial blocks.
-
-**You cannot follow the chain with it.** A Nitro node cannot consume the Fast Feed, and the Fast Feed gives you no way to track chain state. Subscribers write their own client. To follow the chain, use the standard sequencer feed instead.
-
-## Who the Fast Feed serves
-
-Subscribe to the Fast Feed if an earlier view of ordered transactions helps you:
+Any application or user that is latency sensitive gains from reading ordered transactions sooner. The following groups benefit most from subscribing:
 
 - **<a data-quicklook-from="searcher">Searchers</a>** react to ordered transactions sooner, whether they run arbitrage between a centralized and a decentralized exchange, liquidations, or back-running strategies.
-- **<a data-quicklook-from="propamm">propAMMs</a>** and other latency-sensitive apps refresh onchain quotes and parameters against fresher data.
+- **<a data-quicklook-from="propamm">propAMMs</a>** confirm faster whether their most recent price updates have landed.
 - **Market makers** update pricing models earlier in the round.
 
 If you send ordinary transactions through a wallet or an app, the Fast Feed does not affect you. It doesn't change the ordering, the inclusion guarantee, or the fee that anyone pays.
@@ -61,7 +57,7 @@ The receipt reports `status`, `gas_used`, `gas_used_for_l1`, `cumulative_gas_use
 
 The Fast Feed trades guarantees for speed. Three consequences shape how you write a client.
 
-**Inclusion is not guaranteed.** The `block_number` you receive is tentative. The Sequencer publishes a transaction to the Fast Feed before it stores that transaction, which is part of what makes the feed fast. If the Sequencer fails partway through a block, the transactions it already published are lost, and another Sequencer starts a new block from scratch.
+**Inclusion is not guaranteed.** The `block_number` you receive is tentative. The Sequencer publishes a transaction to the Fast Feed before it stores that transaction, which is part of what makes the feed fast. If the Sequencer fails partway through a block, the transactions it already published are lost, and another Sequencer starts a new block from scratch. The Sequencer almost never fails this way, so a PGA round rarely loses or reorders the transactions it published.
 
 **Receipts are partial.** A receipt omits `block_hash`, because the block is not final when the Sequencer publishes it.
 
