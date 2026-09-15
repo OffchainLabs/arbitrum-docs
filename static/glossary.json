@@ -473,7 +473,7 @@
   },
   "propamm": {
     "title": "propAMM",
-    "text": "<p>A proprietary automated market maker. A constant-product automated market maker relies on arbitrageurs to correct its prices. A propAMM instead updates its onchain quotes from an external trusted price source, and usually supplies its own liquidity. propAMMs need cheap, frequent, priority-ordered inclusion to keep those quotes current, so they depend on an ordering policy that sells priority, such as PGA.</p>\n"
+    "text": "<p>A proprietary automated market maker is an onchain pool that a single market maker operates. That market maker is the only party permitted to supply liquidity, and it sets the quote from its own pricing model, which draws on multiple sources, rather than from a passive reserve curve.</p>\n<p>A propAMM differs from a constant-product AMM, which holds no view on the external price. A constant-product quote moves only when someone trades against it, so arbitrageurs are what pull it back toward the market. A propAMM instead pushes price updates onchain, or derives the price at execution time. propAMMs need cheap, frequent, priority-ordered inclusion to keep those quotes current, so they depend on an ordering policy that sells priority, such as PGA.</p>\n"
   },
   "proposer": {
     "title": "Proposer",
