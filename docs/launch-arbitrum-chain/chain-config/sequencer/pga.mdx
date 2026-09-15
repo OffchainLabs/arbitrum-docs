@@ -1,0 +1,93 @@
+---
+title: 'PGA for Arbitrum chains'
+sidebar_label: 'PGA for Arbitrum chains'
+description: 'Guidance and best practices for using PGA on Arbitrum chains'
+user_story: 'As an Arbitrum chain owner-operator, I want to know how to set up PGA, a new transaction ordering policy for Arbitrum chains'
+content_type: how-to
+author: anegg0
+sme: gligneul
+---
+
+Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that you can enable on any <a data-quicklook-from="arbitrum-chains">Arbitrum chain</a>. Under PGA, the <a data-quicklook-from="sequencer">Sequencer</a> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the Sequencer transfers the priority queue into the block it is building.
+
+Activating PGA requires changing the Sequencer configuration. PGA adds no operational overhead, which makes it viable for a much wider range of chains than <a data-quicklook-from="timeboost">Timeboost</a>.
+
+Your chain must collect priority fees, which <a data-quicklook-from="arbos">ArbOS</a> 61 supports. PGA orders transactions by tips.
+
+As with all features on the Arbitrum stack, you can adopt PGA at your own discretion and on your own timeline.
+
+To learn how PGA works, see the [introduction to PGA](../../../how-arbitrum-works/priority-gas-auction/pga).
+
+## Recommended adoption path
+
+Consider PGA for any chain with meaningful competition for block space. These chains are good candidates:
+
+- **Chains with active DeFi, arbitrage, or liquidation activity.** PGA converts latency competition into fee competition and routes the proceeds to your chain's fee collector.
+- **Chains with latency-sensitive applications,** such as proposer-based automated market makers (propAMMs). Per-transaction, just-in-time bidding suits workloads that need frequent priority-ordered inclusion.
+
+## Tradeoffs
+
+### Costs
+
+Under <a data-quicklook-from="first-come-first-serve-fcfs">first come first serve (FCFS)</a> ordering, arrival time determines the order. Under PGA, willingness to pay determines it. Whenever your chain is congested, the Sequencer orders transactions that pay no priority fee behind those that do. The anti-starvation boost bounds how long they wait, but does not restore parity.
+
+### Revenue
+
+PGA revenue depends on MEV and competition for ordering. A chain with no congestion collects little in priority fees.
+
+## Enable PGA on your chain
+
+### Prerequisites
+
+Before you start, confirm all four of the following:
+
+1. **ArbOS 61 or newer.** This release supports priority fee collection. PGA orders by tips, so an earlier ArbOS orders by fees your chain never collects. To check what your chain runs and what the release contains, see [ArbOS 61 Elara](/run-arbitrum-node/arbos-releases/arbos61) and the [ArbOS software releases overview](/run-arbitrum-node/arbos-releases/overview).
+2. **Priority fee collection enabled.** Collection requires all three of the following:
+   - ArbOS 61 or newer
+   - The chain's collect-tips flag set
+   - The <a data-quicklook-from="batch-poster">batch poster</a> coinbase configured
+
+   On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, you toggle collection with an `ArbOwner` precompile call to `setCollectTips`. For the call itself, the access-control rules, and a timing caveat that affects the enabling transaction, see [priority fees collection](/launch-arbitrum-chain/chain-config/costs/priority-fees). The [`ArbOwner` precompile reference](/arbitrum-essentials/precompiles/reference#arbowner) lists every method.
+
+3. **Timeboost disabled.** A configuration that enables both Timeboost and PGA behaves unpredictably. To find your current setting, see [Timeboost for Arbitrum chains](/launch-arbitrum-chain/chain-config/sequencer/timeboost).
+4. **A Nitro build that includes PGA.** Confirm that the release you run supports it. The [ArbOS software releases overview](/run-arbitrum-node/arbos-releases/overview) maps Nitro versions to ArbOS versions, and the [Nitro support policy](/run-arbitrum-node/nitro-support-policy) tells you which releases are supported.
+
+### Overview
+
+To enable PGA, complete two steps:
+
+1. Confirm that priority fee collection is active on your chain.
+2. Configure your Sequencer node to enable PGA and set the rounds-per-block parameter.
+
+### Step 1: Confirm priority fee collection
+
+Verify that your chain runs ArbOS 61 or newer and that tip collection is on. If your chain has a toggler contract for this, use it. Otherwise, make an `ArbOwner` precompile call to `setCollectTips`. Confirm that the batch poster coinbase is configured, because collection depends on it.
+
+<VanillaAdmonition type="caution">
+
+Complete Step 1 before you start Step 2. PGA orders by tips, so a chain that does not collect them orders by fees it never receives.
+
+</VanillaAdmonition>
+
+### Step 2: Configure your Sequencer node for PGA
+
+Add the following to your Sequencer's node configuration file:
+
+```js
+{
+  "execution": {
+    "sequencer": {
+      "pga": {
+        "enable": true,
+        "rounds-per-block": 2
+      },
+      "timeboost": {
+        "enable": false
+      },
+      "max-block-speed": "250ms"
+    }
+  }
+}
+```
+
+`rounds-per-block` is the `K` parameter. With `max-block-speed` at `250ms` and `K=2`, ordering rounds are 125ms long.
