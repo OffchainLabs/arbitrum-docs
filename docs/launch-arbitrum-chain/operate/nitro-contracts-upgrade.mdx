@@ -11,7 +11,7 @@ content_type: how-to
 
 The Arbitrum Chain SDK CLI can deploy an upgrade action, execute it through the parent-chain <a data-quicklook-from="upgrade-executor">upgrade executor</a>, and verify the resulting Nitro contracts version. The SDK Docker image includes the Chain Actions scripts and Foundry binaries this workflow requires.
 
-The commands currently support the Nitro contracts `3.2.0` upgrade. This action upgrades `RollupAdminLogic` and `RollupUserLogic` from `3.1.0` to `3.2.0`. It does not upgrade the bridge, inbox, sequencer inbox, outbox, or challenge manager, and it does not require an ArbOS upgrade.
+The commands currently support the Nitro contracts `3.2.0` upgrade. This action upgrades `RollupAdminLogic` and `RollupUserLogic` from `3.1.0` to `3.2.0`. It does not upgrade the bridge, inbox, sequencer inbox, outbox, or challenge manager, and it does not require an <a data-quicklook-from="arbos">ArbOS</a> upgrade.
 
 <VanillaAdmonition type="caution" title="Confirm the upgrade path first">
 
@@ -29,7 +29,7 @@ Gather:
 - The parent-chain upgrade executor address that owns the Rollup proxy.
 - A dedicated account with the executor role on that upgrade executor.
 - A funded deployment account if you need to deploy the upgrade action.
-- [`jq`](https://jqlang.org/download/), to construct command input without putting a private key in the command arguments.
+- [`jq`](https://jqlang.org/download/), to build the command input without putting a private key in the arguments.
 
 The Nitro contracts upgrade commands require Chain SDK `v0.28.0` or later. Pull and pin the corresponding image:
 
@@ -46,7 +46,7 @@ The deploy and execute CLI commands require a raw, `0x`-prefixed private key. Th
 
 ## 1. Inspect the command schemas
 
-The CLI validates every JSON input before running a command. Inspect the schemas when you upgrade the SDK:
+The CLI validates every JSON input before running a command. When you upgrade the SDK, inspect the schemas:
 
 ```shell
 docker run --rm "$CHAIN_SDK_IMAGE" \
@@ -59,11 +59,11 @@ docker run --rm "$CHAIN_SDK_IMAGE" \
   verifyNitroContractsUpgrade --schema
 ```
 
-## 2. Deploy the upgrade action if necessary
+## 2. If needed, deploy the upgrade action
 
 First, check the [deployed `3.2.0` upgrade action instances](https://github.com/OffchainLabs/chain-actions/tree/main/scripts/foundry/contract-upgrades/3.2.0#deployed-instances). If your parent chain has an instance, record its address and continue to step 3.
 
-For another parent chain, deploy the action with a funded account:
+If your parent chain has no deployed instance, deploy the action with a funded account:
 
 ```shell
 read -rsp 'Deployment account private key: ' deployment_private_key
@@ -136,6 +136,6 @@ docker run --rm "$CHAIN_SDK_IMAGE" \
   }'
 ```
 
-The verification command simulates behavior introduced in `RollupAdminLogic` `3.2.0`. A successful command returns exit code `0`. A revert or nonzero exit indicates that the Rollup still uses the previous implementation or that the upgrade configuration is incorrect.
+The verification command simulates behavior introduced in `RollupAdminLogic` version `3.2.0`. A successful command returns exit code `0`. A revert or nonzero exit indicates that the Rollup still uses the previous implementation or that the upgrade configuration is incorrect.
 
-After verification, complete the operational checks in the [Arbitrum chain upgrade runbook](/launch-arbitrum-chain/operate/upgrade-runbook.mdx#post-upgrade-verification).
+After you verify the upgrade, complete the operational checks in the [Arbitrum chain upgrade runbook](/launch-arbitrum-chain/operate/upgrade-runbook.mdx#post-upgrade-verification).
