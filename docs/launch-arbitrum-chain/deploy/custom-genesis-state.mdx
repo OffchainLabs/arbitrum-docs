@@ -207,64 +207,67 @@ These parameters define your chain's identity.
 
 #### `genesis-file-generator` execution steps
 
-1. Prepare the genesis state:
+##### 1. Prepare the genesis state:
 
-   - Set up the `.env` file with the required parameters.
-   - Run the [`genesis-file-generator`](https://hub.docker.com/r/offchainlabs/genesis-file-generator/tags) Docker image to generate a `genesis.json` file with the required predeployed contracts and more configurations.
+- Set up the `.env` file with the required parameters.
+- Run the [`genesis-file-generator`](https://hub.docker.com/r/offchainlabs/genesis-file-generator/tags) Docker image to generate a `genesis.json` file with the required predeployed contracts and more configurations.
 
-   ```shell
-   mkdir -p genesis
+```shell
+mkdir -p genesis
 
-   docker run --rm \
-   --env-file .env \
-   -v "$(pwd)/genesis":/app/genesis \
-   offchainlabs/genesis-file-generator:v0.0.5-4d999ea
-   ```
+docker run --rm \
+--env-file .env \
+-v "$(pwd)/genesis":/app/genesis \
+offchainlabs/genesis-file-generator:v0.0.5-4d999ea
+```
 
-   - You can also generate your own `genesis.json` file, but carefully read [this notice about the chain configuration property](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
+- You can also generate your own `genesis.json` file, but carefully read [this notice about the chain configuration property](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
 
-   - To preallocate your own accounts—balances, contract bytecode, or storage slots—create a `custom-alloc.json` file (standard Geth `alloc` format) next to your `.env`, set `CUSTOM_ALLOC_ACCOUNT_FILE=custom-alloc.json` in the `.env`, and add a read-only bind mount for it to the `docker run` command:
+- To preallocate your own accounts—balances, contract bytecode, or storage slots—create a `custom-alloc.json` file (standard Geth `alloc` format) next to your `.env`, set `CUSTOM_ALLOC_ACCOUNT_FILE=custom-alloc.json` in the `.env`, and add a read-only bind mount for it to the `docker run` command:
 
-   ```shell
-   docker run --rm \
-   --env-file .env \
-   -v "$(pwd)/genesis":/app/genesis \
-   -v "$(pwd)/custom-alloc.json":/app/custom-alloc.json:ro \
-   offchainlabs/genesis-file-generator:v0.0.5-4d999ea
-   ```
+```shell
+docker run --rm \
+--env-file .env \
+-v "$(pwd)/genesis":/app/genesis \
+-v "$(pwd)/custom-alloc.json":/app/custom-alloc.json:ro \
+offchainlabs/genesis-file-generator:v0.0.5-4d999ea
+```
 
-   Example `custom-alloc.json` (preallocates 1 ETH—review the solvency warning above before setting non-zero balances):
+Example `custom-alloc.json` (preallocates 1 ETH—review the solvency warning above before setting non-zero balances):
 
-   ```json
-   {
-     "0x299a89EE3Ee2BBC2cf9586ABd9AB1b57CF51B41F": { "balance": "0xde0b6b3a7640000" }
-   }
-   ```
+```json
+{
+  "0x299a89EE3Ee2BBC2cf9586ABd9AB1b57CF51B41F": { "balance": "0xde0b6b3a7640000" }
+}
+```
 
-2. Generate the required hashes:
+##### 2. Generate the required hashes
 
-   - After the `genesis.json` file is created, run the Nitro container to compute the genesis `blockHash` with the `genesis-generator` endpoint:
+- After the `genesis.json` file is created, run the Nitro container to compute the genesis `blockHash` with the `genesis-generator` endpoint:
 
-   ```shell
-   source .env
+```shell
+source .env
 
-   docker run --rm \
-     -v "$(pwd)/genesis":/data/genesisDir \
-     --entrypoint genesis-generator \
-     "$NITRO_NODE_IMAGE" \
-     --genesis-json-file /data/genesisDir/genesis.json
-   ```
+docker run --rm \
+  -v "$(pwd)/genesis":/data/genesisDir \
+  --entrypoint genesis-generator \
+  "$NITRO_NODE_IMAGE" \
+  --genesis-json-file /data/genesisDir/genesis.json
+```
 
-   - This bind-mounts the current directory into the container so it can read the `genesis.json` file generated in the previous step and output the genesis `blockHash` and `sendRoot` hash. The container logs both values as:
+- This bind-mounts the current directory into the container so it can read the `genesis.json` file generated in the previous step and output the genesis `blockHash` and `sendRoot` hash. The container logs both values as:
 
-   ```shell
-   genesis-hash-calculator  | BlockHash: 0xd636d2cae7a75bf41f471639f1cbf98fe2a24216147792510e664a65496f27ed, SendRoot: 0x0000000000000000000000000000000000000000000000000000000000000000, Batch: 1, PosInBatch: 0
-   ```
+```shell
+genesis-hash-calculator  | BlockHash: 0xd636d2cae7a75bf41f471639f1cbf98fe2a24216147792510e664a65496f27ed, SendRoot: 0x0000000000000000000000000000000000000000000000000000000000000000, Batch: 1, PosInBatch: 0
+```
 
-3. Deploy the Rollup:
-   - Take the `BlockHash`, `SendRoot`, `Batch`, and `PosInBatch` values from the log line above, then follow the [deploy the Rollup](#deploy-the-rollup). The Chain SDK uses them to generate the `assertion_hash` that registers your Rollup's core smart contracts on the parent chain.
-4. Configure and launch your node:
-   - Follow the instructions to [initialize every Nitro node](#initialize-every-nitro-node) to point each node at your `genesis.json` and start the chain.
+##### 3. Deploy the Rollup
+
+- Take the `BlockHash`, `SendRoot`, `Batch`, and `PosInBatch` values from the log line above, then follow the [deploy the Rollup](#deploy-the-rollup). The Chain SDK uses them to generate the `assertion_hash` that registers your Rollup's core smart contracts on the parent chain.
+
+##### 4. Configure and launch your node
+
+- Follow the instructions to [initialize every Nitro node](#initialize-every-nitro-node) to point each node at your `genesis.json` and start the chain.
 
 ### Deploy the Rollup
 
