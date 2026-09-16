@@ -1,0 +1,51 @@
+---
+title: The batch poster
+description: 'Learn the fundamentals of the Arbitrum batch poster.'
+author: pete-vielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need to learn more about the batch poster.
+content_type: reference
+---
+
+Batch posting is a fundamental process for the <a data-quicklook-from="sequencer">Sequencer's</a> operation in Arbitrum. It involves collecting multiple <a data-quicklook-from="child-chain">child chain</a> <a data-quicklook-from="transaction">transactions</a>, organizing them into <a data-quicklook-from="batch">batches</a>, compressing the data to reduce size, and sending these batches to the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract on the <a data-quicklook-from="parent-chain">parent chain</a>. This mechanism securely records transactions on the parent chain while optimizing for costs and performance.
+
+## How it works
+
+<ImageZoom src="/img/batchposter-path.svg" alt="Batch poster path. The batch poster pulls sequenced messages from the `TransactionStreamer`, builds a block, routes the data to a data availability provider, encodes the parent chain transaction as calldata or blobs with a delay proof, verifies the batch, posts the transaction, and lands it in the parent chain SequencerInbox contract. Building a block expands into four substeps: compute the parent chain block bounds, fill batch segments and compress them with adaptive Brotli, decide whether to post now or wait, and CloseAndGetBytes to recompress at a higher level, which returns to building the block. Posting expands into three substeps: fee calculation, nonce management, and sign and send, which returns to posting the transaction." className="img-600px" />
+
+#### 1. Messages arrive (upstream handoff)
+
+A transaction’s journey into the <a data-quicklook-from="batch-poster">batch poster</a> begins after it’s already been [sequenced](/how-arbitrum-works/deep-dives/sequencer.mdx). The poster pulls ordered child chain messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx), and [soft finality](/how-arbitrum-works/reference/finality-and-reorgs.mdx#the-three-confirmation-levels) all happened before this point and live outside of the batch poster.
+
+#### 2. The poster decides where it stands
+
+The main loop (`MaybePostSequencerBatch`) first does a safety check (refuse to post if a prior batch reverted), then asks “what batch number and the parent chain nonce am I on?” and establishes the parent chain time/block window the batch will use. That window comes from reading the parent chain SequencerInbox contract’s `MaxTimeVariation`—a read-only handoff out to the parent chain.
+
+#### 3. Messages become a compressed batch
+
+The poster receives messages in order, turning each into typed segments (the transaction itself, plus small bookkeeping notes for <a data-quicklook-from="delayed-inbox">delayed-message</a> markers and time/block advances) and streaming them through Brotli. It watches size and segment-count caps, and adapts compression effort to how far behind it is—more compression when calm, less when backlogged. When it decides the batch is ready (full enough, old enough, or a delayed message is about to expire), it seals and recompresses it. This is the core work done inside the batch poster.
+
+#### 4. The data is routed to storage (DA handoff)
+
+The sealed bytes are handed to a data availability (DA) provider—an offchain <a data-quicklook-from="data-availability-committee-dac">AnyTrust</a>/<a data-quicklook-from="data-availability-server-das">DAS</a> committee or a custom backend—via the small Writer.Store interface, with a fallback to putting data directly on Ethereum (calldata or <a data-quicklook-from="blob">blobs</a>). What comes back is either a <a data-quicklook-from="data-availability-certificate">certificate</a> (offchain) or the raw data (EthDA). The committee aggregation, <a data-quicklook-from="bls-signature">BLS signing</a>, and blob KZG cryptography all happen behind that interface—handoffs that the batch poster isn’t involved in.
+
+#### 5. The batch is wrapped for the parent chain and self-checked
+
+The poster builds calldata for the right `SequencerInbox` method (calldata vs. blobs, with or without a delay proof) and—as a correctness gate—replays the whole batch through the `InboxMultiplexer` (the same read/decode machinery used to consume batches) to confirm it decodes back to the exact original messages before anything is sent.
+
+#### 6. The transaction is shipped to the parent chain (`DataPoster` handoff)
+
+The batch poster hands the calldata, blobs, and gas estimate to the `DataPoster`—the “shipping department.” From here, nonce selection, fee bidding, signing, queue persistence, and replace-by-fee-if-stuck are the `DataPoster`’s job, deliberately kept separate so the batch poster never has to deal with Ethereum gas mechanics. The `DataPoster` ultimately submits the transaction to the parent chain `SequencerInbox` contract.
+
+#### 7. Finality and feedback
+
+Once the parent chain transaction confirms, the transactions cross from the Sequencer’s soft finality into [hard finality](/how-arbitrum-works/reference/finality-and-reorgs.mdx) anchored on the parent chain. The poster updates its backlog estimate (feeding back into compression effort and fee urgency), and a background revert watcher monitors the parent chain—if a posted batch ever fails onchain, it halts all posting for operator intervention.
+
+## Related resources
+
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer.mdx#batch-posting): batching, compression, and the Sequencer Inbox methods.
+- [Sequencer transaction flow](/how-arbitrum-works/deep-dives/sequencer-transaction-flow.mdx): what happens before the handoff, from the queue to block creation.
+- [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing): how the parent chain pricer reimburses batch posting costs.
+- [Finality and reorgs](/how-arbitrum-works/reference/finality-and-reorgs.mdx): what parent chain finality guarantees, and the failure modes around posting.
+- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx): what the DAC does with the data behind the DA handoff.
+- [Run a batch poster](/launch-arbitrum-chain/run-a-node/batch-poster.mdx) and [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx): the operator view.
