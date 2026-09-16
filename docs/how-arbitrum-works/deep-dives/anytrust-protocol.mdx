@@ -11,11 +11,55 @@ AnyTrust is a variant of the [<a data-quicklook-from="arbitrum">Arbitrum</a> Nit
 
 The Arbitrum protocol requires that all Arbitrum nodes, including [validators](/how-arbitrum-works/deep-dives/assertions.mdx) (nodes that verify the correctness of the chain and place bonds on correct results), have access to the data of every child chain <a data-quicklook-from="transaction">transaction</a> in the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>’s inbox. An Arbitrum Rollup provides data access by [posting the data (in batched, compressed form) on the parent chain](/how-arbitrum-works/deep-dives/sequencer.mdx#batch-posting), Ethereum, as blobs or calldata. The Ethereum gas used to pay for this is the largest component of the cost of using Arbitrum.
 
-AnyTrust relies instead on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has N members, of which AnyTrust assumes at least two are honest. This means that if `N - 1` DAC members promise to provide access to some data, at least one of them must be honest. Since there are two honest members and only one failed to keep the promise, it follows that at least one of the promisers must be honest, and that honest member will provide data when needed to ensure the chain can properly function.
+AnyTrust relies instead on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has `N` members. AnyTrust assumes that at least two of them are honest.
+
+## What the 2-of-N assumption means
+
+AnyTrust adds one trust assumption to Nitro, and that assumption covers data only. This section explains what you trust the committee with, what you do not, and what happens when the assumption fails.
+
+### What the committee cannot do
+
+The committee stores data. It does not decide what is true.
+
+- **It cannot forge transactions or move funds.** The child chain's state comes from executing the data in the inbox. Validators prove the correct result on the parent chain through [assertions and fraud proofs](/how-arbitrum-works/deep-dives/assertions.mdx). A committee that signs for false data does not change the state that honest validators prove.
+- **It cannot censor you on its own.** If the <a data-quicklook-from="sequencer">Sequencer</a> ignores your transaction, you can [force it in through the parent chain's delayed inbox](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#force-inclusion-after-delays). That path does not involve the committee.
+- **It cannot rewrite history.** Every batch commits to the parent chain, either as full data or as a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert).
+
+A dishonest committee threatens your ability to read the chain's data. It does not threaten the correctness of the chain's state.
+
+### How the signature threshold works
+
+Two numbers define the committee:
+
+- `N` is the number of committee members.
+- `H` is the number of members you assume are honest. The `assumed-honest` parameter sets it.
+
+A DACert needs `K` signatures, where `K = N + 1 - H`.
+
+The `2-of-N` assumption is the case where `H` is 2, which makes `K` equal to `N - 1`. Every DACert then carries signatures from all but one member.
+
+One honest signer is always among them. Suppose `N - 1` members sign a DACert. At most one member did not sign, and two members are honest. So at least one honest member signed. An honest member that signs keeps its promise and serves the data on request.
+
+You can configure `H` per chain, so `N - 1` is the conventional choice rather than a fixed rule. If you run your own chain, refer to [choosing N and H for your committee](/launch-arbitrum-chain/chain-config/data-availability/anytrust-trust-model.mdx).
+
+### What happens when the assumption breaks
+
+If fewer members stay honest than `H` assumes, the committee can withhold data. The table below separates what you lose from what you keep.
+
+| Outcome                                 | Committee withholds data | Committee signs for data it does not hold |
+| --------------------------------------- | ------------------------ | ----------------------------------------- |
+| Chain state stays correct               | Yes                      | Yes                                       |
+| Committee cannot steal funds            | Yes                      | Yes                                       |
+| Validators can reconstruct recent state | No                       | No                                        |
+| Validators can prove new assertions     | No                       | No                                        |
+
+In both cases the chain halts instead of settling a wrong result. Withheld data costs you liveness, not safety.
+
+The Sequencer also has an escape hatch before that point. If it cannot collect `K` signatures within a few minutes, it falls back to Rollup mode and posts the full batch data to the parent chain. A committee that stops responding costs you the AnyTrust discount. It does not stop the chain.
 
 ## Keysets
 
-A Keyset specifies the [Boneh–Lynn–Shacham (BLS)](https://en.wikipedia.org/wiki/BLS_digital_signature) public keys of DAC members and the number of signatures required for a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert) to be valid. Keysets enable DAC membership changes and allow DAC members to change their keys.
+A Keyset specifies the [Boneh–Lynn–Shacham (BLS)](https://en.wikipedia.org/wiki/BLS_digital_signature) public keys of DAC members and the number of signatures required for a DACert to be valid. Keysets enable DAC membership changes and allow DAC members to change their keys.
 
 A Keyset contains:
 
@@ -33,14 +77,14 @@ A central concept in AnyTrust is the Data Availability Certificate (hereafter, a
 
 - The hash of a data block
 - An expiration time
-- Proof that the `N - 1` DAC members have signed the pair (hash, expiration time), consisting of:
+- Proof that `K` DAC members have signed the pair (hash, expiration time), which is `N - 1` members under the `2-of-N` assumption. The proof consists of:
   - The hash of the Keyset used in signing
   - A bitmap showing which DAC members signed
   - A BLS aggregated signature (over the BLS12-381 curve) proving that those parties signed.
 
 Because of the `2-of-N` trust assumption, a DACert constitutes proof that the block’s data (i.e., the preimage of the hash in the DACert) will be available from at least one honest DAC member, at least until the expiration time expires.
 
-In regular Arbitrum Nitro, the Arbitrum [<a data-quicklook-from="sequencer">Sequencer</a>](/how-arbitrum-works/deep-dives/sequencer.mdx) posts data blocks on the parent chain as [blobs or calldata](/how-arbitrum-works/deep-dives/sequencer.mdx#submitting-to-the-sequencer-inbox-contract). The hashes of the data blocks are committed to the parent chain Inbox contract, allowing the data to be reliably read by the child chain code.
+In regular Arbitrum Nitro, the Arbitrum [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) posts data blocks on the parent chain as [blobs or calldata](/how-arbitrum-works/deep-dives/sequencer.mdx#submitting-to-the-sequencer-inbox-contract). The hashes of the data blocks are committed to the parent chain Inbox contract, allowing the data to be reliably read by the child chain code.
 
 AnyTrust gives the Sequencer two ways to post a data block on the parent chain: it can post the full data as above, or it can post a DACert proving availability of the data. The parent chain Inbox contract will reject any DACert that uses an invalid Keyset; the other aspects of DACert validity are checked by the child chain code.
 
