@@ -389,6 +389,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/sequencer/timeboost',
                   label: `Timeboost`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/pga',
+                  label: `PGA`,
+                },
               ],
             },
             {
@@ -1160,6 +1165,22 @@ const sidebars = {
               type: 'link',
               href: 'https://arxiv.org/abs/2306.02179',
               label: 'White paper: Timeboost',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'PGA and Fast Feed',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/pga',
+              label: 'How PGA works',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/fast-feed',
+              label: 'Introduction to the Fast Feed',
             },
           ],
         },

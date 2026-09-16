@@ -13,6 +13,8 @@ todos:
 
 [Running an Arbitrum relay locally as a feed relay](/run-arbitrum-node/run-feed-relay.mdx) lets you subscribe to an uncompressed <a data-quicklook-from="sequencer-feed">sequencer feed</a> for real-time data as the sequencer accepts and orders transactions offchain.
 
+This page covers the standard sequencer feed, which publishes complete blocks and is free to consume. Arbitrum One also offers the <a data-quicklook-from="fast-feed">Fast Feed</a>, a paid stream that publishes individual transactions before their block closes. See the [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) to compare the two.
+
 When connected to websocket port `9642` of the local relay, you'll receive a data feed that looks something like this:
 
 ```json
