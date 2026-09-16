@@ -15,7 +15,7 @@ Batch posting is a fundamental process for the <a data-quicklook-from="sequencer
 
 #### 1. Messages arrive (upstream handoff)
 
-A transaction’s journey into the <a data-quicklook-from="batch-poster">batch poster</a> begins after it’s already been [sequenced](/how-arbitrum-works/deep-dives/sequencer.mdx). The poster pulls ordered child chain messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx), and [soft finality](/how-arbitrum-works/reference/finality-and-reorgs.mdx#the-three-confirmation-levels) all happened before this point and live outside of the batch poster.
+A transaction’s journey into the <a data-quicklook-from="batch-poster">batch poster</a> begins after it’s already been [sequenced](/how-arbitrum-works/deep-dives/sequencer.mdx). The poster pulls ordered child chain messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/how-arbitrum-works/deep-dives/stf.mdx), and [soft finality](/how-arbitrum-works/reference/finality-and-reorgs.mdx#the-three-confirmation-levels) all happened before this point and live outside of the batch poster.
 
 #### 2. The poster decides where it stands
 
