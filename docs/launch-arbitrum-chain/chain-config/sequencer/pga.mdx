@@ -10,7 +10,7 @@ sme: gligneul
 
 Priority Gas Auctions (PGA) is an optional <a data-quicklook-from="transaction-ordering-policy">transaction-ordering policy</a> that you can enable on any <a data-quicklook-from="arbitrum-chains">Arbitrum chain</a>. Under PGA, the <a data-quicklook-from="sequencer">Sequencer</a> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the Sequencer transfers the priority queue into the block it is building.
 
-Activating PGA requires changing the Sequencer configuration. PGA adds no operational overhead, which makes it viable for a much wider range of chains than <a data-quicklook-from="timeboost">Timeboost</a>.
+Activating PGA requires enabling tip collection on your chain. Once your chain collects tips, the Sequencer switches to PGA ordering automatically. PGA adds no operational overhead, which makes it viable for a much wider range of chains than <a data-quicklook-from="timeboost">Timeboost</a>.
 
 Your chain must collect priority fees, which <a data-quicklook-from="arbos">ArbOS</a> 61 supports. PGA orders transactions by tips.
 
