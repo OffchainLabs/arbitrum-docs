@@ -33,6 +33,7 @@
     "precompiles:check": "node scripts/generate-precompile-tables.mjs --check",
     "references:check": "node scripts/references-check.mjs",
     "redirects:legacy": "node scripts/generate-legacy-redirects.mjs",
+    "redirects:current": "node scripts/generate-current-redirects.mjs",
     "redirects:check": "node scripts/redirects-check.mjs",
     "vars:check": "node scripts/vars-check.mjs",
     "content:lint": "node scripts/content-lint.mjs",

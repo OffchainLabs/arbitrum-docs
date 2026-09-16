@@ -1,0 +1,107 @@
+[
+  {
+    "source": "/how-arbitrum-works/bold/bold-faq",
+    "upstream": "docs/how-arbitrum-works/bold/bold-faq.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-08-26",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/how-arbitrum-works/priority-gas-auction/fast-feed",
+    "upstream": "docs/how-arbitrum-works/priority-gas-auction/fast-feed.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-09-03",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/how-arbitrum-works/priority-gas-auction/pga",
+    "upstream": "docs/how-arbitrum-works/priority-gas-auction/pga.md",
+    "reason": "no-counterpart",
+    "added": "2026-09-01",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing",
+    "upstream": "docs/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-08-20",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/launch-arbitrum-chain/chain-config/costs/priority-fees",
+    "upstream": "docs/launch-arbitrum-chain/chain-config/costs/priority-fees.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-08-04",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/launch-arbitrum-chain/chain-config/sequencer/pga",
+    "upstream": "docs/launch-arbitrum-chain/chain-config/sequencer/pga.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-09-03",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference",
+    "upstream": "docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-08-17",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/launch-arbitrum-chain/chain-config/validation/test-chain-configuration",
+    "upstream": "docs/launch-arbitrum-chain/chain-config/validation/test-chain-configuration.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-08-03",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/launch-arbitrum-chain/deploy/custom-genesis-state",
+    "upstream": "docs/launch-arbitrum-chain/deploy/custom-genesis-state.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-07-02",
+    "kind": "MISS"
+  },
+  {
+    "source": "/launch-arbitrum-chain/deploy/token-bridge-troubleshooting",
+    "upstream": "docs/launch-arbitrum-chain/deploy/token-bridge-troubleshooting.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-07-29",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/launch-arbitrum-chain/operate/error-index",
+    "upstream": "docs/launch-arbitrum-chain/operate/error-index.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-08-03",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/launch-arbitrum-chain/operate/sequencer-troubleshooting",
+    "upstream": "docs/launch-arbitrum-chain/operate/sequencer-troubleshooting.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-08-17",
+    "kind": "DRIFT"
+  },
+  {
+    "source": "/node-running/sequencer-content-map",
+    "upstream": "docs/node-running/sequencer-content-map.mdx",
+    "reason": "no-counterpart",
+    "added": "2025-07-16",
+    "kind": "MISS"
+  },
+  {
+    "source": "/Offchain-pattern-guide",
+    "upstream": "docs/Offchain-pattern-guide.md",
+    "reason": "no-counterpart",
+    "added": "2026-06-03",
+    "kind": "MISS"
+  },
+  {
+    "source": "/run-arbitrum-node/arbos-releases/arbos61",
+    "upstream": "docs/run-arbitrum-node/arbos-releases/arbos61.mdx",
+    "reason": "no-counterpart",
+    "added": "2026-07-16",
+    "kind": "DRIFT"
+  }
+]
