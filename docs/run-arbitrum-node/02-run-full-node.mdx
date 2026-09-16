@@ -1,34 +1,108 @@
 ---
 title: 'How to run a full node for an Arbitrum chain'
-description: Learn how to run an Arbitrum node on your local machine
+description: Run an Arbitrum full node with Docker on a single host, or with the community Helm chart on Kubernetes
+user_story: As a node operator, I want to run a full node for an Arbitrum chain with either Docker or Helm.
 sidebar_position: 1
 content_type: how-to
+author: 'Jason-W123'
+sme: 'Jason-W123'
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import HardwarePartial from '../partials/_hardware-requirements.mdx';
+import DAOChainsParameters from './partials/run-full-node/_dao-chains-parameters.mdx';
+import OrbitChainsParameters from './partials/run-full-node/_orbit-chains-parameters.mdx';
 import DAOChainsExample from './partials/run-full-node/_dao-chains-example.mdx';
 import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.mdx';
+import StateHistoryDefaults from './partials/run-full-node/_state-history-defaults.mdx';
+import OptionalTxPrecheckerParameters from './partials/run-full-node/_tx-prechecker-parameters.mdx';
+import OptionalParameters from './partials/run-full-node/_optional-parameters.mdx';
 
-:::info Prerequisites
+This how-to walks you through running a full node for an Arbitrum chain with **Docker** or with the **community Helm chart on Kubernetes**.
 
-This page assumes that you've completed the steps from the [Start here](/run-arbitrum-node/start-here.mdx) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, <a data-quicklook-from="database-snapshot">database snapshots</a>, and other information required to run the node.
+Pick your deployment method once, in the first tabbed section below. Every later tab on this page follows that choice.
 
-To view the short and long term support policy, visit the [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx) page.
+<VanillaAdmonition type="tip" title="Want the short version?">
 
-If you're looking to run a node with a different role — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, <a data-quicklook-from="archive-node">archive node</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—see [How to assign roles to a Nitro node](/run-arbitrum-node/assign-node-roles.mdx) for the flags that define each role.
-
-:::
-
-<VanillaAdmonition type="tip" title="Running on Kubernetes or want a more reliable setup?">
-
-This page covers running a node with Docker. If you want to deploy on Kubernetes, or you want a more production-ready setup with monitoring, log signals, and network egress guidance, follow [How to run a full node with Helm on Kubernetes](/launch-arbitrum-chain/run-a-node/run-full-node-with-helm.mdx) instead.
+To start an Arbitrum One full node with Docker and recommended defaults in four steps, follow the [full node quickstart](/run-arbitrum-node/02-quickstart-full-node.mdx). Come back here to deploy on Kubernetes, run a different chain, choose a state scheme, or tune the node.
 
 </VanillaAdmonition>
 
-## Choose a state scheme
+<VanillaAdmonition type="info">
 
-Nitro stores its state trie using one of two <a data-quicklook-from="state-scheme">schemes</a>: **<a data-quicklook-from="hashdb">HashDB</a>** (the default) or **<a data-quicklook-from="pathdb">PathDB</a>**. Choose before you initialize the database. You cannot switch an existing database—moving between schemes means re-initializing from a snapshot built with the scheme you want.
+To access an Arbitrum chain without running your own node, see [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers.mdx).
+
+A Nitro node can also run as a <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, <a data-quicklook-from="archive-node">archive node</a>, or <a data-quicklook-from="feed-relay">feed relay</a>. See [how to assign roles to a Nitro node](/run-arbitrum-node/operation/assign-node-roles.mdx) and the [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx).
+
+</VanillaAdmonition>
+
+## Choose your deployment
+
+Both methods run the same Nitro binary with the same configuration. They differ in what surrounds it.
+
+|               | Docker                                                  | Helm on Kubernetes                                                    |
+| :------------ | :------------------------------------------------------ | :-------------------------------------------------------------------- |
+| Best for      | A single host, a first node, local testing              | A cluster, and nodes you operate long-term                            |
+| Configuration | CLI flags on `docker run`, or a `node-config.json` file | Chart values under `configmap.data.*`, as `--set` or a values file    |
+| Memory limits | You set `GOMEMLIMIT` yourself                           | The chart derives `GOMEMLIMIT` from the pod's memory limit            |
+| Monitoring    | You scrape the metrics port yourself                    | A `ServiceMonitor` for Prometheus, plus a published Grafana dashboard |
+| Health checks | You add them                                            | A startup probe ships on by default; you add liveness and readiness   |
+| Storage       | A host directory you mount                              | A PersistentVolumeClaim sized by `persistence.size`                   |
+
+The chart is the [community Helm chart](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/nitro). Its defaults target Arbitrum One, so Arbitrum One is the worked example throughout. Each step notes what changes for other chains.
+
+## Before you start
+
+Prepare the following before you run your node for the first time. You combine these values with the commands and configuration below, so keep them somewhere you can copy from.
+
+### Minimum hardware configuration
+
+The following are the minimum hardware requirements for a <a data-quicklook-from="arbitrum-nitro">Nitro</a> full node (not archival):
+
+<HardwarePartial />
+
+- The RAM and CPU minimums suit nodes that handle a limited number of RPC requests. To serve many simultaneous requests, increase both.
+- Single-core performance matters. If the node falls behind and a single core sits at 100%, move to a faster processor.
+- Storage requirements grow with the chain, and snapshot extraction needs about 2x the snapshot size in temporary space. Database size varies widely by chain — on Arbitrum One it runs to multiple TB. For your own Arbitrum chain, ask the chain operator before you provision storage.
+
+<div className="dynamic-content-tabs">
+  <Tabs className="tabgroup" groupId="node-deployment" defaultValue="docker">
+    <TabItem value="docker" label="Docker">
+
+Mount a host directory large enough for the database, plus the temporary space extraction needs.
+
+    </TabItem>
+    <TabItem value="helm" label="Helm">
+
+Raise the chart's default `persistence.size` (`500Gi`) to fit the chain you run. Allow roughly 2x the snapshot size in extra temporary disk for extraction on the first run.
+
+    </TabItem>
+
+  </Tabs>
+</div>
+
+### Parent chain (L1) client
+
+Your node needs a parent chain RPC endpoint, and that client must stay up to date. An incompatible L1 client version can crash your Arbitrum node or stop it from syncing, so check the [Nitro release notes](https://github.com/OffchainLabs/nitro/releases) when you upgrade it.
+
+Arbitrum One, Nova, and Sepolia settle to Ethereum, so they also need an L1 beacon or blob endpoint. See [L1 Ethereum beacon chain RPC providers](/run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers.mdx). For a chain with a different parent, use that parent chain's RPC, and add a beacon endpoint only if the chain posts blobs.
+
+### Recommended Nitro version
+
+Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@</code>
+
+The Helm chart pulls the same image. Pin it with `image.tag` rather than tracking the chart's default.
+
+<VanillaAdmonition type="caution">
+
+Run only release versions. Beta and release candidate builds of Nitro are not supported and can cause unexpected behavior or database corruption.
+
+</VanillaAdmonition>
+
+### Choose a state scheme
+
+Nitro stores its state trie using one of two <a data-quicklook-from="state-scheme">schemes</a>: **<a data-quicklook-from="hashdb">HashDB</a>** (the default) or **<a data-quicklook-from="pathdb">PathDB</a>**. Choose before you initialize the database. You cannot switch an existing database — moving between schemes means re-initializing from a snapshot built with the scheme you want.
 
 | Property                      | HashDB (default)                         | PathDB                                     |
 | :---------------------------- | :--------------------------------------- | :----------------------------------------- |
@@ -40,78 +114,251 @@ Nitro stores its state trie using one of two <a data-quicklook-from="state-schem
 | Download with `--init.latest` | Supported                                | Not supported; use `--init.url`            |
 | Minimum Nitro version         | Any                                      | v3.9.x                                     |
 
-Both schemes have a published full node snapshot, so either one can initialize without syncing from genesis. At comparable dates the two are close in size: on Arbitrum One, the `pruned` HashDB snapshot is about 2.3 TB and the `full-path` PathDB snapshot is about 2.4 TB.
-
 Pick based on how you want to handle <a data-quicklook-from="state-pruning">pruning</a> and whether you need block validation:
 
 - **Choose HashDB** if your node runs the block validator, or if you want the simplest initialization. `--init.latest pruned` downloads and verifies the snapshot for you. You then prune manually, and your node is offline while it does.
-- **Choose PathDB** if you want to avoid manual prune cycles. Nitro prunes online, so the node keeps serving RPC and disk use stays within the window you set with `--execution.caching.state-history`. Initialization takes more work: you pass the snapshot URL to `--init.url` yourself.
+- **Choose PathDB** to avoid manual prune cycles. Nitro prunes online, so the node keeps serving RPC and disk use stays within the window you set with `--execution.caching.state-history`. You pass the snapshot URL to `--init.url` yourself.
 
-On **<a data-quicklook-from="archive-node">archive</a>** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/run-arbitrum-node/more-types/01-run-archive-node.mdx).
+On archive nodes, PathDB cuts disk use substantially. See [how to run an archive node](/run-arbitrum-node/more-types/01-run-archive-node.mdx).
 
-<VanillaAdmonition type="caution" title="PathDB and block validation">
+<VanillaAdmonition type="warning" title="PathDB and block validation">
 
-PathDB cannot validate blocks. If a node requires the block validator, Nitro exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required`.
-
-A default full node is unaffected: it runs the watchtower strategy, which does not require the block validator. Nitro rejects `path` when you set `--node.block-validator.enable=true`, choose a staker strategy other than `Watchtower`, or enable fast confirmation.
+PathDB cannot validate blocks. Nitro rejects `path` and exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required` when you set `--node.block-validator.enable=true`, choose a staker strategy other than `Watchtower`, or enable fast confirmation. A default full node runs Watchtower, so it is unaffected.
 
 </VanillaAdmonition>
 
-## Putting it into practice: run a node
+### Database snapshots
 
-:::warning Caution
+Whether you need a <a data-quicklook-from="database-snapshot">database snapshot</a> depends on the chain:
 
-If you are running more than one node, you should [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+- **Arbitrum One** requires one on the first run, because the snapshot supplies state from the Classic era.
+- **Arbitrum Nova and Sepolia** have published snapshots that speed up the initial sync but are not required.
+- **Your own Arbitrum chain** typically syncs from genesis, unless the chain's team publishes a snapshot for you.
 
-:::
+A snapshot gives your node the chain's state up to a specific block, so it reaches the head of the chain faster. Initial sync still takes hours to days. Snapshots for Arbitrum One, Nova, and Sepolia are listed in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/).
 
-:::warning PathDB and `--init.latest`
+Initialize with one of two flags:
 
-`--init.latest` accepts only `archive`, `pruned`, and `genesis`, and every snapshot it resolves for those kinds uses HashDB. Adding `--execution.caching.state-scheme=path` to the examples below fails, because the downloaded snapshot's scheme won't match.
+- `--init.latest <kind>` downloads and verifies the latest snapshot of that kind from `https://snapshot.arbitrum.foundation/`. It accepts `pruned`, `archive`, and `genesis`, and every kind it resolves uses HashDB. Override the base URL with `--init.latest-base`.
+- `--init.url <url>` takes a snapshot URL directly. Use it for the PathDB kinds, `full-path` and `archive-path`, which `--init.latest` does not accept.
 
-PathDB snapshots are published under the separate `full-path` and `archive-path` kinds, which `--init.latest` does not accept. To initialize a PathDB database, pass the snapshot URL to `--init.url` instead. See [PathDB snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
+Nitro ignores both flags once a database exists, so it is safe to leave them in place across restarts.
 
-:::
+<VanillaAdmonition type="warning" title="Match the snapshot to your state scheme">
 
-:::warning Docker volume mount
+A snapshot only works with a node running the same state scheme. Each snapshot directory publishes a `metadata.json` file naming its `state_scheme`. Check it before you download.
 
-To ensure the database persists across restarts, mount an external volume to **`/home/user/.arbitrum`** inside the Docker container. Make sure to:
+</VanillaAdmonition>
 
-- Create the host directory **before** running Docker (e.g., `mkdir -p /some/local/dir/arbitrum`), otherwise Docker may create it as `root`, and the container (which runs as UID 1000) won't be able to write to it.
-- If you encounter permission errors on Linux or macOS, run `chmod -fR 777 /some/local/dir/arbitrum` on the host directory.
+Read [Nitro database snapshots](/run-arbitrum-node/reference/nitro-database-snapshots.mdx) for every snapshot kind, [PathDB initialization](/run-arbitrum-node/reference/nitro-database-snapshots.mdx#pathdb-snapshots), and [hosting one snapshot for several nodes](/run-arbitrum-node/reference/nitro-database-snapshots.mdx#downloading-the-snapshot-manually).
 
-:::
+<VanillaAdmonition type="warning" title="Fusaka upgrade: historical blobs">
 
-:::note Node config file
+If you run a beacon node, historical data now lives in <a data-quicklook-from="blob">blobs</a>. To make this transition, see [historical blobs for beacon nodes](/run-arbitrum-node/data-availability/beacon-nodes-historical-blobs.mdx).
 
-If using a `node-config.json` file with Docker to mount, use the following command:
+</VanillaAdmonition>
+
+### Required parameters
+
+The list below contains all the parameters you need to configure your node. Select your deployment method, then the chain you want to run a node for.
+
+<div className="dynamic-content-tabs">
+  <Tabs className="tabgroup" groupId="node-deployment" defaultValue="docker">
+    <TabItem value="docker" label="Docker">
+      <div className="dynamic-content-tabs">
+        <Tabs className="tabgroup" groupId="arbitrum-chain-type" defaultValue="dao-chains">
+          <TabItem value="dao-chains" label="Arbitrum One, Nova, Sepolia">
+            <DAOChainsParameters />
+          </TabItem>
+          <TabItem value="your-chain" label="Your Arbitrum chain">
+            <OrbitChainsParameters />
+          </TabItem>
+        </Tabs>
+      </div>
+    </TabItem>
+    <TabItem value="helm" label="Helm">
+
+The chart takes the same settings as chart values under `configmap.data`, using the flag name as the key path. `--parent-chain.connection.url` becomes `configmap.data.parent-chain.connection.url`, and so on.
+
+<div className="dynamic-content-tabs">
+  <Tabs className="tabgroup" groupId="arbitrum-chain-type" defaultValue="dao-chains">
+    <TabItem value="dao-chains" label="Arbitrum One, Nova, Sepolia">
+
+The chart defaults to Arbitrum One (`chain.id` `42161`, `parent-chain.id` `1`), so an Arbitrum One node needs only three values:
+
+| Value                                                | What it holds                           |
+| :--------------------------------------------------- | :-------------------------------------- |
+| `configmap.data.parent-chain.connection.url`         | Your Ethereum L1 execution RPC endpoint |
+| `configmap.data.parent-chain.blob-client.beacon-url` | Your Ethereum beacon or blob endpoint   |
+| `configmap.data.init.latest`                         | `pruned`, to initialize from a snapshot |
+
+For Nova or Sepolia, also override `configmap.data.chain.id` and `configmap.data.parent-chain.id`. Arbitrum Sepolia settles to Ethereum Sepolia, so its parent chain ID is `11155111`, and both parent chain endpoints must point at Sepolia.
+
+    </TabItem>
+    <TabItem value="your-chain" label="Your Arbitrum chain">
+
+A node for your own Arbitrum chain needs its chain info, sequencer endpoint, and feed URL:
+
+| Value                                        | What it holds                                    |
+| :------------------------------------------- | :----------------------------------------------- |
+| `configmap.data.parent-chain.id`             | The parent chain's ID                            |
+| `configmap.data.parent-chain.connection.url` | The parent chain's RPC endpoint                  |
+| `configmap.data.chain.id`, `chain.name`      | Your chain's ID and name                         |
+| `configmap.data.chain.info-json`             | The chain info JSON your chain owner provides    |
+| `configmap.data.execution.forwarding-target` | The sequencer endpoint your chain owner provides |
+| `configmap.data.node.feed.input.url`         | The sequencer feed URL your chain owner provides |
+
+Because `chain.info-json` is a large JSON string, supply these through a values file rather than `--set`. See the example under [Run the node](#run-the-node).
+
+If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-client.beacon-url`. <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust chains</a> also need a Data Availability configuration (`node.da.anytrust.*`, including a `rest-aggregator`); see [Data Availability](/how-arbitrum-works/deep-dives/data-availability.mdx). The older `node.data-availability.*` flags still work, but Nitro deprecated them and will remove them in a future release.
+
+    </TabItem>
+
+  </Tabs>
+</div>
+
+    </TabItem>
+
+  </Tabs>
+</div>
+
+## Run the node
+
+Now that you have the prerequisite information prepared, start your node.
+
+<VanillaAdmonition type="warning">
+
+If you run more than one node, [run a feed relay](/run-arbitrum-node/data-availability/run-feed-relay.mdx).
+
+</VanillaAdmonition>
+
+<div className="dynamic-content-tabs">
+  <Tabs className="tabgroup" groupId="node-deployment" defaultValue="docker">
+    <TabItem value="docker" label="Docker">
+
+<VanillaAdmonition type="warning" title="Docker volume mount">
+
+To keep the database across restarts, mount an external volume to **`/home/user/.arbitrum`** inside the Docker container.
+
+Create the host directory **before** you run Docker, for example `mkdir -p /some/local/dir/arbitrum`. Otherwise Docker may create it as `root`, and the container (which runs as UID 1000) cannot write to it. See [note on permissions](#note-on-permissions) if you hit permission errors.
+
+</VanillaAdmonition>
+
+<VanillaAdmonition type="note" title="Node config file">
+
+To mount a `node-config.json` file with Docker, use the following command:
 
 ```
 docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ --conf.file /home/user/.arbitrum/node-config.json
 ```
 
-:::
+</VanillaAdmonition>
 
-- Here is an example of how to run `nitro-node`:
+The examples below initialize with `--init.latest`, which resolves HashDB snapshots only. To run PathDB, replace that flag with `--init.url` and a `full-path` snapshot URL.
 
 <div className="dynamic-content-tabs">
-  <Tabs className="tabgroup" defaultValue={null}>
-    <TabItem value="dao-governed-chains-example" label="Arbitrum One, Nova, Sepolia">
+  <Tabs className="tabgroup" groupId="arbitrum-chain-type" defaultValue="dao-chains">
+    <TabItem value="dao-chains" label="Arbitrum One, Nova, Sepolia">
       <DAOChainsExample />
     </TabItem>
-    <TabItem value="orbit-chains-example" label="Arbitrum chains">
+    <TabItem value="your-chain" label="Your Arbitrum chain">
       <OrbitChainsExample />
     </TabItem>
   </Tabs>
 </div>
 
-- Note that it is important that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the Docker container won't be able to write to it.
-- Note that if you are running a node for the parent chain (e.g., Ethereum for Arbitrum One or Nova) on localhost, you may need to add `--network host` right after `docker run` to use Docker host-based networking
-- When shutting down the Docker image, it is important to allow a graceful shutdown to save the current state to disk. Here is an example of how to do a graceful shutdown of all Docker images currently running
+Two more things to watch for:
 
-  ```shell
-  docker stop --time=1800 $(docker ps -aq)
-  ```
+- If you run the parent chain client on localhost, add `--network host` right after `docker run` to use Docker host-based networking.
+- Shut the container down gracefully so the node saves its current state to disk. An abrupt stop can corrupt the database.
+
+To shut down, stop the container by name and give it up to 30 minutes to finish writing:
+
+```shell
+docker stop --timeout=1800 <container name>
+```
+
+    </TabItem>
+    <TabItem value="helm" label="Helm">
+
+First, add the chart repo:
+
+```shell
+helm repo add offchainlabs https://charts.arbitrum.io
+helm repo update
+```
+
+Then install, selecting the configuration for your chain:
+
+<div className="dynamic-content-tabs">
+  <Tabs className="tabgroup" groupId="arbitrum-chain-type" defaultValue="dao-chains">
+    <TabItem value="dao-chains" label="Arbitrum One, Nova, Sepolia">
+
+```shell
+# Arbitrum One
+helm install arb1-fullnode offchainlabs/nitro \
+  --set configmap.data.parent-chain.connection.url=<ETH_L1_RPC_URL> \
+  --set configmap.data.parent-chain.blob-client.beacon-url=<L1_BEACON_URL> \
+  --set configmap.data.init.latest=pruned   # pruned snapshot, recommended for Arbitrum One
+```
+
+For Nova or Sepolia, override the chain and parent-chain IDs. For example, Arbitrum Sepolia:
+
+```shell
+# Arbitrum Sepolia (parent chain is Ethereum Sepolia, 11155111)
+helm install arbsepolia-fullnode offchainlabs/nitro \
+  --set configmap.data.parent-chain.id=11155111 \
+  --set configmap.data.parent-chain.connection.url=<SEPOLIA_RPC_URL> \
+  --set configmap.data.parent-chain.blob-client.beacon-url=<CONSENSUS_API_URL> \
+  --set configmap.data.chain.id=421614
+```
+
+    </TabItem>
+    <TabItem value="your-chain" label="Your Arbitrum chain">
+
+Because `chain.info-json` is a large JSON string, supply your chain's settings through a values file rather than `--set`:
+
+```yaml
+# values-mychain.yaml
+configmap:
+  data:
+    parent-chain:
+      id: <PARENT_CHAIN_ID>
+      connection:
+        url: <PARENT_CHAIN_RPC_URL>
+    chain:
+      id: <YOUR_CHAIN_ID>
+      name: <YOUR_CHAIN_NAME>
+      info-json: '<your chain info JSON>'
+    execution:
+      forwarding-target: <SEQUENCER_ENDPOINT_URL>
+    node:
+      feed:
+        input:
+          url: <SEQUENCER_FEED_URL>
+```
+
+```shell
+helm install mychain-fullnode offchainlabs/nitro -f values-mychain.yaml
+```
+
+    </TabItem>
+
+  </Tabs>
+</div>
+
+<VanillaAdmonition type="caution" title="Defaults that commonly trip up operators">
+
+- **Do not copy the chart README's init example verbatim.** It uses `nitro-genesis.tar`, which syncs from genesis — a huge, slow process on a chain with a long history, such as Arbitrum One. Where a pruned snapshot exists, prefer `configmap.data.init.latest=pruned`.
+- **The chart changes the RPC path prefix.** Defaults are `http.rpcprefix=/rpc` and `ws.rpcprefix=/ws`, so RPC is served at `http://host:8547/rpc`, not vanilla Nitro's `/`. Clients that omit `/rpc` get a 404.
+- **Metrics are off by default.** Enable `configmap.data.metrics=true` and `serviceMonitor.enabled=true` to scrape them. See [monitor the node](#monitor-the-node).
+
+</VanillaAdmonition>
+
+    </TabItem>
+
+  </Tabs>
+</div>
 
 ### Important ports
 
@@ -120,84 +367,180 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
 | `RPC`/`http`      | `8547`       |
 | `RPC`/`websocket` | `8548`       |
 | `Sequencer Feed`  | `9642`       |
+| Metrics           | `6070`       |
 
-- Please note: the `RPC`/`websocket` protocol requires some ports to be enabled, you can use the following flags:
-  - `--ws.port=8548`
-  - `--ws.addr=0.0.0.0`
-  - `--ws.origins=\*`
+To serve WebSocket RPC, set `--ws.port=8548`, `--ws.addr=0.0.0.0`, and `--ws.origins=\*`.
+
+<div className="dynamic-content-tabs">
+  <Tabs className="tabgroup" groupId="node-deployment" defaultValue="docker">
+    <TabItem value="docker" label="Docker">
+
+Publish each port you want to reach with `-p`, as the examples above do for `8547` and `8548`. RPC is served at the root path, so `http://localhost:8547` works with no prefix.
+
+    </TabItem>
+    <TabItem value="helm" label="Helm">
+
+Set the same options as chart values, such as `configmap.data.ws.port`. Note the chart's path prefixes: it serves RPC at `http://<host>:8547/rpc` and WebSocket at `/ws`, not at the root. A client that omits the prefix gets a 404.
+
+    </TabItem>
+
+  </Tabs>
+</div>
 
 ### Note on permissions
 
-- The Docker image is configured to run as non-root UID 1000. This configuration means if you are running in Linux or OSX and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
+This section applies to Docker. The Docker image runs as non-root UID 1000. On Linux or macOS, if you get permission errors when you run the Docker image, run the following commands to allow all users to update the persistent folders:
 
-  ```shell
-  mkdir /data/arbitrum
-  chmod -fR 777 /data/arbitrum
-  ```
+```shell
+mkdir /data/arbitrum
+chmod -fR 777 /data/arbitrum
+```
+
+## Configure and tune the node
 
 ### Watchtower mode
 
-- By default, the full node runs in Watchtower mode, meaning that it watches the onchain assertions and, if it disagrees with them, logs an error containing the string `found incorrect assertion in watchtower mode`. For a BoLD-enabled chain like Arbitrum One or Arbitrum Nova if you are running Nitro before v3.6.0, the `--node.bold.enable=true` flag should be set to ensure your node can monitor for onchain assertions properly.
-- Setting this flag is not required as your node will continue to operate correctly, validate the Arbitrum One/Nova chain, and serve RPC requests as usual, regardless of this flag.
-- Note that watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode using the parameter `--node.staker.enable=false`.
-- For details on watchtower mode alongside the other validator strategies (`defensive`, `stakeLatest`, `resolveNodes`, `makeNodes`), see [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx).
+By default, the full node runs in Watchtower mode. It watches the onchain assertions and, if it disagrees with them, logs an error containing the string `found incorrect assertion in watchtower mode`.
+
+- Watchtower mode is optional and adds a small amount of execution and memory overhead. Turn it off with `--node.staker.enable=false`. Your node serves RPC and follows the chain either way.
+- On a BoLD-enabled chain such as Arbitrum One or Nova, if you run Nitro before v3.6.0, set `--node.bold.enable=true` so your node monitors onchain assertions properly.
+- For watchtower mode alongside the other validator strategies (`defensive`, `stakeLatest`, `resolveNodes`, `makeNodes`), see [how to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx).
 
 ### Pruning
 
-Pruning removes older, unnecessary state from the local copy of the chain your node maintains. It saves disk space and slightly improves the node's efficiency. How you prune depends on the [state scheme](#choose-a-state-scheme) you chose.
+Pruning removes older state from the local copy of the chain your node maintains. It saves disk space and slightly improves the node's efficiency. How you prune depends on the [state scheme](#choose-a-state-scheme) you chose.
 
-On **HashDB**, the default, pruning is a _manual, opt-in_ operation. It removes all states from blocks older than the latest 128. You decide when to run it, and the node stops serving RPC requests until it finishes. On a chain the size of Arbitrum One, that can take days.
-
-On **PathDB**, pruning is automatic and runs online. Nitro discards state older than the `--execution.caching.state-history` window as it goes, so you never schedule a prune and the node never goes offline to run one. Disk use stays within that window instead of growing between manual prunes.
-
-import StateHistoryDefaults from './partials/run-full-node/_state-history-defaults.mdx';
+On **PathDB**, Nitro prunes automatically and online. It discards state older than the `--execution.caching.state-history` window as it goes, so you never schedule a prune and the node never goes offline to run one.
 
 <StateHistoryDefaults />
 
-:::note
+On **HashDB**, the default, pruning is manual and opt-in. It runs at startup, during initialization, and the node stops serving RPC requests until it finishes. Activate it with `--init.prune <mode>`:
 
-The pruning process occurs when the node starts (upon initialization) and will not serve RPC requests during pruning.
+| Mode        | Retains                                                                                                    | Use for                                                                                                                                                        |
+| :---------- | :--------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `minimal`   | Genesis state and head state only                                                                          | The fastest and most aggressive prune                                                                                                                          |
+| `full`      | Genesis state, the latest confirmed block, and head state                                                  | Full nodes serving RPC. It does not work in `validator` mode.                                                                                                  |
+| `validator` | The `full` set, plus the latest confirmed assertion root from L1 and the last locally validated block root | Validators. Needs an L1 Ethereum RPC URL, and takes longer than `full`. See [how to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx). |
 
-:::
-
-If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
-
-- `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:
-  - `minimal`: The most aggressive prune and retains only the genesis state and the head state (at the latest snapshot). Takes the least amount of time to complete. Duration depends on the chain and database size (several hours for smaller chains; potentially days for large chains like Arbitrum One).
-  - `full` : Mostly intended for full nodes serving RPC requests, this mode retains the genesis state, the state of the latest confirmed block, and the head state (at the latest snapshot). Will not work if the node is in `validator` mode. Duration varies significantly by chain and database size—for Arbitrum One, this may take multiple days on NVMe SSDs. For smaller chains, it will be much faster. If pruning takes too long, consider downloading a fresh pruned snapshot with `--init.latest pruned` instead.
-  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, the latest confirmed assertion root (obtained from L1), the last locally validated block root, and the head state (at the latest snapshot). This mode is expected to take longer than `full` pruning mode. For validator-specific setup details, see [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx).
+Duration scales with database size: several hours on smaller chains, and multiple days on Arbitrum One even on NVMe SSDs. If a prune runs too long, download a fresh snapshot with `--init.latest pruned` instead.
 
 ### Memory management
 
-Under heavy RPC load or during operations such as large `debug_traceBlockByNumber` calls, Nitro nodes can consume significant memory. To prevent out-of-memory (OOM) crashes, consider configuring the following:
+Under heavy RPC load, or during operations such as large `debug_traceBlockByNumber` calls, Nitro nodes can consume significant memory. Two settings prevent out-of-memory (OOM) crashes:
 
-- `--node.resource-mgmt.mem-free-limit`: Declines incoming RPC requests when free system memory drops below the specified threshold (e.g., `--node.resource-mgmt.mem-free-limit=4GiB`). This helps protect the node from OOM under high request load.
-- `GOMEMLIMIT` environment variable: Sets a soft memory limit for the Go runtime garbage collector (e.g., `GOMEMLIMIT=48GiB` for a 64 GB machine), helping reduce memory spikes.
+- `--node.resource-mgmt.mem-free-limit`: Declines incoming RPC requests when free system memory drops below the specified threshold, for example `--node.resource-mgmt.mem-free-limit=4GiB`.
+- `GOMEMLIMIT`: Sets a soft memory limit for the Go runtime garbage collector, for example `GOMEMLIMIT=48GiB` for a 64 GB machine. This reduces memory spikes.
 
-For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
+For Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning and monitoring](/run-arbitrum-node/operation/node-tuning-and-monitoring.mdx).
 
-:::tip
-For Docker deployments, you can set these in your `docker run` command:
+<div className="dynamic-content-tabs">
+  <Tabs className="tabgroup" groupId="node-deployment" defaultValue="docker">
+    <TabItem value="docker" label="Docker">
+
+Set both in your `docker run` command:
 
 ```shell
 docker run ... -e GOMEMLIMIT=48GiB ... offchainlabs/nitro-node:... --node.resource-mgmt.mem-free-limit=4GiB ...
 ```
 
-:::
+    </TabItem>
+    <TabItem value="helm" label="Helm">
+
+Set a memory limit so the chart can size the Go runtime. This is optional but recommended:
+
+- **`resources.limits.memory`**: set this to activate the chart's automatic `GOMEMLIMIT`. When a memory limit is present, the chart derives `GOMEMLIMIT` from it (`env.nitro.goMemLimit`, on by default).
+- **`MALLOC_ARENA_MAX=2`**: the chart sets this by default (`env.nitro.mallocArenaMax`), so you do not normally need to configure it.
+- **`configmap.data.node.resource-mgmt.mem-free-limit`**: the RPC memory throttle, disabled by default. Recommended if you expose this node as a public RPC.
+
+To set any other environment variable, use `extraEnv`, whose entries are spliced directly into the pod's `env`:
+
+```yaml
+extraEnv:
+  - name: SOME_VAR
+    value: 'value'
+```
+
+    </TabItem>
+
+  </Tabs>
+</div>
 
 ### Transaction prechecker
 
-- Enabling the transaction prechecker will add extra checks before your node forwards `eth_sendRawTransaction` to the Sequencer endpoint.
-- Below, we list the flags to set up the prechecker:
-
-import OptionalTxPrecheckerParameters from './partials/run-full-node/_tx-prechecker-parameters.mdx';
+The transaction prechecker adds extra checks before your node forwards `eth_sendRawTransaction` to the Sequencer endpoint. The flags to set up the prechecker are below:
 
 <OptionalTxPrecheckerParameters />
 
 ### Optional parameters
 
-Below, we listed the most commonly used parameters when running a node. You can also use the flag `--help` for a comprehensive list of the available parameters.
-
-import OptionalParameters from './partials/run-full-node/_optional-parameters.mdx';
+Below are the most commonly used parameters when you run a node. You can also use the flag `--help` for a comprehensive list of the available parameters.
 
 <OptionalParameters />
+
+## Monitor the node
+
+Nitro exposes Prometheus metrics once you enable them. The metrics server binds to `0.0.0.0:6070` by default (`metrics-server.port`) and serves at `/debug/metrics/prometheus`.
+
+<div className="dynamic-content-tabs">
+  <Tabs className="tabgroup" groupId="node-deployment" defaultValue="docker">
+    <TabItem value="docker" label="Docker">
+
+Add `--metrics` to the node's flags and publish port `6070` with `-p 0.0.0.0:6070:6070`. Then point your Prometheus scrape config at `http://<host>:6070/debug/metrics/prometheus`.
+
+    </TabItem>
+    <TabItem value="helm" label="Helm">
+
+Turn on metrics and a `ServiceMonitor` so Prometheus can scrape the node:
+
+```shell
+helm upgrade <my-release> offchainlabs/nitro \
+  --reuse-values \
+  --set configmap.data.metrics=true \
+  --set serviceMonitor.enabled=true
+```
+
+The `ServiceMonitor` scrapes port `6070` and the path `/debug/metrics/prometheus` (`serviceMonitor.path`). The chart's Grafana dashboard is attached to the [chart releases page](https://github.com/OffchainLabs/community-helm-charts/releases).
+
+The chart wires a **startup probe** by default, but liveness and readiness probes stay off unless you set `livenessProbe` and `readinessProbe`. The startup probe's long failure window protects the initial sync, so a slow sync does not trigger a restart. It does not catch a hang after the node is up, so configure a liveness probe yourself.
+
+    </TabItem>
+
+  </Tabs>
+</div>
+
+For the metrics worth alerting on, the Grafana dashboard, health check patterns, and the [log signals that separate a healthy node from a broken one](/run-arbitrum-node/operation/node-tuning-and-monitoring.mdx#log-signals-to-watch), see [node tuning and monitoring](/run-arbitrum-node/operation/node-tuning-and-monitoring.mdx). For error strings mapped to specific fixes, see [troubleshooting](/run-arbitrum-node/06-troubleshooting.mdx).
+
+## Network egress allowlist
+
+A full node reaches out to a fixed set of endpoints. Cloud providers often restrict outbound traffic by default, so you may need to allow these destinations in your security group, firewall rules, or egress `NetworkPolicy`.
+
+For DAO-governed chains, the hostnames come from the chain's built-in chain info. For your own Arbitrum chain, they come from the `chain.info-json`, `execution.forwarding-target`, and feed URLs you configure. The categories are the same across chains:
+
+| Purpose                       | Where the endpoint comes from                                       | When                                        |
+| :---------------------------- | :------------------------------------------------------------------ | :------------------------------------------ |
+| **Sequencer** (tx forwarding) | chain info `sequencer-url` / `execution.forwarding-target`          | Always—the node forwards user txs here      |
+| Sequencer fallbacks           | chain info `secondary-forwarding-target`                            | Failover                                    |
+| **Sequencer feed**            | chain info `feed-url` / `node.feed.input.url`                       | Always                                      |
+| Feed fallbacks / delayed      | chain info `secondary-feed-url` / `node.feed.input.secondary-url`   | Failover                                    |
+| Block metadata                | chain info `block-metadata-url`                                     | Only if tracking block metadata / Timeboost |
+| DB snapshot                   | the `init` source host                                              | Initial sync only                           |
+| **Parent chain**              | your parent-chain RPC + beacon (beacon only for an Ethereum parent) | Always                                      |
+| DA / REST endpoints           | `rest-aggregator` URL list                                          | AnyTrust chains only, such as Nova          |
+
+For **Arbitrum One**, those resolve to:
+
+| Purpose                   | Endpoint(s)                                                                                    |
+| :------------------------ | :--------------------------------------------------------------------------------------------- |
+| Sequencer (tx forwarding) | `https://arb1-sequencer.arbitrum.io/rpc`                                                       |
+| Sequencer fallbacks       | `https://arb1-sequencer-fallback-{1..5}.arbitrum.io/rpc`                                       |
+| Sequencer feed (primary)  | `wss://arb1-feed.arbitrum.io/feed`                                                             |
+| Feed fallbacks / delayed  | `wss://arb1-delayed-feed.arbitrum.io/feed`, `wss://arb1-feed-fallback-{1..5}.arbitrum.io/feed` |
+| Block metadata            | `https://arb1.arbitrum.io/rpc`                                                                 |
+| DB snapshot               | `https://snapshot.arbitrum.foundation/`                                                        |
+| Parent chain              | Your Ethereum L1 execution RPC + L1 beacon/blob endpoint                                       |
+
+<VanillaAdmonition type="caution" title="Firewall egress">
+
+For a default Arbitrum One full node, allow `*.arbitrum.io` (443 HTTPS + WSS), `snapshot.arbitrum.foundation` (443, init only), and your own L1 RPC and beacon hosts. For other chains, allow that chain's sequencer, feed, and snapshot hosts, plus your parent-chain endpoints. **More outbound paths exist only if you enable them:** the version alerter (off by default), the classic redirect, or DA/REST endpoints on AnyTrust chains such as Nova.
+
+</VanillaAdmonition>

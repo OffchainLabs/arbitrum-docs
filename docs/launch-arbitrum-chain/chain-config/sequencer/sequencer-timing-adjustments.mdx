@@ -57,7 +57,7 @@ docker run -v /path/to/nodeConfig.json:/config/nodeConfig.json \
 
 <VanillaAdmonition type="info" title="Latest version of Nitro">
 
-You can find the latest recommended version of Nitro on the [Run a Node](/run-arbitrum-node/start-here.mdx#recommended-nitro-version) page.
+You can find the latest recommended version of Nitro on the [Run a full node](/run-arbitrum-node/02-run-full-node.mdx#recommended-nitro-version) page.
 
 </VanillaAdmonition>
 
@@ -163,7 +163,7 @@ With `reorg-resistance-margin=0`, a parent-chain reorg — or simply a batch lan
 
 </VanillaAdmonition>
 
-Note the interaction with `maxTimeVariation`: a wider past window (`delayBlocks` and `delaySeconds`) gives the batch poster more room before the margin is threatened, while a narrower window makes the margin bite sooner. See the [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx) for the full batch-poster flag set.
+Note the interaction with `maxTimeVariation`: a wider past window (`delayBlocks` and `delaySeconds`) gives the batch poster more room before the margin is threatened, while a narrower window makes the margin bite sooner. See the [CLI flags reference](/run-arbitrum-node/reference/cli-flags-reference.mdx) for the full batch-poster flag set.
 
 ## Changing `maxTimeVariation`
 

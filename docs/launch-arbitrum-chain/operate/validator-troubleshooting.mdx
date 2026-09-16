@@ -52,7 +52,7 @@ Two rules to check when tuning these:
 - **The posting interval must exceed the Rollup contract's `minimumAssertionPeriod`.** That is an onchain constraint measured in <a data-quicklook-from="parent-chain">parent-chain</a> blocks (`block.number` units — on an Arbitrum parent these track the underlying L1 block number, not the Arbitrum block height). The validator checks it before posting and waits until enough blocks have passed, so a shorter posting interval silently caps you at the onchain floor rather than causing reverted transactions. Read `minimumAssertionPeriod` from your Rollup contract rather than assuming the default.
 - **Do not tune the confirming interval to make confirmations happen sooner.** Confirmation timing is governed onchain by `confirmPeriodBlocks` and, where a challenge occurred, `challengeGracePeriodBlocks`. Lowering `--node.bold.assertion-confirming-interval` only increases how often the validator checks, which adds parent-chain RPC load without advancing anything.
 
-For the full flag list, see the [Nitro CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx). For the onchain parameters, see the parameter table in [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold.mdx#table-of-arbitrum-bold-parameters).
+For the full flag list, see the [Nitro CLI flags reference](/run-arbitrum-node/reference/cli-flags-reference.mdx). For the onchain parameters, see the parameter table in [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold.mdx#table-of-arbitrum-bold-parameters).
 
 ## Parent-chain read consistency
 

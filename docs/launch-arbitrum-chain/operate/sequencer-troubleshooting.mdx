@@ -47,7 +47,7 @@ sequencers  →  sequencer relays  →  external relays  →  public subscribers
 
 Sequencer relays subscribe to _every_ sequencer replica, not just the active one. Non-chosen sequencers still broadcast, so aggregating all of them means no messages are lost when the chosen sequencer changes. This is why the Helm setup needs per-replica headless services—a single load-balanced address would connect to only one replica. See [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx#2-relays-setup).
 
-For installation steps, see [How to run a feed relay](/run-arbitrum-node/run-feed-relay.mdx). For the message format, see [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
+For installation steps, see [How to run a feed relay](/run-arbitrum-node/data-availability/run-feed-relay.mdx). For the message format, see [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
 
 ### Timeouts that govern a feed connection
 
@@ -127,7 +127,7 @@ The feed carries no _heartbeat_ at the application level, so silence is ambiguou
 
 <VanillaAdmonition type="caution" title="Redundant feed connections">
 
-You can point a relay at the same endpoint twice to survive a reset without waiting for a reconnect. This doubles bandwidth and risks rate limiting. Configure it at the relay, never at individual nodes, and never use more than one redundant connection. See [How to run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+You can point a relay at the same endpoint twice to survive a reset without waiting for a reconnect. This doubles bandwidth and risks rate limiting. Configure it at the relay, never at individual nodes, and never use more than one redundant connection. See [How to run a feed relay](/run-arbitrum-node/data-availability/run-feed-relay.mdx).
 
 </VanillaAdmonition>
 
