@@ -59,17 +59,7 @@ To enable PGA, complete two steps:
 1. Confirm that priority fee collection is active on your chain.
 2. Configure your Sequencer node to enable PGA and set the rounds-per-block parameter.
 
-### Step 1: Confirm priority fee collection
-
-Verify that your chain runs ArbOS 61 or newer and that tip collection is on. If your chain has a toggler contract for this, use it. Otherwise, make an `ArbOwner` precompile call to `setCollectTips`. Confirm that the batch poster coinbase is configured, because collection depends on it.
-
-<VanillaAdmonition type="caution">
-
-Complete Step 1 before you start Step 2. PGA orders by tips, so a chain that does not collect them orders by fees it never receives.
-
-</VanillaAdmonition>
-
-### Step 2: Configure your Sequencer node for PGA
+### Step 1: Configure your Sequencer node for PGA
 
 Add the following to your Sequencer's node configuration file:
 
@@ -78,7 +68,6 @@ Add the following to your Sequencer's node configuration file:
   "execution": {
     "sequencer": {
       "pga": {
-        "enable": true,
         "rounds-per-block": 2
       },
       "timeboost": {
@@ -91,3 +80,13 @@ Add the following to your Sequencer's node configuration file:
 ```
 
 `rounds-per-block` is the `K` parameter. With `max-block-speed` at `250ms` and `K=2`, ordering rounds are 125ms long.
+
+### Step 2: Enable priority fee collection
+
+<VanillaAdmonition type="caution">
+
+Complete Step 1 before you start Step 2. Enabling tip collection activates PGA immediately, with a default of one round per block.
+
+</VanillaAdmonition>
+
+Verify that your chain runs ArbOS 61 or newer. If your chain has a toggler contract for tip collection, use it. Otherwise, make an `ArbOwner` precompile call to `setCollectTips`.
