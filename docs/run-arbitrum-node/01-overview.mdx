@@ -36,7 +36,7 @@ The rest of this series focuses on the second approach: running your own Arbitru
 
 When interacting with the Arbitrum network, users have the option to run either a full node or an <a data-quicklook-from="archive-node">archive node</a>. There are distinct advantages to running an <a data-quicklook-from="arbitrum-full-node">Arbitrum full node</a>. In this quick start, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each node type, users can make an informed decision based on their specific requirements and objectives.
 
-Beyond full and archive nodes, a Nitro node can take on other roles — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—purely through configuration. For the flags that define each role and how to convert a node between roles, see [How to assign roles to a Nitro node](/run-arbitrum-node/assign-node-roles.mdx).
+Beyond full and archive nodes, a Nitro node can take on other roles — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—purely through configuration. For the flags that define each role and how to convert a node between roles, see [How to assign roles to a Nitro node](/run-arbitrum-node/operation/assign-node-roles.mdx).
 
 ## Considerations for running an Arbitrum full node
 
@@ -64,7 +64,7 @@ If you are running a single node, there is no requirement to set up a feed relay
 
 Soon, feed endpoints will mandate compression using a custom dictionary. Therefore, if you plan to connect to a feed using anything other than a standard node, it is strongly advised to run a local feed relay. This local feed relay will ensure that you have access to an uncompressed feed by default, maintaining optimal performance and compatibility.
 
-For detailed instructions, read [how to run an Arbitrum feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+For detailed instructions, read [how to run an Arbitrum feed relay](/run-arbitrum-node/data-availability/run-feed-relay.mdx).
 
 ## Support policy
 

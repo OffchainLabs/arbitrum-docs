@@ -536,6 +536,76 @@
       "destination": "/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering",
       "permanent": false
     },
+    {
+      "source": "/run-arbitrum-node/run-feed-relay",
+      "destination": "/run-arbitrum-node/data-availability/run-feed-relay",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/beacon-nodes-historical-blobs",
+      "destination": "/run-arbitrum-node/data-availability/beacon-nodes-historical-blobs",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/cli-flags-reference",
+      "destination": "/run-arbitrum-node/reference/cli-flags-reference",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/da-tools-reference",
+      "destination": "/run-arbitrum-node/reference/da-tools-reference",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/nitro-database-snapshots",
+      "destination": "/run-arbitrum-node/reference/nitro-database-snapshots",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers",
+      "destination": "/run-arbitrum-node/reference/l1-ethereum-beacon-chain-rpc-providers",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/configuration-system",
+      "destination": "/run-arbitrum-node/reference/configuration-system",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/assign-node-roles",
+      "destination": "/run-arbitrum-node/operation/assign-node-roles",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/node-tuning-and-monitoring",
+      "destination": "/run-arbitrum-node/operation/node-tuning-and-monitoring",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble",
+      "destination": "/run-arbitrum-node/operation/how-to-convert-databases-from-leveldb-to-pebble",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/migrate-state-and-history-from-classic",
+      "destination": "/run-arbitrum-node/operation/migrate-state-and-history-from-classic",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/build-nitro-locally",
+      "destination": "/run-arbitrum-node/build-nitro-locally",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/nitro/docker-and-cli-binaries",
+      "destination": "/run-arbitrum-node/reference/docker-and-cli-binaries",
+      "permanent": false
+    },
+    {
+      "source": "/run-arbitrum-node/data-availability",
+      "destination": "/how-arbitrum-works/deep-dives/data-availability",
+      "permanent": false
+    },
     { "source": "/__redirects-autogen-end__", "destination": "/", "permanent": false },
     {
       "source": "/(anytrust/?)",
