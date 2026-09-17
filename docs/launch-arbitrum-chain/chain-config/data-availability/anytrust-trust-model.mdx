@@ -108,18 +108,11 @@ Two measures help, and both are yours to take rather than the committee's:
 - **Run your own mirror DAS.** Anyone can run a server that syncs batch data and serves it over the REST API. A mirror you control means you can read your chain's history without asking the committee. Refer to [deploy a mirror DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das.mdx).
 - **Choose members that fail independently.** Five members in one data center under one operator give you `N` of 5 and the real resilience of 1. The protocol counts members; it does not check whether they are genuinely separate.
 
-<!-- ============================================================= -->
-<!-- REVIEW NEEDED — regulated-industries section starts here.     -->
-<!-- Pete: this section makes claims about what auditors ask and   -->
-<!-- what AnyTrust does/does not guarantee. Please check tone and  -->
-<!-- each flagged claim before merge. Individual flags inline.     -->
-<!-- ============================================================= -->
+<!-- this was a suggestion through the vanilla admonition -->
 
 ## What an auditor will ask you
 
 If you run an AnyTrust chain in a regulated setting, expect questions about the committee. The protocol does not answer them for you. Your keyset, your member agreements, and your governance do.
-
-<!-- REVIEW: confirm we want this disclaimer, and its wording. -->
 
 <VanillaAdmonition type="warning" title="This is not legal or compliance advice">
 
@@ -139,7 +132,7 @@ AnyTrust is a technical design. Whether a given configuration meets a specific r
 | Can you reconstruct chain history without the committee? | Only if you run an archive or mirror DAS                             |
 | Which parties can read transaction data?                 | Every committee member, plus anyone who queries a REST endpoint      |
 
-### Three points that surprise reviewers
+### Three points worth reiterating
 
 <!-- REVIEW: item 1 is the one most likely to matter and most likely -->
 <!-- to be challenged. Verify the "not encrypted" claim reads right. -->
