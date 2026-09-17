@@ -10,7 +10,7 @@ sme: Jason-W123
 
 <VanillaAdmonition type="info">
 
-As a <a data-quicklook-from="raas">RaaS</a> or <a data-quicklook-from="chain-owner">Chain Owner</a>, if you require internal daily reporting on fees, we have an [RPC script you can leverage for reporting purposes](https://github.com/yahgwai/aep-fee-tracker/).
+As a <Term id="raas">RaaS</Term> or <Term id="chain-owner">Chain Owner</Term>, if you require internal daily reporting on fees, we have an [RPC script you can leverage for reporting purposes](https://github.com/yahgwai/aep-fee-tracker/).
 
 </VanillaAdmonition>
 
@@ -18,10 +18,10 @@ As a <a data-quicklook-from="raas">RaaS</a> or <a data-quicklook-from="chain-own
 
 ### 1. Fee collector address types (L1 focus)
 
-There are two main <a data-quicklook-from="L1">L1</a> fee collector addresses:
+There are two main <Term id="L1">L1</Term> fee collector addresses:
 
-1. **L1 Base Fee**: Refunds [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) for <a data-quicklook-from="parent-chain">parent chain</a> posting costs
-2. **L1 Surplus**: Collects profit on <a data-quicklook-from="batch">Batch</a> posting fees
+1. **L1 Base Fee**: Refunds [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) for <Term id="parent-chain">parent chain</Term> posting costs
+2. **L1 Surplus**: Collects profit on <Term id="batch">Batch</Term> posting fees
 
 #### Important distinction:
 
@@ -33,7 +33,7 @@ There are two main <a data-quicklook-from="L1">L1</a> fee collector addresses:
 
 #### Transaction flow:
 
-1. Users send transactions on the <a data-quicklook-from="child-chain">child chain</a>
+1. Users send transactions on the <Term id="child-chain">child chain</Term>
 2. Transactions are packaged into batches
 3. Batch poster sends batches to parent chain (paying parent chain gas)
 4. Batch posting reports are generated containing:

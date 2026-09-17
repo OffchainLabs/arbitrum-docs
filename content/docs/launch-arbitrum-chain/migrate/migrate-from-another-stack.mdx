@@ -12,7 +12,7 @@ editor: 'anegg0'
 
 <VanillaAdmonition type="warning">
 
-This document is provided for informational purposes only and does not constitute an end-to-end guide for executing the migration. <a data-quicklook-from="offchain-labs">Offchain Labs</a> doesn’t have special knowledge or a private “fast path.” This document provides the extent of our guidance. Your current <a data-quicklook-from="raas">RaaS</a> provider owns and executes the migration. We can provide [introductions to RaaSes](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
+This document is provided for informational purposes only and does not constitute an end-to-end guide for executing the migration. <Term id="offchain-labs">Offchain Labs</Term> doesn’t have special knowledge or a private “fast path.” This document provides the extent of our guidance. Your current <Term id="raas">RaaS</Term> provider owns and executes the migration. We can provide [introductions to RaaSes](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
 
 </VanillaAdmonition>
 
@@ -20,7 +20,7 @@ This document is provided for informational purposes only and does not constitut
 
 Teams typically migrate when they need one or more of the following:
 
-- **Lower fees**: <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> Rollup or [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) for low <a data-quicklook-from="transaction">transaction</a> fees.
+- **Lower fees**: <Term id="arbitrum-chain">Arbitrum chain</Term> Rollup or [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) for low <Term id="transaction">transaction</Term> fees.
 - **Various customization options**: Custom gas token, flexible DA, [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction), [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction), etc.
 - **Mature tooling and ecosystem**: Bridges, indexers, wallets, monitoring, and partners with Arbitrum chain-ready integrations.
 
@@ -28,7 +28,7 @@ Teams typically migrate when they need one or more of the following:
 
 Teams coming from other stacks have two viable paths:
 
-- **Ecosystem migration (simpler, faster)**: Launch a fresh Arbitrum chain. Users/app <a data-quicklook-from="bridge">Bridge</a> funds and redeploy contracts. This approach is quicker and less risky, but it puts a burden on apps and users.
+- **Ecosystem migration (simpler, faster)**: Launch a fresh Arbitrum chain. Users/app <Term id="bridge">Bridge</Term> funds and redeploy contracts. This approach is quicker and less risky, but it puts a burden on apps and users.
 - **Chain-state migration (harder, slower)**: Transplant state/history so apps keep addresses and positions. This method requires more engineering, testing, and downtime planning.
 
 The right choice depends on your user requirements, partner dependencies, and tolerance for downtime/engineering effort. Your RaaS owns and executes the migration plan.
@@ -105,7 +105,7 @@ Zero knowledge (zk) pre-compiles don’t carry over. Port logic to Solidity or [
 On a high level, there are two paths for migration:
 
 - **Ecosystem migration:** Simplifies the chain operator experience by placing the burden on users and apps to self-migrate their assets and contracts to a new chain deployment.
-- **<a data-quicklook-from="chain-state">Chain state</a> migration:** A more complex migration where the chain state gets transplanted into the new Rollup stack/contract system, but the ecosystem and user experience may stay relatively the same.
+- **<Term id="chain-state">Chain state</Term> migration:** A more complex migration where the chain state gets transplanted into the new Rollup stack/contract system, but the ecosystem and user experience may stay relatively the same.
 
 The rest of this answer assumes that the team wants to perform the latter. For chain-state migration, the overall process for chain-state migration from another optimistic stack chain is:
 
@@ -118,7 +118,7 @@ The rest of this answer assumes that the team wants to perform the latter. For c
 1. Freeze legacy chain writes and make RPC read-only:
    1. Stop the legacy chain’s proposer/[Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) so no new blocks or transactions get created after the chosen upgrade block.
    2. Configure the legacy RPC to reject write methods (e.g., `eth_sendRawTransaction`) and only serve readable requests for historical data.
-2. Ensure that you can export required state from your EVM-compatible <a data-quicklook-from="client">client</a> at the upgrade block.
+2. Ensure that you can export required state from your EVM-compatible <Term id="client">client</Term> at the upgrade block.
 3. Expect a freeze window of hours (depends on state size) for snapshot integrity.
 4. Run Nitro nodes for post-migration traffic.
 5. Run a legacy archive node in parallel. This archive node wouldn’t try to advance beyond the upgrade block.
@@ -144,7 +144,7 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 #### 3 weeks before → 2 weeks before migration: build and test
 
 - [ ] RaaS: set up private Arbitrum chain
-- [ ] Testnet deployment: Sequencer, [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions), <a data-quicklook-from="bonder">Bonder</a>, DA config.
+- [ ] Testnet deployment: Sequencer, [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions), <Term id="bonder">Bonder</Term>, DA config.
 - [ ] Inventory contracts & state: Addresses, precompiles, proxies, admin keys, governance
 - [ ] Stand up Dual-RPC gateway prototype: Route pre-migration range to old stack archive; post-migration to Arbitrum chain.
 - [ ] Prepare official asset list: Canonical bridge(s), authoritative token addresses, symbols, decimals.
@@ -166,7 +166,7 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 - [ ] Stop old chain block/transaction production: disable proposer/sequencer, set legacy RPC to read-only, block `eth_sendRawTransaction` method, thus no new blocks or transactions.
 - [ ] Take a snapshot or confirm the last block for state replay
 - [ ] Bring up the new Arbitrum chain mainnet: import state or launch genesis.
-- [ ] Start batch poster/bonder and verify assertions on <a data-quicklook-from="L1">L1</a>.
+- [ ] Start batch poster/bonder and verify assertions on <Term id="L1">L1</Term>.
 - [ ] Flip DNS for RPC/explorer; enable dual-RPC gateway for historical queries
 - [ ] Open canonical bridges and publish asset list
 - [ ] Make announcements after all health checks clear and partner confirmations pass.

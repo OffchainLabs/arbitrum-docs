@@ -13,15 +13,15 @@ This document explains the protocol-level concepts of parent-to-child messaging.
 
 :::
 
-In the [Bypassing the Sequencer](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract instead of sending them directly to the [<a data-quicklook-from="sequencer">Sequencer</a>](/docs/how-arbitrum-works/deep-dives/sequencer). This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
+In the [Bypassing the Sequencer](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <Term id="child-chain">child chain</Term> by going through the <Term id="parent-chain">parent chain</Term>'s <Term id="delayed-inbox">Delayed Inbox</Term> contract instead of sending them directly to the [<Term id="sequencer">Sequencer</Term>](/docs/how-arbitrum-works/deep-dives/sequencer). This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
-- Submit a child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
+- Submit a child chain bound <Term id="transaction">transaction</Term> from a parent chain
 - Deposit **ETH** or native tokens from a parent chain to a child chain
 - Send arbitrary data or instructions from a parent chain to a child chain
 
 We generally categorize these parent-to-child chain messaging methods as follows:
 
-1. **Native token bridging**: Refers to depositing a child chain's native token from the parent chain to the child chain. Depending on the type of <a data-quicklook-from="arbitrum">Arbitrum</a> chain, this can include:
+1. **Native token bridging**: Refers to depositing a child chain's native token from the parent chain to the child chain. Depending on the type of <Term id="arbitrum">Arbitrum</Term> chain, this can include:
 
 - \***\*ETH** Bridging**: For Arbitrum chains that use **ETH** as their gas token, users can deposit **ETH\*\* onto a child chain via the Delayed Inbox.
 - **Custom gas token bridging**: For Arbitrum chains that use a custom gas token, users can deposit that chain's native token to a child chain using the same mechanism.
@@ -44,7 +44,7 @@ This section will explore these categories in detail and explain how they work. 
 
 Native token bridging refers to depositing a chain's native currency (the token used to pay gas fees) from the parent chain to the child chain. This follows a different, simpler process than **ERC-20** token bridging through the canonical token bridge.
 
-Arbitrum chains can use **ETH** or any other **ERC-20** tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use **ETH** as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/docs/arbitrum-essentials/bridging/configure-token-gateway/custom).
+Arbitrum chains can use **ETH** or any other **ERC-20** tokens as their gas fee currency. <Term id="arbitrum-one">Arbitrum One</Term> and Nova use **ETH** as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/docs/arbitrum-essentials/bridging/configure-token-gateway/custom).
 
 Whether a chain uses **ETH** or a custom gas token, users can deposit tokens from a parent chain (for Arbitrum One, Ethereum) into a child chain. Below, we describe how to deposit **ETH** on chains that use **ETH** as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain’s Delayed Inbox contract.
 
@@ -56,7 +56,7 @@ For step-by-step instructions on depositing native tokens, see [How to bridge fr
 
 #### How deposits work
 
-When you call `Inbox.depositEth`, the **ETH** is sent to the <a data-quicklook-from="bridge">bridge</a> contract on the parent chain. The bridge then "credits" the deposited amount to the designated address on the child chain. From the L1 perspective, the funds are held in Arbitrum’s bridge contract on your behalf.
+When you call `Inbox.depositEth`, the **ETH** is sent to the <Term id="bridge">bridge</Term> contract on the parent chain. The bridge then "credits" the deposited amount to the designated address on the child chain. From the L1 perspective, the funds are held in Arbitrum’s bridge contract on your behalf.
 
 A diagram illustrating this deposit process is below:
 
@@ -101,7 +101,7 @@ modifier onlyFromMyL1Contract() override {
 Arbitrum provides a _Delayed Inbox_ contract on the parent chain that can deliver arbitrary messages to the child chain. This functionality is important for two reasons:
 
 1. **General cross-chain messaging**: Allows a parent-chain EOA or contract to send messages or transactions to a child chain. This functionality is critical for bridging assets (other than the chain's native token) and performing cross-chain operations.
-2. **Censorship resistance**: It ensures the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> remains censorship-resistant, even if the Sequencer misbehaves or excludes certain transactions; refer to [Bypassing the Sequencer](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#bypassing-the-sequencer) for more details.
+2. **Censorship resistance**: It ensures the <Term id="arbitrum-chain">Arbitrum chain</Term> remains censorship-resistant, even if the Sequencer misbehaves or excludes certain transactions; refer to [Bypassing the Sequencer](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#bypassing-the-sequencer) for more details.
 
 Users can send child chain transactions through the Delayed Inbox in two primary ways:
 
@@ -136,7 +136,7 @@ The Delayed Inbox provides methods for unsigned messages from both EOAs and cont
 
 ### Message types
 
-[<a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>](/docs/how-arbitrum-works/inside-arbitrum-nitro) defines various **message types** to distinguish between the categories described above (signed vs. unsigned, EOAs vs. contracts, etc.). These message types help the protocol route and process each incoming message securely.
+[<Term id="arbitrum-nitro">Arbitrum Nitro</Term>](/docs/how-arbitrum-works/inside-arbitrum-nitro) defines various **message types** to distinguish between the categories described above (signed vs. unsigned, EOAs vs. contracts, etc.). These message types help the protocol route and process each incoming message securely.
 
 For the full list of message-type identifiers used by ArbOS, see [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) and the [ArbOS messages section](/docs/how-arbitrum-works/deep-dives/arbos#messages-and-blocks).
 
@@ -154,7 +154,7 @@ For step-by-step instructions on creating retryable tickets, including parameter
 
 ### Retryable ticket lifecycle
 
-The lifecycle of a <a data-quicklook-from="retryable-ticket">retryable ticket</a> involves three stages: submission, automatic redemption, and manual redemption.
+The lifecycle of a <Term id="retryable-ticket">retryable ticket</Term> involves three stages: submission, automatic redemption, and manual redemption.
 
 #### Submission
 

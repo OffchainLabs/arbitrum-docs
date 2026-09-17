@@ -7,16 +7,16 @@ author: pete-vielhaber
 sme: TucksonDev
 ---
 
-<a data-quicklook-from="arbitrum">Arbitrum</a> uses gas to track the execution cost on an Arbitrum Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas as it would on Ethereum.
+<Term id="arbitrum">Arbitrum</Term> uses gas to track the execution cost on an Arbitrum Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas as it would on Ethereum.
 
 There are two parties a user pays when submitting a transaction:
 
 - **Poster**: If reimbursable, covers the parent chain resources such as the parent chain calldata needed to post the transaction.
 - **Network fee account**: Covers the child chain's resources, including computation, storage, and other burdens that child chain nodes must bear to service transactions.
 
-The parent chain component is the product of the <a data-quicklook-from="transaction">transaction</a>'s estimated contribution to its <a data-quicklook-from="batch">batch</a>'s size—computed using [Brotli](/docs/how-arbitrum-works/deep-dives/batchposter) on the transaction alone—and the child chain's view of the parent chain data price. This value dynamically adjusts over time to ensure the batch poster is ultimately fairly compensated.
+The parent chain component is the product of the <Term id="transaction">transaction</Term>'s estimated contribution to its <Term id="batch">batch</Term>'s size—computed using [Brotli](/docs/how-arbitrum-works/deep-dives/batchposter) on the transaction alone—and the child chain's view of the parent chain data price. This value dynamically adjusts over time to ensure the batch poster is ultimately fairly compensated.
 
-The child chain component consists of the traditional fees <a data-quicklook-from="geth">Geth</a> would pay to bonders in a vanilla parent chain, such as the computation and storage charges that apply to the [<a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)](/how-arbitrum-works/deep-dives/stf.mdx). [<a data-quicklook-from="arbos">ArbOS</a>](/docs/how-arbitrum-works/deep-dives/arbos) charges additional fees for executing its child-chain-specific [precompiles](/docs/arbitrum-essentials/precompiles/overview), whose fees are dynamically priced based on the resources used during execution.
+The child chain component consists of the traditional fees <Term id="geth">Geth</Term> would pay to bonders in a vanilla parent chain, such as the computation and storage charges that apply to the [<Term id="state-transition-function">State Transition Function</Term> (STF)](/how-arbitrum-works/deep-dives/stf.mdx). [<Term id="arbos">ArbOS</Term>](/docs/how-arbitrum-works/deep-dives/arbos) charges additional fees for executing its child-chain-specific [precompiles](/docs/arbitrum-essentials/precompiles/overview), whose fees are dynamically priced based on the resources used during execution.
 
 The following sections detail how parent and child chain fees are calculated. For a practical guide on estimating gas for your transactions, see [How to estimate gas in Arbitrum](/docs/arbitrum-essentials/how-to-estimate-gas).
 
@@ -51,11 +51,11 @@ To overcome these challenges, Arbitrum Nitro implements a two-fold strategy:
 
 There are two types of parent chain costs: batch posting costs and rewards.
 
-Batch posting costs reflect the actual cost a [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) pays to post batch data on the parent chain. Whenever a batch is posted, the parent chain contract that records it will send a special "batch posting report" message to the child chain <a data-quicklook-from="arbos">ArbOS</a>, reporting who paid for the batch and the parent chain basefee at the time. This message is placed in the chain's [<a data-quicklook-from="delayed-inbox">delayed inbox</a>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) so that it will be delivered to the child chain ArbOS after some delay.
+Batch posting costs reflect the actual cost a [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) pays to post batch data on the parent chain. Whenever a batch is posted, the parent chain contract that records it will send a special "batch posting report" message to the child chain <Term id="arbos">ArbOS</Term>, reporting who paid for the batch and the parent chain basefee at the time. This message is placed in the chain's [<Term id="delayed-inbox">delayed inbox</Term>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) so that it will be delivered to the child chain ArbOS after some delay.
 
 When a batch posting report message arrives at the child chain, ArbOS computes the cost of the referenced batch by multiplying the reported basefee by the batch's data cost. (ArbOS retrieves the batch's data from its inbox state and computes the parent chain gas the batch would have used by counting the number of zero bytes and non-zero bytes in the batch.) The pricer records the resulting cost as funds due to the party who is reported to have submitted the batch.
 
-The second type of parent chain cost is an optional (per chain) per-unit reward for handling transaction calldata. In general, the reward might be paid to the [<a data-quicklook-from="sequencer">Sequencer</a>](/docs/how-arbitrum-works/deep-dives/sequencer), or to members of the Data Availability Committee in an [AnyTrust chain](/docs/how-arbitrum-works/deep-dives/anytrust-protocol), or to anyone else who incurs per-calldata-byte costs on behalf of the chain. The reward is a fixed number of wei per data unit, and is paid to a single address.
+The second type of parent chain cost is an optional (per chain) per-unit reward for handling transaction calldata. In general, the reward might be paid to the [<Term id="sequencer">Sequencer</Term>](/docs/how-arbitrum-works/deep-dives/sequencer), or to members of the Data Availability Committee in an [AnyTrust chain](/docs/how-arbitrum-works/deep-dives/anytrust-protocol), or to anyone else who incurs per-calldata-byte costs on behalf of the chain. The reward is a fixed number of wei per data unit, and is paid to a single address.
 
 The parent chain pricer keeps track of funds due to the reward address based on the number of data units processed so far. This amount is updated whenever a batch posting report arrives at the child chain.
 
@@ -99,7 +99,7 @@ The pricer module within ArbOS tracks:
 
 When the Sequencer posts a batch to the parent chain inbox:
 
-1. **Batch posting report generation**: The parent chain inbox inserts a "batch posting report" transaction into the chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>. After a delay, this report is processed by ArbOS's pricer module.
+1. **Batch posting report generation**: The parent chain inbox inserts a "batch posting report" transaction into the chain's <Term id="delayed-inbox">Delayed Inbox</Term>. After a delay, this report is processed by ArbOS's pricer module.
 
 2. **Processing the batch posting report**:
 
@@ -179,7 +179,7 @@ The parent chain pricer also records the total number of "data units" (the sum o
 
 ## Child chain gas pricing
 
-The child chain gas price on a given <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> has a set floor, which can be queried via [`ArbGasInfo`](/docs/arbitrum-essentials/precompiles/reference#arbgasinfo)'s `getMinimumGasPrice` method.
+The child chain gas price on a given <Term id="arbitrum-chain">Arbitrum chain</Term> has a set floor, which can be queried via [`ArbGasInfo`](/docs/arbitrum-essentials/precompiles/reference#arbgasinfo)'s `getMinimumGasPrice` method.
 
 ### Estimating child chain gas
 
@@ -191,7 +191,7 @@ This means that, for a given operation, the value returned by `eth_estimateGas` 
 
 Child chain gas fees work similarly to Ethereum: a transaction consumes gas, which is multiplied by the current basefee per gas to determine the child chain transaction fee (denominated in gwei).
 
-The basefee is set by a pricing algorithm that governs fees across multiple adjustment windows. This algorithm uses several <a data-quicklook-from="gas-target">gas targets</a>, each paired with its own <a data-quicklook-from="adjustment-window">adjustment window</a>. Higher targets with shorter windows (for example, 60 Mgas/s over nine seconds) absorb transient demand spikes without triggering aggressive fee increases. Lower targets with longer windows address slower traffic, with the lowest target measured over 86,400 seconds (one day), establishing the chain's long-term capacity.
+The basefee is set by a pricing algorithm that governs fees across multiple adjustment windows. This algorithm uses several <Term id="gas-target">gas targets</Term>, each paired with its own <Term id="adjustment-window">adjustment window</Term>. Higher targets with shorter windows (for example, 60 Mgas/s over nine seconds) absorb transient demand spikes without triggering aggressive fee increases. Lower targets with longer windows address slower traffic, with the lowest target measured over 86,400 seconds (one day), establishing the chain's long-term capacity.
 
 From the users' perspective, this means that the network will charge an increasing amount for each additional amount of gas consumed above the target. For example, a 10% fee is levied for going 1% over the target. The fee rises to 15% if you go to 2% over the target, and so on.
 
@@ -215,7 +215,7 @@ Gas estimation for retryable submissions is possible via the [`NodeInterface`](/
 
 ### The gas target
 
-The security of Arbitrum Nitro chains depends on the assumption that when one [<a data-quicklook-from="validator">validator</a>](/docs/how-arbitrum-works/deep-dives/assertions) creates an [assertion](/docs/how-arbitrum-works/deep-dives/assertions), other validators check it and respond with a correct assertion or a [<a data-quicklook-from="challenge">challenge</a>](/docs/how-arbitrum-works/bold/gentle-introduction) if it's wrong.
+The security of Arbitrum Nitro chains depends on the assumption that when one [<Term id="validator">validator</Term>](/docs/how-arbitrum-works/deep-dives/assertions) creates an [assertion](/docs/how-arbitrum-works/deep-dives/assertions), other validators check it and respond with a correct assertion or a [<Term id="challenge">challenge</Term>](/docs/how-arbitrum-works/bold/gentle-introduction) if it's wrong.
 
 This requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account when setting deadlines for assertions.
 

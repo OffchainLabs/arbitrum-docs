@@ -7,7 +7,7 @@ author: Jason Wan
 sme: Jason Wan
 ---
 
-This guide explains how to configure your <a data-quicklook-from="arbitrum">Arbitrum</a> node to post [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blob transactions to the <a data-quicklook-from="parent-chain">parent chain</a>, which can significantly reduce data availability costs.
+This guide explains how to configure your <Term id="arbitrum">Arbitrum</Term> node to post [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blob transactions to the <Term id="parent-chain">parent chain</Term>, which can significantly reduce data availability costs.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ Before enabling blob transactions, verify that your setup meets these requiremen
 
 ### 1. Chain configuration
 
-- Your <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> must be running in **Rollup mode**
+- Your <Term id="arbitrum-chain">Arbitrum chain</Term> must be running in **Rollup mode**
 
 ### 2. Parent chain compatibility
 
@@ -34,7 +34,7 @@ Call the `arbOSVersion()` function on the ArbSys [precompile](/docs/arbitrum-ess
 
 - Contract address: `0x0000000000000000000000000000000000000064`
 - Function: `arbOSVersion()` returns `uint256`
-- You can call this using any Ethereum <a data-quicklook-from="client">client</a> or block explorer on your Arbitrum chain
+- You can call this using any Ethereum <Term id="client">client</Term> or block explorer on your Arbitrum chain
 
 #### Method 2: Using `cast` (if you have Foundry installed)
 
@@ -46,7 +46,7 @@ If your version is below 20, upgrade by following the [ArbOS upgrade guide](/doc
 
 ## Configuration
 
-To enable blob <a data-quicklook-from="transaction">transaction</a> posting, add the following configuration to your [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) node:
+To enable blob <Term id="transaction">transaction</Term> posting, add the following configuration to your [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) node:
 
 ```json
 {

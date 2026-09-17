@@ -20,7 +20,7 @@ In addition to the hardware requirements, the following prerequisites will be ne
 
 ### Minimum hardware configuration
 
-The following are the minimum hardware requirements to set up a <a data-quicklook-from="arbitrum-nitro">Nitro</a> full node (not archival):
+The following are the minimum hardware requirements to set up a <Term id="arbitrum-nitro">Nitro</Term> full node (not archival):
 
 import HardwarePartial from '../partials/_hardware-requirements.mdx';
 
@@ -31,7 +31,7 @@ Please note that:
 - The minimum requirements for RAM and CPU listed here are recommended for nodes that handle a limited number of RPC requests. For nodes that need to process multiple simultaneous requests, both the RAM size and the number of CPU cores should be increased to accommodate higher levels of traffic.
 - Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor.
 - The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended. Note that snapshot extraction requires approximately 2x the snapshot size in temporary disk space, so plan accordingly during initial setup.
-- Nitro stores its state trie using either <a data-quicklook-from="hashdb">HashDB</a> (the default) or <a data-quicklook-from="pathdb">PathDB</a>. The choice affects which snapshot you can use, so make it before you initialize the database. Both <a data-quicklook-from="state-scheme">schemes</a> have published full node snapshots; PathDB <a data-quicklook-from="state-pruning">prunes</a> automatically but cannot validate blocks. See [Choose a state scheme](/docs/run-a-node/run-full-node#choose-a-state-scheme).
+- Nitro stores its state trie using either <Term id="hashdb">HashDB</Term> (the default) or <Term id="pathdb">PathDB</Term>. The choice affects which snapshot you can use, so make it before you initialize the database. Both <Term id="state-scheme">schemes</Term> have published full node snapshots; PathDB <Term id="state-pruning">prunes</Term> automatically but cannot validate blocks. See [Choose a state scheme](/docs/run-a-node/run-full-node#choose-a-state-scheme).
 
 ### Parent chain (L1) client
 
@@ -51,7 +51,7 @@ Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <c
 
 ::::info Snapshots availability
 
-<a data-quicklook-from="database-snapshot">Database snapshots</a> for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia are available in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/).
+<Term id="database-snapshot">Database snapshots</Term> for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia are available in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/).
 
 Snapshots are published per state scheme, and a snapshot only works with a node using the same scheme:
 
@@ -98,7 +98,7 @@ For more details on snapshot downloading and initialization, see the [complete s
 
 :::warning Fusaka upgrade: historical blobs
 
-If you're running a beacon node, historical data will now be in <a data-quicklook-from="blob">blobs</a>. To make this transition to using historical blobs, refer to the [Historical Blobs for Beacon Nodes](/docs/run-a-node/beacon-nodes-historical-blobs) guide.
+If you're running a beacon node, historical data will now be in <Term id="blob">blobs</Term>. To make this transition to using historical blobs, refer to the [Historical Blobs for Beacon Nodes](/docs/run-a-node/beacon-nodes-historical-blobs) guide.
 
 :::
 

@@ -7,9 +7,9 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-<a data-quicklook-from="arbitrum">Arbitrum</a> implements a **<a data-quicklook-from="fraud-proof">fraud proof</a>** system that ensures that the state of any given <a data-quicklook-from="child-chain">child chain</a> is safely maintained by its <a data-quicklook-from="parent-chain">parent chain</a>. In this system, a <a data-quicklook-from="validator">validator</a> is responsible for periodically posting **<a data-quicklook-from="assertion">assertions</a>** about the child chain's state to its parent chain. See [Inside Arbitrum Nitro](/docs/how-arbitrum-works/inside-arbitrum-nitro#step-5-validation-and-dispute-resolution) to learn more about the <a data-quicklook-from="rollup">Rollup</a> protocol.
+<Term id="arbitrum">Arbitrum</Term> implements a **<Term id="fraud-proof">fraud proof</Term>** system that ensures that the state of any given <Term id="child-chain">child chain</Term> is safely maintained by its <Term id="parent-chain">parent chain</Term>. In this system, a <Term id="validator">validator</Term> is responsible for periodically posting **<Term id="assertion">assertions</Term>** about the child chain's state to its parent chain. See [Inside Arbitrum Nitro](/docs/how-arbitrum-works/inside-arbitrum-nitro#step-5-validation-and-dispute-resolution) to learn more about the <Term id="rollup">Rollup</Term> protocol.
 
-Each assertion is a _claim about the impact that a series of child chain blocks (containing <a data-quicklook-from="transaction">transactions</a>) ought to have on the chain's state_. When posted to the parent chain, assertions are recorded by the Rollup contract; once confirmed, the resulting state <a data-quicklook-from="commitment">commitment</a> (block hash + send root) is relayed to the `Outbox` contract. The primary purpose of this commitment is to **secure withdrawals**: it provides the trusted state against which child chain -> parent chain messages (such as withdrawals) are proven before they can be executed on the parent chain. The same committed state can also be reused by off-chain tools — for example, the off-chain state verification described in this guide.
+Each assertion is a _claim about the impact that a series of child chain blocks (containing <Term id="transaction">transactions</Term>) ought to have on the chain's state_. When posted to the parent chain, assertions are recorded by the Rollup contract; once confirmed, the resulting state <Term id="commitment">commitment</Term> (block hash + send root) is relayed to the `Outbox` contract. The primary purpose of this commitment is to **secure withdrawals**: it provides the trusted state against which child chain -> parent chain messages (such as withdrawals) are proven before they can be executed on the parent chain. The same committed state can also be reused by off-chain tools — for example, the off-chain state verification described in this guide.
 
 Before we begin, we will introduce the key components: the assertion, its global state, and send roots.
 
@@ -68,7 +68,7 @@ assertionHash = keccak256(abi.encodePacked(
 
 The send root mapping is stored in the `Outbox` contract. It maps the Merkle root of each batch of child chain -> parent chain messages (the _send root_) to its corresponding child chain block hash.
 
-When an assertion is confirmed, the Rollup contract records the send root to the <a data-quicklook-from="outbox">outbox</a> so that, when a user later triggers a child chain -> parent chain message on the parent chain, the request can be verified.
+When an assertion is confirmed, the Rollup contract records the send root to the <Term id="outbox">outbox</Term> so that, when a user later triggers a child chain -> parent chain message on the parent chain, the request can be verified.
 
 ```solidity
 mapping(bytes32 => bytes32) public roots; // maps root hashes => child chain block hash
@@ -184,7 +184,7 @@ You have now proven a specific storage value at a specific block height on the c
 The procedure above is cryptographically sound — its trust is anchored in an assertion confirmed on the parent chain, and every value fetched from a child chain RPC is verified against that anchor. Keep the following caveats in mind:
 
 - **You can only prove state at a confirmed block.** The block hash in an assertion's global state is for one specific block (the end of the assertion). To prove state at an arbitrary or more recent block, you must additionally link that block back to a confirmed block through the `parentHash` chain.
-- **<a data-quicklook-from="confirmation">Confirmation</a> depends on the parent chain's finality.** `latestConfirmed()` can change if the parent chain reorganizes. For maximum safety, read it at a finalized parent chain block.
-- **"Confirmed" reflects the Rollup's trust model.** A confirmed assertion is one that survived its <a data-quicklook-from="challenge-period">challenge period</a>; its correctness rests on the Rollup's fraud-proof / <a data-quicklook-from="bold">BoLD</a> security assumptions (at least one honest validator).
+- **<Term id="confirmation">Confirmation</Term> depends on the parent chain's finality.** `latestConfirmed()` can change if the parent chain reorganizes. For maximum safety, read it at a finalized parent chain block.
+- **"Confirmed" reflects the Rollup's trust model.** A confirmed assertion is one that survived its <Term id="challenge-period">challenge period</Term>; its correctness rests on the Rollup's fraud-proof / <Term id="bold">BoLD</Term> security assumptions (at least one honest validator).
 - **Zero / non-existent values need explicit handling.** The steps above check `acctExists == true` and `storageExists == true`. Proving that a slot's value _is_ zero requires handling the corresponding exclusion proof.
 - **The Merkle Trie verifier must be correct.** The overall guarantee depends on the correctness of the verifier library you use; review and test it before relying on it in production.

@@ -12,7 +12,7 @@ import CustomizeCautionBannerPartial from '../partials/_arbitrum-chain-customize
 
 <CustomizeCautionBannerPartial />
 
-This guide will help your team implement their own Data Availability (DA) provider that integrates with <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> using the DA API.
+This guide will help your team implement their own Data Availability (DA) provider that integrates with <Term id="arbitrum-nitro">Arbitrum Nitro</Term> using the DA API.
 
 **The DA API is experimental until Nitro officially announces its availability in a release.**
 
@@ -24,21 +24,21 @@ The DA API is an extensibility feature in Arbitrum Nitro that allows external da
 
 - **No forking required**: Integrate your DA system without modifying Nitro or contracts
 - **Pluggable architecture**: Define your own certificate formats and validation logic
-- **Fraud-proof compatible**: Full support for [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) <a data-quicklook-from="challenge">challenge</a> protocol and fraud proofs
+- **Fraud-proof compatible**: Full support for [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) <Term id="challenge">challenge</Term> protocol and fraud proofs
 - **Multi-provider support**: Multiple DA systems can coexist on the same chain
 
 ### Architecture overview
 
 The DA API has four main components:
 
-1. **Reader RPC methods**: Recovers <a data-quicklook-from="batch">batch</a> data from certificates and collects preimages for fraud proofs
+1. **Reader RPC methods**: Recovers <Term id="batch">batch</Term> data from certificates and collects preimages for fraud proofs
 2. **Writer RPC method**: Stores batch data and generates certificates
-3. **<a data-quicklook-from="validator">Validator</a> RPC methods**: Generates proofs for <a data-quicklook-from="fraud-proof">Fraud proof</a> validation
+3. **<Term id="validator">Validator</Term> RPC methods**: Generates proofs for <Term id="fraud-proof">Fraud proof</Term> validation
 4. **Onchain validator contract** (Solidity): Validates proofs onchain during fraud proof challenges
 
 These components work together to enable:
 
-- **Normal execution**: [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) stores data -> generates certificate -> posts to <a data-quicklook-from="L1">L1</a>
+- **Normal execution**: [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) stores data -> generates certificate -> posts to <Term id="L1">L1</Term>
 - **Validation**: Node reads certificate -> recovers data -> executes
 - **Fraud proofs**: Prover generates proof -> enhances with DA data -> validates onchain
 
@@ -49,7 +49,7 @@ This guide is for development teams who want to:
 - Integrate an existing DA system with Nitro's DA API
 - Understand how the DA API works under the hood
 
-**Prerequisites**: Familiarity with JSON-RPC, Solidity, Ethereum L1/<a data-quicklook-from="L2">L2</a> architecture, and Arbitrum Nitro basics. Experience with any backend programming language.
+**Prerequisites**: Familiarity with JSON-RPC, Solidity, Ethereum L1/<Term id="L2">L2</Term> architecture, and Arbitrum Nitro basics. Experience with any backend programming language.
 
 ### Reference implementation
 
@@ -186,7 +186,7 @@ Recovers the full batch payload data from a certificate. Called during normal no
 
 4. **Verify data integrity**:
 
-   - Check that the data matches the <a data-quicklook-from="commitment">commitment</a> in the certificate
+   - Check that the data matches the <Term id="commitment">commitment</Term> in the certificate
    - Example: `sha256(data) == certificate.dataHash`
 
 5. **Return the payload** or error
@@ -504,7 +504,7 @@ The `timeout` parameter specifies when the stored data should expire:
    - Must start with bytes `0x01` (DA API header) + your optional provider type byte(s). Refer to the description in the section on `daprovider_getSupportedHeaderBytes`
    - Must contain enough information to retrieve the data later
    - Should include a data commitment (hash, Merkle root, etc.)
-   - Should include proof of authenticity (signature, <a data-quicklook-from="bls-signature">BLS Signature</a>, etc.)
+   - Should include proof of authenticity (signature, <Term id="bls-signature">BLS Signature</Term>, etc.)
 
 3. **Return the certificate** as hex-encoded bytes
 
@@ -1377,7 +1377,7 @@ The BOLD State Provider submits the enhanced proof to the OneStepProverHostIo co
 
 ### Why certificates come from L1
 
-Certificates **always** come from L1 <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> messages\*\*, never from external DA providers. This process ensures:
+Certificates **always** come from L1 <Term id="sequencer-inbox">Sequencer Inbox</Term> messages\*\*, never from external DA providers. This process ensures:
 
 - Proofs are always verifiable without network dependencies
 - No trust in the DA provider's availability during challenges
@@ -1420,7 +1420,7 @@ Nitro contracts v3.2 have not been publicly released yet and is not supported in
 
 You can deploy a RollupCreator factory contract following the instructions in [How to deploy new factory contracts](/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts#deploying-a-rollupcreator).
 
-Before creating the Arbitrum chain, you must have the onchain custom validator contract and the OneStepProof (OSP) contracts deployed on the <a data-quicklook-from="parent-chain">parent chain</a>. Deploy the onchain validator contract first, and then use the script available at `scripts/deployOsp.ts` to deploy the OSP contracts. Specify the address of the custom validator contract in a `CUSTOM_DA_VALIDATOR` env variable and use hardhat to run the script:
+Before creating the Arbitrum chain, you must have the onchain custom validator contract and the OneStepProof (OSP) contracts deployed on the <Term id="parent-chain">parent chain</Term>. Deploy the onchain validator contract first, and then use the script available at `scripts/deployOsp.ts` to deploy the OSP contracts. Specify the address of the custom validator contract in a `CUSTOM_DA_VALIDATOR` env variable and use hardhat to run the script:
 
 ```shell
 yarn run hardhat run scripts/deployOsp.ts --network parentChainNetwork
@@ -1657,7 +1657,7 @@ Test your DA provider connected to a Nitro node:
 
 The Nitro repository includes system tests for the DA API with BoLD challenges:
 
-**BoLD <a data-quicklook-from="challenge-protocol">challenge protocol</a> Tests** (file: `system_tests/bold_challenge_protocol_test.go`):
+**BoLD <Term id="challenge-protocol">challenge protocol</Term> Tests** (file: `system_tests/bold_challenge_protocol_test.go`):
 
 - `TestChallengeProtocolBOLDCustomDA_EvilDataGoodCert`: Corrupted data, valid certificate
 - `TestChallengeProtocolBOLDCustomDA_EvilDataEvilCert`: Corrupted data, invalid certificate
@@ -1925,7 +1925,7 @@ A JSON object with `SerializedDACert` field (byte array). This field certifies t
 
 #### Signature handling
 
-The current default <a data-quicklook-from="client">client</a> implementation relies on underlying transport encryption (e.g., TLS/JWT) for security. The signature parameter gets used for basic data integrity checking, not cryptographic authentication.
+The current default <Term id="client">client</Term> implementation relies on underlying transport encryption (e.g., TLS/JWT) for security. The signature parameter gets used for basic data integrity checking, not cryptographic authentication.
 
 - **Client Behavior**: The client populates `signature` with the Keccak256 hash of all other method arguments.
 - **Server Implementation**: Server integrators may recompute and verify this hash to check data integrity, but this verification is optional and not required for core protocol functionality.

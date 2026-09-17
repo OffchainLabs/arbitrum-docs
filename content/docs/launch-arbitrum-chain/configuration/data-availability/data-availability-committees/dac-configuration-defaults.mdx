@@ -102,13 +102,13 @@ Every DAC-related setting with its documented default, organized by config secti
 | `panic-on-error`  | `false`          | Fail immediately on DAS errors (not recommended) |
 | `request-timeout` | `5s`             | Timeout for Store requests                       |
 
-The <a data-quicklook-from="parent-chain">parent chain</a> connection settings (`parent-chain.node-url`, `parent-chain.connection-attempts` with default `15`, and `parent-chain.sequencer-inbox-address`) are flags of the standalone `anytrustserver` only — refer to [How to deploy a DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das).
+The <Term id="parent-chain">parent chain</Term> connection settings (`parent-chain.node-url`, `parent-chain.connection-attempts` with default `15`, and `parent-chain.sequencer-inbox-address`) are flags of the standalone `anytrustserver` only — refer to [How to deploy a DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das).
 
 ### `node.da.anytrust.rest-aggregator`
 
 | Key                              | Default                  | Description                                                            |
 | -------------------------------- | ------------------------ | ---------------------------------------------------------------------- |
-| `enable`                         | `false`                  | Enable REST retrieval of <a data-quicklook-from="batch">batch</a> data |
+| `enable`                         | `false`                  | Enable REST retrieval of <Term id="batch">batch</Term> data |
 | `max-per-endpoint-stats`         | `20`                     | Latency/success-rate stats entries per endpoint                        |
 | `online-url-list`                | —                        | URL to a remote list of REST DAS endpoint URLs                         |
 | `online-url-list-fetch-interval` | `1h0m0s`                 | How often to re-fetch the online URL list                              |
@@ -129,7 +129,7 @@ The <a data-quicklook-from="parent-chain">parent chain</a> connection settings (
 | Key                            | Default    | Description                                                                         |
 | ------------------------------ | ---------- | ----------------------------------------------------------------------------------- |
 | `delay-on-error`               | `1s`       | Wait time before retrying after sync error                                          |
-| `eager`                        | `false`    | Eagerly sync batch data using <a data-quicklook-from="L1">L1</a> as index (vs lazy) |
+| `eager`                        | `false`    | Eagerly sync batch data using <Term id="L1">L1</Term> as index (vs lazy) |
 | `eager-lower-bound-block`      | —          | Starting L1 block for eager sync (only if no prior state)                           |
 | `ignore-write-errors`          | `true`     | Log-only on write failures during sync                                              |
 | `parent-chain-blocks-per-read` | `100`      | Max L1 blocks to read per eager sync poll                                           |
@@ -143,7 +143,7 @@ The <a data-quicklook-from="parent-chain">parent chain</a> connection settings (
 | ---------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `assumed-honest` | —       | `H` value; required signatures `K = N + 1 - H`                                                                                                                                                                            |
 | `backends`       | `null`  | JSON array of `{url, pubkey}` objects. The aggregator assigns each backend a `signersMask` of `1 << i` based on its index in the array, so member order must match the position of each public key in the onchain keyset. |
-| `enable`         | `false` | Enable RPC storage of batch data (<a data-quicklook-from="batch-poster">Batch Poster</a> only)                                                                                                                            |
+| `enable`         | `false` | Enable RPC storage of batch data (<Term id="batch-poster">Batch Poster</Term> only)                                                                                                                            |
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client`
 
@@ -189,7 +189,7 @@ The <a data-quicklook-from="parent-chain">parent chain</a> connection settings (
 
 | Key                  | Default            | Description                                                  |
 | -------------------- | ------------------ | ------------------------------------------------------------ |
-| `enable`             | `false`            | Enable DAProvider <a data-quicklook-from="client">client</a> |
+| `enable`             | `false`            | Enable DAProvider <Term id="client">client</Term> |
 | `store-rpc-method`   | `daprovider_store` | Single-shot store RPC method name                            |
 | `use-data-streaming` | `false`            | Use chunked streaming protocol for large payloads            |
 | `with-writer`        | `false`            | DAProvider server supports writer interface                  |

@@ -7,13 +7,13 @@ author: gmetha2
 sme: Jason-W123
 ---
 
-Arbitrum chain operators increasingly want to deploy chains with pre-existing state by loading an initial state from a file such as `genesis.json`. Specifically, chain operators want to predeploy smart contracts (like Gnosis Safe) to an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> so they exist from genesis, before any user interaction or post-launch governance.
+Arbitrum chain operators increasingly want to deploy chains with pre-existing state by loading an initial state from a file such as `genesis.json`. Specifically, chain operators want to predeploy smart contracts (like Gnosis Safe) to an <Term id="arbitrum-chain">Arbitrum chain</Term> so they exist from genesis, before any user interaction or post-launch governance.
 
 Initializing from a genesis state helps in the following scenarios:
 
 1. Redeploying a new testnet with the pre-existing state if the current testnet is broken.
 2. Deploying more sibling chains with pre-existing contracts.
-3. Simplifying self-serve backends for <a data-quicklook-from="raas">Rollup-as-a-Service (RaaS)</a> providers, so that hundreds of testnets can be deployed with similar contracts.
+3. Simplifying self-serve backends for <Term id="raas">Rollup-as-a-Service (RaaS)</Term> providers, so that hundreds of testnets can be deployed with similar contracts.
 4. Reducing the work for third-party infrastructure teams that redeploy contracts for new chains.
 
 ## Why should I use a custom genesis state?
@@ -26,7 +26,7 @@ A custom genesis lets you start your Arbitrum chain with a customized genesis st
 
 <VanillaAdmonition type="danger" title="Preallocated balances are not backed by the parent chain">
 
-Preallocating account balances in the genesis state credits **ETH** (or your <a data-quicklook-from="custom-gas-token">custom gas token</a>) on your Arbitrum chain **without** depositing anything into the <a data-quicklook-from="parent-chain">parent-chain</a> bridge. The protocol does **not** require the bridge to hold ETH equal to the balances you preallocate, and there is no deploy-time check.
+Preallocating account balances in the genesis state credits **ETH** (or your <Term id="custom-gas-token">custom gas token</Term>) on your Arbitrum chain **without** depositing anything into the <Term id="parent-chain">parent-chain</Term> bridge. The protocol does **not** require the bridge to hold ETH equal to the balances you preallocate, and there is no deploy-time check.
 
 If your chain will accept user deposits, a chain whose total preallocated balances exceed the bridge's backing is **insolvent from genesis**: withdrawals can fail once the bridge is drained. Only preallocate non-zero balances if you accept responsibility for backing them—for example, a private or test chain, or one where you deposit the equivalent amount into the bridge before opening it to users.
 
@@ -75,11 +75,11 @@ export CHAIN_SDK_IMAGE=offchainlabs/arbitrum-chain-sdk:v0.28.0
 docker pull "$CHAIN_SDK_IMAGE"
 ```
 
-Pin the same image tag or digest for every operator. Different versions of the bundled <a data-quicklook-from="arbitrum-nitro">Nitro</a> `genesis-generator` binary can produce a different genesis block hash.
+Pin the same image tag or digest for every operator. Different versions of the bundled <Term id="arbitrum-nitro">Nitro</Term> `genesis-generator` binary can produce a different genesis block hash.
 
 ##### 1. Define custom account allocations
 
-Create `custom-alloc.json` if you want to add balances, bytecode, nonces, or storage. The file must contain an object keyed by account address, in the standard <a data-quicklook-from="geth">Geth</a> `alloc` format. It must not contain an outer `alloc` property. Review the solvency warning above before you set a non-zero `balance`.
+Create `custom-alloc.json` if you want to add balances, bytecode, nonces, or storage. The file must contain an object keyed by account address, in the standard <Term id="geth">Geth</Term> `alloc` format. It must not contain an outer `alloc` property. Review the solvency warning above before you set a non-zero `balance`.
 
 ```json title="custom-alloc.json"
 {
@@ -135,7 +135,7 @@ The generator accepts these fields:
 | `maxCodeSize`                | `string`  | No       | `24576` | Maximum deployed contract bytecode size in bytes.                                                                                                                                       |
 | `maxInitCodeSize`            | `string`  | No       | `49152` | Maximum contract initialization bytecode size in bytes.                                                                                                                                 |
 
-The `chainId`, <a data-quicklook-from="chain-owner">chain owner</a>, ArbOS version, chain type, and code-size limits become part of `serializedChainConfig`. Keep them identical when you prepare the Rollup deployment.
+The `chainId`, <Term id="chain-owner">chain owner</Term>, ArbOS version, chain type, and code-size limits become part of `serializedChainConfig`. Keep them identical when you prepare the Rollup deployment.
 
 ##### 3. Generate the genesis file and hashes
 
@@ -172,7 +172,7 @@ Store `genesis-result.json` with your deployment records. It ties the exact gene
 
 <VanillaAdmonition type="caution" title="Generate the genesis before deploying the chain">
 
-The Rollup contract commits to the genesis state during deployment. If you change an allocation or any genesis parameter afterward, the resulting block hash no longer matches the onchain genesis <a data-quicklook-from="assertion">assertion</a>. Generate and review the final file before you call `createRollup`.
+The Rollup contract commits to the genesis state during deployment. If you change an allocation or any genesis parameter afterward, the resulting block hash no longer matches the onchain genesis <Term id="assertion">assertion</Term>. Generate and review the final file before you call `createRollup`.
 
 </VanillaAdmonition>
 

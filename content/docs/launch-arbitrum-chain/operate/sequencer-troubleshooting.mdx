@@ -18,18 +18,18 @@ Every default value and log string on this page comes from the [Nitro source](ht
 
 ## Feed relay architecture
 
-The <a data-quicklook-from="sequencer-feed">sequencer feed</a> is a WebSocket stream of transactions in the order the <a data-quicklook-from="sequencer">sequencer</a> chose. It gives you data before batches land on the <a data-quicklook-from="parent-chain">parent chain</a>, which is why nodes use it to stay current instead of waiting for batches.
+The <Term id="sequencer-feed">sequencer feed</Term> is a WebSocket stream of transactions in the order the <Term id="sequencer">sequencer</Term> chose. It gives you data before batches land on the <Term id="parent-chain">parent chain</Term>, which is why nodes use it to stay current instead of waiting for batches.
 
 ### What produces the feed
 
-Any <a data-quicklook-from="arbitrum-nitro">Nitro</a> node with feed output enabled runs a broadcast server on port `9642` and serves the `/feed` endpoint. Two roles enable it:
+Any <Term id="arbitrum-nitro">Nitro</Term> node with feed output enabled runs a broadcast server on port `9642` and serves the `/feed` endpoint. Two roles enable it:
 
 | Role      | What it does                                                 | Configuration                          |
 | --------- | ------------------------------------------------------------ | -------------------------------------- |
 | Sequencer | Broadcasts messages it sequences itself                      | `node.feed.output.enable=true`         |
 | Relay     | Subscribes to an upstream feed and rebroadcasts it unchanged | `node.feed.input.url` plus feed output |
 
-A relay does not sequence, validate, or execute anything. It reads an upstream feed and distributes it to more subscribers. The message content is identical either way, so a <a data-quicklook-from="client">client</a> cannot tell from the payload whether it is connected to a sequencer or a relay.
+A relay does not sequence, validate, or execute anything. It reads an upstream feed and distributes it to more subscribers. The message content is identical either way, so a <Term id="client">client</Term> cannot tell from the payload whether it is connected to a sequencer or a relay.
 
 ### Sequencer feed compared to relay feed
 
@@ -101,7 +101,7 @@ A "stalled feed" describes three different failures. They need different fixes, 
 | What you observe                           | What it means                               | Where to look                                          |
 | ------------------------------------------ | ------------------------------------------- | ------------------------------------------------------ |
 | No new messages arrive at your node        | Connection is dead or upstream stopped      | Your node and the relay chain                          |
-| `arb/feed/backlog/messages` grows steadily | Batches are not landing on the parent chain | <a data-quicklook-from="batch-poster">Batch poster</a> |
+| `arb/feed/backlog/messages` grows steadily | Batches are not landing on the parent chain | <Term id="batch-poster">Batch poster</Term> |
 | Your node lags but the feed is live        | Your node cannot keep up executing          | Your node's resources                                  |
 
 <VanillaAdmonition type="caution" title="A growing feed backlog is not a lagging follower">
@@ -192,7 +192,7 @@ The sequencer keeps running here, but the block it builds is empty because the s
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `currently not accepting transactions due to expected surplus being below threshold` | Expected surplus fell below `expected-surplus-hard-threshold`                                                        |
 | `transaction sender is not on the whitelist`                                         | `sender-whitelist` is set and the sender is absent                                                                   |
-| `sequencer temporarily not available`                                                | This node is forwarding rather than sequencing, and its <a data-quicklook-from="forwarder">forwarder</a> is disabled |
+| `sequencer temporarily not available`                                                | This node is forwarding rather than sequencing, and its <Term id="forwarder">forwarder</Term> is disabled |
 
 For the surplus flags, see [Sequencer configuration reference](/docs/launch-arbitrum-chain/configuration/sequencer/sequencer-config-reference#expected-surplus-flags).
 
@@ -213,7 +213,7 @@ Ruling these out saves time:
 
 - **A batch posting backlog.** The sequencer keeps producing blocks while unposted batches accumulate. See [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting).
 - **A feed outage.** The feed is an output. Losing it affects subscribers, not block production.
-- **A <a data-quicklook-from="validator">validator</a> or <a data-quicklook-from="proposer">proposer</a> failure.** Validation runs behind block production and does not gate it.
+- **A <Term id="validator">validator</Term> or <Term id="proposer">proposer</Term> failure.** Validation runs behind block production and does not gate it.
 - **An unfunded batch poster.** Posting stops; sequencing does not.
 
 ### Diagnostic order

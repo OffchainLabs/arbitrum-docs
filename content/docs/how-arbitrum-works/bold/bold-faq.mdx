@@ -16,7 +16,7 @@ The entities responsible for posting assertions about Arbitrum state to Ethereum
 
 #### Q: Why are the bond sizes so high for Arbitrum One?
 
-There are two types of “bonds” in BoLD: **assertion and challenge**. The sizes below are carefully calculated and set for Arbitrum One, using a variety of factors, including TVL, to optimize a balance between the cost for honest parties and the security of the protocol. As always, the exact bond sizes for an Arbitrum chain using BoLD are entirely up to the <a data-quicklook-from="chain-owner">chain owner</a> to decide, if they choose to adopt BoLD at all.
+There are two types of “bonds” in BoLD: **assertion and challenge**. The sizes below are carefully calculated and set for Arbitrum One, using a variety of factors, including TVL, to optimize a balance between the cost for honest parties and the security of the protocol. As always, the exact bond sizes for an Arbitrum chain using BoLD are entirely up to the <Term id="chain-owner">chain owner</Term> to decide, if they choose to adopt BoLD at all.
 
 **Assertion bond sizes**
 
@@ -32,11 +32,11 @@ To summarize with a scenario, this effectively means that defending against a \$
 
 **Bonding pools as a way to allow people to participate in assertion posting**
 
-BoLD ships with <a data-quicklook-from="trustless">trustless</a> [bonding pools](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#trustless-bonding-pools) that allow any group of participants to pool their funds together to challenge a dishonest proposer, and win. That is, any group of entities can pool funds into a simple contract that will post an assertion to Ethereum without needing to trust each other. Upon observing an invalid assertion, validators have a <a data-quicklook-from="challenge-period">challenge period</a> (~@@arbOneDisputeWindowDays=6.4@@ days) to pool funds in the contract and respond with a counterassertion. Making it easy to pool the funds to participate in the defense of Arbitrum trustlessly improves decentralization and the safety of BoLD.
+BoLD ships with <Term id="trustless">trustless</Term> [bonding pools](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#trustless-bonding-pools) that allow any group of participants to pool their funds together to challenge a dishonest proposer, and win. That is, any group of entities can pool funds into a simple contract that will post an assertion to Ethereum without needing to trust each other. Upon observing an invalid assertion, validators have a <Term id="challenge-period">challenge period</Term> (~@@arbOneDisputeWindowDays=6.4@@ days) to pool funds in the contract and respond with a counterassertion. Making it easy to pool the funds to participate in the defense of Arbitrum trustlessly improves decentralization and the safety of BoLD.
 
 #### Q: Does the bond requirement only mean that whales can validate Arbitrum One?
 
-Validating Arbitrum One is **free and accessible**. By default, all Arbitrum One nodes are <a data-quicklook-from="watchtower-validator">watchtower validators</a>, meaning they can detect and report invalid assertions posted to Ethereum.
+Validating Arbitrum One is **free and accessible**. By default, all Arbitrum One nodes are <Term id="watchtower-validator">watchtower validators</Term>, meaning they can detect and report invalid assertions posted to Ethereum.
 
 However, becoming an assertion proposer requires a bond, as without it, anyone could delay all Arbitrum-bridged assets by one week. That said, BoLD allows anyone to propose assertions and also challenge invalid assertions via pool contracts, helping keep proposers accountable for their actions.
 
@@ -46,9 +46,9 @@ Honest parties will always be refunded, while malicious actors will always stand
 
 #### Q: If there's a challenge, what happens to the confiscated funds from malicious actors for Arbitrum One?
 
-Recall that BoLD enables any validator to put up a bond to propose assertions about the <a data-quicklook-from="child-chain">child chain</a> state. These assertions about the child chain state are deterministic, so an honest party who posts a bond on the correct assertion will always win in disputes. In these scenarios, the honest party will eventually have their bonds reimbursed while the malicious actor will lose all of their funds.
+Recall that BoLD enables any validator to put up a bond to propose assertions about the <Term id="child-chain">child chain</Term> state. These assertions about the child chain state are deterministic, so an honest party who posts a bond on the correct assertion will always win in disputes. In these scenarios, the honest party will eventually have their bonds reimbursed while the malicious actor will lose all of their funds.
 
-In BoLD, all costs spent by malicious actors are confiscated and sent to the <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a> treasury. A small reward, called the Defender's Bounty, of 1% will go to entities who put down challenge bonds in defense of Arbitrum One. For the remaining funds, the Arbitrum DAO will have full discretion over how to use those confiscated from a malicious actor. Applications include, but are not limited to:
+In BoLD, all costs spent by malicious actors are confiscated and sent to the <Term id="arbitrum-dao">Arbitrum DAO</Term> treasury. A small reward, called the Defender's Bounty, of 1% will go to entities who put down challenge bonds in defense of Arbitrum One. For the remaining funds, the Arbitrum DAO will have full discretion over how to use those confiscated from a malicious actor. Applications include, but are not limited to:
 
 - Using the confiscated funds to refund the parent chain gas costs to honest parties,
 - Rewarding or reimbursing the honest parties with some, or all, of the confiscated funds over the 1% Defender's Bounty,
@@ -76,12 +76,12 @@ Therefore, the BoLD AIP proposes that honest parties be rewarded with 1% of the 
 
 Although BoLD supports using an **ERC-20** token, Ethereum, specifically **WETH**, was chosen over **ARB** for a few reasons:
 
-1. **Arbitrum One and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> both inherit their security from Ethereum already.** Arbitrum One and Nova rely on Ethereum for both data availability and as the referee for determining winners during fraud-proof disputes. Ethereum’s value is also relatively independent of Arbitrum, especially when compared to **ARB**.
+1. **Arbitrum One and <Term id="arbitrum-nova">Arbitrum Nova</Term> both inherit their security from Ethereum already.** Arbitrum One and Nova rely on Ethereum for both data availability and as the referee for determining winners during fraud-proof disputes. Ethereum’s value is also relatively independent of Arbitrum, especially when compared to **ARB**.
 2. Adversaries might be able to exploit the potential instability of **ARB** when trying to win challenges. Suppose an adversary deposits their bond in **ARB** and can create an impression that they have a nontrivial chance of winning the challenge. This impression might drive down the value of **ARB**, which would decrease the adversary's cost to create more bonds (i.e., more spam) during the challenge, which in turn could increase the adversary's chances of winning (which would drive **ARB** lower, making the attack cheaper still for the adversary, etc.).
 3. **Access to liquidity**: Ethereum has greater liquidity than **ARB**. In the event of an attack on Arbitrum, access and ease of pooling funds may become crucial.
 4. **Fraud proofs are submitted to, and arbitrated on, the parent chain (Ethereum).** The bonding of capital to make assertions is done so on the parent chain (Ethereum), since Ethereum is the arbitrator of disputes. If BoLD were to use **ARB** instead of **ETH**, a large amount of **ARB** must be pre-positioned on the parent chain, which is more difficult to do when compared to pre-positioning **ETH** on the parent chain (Ethereum).
 
-An Arbitrum chain owner may choose to use any token they wish for bonding if they adopt and use BoLD <a data-quicklook-from="permissionless-validation">permissionless validation</a>.
+An Arbitrum chain owner may choose to use any token they wish for bonding if they adopt and use BoLD <Term id="permissionless-validation">permissionless validation</Term>.
 
 #### Q: Can the required token for the validator be set to **ARB**, and can network **ETH** revenues get distributed for validator incentives for Arbitrum One?
 
@@ -121,7 +121,7 @@ This decision comes from two reasons:
 
 We believe enabling permissionless validation for Nova is not worth the capital requirement trade-offs, given the unique security model of AnyTrust chains.
 
-Notably, since Arbitrum Nova's security already depends on at least one DAC member providing honest data availability, trusting the same committee to have at least one member provide honest validation does not add a major trust assumption. This trust assumption requires all DAC members to run validators as well. If the DAC is also validating the chain, a feature the <a data-quicklook-from="offchain-labs">Offchain Labs</a> team has been working on, <a data-quicklook-from="fast-withdrawals">Fast Withdrawals</a>, would allow users to withdraw assets from Nova in ~15 minutes, or the time it takes to reach parent chain finality. This finality is made possible by the DAC, which attests to and instantly confirms an assertion. Fast Withdrawals will be the subject of a future forum post and snapshot vote.
+Notably, since Arbitrum Nova's security already depends on at least one DAC member providing honest data availability, trusting the same committee to have at least one member provide honest validation does not add a major trust assumption. This trust assumption requires all DAC members to run validators as well. If the DAC is also validating the chain, a feature the <Term id="offchain-labs">Offchain Labs</Term> team has been working on, <Term id="fast-withdrawals">Fast Withdrawals</Term>, would allow users to withdraw assets from Nova in ~15 minutes, or the time it takes to reach parent chain finality. This finality is made possible by the DAC, which attests to and instantly confirms an assertion. Fast Withdrawals will be the subject of a future forum post and snapshot vote.
 
 #### Q: When it comes to viewing the upfront assertion bond (to be a proposer) as the security budget for Arbitrum One, is it possible for an attacker to go above the security budget, and if so, what happens then?
 
@@ -145,9 +145,9 @@ If a malicious entity wanted to attack Arbitrum, they would need to deposit 3,60
 
 #### Q: How do BoLD-based L3s' challenge periods operate, considering the worst-case scenario?
 
-To recap, both Arbitrum’s current dispute protocol and BoLD require assertions to be posted to the parent chain and employ interactive proving, which involves a back-and-forth between two entities until a single step of disagreement is reached. That single disputed step then gets submitted to contracts on the parent chain, which will eventually declare a winner. For <a data-quicklook-from="L2">L2s</a> such as Arbitrum One, BoLD must be deployed on a credibly neutral, censorship-resistant backend to ensure fair dispute resolution. Ethereum is therefore the ideal candidate for deploying the BoLD protocol on L2s.
+To recap, both Arbitrum’s current dispute protocol and BoLD require assertions to be posted to the parent chain and employ interactive proving, which involves a back-and-forth between two entities until a single step of disagreement is reached. That single disputed step then gets submitted to contracts on the parent chain, which will eventually declare a winner. For <Term id="L2">L2s</Term> such as Arbitrum One, BoLD must be deployed on a credibly neutral, censorship-resistant backend to ensure fair dispute resolution. Ethereum is therefore the ideal candidate for deploying the BoLD protocol on L2s.
 
-But you might now be wondering: what about L3 Arbitrum chains that don't settle to Ethereum? Unlike L2s that settle to Ethereum, assertions on an L3's state need to be posted to an L2 either via (A) the L3 <a data-quicklook-from="sequencer">Sequencer</a> or (B) the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> queue managed by the L2 sequencer on L2. If the parent chain (in this case, L2) is getting repeatedly censored or if the L2 sequencer is offline, every block-level assertion and/or sub-challenge assertion would need to wait @@arbOneForceIncludePeriodHours=24@@ hours before they can bypass the sequencer (using the `SequencerInbox`'s [`forceInclusion` method](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#force-inclusion-after-delays)). If this were to happen, challenge resolution would get delayed by a time _t_ where _t_ = (@@arbOneForceIncludePeriodHours=24@@ hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days!
+But you might now be wondering: what about L3 Arbitrum chains that don't settle to Ethereum? Unlike L2s that settle to Ethereum, assertions on an L3's state need to be posted to an L2 either via (A) the L3 <Term id="sequencer">Sequencer</Term> or (B) the <Term id="delayed-inbox">Delayed Inbox</Term> queue managed by the L2 sequencer on L2. If the parent chain (in this case, L2) is getting repeatedly censored or if the L2 sequencer is offline, every block-level assertion and/or sub-challenge assertion would need to wait @@arbOneForceIncludePeriodHours=24@@ hours before they can bypass the sequencer (using the `SequencerInbox`'s [`forceInclusion` method](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#force-inclusion-after-delays)). If this were to happen, challenge resolution would get delayed by a time _t_ where _t_ = (@@arbOneForceIncludePeriodHours=24@@ hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days!
 
 To mitigate the risk of this issue manifesting on Arbitrum chains, Offchain Labs has included a feature called [_Delay Buffer_](/docs/how-arbitrum-works/deep-dives/sequencer#censorship-timeout) (also called _Censorship Timeout_) in BoLD’s 1.0.0 release. The _Delay Buffer_ feature aims to limit the negative effects of: prolonged parent chain censorship, prolonged sequencer censorship, and/or unexpected sequencer outages. This buffer is configurable by setting a time threshold that decrements when unexpected delays occur. Once that time threshold is reached, the force inclusion window is reduced, effectively allowing entities to make moves without the 24-hour delay per move.
 
@@ -159,7 +159,7 @@ Recommended parameter defaults for L3 Arbitrum chains that wish to use BoLD are 
 
 <VanillaAdmonition type="warning">
 
-The autopooling feature is not available on <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> yet.
+The autopooling feature is not available on <Term id="arbitrum-nitro">Arbitrum Nitro</Term> yet.
 
 </VanillaAdmonition>
 
@@ -171,7 +171,7 @@ The minimum hardware requirements for running a BoLD validator are still being r
 
 #### Q: How do BoLD validators communicate with one another? Is it over a P2P network?
 
-BoLD validators for Arbitrum chains communicate directly with <a data-quicklook-from="smart-contract">smart contracts</a> on the parent chain (Ethereum), meaning that opening challenges, submitting bisected history commitments, one-step proofs, and confirmations are all adjudicated on the Ethereum blockchain. There is no P2P between validators.
+BoLD validators for Arbitrum chains communicate directly with <Term id="smart-contract">smart contracts</Term> on the parent chain (Ethereum), meaning that opening challenges, submitting bisected history commitments, one-step proofs, and confirmations are all adjudicated on the Ethereum blockchain. There is no P2P between validators.
 
 #### Q: For an L3 Arbitrum chain, secured using BoLD, that settles to Arbitrum One, does the one-step proof happen on the parent chain?
 

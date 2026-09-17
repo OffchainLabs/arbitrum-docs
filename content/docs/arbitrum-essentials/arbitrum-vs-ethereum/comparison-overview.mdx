@@ -7,7 +7,7 @@ author: jose-franco
 sme: jose-franco
 ---
 
-Arbitrum's design is to be as compatible and consistent with Ethereum as possible, from its high-level RPCs to its low-level bytecode and everything in between. <a data-quicklook-from="dapp">Decentralized app</a> developers with experience building on Ethereum will likely find that little to no new specific knowledge is required to build on Arbitrum.
+Arbitrum's design is to be as compatible and consistent with Ethereum as possible, from its high-level RPCs to its low-level bytecode and everything in between. <Term id="dapp">Decentralized app</Term> developers with experience building on Ethereum will likely find that little to no new specific knowledge is required to build on Arbitrum.
 
 This article outlines the key differences, benefits, and potential pitfalls that devs should be aware of when working with Arbitrum. This first page serves as an outline, with links to the relevant pages.
 
@@ -15,7 +15,7 @@ This article outlines the key differences, benefits, and potential pitfalls that
 
 In Ethereum, the STF receives transactions as inputs, processes them via the EVM, and produces the final state as output.
 
-The Ethereum state is a vast data structure represented by a modified Merkle Patricia Trie. This structure holds all accounts, linking them via hashes and reducing the entire state to a single root hash stored on the <a data-quicklook-from="blockchain">blockchain</a>.
+The Ethereum state is a vast data structure represented by a modified Merkle Patricia Trie. This structure holds all accounts, linking them via hashes and reducing the entire state to a single root hash stored on the <Term id="blockchain">blockchain</Term>.
 
 The Ethereum Virtual Machine (EVM) operates similarly to a mathematical function: given an input, it produces a deterministic output. Ethereum's STF encapsulates this behavior:
 
@@ -23,17 +23,17 @@ $$
 Y(S, T) = S'
 $$
 
-Here, `S` represents the current state, `T` denotes the <a data-quicklook-from="transaction">transaction</a>, and `S'` is the new state resulting from the execution of `T`.
+Here, `S` represents the current state, `T` denotes the <Term id="transaction">transaction</Term>, and `S'` is the new state resulting from the execution of `T`.
 
 The EVM operates as a stack machine with a maximum depth of 1024 items. Each item is a 256-bit word, chosen for compatibility with 256-bit cryptography (e.g., Keccak-256 hashes and secp256k1 signatures).
 
 During execution, the EVM uses transient _memory_ (a word-addresses byte array) that only persists for the duration of a transaction. In contrast, each contract maintains a persistent Merkle Patricia _storage_ trie–a word-addressable word array–that forms part of the global state.
 
-<a data-quicklook-from="smart-contract">smart contract</a> bytecode compiles into a series of EVM opcodes that perform standard stack operations (such as `XOR`, `AND`, `ADD`, `SUB`) and blockchain-specific operations (such as `ADDRESS`, `BALANCE`, `BLOCKHASH`).
+<Term id="smart-contract">smart contract</Term> bytecode compiles into a series of EVM opcodes that perform standard stack operations (such as `XOR`, `AND`, `ADD`, `SUB`) and blockchain-specific operations (such as `ADDRESS`, `BALANCE`, `BLOCKHASH`).
 
-<a data-quicklook-from="geth">Geth</a> (go-Ethereum) is one of the primary <a data-quicklook-from="client">client</a> implementations of Ethereum, serving as the practical embodiment of both the STF and the EVM execution engine. It processes transactions by executing the smart contract's bytecode and updating the global state, ensuring that every state change is deterministic and secure.
+<Term id="geth">Geth</Term> (go-Ethereum) is one of the primary <Term id="client">client</Term> implementations of Ethereum, serving as the practical embodiment of both the STF and the EVM execution engine. It processes transactions by executing the smart contract's bytecode and updating the global state, ensuring that every state change is deterministic and secure.
 
-In essence, Geth converts transaction inputs into precise computational steps within the EVM, maintaining the intricate data structures that underpin Ethereum's blockchain. Its robust design not only powers the core operations of Ethereum but also provides the foundation for advanced modifications in platforms like the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack.
+In essence, Geth converts transaction inputs into precise computational steps within the EVM, maintaining the intricate data structures that underpin Ethereum's blockchain. Its robust design not only powers the core operations of Ethereum but also provides the foundation for advanced modifications in platforms like the <Term id="arbitrum-nitro">Arbitrum Nitro</Term> stack.
 
 ## STF on Arbitrum
 

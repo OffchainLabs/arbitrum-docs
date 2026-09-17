@@ -8,13 +8,13 @@ author: emredincoglu
 sme: jason-w123
 ---
 
-To learn how the <a data-quicklook-from="batch-poster">batch-poster</a> role relates to the other Nitro node roles, including its wallet requirements and the safety rules for running redundant posters, see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles).
+To learn how the <Term id="batch-poster">batch-poster</Term> role relates to the other Nitro node roles, including its wallet requirements and the safety rules for running redundant posters, see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles).
 
 The [batch poster](/docs/how-arbitrum-works/deep-dives/assertions) uses the following default configuration flags and values:
 
 | Flag                                                  | Default value | Description                                                                                                                                                                                                                |
 | ----------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--node.batch-poster.enable`                          | false         | Enables posting batches to <a data-quicklook-from="L1">L1</a>                                                                                                                                                              |
+| `--node.batch-poster.enable`                          | false         | Enables posting batches to <Term id="L1">L1</Term>                                                                                                                                                              |
 | `--node.batch-poster.max-calldata-batch-size`         | 100000        | Maximum calldata batch size; replaces the deprecated `--node.batch-poster.max-size`. Default value is overwritten if it's an L3 (90000). For AnyTrust batches, use `--node.da.anytrust.max-batch-size` (default 1,000,000) |
 | `--node.batch-poster.poll-interval`                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                                                                                                                                               |
 | `--node.batch-poster.error-delay`                     | 10 seconds    | Delay time after error posting batch                                                                                                                                                                                       |

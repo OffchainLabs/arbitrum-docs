@@ -11,13 +11,13 @@ sme: dzgoldman
 
 Arbitrum is a finance-native blockchain platform. It provides infrastructure for applications, tokenization, and dedicated blockchain environments.
 
-You can build on the public chains Arbitrum One and Arbitrum Nova, or you can launch your own <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> and configure its execution, data availability, fee model, governance, and validation.
+You can build on the public chains Arbitrum One and Arbitrum Nova, or you can launch your own <Term id="arbitrum-chain">Arbitrum chain</Term> and configure its execution, data availability, fee model, governance, and validation.
 
 Arbitrum runs on top of Ethereum. Your transactions cost less and the chain processes more of them per second, while Ethereum still settles the results and keeps the data available. This page explains the main parts of the platform: Arbitrum Rollup, AnyTrust, Nitro, Stylus, Arbitrum One, Arbitrum Nova, and Arbitrum chains.
 
 <ImageZoom src="/img/arbitrum-chain-naming.svg" alt="Two boxes, one above the other. The top box is an Arbitrum chain, which the docs call either the child chain or layer 2. An arrow labeled 'settles to' points down to the bottom box, Ethereum, which the docs call either the parent chain or layer 1." className="img-600px" />
 
-Two pairs of names appear throughout this page. Ethereum is the <a data-quicklook-from="parent-chain">parent chain</a>, also called <a data-quicklook-from="layer-1-l1">layer 1</a>. An Arbitrum chain that settles to Ethereum is a <a data-quicklook-from="child-chain">child chain</a>, also called <a data-quicklook-from="layer-2-l2">layer 2</a>.
+Two pairs of names appear throughout this page. Ethereum is the <Term id="parent-chain">parent chain</Term>, also called <Term id="layer-1-l1">layer 1</Term>. An Arbitrum chain that settles to Ethereum is a <Term id="child-chain">child chain</Term>, also called <Term id="layer-2-l2">layer 2</Term>.
 
 ## Why does Ethereum need help scaling?
 
@@ -29,7 +29,7 @@ That tradeoff is the scalability trilemma: a chain cannot maximize decentralizat
 
 Rather than weaken security or decentralization, the Ethereum roadmap moves execution offchain to Rollups like Arbitrum. Ethereum then specializes in settlement and data availability.
 
-A Rollup orders many transactions into a <a data-quicklook-from="batch">batch</a>, executes them on its own infrastructure, and posts compressed data and a state commitment back to Ethereum. You inherit Ethereum's security, throughput rises by orders of magnitude, and fees drop.
+A Rollup orders many transactions into a <Term id="batch">batch</Term>, executes them on its own infrastructure, and posts compressed data and a state commitment back to Ethereum. You inherit Ethereum's security, throughput rises by orders of magnitude, and fees drop.
 
 To go deeper, read [How Arbitrum works](/docs/how-arbitrum-works/inside-arbitrum-nitro).
 
@@ -56,9 +56,9 @@ Arbitrum executes offchain and uses Ethereum for settlement and data availabilit
 
 ## How does Arbitrum prove that a result is correct?
 
-When a transaction reaches Arbitrum, the <a data-quicklook-from="sequencer">sequencer</a> puts it in order. Arbitrum compresses that order and posts it to Ethereum. The posted order is the evidence of which transactions run, and that is where the name "Rollup" comes from.
+When a transaction reaches Arbitrum, the <Term id="sequencer">sequencer</Term> puts it in order. Arbitrum compresses that order and posts it to Ethereum. The posted order is the evidence of which transactions run, and that is where the name "Rollup" comes from.
 
-As long as Ethereum stays secure, anyone can read those transactions. If a result differs from the posted order, a <a data-quicklook-from="validator">validator</a> can challenge it.
+As long as Ethereum stays secure, anyone can read those transactions. If a result differs from the posted order, a <Term id="validator">validator</Term> can challenge it.
 
 Billions of dollars have moved through Arbitrum, and no fraudulent result has ever been confirmed.
 
@@ -66,9 +66,9 @@ To learn how the dispute protocol works, read the [BoLD gentle introduction](/do
 
 ## Who validates the chain and raises challenges?
 
-Anyone can validate Arbitrum's <a data-quicklook-from="chain-state">chain state</a>. Whoever does so is a validator. Most people do not run one, in the same way that most people do not run an Ethereum staking node.
+Anyone can validate Arbitrum's <Term id="chain-state">chain state</Term>. Whoever does so is a validator. Most people do not run one, in the same way that most people do not run an Ethereum staking node.
 
-The <a data-quicklook-from="fraud-proof">fraud proof</a> system needs only one honest validator to keep the chain secure, and that single validator can catch several malicious actors. This is what makes the system trustless: your funds do not depend on any one designated party.
+The <Term id="fraud-proof">fraud proof</Term> system needs only one honest validator to keep the chain secure, and that single validator can catch several malicious actors. This is what makes the system trustless: your funds do not depend on any one designated party.
 
 To learn about the validator types, read [Run a validator node](/docs/run-a-node/more-types/run-validator-node).
 
@@ -78,7 +78,7 @@ To learn about the validator types, read [Run a validator node](/docs/run-a-node
 
 Re-executing every transaction on Ethereum would cost too much. Instead, each party bisects its history of commitments until both arrive at the single instruction they disagree about.
 
-Ethereum then acts as the arbiter and declares a winner. The batches that Arbitrum posts to Ethereum are the source of truth, and the challenge process, called <a data-quicklook-from="bold">BoLD</a>, proves which validator is right.
+Ethereum then acts as the arbiter and declares a winner. The batches that Arbitrum posts to Ethereum are the source of truth, and the challenge process, called <Term id="bold">BoLD</Term>, proves which validator is right.
 
 For the full protocol, read the [BoLD gentle introduction](/docs/how-arbitrum-works/bold/gentle-introduction).
 
@@ -92,13 +92,13 @@ There is a delay, but it applies to one action, not to everyday activity.
 | Use a third-party fast bridge            | No, for a fee                                       |
 | Deposit funds from Ethereum to Arbitrum  | No                                                  |
 
-The <a data-quicklook-from="challenge-period">challenge period</a> delays withdrawals back to Ethereum because that is the point where you cross a trust boundary. It does not affect the transactions you send inside Arbitrum.
+The <Term id="challenge-period">challenge period</Term> delays withdrawals back to Ethereum because that is the point where you cross a trust boundary. It does not affect the transactions you send inside Arbitrum.
 
 To learn how bridging works, read [Token bridging](/docs/how-arbitrum-works/deep-dives/token-bridging). To move tokens yourself, follow the [Arbitrum bridge quickstart](/docs/arbitrum-bridge/quickstart).
 
 ## Why are fees on Arbitrum lower?
 
-The word "optimistic" describes how Arbitrum verifies state: it treats an <a data-quicklook-from="assertion">assertion</a> as valid unless someone challenges it through BoLD. That design buys security and correctness rather than cost savings.
+The word "optimistic" describes how Arbitrum verifies state: it treats an <Term id="assertion">assertion</Term> as valid unless someone challenges it through BoLD. That design buys security and correctness rather than cost savings.
 
 The low fees come from five other things:
 
@@ -116,13 +116,13 @@ To go deeper, read [How Arbitrum works](/docs/how-arbitrum-works/inside-arbitrum
 
 Layer 2 protocols optimize for different goals. Arbitrum put Ethereum compatibility first, so you can use your existing Ethereum wallets, and you can build and deploy contracts with your existing Ethereum libraries and tooling.
 
-Arbitrum reaches that compatibility by running a fork of [Geth](/docs/how-arbitrum-works/reference/geth), the most widely used Ethereum implementation, modified to work as a trustless child chain. Most of the code that runs on Arbitrum is the same code that runs on Ethereum. Offchain Labs calls this approach <a data-quicklook-from="arbitrum-nitro">Nitro</a>, and you can read the [Nitro codebase](https://github.com/OffchainLabs/nitro).
+Arbitrum reaches that compatibility by running a fork of [Geth](/docs/how-arbitrum-works/reference/geth), the most widely used Ethereum implementation, modified to work as a trustless child chain. Most of the code that runs on Arbitrum is the same code that runs on Ethereum. Offchain Labs calls this approach <Term id="arbitrum-nitro">Nitro</Term>, and you can read the [Nitro codebase](https://github.com/OffchainLabs/nitro).
 
 For the differences that remain, read the [Comparison overview](/docs/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview).
 
 ## What can you build on Arbitrum that you cannot build on Ethereum?
 
-<a data-quicklook-from="stylus">Stylus</a> keeps Nitro's Ethereum compatibility and adds a second virtual machine alongside the Ethereum Virtual Machine (EVM). You can write contracts in Rust, C, and C++, and they interoperate with your Solidity contracts. Stylus shipped in [ArbOS 32](/docs/run-a-node/arbos-releases/arbos32) and runs on Arbitrum One, Arbitrum Nova, and Arbitrum chains. To try it, follow the [Stylus quickstart](/docs/stylus/quickstart).
+<Term id="stylus">Stylus</Term> keeps Nitro's Ethereum compatibility and adds a second virtual machine alongside the Ethereum Virtual Machine (EVM). You can write contracts in Rust, C, and C++, and they interoperate with your Solidity contracts. Stylus shipped in [ArbOS 32](/docs/run-a-node/arbos-releases/arbos32) and runs on Arbitrum One, Arbitrum Nova, and Arbitrum chains. To try it, follow the [Stylus quickstart](/docs/stylus/quickstart).
 
 You can also launch your own Arbitrum chain with a custom gas token. For example, your chain can charge gas in USDC. The gas token is one of many settings you control. To see the full list, read the [Arbitrum chain introduction](/docs/launch-arbitrum-chain/overview/a-gentle-introduction).
 
@@ -130,7 +130,7 @@ You can also launch your own Arbitrum chain with a custom gas token. For example
 
 Arbitrum Rollup avoids centralization and extra trust assumptions, which makes it a strong default and a net gain for the Ethereum ecosystem.
 
-That decentralization has a price, and not every application needs to pay it. When your security requirements differ, another tool in the Arbitrum suite may fit better, for example an <a data-quicklook-from="arbitrum-anytrust-chain">Arbitrum AnyTrust chain</a>.
+That decentralization has a price, and not every application needs to pay it. When your security requirements differ, another tool in the Arbitrum suite may fit better, for example an <Term id="arbitrum-anytrust-chain">Arbitrum AnyTrust chain</Term>.
 
 ## What is AnyTrust?
 
@@ -138,7 +138,7 @@ AnyTrust is a different data availability option. It works like an Arbitrum Roll
 
 Because the data stays offchain in the normal case, an AnyTrust chain charges much lower fees. In exchange, AnyTrust does not offer the same decentralization, trustlessness, and permissionless security guarantees as a Rollup.
 
-If someone raises a challenge, the AnyTrust chain reverts to Rollup mode. The security assumption is that at least two <a data-quicklook-from="data-availability-committee-dac">committee</a> members are honest and will provide the data when it is needed.
+If someone raises a challenge, the AnyTrust chain reverts to Rollup mode. The security assumption is that at least two <Term id="data-availability-committee-dac">committee</Term> members are honest and will provide the data when it is needed.
 
 AnyTrust suits applications that need high throughput and do not need the full decentralization of a Rollup.
 
@@ -151,10 +151,10 @@ Many. Running multiple chains in parallel is a core advantage of offchain scalin
 Here is a snapshot of the chains running today:
 
 - On Ethereum, as layer 2:
-  - [Arbitrum One](https://portal.arbitrum.io/), an <a data-quicklook-from="arbitrum-rollup-chain">Arbitrum Rollup chain</a> that the [Arbitrum Foundation](https://arbitrum.foundation) operates
-  - [Arbitrum Nova](https://nova.arbitrum.io/), an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust chain</a> that the [Arbitrum Foundation](https://arbitrum.foundation) operates
+  - [Arbitrum One](https://portal.arbitrum.io/), an <Term id="arbitrum-rollup-chain">Arbitrum Rollup chain</Term> that the [Arbitrum Foundation](https://arbitrum.foundation) operates
+  - [Arbitrum Nova](https://nova.arbitrum.io/), an <Term id="arbitrum-anytrust-chain">AnyTrust chain</Term> that the [Arbitrum Foundation](https://arbitrum.foundation) operates
   - Arbitrum chains that developers launch and operate themselves
-- On an EVM layer 2, as <a data-quicklook-from="layer-3-l3">layer 3</a>:
+- On an EVM layer 2, as <Term id="layer-3-l3">layer 3</Term>:
   - Arbitrum chains on Arbitrum One and Arbitrum Nova
   - Arbitrum chains on other EVM layer 2 chains
 

@@ -18,7 +18,7 @@ Each entry links to the guide that explains the message in full. This page delib
 
 </VanillaAdmonition>
 
-Log levels in the linked guides are worth reading closely. Many <a data-quicklook-from="batch-poster">batch poster</a> messages are logged quietly at first. If they persist, they escalate to `WARN` or `ERROR`. A single `WARN` is usually noise. A sustained one that reaches `ERROR` is the real signal. To learn how that escalation works, see [The escalation rule to remember](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting#the-escalation-rule-to-remember).
+Log levels in the linked guides are worth reading closely. Many <Term id="batch-poster">batch poster</Term> messages are logged quietly at first. If they persist, they escalate to `WARN` or `ERROR`. A single `WARN` is usually noise. A sustained one that reaches `ERROR` is the real signal. To learn how that escalation works, see [The escalation rule to remember](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting#the-escalation-rule-to-remember).
 
 ## Batch poster
 
@@ -43,7 +43,7 @@ Log levels in the linked guides are worth reading closely. Many <a data-quickloo
 | `failed to update tx poster balance` / `failed to update tx poster nonce`       | Periodic state refresh failed; loop backs off                                      | [Nonce and sync](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting#failed-tx-poster-state)     |
 | `DataPoster failed to send transaction`                                         | Mempool rejection or RPC issue; transaction stays queued                           | [Nonce and sync](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting#dataposter-send-failed)     |
 | `failed to replace-by-fee transaction`                                          | Per-nonce RBF error that escalates if it persists                                  | [Nonce and sync](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting#maybelogerror-family)       |
-| `DataPoster is avoiding creating a mempool nonce gap`                           | Deliberate <a data-quicklook-from="reorg">reorg</a> safety; transaction is retried | [Parent chain bounds](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting#avoiding-nonce-gap)    |
+| `DataPoster is avoiding creating a mempool nonce gap`                           | Deliberate <Term id="reorg">reorg</Term> safety; transaction is retried | [Parent chain bounds](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting#avoiding-nonce-gap)    |
 
 ### Reverts and halting
 
@@ -96,7 +96,7 @@ Log levels in the linked guides are worth reading closely. Many <a data-quickloo
 | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `error initializing staker: could not create assertion chain: no contract code at given address` | Reading at `finalized` before the Rollup deployment is finalized, or a stale `rollup.rollup` | [Parent chain read consistency](/docs/launch-arbitrum-chain/operate/validator-troubleshooting#no-contract-code)  |
 | `ASSERTION_NOT_EXIST`                                                                            | Unsynced node, inconsistent parent chain RPC, or reorg exposure                              | [Assertion errors](/docs/launch-arbitrum-chain/operate/validator-troubleshooting#assertion-not-exist)            |
-| `found incorrect assertion in watchtower mode` (legacy staker)                                   | Local state disagrees with an onchain <a data-quicklook-from="assertion">assertion</a>       | [Assertion errors](/docs/launch-arbitrum-chain/operate/validator-troubleshooting#incorrect-assertion-watchtower) |
+| `found incorrect assertion in watchtower mode` (legacy staker)                                   | Local state disagrees with an onchain <Term id="assertion">assertion</Term>       | [Assertion errors](/docs/launch-arbitrum-chain/operate/validator-troubleshooting#incorrect-assertion-watchtower) |
 | `Detected invalid assertion, but not configured to post a rival stake` (BoLD staker)             | Local state disagrees with an onchain assertion                                              | [Assertion errors](/docs/launch-arbitrum-chain/operate/validator-troubleshooting#incorrect-assertion-watchtower) |
 
 ## Messages not listed here

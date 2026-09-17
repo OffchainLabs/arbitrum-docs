@@ -13,11 +13,11 @@ import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.m
 
 :::info Prerequisites
 
-This page assumes that you've completed the steps from the [Start here](/docs/run-a-node/start-here) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, <a data-quicklook-from="database-snapshot">database snapshots</a>, and other information required to run the node.
+This page assumes that you've completed the steps from the [Start here](/docs/run-a-node/start-here) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, <Term id="database-snapshot">database snapshots</Term>, and other information required to run the node.
 
 To view the short and long term support policy, visit the [Nitro support policy](/docs/run-a-node/nitro-support-policy) page.
 
-If you're looking to run a node with a different role — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, <a data-quicklook-from="archive-node">archive node</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles) for the flags that define each role.
+If you're looking to run a node with a different role — <Term id="sequencer">sequencer</Term>, <Term id="batch-poster">batch poster</Term>, <Term id="validator">validator</Term>, <Term id="archive-node">archive node</Term>, or <Term id="feed-relay">feed relay</Term>—see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles) for the flags that define each role.
 
 :::
 
@@ -29,7 +29,7 @@ This page covers running a node with Docker. If you want to deploy on Kubernetes
 
 ## Choose a state scheme
 
-Nitro stores its state trie using one of two <a data-quicklook-from="state-scheme">schemes</a>: **<a data-quicklook-from="hashdb">HashDB</a>** (the default) or **<a data-quicklook-from="pathdb">PathDB</a>**. Choose before you initialize the database. You cannot switch an existing database—moving between schemes means re-initializing from a snapshot built with the scheme you want.
+Nitro stores its state trie using one of two <Term id="state-scheme">schemes</Term>: **<Term id="hashdb">HashDB</Term>** (the default) or **<Term id="pathdb">PathDB</Term>**. Choose before you initialize the database. You cannot switch an existing database—moving between schemes means re-initializing from a snapshot built with the scheme you want.
 
 | Property                      | HashDB (default)                         | PathDB                                     |
 | :---------------------------- | :--------------------------------------- | :----------------------------------------- |
@@ -43,12 +43,12 @@ Nitro stores its state trie using one of two <a data-quicklook-from="state-schem
 
 Both schemes have a published full node snapshot, so either one can initialize without syncing from genesis. At comparable dates the two are close in size: on Arbitrum One, the `pruned` HashDB snapshot is about 2.3 TB and the `full-path` PathDB snapshot is about 2.4 TB.
 
-Pick based on how you want to handle <a data-quicklook-from="state-pruning">pruning</a> and whether you need block validation:
+Pick based on how you want to handle <Term id="state-pruning">pruning</Term> and whether you need block validation:
 
 - **Choose HashDB** if your node runs the block validator, or if you want the simplest initialization. `--init.latest pruned` downloads and verifies the snapshot for you. You then prune manually, and your node is offline while it does.
 - **Choose PathDB** if you want to avoid manual prune cycles. Nitro prunes online, so the node keeps serving RPC and disk use stays within the window you set with `--execution.caching.state-history`. Initialization takes more work: you pass the snapshot URL to `--init.url` yourself.
 
-On **<a data-quicklook-from="archive-node">archive</a>** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/docs/run-a-node/more-types/run-archive-node).
+On **<Term id="archive-node">archive</Term>** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/docs/run-a-node/more-types/run-archive-node).
 
 <VanillaAdmonition type="caution" title="PathDB and block validation">
 

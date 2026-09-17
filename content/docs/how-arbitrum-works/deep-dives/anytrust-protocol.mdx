@@ -7,15 +7,15 @@ author: pete-vielhaber
 sme: TucksonDev
 ---
 
-AnyTrust is a variant of the [<a data-quicklook-from="arbitrum">Arbitrum</a> Nitro technology](/docs/how-arbitrum-works/inside-arbitrum-nitro) that lowers costs by accepting a mild trust assumption.
+AnyTrust is a variant of the [<Term id="arbitrum">Arbitrum</Term> Nitro technology](/docs/how-arbitrum-works/inside-arbitrum-nitro) that lowers costs by accepting a mild trust assumption.
 
-The Arbitrum protocol requires that all Arbitrum nodes, including [validators](/docs/how-arbitrum-works/deep-dives/assertions) (nodes that verify the correctness of the chain and place bonds on correct results), have access to the data of every child chain <a data-quicklook-from="transaction">transaction</a> in the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>’s inbox. An Arbitrum Rollup provides data access by [posting the data (in batched, compressed form) on the parent chain](/docs/how-arbitrum-works/deep-dives/batchposter), Ethereum, as blobs or calldata. The Ethereum gas used to pay for this is the largest component of the cost of using Arbitrum.
+The Arbitrum protocol requires that all Arbitrum nodes, including [validators](/docs/how-arbitrum-works/deep-dives/assertions) (nodes that verify the correctness of the chain and place bonds on correct results), have access to the data of every child chain <Term id="transaction">transaction</Term> in the <Term id="arbitrum-chain">Arbitrum chain</Term>’s inbox. An Arbitrum Rollup provides data access by [posting the data (in batched, compressed form) on the parent chain](/docs/how-arbitrum-works/deep-dives/batchposter), Ethereum, as blobs or calldata. The Ethereum gas used to pay for this is the largest component of the cost of using Arbitrum.
 
 AnyTrust relies instead on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has N members, of which AnyTrust assumes at least two are honest. This means that if `N - 1` DAC members promise to provide access to some data, at least one of them must be honest. Since there are two honest members and only one failed to keep the promise, it follows that at least one of the promisers must be honest, and that honest member will provide data when needed to ensure the chain can properly function.
 
 ## Keysets
 
-A Keyset specifies the [Boneh–Lynn–Shacham (BLS)](https://en.wikipedia.org/wiki/BLS_digital_signature) public keys of DAC members and the number of signatures required for a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert) to be valid. Keysets enable DAC membership changes and allow DAC members to change their keys.
+A Keyset specifies the [Boneh–Lynn–Shacham (BLS)](https://en.wikipedia.org/wiki/BLS_digital_signature) public keys of DAC members and the number of signatures required for a <Term id="data-availability-certificate">Data Availability Certificate</Term> (DACert) to be valid. Keysets enable DAC membership changes and allow DAC members to change their keys.
 
 A Keyset contains:
 
@@ -40,7 +40,7 @@ A central concept in AnyTrust is the Data Availability Certificate (hereafter, a
 
 Because of the `2-of-N` trust assumption, a DACert constitutes proof that the block’s data (i.e., the preimage of the hash in the DACert) will be available from at least one honest DAC member, at least until the expiration time expires.
 
-In regular Arbitrum Nitro, the Arbitrum [<a data-quicklook-from="sequencer">Sequencer</a>](/docs/how-arbitrum-works/deep-dives/sequencer) posts data blocks on the parent chain as [blobs or calldata](/docs/how-arbitrum-works/deep-dives/batchposter). The hashes of the data blocks are committed to the parent chain Inbox contract, allowing the data to be reliably read by the child chain code.
+In regular Arbitrum Nitro, the Arbitrum [<Term id="sequencer">Sequencer</Term>](/docs/how-arbitrum-works/deep-dives/sequencer) posts data blocks on the parent chain as [blobs or calldata](/docs/how-arbitrum-works/deep-dives/batchposter). The hashes of the data blocks are committed to the parent chain Inbox contract, allowing the data to be reliably read by the child chain code.
 
 AnyTrust gives the Sequencer two ways to post a data block on the parent chain: it can post the full data as above, or it can post a DACert proving availability of the data. The parent chain Inbox contract will reject any DACert that uses an invalid Keyset; the other aspects of DACert validity are checked by the child chain code.
 
@@ -65,7 +65,7 @@ The DAS software, based on configuration options, can store its data in local fi
 
 ## Sequencer-DAC interaction
 
-When the Arbitrum Sequencer produces a data <a data-quicklook-from="batch">batch</a> that it wants to post using the DAC, it sends the batch's data, along with the expiration time (normally, three weeks in the future) via RPC to all DAC members in parallel. Each DAC member stores the data in its backing store, indexed by the data's hash. Then the member signs the pair (hash, expiration time) using its BLS key, and returns the signature with a success indicator to the Sequencer.
+When the Arbitrum Sequencer produces a data <Term id="batch">batch</Term> that it wants to post using the DAC, it sends the batch's data, along with the expiration time (normally, three weeks in the future) via RPC to all DAC members in parallel. Each DAC member stores the data in its backing store, indexed by the data's hash. Then the member signs the pair (hash, expiration time) using its BLS key, and returns the signature with a success indicator to the Sequencer.
 
 Once the Sequencer has collected enough signatures, it can aggregate the signatures and create a valid DACert for the pair (hash, expiration time). The Sequencer then posts that DACert to the parent chain Inbox contract, making it available to the AnyTrust chain software on the child chain.
 

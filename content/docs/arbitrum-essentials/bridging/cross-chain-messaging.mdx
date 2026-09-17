@@ -10,20 +10,20 @@ sme: greatsoshiant
 
 import ArbitrumSdkInfo from '@site/docs/partials/_arbitrum-sdk-partial.mdx';
 
-The <a data-quicklook-from="arbitrum">Arbitrum</a> protocol and related tooling make it easy for developers to build cross-chain applications; i.e., applications that involve sending messages from Ethereum to an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, and/or from an Arbitrum chain to Ethereum.
+The <Term id="arbitrum">Arbitrum</Term> protocol and related tooling make it easy for developers to build cross-chain applications; i.e., applications that involve sending messages from Ethereum to an <Term id="arbitrum-chain">Arbitrum chain</Term>, and/or from an Arbitrum chain to Ethereum.
 
 <ArbitrumSdkInfo />
 
 ## Ethereum-to-Arbitrum messaging
 
-Creating an arbitrary parent-to-child chain contract call occurs via the Inbox's `createRetryableTicket` method. Upon publishing the <a data-quicklook-from="parent-chain">parent chain</a> <a data-quicklook-from="transaction">transaction</a>, the <a data-quicklook-from="child-chain">child chain</a> side will typically be included within minutes. Commonly, the child chain execution will automatically succeed, but if it reverts, it can be re-executed via a call to the `redeem` method of the [`ArbRetryableTx`](/docs/arbitrum-essentials/precompiles/reference#arbretryabletx) <a data-quicklook-from="precompile">precompile</a>.
+Creating an arbitrary parent-to-child chain contract call occurs via the Inbox's `createRetryableTicket` method. Upon publishing the <Term id="parent-chain">parent chain</Term> <Term id="transaction">transaction</Term>, the <Term id="child-chain">child chain</Term> side will typically be included within minutes. Commonly, the child chain execution will automatically succeed, but if it reverts, it can be re-executed via a call to the `redeem` method of the [`ArbRetryableTx`](/docs/arbitrum-essentials/precompiles/reference#arbretryabletx) <Term id="precompile">precompile</Term>.
 
 - **How-to guide**: [How to bridge from the parent chain to the child chain](/docs/arbitrum-essentials/bridging/deposit/eth-and-messages)
 - **Protocol details**: [Parent to child chain messaging](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging)
 
 ## Arbitrum-to-Ethereum messaging
 
-Similarly, child chain contracts can send arbitrary messages for execution on the parent chain. These are initiated via calls to the [`ArbSys`](/docs/arbitrum-essentials/precompiles/reference#arbsys) precompile contract's `sendTxToL1` method. Upon <a data-quicklook-from="confirmation">confirmation</a> (about one week later), you can execute them by retrieving the relevant data via a call to the `NodeInterface` contract's `constructOutboxProof` method, and then calling the `Outbox`'s `executeTransaction` method.
+Similarly, child chain contracts can send arbitrary messages for execution on the parent chain. These are initiated via calls to the [`ArbSys`](/docs/arbitrum-essentials/precompiles/reference#arbsys) precompile contract's `sendTxToL1` method. Upon <Term id="confirmation">confirmation</Term> (about one week later), you can execute them by retrieving the relevant data via a call to the `NodeInterface` contract's `constructOutboxProof` method, and then calling the `Outbox`'s `executeTransaction` method.
 
 - **How-to guide**: [How to bridge to parent chain from child chain](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages)
 - **Protocol details**: [Child to parent chain messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging)

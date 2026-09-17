@@ -13,11 +13,11 @@ This document explains the protocol-level concepts of child-to-parent messaging.
 
 :::
 
-<a data-quicklook-from="arbitrum">Arbitrum</a>'s <a data-quicklook-from="outbox">outbox</a> system allows arbitrary child-to-parent chain contract calls, i.e., messages initiated from the child chain that will eventually resolve through execution on the parent chain.
+<Term id="arbitrum">Arbitrum</Term>'s <Term id="outbox">outbox</Term> system allows arbitrary child-to-parent chain contract calls, i.e., messages initiated from the child chain that will eventually resolve through execution on the parent chain.
 
 Child-to-parent chain messages (i.e., outgoing messages) bear some things in common with Arbitrum’s [parent chain to child chain messages](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging), which are “in reverse” with differences, which we’ll explore in this section.
 
-Executing one of these messages on the parent chain requires the containing <a data-quicklook-from="assertion">assertion</a> to be confirmed, which is a stronger guarantee than a batch reaching the parent chain. [Finality](/docs/how-arbitrum-works/deep-dives/finality) explains why posting a batch does not make funds withdrawable.
+Executing one of these messages on the parent chain requires the containing <Term id="assertion">assertion</Term> to be confirmed, which is a stronger guarantee than a batch reaching the parent chain. [Finality](/docs/how-arbitrum-works/deep-dives/finality) explains why posting a batch does not make funds withdrawable.
 
 ## Protocol flow
 
@@ -25,7 +25,7 @@ Messages from child to parent chains are included in Arbitrum’s Rollup state a
 
 1. **Message creation on child chain**:
    - To initiate a child-to-parent chain message, a user or contract calls the `sendTxToL1` method on the [`ArbSys`](/docs/arbitrum-essentials/precompiles/reference#arbsys) precompile.
-2. **Message inclusion in an <a data-quicklook-from="assertion">assertion</a>**:
+2. **Message inclusion in an <Term id="assertion">assertion</Term>**:
    - The message is batched with other transactions and included in a [Rollup assertion](/docs/how-arbitrum-works/deep-dives/assertions).
    - Assertions are submitted to the Rollup contract on the parent chain and enter the [dispute window](/docs/how-arbitrum-works/deep-dives/assertions) (@@arbOneDisputeWindowDays=6.4@@ days).
 3. **Assertion confirmation**:
@@ -64,14 +64,14 @@ Each message progresses through three primary states:
 | Stage | Description |
 | ------------------------ | ----------- |
 | Posted on child chain | The message is sent via `ArbSys.sendTxToL1`. |
-| Waiting for finalization | The assertion containing the message is in the [<a data-quicklook-from="challenge-period">challenge period</a>](/docs/how-arbitrum-works/deep-dives/assertions) (~@@arbOneDisputeWindowDays=6.4@@ days) |
-| Confirmed and executable on the parent chain | If no [<a data-quicklook-from="fraud-proof">fraud proof</a>](/docs/how-arbitrum-works/bold/gentle-introduction) is submitted, the assertion is confirmed, and the message is available for execution in the outbox. |
+| Waiting for finalization | The assertion containing the message is in the [<Term id="challenge-period">challenge period</Term>](/docs/how-arbitrum-works/deep-dives/assertions) (~@@arbOneDisputeWindowDays=6.4@@ days) |
+| Confirmed and executable on the parent chain | If no [<Term id="fraud-proof">fraud proof</Term>](/docs/how-arbitrum-works/bold/gentle-introduction) is submitted, the assertion is confirmed, and the message is available for execution in the outbox. |
 
 ## Asset withdrawals
 
 ### **ETH** withdrawals
 
-Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and architecture, which we explain in detail in the [Token bridging](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#token-bridging) section of the **Bridging from a parent chain to a child chain** article. This section explains how the Arbitrum canonical bridge works for child-to-parent chain token bridging.
+Arbitrum has a canonical <Term id="bridge">bridge</Term> design and architecture, which we explain in detail in the [Token bridging](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#token-bridging) section of the **Bridging from a parent chain to a child chain** article. This section explains how the Arbitrum canonical bridge works for child-to-parent chain token bridging.
 
 The [`ArbSys`](/docs/arbitrum-essentials/precompiles/reference#arbsys) precompile provides a `withdrawEth` convenience method for withdrawing **ETH** from the child chain. This method burns the **ETH** on the child chain and creates a child-to-parent message. Like all child-to-parent messages, it requires execution on the parent chain after the challenge period via `Outbox.executeTransaction`.
 

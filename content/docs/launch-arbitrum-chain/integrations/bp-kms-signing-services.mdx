@@ -56,7 +56,7 @@ This config is nested under both the batch poster and the staker, so the full CL
 
 **Staker** uses the same fields under `--node.staker.data-poster.external-signer.*`.
 
-When `external-signer.url` is empty, the batch poster requires a local key. **AnyTrust chains need a local key even when external signing is enabled**: the external signer covers the batch transactions posted to the parent chain, but the requests sent to the <a data-quicklook-from="data-availability-committee-dac">DA Committee</a> are still signed with a local key. See [External signer support](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das#external-signer-support) for how to configure the separate key.
+When `external-signer.url` is empty, the batch poster requires a local key. **AnyTrust chains need a local key even when external signing is enabled**: the external signer covers the batch transactions posted to the parent chain, but the requests sent to the <Term id="data-availability-committee-dac">DA Committee</Term> are still signed with a local key. See [External signer support](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das#external-signer-support) for how to configure the separate key.
 
 ## What the signer service must implement
 

@@ -14,9 +14,9 @@ This documentation is for production sequencer deployments. If you want to set u
 
 ## Introduction
 
-The [sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) is a critical component of your <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from <a data-quicklook-from="arbitrum-full-node">full nodes</a>, queuing them, and returning <a data-quicklook-from="sequencer-feed">feed</a> messages to those full nodes. It subsequently sends queued transactions to <a data-quicklook-from="batch-poster">batch posters</a> for data posting.
+The [sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) is a critical component of your <Term id="arbitrum-chain">Arbitrum chain</Term> and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from <Term id="arbitrum-full-node">full nodes</Term>, queuing them, and returning <Term id="sequencer-feed">feed</Term> messages to those full nodes. It subsequently sends queued transactions to <Term id="batch-poster">batch posters</Term> for data posting.
 
-If your sequencer goes offline, the network cannot process new transactions arriving at the <a data-quicklook-from="child-chain">child chain</a>'s RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
+If your sequencer goes offline, the network cannot process new transactions arriving at the <Term id="child-chain">child chain</Term>'s RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ Before you begin, ensure you have:
 - Experience with Kubernetes and container orchestration
 - Access to a Kubernetes cluster with multiple availability zones
 - Understanding of Redis and cloud infrastructure
-- A properly configured <a data-quicklook-from="parent-chain">parent chain</a> node or RPC node endpoint
+- A properly configured <Term id="parent-chain">parent chain</Term> node or RPC node endpoint
 - Sequencer keys and permissions
 - Sufficient storage and compute resources
 
@@ -34,7 +34,7 @@ Before you begin, ensure you have:
 A high-availability sequencer deployment consists of seven key components:
 
 1. **CDN/Load Balancer**: Manages traffic routing and bot detection
-2. **<a data-quicklook-from="arbitrum-nitro">Nitro</a> full nodes**: Process read requests and forward write transactions
+2. **<Term id="arbitrum-nitro">Nitro</Term> full nodes**: Process read requests and forward write transactions
 3. **External Relays**: Handle public feed traffic
 4. **Sequencer Relays**: Combine feeds from all sequencers
 5. **Sequencers**: Multiple redundant transaction queuing machines

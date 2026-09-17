@@ -8,7 +8,7 @@ author: pete-vielhaber
 sme: Jason-W123
 ---
 
-During <a data-quicklook-from="arbitrum">Arbitrum</a> chain configuration, you'll choose the data availability (DA) option that best suits your needs. This choice affects how <a data-quicklook-from="transaction">transaction</a> data is stored and accessed for validation—impacting security, costs, and performance.
+During <Term id="arbitrum">Arbitrum</Term> chain configuration, you'll choose the data availability (DA) option that best suits your needs. This choice affects how <Term id="transaction">transaction</Term> data is stored and accessed for validation—impacting security, costs, and performance.
 
 Using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) lets you select from multiple DA options, tailoring your decision to meet your specific requirements.
 
@@ -16,19 +16,19 @@ Using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk) lets y
 
 ### 1. Rollup mode (Ethereum/parent chain DA)
 
-This is the default option for chains that prioritize security. Transaction data is posted to the <a data-quicklook-from="parent-chain">parent chain</a> as calldata or blobs (after [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844)), using Ethereum's DA layer.
+This is the default option for chains that prioritize security. Transaction data is posted to the <Term id="parent-chain">parent chain</Term> as calldata or blobs (after [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844)), using Ethereum's DA layer.
 
 - Set `DataAvailabilityCommittee` to `false` in your chain config using the Chain SDK. No additional steps are required.
 
 ### 2. AnyTrust mode
 
-This mode uses an external Data Availability Committee (DAC), which is a group of permissioned nodes that you choose and run, or outsource to a Rollup-as-a-Service (<a data-quicklook-from="raas">RaaS</a>). Instead of posting all the data to the parent chain, the <a data-quicklook-from="batch">batch</a> poster sends a lightweight <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> (DACert) signed by the required number of DAC members (configurable). The data is stored offchain and made available when needed.
+This mode uses an external Data Availability Committee (DAC), which is a group of permissioned nodes that you choose and run, or outsource to a Rollup-as-a-Service (<Term id="raas">RaaS</Term>). Instead of posting all the data to the parent chain, the <Term id="batch">batch</Term> poster sends a lightweight <Term id="data-availability-certificate">Data Availability Certificate</Term> (DACert) signed by the required number of DAC members (configurable). The data is stored offchain and made available when needed.
 
 - Set `DataAvailabilityCommittee` to `true` in your chain config.
 - Deploy a Data Availability Server (DAS) for each DAC member using Nitro's DAS software.
 - Generate a keyset (BLS public keys and quorum threshold) from DAC members.
 - Register the generated keyset on the `SequencerInbox` contract after deployment.
-- Configure nodes (<a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, validators) to connect to the DAS endpoints (via REST/RPC aggregators).
+- Configure nodes (<Term id="sequencer">sequencer</Term>, <Term id="batch-poster">batch poster</Term>, validators) to connect to the DAS endpoints (via REST/RPC aggregators).
 
 For a complete, detailed set of instructions on setting up DAC, DAS, and generating keysets, refer to [Get started](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started).
 

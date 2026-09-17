@@ -11,7 +11,7 @@ import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-Deploying new <a data-quicklook-from='arbitrum-chain'>Arbitrum chains</a> is done through a [`RollupCreator`](/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain. To assist with these operations, the Arbitrum chain SDK contains a series of tools and scripts that help create and manage your chain(s). Its capabilities include:
+Deploying new <Term id="arbitrum-chain">Arbitrum chains</Term> is done through a [`RollupCreator`](/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain. To assist with these operations, the Arbitrum chain SDK contains a series of tools and scripts that help create and manage your chain(s). Its capabilities include:
 
 - Configuration and deployment of your Arbitrum chain's core contracts
 - Configuration and deployment of the chain's TokenBridge contracts
@@ -33,14 +33,14 @@ There are two main types of Arbitrum chains. Review the following options to det
 #### Rollup
 
 - **Description**
-  - Offers Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
+  - Offers Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to <Term id="arbitrum-one">Arbitrum One</Term>.
 - **Use case**
   - Ideal for applications that require high security guarantees.
 
 #### AnyTrust
 
 - **Description**
-  - Implements the [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol), relying on an external <a data-quicklook-from='data-availability-committee-dac'>Data Availability Committee (DAC)</a> to store data and provide it on-demand, effectively using it as its Data Availability (DA) layer.
+  - Implements the [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol), relying on an external <Term id="data-availability-committee-dac">Data Availability Committee (DAC)</Term> to store data and provide it on-demand, effectively using it as its Data Availability (DA) layer.
 - **Use case**
   - Suitable for applications that require lower transaction fees.
 
@@ -64,9 +64,9 @@ Your Arbitrum chain's token bridge contracts allow **ERC-20** tokens to move bet
 
 The four steps above run through two separate factory contracts, in order. Knowing which one does what makes the deployment sequence easier to reason about when something fails partway.
 
-`RollupCreator` runs first. It deploys your chain's core contracts — the Rollup, the <a data-quicklook-from="sequencer-inbox">sequencer inbox</a>, the <a data-quicklook-from="delayed-inbox">delayed inbox</a>, the <a data-quicklook-from="outbox">outbox</a>, and the bridge — and sends the initialization messages that bring the chain to life.
+`RollupCreator` runs first. It deploys your chain's core contracts — the Rollup, the <Term id="sequencer-inbox">sequencer inbox</Term>, the <Term id="delayed-inbox">delayed inbox</Term>, the <Term id="outbox">outbox</Term>, and the bridge — and sends the initialization messages that bring the chain to life.
 
-`TokenBridgeCreator` runs afterward. It depends on `RollupCreator` having already run: the factory contract takes your chain's `inbox` address as input (the SDK accepts your `rollup` address and resolves the inbox for you), deploys the parent chain half of the token bridge, and sends messages to the <a data-quicklook-from="child-chain">child chain</a> to deploy the counterpart contracts there.
+`TokenBridgeCreator` runs afterward. It depends on `RollupCreator` having already run: the factory contract takes your chain's `inbox` address as input (the SDK accepts your `rollup` address and resolves the inbox for you), deploys the parent chain half of the token bridge, and sends messages to the <Term id="child-chain">child chain</Term> to deploy the counterpart contracts there.
 
 Two consequences follow from that ordering:
 

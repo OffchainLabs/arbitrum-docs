@@ -7,7 +7,7 @@ sme: jose-franco
 ---
 
 <p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
+  <Term id="arbitrum-anytrust-protocol">AnyTrust</Term> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <Term id="parent-chain">parent chain</Term> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
 </p>
 
 This section offers information and a series of how-to guides to help you along the process of setting up a Data Availability Committee. These guides target two audiences: Committee members who wish to deploy a Data Availability Server, and chain owners who wish to configure their chain with the information of the Committee.
@@ -20,7 +20,7 @@ Committee members will need to run a DAS. To do that, they will first need to ge
 
 Here's a basic checklist of actions to complete for DAC members:
 
-- [Deploy a DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das). Send the following information to the <a data-quicklook-from="chain-owner">chain owner</a>:
+- [Deploy a DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das). Send the following information to the <Term id="chain-owner">chain owner</Term>:
   - Public BLS key
   - The https URL for the RPC endpoint which includes some random string (e.g., das.your-chain.io/rpc/randomstring123), communicated through a secure channel
   - The https URL for the REST endpoint (e.g., das.your-chain.io/rest)
@@ -29,7 +29,7 @@ Here's a basic checklist of actions to complete for DAC members:
 
 ## If you are a chain owner
 
-Chain owners will need to gather the information from the committee members to craft the necessary data to update their chain and the <a data-quicklook-from="batch-poster">batch poster</a> (more information in [How to configure the DAC in your chain](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/configure-dac)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das#testing-the-das) and [How to deploy a mirror DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das#testing-the-das).
+Chain owners will need to gather the information from the committee members to craft the necessary data to update their chain and the <Term id="batch-poster">batch poster</Term> (more information in [How to configure the DAC in your chain](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/configure-dac)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das#testing-the-das) and [How to deploy a mirror DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das#testing-the-das).
 
 Here's a basic checklist of actions to complete for chain owners:
 

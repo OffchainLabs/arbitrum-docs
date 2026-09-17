@@ -8,9 +8,9 @@ author: pete-vielhaber
 sme: TBD
 ---
 
-This guide covers operational issues that <a data-quicklook-from="validator">validator</a> operators encounter after setup, with guidance on diagnosing root causes and resolving them. For initial setup, see [How to run a validator](/docs/run-a-node/more-types/run-validator-node). For the metrics and alerts to watch, see the validator section of [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations). For sequencing a <a data-quicklook-from="bold">BoLD</a> upgrade, see the [BoLD upgrade playbook](/docs/launch-arbitrum-chain/operate/bold-upgrade-playbook).
+This guide covers operational issues that <Term id="validator">validator</Term> operators encounter after setup, with guidance on diagnosing root causes and resolving them. For initial setup, see [How to run a validator](/docs/run-a-node/more-types/run-validator-node). For the metrics and alerts to watch, see the validator section of [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations). For sequencing a <Term id="bold">BoLD</Term> upgrade, see the [BoLD upgrade playbook](/docs/launch-arbitrum-chain/operate/bold-upgrade-playbook).
 
-Most of this guide applies to both the legacy staker and the <a data-quicklook-from="bold">BoLD</a> staker. Where behavior differs, this guide calls it out.
+Most of this guide applies to both the legacy staker and the <Term id="bold">BoLD</Term> staker. Where behavior differs, this guide calls it out.
 
 ## Validation strategies in operation
 
@@ -18,8 +18,8 @@ The [validator setup guide](/docs/run-a-node/more-types/run-validator-node#valid
 
 | Strategy       | Operational notes                                                                                                                                                                                                                                                                                                                                                                                     |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Watchtower`   | Default. Takes no onchain action and needs no <a data-quicklook-from="wallet">wallet</a> or bond. Logs: `found incorrect assertion in watchtower mode` (legacy) or `Detected invalid assertion, but not configured to post a rival stake` (BoLD) on disagreement.                                                                                                                                     |
-| `Defensive`    | Acts only when it finds a bad <a data-quicklook-from="assertion">assertion</a>: it bonds and posts the correct rival assertion. On a BoLD chain it does not open the <a data-quicklook-from="challenge">challenge</a> itself — that requires `ResolveNodes` or `MakeNodes`. Idle in normal operation, so an absence of onchain activity is not a fault signal.                                        |
+| `Watchtower`   | Default. Takes no onchain action and needs no <Term id="wallet">wallet</Term> or bond. Logs: `found incorrect assertion in watchtower mode` (legacy) or `Detected invalid assertion, but not configured to post a rival stake` (BoLD) on disagreement.                                                                                                                                     |
+| `Defensive`    | Acts only when it finds a bad <Term id="assertion">assertion</Term>: it bonds and posts the correct rival assertion. On a BoLD chain it does not open the <Term id="challenge">challenge</Term> itself — that requires `ResolveNodes` or `MakeNodes`. Idle in normal operation, so an absence of onchain activity is not a fault signal.                                        |
 | `StakeLatest`  | Pre-BoLD chains only. Not available on BoLD chains.                                                                                                                                                                                                                                                                                                                                                   |
 | `ResolveNodes` | Resolves assertions **that already exist** — on legacy chains it bonds on them; on BoLD chains it confirms them and can open challenges. It does not create routine successor assertions (it still posts the correct rival when it detects a bad one), so a chain whose validators are all `ResolveNodes` will stop advancing. At least one `MakeNodes` validator is required to post new assertions. |
 | `MakeNodes`    | Creates assertions, resolves unconfirmed ones, and challenges bad ones.                                                                                                                                                                                                                                                                                                                               |
@@ -32,7 +32,7 @@ A validator bonds once. Changing strategy—for example from `MakeNodes` to `Def
 
 <VanillaAdmonition type="caution" title="Multiple MakeNodes validators produce expected reverts">
 
-If more than one `MakeNodes` validator runs on the same chain, they may attempt to create the same assertion simultaneously. Only one succeeds; the others revert. These reverts are normal contention, not a malfunction. Do not alert on them individually—alert on assertions failing to appear at all. See [`arb/validator/poster/error_posting_assertion`](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the counter to watch, and expect a nonzero baseline when you run redundant <a data-quicklook-from="proposer">proposers</a>.
+If more than one `MakeNodes` validator runs on the same chain, they may attempt to create the same assertion simultaneously. Only one succeeds; the others revert. These reverts are normal contention, not a malfunction. Do not alert on them individually—alert on assertions failing to appear at all. See [`arb/validator/poster/error_posting_assertion`](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the counter to watch, and expect a nonzero baseline when you run redundant <Term id="proposer">proposers</Term>.
 
 </VanillaAdmonition>
 
@@ -49,7 +49,7 @@ Four flags control assertion timing, and they are frequently confused with one a
 
 Two rules to check when tuning these:
 
-- **The posting interval must exceed the Rollup contract's `minimumAssertionPeriod`.** That is an onchain constraint measured in <a data-quicklook-from="parent-chain">parent-chain</a> blocks (`block.number` units — on an Arbitrum parent these track the underlying L1 block number, not the Arbitrum block height). The validator checks it before posting and waits until enough blocks have passed, so a shorter posting interval silently caps you at the onchain floor rather than causing reverted transactions. Read `minimumAssertionPeriod` from your Rollup contract rather than assuming the default.
+- **The posting interval must exceed the Rollup contract's `minimumAssertionPeriod`.** That is an onchain constraint measured in <Term id="parent-chain">parent-chain</Term> blocks (`block.number` units — on an Arbitrum parent these track the underlying L1 block number, not the Arbitrum block height). The validator checks it before posting and waits until enough blocks have passed, so a shorter posting interval silently caps you at the onchain floor rather than causing reverted transactions. Read `minimumAssertionPeriod` from your Rollup contract rather than assuming the default.
 - **Do not tune the confirming interval to make confirmations happen sooner.** Confirmation timing is governed onchain by `confirmPeriodBlocks` and, where a challenge occurred, `challengeGracePeriodBlocks`. Lowering `--node.bold.assertion-confirming-interval` only increases how often the validator checks, which adds parent-chain RPC load without advancing anything.
 
 For the full flag list, see the [Nitro CLI flags reference](/docs/run-a-node/nitro/cli-flags-reference). For the onchain parameters, see the parameter table in [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#table-of-arbitrum-bold-parameters).
@@ -61,8 +61,8 @@ For the full flag list, see the [Nitro CLI flags reference](/docs/run-a-node/nit
 | Value       | Trade-off                                                                                                                                                     |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `finalized` | Default and safest. The validator only acts on data that cannot be reorganized, at the cost of lagging roughly two epochs behind on an Ethereum parent chain. |
-| `safe`      | Shorter lag, small <a data-quicklook-from="reorg">reorg</a> exposure.                                                                                         |
-| `latest`    | No lag, full <a data-quicklook-from="reorg">reorg</a> exposure. The validator may act on data that later disappears.                                          |
+| `safe`      | Shorter lag, small <Term id="reorg">reorg</Term> exposure.                                                                                         |
+| `latest`    | No lag, full <Term id="reorg">reorg</Term> exposure. The validator may act on data that later disappears.                                          |
 
 ### `error initializing staker: could not create assertion chain: no contract code at given address` {#no-contract-code}
 
@@ -106,7 +106,7 @@ If a validator transaction has been pending for more than roughly 10 minutes, it
 
 <VanillaAdmonition type="caution" title="The staker queues only one transaction by default">
 
-`--node.staker.data-poster.max-mempool-transactions` defaults to **`1`**, compared to `18` for the <a data-quicklook-from="batch-poster">batch poster</a>. A single stuck transaction therefore blocks every subsequent validator action until it clears. This is the first thing to check, and the difference from batch poster behavior surprises most operators.
+`--node.staker.data-poster.max-mempool-transactions` defaults to **`1`**, compared to `18` for the <Term id="batch-poster">batch poster</Term>. A single stuck transaction therefore blocks every subsequent validator action until it clears. This is the first thing to check, and the difference from batch poster behavior surprises most operators.
 
 </VanillaAdmonition>
 
@@ -139,7 +139,7 @@ Before attempting it, note the constraints:
 - **It is not permissionless.** `onlyValidator` restricts the caller to the allowlist on a permissioned chain. If you misconfigured the allowlist, fix it first.
 - **`prevAssertionHash` must be the current latest confirmed assertion.** Assertions confirm in order; you cannot skip ahead.
 - **`confirmPeriodBlocks` must have elapsed** since the assertion was created.
-- **If the parent assertion has more than one child**, a <a data-quicklook-from="challenge">challenge</a> occurred. The winning <a data-quicklook-from="edge">edge</a> must be confirmed, and `challengeGracePeriodBlocks` must have elapsed since that edge was confirmed. The grace period exists to give the <a data-quicklook-from="chain-owner">chain owner</a> or security council a window to intervene—do not attempt to route around it.
+- **If the parent assertion has more than one child**, a <Term id="challenge">challenge</Term> occurred. The winning <Term id="edge">edge</Term> must be confirmed, and `challengeGracePeriodBlocks` must have elapsed since that edge was confirmed. The grace period exists to give the <Term id="chain-owner">chain owner</Term> or security council a window to intervene—do not attempt to route around it.
 
 ## Related monitoring
 

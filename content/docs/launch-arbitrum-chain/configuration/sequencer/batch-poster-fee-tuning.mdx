@@ -8,13 +8,13 @@ author: pete-vielhaber
 sme: jason-w123
 ---
 
-The [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the <a data-quicklook-from="parent-chain">parent chain</a>. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions aren't included promptly.
+The [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the <Term id="parent-chain">parent chain</Term>. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions aren't included promptly.
 
 This guide covers how to tune fee-related parameters to balance cost efficiency against batch posting reliability. For initial setup of blob posting, see [Enabling blob transactions](/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs). For general batch poster configuration, see [Run a batch poster](/docs/run-a-node/run-batch-poster).
 
 ## Blob transaction fee configuration
 
-[`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) introduces a separate fee market for blob <a data-quicklook-from="transaction">transactions</a>. Blob transactions have two fee components:
+[`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) introduces a separate fee market for blob <Term id="transaction">transactions</Term>. Blob transactions have two fee components:
 
 - **Blob base fee**: Set by the protocol based on blob demand. This isn't directly configurable—it's determined by the parent chain's blob gas pricing mechanism.
 - **Priority fee (tip cap)**: The amount the batch poster is willing to pay per gas as a tip to incentivize block producers to include the blob transaction.

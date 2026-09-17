@@ -40,7 +40,7 @@ Go reports its total memory usage via `runtime.MemStats.Sys`, which includes the
 
 ### CGO allocations (Pebble and Stylus)
 
-Nitro's on-disk database, <a data-quicklook-from="pebble">Pebble</a>, allocates its block cache and memtables through CGO `calloc()` calls (see `pebble/internal/manual/manual.go` in the source). These allocations go through the C memory allocator and are out of scope for Go's memory tracking.
+Nitro's on-disk database, <Term id="pebble">Pebble</Term>, allocates its block cache and memtables through CGO `calloc()` calls (see `pebble/internal/manual/manual.go` in the source). These allocations go through the C memory allocator and are out of scope for Go's memory tracking.
 
 **Pebble block cache** is the largest CGO consumer. It caches frequently read database blocks in memory to avoid disk I/O. Its size is set directly by the `database-cache` configuration parameter.
 
@@ -317,7 +317,7 @@ nitro \
 
 #### Archive node with 128 GB RAM
 
-<a data-quicklook-from="archive-node">Archive nodes</a> benefit from larger caches to reduce disk I/O for historical queries:
+<Term id="archive-node">Archive nodes</Term> benefit from larger caches to reduce disk I/O for historical queries:
 
 ```shell
 # Non-Go: 4096 + 2048 + 1200 + 800 + 256 + 128 + 300 = 8,828 MB

@@ -7,10 +7,10 @@ author: pete-vielhaber
 sme: Mehdi
 ---
 
-You can submit transactions to <a data-quicklook-from="arbitrum">Arbitrum</a> through two main pathways:
+You can submit transactions to <Term id="arbitrum">Arbitrum</Term> through two main pathways:
 
-1. **Through the [<a data-quicklook-from="sequencer">Sequencer</a>](/docs/how-arbitrum-works/deep-dives/sequencer)**: The standard method for most transactions.
-2. **Bypassing the Sequencer**: Using the [<a data-quicklook-from="delayed-inbox">Delayed Inbox</a>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) contract on the parent chain.
+1. **Through the [<Term id="sequencer">Sequencer</Term>](/docs/how-arbitrum-works/deep-dives/sequencer)**: The standard method for most transactions.
+2. **Bypassing the Sequencer**: Using the [<Term id="delayed-inbox">Delayed Inbox</Term>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) contract on the parent chain.
 
 This guide explains both methods, when to use each, and how they flow through Arbitrum’s transaction lifecycle.
 
@@ -41,7 +41,7 @@ The Sequencer processes most transactions on Arbitrum. You have four options for
 
 ### Public RPC
 
-Arbitrum provides public RPC endpoints for <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, and Arbitrum Sepolia. These endpoints are rate-limited, making them best for:
+Arbitrum provides public RPC endpoints for <Term id="arbitrum-one">Arbitrum One</Term>, <Term id="arbitrum-nova">Arbitrum Nova</Term>, and Arbitrum Sepolia. These endpoints are rate-limited, making them best for:
 
 - Testing and development
 - Light usage and general interactions
@@ -62,7 +62,7 @@ You can find a list of supported third-party providers [here](https://docs.arbit
 
 ### Arbitrum nodes
 
-Running your own Arbitrum node provides maximum control and privacy. Your transactions connect to the Sequencer through the [<a data-quicklook-from="sequencer-feed">Sequencer Feed</a>](/docs/how-arbitrum-works/deep-dives/sequencer#persistence-and-broadcast). Consider this option if you need:
+Running your own Arbitrum node provides maximum control and privacy. Your transactions connect to the Sequencer through the [<Term id="sequencer-feed">Sequencer Feed</Term>](/docs/how-arbitrum-works/deep-dives/sequencer#persistence-and-broadcast). Consider this option if you need:
 
 - Complete control over transaction handling
 - Maximum privacy

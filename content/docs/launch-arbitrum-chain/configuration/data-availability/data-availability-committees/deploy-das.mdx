@@ -7,7 +7,7 @@ sme: Mehdi Salehi, jose-franco
 ---
 
 <p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
+  <Term id="arbitrum-anytrust-protocol">AnyTrust</Term> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <Term id="parent-chain">parent chain</Term> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
 </p>
 
 In this how-to, you'll learn how to deploy a DAS that exposes:
@@ -24,9 +24,9 @@ This how-to assumes that you're familiar with:
 
 ## How does a DAS work?
 
-A Data Availability Server (DAS) allows storage and retrieval of <a data-quicklook-from="transaction">transaction</a> data batches for an AnyTrust chain. It's the software that the members of the DAC run in order to provide the Data Availability service.
+A Data Availability Server (DAS) allows storage and retrieval of <Term id="transaction">transaction</Term> data batches for an AnyTrust chain. It's the software that the members of the DAC run in order to provide the Data Availability service.
 
-DA servers accept time-limited requests to store data <a data-quicklook-from="batch">batches</a> from the sequencer of an AnyTrust chain, and return a signed certificate promising to store that data during the established time. They also respond to requests to retrieve the data batches.
+DA servers accept time-limited requests to store data <Term id="batch">batches</Term> from the sequencer of an AnyTrust chain, and return a signed certificate promising to store that data during the established time. They also respond to requests to retrieve the data batches.
 
 ## Configuration options
 
@@ -88,7 +88,7 @@ As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `
 Gather the following information:
 
 - The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@`
-- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/docs/arbitrum-essentials/reference/node-providers#third-party-rpc-providers) or [run your own node](/docs/run-a-node/run-full-node) to prevent being rate limited.
+- An RPC endpoint for the <Term id="parent-chain">parent chain</Term>. It is recommended to use a [third-party provider RPC](/docs/arbitrum-essentials/reference/node-providers#third-party-rpc-providers) or [run your own node](/docs/run-a-node/run-full-node) to prevent being rate limited.
 - The `SequencerInbox` contract address in the parent chain.
 
 - If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept.
@@ -117,7 +117,7 @@ Depending on the storage backend you use for your DAS, you'll need to configure 
 
 ### Step 1: Generate the BLS keypair
 
-Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
+Next, we'll generate a BLS keypair. The private key will be used to sign the <Term id="data-availability-certificate">Data Availability Certificates (DACert)</Term> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
 
 The BLS keypair must be generated using the `anytrusttool keygen` utility. Later, it will be passed to the DAS by file or command line.
 
@@ -416,7 +416,7 @@ curl -I <YOUR REST ENDPOINT>/health
 
 ### Test 4: Retrieve data from a batch poster transaction
 
-You can also do a test to retrieve the transaction data posted by a <a data-quicklook-from="batch-poster">Batch Poster</a> transaction. The transaction will contain both keyset and data hash information in its `data` field in method `addSequencerL2BatchFromOrigin(uint256 sequenceNumber, bytes data,uint256 afterDelayedMessagesRead, address gasRefunder,uint256 prevMessageCount,uint256 newMessageCount)`.
+You can also do a test to retrieve the transaction data posted by a <Term id="batch-poster">Batch Poster</Term> transaction. The transaction will contain both keyset and data hash information in its `data` field in method `addSequencerL2BatchFromOrigin(uint256 sequenceNumber, bytes data,uint256 afterDelayedMessagesRead, address gasRefunder,uint256 prevMessageCount,uint256 newMessageCount)`.
 
 After you decode a batch poster transaction and get its `data` within the function data, you can continue to decode the `data` as follows:
 
@@ -443,13 +443,13 @@ Keep in mind the following information when running the DAS.
 
 A DAS should strive not to miss any batch of information sent by the sequencer. Although it can use a REST aggregator to fetch missing information from other DA servers, it should aim to synchronize all received information directly. To facilitate this, avoid placing any load balancing layer before the DAS, enabling it to handle all incoming traffic.
 
-Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the <a data-quicklook-from="chain-owner">chain owner</a> through a private channel to maintain security.
+Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the <Term id="chain-owner">chain owner</Term> through a private channel to maintain security.
 
 Finally, as explained in the previous section, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
 
 ## External signer support
 
-By default the batch poster uses the same ECDSA key to sign `das_store` requests as it uses to sign the batch transactions sent to the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract. Many installations use an external signer for securing the batch poster's key. While using an external signer is suported for signing batch transactions, it is not currently supported for signing the requests sent to the DA Committee. Currently, if you want to use an external signer for the batch transactions together with AnyTrust, you must generate a separate key for signing the requests sent to the DA Committee. If a <a data-quicklook-from="wallet">wallet</a> file is used the account must be named "l1-batch-poster".
+By default the batch poster uses the same ECDSA key to sign `das_store` requests as it uses to sign the batch transactions sent to the <Term id="sequencer-inbox">Sequencer Inbox</Term> contract. Many installations use an external signer for securing the batch poster's key. While using an external signer is suported for signing batch transactions, it is not currently supported for signing the requests sent to the DA Committee. Currently, if you want to use an external signer for the batch transactions together with AnyTrust, you must generate a separate key for signing the requests sent to the DA Committee. If a <Term id="wallet">wallet</Term> file is used the account must be named "l1-batch-poster".
 
 The batch poster would need to have the configuration for the external signer
 

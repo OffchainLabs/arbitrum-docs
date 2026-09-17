@@ -13,7 +13,7 @@ Head over to [the Stylus quickstart](/docs/stylus/quickstart) if you'd like to u
 
 :::
 
-This quickstart is for web developers who want to start building **decentralized applications** using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
+This quickstart is for web developers who want to start building **decentralized applications** using <Term id="arbitrum">Arbitrum</Term>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
 
@@ -44,7 +44,7 @@ In the case of a compromised cloud host:
 
 Centralized third-party intermediaries represent a **single point of failure** that malicious actors can exploit. With a blockchain infrastructure such as Ethereum, we decentralize our vending machine's **business logic and data**, making this type of exploits nearly impossible.
 
-This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's permissionless, <a data-quicklook-from='trustless'>trustless</a>, decentralized network of nodes[^2] **while keeping costs low for you and your users**.
+This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's permissionless, <Term id="trustless">trustless</Term>, decentralized network of nodes[^2] **while keeping costs low for you and your users**.
 
 Let's implement the "Web3" version of the above vending machine using Arbitrum.
 
@@ -53,7 +53,7 @@ Let's implement the "Web3" version of the above vending machine using Arbitrum.
 <CustomDetails summary="VS Code">VS Code is the IDE we'll use to build our vending machine. See [code.visualstudio.com](https://code.visualstudio.com/) to install.</CustomDetails>
 
 <CustomDetails summary="Web3 wallet">
-  We will use Metamask as the <a data-quicklook-from="ethereum-wallet">wallet</a> to interact with our vending machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
+  We will use Metamask as the <Term id="ethereum-wallet">wallet</Term> to interact with our vending machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
 </CustomDetails>
 
 <CustomDetails summary="Yarn">Yarn is the package manager we'll use to install dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.</CustomDetails>
@@ -65,17 +65,17 @@ We'll address any remaining dependencies as we go.
 ## Ethereum and Arbitrum in a nutshell
 
 - **Ethereum**
-  - Ethereum is a decentralized network of [nodes](https://docs.prylabs.network/docs/concepts/nodes-networks) that use Ethereum's client software (like [Offchain's Prysm](https://www.offchainlabs.com/prysm/docs) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
+  - Ethereum is a decentralized network of [nodes](https://docs.prylabs.network/docs/concepts/nodes-networks) that use Ethereum's client software (like [Offchain's Prysm](https://www.offchainlabs.com/prysm/docs) to maintain a public <Term id="blockchain">blockchain</Term> data structure.
   - The data within Ethereum's blockchain data structure changes one transaction at a time.
-  - <a data-quicklook-from="smart-contract">Smart contracts</a> are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
+  - <Term id="smart-contract">Smart contracts</Term> are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
   - You can use smart contracts to build decentralized apps that use Ethereum's network to process transactions and store data. Think of smart contracts as your app's backend
   - Apps let users carry their data and identity between applications without trusting centralized service providers.
   - People who run Ethereum validator nodes[^3] can earn **ETH** for processing and validating transactions on behalf of users and apps.
   - These transactions can be expensive when the network is under heavy load.
 - **Arbitrum**
   - Arbitrum is a finance-native platform providing infrastructure for building applications.
-  - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is a child chain that implements the
-    <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup protocol</a>. See the [Arbitrum chains overview](/docs/arbitrum-essentials/public-chains) for a comparison of Arbitrum One, Nova, and the available testnets.
+  - <Term id="arbitrum-one">Arbitrum One</Term> is a child chain that implements the
+    <Term id="arbitrum-rollup-protocol">Arbitrum Rollup protocol</Term>. See the [Arbitrum chains overview](/docs/arbitrum-essentials/public-chains) for a comparison of Arbitrum One, Nova, and the available testnets.
   - You can use Arbitrum One to build user-friendly apps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high-security standards[^4].
 
  <!-- Note: add simple diagrams representing smart contracts development cycle  -\-> -->
@@ -467,7 +467,7 @@ Now, let's decentralize our vending machine's business logic and data by porting
 ## Review the Solidity vending machine
 
 Here is a Solidity implementation of the vending machine.
-Solidity is a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it is deployable to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
+Solidity is a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it is deployable to any Ethereum-compatible blockchain, including Ethereum mainnet, <Term id="arbitrum-one">Arbitrum One</Term>, and <Term id="arbitrum-nova">Arbitrum Nova</Term>.
 
 <CustomDetails summary="VendingMachine.sol">
 

@@ -8,13 +8,13 @@ author: petevielhaber
 sme: petevielhaber
 ---
 
-Your Arbitrum chain charges users for the cost of posting their transaction data to the <a data-quicklook-from="parent-chain">parent chain</a>. Four `ArbOwner` methods control how that charge adjusts over time. Tune them when fee revenue drifts away from what your <a data-quicklook-from="batch-poster">batch poster</a> actually spends.
+Your Arbitrum chain charges users for the cost of posting their transaction data to the <Term id="parent-chain">parent chain</Term>. Four `ArbOwner` methods control how that charge adjusts over time. Tune them when fee revenue drifts away from what your <Term id="batch-poster">batch poster</Term> actually spends.
 
-These parameters are separate from congestion pricing. They set what the chain charges for data, not what it charges when demand exceeds the <a data-quicklook-from="gas-target">gas target</a>. To tune congestion pricing, refer to the [Manage gas target](/docs/launch-arbitrum-chain/operate/gas-target) page.
+These parameters are separate from congestion pricing. They set what the chain charges for data, not what it charges when demand exceeds the <Term id="gas-target">gas target</Term>. To tune congestion pricing, refer to the [Manage gas target](/docs/launch-arbitrum-chain/operate/gas-target) page.
 
 ## How the pricing algorithm works
 
-<a data-quicklook-from="arbos">ArbOS</a> tracks a running surplus: the difference between what it has collected from users for data and what it owes the batch poster. At each update it adjusts the price per data unit to drive that surplus toward zero over a chosen time horizon.
+<Term id="arbos">ArbOS</Term> tracks a running surplus: the difference between what it has collected from users for data and what it owes the batch poster. At each update it adjusts the price per data unit to drive that surplus toward zero over a chosen time horizon.
 
 Two of the parameters below map directly onto that algorithm:
 
@@ -25,7 +25,7 @@ For the full derivation, refer to [gas and fees](/docs/how-arbitrum-works/deep-d
 
 ## The parameters
 
-Call all four methods on the <a data-quicklook-from="precompile">precompile</a> `ArbOwner` at address `0x0000000000000000000000000000000000000070`. Only a <a data-quicklook-from="chain-owner">chain owner</a> can call them. Calls from any other account revert.
+Call all four methods on the <Term id="precompile">precompile</Term> `ArbOwner` at address `0x0000000000000000000000000000000000000070`. Only a <Term id="chain-owner">chain owner</Term> can call them. Calls from any other account revert.
 
 | Method                                          | What it sets                                                       | Default             |
 | ----------------------------------------------- | ------------------------------------------------------------------ | ------------------- |

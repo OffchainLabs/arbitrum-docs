@@ -8,7 +8,7 @@ author: pete-vielhaber
 sme: Jason-W123
 ---
 
-This document covers the JSON-RPC methods exposed by <a data-quicklook-from="arbitrum">Arbitrum</a> Data Availability Servers (DAS) and the newer DAProvider interface, as defined in the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk/) node configuration types [`NodeConfig.generated.ts`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/types/NodeConfig.generated.ts)
+This document covers the JSON-RPC methods exposed by <Term id="arbitrum">Arbitrum</Term> Data Availability Servers (DAS) and the newer DAProvider interface, as defined in the [Arbitrum Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk/) node configuration types [`NodeConfig.generated.ts`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/src/types/NodeConfig.generated.ts)
 
 <VanillaAdmonition type="info" title="Config paths renamed in Nitro v3.10.0">
 
@@ -22,7 +22,7 @@ DAS servers exposed two interfaces for data storage and retrieval:
 
 | Interface | Port (typical) | Used by                                                | Purpose                                                             |
 | --------- | -------------- | ------------------------------------------------------ | ------------------------------------------------------------------- |
-| RPC       | `:9876`        | <a data-quicklook-from="batch-poster">Batch Poster</a> | Store <a data-quicklook-from="batch">batch</a> data, obtain DACerts |
+| RPC       | `:9876`        | <Term id="batch-poster">Batch Poster</Term> | Store <Term id="batch">batch</Term> data, obtain DACerts |
 | REST      | `:9877`        | Nitro nodes                                            | Retrieve batch data by hash                                         |
 
 The RPC interface supports two storage modes:
@@ -95,7 +95,7 @@ Finalizes a chunked store session, signaling that all chunks have been transmitt
 **Behavior:**
 
 - Called once after all chunks have been sent via `das_sendChunk`
-- The DAS server assembles the chunks, stores the complete payload, and returns a signed DACert component (the server's <a data-quicklook-from="bls-signature">BLS Signature</a> over the data hash)
+- The DAS server assembles the chunks, stores the complete payload, and returns a signed DACert component (the server's <Term id="bls-signature">BLS Signature</Term> over the data hash)
 - On success, the server commits the data to its configured storage backend
 
 ## DAProvider RPC methods (newer interface)
@@ -283,7 +283,7 @@ Full config path: `node.da.anytrust.rpc-aggregator.backends` (JSON string)
 | `da.anytrust.request-timeout`            | `5s`                     | Store request timeout                                                                             |
 | `da.anytrust.panic-on-error`             | `false`                  | Crash on DAS errors (not recommended)                                                             |
 | `parent-chain.sequencer-inbox-address`   | —                        | SequencerInbox contract address (standalone `anytrustserver` only)                                |
-| `parent-chain.node-url`                  | —                        | <a data-quicklook-from="parent-chain">Parent chain</a> RPC URL (standalone `anytrustserver` only) |
+| `parent-chain.node-url`                  | —                        | <Term id="parent-chain">Parent chain</Term> RPC URL (standalone `anytrustserver` only) |
 | `batch-poster.anytrust-retention-period` | `360h`                   | How long DAS retains stored batches                                                               |
 | `rpc-aggregator.assumed-honest`          | —                        | H value for quorum (K=N+1-H)                                                                      |
 | `rpc-client.enable-chunked-store`        | `true`                   | Use streaming protocol                                                                            |

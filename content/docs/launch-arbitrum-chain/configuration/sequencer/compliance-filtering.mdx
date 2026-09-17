@@ -10,9 +10,9 @@ sme: gmehta2
 
 <VanillaAdmonition type="note">This feature is available through the ArbOS 61 upgrade, however off by default. We recommend adopting this feature at least 30 days after the release of ArbOS 61 on Arbitrum One.</VanillaAdmonition>
 
-New, optional components can be added to the <a data-quicklook-from='sequencer'>Sequencer</a> and <a data-quicklook-from='state-transition-function'>State Transition Function</a> (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
+New, optional components can be added to the <Term id="sequencer">Sequencer</Term> and <Term id="state-transition-function">State Transition Function</Term> (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
 
-The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the <a data-quicklook-from='delayed-inbox'>Delayed Inbox</a> on the parent chain.
+The chain owner may configure an external compliance service (e.g., TRM or Chainalysis) to define address-level policies. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered prior to execution, including transactions submitted via the <Term id="delayed-inbox">Delayed Inbox</Term> on the parent chain.
 
 ## Rationale
 
@@ -89,7 +89,7 @@ This design allows third-party liquidators and protocol contracts (e.g., Paxos, 
 
 ### Synchronization pipeline
 
-The restricted address list is distributed to Sequencer and <a data-quicklook-from='prechecker-node'>prechecker nodes</a> via a cloud-based pipeline:
+The restricted address list is distributed to Sequencer and <Term id="prechecker-node">prechecker nodes</Term> via a cloud-based pipeline:
 
 - The compliance provider periodically publishes a new hash list to a designated S3 bucket.
 - An SNS notification triggers ingestion into the chain operator's own S3 bucket.
@@ -108,7 +108,7 @@ Nodes are expected to always have a valid list in memory. On startup or restart,
 
 <VanillaAdmonition type="note">All the components above are available with ArbOS 61 (Elara).</VanillaAdmonition>
 
-Compliance Filtering is disabled by default. Chain owners must explicitly configure and enable each component. <a data-quicklook-from="activation">Activation</a> after chain deployment may require an ArbOS upgrade.
+Compliance Filtering is disabled by default. Chain owners must explicitly configure and enable each component. <Term id="activation">Activation</Term> after chain deployment may require an ArbOS upgrade.
 
 ## Security considerations
 
