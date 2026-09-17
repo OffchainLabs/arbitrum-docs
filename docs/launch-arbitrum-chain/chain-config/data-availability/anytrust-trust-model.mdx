@@ -84,8 +84,6 @@ Two measures help, and both are yours to take rather than the committee's:
 - **Run your own mirror DAS.** Anyone can run a server that syncs batch data and serves it over the REST API. A mirror you control means you can read your chain's history without asking the committee. Refer to [deploy a mirror DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das.mdx).
 - **Choose members that fail independently.** Five members in one data center under one operator give you `N` of 5 and the real resilience of 1. The protocol counts members; it does not check whether they are genuinely separate.
 
-<!-- this was a suggestion through the vanilla admonition -->
-
 ## What an auditor will ask you
 
 If you run an AnyTrust chain in a regulated setting, expect questions about the committee. The protocol does not answer them for you. Your keyset, your member agreements, and your governance do.
@@ -115,10 +113,6 @@ AnyTrust is a technical design. Whether a given configuration meets a specific r
 2. **Retention has a default and a floor.** The batch poster asks members to retain data for `360h` (15 days) by default, set by `node.batch-poster.anytrust-retention-period`. Separately, every node that reads a batch rejects a DACert that expires less than one week after the batch's maximum timestamp. Neither number is a permanent archive. If you must keep history, run an [archive DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#archive-da-servers).
 
 3. **Committee independence is a governance property, not a protocol property.** The chain owner can swap the whole keyset. An auditor who accepts your committee today is accepting your owner-key governance along with it.
-
-<!-- ============================================================= -->
-<!-- REVIEW NEEDED — regulated-industries section ends here.       -->
-<!-- ============================================================= -->
 
 ## Related pages
 
