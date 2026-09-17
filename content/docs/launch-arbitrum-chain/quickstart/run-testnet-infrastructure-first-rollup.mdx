@@ -31,11 +31,11 @@ The setup uses multiple sequencers with automatic failover, Redis for coordinati
 12. Verify
 13. Deploy the token bridge
 
-:::tip Run all steps in the same terminal
+<VanillaAdmonition type="tip" title="Run all steps in the same terminal">
 
 The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`, `$REDIS_URL`). Run Steps 1–11 in the **same terminal session** so these variables persist, or re-export them if you open a new terminal.
 
-:::
+</VanillaAdmonition>
 
 ## Prerequisites
 
@@ -158,11 +158,11 @@ NITRO_NODE_SEQ__COORDINATOR_MY__URL value:
 kubectl get pods -l app.kubernetes.io/name=nitro -w
 ```
 
-:::warning Set sequencer priority after deployment
+<VanillaAdmonition type="warning" title="Set sequencer priority after deployment">
 
 After deploying sequencers, you must set at least one sequencer in the priority list. Without this, no sequencer will be active, and your chain won’t produce blocks. Complete Step 10 to set priorities using the Sequencer Coordinator Manager, or set them directly in Redis.
 
-:::
+</VanillaAdmonition>
 
 ## Step 5: Deploy sequencer relays
 
@@ -244,11 +244,11 @@ configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-ke
 rm batch-poster-key.txt
 ```
 
-:::warning Do not add batch poster to sequencer priority
+<VanillaAdmonition type="warning" title="Do not add batch poster to sequencer priority">
 
 Do **not** add the batch poster to the Sequencer Coordinator Manager's sequencer priority list. Otherwise, it could become the active sequencer unintentionally.
 
-:::
+</VanillaAdmonition>
 
 ## Step 9: Deploy validator
 
@@ -284,11 +284,11 @@ rm validator-key.txt
 
 ## Step 10: Set up Sequencer Coordinator Manager and set priority
 
-:::warning Required for sequencer activation
+<VanillaAdmonition type="warning" title="Required for sequencer activation">
 
 This step is **required**, not optional.
 
-:::
+</VanillaAdmonition>
 
 You **must** set sequencer priority for your chain to work. Without setting a priority, no sequencer will be active. The Sequencer Coordinator Manager (SQM) provides a UI to manage the sequencer priority list. You can also set priority directly in Redis (advanced users).
 
@@ -329,17 +329,17 @@ When you first run SQM, all sequencers will be in the `--Not in priority list bu
 6. **Verify** one sequencer is marked with a `chosen` indicator (this is the active sequencer)
 7. **Press `q`** to quit
 
-:::tip Add all sequencers to priority list
+<VanillaAdmonition type="tip" title="Add all sequencers to priority list">
 
 For proper high availability with automatic failover, add all 3 sequencers to the priority list at different positions (1, 2, 3). The sequencer at position 1 becomes active. If it fails, position 2 takes over automatically.
 
-:::
+</VanillaAdmonition>
 
-:::warning
+<VanillaAdmonition type="warning">
 
 Do **not** add the batch poster to the priority list. The batch poster should never become the active sequencer.
 
-:::
+</VanillaAdmonition>
 
 Alternatively, you can press `a` to manually add a new sequencer by entering its URL. The URL must match the `my-url` configured for each sequencer (e.g., `http://sequencer-nitro-0.sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc`).
 

@@ -8,19 +8,19 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-:::caution Bridge counterparty risk
+<VanillaAdmonition type="caution" title="Bridge counterparty risk">
 
 While this feature allows an <Term id="arbitrum-chain">Arbitrum chain</Term> to use native interop tokens as gas tokens via third-party protocols, it introduces new trust assumptions. In a standard Arbitrum chain, the canonical bridge is the sole authority for minting the chain's gas token, inheriting the security of the <Term id="parent-chain">parent chain</Term>.
 
 However, by using a third-party <Term id="bridge">bridge</Term> for the chain's gas token, your chain's gas token—and thus its liveness—becomes directly dependent on the security and integrity of the third-party bridge provider.
 
-:::
+</VanillaAdmonition>
 
-:::info
+<VanillaAdmonition type="info">
 
 While Native Mint/Burn was introduced in [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos) 41, we strongly recommend that teams upgrade to [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) to enable this feature.
 
-:::
+</VanillaAdmonition>
 
 ## Recommended configuration
 
@@ -44,11 +44,11 @@ We suggest the following baseline or values for production chains:
 
 ## How to configure the feature for your chain
 
-:::info
+<VanillaAdmonition type="info">
 
 The native token mint/burn feature is currently not available for implementation at chain genesis. The ability to activate it during chain initialization will be part of a future release.
 
-:::
+</VanillaAdmonition>
 
 ### Enable the feature post-genesis
 
@@ -173,7 +173,7 @@ When the last native-token owner is removed, Nitro automatically re-opens canoni
 
 Filter event `OwnerActs(bytes4 indexed method, address indexed owner, bytes data)` with first index `0xbdb8f707` to get all results, and decode the latest result's data field to get the last valid timestamp. That timestamp would be the point after which `ArbOwner`'s can take action to `nativeTokenOwner` list.
 
-:::caution Testing Responsibility
+<VanillaAdmonition type="caution" title="Testing Responsibility">
 
 While Offchain Labs has conducted comprehensive [system tests](https://github.com/OffchainLabs/nitro/blob/master/system_tests/arbos_upgrade_test.go#L292)
 to verify the core ArbOS logic for native mint/burn functionality, this does not cover your specific
@@ -185,4 +185,4 @@ implementation.
 - Verify the security and collateralization of their specific third-party token providers (e.g., LayerZero, xERC20).
 - Ensure their custom configurations are compatible with their chain's unique environment.
 
-:::
+</VanillaAdmonition>

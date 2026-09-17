@@ -48,11 +48,11 @@ Call `Inbox.sendL2Message(bytes calldata message)` on the Arbitrum chain’s inb
 
 The child chain will process and execute the message as a regular transaction. This flow does not use retryables, so if the transaction fails, it is not auto-retried and the nonce is consumed. This means the same transaction cannot be replayed, and a new transaction with a higher nonce must be created and submitted.
 
-:::warning
+<VanillaAdmonition type="warning">
 
 Make sure that the deployer address is sufficiently funded on the child chain before sending the transaction. If the transaction runs out of gas or fails for any reason, the associated nonce will be burned. This means that the contract cannot be deployed at the predetermined deterministic address, potentially breaking tooling and integrations that rely on that specific address.
 
-:::
+</VanillaAdmonition>
 
 ## Advantages and considerations
 

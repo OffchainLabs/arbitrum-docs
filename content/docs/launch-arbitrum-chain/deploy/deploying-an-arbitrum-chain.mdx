@@ -25,11 +25,11 @@ This page explains how to deploy an <Term id="arbitrum-chain">Arbitrum chain</Te
 
 If you want to launch with predeployed contracts, balances, or storage, first [generate a custom genesis file with the Chain SDK](/docs/launch-arbitrum-chain/deploy/custom-genesis-state#use-the-chain-sdk). The generated block hash, send root, chain configuration, and initial L1 base fee must be included in the deployment configuration described below.
 
-:::info About custom gas token Arbitrum chains
+<VanillaAdmonition type="info" title="About custom gas token Arbitrum chains">
 
 Custom gas token Arbitrum chains let participants pay transaction fees in an **ERC-20** token instead of **ETH**. Standard **ERC-20** tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup#requirements-of-the-custom-gas-token) to be used as gas tokens. Remember that the **ERC-20** token to be used must be deployed on your chain's parent chain.
 
-:::
+</VanillaAdmonition>
 
 ## Parameters used when deploying a new chain
 
@@ -162,14 +162,14 @@ import SizeLimit from '../partials/_size-limit.mdx';
 
 Now, let's look at the methods to use when creating a new Arbitrum chain with the Chain SDK.
 
-:::info Example script
+<VanillaAdmonition type="info" title="Example script">
 
 The Chain SDK includes an example script for creating an Arbitrum chain. We recommend that you first understand the process described in this section and then check the following example scripts:
 
 - [`create-rollup-eth`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/create-rollup-eth/index.ts) for creating an Arbitrum AnyTrust chain with **ETH** as the gas token.
 - [`create-rollup-custom-fee-token`](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/create-rollup-custom-fee-token) for creating an Arbitrum AnyTrust chain with an **ERC-20** as the gas token.
 
-:::
+</VanillaAdmonition>
 
 Here are the steps involved in the deployment process:
 
@@ -221,11 +221,11 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
 });
 ```
 
-:::info
+<VanillaAdmonition type="info">
 
 The above defaults to Arbitrum Sepolia. We've added the import `viem/chains` and the chain info to demonstrate from a popular library (`viem`) how to import the chain information already available in the Arbitrum Chain SDK.
 
-:::
+</VanillaAdmonition>
 
 ### 2. Deploy the Arbitrum chain
 
@@ -233,11 +233,11 @@ With the new crafted configuration, we can call the `createRollup` method which 
 
 Besides the `Config` structure created in the previous step, other parameters from the `RollupDeploymentParams` structure can be passed to override the defaults set by the Chain SDK. Batch poster and validator addresses must be set to the desired values. Additionally, a public client of the parent chain and a deployer PrivateKeyAccount must be passed as arguments to the function.
 
-:::info Additional step for custom gas token chains
+<VanillaAdmonition type="info" title="Additional step for custom gas token chains">
 
 If you want to configure a custom gas token, the deployer needs to give allowance to the `RollupCreator` contract before starting the deployment process, so that it can spend enough tokens to send the correspondant `Parent-to-Child` messages during the deployment process. This process is handled within the `createRollup` function, but the deployer must own enough tokens to create these messages.
 
-:::
+</VanillaAdmonition>
 
 If you want to configure a custom gas token, you can pass the address in the parent chain of the **ERC-20** token to use in the `nativeToken` parameter of the `createRollup` function.
 
@@ -286,11 +286,11 @@ type CreateRollupResults = {
 
 If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS keys. See [How to configure a DAC](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started) to learn more about setting up a DAC.
 
-:::info
+<VanillaAdmonition type="info">
 
 The Arbitrum Chain SDK includes an example script for setting up the keyset in the `SequencerInbox`. We recommend that you first understand the process described in this section and then check the [`set-valid-keyset`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
 
-:::
+</VanillaAdmonition>
 
 The Chain SDK includes a `setValidKeyset` function to help set the keyset in the SequencerInbox. From the last step, you can gather the `sequencerInbox` and `upgradeExecutor` addresses and pass them to the function along with the `keyset`, a public client of the parent chain, and a wallet client of an account that has executor privileges in the `UpgradeExecutor` contract (to learn more about `UpgradeExecutor`, see [Ownership structure and access control](/docs/launch-arbitrum-chain/operate/ownership-access-control)).
 

@@ -18,11 +18,11 @@ There are multiple ways to supply Nitro with the database snapshot. The most str
 
 Nitro has a CLI configuration for downloading the latest snapshot from a remote server. Set the flag `--init.latest` to either `archive`, `pruned`, or `genesis`, and Nitro will download the preferred snapshot. Nitro rejects any other value. You may also change the `--init.latest-base` flag to set the base URL when searching for the latest snapshot.
 
-:::info
+<VanillaAdmonition type="info">
 
 All three kinds that `--init.latest` accepts resolve to <Term id="hashdb">HashDB</Term> snapshots, so `--init.latest` cannot bootstrap a <Term id="pathdb">PathDB</Term> node. See [PathDB snapshots](#pathdb-snapshots).
 
-:::
+</VanillaAdmonition>
 
 ### How it works
 
@@ -81,11 +81,11 @@ Your node's `--execution.caching.state-scheme` must match the snapshot's `state_
 
 ## Downloading the snapshot manually
 
-:::tip For most users, automatic download is recommended
+<VanillaAdmonition type="tip" title="For most users, automatic download is recommended">
 
 Use `--init.latest pruned` (or `archive`) to enable Nitro's automatic handling of multi-part downloads, checksum verification, and extraction. In contrast, manual downloading is preferable only when you need to host a single snapshot locally for multiple nodes, offering direct control but requiring additional effort.
 
-:::
+</VanillaAdmonition>
 
 It is possible to download the snapshot manually and supply the archive instead of having Nitro download it.
 
@@ -113,13 +113,13 @@ Finally, you can provide a path to the downloaded snapshot archive to Nitro usin
 
 If the snapshot is divided into parts, you should first download the manifest file in `<snapshot-url>.manifest.txt`. This manifest contains the names and checksums of each part. For instance, the snippet below shows how the manifest file should look. You may use the commands described previously to download each part of the snapshot and verify their checksums.
 
-:::note
+<VanillaAdmonition type="note">
 
 For directory-style snapshot URLs, the manifest is the `.manifest.txt` file inside the directory. For example, `https://snapshot.arbitrum.foundation/arb1/2026-08-01-a78755ba/.manifest.txt`. Its part names include the directory prefix, so resolve them against the parent of the snapshot URL.
 
 The same directory also holds a `metadata.json` giving each part's filename, size, and both SHA-256 and xxHash checksums. Either file works for a manual download; Nitro itself reads `.manifest.txt`.
 
-:::
+</VanillaAdmonition>
 
 ```shell
 a938e029605b81e03cd4b9a916c52d96d74c985ac264e2f298b90495c619af74  archive.tar.part0

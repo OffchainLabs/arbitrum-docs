@@ -7,14 +7,14 @@ author: dzgoldman, jose-franco
 sme: jose-franco
 ---
 
-:::info block number vs `block.number`
+<VanillaAdmonition type="info" title="block number vs `block.number`">
 
 Throughout this and other pages, we note that the block number of a chain does not match the value obtained from `block.number`. When using `block.number` in a smart contract, the value obtained will be the block of the first non-Arbitrum ancestor chain. That is:
 
 - Ethereum, if the chain is a Layer 2 (L2) chain on top of Ethereum, or a Layer 3 (L3) chain on top of an Arbitrum chain
 - The parent chain, if it's not Ethereum or an Arbitrum chain (for example, a chain that settles to Base)
 
-:::
+</VanillaAdmonition>
 
 As with Ethereum, Arbitrum clients submit transactions, and the system executes them later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) or via the chain's [Delayed Inbox](/docs/how-arbitrum-works/deep-dives/sequencer).
 
@@ -54,11 +54,11 @@ block.number // => returns the approximate block number of the first non-Arbitru
 
 As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (These are generally the same assumptions one should operate under when using block numbers directly on Ethereum!) For how this affects specific Solidity operations like `block.number` and `block.timestamp`, see [Solidity support](/docs/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support).
 
-:::info EIP-2935 difference
+<VanillaAdmonition type="info" title="EIP-2935 difference">
 
 [EIP-2935](https://eips.ethereum.org/EIPS/eip-2935) adds another way to retrieve block hashes by making a call to a contract. The contract is at the same address and has the same interface as the original. It was modified to have a larger buffer and different code, but it remains usable in the same way to retrieve past L2 block hashes.
 
-:::
+</VanillaAdmonition>
 
 ### Arbitrum block numbers
 

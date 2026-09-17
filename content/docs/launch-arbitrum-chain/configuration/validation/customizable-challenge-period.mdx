@@ -14,11 +14,11 @@ In addition to the main challenge period, **an extra challenge period** provides
 
 ## Default challenge period and extra challenge period
 
-:::info How time is measured in challenges
+<VanillaAdmonition type="info" title="How time is measured in challenges">
 
 Chains settling to Ethereum or Arbitrum chains use `block.number` for all block calculations, which corespond to the chain's view of Ethereum's block number. For example, an L3 Arbitrum chain settling to <Term id="arbitrum-one">Arbitrum One</Term>, will calculate block progression based on Ethereum's (L1) block number.
 
-:::
+</VanillaAdmonition>
 
 By default, the challenge period lasts approximately one week, which equates to roughly @@arbOneDisputeWindowBlocks=45818@@ L1 blocks for chains that settle to Ethereum or an Arbitrum chain. The default duration design is to provide sufficient time for validators to detect and challenge fraudulent assertions.
 

@@ -10,11 +10,11 @@ sme: jason-w123
 
 Nitro's batch poster (and staker) sign their parent chain transactions through the **DataPoster** component. By default, it signs locally with a private key, but it also supports **generic RPC-based external signing**: instead of holding the key, Nitro sends an unsigned transaction to a remote signer over (m)TLS, gets back a signed transaction, and independently verifies it.
 
-:::info
+<VanillaAdmonition type="info">
 
 There is **no native AWS KMS integration** in the Nitro codebase. KMS support is achieved by running a _separate signer service_ that talks to KMS and exposes an Ethereum-style `eth_signTransaction` RPC endpoint. Nitro connects to that endpoint. In other words: "KMS support" = external signer pointed at a KMS-backed signing service.
 
-:::
+</VanillaAdmonition>
 
 ## How it works internally
 

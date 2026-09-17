@@ -196,11 +196,11 @@ The fallback is **enabled by default**:
 'disable-dap-fallback-store-data-on-chain'?: boolean;
 ```
 
-:::danger Dangerous in production
+<VanillaAdmonition type="danger" title="Dangerous in production">
 
 Setting this to `true` **disables the fallback**, meaning the batch poster will keep retrying the DAS and not post data onchain. Doing so in production is dangerous, a DAC outage would halt the chain.
 
-:::
+</VanillaAdmonition>
 
 ### How batch posters enable fallback
 

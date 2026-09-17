@@ -107,11 +107,11 @@ Once a transition to native **USDC** is agreed upon, the following steps are req
 - L2 gateway owner pauses withdrawals on the child chain by calling `pauseWithdrawals()`
 - master minter removes the minter role from the child chain gateway
 
-:::note
+<VanillaAdmonition type="note">
 
 There should be no in-flight deposits when the minter role is revoked. If there are any, they should be finalized first. Anyone can do that by claiming the failed retryable tickets that execute a **USDC** deposit
 
-:::
+</VanillaAdmonition>
 
 - L1 gateway owner sets Circle's account as burner on the parent chain gateway using `setBurner(address)`
 - L1 gateway owner reads the total supply of **USDC** on the child chain and then invokes `setBurnAmount(uint256)` on the parent/child gateway where the amount matches the total supply

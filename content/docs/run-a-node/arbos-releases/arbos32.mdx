@@ -7,13 +7,13 @@ author: dlee
 sme: dlee
 ---
 
-:::caution
+<VanillaAdmonition type="caution">
 
 Please upgrade directly to <Term id="arbos">ArbOS</Term> 32 from ArbOS 20 and not to ArbOS 30 or ArbOS 31. The ArbOS 32 release builds upon ArbOS 30 and ArBbOS 31 and includes critical fixes & optimizations coming out of rigorous testing and feedback from Stylus teams. ArbOS 32 “Bianca” will be the canonical ArbOS version for the “Bianca” family of releases.
 
 Future versions of Nitro may remove support for <Term id="arbitrum-chains">Arbitrum chains</Term> which have historically upgraded to, and remain on, ArbOS 30 or ArbOS 31. Due to this, we highly recommend upgrading immediately and directly to ArbOS 32.
 
-:::
+</VanillaAdmonition>
 
 The minimum Nitro version that supports ArbOS 32 "Bianca" is [Nitro v3.3.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.3.1), which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v3.3.1-e326369`. This release of Nitro is a mandatory upgrade for <Term id="arbitrum-one">Arbitrum One</Term> and <Term id="arbitrum-nova">Nova</Term> <Term id="validator">validators</Term>. For Arbitrum One and Nova, the ArbOS 32 "Bianca" upgrade required a governance vote to activate.
 
@@ -40,9 +40,9 @@ ArbOS 32 Bianca brings many features, improvements, and bug fixes to Arbitrum ch
 
 ## Additional requirement for Arbitrum chains who wish to take advantage of the Stylus Cache Manager
 
-:::tip Stylus Cache Manager
+<VanillaAdmonition type="tip" title="Stylus Cache Manager">
 It is strongly recommended that teams upgrading to ArbOS 32 also spend the time following the instructions described below to deploy and enable the Stylus Cache Manager. Even if your team does not intend to build with Stylus in the immediate term, enabling the Cache Manager ensures that future usage of Arbitrum Stylus on your chain is smooth and provides a consistent UX with the developer experience of building with Arbitrum Stylus on Arbitrum One.
-:::
+</VanillaAdmonition>
 
 Specific to Stylus and ArbOS 32 "Bianca", we have developed a caching strategy that stores frequently accessed contracts in memory to reduce the costs and time associated with contract execution from repeated initializations. Check out the [Stylus caching strategy docs](/docs/stylus/how-tos/caching-contracts) to learn more.
 

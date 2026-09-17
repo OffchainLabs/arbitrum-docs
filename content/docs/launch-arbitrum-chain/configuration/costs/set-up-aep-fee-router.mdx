@@ -86,11 +86,11 @@ The script performs the following operations:
 
 5. Set each of the fee collectors to the `RewardDistributor` contracts.
 
-::::info
+<VanillaAdmonition type="info">
 
 If the same address collects all three fee types, only one `RewardDistributor` contract will be deployed, which will collect all those fees.
 
-::::
+</VanillaAdmonition>
 
 To configure the script, you need to specify the following [environment variables](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/setup-aep-fee-router/.env.example):
 
@@ -175,11 +175,11 @@ The [router contracts repository](https://github.com/OffchainLabs/fund-distribut
 
 1. Periodically trigger withdrawals to the parent chain
 
-::::info
+<VanillaAdmonition type="info">
 
 If the `ChildToParentRouter` is routing its chain's native token, this step should be skipped.
 
-::::
+</VanillaAdmonition>
 
 ```shell
 cast send <router_on_child_address> "routeToken()" --rpc-url <child_rpc_url> --private_key <private_key>

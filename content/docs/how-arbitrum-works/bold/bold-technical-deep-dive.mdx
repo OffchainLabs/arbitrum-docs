@@ -177,12 +177,12 @@ To deploy BoLD on an Arbitrum chain, an upgrade admin action must be taken using
 
 Afterward, assertions will be posted to the new Rollup contract. During the upgrade period, it's possible for a substantial volume of blocks to accumulate in Arbitrum batches. For this reason, BoLD assertions support the concept of an **overflow**, allowing us to handle this situation effectively.
 
-:::caution Withdrawals leading up to a BoLD upgrade
+<VanillaAdmonition type="caution" title="Withdrawals leading up to a BoLD upgrade">
 
 The confirmation timing for any withdrawal in flight when the BoLD upgrade is activated will be delayed until the first BoLD assertion is confirmed. When any Arbitrum chain upgrades to BoLD—including Arbitrum One and Arbitrum Nova—any pending withdrawal to Ethereum initiated before the upgrade will be delayed by one additional challenge period, plus however much time passed between the withdrawal initiation and the BoLD upgrade. This is because the upgrade effectively "resets" the challenge period for those that are not yet finalized.
 
 For example, if the upgrade happens at time `t`, then a withdrawal initiated at time `t-2` days will need to wait an additional @@arbOneDisputeWindowDays=6.4@@ days for its withdrawal to be finalized, totaling 8.4 days of maximum delay. Withdrawals that finalize before the upgrade takes place at time `t` will be unaffected. In other words, the maximum delay a withdrawal will experience leading up to the upgrade is 12.8 days (two challenge periods).
 
-:::
+</VanillaAdmonition>
 
 The upgrade pattern for an existing Arbitrum Rollup to a BoLD-enabled one is tested extensively and run as part of each of our pull requests in the BoLD repository [upgrade workflow on GitHub](https://github.com/OffchainLabs/bold/blob/c4e068b568ff662f49ed191c5c3188ea7b6138b2/.github/workflows/go.yml#L209).

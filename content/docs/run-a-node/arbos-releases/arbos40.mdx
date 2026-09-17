@@ -7,9 +7,9 @@ author: dlee
 sme: dlee
 ---
 
-:::caution
+<VanillaAdmonition type="caution">
 [EIP-2537](https://eips.ethereum.org/EIPS/eip-2537) is not enabled in <Term id="arbos">ArbOS</Term> 40 Callisto. This means that the precompiled contracts for certain operations on the BLS12-381 elliptic curve are not supported. However, these <Term id="precompile">precompiles</Term> will be proposed for inclusion in the next ArbOS release.
-:::
+</VanillaAdmonition>
 
 The minimum Nitro version that supports ArbOS 40 "Callisto" is [Nitro v3.6.5](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.5), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.6.5-89cef87`. This release of Nitro is a mandatory upgrade for <Term id="arbitrum-one">Arbitrum One</Term> and <Term id="arbitrum-nova">Nova</Term> <Term id="validator">validators</Term>. For Arbitrum One and Nova, the ArbOS 40 "Callisto" upgrade required a governance vote to activate.
 
@@ -25,11 +25,11 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 - [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
 - <Term id="wasm-module-root">WASM module root</Term>: `0xdb698a2576298f25448bc092e52cf13b1e24141c997135d70f217d674bbeb69a`
 
-:::caution
+<VanillaAdmonition type="caution">
 
 If your chain is not ready to activate <Term id="bold">BoLD</Term>, please use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher cannot be used without activating BoLD.
 
-:::
+</VanillaAdmonition>
 
 ## High-level description of ArbOS 40 changes
 
@@ -43,9 +43,9 @@ EIP-7702 introduces a new transaction type that allows <Term id="externally-owne
 
 ### [EIP-2537: Precompile for BLS12-381 curve operations](https://eips.ethereum.org/EIPS/eip-2537)
 
-:::caution
+<VanillaAdmonition type="caution">
 This EIP and its specified precompiles are part of ArbOS 40 Callisto but are _not_ enabled. However, these precompiles will be proposed for inclusion in the next ArbOS release.
-:::
+</VanillaAdmonition>
 
 This EIP introduces precompiles for performing cryptographic operations on the BLS12-381 curve, focusing on enhancing the efficiency and security of these operations. This cryptographic primitive provides 120+ bits of security for operations over pairing-friendly curves, compared to the existing BN254 precompile, which offers only 80 bits of security. <Term id="bls-signature">BLS signature</Term> verification is the primary use case for this EIP, although many other applications that rely on point additions, multiplications, and pairing operations stand to benefit from this proposal; examples include zkSNARKS, cross-chain interactions, randomness beacons, and vector commitments.
 

@@ -113,11 +113,11 @@ Additionally, keep in mind that some chains might not have BoLD activated yet, s
 
 ### Use Nitro to create a wallet for your validator
 
-::::warning Clear passwords in the command line
+<VanillaAdmonition type="warning" title="Clear passwords in the command line">
 
 This section shows how to manage a validator wallet using a password. Like any command that requires passing a password or private key, you should take extra precautions to secure your credentials. Failure to protect your password may compromise your validator wallet.
 
-::::
+</VanillaAdmonition>
 
 Nitro includes a tool to create a validator wallet for a specific chain automatically. You can access it by using the option `--node.staker.parent-chain-wallet.only-create-key` and setting a password for the wallet with `--node.staker.parent-chain-wallet.password`.
 
@@ -131,11 +131,11 @@ The wallet file will be created under the mounted directory inside the `<chain-n
 
 Once the wallet is created, you can instruct your validator to use it by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
 
-::::tip Use environment variables
+<VanillaAdmonition type="tip" title="Use environment variables">
 
 If you prefer not to include your password in the command line, you can use environment variables or a secure secrets management solution to supply the password at runtime.
 
-::::
+</VanillaAdmonition>
 
 ### How to add new validators to the allowlist (Arbitrum chains)
 

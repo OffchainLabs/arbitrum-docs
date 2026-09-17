@@ -6,11 +6,11 @@ author: jose-franco
 sme: jose-franco
 ---
 
-:::caution Running a regular DAS vs running a mirror DAS
+<VanillaAdmonition type="caution" title="Running a regular DAS vs running a mirror DAS">
 
 The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to [How to deploy a DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das) if needed.
 
-:::
+</VanillaAdmonition>
 
 <p>
   [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <Term id="parent-chain">parent chain</Term> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
@@ -104,11 +104,11 @@ To enable caching, you can use the following parameters:
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
-::::warning Local Badger database removed
+<VanillaAdmonition type="warning" title="Local Badger database removed">
 
 The local Badger DB storage option (previously set with `local-db-storage`) was deprecated and removed in Nitro v3.8.0, together with its `--data-availability.migrate-local-db-to-file-storage` migration parameter. If your DAS still stores data in a local Badger database, run a Nitro version prior to v3.8.0 with that parameter to migrate the data to the local files storage option (`local-file-storage`) before upgrading.
 
-::::
+</VanillaAdmonition>
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -232,17 +232,17 @@ To activate the "archive mode" in your DAS, configure your storage backend to ne
 --data-availability.google-cloud-storage.discard-after-timeout=false
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 The `s3-storage` **doesn't support** expiration of data, instead that can be enabled from user side by setting `Expiration` as a rule in Lifecycle Configuration of the corresponding S3 bucket. More information available at [AWS Expiring objects](https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-expire-general-considerations.html).
 
-:::
+</VanillaAdmonition>
 
-:::note
+<VanillaAdmonition type="note">
 
 The `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry`.
 
-:::
+</VanillaAdmonition>
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 

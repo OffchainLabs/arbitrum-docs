@@ -7,11 +7,11 @@ author: pete-vielhaber
 sme: Mehdi Salehi
 ---
 
-:::tip Looking for implementation guides?
+<VanillaAdmonition type="tip" title="Looking for implementation guides?">
 
 This document explains the protocol-level concepts of parent-to-child messaging. For practical, step-by-step instructions on implementing bridging and messaging, see [How to bridge from parent chain to child chain](/docs/arbitrum-essentials/bridging/deposit/eth-and-messages).
 
-:::
+</VanillaAdmonition>
 
 In the [Bypassing the Sequencer](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <Term id="child-chain">child chain</Term> by going through the <Term id="parent-chain">parent chain</Term>'s <Term id="delayed-inbox">Delayed Inbox</Term> contract instead of sending them directly to the [<Term id="sequencer">Sequencer</Term>](/docs/how-arbitrum-works/deep-dives/sequencer). This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
@@ -140,11 +140,11 @@ The Delayed Inbox provides methods for unsigned messages from both EOAs and cont
 
 For the full list of message-type identifiers used by ArbOS, see [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) and the [ArbOS messages section](/docs/how-arbitrum-works/deep-dives/arbos#messages-and-blocks).
 
-:::note
+<VanillaAdmonition type="note">
 
 Refer to the [Address aliasing](#address-aliasing) discussion for more background. This mechanism ensures that a parent chain contract can't impersonate a child chain address unless it provides a valid signature as an EOA.
 
-:::
+</VanillaAdmonition>
 
 ## Retryable tickets
 

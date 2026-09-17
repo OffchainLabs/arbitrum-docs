@@ -82,7 +82,7 @@ Assume there is a contract called `foo` on the child chain at address `fooAddres
 
 To verify the state, we need a Merkle Trie verifier contract — for example, a `Lib_MerkleTrie`-style library that exposes a `get(key, proof, root)` function.
 
-:::note Why we can trust an untrusted child chain RPC
+<VanillaAdmonition type="note" title="Why we can trust an untrusted child chain RPC">
 
 The steps below query a child chain RPC several times (`eth_getBlockByHash`, `eth_getProof`). You do _not_ have to trust that RPC. Every value it returns is checked against the trust anchor established in step 1 — the block hash and send root taken from the assertion **confirmed on the parent chain**:
 
@@ -91,7 +91,7 @@ The steps below query a child chain RPC several times (`eth_getBlockByHash`, `et
 
 Because each link is bound to the confirmed parent chain commitment by a cryptographic hash, a malicious or buggy RPC **cannot forge data that passes verification**. The worst it can do is return wrong or missing data, which makes verification _fail_ (a denial of service) — it can never produce a false positive. This one-way guarantee is what makes the whole procedure sound.
 
-:::
+</VanillaAdmonition>
 
 ### 1. Get a confirmed child chain block hash
 
@@ -134,11 +134,11 @@ blockarray = [
 
 If they match, the header — and in particular the `stateRoot` — is proven correct.
 
-:::caution Watch the header field set and zero-value encoding
+<VanillaAdmonition type="caution" title="Watch the header field set and zero-value encoding">
 
 The exact list of header fields (and their ordering) must match the block header schema of the chain you are proving against. The 16 fields above match current Arbitrum Nitro headers, but a chain running a different configuration may include additional fields. Additionally, RLP requires minimal integer encoding: a numeric field whose value is `0` must encode to an empty byte string, not `0x00`. Confirm your encoding reproduces the expected hash before relying on it.
 
-:::
+</VanillaAdmonition>
 
 ### 3. Prove the account in the state root
 

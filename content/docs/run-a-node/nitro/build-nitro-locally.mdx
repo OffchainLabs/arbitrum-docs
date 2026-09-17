@@ -39,11 +39,11 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo service docker start
 ```
 
-:::info
+<VanillaAdmonition type="info">
 
 If you are running Ubuntu 22.04, you might get an `Unable to locate package docker-buildx-plugin` error. Try `sudo apt install docker-buildx` instead.
 
-:::
+</VanillaAdmonition>
 
 #### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
 
@@ -100,11 +100,11 @@ Install [Homebrew](https://brew.sh/) package manager and add it to your `PATH` e
 echo "export PATH=/opt/homebrew/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 Replace `~/.zprofile` with `~/.bash_profile` if you use bash instead of zsh).
 
-:::
+</VanillaAdmonition>
 
 Install essentials:
 
@@ -176,11 +176,11 @@ gvm use go1.25 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 If you use zsh, replace `bash` with `zsh`.
 
-:::
+</VanillaAdmonition>
 
 #### Install foundry version 1.2.3
 

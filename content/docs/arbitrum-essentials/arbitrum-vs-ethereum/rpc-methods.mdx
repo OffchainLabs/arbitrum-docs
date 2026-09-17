@@ -9,11 +9,11 @@ sme: dzgoldman
 
 Although the majority of RPC methods follow the same behavior as in Ethereum, some methods may produce a different result or add more information when used on an Arbitrum chain. This page covers the differences in response body fields you'll find when calling RPC methods on an Arbitrum chain vs on Ethereum.
 
-:::info
+<VanillaAdmonition type="info">
 
 Comprehensive documentation on all generally available JSON-RPC methods for Ethereum can be found at [ethereum.org](https://ethereum.org/en/developers/docs/apis/json-rpc/). As Arbitrum has `go-ethereum` at its core, most of the documented methods there can be used with no modifications.
 
-:::
+</VanillaAdmonition>
 
 ## Transactions
 
@@ -114,11 +114,11 @@ On the parent chain, messages appear in batches. The number of messages per batc
 
 #### Custom `eth_syncing` fields
 
-:::info
+<VanillaAdmonition type="info">
 
 Note that the exact output for the `eth_syncing` RPC call of an out-of-sync Nitro node is not considered a stable API. It is still being actively developed and can be modified without notice between versions.
 
-:::
+</VanillaAdmonition>
 
 | Field name                     | Description                                                                                                                                                                                |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -132,11 +132,11 @@ Note that the exact output for the `eth_syncing` RPC call of an out-of-sync Nitr
 | `lastL1BlockNum`               | Last block number of the first non-Arbitrum ancestor chain that Nitro sees. This is for debugging the connection with the parent chain                                                     |
 | `lastl1BlockHash`              | Last block hash from the parent chain that Nitro sees. This is for debugging the connection with the parent chain                                                                          |
 
-:::info Potential, but not expected error
+<VanillaAdmonition type="info" title="Potential, but not expected error">
 
 If the sync process encounters an error while trying to collect the data above this error will be added to the response.
 
-:::
+</VanillaAdmonition>
 
 #### Understanding common scenarios
 
@@ -150,12 +150,12 @@ The Nitro node provides a native tracer for debugging Stylus contracts called `s
 HostIOs are calls the WasmVM makes to read and write data in the EVM.
 With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
 
-:::info
+<VanillaAdmonition type="info">
 
 The `cargo-stylus` command-line tool uses the `stylusTracer` to replay transactions locally inside a debugger.
 More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/docs/stylus/cli-tools/debugging-tx).
 
-:::
+</VanillaAdmonition>
 
 The table below describes each field of the `stylusTracer` return value.
 

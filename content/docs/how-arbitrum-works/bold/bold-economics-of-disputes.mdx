@@ -117,11 +117,11 @@ This ratio is the sum of the gas plus the bonding marginal costs incurred by the
 
 We require parties to lock up some capital called a "mini-bond" when making big claims in a dispute. These bonds aren't needed for bisection moves but are critical for posting an initial claim. Pricing these mini-bonds helps achieve a high resource ratio between dishonest and honest parties.
 
-:::note
+<VanillaAdmonition type="note">
 
 "Mini-bonds" is another term for "challenge-bonds" mentioned above in [Pricing bonds](#pricing-bonds).
 
-:::
+</VanillaAdmonition>
 
 It is clear that if we can multiply the cost to the malicious party by some multiplier of the honest party, we will get significant security benefits. For instance, imagine that a one-billion-dollar attack can be defended by simply pooling together \$10 million. Is it possible to achieve such a ratio?
 
@@ -159,11 +159,11 @@ For Arbitrum BoLD's initial launch, we believe chain owners should pay a service
 
 This service fee can be paid out when an active proposer's top-level assertion is confirmed on Ethereum, and it will be calculated based on the duration the protocol considers the proposers active. The procedure that calculates this will be handled offchain, using a procedure that will be published later. BoLD makes it permissionless for any validator to become a proposer and also introduces a way to pay a service fee to honest parties for locking up capital to do so. Validators are not considered active proposers until they successfully propose an assertion with a bond.
 
-:::note
+<VanillaAdmonition type="note">
 
 We envision the Arbitrum Foundation (AF) running its own node as a proposer. This proposer's bonding capital will be funded by the AF and/or the DAO, and (unlike other proposers) will not earn a service fee since it is being run as a public good using the community's own money.
 
-:::
+</VanillaAdmonition>
 
 To become an active proposer for an Arbitrum chain post-BoLD, a validator must propose a state assertion to its parent chain. For Arbitrum One and Nova, the state assertion is posted onto the parent chain (Ethereum). If they do not have an active bond on the parent chain, they must attach a bond to their assertion to post it successfully. Subsequent assertions posted by the same address will simply move the already-supplied bond to their latest proposed assertion. Meanwhile, if an entity, say Bob, posts a successor assertion to one previously made by another entity, Alice, the protocol considers Bob the current active proposer. The protocol would no longer consider Alice the active proposer, and once Alice's assertion is confirmed, she will receive a refund of her assertion bond. There can only be one "active" proposer at any point in time.
 

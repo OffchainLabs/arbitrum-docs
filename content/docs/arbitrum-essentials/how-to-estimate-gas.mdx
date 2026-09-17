@@ -7,11 +7,11 @@ author: TucksonDev
 sme: TucksonDev
 ---
 
-:::info Looking for Stylus guidance?
+<VanillaAdmonition type="info" title="Looking for Stylus guidance?">
 
 Head over to [the Stylus gas docs](/docs/stylus/reference/opcode-hostio-pricing) for Stylus-specific guidance.
 
-:::
+</VanillaAdmonition>
 
 This how-to covers how gas operates in <Term id="arbitrum">Arbitrum</Term>, how it's calculated, and how to estimate it before submitting transactions. For a deeper understanding of the underlying pricing mechanisms, see the [Gas and Fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees) concept page.
 
@@ -27,13 +27,13 @@ Note that when working with [parent to child chain messages](/docs/arbitrum-esse
 
 ## The fee formula
 
-:::info L1 fee "baked in"
+<VanillaAdmonition type="info" title="L1 fee &quot;baked in&quot;">
 
 The model below explains a two-dimensional fee model that captures both L1 and <Term id="L2">L2</Term> costs. However, it is important to note that users will see a single fee—the L2 cost with the L1 fee "baked-in." This differs from other Rollups.
 
 Arbitrum converts L1 calldata costs into equivalent L2 gas, so the user sees a single fee rather than two (as explained in the model below). The formula detailed below is precisely how it is calculated—but just remember it is shown as a single fee to the user.
 
-:::
+</VanillaAdmonition>
 
 Arbitrum uses a [two-dimensional fee model](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) where a transaction's total fee has two components: child chain execution costs and parent chain data posting costs. The total transaction fee is:
 
@@ -84,9 +84,9 @@ You can use the [`NodeInterface`](/docs/arbitrum-essentials/nodeinterface/refere
   - Call `NodeInterface.gasEstimateComponents()`, take the second element `gasEstimateForL1` (this is `B` in the formula), multiply by `P` and divide by `L1P`.
   - For <Term id="arbitrum-nova">Arbitrum Nova</Term> (AnyTrust), the data size is a fixed value since only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/docs/how-arbitrum-works/deep-dives/anytrust-protocol#data-availability-certificates-dacert).
 
-:::note
+<VanillaAdmonition type="note">
 For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`.
-:::
+</VanillaAdmonition>
 
 ## Code example
 

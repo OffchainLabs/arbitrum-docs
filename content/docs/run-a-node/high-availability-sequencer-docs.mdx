@@ -6,11 +6,11 @@ author: Jason Wan
 sme: Jason Wan
 ---
 
-:::note
+<VanillaAdmonition type="note">
 
 This documentation is for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, see [How to run a testnet sequencer node](/docs/run-a-node/sequencer/run-sequencer-node).
 
-:::
+</VanillaAdmonition>
 
 ## Introduction
 
@@ -311,11 +311,11 @@ helm install batchposter offchainlabs/nitro \
   --set "configmap.data.node.batch-poster.parent-chain-wallet.private-key=<your-private-key>"
 ```
 
-:::warning Important
+<VanillaAdmonition type="warning" title="Important">
 
 Do not add the batch poster to the sequencer priority list in the Sequencer Coordination Manager (SQM) to prevent it from becoming the active sequencer unintentionally.
 
-:::
+</VanillaAdmonition>
 
 ## Monitoring and maintenance
 

@@ -10,11 +10,11 @@ To configure gas behavior on an <Term id="arbitrum-chain">Arbitrum chain</Term> 
 
 Below is a breakdown of each specified parameter, including its role, typical defaults (based on <Term id="arbitrum-one">Arbitrum One</Term>), and how to configure it. Note that changes may require careful consideration to avoid impacting chain performance, user experience, or security. For example, setting limits too high could lead to state bloat or slower block processing.
 
-:::warning Caution
+<VanillaAdmonition type="warning" title="Caution">
 
 Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible.
 
-:::
+</VanillaAdmonition>
 
 ## Gas target
 
@@ -97,9 +97,9 @@ Refer to the [How to manage the fee parameters](/docs/launch-arbitrum-chain/conf
 
 ## Gas floor per token
 
-:::info
+<VanillaAdmonition type="info">
 This setting is only available starting from [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51).
-:::
+</VanillaAdmonition>
 
 - **Description**: Gas floor per token refers to the minimum <Term id="gas-price-floor">gas price floor</Term> applied for batch posting to [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623)- enabled parent chains. It ensures that transactions with large calldata pay enough fees to cover data posting costs.
 - **Default**: Default value of this setting is based on the parent chain -
@@ -109,9 +109,9 @@ This setting is only available starting from [ArbOS 51 Dia](/docs/run-a-node/arb
   - If your L2 or L3 chain posts data to another parent chain, the parameter will have to be set based on the parent chain.
 - **Configuration**: Call the `setParentGasFloorPerToken(uint64 newFloor)` on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner) to set the value for `gasFloorPerToken`. This value should be adjusted based on the parent chain's EIP-7623 settings to ensure the data-posting costs are fully covered.
 
-:::warning
+<VanillaAdmonition type="warning">
 Changing this value from the recommended default is not advised and should be left untouched in most circumstances, unless required by your parent chain.
-:::
+</VanillaAdmonition>
 
 Example using `cast` (for per batch charge):
 

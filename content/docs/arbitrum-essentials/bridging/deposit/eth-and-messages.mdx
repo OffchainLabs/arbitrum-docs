@@ -33,11 +33,11 @@ const tx = await inbox.depositEth(destinationAddress, {
 await tx.wait();
 ```
 
-:::warning
+<VanillaAdmonition type="warning">
 
 Depositing **ETH** directly via `depositEth` to a contract on a child chain **will not** invoke that contract's fallback function. If you need to trigger a fallback function, use retryable tickets instead.
 
-:::
+</VanillaAdmonition>
 
 ### How **ETH** deposits work
 

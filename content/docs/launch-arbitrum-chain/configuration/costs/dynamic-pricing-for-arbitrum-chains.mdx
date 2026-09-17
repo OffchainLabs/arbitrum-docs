@@ -14,11 +14,11 @@ sme: asomani
 - This change is **backward compatible**. Setting new <Term id="gas-target">gas targets</Term> is **not mandatory**; if no new configuration is set, the legacy gas pricing algorithm with a single gas target remains active.
 - **Additional details:** For those interested in how these values are derived, refer to the [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#the-gas-target) page as it provides the underlying parameters used to calculate the new gas targets and adjustment windows.
 
-:::note
+<VanillaAdmonition type="note">
 
 The upgrade to ArbOS 51 doesn't require activation of these new gas targets. The new targets are completely opt-in, so you can choose when to enable them.
 
-:::
+</VanillaAdmonition>
 
 ## Purpose
 
@@ -31,11 +31,11 @@ Detailed information on the purpose of this upgrade can be found in the [AIP for
 - <Term id="L1">L1</Term> gas fee spikes on Ethereum
 - Data availability pricing
 
-:::info
+<VanillaAdmonition type="info">
 
 For more information about Effective block gas limit, refer to the [Gas and fees page](/docs/how-arbitrum-works/deep-dives/gas-and-fees#effective-block-gas-limit).
 
-:::
+</VanillaAdmonition>
 
 ## How to set multiple gas targets
 

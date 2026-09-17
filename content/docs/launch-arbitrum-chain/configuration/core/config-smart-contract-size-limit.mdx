@@ -28,14 +28,14 @@ import SizeLimit from '../../partials/_size-limit.mdx';
 3. Deploy the chain contracts to the parent chain.
 4. Run the node with the generated config.
 
-:::caution
+<VanillaAdmonition type="caution">
 
 - This change is immutable after deployment—plan carefully.
 - Higher limits increase risks like state bloat, slower node performance, and potential DoS vulnerabilities.
 - Test on a devnet or testnet first to ensure stability.
 - Ensure values are in bytes (not KB) when setting them in code.
 
-:::
+</VanillaAdmonition>
 
 ## Code examples
 

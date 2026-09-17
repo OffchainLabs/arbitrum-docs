@@ -38,11 +38,11 @@ Arbitrum ensures assertions are automatically confirmed or rejected based on pro
 
 For more details on how the Rollup chain works under <Term id="bold">BoLD</Term>, the [gentle introduction](/docs/how-arbitrum-works/bold/gentle-introduction) provides an overview that touches on the Rollup chain.
 
-:::note Validators and proposers serve different roles
+<VanillaAdmonition type="note" title="Validators and proposers serve different roles">
 
 Validators validate transactions by computing the next <Term id="chain-state">chain state</Term> using the chain's [STF](/how-arbitrum-works/deep-dives/stf.mdx), whereas proposers can also assert and challenge the chain state on the parent chain.
 
-:::
+</VanillaAdmonition>
 
 Except for the assertion number, the assertion's contents are merely claims by its proposer. Arbitrum doesn't know at first whether any of these fields are correct. The protocol should eventually confirm the assertion if all of these fields are correct. The protocol should eventually reject the assertion if any of these fields are incorrect.
 
@@ -78,11 +78,11 @@ The protocol design requires only one honest validator to secure the system, mak
 
 Some validators will act as bonders at any given time, while others remain passive. Bonders deposit **ETH** bonds into Arbitrum's smart contracts, which are forfeited if they lose a challenge.
 
-:::note
+<VanillaAdmonition type="note">
 
 Arbitrum Nitro chains accept **ETH** as the only collateral for staking.
 
-:::
+</VanillaAdmonition>
 
 A single bond can secure a sequence of assertions, meaning a validator's bond applies to multiple checkpoints of the chain's history. This checkpoint allows efficient resource use while maintaining security.
 

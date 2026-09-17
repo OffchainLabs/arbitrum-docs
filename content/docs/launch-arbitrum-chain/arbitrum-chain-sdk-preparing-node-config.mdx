@@ -90,11 +90,11 @@ You can find information about what these parameters configure in [How to config
 
 Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Chain SDK.
 
-:::info Example script
+<VanillaAdmonition type="info" title="Example script">
 
 The Arbitrum Chain SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/prepare-node-config/index.ts) script.
 
-:::
+</VanillaAdmonition>
 
 ### 1. Gather information from the deployed chain
 
@@ -111,11 +111,11 @@ The `prepareNodeConfig` method generates a JSON object with the configuration fo
 
 Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash`
 
-:::note
+<VanillaAdmonition type="note">
 
 This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node.
 
-:::
+</VanillaAdmonition>
 
 ```typescript
 import { createPublicClient, http } from 'viem';

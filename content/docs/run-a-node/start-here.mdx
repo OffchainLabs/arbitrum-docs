@@ -6,11 +6,11 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-:::info
+<VanillaAdmonition type="info">
 
 If you’re interested in accessing an Arbitrum chain but don’t want to set up your own node, see our [Node Providers](/docs/arbitrum-essentials/reference/node-providers) to get RPC access to fully managed nodes hosted by a third-party provider.
 
-:::
+</VanillaAdmonition>
 
 This how-to provides step-by-step instructions for preparing the information you will need to run a full node for Arbitrum on your local machine.
 
@@ -39,17 +39,17 @@ Your Arbitrum node requires a connection to a parent chain RPC endpoint (e.g., a
 
 ### Recommended Nitro version
 
-:::caution
+<VanillaAdmonition type="caution">
 
 Although there are beta and release candidate versions of the Arbitrum Nitro software, use only the release version when running your node. Running beta or RC versions is not supported and might lead to unexpected behaviors and/or database corruption.
 
-:::
+</VanillaAdmonition>
 
 Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@</code>
 
 ### Database snapshots
 
-::::info Snapshots availability
+<VanillaAdmonition type="info" title="Snapshots availability">
 
 <Term id="database-snapshot">Database snapshots</Term> for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia are available in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/).
 
@@ -68,7 +68,7 @@ Only the HashDB kinds distinguish pruned from unpruned. PathDB prunes as it runs
 
 Database snapshots for other Arbitrum chains may be available at the discretion of the chain's team. Get in touch with them if you're interested in using a database snapshot for their chains.
 
-::::
+</VanillaAdmonition>
 
 Supplying a database snapshot when starting your node for the first time is required for Arbitrum One (to provide information from the Classic era) but is optional for other chains. Supplying a database snapshot on the first run will provide the state and data for that chain up to a specific block, allowing the node to sync faster to the head of the chain.
 
@@ -80,7 +80,7 @@ We provide a summary of the available parameters here, but it is recommended to 
 - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/docs/run-a-node/nitro/nitro-database-snapshots#downloading-the-snapshot-manually) for instructions on how to do that.
 - Only snapshots formatted with your node's specified state scheme are compatible. In other words, a PathDB snapshot won't work for a node using HashDB, and vice versa. Each snapshot directory publishes a `metadata.json` file naming its `state_scheme`; check it before downloading.
 
-:::tip Which initialization mode should I use?
+<VanillaAdmonition type="tip" title="Which initialization mode should I use?">
 
 | Scenario                                        | Recommended Parameter                                                                                                                                                               |
 | :---------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -94,13 +94,13 @@ We provide a summary of the available parameters here, but it is recommended to 
 
 For more details on snapshot downloading and initialization, see the [complete snapshot guide](/docs/run-a-node/nitro/nitro-database-snapshots).
 
-:::
+</VanillaAdmonition>
 
-:::warning Fusaka upgrade: historical blobs
+<VanillaAdmonition type="warning" title="Fusaka upgrade: historical blobs">
 
 If you're running a beacon node, historical data will now be in <Term id="blob">blobs</Term>. To make this transition to using historical blobs, refer to the [Historical Blobs for Beacon Nodes](/docs/run-a-node/beacon-nodes-historical-blobs) guide.
 
-:::
+</VanillaAdmonition>
 
 ### Required parameters
 

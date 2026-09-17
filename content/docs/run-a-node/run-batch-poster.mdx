@@ -47,11 +47,11 @@ cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCE
 
 You can use only one database at a time, so you can't have both a Redis server and a DB in use simultaneously.
 
-:::note
+<VanillaAdmonition type="note">
 
 If your parent chain is an Arbitrum chain or doesn't have a mempool, you can ignore this section. Noop storage is automatically chosen because batches post sequentially -- a new batch only posts after the previous transaction goes through. No database tracking for queued transactions is required.
 
-:::
+</VanillaAdmonition>
 
 ### Noop
 
@@ -75,11 +75,11 @@ To configure Redis, you can also specify a `redis-signer` value with the flag `-
 
 #### Key differences
 
-:::info
+<VanillaAdmonition type="info">
 
 The default values are DB on by default, and Noop on by default if and only if the parent chain does not have a mempool (any L3 whose parent is an Arbitrum chain).
 
-:::
+</VanillaAdmonition>
 
 | Feature            | Noop | DB         | Redis          |
 | ------------------ | ---- | ---------- | -------------- |
@@ -221,7 +221,7 @@ const networkFeeAccount = await orbitChainClient.arbAggregatorReadContract({
 });
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 Before setting a fee collector for a batch poster, ensure the batch poster is registered in the `BatchPostersTable`. This can be achieved by:
 
@@ -255,7 +255,7 @@ await orbitChainClient.sendRawTransaction({
 });
 ```
 
-:::
+</VanillaAdmonition>
 
 To add a new batch poster, call the `setIsBatchPoster(address,bool)` method of the [`SequencerInbox` contract](https://github.com/OffchainLabs/nitro/blob/6aa06038ef34f9838be5952f4a66fa99807a2e6e/arbnode/sequencer_inbox.go#L59) on the parent chain:
 
@@ -265,11 +265,11 @@ cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCE
 
 ### Setting revenue values
 
-:::note
+<VanillaAdmonition type="note">
 
 These values are only editable by the chain owner(s).
 
-:::
+</VanillaAdmonition>
 
 There are onchain values in ArbOS that set how much ArbOS changes per L1 gas spent on transaction data. This can be set by communicating with the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner).
 

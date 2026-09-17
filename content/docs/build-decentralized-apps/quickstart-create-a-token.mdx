@@ -25,7 +25,7 @@ This guide walks you through deploying a standard **ERC-20** token on Arbitrum O
    ````
 2. **Get test **ETH\***\*: Obtain Arbitrum Sepolia **ETH\*\* from a faucet like Alchemy's Arbitrum Sepolia Faucet, Chainlink's faucet, or QuickNode's faucet. You'll need to connect a wallet (for example, MetaMask) configured for Arbitrum Sepolia and request testnet funds.
 
-:::info Resources
+<VanillaAdmonition type="info" title="Resources">
 
 A list of faucets is available on the [Chain Info page](/docs/chain-info#faucet-list).
 
@@ -33,7 +33,7 @@ Faucets may require certain actions, for example, bridging, use the official Arb
 
 All references to **ETH** on this document refers to test **ETH** on Sepolia.
 
-:::
+</VanillaAdmonition>
 
 3. **Set up development environment**: Configure your wallet and tools for Arbitrum testnet deployment. Sign up for an Etherscan account to get an API key for contract verification.
 
@@ -145,11 +145,11 @@ contract DeployToken is Script {
    ARBISCAN_API_KEY=your_arbiscan_api_key_here
    ```
 
-:::info Resources
+<VanillaAdmonition type="info" title="Resources">
 
 A list of RPCs, and chain IDs are available on the [Chain Info page](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info).
 
-:::
+</VanillaAdmonition>
 
 2. **Update `foundry.toml`** (add chain IDs for verification, as Arbiscan requires them for non-Ethereum chains):
 
@@ -169,11 +169,11 @@ A list of RPCs, and chain IDs are available on the [Chain Info page](https://doc
    arbitrum_one = { key = "${ARBISCAN_API_KEY}", url = "https://api.arbiscan.io/api", chain = 42161 }
    ```
 
-:::info Resources
+<VanillaAdmonition type="info" title="Resources">
 
 A list of chain IDs is available on the [Chain Info page](/docs/chain-info#arbitrum-public-rpc-endpoints).
 
-:::
+</VanillaAdmonition>
 
 ## Testing
 

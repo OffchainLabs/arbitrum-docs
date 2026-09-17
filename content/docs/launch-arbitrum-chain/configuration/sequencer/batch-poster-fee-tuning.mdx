@@ -81,11 +81,11 @@ Each duration triggers a replacement attempt with a higher fee. The schedule sta
 4. If gas prices exceed [`node.batch-poster.data-poster.target-price-gwei` formula](https://github.com/OffchainLabs/nitro/blob/02a590530cffa9a1f79ab8f692d66582b2ec4371/arbnode/dataposter/data_poster.go#L1451), the data poster pauses new batch submissions until prices decrease.
 5. During this pause, batches queue up. Once prices fall, the data poster resumes and works through the backlog.
 
-:::caution
+<VanillaAdmonition type="caution">
 
 If the data poster pauses due to gas prices exceeding the fee cap for an extended period, unposted batches accumulate. Monitor your batch posting logs for signs of a growing backlog. See [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting) for guidance on diagnosing and resolving backlogs.
 
-:::
+</VanillaAdmonition>
 
 ## Tuning recommendations
 
@@ -98,8 +98,8 @@ The right fee configuration depends on your chain’s activity level and cost se
 | Volatile parent chain    | `10+`                      | `1`                        | High                                              | Default or shorter intervals                                 | Gas spikes are common; higher caps prevent frequent posting pauses     |
 | Cost-sensitive operation | `1-2`                      | `1`                        | Low to moderate                                   | Default schedule                                             | Willing to tolerate occasional delays for lower costs                  |
 
-:::info Determining appropriate values
+<VanillaAdmonition type="info" title="Determining appropriate values">
 
 The specific gwei values in the table above are illustrative. Appropriate values depend on your parent chain’s gas price history, your chain’s throughput requirements, and your operational budget. Monitor your batch posting costs and adjust based on observed behavior. Tools like parent chain gas trackers and your node’s batch posting logs provide the data needed to calibrate these settings.
 
-:::
+</VanillaAdmonition>

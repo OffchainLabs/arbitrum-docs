@@ -43,8 +43,8 @@ nitro --conf.file=/path/to/config.json
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>auth flags (5)</summary>
+<Accordions>
+<Accordion title="auth flags (5)">
 
 | Flag             | Type    | Default        | Description                                |
 | ---------------- | ------- | -------------- | ------------------------------------------ |
@@ -54,14 +54,15 @@ Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-syste
 | `auth.origins`   | strings | `[localhost]`  | Origins from which to accept AUTH requests |
 | `auth.port`      | int     | `8549`         | AUTH-RPC server listening port             |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## chain
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>chain flags (9)</summary>
+<Accordions>
+<Accordion title="chain flags (9)">
 
 | Flag                               | Type    | Default                        | Description                                 |
 | ---------------------------------- | ------- | ------------------------------ | ------------------------------------------- |
@@ -75,14 +76,15 @@ Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-syste
 | `chain.info-json`                  | string  | -                              | L2 chain info in json string format         |
 | `chain.name`                       | string  | -                              | L2 chain name (determines Arbitrum network) |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## conf
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>conf flags (9)</summary>
+<Accordions>
+<Accordion title="conf flags (9)">
 
 | Flag                 | Type    | Default | Description                                                                                 |
 | -------------------- | ------- | ------- | ------------------------------------------------------------------------------------------- |
@@ -96,27 +98,29 @@ Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-syste
 | `conf.s3.secret-key` | string  | -       | S3 secret key for fetching the node configuration file from S3 (triggers S3 config loading) |
 | `conf.string`        | string  | -       | configuration as JSON string                                                                |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## ensure-rollup-deployment
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>ensure-rollup-deployment flags (1)</summary>
+<Accordions>
+<Accordion title="ensure-rollup-deployment flags (1)">
 
 | Flag                       | Type | Default | Description                                                                            |
 | -------------------------- | ---- | ------- | -------------------------------------------------------------------------------------- |
 | `ensure-rollup-deployment` | bool | `true`  | before starting the node, wait until the transaction that deployed rollup is finalized |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## execution
 
 Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring)
 
-<details>
-<summary>execution flags (164)</summary>
+<Accordions>
+<Accordion title="execution flags (164)">
 
 | Flag                                                                                           | Type     | Default                                                                                            | Description                                                                                                                                                                                                                                                          |
 | ---------------------------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -285,14 +289,15 @@ Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-a
 | `execution.tx-pre-checker.required-state-max-blocks`                                           | uint     | `4`                                                                                                | maximum number of blocks to look back while looking for the &lt;required-state-age&gt; seconds old state, 0 = don't limit the search                                                                                                                                 |
 | `execution.tx-pre-checker.strictness`                                                          | uint     | `20`                                                                                               | how strict to be when checking txs before forwarding them. 0 = accept anything, 10 = should never reject anything that'd succeed, 20 = likely won't reject anything that'd succeed, 30 = full validation which may reject txs that would succeed                     |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## file-logging
 
 Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring)
 
-<details>
-<summary>file-logging flags (8)</summary>
+<Accordions>
+<Accordion title="file-logging flags (8)">
 
 | Flag                       | Type   | Default     | Description                                                                                                    |
 | -------------------------- | ------ | ----------- | -------------------------------------------------------------------------------------------------------------- |
@@ -305,14 +310,15 @@ Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-a
 | `file-logging.max-backups` | int    | `20`        | maximum number of old log files to retain (0 = no limit)                                                       |
 | `file-logging.max-size`    | int    | `5`         | log file size in Mb that will trigger log file rotation (0 = trigger disabled)                                 |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## graphql
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>graphql flags (3)</summary>
+<Accordions>
+<Accordion title="graphql flags (3)">
 
 | Flag                 | Type    | Default       | Description                                                                                                      |
 | -------------------- | ------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -320,14 +326,15 @@ Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-syste
 | `graphql.enable`     | bool    | -             | Enable graphql endpoint on the rpc endpoint                                                                      |
 | `graphql.vhosts`     | strings | `[localhost]` | Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '\*' wildcard |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## http
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>http flags (10)</summary>
+<Accordions>
+<Accordion title="http flags (10)">
 
 | Flag                                       | Type     | Default              | Description                                                                                                      |
 | ------------------------------------------ | -------- | -------------------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -342,14 +349,15 @@ Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-syste
 | `http.server-timeouts.write-timeout`       | duration | `30s`                | the maximum duration before timing out writes of the response (http.Server.WriteTimeout)                         |
 | `http.vhosts`                              | strings  | `[localhost]`        | Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '\*' wildcard |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## init
 
 Related guide: [Docker and CLI binaries](/docs/run-a-node/nitro/docker-and-cli-binaries)
 
-<details>
-<summary>init flags (29)</summary>
+<Accordions>
+<Accordion title="init flags (29)">
 
 | Flag                                    | Type     | Default                                 | Description                                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------------------- | -------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -383,66 +391,71 @@ Related guide: [Docker and CLI binaries](/docs/run-a-node/nitro/docker-and-cli-b
 | `init.validate-checksum`                | bool     | `true`                                  | if true: validate the checksum after downloading the snapshot                                                                                                                                                                                                                                                                                                                        |
 | `init.validate-genesis-assertion`       | bool     | `true`                                  | tests genesis assertion posted on parent chain against the genesis block created on init                                                                                                                                                                                                                                                                                             |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## ipc
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>ipc flags (1)</summary>
+<Accordions>
+<Accordion title="ipc flags (1)">
 
 | Flag       | Type   | Default | Description                                                               |
 | ---------- | ------ | ------- | ------------------------------------------------------------------------- |
 | `ipc.path` | string | -       | Requested location to place the IPC endpoint. An empty path disables IPC. |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## log-level
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>log-level flags (1)</summary>
+<Accordions>
+<Accordion title="log-level flags (1)">
 
 | Flag        | Type   | Default | Description                                                       |
 | ----------- | ------ | ------- | ----------------------------------------------------------------- |
 | `log-level` | string | `INFO`  | log level, valid values are CRIT, ERROR, WARN, INFO, DEBUG, TRACE |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## log-type
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>log-type flags (1)</summary>
+<Accordions>
+<Accordion title="log-type flags (1)">
 
 | Flag       | Type   | Default     | Description                  |
 | ---------- | ------ | ----------- | ---------------------------- |
 | `log-type` | string | `plaintext` | log type (plaintext or json) |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## metrics
 
 Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring)
 
-<details>
-<summary>metrics flags (1)</summary>
+<Accordions>
+<Accordion title="metrics flags (1)">
 
 | Flag      | Type | Default | Description    |
 | --------- | ---- | ------- | -------------- |
 | `metrics` | bool | -       | enable metrics |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## metrics-server
 
 Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring)
 
-<details>
-<summary>metrics-server flags (3)</summary>
+<Accordions>
+<Accordion title="metrics-server flags (3)">
 
 | Flag                             | Type     | Default     | Description                    |
 | -------------------------------- | -------- | ----------- | ------------------------------ |
@@ -450,14 +463,15 @@ Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-a
 | `metrics-server.port`            | int      | `6070`      | metrics server port            |
 | `metrics-server.update-interval` | duration | `3s`        | metrics server update interval |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## node
 
 Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring)
 
-<details>
-<summary>node flags (408)</summary>
+<Accordions>
+<Accordion title="node flags (408)">
 
 | Flag                                                                                        | Type                     | Default                                                                                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | ------------------------------------------------------------------------------------------- | ------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -870,14 +884,15 @@ Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-a
 | `node.version-alerter-server.min-required-nitro-by-version`                                 | string                   | -                                                                                                     | minimum required version of the nitro node software. First string in the result of querying arb_getMinRequiredNitroVersion endpoint                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `node.version-alerter-server.upgrade-deadline`                                              | string                   | -                                                                                                     | deadline to upgrade the nitro node software. Third string in the result of querying arb_getMinRequiredNitroVersion endpoint                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## parent-chain
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>parent-chain flags (14)</summary>
+<Accordions>
+<Accordion title="parent-chain flags (14)">
 
 | Flag                                                   | Type     | Default     | Description                                                                                                                |
 | ------------------------------------------------------ | -------- | ----------- | -------------------------------------------------------------------------------------------------------------------------- |
@@ -896,14 +911,15 @@ Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-syste
 | `parent-chain.connection.websocket-message-size-limit` | int      | `268435456` | websocket message size limit used by the RPC client. 0 means no limit                                                      |
 | `parent-chain.id`                                      | uint     | -           | if set other than 0, will be used to validate database and L1 connection                                                   |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## persistent
 
 Related guide: [Docker and CLI binaries](/docs/run-a-node/nitro/docker-and-cli-binaries)
 
-<details>
-<summary>persistent flags (8)</summary>
+<Accordions>
+<Accordion title="persistent flags (8)">
 
 | Flag                                           | Type   | Default     | Description                                                                                                                                                                                                                              |
 | ---------------------------------------------- | ------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -916,55 +932,59 @@ Related guide: [Docker and CLI binaries](/docs/run-a-node/nitro/docker-and-cli-b
 | `persistent.pebble.max-concurrent-compactions` | int    | `2`         | maximum number of concurrent compactions                                                                                                                                                                                                 |
 | `persistent.pebble.sync-mode`                  | bool   | -           | if true sync mode is used (data needs to be written to WAL before the write is marked as completed)                                                                                                                                      |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## pprof
 
 Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring)
 
-<details>
-<summary>pprof flags (1)</summary>
+<Accordions>
+<Accordion title="pprof flags (1)">
 
 | Flag    | Type | Default | Description  |
 | ------- | ---- | ------- | ------------ |
 | `pprof` | bool | -       | enable pprof |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## pprof-cfg
 
 Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring)
 
-<details>
-<summary>pprof-cfg flags (2)</summary>
+<Accordions>
+<Accordion title="pprof-cfg flags (2)">
 
 | Flag             | Type   | Default     | Description          |
 | ---------------- | ------ | ----------- | -------------------- |
 | `pprof-cfg.addr` | string | `127.0.0.1` | pprof server address |
 | `pprof-cfg.port` | int    | `6071`      | pprof server port    |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## rpc
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>rpc flags (2)</summary>
+<Accordions>
+<Accordion title="rpc flags (2)">
 
 | Flag                          | Type | Default    | Description                                                                           |
 | ----------------------------- | ---- | ---------- | ------------------------------------------------------------------------------------- |
 | `rpc.batch-request-limit`     | int  | `1000`     | the maximum number of requests in a batch (0 means no limit)                          |
 | `rpc.max-batch-response-size` | int  | `10000000` | the maximum response size for a JSON-RPC request measured in bytes (0 means no limit) |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## validation
 
 Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring)
 
-<details>
-<summary>validation flags (26)</summary>
+<Accordions>
+<Accordion title="validation flags (26)">
 
 | Flag                                                                                          | Type     | Default           | Description                                                                                                                                                                                                                                                         |
 | --------------------------------------------------------------------------------------------- | -------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -995,14 +1015,15 @@ Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-a
 | `validation.wasm.enable-wasmroots-check`                                                      | bool     | `true`            | enable check for compatibility of on-chain WASM module root with node                                                                                                                                                                                               |
 | `validation.wasm.root-path`                                                                   | string   | -                 | path to machine folders, each containing wasm files (machine.v2.wavm.br, replay.wasm)                                                                                                                                                                               |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## version-alerter
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>version-alerter flags (12)</summary>
+<Accordions>
+<Accordion title="version-alerter flags (12)">
 
 | Flag                                                      | Type     | Default                                                                                            | Description                                                                                                                                                           |
 | --------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1019,14 +1040,15 @@ Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-syste
 | `version-alerter.ping-interval`                           | duration | `5m0s`                                                                                             | how often the nitro version alerter should ping arb_getMinRequiredNitroVersion for data                                                                               |
 | `version-alerter.upgrade-grace-period`                    | duration | -                                                                                                  | represents grace period up until the upgrade deadline received from arb_getMinRequiredNitroVersion, determines escalation of messages regarding node software upgrade |
 
-</details>
+</Accordion>
+</Accordions>
 
 ## ws
 
 Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-system)
 
-<details>
-<summary>ws flags (6)</summary>
+<Accordions>
+<Accordion title="ws flags (6)">
 
 | Flag            | Type    | Default              | Description                                                                    |
 | --------------- | ------- | -------------------- | ------------------------------------------------------------------------------ |
@@ -1037,4 +1059,5 @@ Related guide: [Configuration system](/docs/run-a-node/nitro/configuration-syste
 | `ws.port`       | int     | `8548`               | WS-RPC server listening port                                                   |
 | `ws.rpcprefix`  | string  | -                    | WS path path prefix on which JSON-RPC is served. Use '/' to serve on all paths |
 
-</details>
+</Accordion>
+</Accordions>

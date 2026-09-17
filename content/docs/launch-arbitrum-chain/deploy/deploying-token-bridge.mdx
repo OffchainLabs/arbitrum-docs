@@ -54,11 +54,11 @@ When creating the token bridge through the Chain SDK, the parameters `maxGasForC
 
 Let's look at the methods to create a token bridge using the Chain SDK.
 
-:::info Example script
+<VanillaAdmonition type="info" title="Example script">
 
 The Arbitrum Chain SDK includes an example script for deploying a token bridge. We recommend that you first understand the process described in this section and then check the [create-token-bridge-eth](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/create-token-bridge-eth/index.ts) and [create-token-bridge-custom-fee-token](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/create-token-bridge-custom-fee-token/index.ts) scripts.
 
-:::
+</VanillaAdmonition>
 
 Deploying a token bridge for a chain involves the following steps:
 
@@ -70,11 +70,11 @@ Deploying a token bridge for a chain involves the following steps:
 
 ### 1. Approve the custom gas token (if configured)
 
-:::note
+<VanillaAdmonition type="note">
 
 This step is only a requirement for Arbitrum chains configured to use a custom gas token.
 
-:::
+</VanillaAdmonition>
 
 Because the token bridge creation involves sending a retryable ticket to the Arbitrum chain, the `TokenBridgeCreator` needs to be able to send the appropriate custom gas token amount for its execution on the child chain. That means that before calling the `TokenBridgeCreator`, we need to grant allowance to the contract to move our custom gas token. To facilitate this process, the Chain SDK provides two functions:
 
@@ -197,13 +197,13 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
 
 ### 5. Set up the WETH gateway
 
-:::note
+<VanillaAdmonition type="note">
 
 That step only applies to ETH-based Arbitrum chains (i.e., not custom gas token chains). The canonical bridge design has a separate custom gateway for **WETH** to bridge it in and out of the Arbitrum chain.
 
 You can find more info about **WETH** gateways in our ["other gateways flavors" documentation](/docs/how-arbitrum-works/deep-dives/token-bridging#other-flavors-of-gateways).
 
-:::
+</VanillaAdmonition>
 
 Once the token bridge deploys, if the chain uses **ETH** as the gas token, you must set a special gateway to bridge **WETH**. This gateway unwraps **WETH** to bridge it as **ETH** and wraps it back to **WETH** on the destination chain.
 
@@ -251,8 +251,8 @@ if (orbitChainSetWethGatewayRetryableReceipt[0].status !== 'success') {
 }
 ```
 
-:::warning You must verify Arbitrum chain contracts' source code
+<VanillaAdmonition type="warning" title="You must verify Arbitrum chain contracts' source code">
 
 We have provided a script that will perform the source code verification of all the contracts deployed by the `L1AtomicTokenBridgeCreator` to the specific Arbitrum chain. The script is available in the [Token Bridge Contracts repo](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/docs/deployment.md#verify-orbit-contracts-source-code-on-the-blockscout).
 
-:::
+</VanillaAdmonition>

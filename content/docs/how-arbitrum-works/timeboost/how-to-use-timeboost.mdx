@@ -171,19 +171,19 @@ let currentAuctionRoundIsClosed = await publicClient.readContract({
 });
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 Remember that, by default, auctions for a given round open @@timeboostRoundSeconds=60@@ seconds before that round starts and close @@timeboostAuctionClosingSeconds=15@@ seconds before the round starts, so there might be no auctions opened at certain times.
 
-:::
+</VanillaAdmonition>
 
 Once we know the current round, we can bid for (`currentRound + 1`) and verify that the auction is still open (`!currentAuctionRoundIsClosed`), then we can submit a bid.
 
-:::tip Fetching the minimum bid amount
+<VanillaAdmonition type="tip" title="Fetching the minimum bid amount">
 
 Before submitting a bid, query the reserve pricer API to retrieve the minimum acceptable bid amount for the round you're bidding on.
 
-:::
+</VanillaAdmonition>
 
 When bids get submitted to the autonomous auctioneer endpoint, we need to send an `auctioneer_submitBid` request with the following information:
 
@@ -332,17 +332,17 @@ The sequencer handles the express lane. When sending transactions to the Sequenc
 - conditional options for Arbitrum transactions ([more information](https://github.com/OffchainLabs/go-ethereum/blob/48de2030c7a6fa8689bc0a0212ebca2a0c73e3ad/arbitrum_types/txoptions.go#L71))
 - signature (explained below)
 
-:::info Timeboost-ing third party transactions
+<VanillaAdmonition type="info" title="Timeboost-ing third party transactions">
 
 Notice that while the express lane controller must sign the `timeboost_sendExpressLaneTransaction` request, any party can sign the transaction for execution. In other words, the express lane controller can receive transactions signed by other parties and sign them to apply the time advantage offered by the express lane to those transactions.
 
-:::
+</VanillaAdmonition>
 
-:::info Support for `eth_sendRawTransactionConditional`
+<VanillaAdmonition type="info" title="Support for `eth_sendRawTransactionConditional`">
 
 Timeboost doesn't currently support the `eth_sendRawTransactionConditional` method.
 
-:::
+</VanillaAdmonition>
 
 Let's see an example of a call to this RPC method:
 
@@ -425,11 +425,11 @@ Note that if you get any of the errors below, then the sequence number used in y
 | `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number
 | `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached. Read more about this on our [Troubleshoot Timeboost page](/docs/how-arbitrum-works/timeboost/troubleshoot-timeboost#the-block-based-timeout-for-express-lane-transactions) |
 
-:::info What happens if you're not the express lane controller?
+<VanillaAdmonition type="info" title="What happens if you're not the express lane controller?">
 
 If you are not the express lane controller and you try to submit a transaction to the express lane, the sequencer will respond with the error `NOT_EXPRESS_LANE_CONTROLLER` or `NO_ONCHAIN_CONTROLLER`.
 
-:::
+</VanillaAdmonition>
 
 ## How to withdraw funds deposited in the auction contract
 
@@ -512,10 +512,10 @@ In the current implementation, information about the winning bid for a resolved 
 
 #### S3 URLs for historical bid data
 
-:::info URL updates for historical bid data
+<VanillaAdmonition type="info" title="URL updates for historical bid data">
 On June 9 2025, at around 17:27 ET (UTC−05:00), the region in which the Amazon S3 bucket for historical bid data on Arbitrum One was _changed_ from `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/` to `s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/`. The below table has been updated for the new, correct URL to access bid data after June 9, 2025 17:27 ET, but if you require data from before June 9, 2025 17:27 ET, then please use `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/`.
 
-:::
+</VanillaAdmonition>
 
 | Chain            | S3 bucket URL                                                   |
 | ---------------- | --------------------------------------------------------------- |
@@ -523,11 +523,11 @@ On June 9 2025, at around 17:27 ET (UTC−05:00), the region in which the Amazon
 | Arbitrum One     | s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/    |
 | Arbitrum Nova    | s3://timeboost-auctioneer-nova/ue2/validated-timeboost-bids/    |
 
-:::note
+<VanillaAdmonition type="note">
 
 Make sure you use `--no-sign-request` with the [AWS S3 CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/).
 
-:::
+</VanillaAdmonition>
 
 Here is an example query on how to look up and download historical bid data:
 

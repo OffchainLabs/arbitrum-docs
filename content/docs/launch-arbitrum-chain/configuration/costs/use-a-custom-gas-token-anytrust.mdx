@@ -22,11 +22,11 @@ There are other important considerations to keep in mind when deciding to use a 
 - The token must only be able to set allowance via a call to the token address itself.
 - The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert.
 
-:::info
+<VanillaAdmonition type="info">
 
 While certain restrictions are in place today (see above), some of them may be removed in upcoming releases of the custom gas token feature. Please reach out to the <Term id="offchain-labs">Offchain Labs</Term> team with any questions or requests for additions to the custom gas token feature.
 
-:::
+</VanillaAdmonition>
 
 ## Configuration of the Arbitrum chain when using a custom gas token
 
@@ -37,11 +37,11 @@ After deploying the chain, you must reset the base fees of the parent chain by c
 - `SetL1PricePerUnit`, setting `pricePerUnit` to `0`
 - `SetL1PricingRewardRate`, setting `perUnitReward` to `0`
 
-:::note
+<VanillaAdmonition type="note">
 
 These methods use <Term id="L1">L1</Term> to refer to the parent chain of the Arbitrum chain.
 
-:::
+</VanillaAdmonition>
 
 These parameter changes are strongly recommended to avoid charging users for a non-existent parent chain's base fee. The impact of not doing this is that Nitro will apply a parent chain's fee to all transactions. As Nitro assumes the native asset is **ETH**, all fees are expected to be denominated in **ETH**. This has the consequence of overcharging users for parent chain fees in native tokens that are more expensive than **ETH** (for example, if you use wrapped **BTC** as the custom gas token). In the case for tokens with prices much lower than **ETH**, the impact is far less pronounced.
 

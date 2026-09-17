@@ -7,11 +7,11 @@ author: leeederek
 sme: leeederek
 ---
 
-:::info PUBLIC PREVIEW DOCUMENT
+<VanillaAdmonition type="info" title="PUBLIC PREVIEW DOCUMENT">
 
 This document is currently in **public preview** and may change significantly as feedback is captured from readers like you. Click the **Request an update** button at the top of this document or [join the Arbitrum Discord](https://discord.gg/arbitrum) to share your feedback.
 
-:::
+</VanillaAdmonition>
 
 ## Launch status and key dates
 
@@ -28,11 +28,11 @@ This document is currently in **public preview** and may change significantly as
 
 BoLD brings new security benefits to Arbitrum chains, regardless of whether their validators are permissioned or permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. We strongly recommend Arbitrum chains adopt Arbitrum BoLD to register these security benefits while **keeping validation permissioned**.
 
-:::warning
+<VanillaAdmonition type="warning">
 
 It is strongly recommended that existing and prospective Arbitrum chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and <Term id="challenge">challenge</Term> the state of your chain. The risks are summarized below. Rigorous testing and research has been poured into the parameters chosen for Arbitrum One and so we cannot formally support or endorse use of permissionless Arbitrum BoLD in other configurations. Please note that when a chain upgrades to use Arbitrum BoLD, any withdrawals (to the parent chain) will be delayed by an additional <Term id="challenge-period">Challenge Period</Term>. The default challenge period is @@arbOneDisputeWindowDays=6.4@@ days. We recommend informing the <Term id="offchain-labs">Offchain Labs</Term> teams of your timelines and intent to upgrade so adequate warning can be provided to your chain's users on the [Arbitrum Bridge](https://bridge.arbitrum.io/).
 
-:::
+</VanillaAdmonition>
 
 Below is a quick breakdown of the benefits of permissioned BoLD vs. permissionless BoLD for your <Term id="arbitrum-chain">Arbitrum chain</Term>:
 
@@ -70,11 +70,11 @@ By default, the Censorship Timeout feature is disabled because proper configurat
 
 Arbitrum BoLD's implementation and specification have been thoroughly tested and audited. The upgrade to Arbitrum BoLD is not the subject of this section, but rather the caveats and nuances that come with whether to enable permissionless validation.
 
-:::warning
+<VanillaAdmonition type="warning">
 
 It is strongly recommended that existing and prospective Arbitrum chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and challenge the state of your chain. The risks are summarized below. Rigorous testing and research has been poured into the parameters chosen for Arbitrum One and so we cannot formally support or endorse use of permissionless Arbitrum BoLD in other configurations.
 
-:::
+</VanillaAdmonition>
 
 Enabling permissionless validation means that any entity can spin up a validator and open challenges to dispute invalid claims made by other validators on the network. This opens up an Arbitrum chain to the risk of spam and attacks by unknown and malicious entities. To mitigate this risk for Arbitrum One, a considerable amount of research and testing has been done to optimize the trade-offs between deterring attacks and managing the costs of defending Arbitrum for honest parties. This research includes carefully calculating all relevant bond sizes, challenge period durations, and relevant plans for operating the infrastructure. More information on this research can be found in the [BoLD whitepaper](https://arxiv.org/abs/2404.10491). Below are a few examples of various risks that an Arbitrum chain will hold should they pursue permissionless BoLD:
 
@@ -102,19 +102,19 @@ As mentioned earlier, the upgrade to the dispute protocol involves both a Nitro 
 
 To read more about Arbitrum BoLD, please refer to the [Gentle Introduction for BoLD](/docs/how-arbitrum-works/bold/gentle-introduction).
 
-:::caution
+<VanillaAdmonition type="caution">
 
 The recommendation is to keep Arbitrum chains validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the allowlist via the `validators[]` array. Furthermore, we recommend keeping the [Censorship Timeout](/docs/how-arbitrum-works/deep-dives/sequencer#censorship-timeout) feature disabled.
 
-:::
+</VanillaAdmonition>
 
-:::info This is not an ArbOS upgrade
+<VanillaAdmonition type="info" title="This is not an ArbOS upgrade">
 
 Enabling BoLD in your chain involves updating your chain's Nitro contracts and ensuring that your nodes are running the expected minimum (or higher) version.
 
 However, enabling BoLD does not require upgrading your [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos) version.
 
-:::
+</VanillaAdmonition>
 
 This how-to provides step-by-step instructions for Arbitrum chain operators who want to enable BoLD on their chain. Familiarity with Nitro, [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction), and [chain ownership](/docs/launch-arbitrum-chain/operate/ownership-access-control) is expected.
 
@@ -235,29 +235,29 @@ $ L1_PRIV_KEY=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bo
 
 ```
 
-:::note
+<VanillaAdmonition type="note">
 You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
 
-:::
+</VanillaAdmonition>
 
 #### Step 4: Gather the information of the current state of the chain
 
 The next script will gather information about the chain's current state (the last confirmed assertion), allowing you to initialize the new Rollup contract with that confirmed assertion. We recommended stopping all validators at this point to prevent them from confirming new assertions that might block the upgrade in the next step.
 
-:::info Last confirmed assertion
+<VanillaAdmonition type="info" title="Last confirmed assertion">
 
 As mentioned, this script will try to find the last confirmed assertion of your chain. Please note that:
 
 - If a new assertion is confirmed between Steps 4 and 5, step 5 will revert and Step 4 must be repeated.
 - The script looks for the `NodeCreated` event of the last confirmed assertion in the last 100,000 blocks. If the `NodeCreated` event was emitted in an older block, it won't be able to find it.
 
-:::
+</VanillaAdmonition>
 
-:::note Upgrades executed by a multisig or security council
+<VanillaAdmonition type="note" title="Upgrades executed by a multisig or security council">
 
 If Step 5 requires signatures that take hours or days to collect, you do not need to keep validators stopped for that entire period. The payload your signers approve does not encode assertion data, so you can refresh the lookup this script populates at any point before execution without invalidating collected signatures. To learn how to sequence this, see the [BoLD upgrade playbook](/docs/launch-arbitrum-chain/operate/bold-upgrade-playbook).
 
-:::
+</VanillaAdmonition>
 
 ```shell
 
@@ -278,11 +278,11 @@ You are now ready to perform the upgrade. The following script will either perfo
 - If `L1_PRIV_KEY` is the chain owner's, the script will perform the upgrade directly. Note that it will not ask for <Term id="confirmation">confirmation</Term> before sending the transaction.
 - If `L1_PRIV_KEY` is NOT the chain owner's, the script will print the upgrade payload.
 
-:::warning
+<VanillaAdmonition type="warning">
 
 The following script will send the upgrade <Term id="transaction">transaction</Term> directly if the `L1_PRIV_KEY` specified is the private key of the chain owner. Please note that the script **does not ask for confirmation**.
 
-:::
+</VanillaAdmonition>
 
 ```shell
 $ L1_PRIV_KEY=xxx yarn script:bold-local-execute --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
@@ -305,7 +305,7 @@ Additionally, the `--chain.info-json` object also needs to be modified:
 
 After updating the configuration, restart your node.
 
-:::info Validator nodes shutdown
+<VanillaAdmonition type="info" title="Validator nodes shutdown">
 
 When enabling BoLD on a validator, it will default to read only finalized information from its parent chain. If you run your node before the blocks that contain the upgrade transactions are finalized, the node will stop with the following message:
 
@@ -315,7 +315,7 @@ error initializing staker: could not create assertion chain: no contract code at
 
 In this case, wait until those blocks finalize, then start your node again.
 
-:::
+</VanillaAdmonition>
 
 #### Step 7: Monitor the validation process
 

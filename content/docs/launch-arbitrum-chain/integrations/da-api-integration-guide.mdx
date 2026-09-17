@@ -216,7 +216,7 @@ Your implementation must distinguish between three scenarios:
 - **Nitro behavior**: Processes empty batch (zero transactions), syncing continues
 - **Important**: Only return nil/empty if the batch is truly empty, not as an error signal
 
-:::danger Critical rule
+<VanillaAdmonition type="danger" title="Critical rule">
 
 The DA provider is a **trusted component**. Nitro cannot validate what you return, so you must:
 
@@ -224,7 +224,7 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
 - Use CertificateValidationError for invalid certificates (allows processing to continue)
 - Use other errors for infrastructure failures (stops syncing until resolved)
 
-:::
+</VanillaAdmonition>
 
 **Detection mechanism**: Nitro detects CertificateValidationError by checking if the error message **contains the string** `"certificate validation failed"`. The error can include additional context after this string.
 
@@ -607,11 +607,11 @@ The Batch Poster supports multiple DA writers in a sequential fallback chain (Ex
 }
 ```
 
-:::info Important
+<VanillaAdmonition type="info" title="Important">
 
 The fallback error and the resize error are the **only** ways to trigger automatic recovery. Any other error will **stop the batch posting entirely** without trying other writers or resizing. This design prevents expensive surprise costs from fixable infrastructure issues.
 
-:::
+</VanillaAdmonition>
 
 ### Error handling
 
@@ -702,11 +702,11 @@ Generates an **opening proof** for reading a specific **32-byte range** of the c
 }
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 The `offset` must be 32-byte aligned (0, 32, 64, 96, ...). The proof covers exactly 32 bytes starting at this offset.
 
-:::
+</VanillaAdmonition>
 
 **Returns**:
 
@@ -868,11 +868,11 @@ Generates a proof of whether a certificate is valid or invalid according to your
 }
 ```
 
-:::danger Critical rule
+<VanillaAdmonition type="danger" title="Critical rule">
 
 Invalid certificates (bad format, bad signature, untrusted signer) must return a successful response with `claimedValid=0` in the proof. Do **not** return an error.
 
-:::
+</VanillaAdmonition>
 
 **Only return errors for**:
 
@@ -1165,7 +1165,7 @@ This function must:
 3. **Validate the certificate** according to your DA system's rules
 4. **Return true if valid, false if invalid**
 
-:::danger Critical Requirement
+<VanillaAdmonition type="danger" title="Critical Requirement">
 
 This function **must not revert for invalid certificates**. It should:
 
@@ -1173,7 +1173,7 @@ This function **must not revert for invalid certificates**. It should:
 - Return `false` for invalid certificates (bad format, bad signature, untrusted signer, etc.)
 - Only revert for truly unexpected conditions (e.g., internal contract errors)
 
-:::
+</VanillaAdmonition>
 
 **Why?** The fraud-proof system needs to be able to prove "this certificate is invalid" onchain. If the function reverts, this proof becomes impossible.
 
@@ -1412,11 +1412,11 @@ This section covers creating the Arbitrum chain with custom DA support, configur
 
 To use a custom DA validator contract for the onchain proving process, the minimum nitro-contracts version required is v3.2, which is available in the `deploy-custom-da-val` branch on the nitro-contracts repository.
 
-:::info
+<VanillaAdmonition type="info">
 
 Nitro contracts v3.2 have not been publicly released yet and is not supported in the latest version of the Arbitrum Chain SDK. The following instructions specify how to deploy a RollupCreator factory contract and create a new chain with it. However, it's recommended to use the canonical RollupCreator factory contract and the Arbitrum Chain SDK once they are available.
 
-:::
+</VanillaAdmonition>
 
 You can deploy a RollupCreator factory contract following the instructions in [How to deploy new factory contracts](/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts#deploying-a-rollupcreator).
 
@@ -1470,11 +1470,11 @@ Nitro nodes connect to DA providers via JSON-RPC. Configure your provider with t
 --node.batch-poster.disable-dap-fallback-store-data-onchain   # Disable fallback to EthDA (calldata/blobs)
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 The maximum batch size is determined dynamically by querying your DA provider's `daprovider_getMaxMessageSize` method before each batch is built. There is no static configuration for maximum batch size.
 
-:::
+</VanillaAdmonition>
 
 ### JWT authentication
 
@@ -1876,11 +1876,11 @@ Integrators can customize these names using the following CLI flags on the Nitro
 - `--node.da.external-provider.data-stream.rpc-methods.stream-chunk`
 - `--node.da.external-provider.data-stream.rpc-methods.finalize-stream`
 
-:::note Universal Integer Encoding Standard
+<VanillaAdmonition type="note" title="Universal Integer Encoding Standard">
 
 All `uint64` integer parameters (e.g., `timestamp`, `nChunks`, `BatchId`) must be encoded as JSON strings prefixed with `0x` (hexadecimal encoding).
 
-:::
+</VanillaAdmonition>
 
 #### Start stream: (`daprovider_startChunkedStore`)
 
@@ -1951,11 +1951,11 @@ For integrators implementing server-side logic in Go, the recommended approach i
 
 Implementing the required JSON-RPC endpoints can be reduced to simple wrappers around the `DataStreamReceiver` methods, as demonstrated below.
 
-:::note
+<VanillaAdmonition type="note">
 
 We use the `hexutil` types to correctly handle the required `0x`-prefixed integer encoding specified in [3. Implementing reader RPC methods](#3-implementing-reader-rpc-methods).
 
-:::
+</VanillaAdmonition>
 
 ```go
 func (s *Server) StartChunkedStore(ctx context.Context, timestamp, nChunks, chunkSize, totalSize, timeout hexutil.Uint64, sig hexutil.Bytes) (*data_streaming.StartStreamingResult, error) {

@@ -12,11 +12,11 @@ Deploying new Arbitrum chains is usually done through a `RollupCreator` contract
 
 This page describes the benefits of using these canonical factory contracts and lists their addresses in all supported chains.
 
-:::info Use the Arbitrum Chain SDK
+<VanillaAdmonition type="info" title="Use the Arbitrum Chain SDK">
 
 You can use these contracts to create Arbitrum chains. However, it is strongly recommended to go through the [Chain SDK](/docs/launch-arbitrum-chain/overview/arbitrum-chain-sdk-introduction) to interact with them. Doing so prevents misconfiguring parameters and using appropriate defaults for most of them.
 
-:::
+</VanillaAdmonition>
 
 ## Benefits of using the canonical factory contracts
 
@@ -44,11 +44,11 @@ This table shows the addresses of the deployed and maintained canonical factory 
 
 This section describes the process of deploying a new `RollupCreator` and a new `TokenBridgeCreator` on a parent chain.
 
-:::warning The use of non-canonical factory contracts is unsupported
+<VanillaAdmonition type="warning" title="The use of non-canonical factory contracts is unsupported">
 
 This section describes the process of deploying new factory contracts. This can be useful when creating Arbitrum chains on a parent chain that doesn't have canonical factory contracts, or when modifying the core or token bridge contracts. However, keep in mind that using factory contracts different than the ones listed above (canonical) is not supported and might lead to unexpected issues.
 
-:::
+</VanillaAdmonition>
 
 ### Deploying a `RollupCreator`
 

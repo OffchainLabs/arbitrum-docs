@@ -14,11 +14,11 @@ Two companion pages cover the surrounding context, and this page assumes you hav
 - [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer) explains the Sequencer's role, the real-time feed, batch posting, and finality.
 - [Transaction lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle) explains the different ways to submit a transaction, including bypassing the Sequencer entirely.
 
-:::note Scope of this page
+<VanillaAdmonition type="note" title="Scope of this page">
 
 This page describes the internals of a single Sequencer instance. For the behavior of <Term id="arbitrum-one">Arbitrum One</Term>'s public sequencer endpoint (latency expectations, retries, and fallback patterns), see [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers). For running multiple redundant Sequencers with Redis-based coordination, see [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs) and [How to run a Sequencer Coordinator Manager](/docs/run-a-node/sequencer/run-sequencer-coordination-manager).
 
-:::
+</VanillaAdmonition>
 
 All code references below point to [Nitro `v3.11.0`](https://github.com/OffchainLabs/nitro/tree/a618155919315241665356fe60f3cd00d66d5e46).
 
@@ -33,11 +33,11 @@ All code references below point to [Nitro `v3.11.0`](https://github.com/Offchain
 5. The new block is published on the <Term id="sequencer-feed">Sequencer Feed</Term> for real-time consumers, and the <Term id="batch-poster">batch poster</Term> later posts the compressed sequence to the <Term id="sequencer-inbox">sequencer inbox</Term> on the <Term id="parent-chain">parent chain</Term>.
 6. <Term id="validator">Validators</Term> re-execute the sequence posted on the parent chain to verify and assert the chain's state.
 
-:::note Validators do not accept user transactions
+<VanillaAdmonition type="note" title="Validators do not accept user transactions">
 
 Validators only read the ordered transactions from the parent chain and re-execute them locally to compute the chain's state. They have no transaction queue and no way to accept, order, or process a user transaction directly. The only ingestion point for user transactions is the Sequencer, and RPC nodes exist to forward transactions to it. (The one exception, submitting through the <Term id="delayed-inbox">delayed inbox</Term> on the parent chain, is covered in [Transaction lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle).)
 
-:::
+</VanillaAdmonition>
 
 ## How transactions reach the Sequencer
 

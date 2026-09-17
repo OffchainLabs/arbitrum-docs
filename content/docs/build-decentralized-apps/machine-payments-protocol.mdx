@@ -31,11 +31,11 @@ It supports two settlement mechanisms:
 | authorization | EIP-3009 transferWithAuthorization (native to USDC) | ❌                                              | ❌                                                  |
 | permit2       | Uniswap's Permit2 permitWitnessTransferFrom         | ✅ (pay multiple recipients in one transaction) | ✅ payer must pre-approve Permit2 on the token once |
 
-:::warning Other options
+<VanillaAdmonition type="warning" title="Other options">
 
 `transaction` and `hash` credential types are stubbed but intentionally not implemented—these have weaker challenge-binding and carry fraud risk.
 
-:::
+</VanillaAdmonition>
 
 <ImageZoom src="/img/mpp.png" className="img-600px" alt="MPP Flow">
   MPP Flow

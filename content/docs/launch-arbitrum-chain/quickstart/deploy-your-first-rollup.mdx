@@ -62,11 +62,11 @@ DEPLOYER_PRIVATE_KEY=0xYourPrivateKeyHere
 | `CHAIN_DEPLOYMENT_TRANSACTION_HASH` | **Yes** (after Step 2) | Step 3, 6    | Transaction hash from the deploy script. Copy it from Step 2's output into `.env`.                                                                                                     |
 | `CHAIN_RPC`                         | Optional               | Step 6       | Your chain's RPC URL. Defaults to `http://localhost:8449` when running locally. Override if your node is elsewhere.                                                                    |
 
-:::caution Private key format
+<VanillaAdmonition type="caution" title="Private key format">
 
 Your key must start with `0x` and be 64 hex characters long (66 characters total). **Never** share it or commit it to Git.
 
-:::
+</VanillaAdmonition>
 
 ## Step 2: Deploy the chain
 

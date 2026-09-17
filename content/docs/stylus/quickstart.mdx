@@ -22,15 +22,16 @@ cover the following steps:
 
 ### Prerequisites
 
-<details>
-<summary>Rust toolchain</summary>
+<Accordions>
+<Accordion title="Rust toolchain">
 
 Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v@@stylusRustToolchain=1.91@@ or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
-</details>
+</Accordion>
+</Accordions>
 
-<details>
-<summary>VS Code</summary>
+<Accordions>
+<Accordion title="VS Code">
 
 We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you're comfortable with those.
 
@@ -41,26 +42,29 @@ Some helpful VS Code extensions for Rust development:
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
 - [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
 
- </details>
+ </Accordion>
+</Accordions>
 
-<details>
-<summary>Docker</summary>
+<Accordions>
+<Accordion title="Docker">
 
 The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
 
 You can download Docker from [Docker's website](https://www.docker.com/products/docker-desktop).
 
-</details>
+</Accordion>
+</Accordions>
 
-<details>
-<summary>Foundry's Cast</summary>
+<Accordions>
+<Accordion title="Foundry's Cast">
 
 Foundry's Cast is a command-line tool that allows you to interact with your EVM contracts. You need to [install the Foundry CLI](https://getfoundry.sh) to use Cast.
 
-</details>
+</Accordion>
+</Accordions>
 
-<details>
-<summary>Nitro devnode</summary>
+<Accordions>
+<Accordion title="Nitro devnode">
 
 Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
@@ -73,7 +77,8 @@ cd nitro-devnode
 ./run-dev-node.sh
 ```
 
-</details>
+</Accordion>
+</Accordions>
 
 ## Creating a Stylus project with cargo stylus
 
