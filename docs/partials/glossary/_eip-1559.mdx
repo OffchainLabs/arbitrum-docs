@@ -1,0 +1,7 @@
+---
+title: EIP-1559
+key: eip-1559
+titleforSort: EIP-1559
+---
+
+An Ethereum Improvement Proposal, live since Ethereum's London upgrade in 2021, that splits the gas price into two parts: a base fee per gas that the protocol sets and adjusts with demand, and a priority fee per gas that you set as a tip to bid for earlier inclusion. A transaction declares both limits as `max_fee_per_gas` and `max_priority_fee_per_gas`. Arbitrum chains use the same fields, and under PGA the priority fee decides the order in which the [Sequencer](/intro/glossary#sequencer) includes transactions.
