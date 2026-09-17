@@ -1,0 +1,225 @@
+---
+title: 'Sequencer troubleshooting'
+sidebar_label: 'Sequencer troubleshooting'
+description: 'Diagnose and resolve sequencer feed problems, broadcast backlog errors, feed stalls, and the conditions that stop block production.'
+author: pete-vielhaber
+sme: jasonw-123
+user_story: As an Arbitrum chain operator, I need to diagnose why my sequencer stopped producing blocks or why its feed stalled, so I can restore normal operation.
+content_type: how-to
+---
+
+This guide covers sequencer feed and block production problems. For setup, see [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx). For metric names and alert thresholds, see [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx). For batch posting problems, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx).
+
+<VanillaAdmonition type="info" title="Defaults in this guide">
+
+Every default value and log string on this page comes from the [Nitro source](https://github.com/OffchainLabs/nitro). Defaults change between releases. Confirm them against the version you run with `--help`.
+
+</VanillaAdmonition>
+
+## Feed relay architecture
+
+The <a data-quicklook-from="sequencer-feed">sequencer feed</a> is a WebSocket stream of transactions in the order the <a data-quicklook-from="sequencer">sequencer</a> chose. It gives you data before batches land on the <a data-quicklook-from="parent-chain">parent chain</a>, which is why nodes use it to stay current instead of waiting for batches.
+
+### What produces the feed
+
+Any <a data-quicklook-from="arbitrum-nitro">Nitro</a> node with feed output enabled runs a broadcast server on port `9642` and serves the `/feed` endpoint. Two roles enable it:
+
+| Role      | What it does                                                 | Configuration                          |
+| --------- | ------------------------------------------------------------ | -------------------------------------- |
+| Sequencer | Broadcasts messages it sequences itself                      | `node.feed.output.enable=true`         |
+| Relay     | Subscribes to an upstream feed and rebroadcasts it unchanged | `node.feed.input.url` plus feed output |
+
+A relay does not sequence, validate, or execute anything. It reads an upstream feed and distributes it to more subscribers. The message content is identical either way, so a <a data-quicklook-from="client">client</a> cannot tell from the payload whether it is connected to a sequencer or a relay.
+
+### Sequencer feed compared to relay feed
+
+The difference is operational, not structural:
+
+- **Load isolation.** Every subscriber on a sequencer is a connection the sequencer maintains instead of ordering transactions. Relays absorb that load.
+- **Compression.** Public feed endpoints may serve compressed messages using a custom dictionary. A local relay serves an uncompressed feed by default, so if you consume the feed with anything other than a standard Nitro node, run one.
+- **Blast radius.** A relay that fails takes its subscribers offline. A sequencer that fails stops the chain.
+
+In a high-availability deployment, feeds flow in one direction through two relay tiers:
+
+```shell
+sequencers  →  sequencer relays  →  external relays  →  public subscribers
+```
+
+Sequencer relays subscribe to _every_ sequencer replica, not just the active one. Non-chosen sequencers still broadcast, so aggregating all of them means no messages are lost when the chosen sequencer changes. This is why the Helm setup needs per-replica headless services—a single load-balanced address would connect to only one replica. See [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx#2-relays-setup).
+
+For installation steps, see [How to run a feed relay](/run-arbitrum-node/run-feed-relay.mdx). For the message format, see [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
+
+### Timeouts that govern a feed connection
+
+Client and server apply separate timeouts. Because the server gives up before the client does, a healthy connection that goes quiet is usually dropped by the server first.
+
+| Setting                                     | Side   | Default | What it controls                                              |
+| ------------------------------------------- | ------ | ------- | ------------------------------------------------------------- |
+| `node.feed.output.ping`                     | Server | 5s      | How often the server pings each client                        |
+| `node.feed.output.client-timeout`           | Server | 15s     | How long the server waits before dropping a silent client     |
+| `node.feed.output.read-timeout`             | Server | 1s      | How long the server waits to read data (including pings)      |
+| `node.feed.input.timeout`                   | Client | 20s     | How long the client waits for data before treating it as dead |
+| `node.feed.input.reconnect-initial-backoff` | Client | 1s      | First reconnect delay                                         |
+| `node.feed.input.reconnect-maximum-backoff` | Client | 64s     | Reconnect delay ceiling; the delay doubles each attempt       |
+
+## Broadcast backlog errors
+
+The broadcast server keeps recent messages in a **backlog** so a reconnecting client can catch up without a full resync. The backlog is split into segments holding `node.feed.output.backlog.segment-limit` messages each (default `240`).
+
+### `error in backlogSegment type assertion: clearing backlog`
+
+Nitro logs this at `ERROR`. Despite the wording, it is a broadcaster-side memory structure problem, not chain data loss or corruption. Blocks the sequencer already produced are unaffected.
+
+**What happens.** The backlog empties itself. Connected clients can no longer catch up from memory, so they resync from their configured source. Feed consumers see a gap and reconnect.
+
+**Where it comes from.** The message appears at five places in `broadcaster/backlog/backlog.go`, and they do not all behave the same way:
+
+- **Four sites inside `delete(confirmed)`** call `reset()` and genuinely clear the backlog. This runs when the broadcaster prunes messages it has seen confirmed on the parent chain.
+- **One site inside `IsBacklogSegmentNil`** logs the identical text but clears nothing—it only reports a failed type check and returns. If you see this message and the backlog is still populated, you hit this path.
+
+Because the text is the same in both cases, do not infer a backlog reset from the log line alone. Confirm it with `arb/feed/backlog/messages`, which drops to zero on a real reset.
+
+One related message comes from the same code path.
+
+#### `confirmed sequence number is past the end of stored messages`
+
+- [WARN]—The confirmed message number is ahead of everything the backlog holds, so it resets.
+- [CAUSE]—The broadcaster fell far behind, or it restarted and received confirmations for messages it never buffered.
+- [MEANING]—Expected shortly after a restart. A recurring pattern in steady state is not.
+
+### What to do
+
+1. **Confirm the scope.** Check whether the chain is still producing blocks. If it is, the problem is limited to the feed and no chain data is at risk.
+2. **Check `arb/feed/backlog/messages`.** A drop to zero confirms a real reset. Sustained growth is a different problem—see [Feed stall diagnosis](#feed-stall-diagnosis).
+3. **Treat repeats as a bug report.** A single occurrence after a restart is tolerable. A repeating pattern in steady state is worth reporting to the [Nitro repository](https://github.com/OffchainLabs/nitro/issues) with the surrounding log lines, because every code path that produces this message is an internal invariant failure rather than a configuration problem.
+4. **Do not tune `segment-limit` in response.** The error is not caused by the segment size.
+
+## Feed stall diagnosis
+
+A "stalled feed" describes three different failures. They need different fixes, so identify which one you have before acting.
+
+| What you observe                           | What it means                               | Where to look                                          |
+| ------------------------------------------ | ------------------------------------------- | ------------------------------------------------------ |
+| No new messages arrive at your node        | Connection is dead or upstream stopped      | Your node and the relay chain                          |
+| `arb/feed/backlog/messages` grows steadily | Batches are not landing on the parent chain | <a data-quicklook-from="batch-poster">Batch poster</a> |
+| Your node lags but the feed is live        | Your node cannot keep up executing          | Your node's resources                                  |
+
+<VanillaAdmonition type="caution" title="A growing feed backlog is not a lagging follower">
+
+`arb/feed/backlog/messages` counts messages the broadcast server retains until it sees them covered by batches on the parent chain. Growth means batches are not landing. It does not mean a subscriber is behind. See [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx#sequencer) for the full metric list.
+
+</VanillaAdmonition>
+
+### Detecting a stall
+
+The feed carries no _heartbeat_ at the application level, so silence is ambiguous—a chain with no traffic produces no messages. Use these signals instead:
+
+- **Compare block height to feed activity.** If the chain advances but you receive nothing, your connection is the problem. If neither advances, see [Block production halt conditions](#block-production-halt-conditions).
+- **Watch for reconnect loops.** The client gives up after `node.feed.input.timeout` (default `20s`) and reconnects with backoff that doubles from `1s` to `64s`. Repeated reconnects in the logs mean the connection is unstable, not idle.
+- **Check each relay tier separately.** With sequencer relays and external relays chained, a stall at one tier looks identical from the bottom. Connect directly to each tier to find where messages stop.
+
+### Recovering from a stall
+
+1. **Restart the relay.** A relay holds no state that needs preserving. Restarting reconnects it upstream and repopulates its backlog.
+2. **Verify the upstream URL list.** A relay configured against a single sequencer replica goes silent whenever that replica is not chosen. Point sequencer relays at every replica.
+3. **Check for rate limiting.** Public feed endpoints may throttle excessive connections. If you added redundant connections, remove them and reconnect.
+4. **Fall back to the parent chain.** A node with a working parent chain connection still syncs from batches without any feed. Sync is slower but correct, so a feed outage degrades latency rather than halting your node.
+
+<VanillaAdmonition type="caution" title="Redundant feed connections">
+
+You can point a relay at the same endpoint twice to survive a reset without waiting for a reconnect. This doubles bandwidth and risks rate limiting. Configure it at the relay, never at individual nodes, and never use more than one redundant connection. See [How to run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+
+</VanillaAdmonition>
+
+## Block production halt conditions
+
+Block production stops for one of four reasons: no sequencer holds the lockout, the sequencer refuses to build a block, the sequencer accepts no transactions, or execution fails. The checks below run in that order inside Nitro's block creation loop.
+
+### 1. No sequencer is chosen
+
+With the coordinator enabled, exactly one sequencer holds the lockout in Redis. When none does, every node forwards transactions to a target that is not sequencing, and the chain stops.
+
+#### `sequencer priorities unset`
+
+- [ERROR]—The `coordinator.priorities` key does not exist in Redis.
+- [CAUSE]—A new or wiped Redis instance, or one that was never populated.
+- [ACTION]—Register your sequencers. See [Redis priority registration](/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx#redis-priority-registration).
+
+#### `no sequencer appears to want the lockout on redis`
+
+- [DEBUG→WARN→ERROR]—The priority list exists, but no sequencer on it has set its wants-lockout key. Nitro logs this at `DEBUG` at first, escalates to `WARN` after 10 seconds and `ERROR` after 20, and throttles it to once every 5 seconds.
+- [CAUSE]—Every listed sequencer is unsynced, down, or unreachable—or the URLs in the list do not match any running sequencer's `my-url`.
+- [ACTION]—Compare the `priorities` value printed in the log against each sequencer's configured `my-url`. They must match exactly.
+
+#### `sequencer is not synced`
+
+- [WARN]—The sequencer does not ask for the lockout because it has not caught up. Nitro attaches sync details to the log entry.
+- [CAUSE]—The node is still replaying messages, or it cannot reach the feed or parent chain.
+- [MEANING]—Expected during startup. Sustained means the node cannot catch up.
+
+#### `myurl main sequencer, but no sequencer exists`
+
+- [ERROR]—The node is top of the priority list, but it has no sequencer configured.
+- [CAUSE]—A node registered in `coordinator.priorities` without `node.sequencer=true`. Registering a batch poster causes exactly this.
+- [ACTION]—Remove the node from the priority list, or enable sequencing on it.
+
+### 2. The sequencer refuses to build a block
+
+#### `cannot sequence: unknown L1 block or L1 timestamp too far from local clock time`
+
+- [ERROR]—The single most common cause of a silent halt on an otherwise healthy sequencer. Queued transactions are pushed back to the retry queue and the sequencer waits before trying again.
+- [CAUSE]—Either the sequencer has not learned any parent chain block yet, or the newest parent chain block's timestamp differs from the local clock by more than `execution.sequencer.max-acceptable-timestamp-delta` (default `1h`).
+- [MEANING]—Two very different faults share this message: a parent chain connection that is down or lagging, and a local clock that has drifted.
+- [ACTION]—Check parent chain RPC reachability and freshness first, then verify NTP on the sequencer host. Raising the delta hides the symptom without fixing either cause.
+
+<VanillaAdmonition type="caution" title="This check only runs with a parent chain reader">
+
+The timestamp check applies only when the sequencer has a parent chain reader configured. A sequencer without one never halts for this reason, which is why local dev nodes do not reproduce it.
+
+</VanillaAdmonition>
+
+#### `sequencer block creation panicked`
+
+- [ERROR]—Block creation panicked. Nitro recovers, returns an internal error to every queued transaction, and waits `max-block-speed` before retrying.
+- [MEANING]—The sequencer survives, so this appears as a stall rather than a crash. A repeating panic halts the chain in practice.
+- [ACTION]—Capture the attached backtrace and report it.
+
+### 3. The sequencer accepts no transactions
+
+The sequencer keeps running here, but the block it builds is empty because the sequencer rejects everything before queuing it.
+
+| Rejection message                                                                    | Trigger                                                                                                              |
+| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `currently not accepting transactions due to expected surplus being below threshold` | Expected surplus fell below `expected-surplus-hard-threshold`                                                        |
+| `transaction sender is not on the whitelist`                                         | `sender-whitelist` is set and the sender is absent                                                                   |
+| `sequencer temporarily not available`                                                | This node is forwarding rather than sequencing, and its <a data-quicklook-from="forwarder">forwarder</a> is disabled |
+
+For the surplus flags, see [Sequencer configuration reference](/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference.mdx#expected-surplus-flags).
+
+`sequencer temporarily not available` comes from the forwarder, not the sequencer. A node returns it when it is not the chosen sequencer and has no enabled target to forward to. Brief occurrences during a lockout handoff are normal. Sustained occurrences across every node mean no sequencer is chosen—see [No sequencer is chosen](#1-no-sequencer-is-chosen).
+
+### 4. Execution problems
+
+#### `took over 5 seconds to sequence a block`
+
+- [WARN]—Fixed 5-second threshold, not configurable.
+- [CAUSE]—Slow disk, an oversized block, or resource contention.
+- [MEANING]—An early warning, not a halt. Sustained occurrences precede a growing backlog.
+- [ACTION]—Check disk I/O and CPU. See [Managing state growth](/launch-arbitrum-chain/operate/state-growth.mdx).
+
+### What does not halt block production
+
+Ruling these out saves time:
+
+- **A batch posting backlog.** The sequencer keeps producing blocks while unposted batches accumulate. See [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx).
+- **A feed outage.** The feed is an output. Losing it affects subscribers, not block production.
+- **A <a data-quicklook-from="validator">validator</a> or <a data-quicklook-from="proposer">proposer</a> failure.** Validation runs behind block production and does not gate it.
+- **An unfunded batch poster.** Posting stops; sequencing does not.
+
+### Diagnostic order
+
+1. Is the chain producing blocks? Compare block height across two samples.
+2. Does a sequencer hold the lockout? Read `coordinator.chosen` in Redis, or use the Sequencer Coordination Manager (SQM).
+3. Does the chosen sequencer log `cannot sequence`? Check the parent chain connection and clock.
+4. Are transactions being rejected on arrival? Check surplus thresholds and the sender allowlist.
+5. Is block creation slow rather than stopped? Check `took over 5 seconds to sequence a block` and host resources.
