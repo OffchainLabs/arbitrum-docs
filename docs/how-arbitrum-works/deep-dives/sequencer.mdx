@@ -60,7 +60,7 @@ Censorship Timeout aims to limit the negative effects of:
 - Prolonged Sequencer censorship, or
 - Unexpected Sequencer outages
 
-### How the Censorship Timeout works
+## How the Censorship Timeout works
 
 To explain how this feature improves the security of chains settling to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, consider a scenario where an <a data-quicklook-from="layer-3-l3">L3</a>’s parent chain Sequencer (the <a data-quicklook-from="L2">L2</a> Sequencer) is censoring or offline. In such a case, every <a data-quicklook-from="assertion">assertion</a> and/or sub-<a data-quicklook-from="challenge">challenge</a> move would need to wait @@arbOneForceIncludePeriodHours=24@@ hours before bypassing the L2 Sequencer (using the Sequencer Inbox’s <a data-quicklook-from="forceinclusion">`forceInclusion`</a> method). In this scenario, a challenge resolution would be delayed by a time t where t = (@@arbOneForceIncludePeriodHours=24@@ hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
 
