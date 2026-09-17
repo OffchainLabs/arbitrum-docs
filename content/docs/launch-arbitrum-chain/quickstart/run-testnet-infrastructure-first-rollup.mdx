@@ -41,7 +41,7 @@ The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`
 
 | Requirement            | What you need                                                                                                                                                                                       |
 | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Deployed chain**     | Complete [Deploy your first rollup](/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch.mdx), Steps 1–4 (deploy, generate config, fund batch poster and validator), **do not complete Step 5** |
+| **Deployed chain**     | Complete [Deploy your first rollup](/docs/launch-arbitrum-chain/quickstart/deploy-your-first-rollup), Steps 1–4 (deploy, generate config, fund batch poster and validator), **do not complete Step 5** |
 | **Kubernetes cluster** | Access to a cluster with multiple availability zones (e.g., EKS, GKE, AKS)                                                                                                                          |
 | **Helm**               | [Install Helm](https://helm.sh/docs/intro/install/)                                                                                                                                                 |
 | **kubectl**            | Configured to access your cluster                                                                                                                                                                   |
@@ -252,7 +252,7 @@ Do **not** add the batch poster to the Sequencer Coordinator Manager's sequencer
 
 ## Step 9: Deploy validator
 
-The validator validates blocks and posts [assertions](/how-arbitrum-works/deep-dives/assertions.mdx) to the parent chain. It is required for chain security. The validator wallet needs **ETH** on the parent chain (Arbitrum Sepolia) for gas.
+The validator validates blocks and posts [assertions](/docs/how-arbitrum-works/deep-dives/assertions) to the parent chain. It is required for chain security. The validator wallet needs **ETH** on the parent chain (Arbitrum Sepolia) for gas.
 
 - Save the validator private key to a file (do not commit to Git):
 
@@ -523,4 +523,4 @@ Your chain RPC is at your full node URL (load balancer or CDN). Users and apps c
 
 ### Next steps
 
-For running production mainnet, consider a RaaS provider. See the [list of RaaSes on the Third-party providers page](/launch-arbitrum-chain/integrations/infrastructure-providers.mdx#rollup-as-a-service-raas-providers).
+For running production mainnet, consider a RaaS provider. See the [list of RaaSes on the Third-party providers page](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).

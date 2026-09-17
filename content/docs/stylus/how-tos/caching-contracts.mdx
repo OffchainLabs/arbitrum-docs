@@ -28,11 +28,11 @@ To ensure that developers periodically pay to maintain their position in the cac
 
 During activation, we compute the contract's initialization costs for both non-cached and cached initialization. These costs take into account factors such as the number of functions, types, code size, data length, and memory usage. It's important to note that accessing an uncached contract does not automatically add it to the `CacheManager`'s cache. Only explicit calls to the `CacheManager` contract will add a contract to the cache. If a contract is removed from the cache, calling the contract becomes more expensive unless it is re-added.
 
-To see how much gas contract initialization would cost, you need to call `programInitGas(address)` from the [ArbWasm precompile](/arbitrum-essentials/precompiles/reference#common-precompiles). This function returns both the initialization cost when the contract is cached and when it is not.
+To see how much gas contract initialization would cost, you need to call `programInitGas(address)` from the [ArbWasm precompile](/docs/arbitrum-essentials/precompiles/reference#common-precompiles). This function returns both the initialization cost when the contract is cached and when it is not.
 
 <VanillaAdmonition type="note">
 
-Fragmented contracts for those over 24kb. Stylus contracts deployed across multiple fragments (see [contract size](/stylus/cli-tools/overview#deploying-contracts-larger-than-24-kb)) incur an additional activation cost roughly equivalent to one `EXTCODEREAD` per fragment, since ArbOS must read each fragment from state before concatenation and decompression. Caching the collection contract still benefits subsequent calls, as the cache stores the fully reconstructed and instrumented native code — not the underlying fragments.
+Fragmented contracts for those over 24kb. Stylus contracts deployed across multiple fragments (see [contract size](/docs/stylus/cli-tools/overview#deploying-contracts-larger-than-24-kb)) incur an additional activation cost roughly equivalent to one `EXTCODEREAD` per fragment, since ArbOS must read each fragment from state before concatenation and decompression. Caching the collection contract still benefits subsequent calls, as the cache stores the fully reconstructed and instrumented native code — not the underlying fragments.
 
 </VanillaAdmonition>
 

@@ -8,7 +8,7 @@ author: pete-vielhaber
 sme: jose-franco
 ---
 
-This guide covers problems that operators encounter when deploying, verifying, and registering contracts for the canonical <a data-quicklook-from="arb-token-bridge">token bridge</a>. For the deployment procedure itself, see [Deploy a token bridge using the Chain SDK](/launch-arbitrum-chain/deploy/token-bridge.mdx). To learn how the bridge is designed, see [Token bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx).
+This guide covers problems that operators encounter when deploying, verifying, and registering contracts for the canonical <a data-quicklook-from="arb-token-bridge">token bridge</a>. For the deployment procedure itself, see [Deploy a token bridge using the Chain SDK](/docs/launch-arbitrum-chain/deploy/deploying-token-bridge). To learn how the bridge is designed, see [Token bridging](/docs/how-arbitrum-works/deep-dives/token-bridging).
 
 Most routing problems in this guide trace back to a single behavior: the <a data-quicklook-from="gateway-router">gateway router</a> falls back to a default gateway instead of failing when a token has no registration. We’ll first cover issues related to how a gateway router chooses a specific gateway for a given token.
 
@@ -30,7 +30,7 @@ Step 2 is the reason misrouting is so hard to spot. A token you believe is regis
 
 ## Bridged USDC routes to the standard gateway
 
-You deployed a bridged **USDC** gateway following [the bridged USDC standard](/launch-arbitrum-chain/integrations/bridged-usdc.mdx), but the SDK and bridge UI keep sending **USDC** through the standard **ERC-20** gateway, producing the default bridged token rather than the Circle-standard one.
+You deployed a bridged **USDC** gateway following [the bridged USDC standard](/docs/launch-arbitrum-chain/integrations/bridged-usdc-standard), but the SDK and bridge UI keep sending **USDC** through the standard **ERC-20** gateway, producing the default bridged token rather than the Circle-standard one.
 
 ### What causes this problem
 
@@ -44,7 +44,7 @@ As part of the **USDC** bridge deployment script, the custom **USDC** gateway is
 
 ## Custom gateway registration fails
 
-Registering a token or gateway involves sending specific transactions to the `TokenBridge` router or gateway. This section will cover common troubleshooting, for a deeper understanding refer to the [Generic custom gateway](/arbitrum-essentials/bridging/configure-token-gateway/generic-custom.mdx) page.
+Registering a token or gateway involves sending specific transactions to the `TokenBridge` router or gateway. This section will cover common troubleshooting, for a deeper understanding refer to the [Generic custom gateway](/docs/arbitrum-essentials/bridging/configure-token-gateway/generic-custom) page.
 
 ### Wrong caller for the registration path
 
@@ -58,7 +58,7 @@ Because it's `onlyOwner` and the owner is the `UpgradeExecutor` on chains deploy
 
 Because registration is asynchronous, the parent chain transaction can succeed while the child chain retryable fails or expires unredeemed. The result is a half-applied registration: one router resolves your custom gateway, and the other falls back to its default. Deposits and withdrawals then disagree about which gateway owns the token.
 
-After any registration, confirm `getGateway` returns the same gateway on both routers. If the child chain side is missing, locate the retryable ticket from the parent chain transaction and redeem it. To learn how redemption works, see [Parent to child chain messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx).
+After any registration, confirm `getGateway` returns the same gateway on both routers. If the child chain side is missing, locate the retryable ticket from the parent chain transaction and redeem it. To learn how redemption works, see [Parent to child chain messaging](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging).
 
 ### Array length and remapping errors
 
@@ -72,7 +72,7 @@ Your chain has no <a data-quicklook-from="weth-gateway">WETH gateway</a>, no chi
 
 If your chain uses a <a data-quicklook-from="custom-gas-token">custom gas token</a>, it doesn't need a WETH gateway since ETH is not the native token of the chain and doesn't require specific handling. In a custom gas token chain, WETH can be bridge through the default gateway.
 
-On an **ETH**-based chain, the gateway is wired to the **WETH** address stored by the creator you deployed through, not to one you choose at chain creation time. To learn which creator you used, see [Canonical factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx).
+On an **ETH**-based chain, the gateway is wired to the **WETH** address stored by the creator you deployed through, not to one you choose at chain creation time. To learn which creator you used, see [Canonical factory contracts](/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts).
 
 ## `network does not support ENS` when deploying the creator
 

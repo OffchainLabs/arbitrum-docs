@@ -16,7 +16,7 @@ The gas target is measured in _gas per second_ and is used as a threshold for in
 
 For example, when cumulative usage on Arbitrum One and Arbitrum Nova exceed a certain amount of gas per second, the `L2 base fee` rises to increase the amount of `gwei` charged per unit of gas. This happens using a similar approach to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md).
 
-[You can read more about how gas fees are calculated on Arbitrum in this explainer](/how-arbitrum-works/deep-dives/gas-and-fees.mdx)
+[You can read more about how gas fees are calculated on Arbitrum in this explainer](/docs/how-arbitrum-works/deep-dives/gas-and-fees)
 
 ## Why do we have throughput limits on blockchains?
 
@@ -30,7 +30,7 @@ The gas target, therefore, is fundamentally a protective mechanism. If the chain
 
 An increase in the speed target allows users and apps to perform more onchain actions without incurring additional costs. This makes it possible for a chain's nodes to experience higher and unexpected loads. When faced with high, sustained demand, the additional load could eventually lead to undesirable increases in infrastructure costs, cause nodes to lag behind the chain, and risk halting if the demand exceeds the resources of validator nodes.
 
-Refer to the [State Growth](/launch-arbitrum-chain/operate/state-growth.mdx) article for more information.
+Refer to the [State Growth](/docs/launch-arbitrum-chain/operate/state-growth) article for more information.
 
 ## How to set the gas target
 
@@ -47,7 +47,7 @@ Call `ArbGasInfo.getGasPricingConstraints()` first (available from ArbOS 51 onwa
 
 <VanillaAdmonition type="warning">
 
-From [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) onward, `setSpeedLimit` writes only the single gas target value. It does not change a multiple gas target configuration. On a chain with constraints configured, the call succeeds and the stored value changes, but gas prices do not respond. To move such a chain back to a single gas target, call `setGasPricingConstraints` with an empty array, then call `setSpeedLimit`.
+From [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) onward, `setSpeedLimit` writes only the single gas target value. It does not change a multiple gas target configuration. On a chain with constraints configured, the call succeeds and the stored value changes, but gas prices do not respond. To move such a chain back to a single gas target, call `setGasPricingConstraints` with an empty array, then call `setSpeedLimit`.
 
 </VanillaAdmonition>
 
@@ -62,9 +62,9 @@ From [ArbOS 51 Dia](/run-arbitrum-node/arbos-releases/arbos51) onward, `setSpeed
 | `setL2GasBacklogTolerance(uint64 sec)` | The backlog ArbOS forgives before it raises the base fee, in seconds                | `10`        | `ArbGasInfo.getGasBacklogTolerance()` |
 | `setGasBacklog(uint64 backlog)`        | The accumulated backlog directly, bypassing normal accounting                       | `0`         | `ArbGasInfo.getGasBacklog()`          |
 
-To tune the equivalent behavior on a chain that uses multiple gas targets, set the `adjustmentWindowSeconds` and `startingBacklogValue` fields of each constraint instead. Refer to [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx).
+To tune the equivalent behavior on a chain that uses multiple gas targets, set the `adjustmentWindowSeconds` and `startingBacklogValue` fields of each constraint instead. Refer to [how to configure dynamic pricing for your chain](/docs/launch-arbitrum-chain/configuration/costs/dynamic-pricing-for-arbitrum-chains).
 
-These four parameters control how the chain prices congestion. They do not control what the chain charges for posting data to the parent chain. For that, refer to [tune parent chain data fee pricing](/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing.mdx).
+These four parameters control how the chain prices congestion. They do not control what the chain charges for posting data to the parent chain. For that, refer to [tune parent chain data fee pricing](/docs/launch-arbitrum-chain/configuration/costs/parent-chain-data-fee-pricing).
 
 ### Set a single gas target
 
@@ -84,13 +84,13 @@ cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getGa
 
 `getGasAccountingParams()` returns the gas target, the pool size, and the block gas limit. Check that the first value matches what you set.
 
-Raise the target in small steps and watch your nodes between each step. Refer to [monitoring your Arbitrum chain](/launch-arbitrum-chain/operate/monitoring.mdx) for the metrics to watch, and to [configure and optimize gas](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx) for the other gas parameters you can tune.
+Raise the target in small steps and watch your nodes between each step. Refer to [monitoring your Arbitrum chain](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the metrics to watch, and to [configure and optimize gas](/docs/launch-arbitrum-chain/configuration/costs/gas-optimization-tools) for the other gas parameters you can tune.
 
 ### Set multiple gas targets
 
-Multiple gas targets smooth price transitions and are the recommended configuration from ArbOS 51 Dia onward. To configure them, refer to [how to configure dynamic pricing for your chain](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx).
+Multiple gas targets smooth price transitions and are the recommended configuration from ArbOS 51 Dia onward. To configure them, refer to [how to configure dynamic pricing for your chain](/docs/launch-arbitrum-chain/configuration/costs/dynamic-pricing-for-arbitrum-chains).
 
-For the full list of `ArbOwner` methods, refer to the [precompiles reference](/arbitrum-essentials/precompiles/reference.mdx#arbowner).
+For the full list of `ArbOwner` methods, refer to the [precompiles reference](/docs/arbitrum-essentials/precompiles/reference#arbowner).
 
 ## Is Offchain Labs working on software improvements to allow Arbitrum chain owners to _safely_ raise their chain's speed target?
 

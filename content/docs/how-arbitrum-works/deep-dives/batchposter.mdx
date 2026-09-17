@@ -15,7 +15,7 @@ Batch posting is a fundamental process for the <a data-quicklook-from="sequencer
 
 #### 1. Messages arrive (upstream handoff)
 
-A transaction’s journey into the <a data-quicklook-from="batch-poster">batch poster</a> begins after it’s already been [sequenced](/how-arbitrum-works/deep-dives/sequencer.mdx). The poster pulls ordered child chain messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/how-arbitrum-works/deep-dives/stf.mdx), and [soft finality](/how-arbitrum-works/reference/finality-and-reorgs.mdx#the-three-confirmation-levels) all happened before this point and live outside of the batch poster.
+A transaction’s journey into the <a data-quicklook-from="batch-poster">batch poster</a> begins after it’s already been [sequenced](/docs/how-arbitrum-works/deep-dives/sequencer). The poster pulls ordered child chain messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/how-arbitrum-works/deep-dives/stf.mdx), and [soft finality](/docs/how-arbitrum-works/reference/finality-and-reorgs#the-three-confirmation-levels) all happened before this point and live outside of the batch poster.
 
 #### 2. The poster decides where it stands
 
@@ -39,13 +39,13 @@ The batch poster hands the calldata, blobs, and gas estimate to the `DataPoster`
 
 #### 7. Finality and feedback
 
-Once the parent chain transaction confirms, the transactions cross from the Sequencer’s soft finality into [hard finality](/how-arbitrum-works/reference/finality-and-reorgs.mdx) anchored on the parent chain. The poster updates its backlog estimate (feeding back into compression effort and fee urgency), and a background revert watcher monitors the parent chain—if a posted batch ever fails onchain, it halts all posting for operator intervention.
+Once the parent chain transaction confirms, the transactions cross from the Sequencer’s soft finality into [hard finality](/docs/how-arbitrum-works/reference/finality-and-reorgs) anchored on the parent chain. The poster updates its backlog estimate (feeding back into compression effort and fee urgency), and a background revert watcher monitors the parent chain—if a posted batch ever fails onchain, it halts all posting for operator intervention.
 
 ## Related resources
 
-- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer.mdx#posting-to-the-parent-chain): batching, compression, and the Sequencer Inbox methods.
-- [Sequencer transaction flow](/how-arbitrum-works/deep-dives/sequencer-transaction-flow.mdx): what happens before the handoff, from the queue to block creation.
-- [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing): how the parent chain pricer reimburses batch posting costs.
-- [Finality and reorgs](/how-arbitrum-works/reference/finality-and-reorgs.mdx): what parent chain finality guarantees, and the failure modes around posting.
-- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx): what the DAC does with the data behind the DA handoff.
-- [Run a batch poster](/launch-arbitrum-chain/run-a-node/batch-poster.mdx) and [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx): the operator view.
+- [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer#posting-to-the-parent-chain): batching, compression, and the Sequencer Inbox methods.
+- [Sequencer transaction flow](/docs/how-arbitrum-works/deep-dives/sequencer-transaction-flow): what happens before the handoff, from the queue to block creation.
+- [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing): how the parent chain pricer reimburses batch posting costs.
+- [Finality and reorgs](/docs/how-arbitrum-works/reference/finality-and-reorgs): what parent chain finality guarantees, and the failure modes around posting.
+- [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol): what the DAC does with the data behind the DA handoff.
+- [Run a batch poster](/docs/run-a-node/run-batch-poster) and [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting): the operator view.

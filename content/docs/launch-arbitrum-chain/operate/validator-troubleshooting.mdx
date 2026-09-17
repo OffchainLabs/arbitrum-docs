@@ -8,13 +8,13 @@ author: pete-vielhaber
 sme: TBD
 ---
 
-This guide covers operational issues that <a data-quicklook-from="validator">validator</a> operators encounter after setup, with guidance on diagnosing root causes and resolving them. For initial setup, see [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx). For the metrics and alerts to watch, see the validator section of [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx). For sequencing a <a data-quicklook-from="bold">BoLD</a> upgrade, see the [BoLD upgrade playbook](/launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx).
+This guide covers operational issues that <a data-quicklook-from="validator">validator</a> operators encounter after setup, with guidance on diagnosing root causes and resolving them. For initial setup, see [How to run a validator](/docs/run-a-node/more-types/run-validator-node). For the metrics and alerts to watch, see the validator section of [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations). For sequencing a <a data-quicklook-from="bold">BoLD</a> upgrade, see the [BoLD upgrade playbook](/docs/launch-arbitrum-chain/operate/bold-upgrade-playbook).
 
 Most of this guide applies to both the legacy staker and the <a data-quicklook-from="bold">BoLD</a> staker. Where behavior differs, this guide calls it out.
 
 ## Validation strategies in operation
 
-The [validator setup guide](/run-arbitrum-node/more-types/02-run-validator-node.mdx#validation-strategies) describes what each strategy does. This section covers the operational consequences that are easy to get wrong.
+The [validator setup guide](/docs/run-a-node/more-types/run-validator-node#validation-strategies) describes what each strategy does. This section covers the operational consequences that are easy to get wrong.
 
 | Strategy       | Operational notes                                                                                                                                                                                                                                                                                                                                                                                     |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -32,7 +32,7 @@ A validator bonds once. Changing strategy—for example from `MakeNodes` to `Def
 
 <VanillaAdmonition type="caution" title="Multiple MakeNodes validators produce expected reverts">
 
-If more than one `MakeNodes` validator runs on the same chain, they may attempt to create the same assertion simultaneously. Only one succeeds; the others revert. These reverts are normal contention, not a malfunction. Do not alert on them individually—alert on assertions failing to appear at all. See [`arb/validator/poster/error_posting_assertion`](/launch-arbitrum-chain/operate/monitoring.mdx) for the counter to watch, and expect a nonzero baseline when you run redundant <a data-quicklook-from="proposer">proposers</a>.
+If more than one `MakeNodes` validator runs on the same chain, they may attempt to create the same assertion simultaneously. Only one succeeds; the others revert. These reverts are normal contention, not a malfunction. Do not alert on them individually—alert on assertions failing to appear at all. See [`arb/validator/poster/error_posting_assertion`](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the counter to watch, and expect a nonzero baseline when you run redundant <a data-quicklook-from="proposer">proposers</a>.
 
 </VanillaAdmonition>
 
@@ -52,7 +52,7 @@ Two rules to check when tuning these:
 - **The posting interval must exceed the Rollup contract's `minimumAssertionPeriod`.** That is an onchain constraint measured in <a data-quicklook-from="parent-chain">parent-chain</a> blocks (`block.number` units — on an Arbitrum parent these track the underlying L1 block number, not the Arbitrum block height). The validator checks it before posting and waits until enough blocks have passed, so a shorter posting interval silently caps you at the onchain floor rather than causing reverted transactions. Read `minimumAssertionPeriod` from your Rollup contract rather than assuming the default.
 - **Do not tune the confirming interval to make confirmations happen sooner.** Confirmation timing is governed onchain by `confirmPeriodBlocks` and, where a challenge occurred, `challengeGracePeriodBlocks`. Lowering `--node.bold.assertion-confirming-interval` only increases how often the validator checks, which adds parent-chain RPC load without advancing anything.
 
-For the full flag list, see the [Nitro CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx). For the onchain parameters, see the parameter table in [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold.mdx#table-of-arbitrum-bold-parameters).
+For the full flag list, see the [Nitro CLI flags reference](/docs/run-a-node/nitro/cli-flags-reference). For the onchain parameters, see the parameter table in [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#table-of-arbitrum-bold-parameters).
 
 ## Parent-chain read consistency
 
@@ -143,4 +143,4 @@ Before attempting it, note the constraints:
 
 ## Related monitoring
 
-Assertion-progress and failure signals, including which metrics apply to the legacy staker versus the BoLD staker and the `validatorAfkBlocks` allowlist caution, are documented in the validator section of [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx).
+Assertion-progress and failure signals, including which metrics apply to the legacy staker versus the BoLD staker and the `validatorAfkBlocks` allowlist caution, are documented in the validator section of [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations).

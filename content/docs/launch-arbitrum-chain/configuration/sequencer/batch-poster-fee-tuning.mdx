@@ -8,9 +8,9 @@ author: pete-vielhaber
 sme: jason-w123
 ---
 
-The [Batch Poster](/how-arbitrum-works/deep-dives/assertions.mdx) relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the <a data-quicklook-from="parent-chain">parent chain</a>. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions aren't included promptly.
+The [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the <a data-quicklook-from="parent-chain">parent chain</a>. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions aren't included promptly.
 
-This guide covers how to tune fee-related parameters to balance cost efficiency against batch posting reliability. For initial setup of blob posting, see [Enabling blob transactions](/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs.mdx). For general batch poster configuration, see [Run a batch poster](/launch-arbitrum-chain/run-a-node/batch-poster.mdx).
+This guide covers how to tune fee-related parameters to balance cost efficiency against batch posting reliability. For initial setup of blob posting, see [Enabling blob transactions](/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs). For general batch poster configuration, see [Run a batch poster](/docs/run-a-node/run-batch-poster).
 
 ## Blob transaction fee configuration
 
@@ -83,7 +83,7 @@ Each duration triggers a replacement attempt with a higher fee. The schedule sta
 
 :::caution
 
-If the data poster pauses due to gas prices exceeding the fee cap for an extended period, unposted batches accumulate. Monitor your batch posting logs for signs of a growing backlog. See [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) for guidance on diagnosing and resolving backlogs.
+If the data poster pauses due to gas prices exceeding the fee cap for an extended period, unposted batches accumulate. Monitor your batch posting logs for signs of a growing backlog. See [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting) for guidance on diagnosing and resolving backlogs.
 
 :::
 

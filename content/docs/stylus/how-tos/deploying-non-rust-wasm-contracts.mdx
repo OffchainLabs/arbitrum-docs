@@ -71,7 +71,7 @@ Only functions from the `vm_hooks` module are permitted:
 (import "vm_hooks" "storage_store_bytes32" (func $storage_store (param i32 i32)))
 ```
 
-See the [hostio exports documentation](/stylus/advanced/hostio-exports) for the complete list of available VM hooks.
+See the [hostio exports documentation](/docs/stylus/advanced/hostio-exports) for the complete list of available VM hooks.
 
 ### Memory requirements
 
@@ -502,7 +502,7 @@ Build the Zig library to a freestanding WASM file for onchain deployment:
 zig build-lib ./src/main.zig -target wasm32-freestanding -dynamic --export=user_entrypoint -OReleaseSmall --export=mark_unused
 ```
 
-Deploy it with the Stylus CLI tool. This example deploys to Arbitrum Sepolia; you can also target a [local Stylus devnode](/run-arbitrum-node/run-local-full-chain-simulation) at `http://localhost:8547`:
+Deploy it with the Stylus CLI tool. This example deploys to Arbitrum Sepolia; you can also target a [local Stylus devnode](/docs/run-a-node/run-local-full-chain-simulation) at `http://localhost:8547`:
 
 ```shell
 cargo stylus deploy \

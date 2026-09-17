@@ -61,7 +61,7 @@ impl Token {
 **Important Notes:**
 
 - For normal L2-to-L2 transactions, behaves like EVM's `CALLER` opcode
-- For L1-to-L2 retryable ticket transactions, the top-level sender's address will be [aliased](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#address-aliasing)
+- For L1-to-L2 retryable ticket transactions, the top-level sender's address will be [aliased](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#address-aliasing)
 - In delegate calls, returns the original caller (not the delegating contract)
 
 ### `msg_value()`
@@ -147,7 +147,7 @@ impl Factory {
 }
 ```
 
-**Important:** Returns the original EOA (Externally Owned Account) that initiated the transaction, even through multiple contract calls. When deploying via a factory pattern, `msg_sender()` returns the factory address — use `tx_origin()` to get the actual deployer. See [Using `msg_sender()` instead of `tx_origin()`](../how-tos/using-constructors#using-msg_sender-instead-of-tx_origin) for details.
+**Important:** Returns the original EOA (Externally Owned Account) that initiated the transaction, even through multiple contract calls. When deploying via a factory pattern, `msg_sender()` returns the factory address — use `tx_origin()` to get the actual deployer. See [Using `msg_sender()` instead of `tx_origin()`](/docs/stylus/how-tos/using-constructors#using-msg_sender-instead-of-tx_origin) for details.
 
 ### `tx_gas_price()`
 
@@ -224,7 +224,7 @@ impl TimeLock {
 }
 ```
 
-**Note:** See [Block Numbers and Time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time) for more information on how this value is determined on Arbitrum.
+**Note:** See [Block Numbers and Time](/docs/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time) for more information on how this value is determined on Arbitrum.
 
 ### `block_timestamp()`
 
@@ -254,7 +254,7 @@ impl Auction {
 }
 ```
 
-**Note:** See [Block Numbers and Time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time) for more information on how this value is determined on Arbitrum.
+**Note:** See [Block Numbers and Time](/docs/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time) for more information on how this value is determined on Arbitrum.
 
 ### `block_basefee()`
 
@@ -905,6 +905,6 @@ The following tables provide a quick reference for all VM methods and utility fu
 
 ## See Also
 
-- [Contracts](./contracts.mdx) - Contract structure and methods
-- [Primitives](./data-types/primitives.mdx) - Basic data types
-- [Storage Types](./data-types/storage.mdx) - Persistent storage
+- [Contracts](/docs/stylus/fundamentals/contracts) - Contract structure and methods
+- [Primitives](/docs/stylus/fundamentals/data-types/primitives) - Basic data types
+- [Storage Types](/docs/stylus/fundamentals/data-types/storage) - Persistent storage

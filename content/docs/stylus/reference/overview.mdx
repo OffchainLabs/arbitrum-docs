@@ -8,7 +8,7 @@ author: jose-franco
 sme: jose-franco
 ---
 
-The [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs) (v@@stylusSdkVersion=0.10.7@@) lets you write Solidity ABI-equivalent smart contracts in Rust, compiled to WebAssembly and executed on Arbitrum chains. For a conceptual introduction, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first contract, see the [Quickstart](../quickstart.mdx).
+The [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs) (v@@stylusSdkVersion=0.10.7@@) lets you write Solidity ABI-equivalent smart contracts in Rust, compiled to WebAssembly and executed on Arbitrum chains. For a conceptual introduction, see [Stylus: A Gentle Introduction](/docs/stylus/gentle-introduction). To deploy your first contract, see the [Quickstart](/docs/stylus/quickstart).
 
 The SDK is built on [Alloy](https://docs.rs/alloy-primitives/latest/alloy_primitives/), the standard Rust Ethereum primitive library. Because both share the same types, Stylus contracts are compatible with the broader Rust Ethereum ecosystem.
 
@@ -18,7 +18,7 @@ The SDK has been audited by OpenZeppelin:
 - [Stylus SDK v0.10 audit](../../hosted-pdfs/audit-reports/2025_12_10_open_zeppelin_stylus_sdk_v0_10_audit.pdf) (December 2025)
 - [Stylus SDK PR #370 audit](../../hosted-pdfs/audit-reports/2025_12_19_open_zeppelin_stylus_sdk_pull_request_370_audit.pdf) (December 2025)
 
-All reports are listed on the [security audit reports](/audit-reports) page.
+All reports are listed on the [security audit reports](/docs/audit-reports) page.
 
 ## SDK architecture
 
@@ -71,55 +71,55 @@ The `stylus-sdk` crate re-exports these modules from its root:
 
 | Article                                                                               | Description                                                                                      |
 | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| [Structure of a contract](/stylus/fundamentals/project-structure)                     | Project layout, the `#[entrypoint]` macro, and `#[public]` methods                               |
-| [Global variables and functions](/stylus/fundamentals/global-variables-and-functions) | Access blockchain context through `self.vm()` — message sender, block info, and crypto functions |
-| [Contracts](/stylus/fundamentals/contracts)                                           | Storage definition, method declarations, and the contract lifecycle                              |
-| [Writing tests](/stylus/fundamentals/testing-contracts)                               | Unit test contracts with `TestVM` without deploying to a blockchain                              |
+| [Structure of a contract](/docs/stylus/fundamentals/project-structure)                     | Project layout, the `#[entrypoint]` macro, and `#[public]` methods                               |
+| [Global variables and functions](/docs/stylus/fundamentals/global-variables-and-functions) | Access blockchain context through `self.vm()` — message sender, block info, and crypto functions |
+| [Contracts](/docs/stylus/fundamentals/contracts)                                           | Storage definition, method declarations, and the contract lifecycle                              |
+| [Writing tests](/docs/stylus/fundamentals/testing-contracts)                               | Unit test contracts with `TestVM` without deploying to a blockchain                              |
 
 ### Data types
 
 | Article                                                                                | Description                                                                                        |
 | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [Primitives](/stylus/fundamentals/data-types/primitives)                               | Rust primitives (bool, integers, addresses) with automatic ABI encoding and Solidity type mappings |
-| [Compound types](/stylus/fundamentals/data-types/compound-types)                       | Arrays, vectors, tuples, and custom structs                                                        |
-| [Storage](/stylus/fundamentals/data-types/storage)                                     | Persistent contract state using storage types and the `sol_storage!` macro                         |
-| [Conversions between types](/stylus/fundamentals/data-types/conversions-between-types) | Converting between Rust types and Solidity-compatible types                                        |
+| [Primitives](/docs/stylus/fundamentals/data-types/primitives)                               | Rust primitives (bool, integers, addresses) with automatic ABI encoding and Solidity type mappings |
+| [Compound types](/docs/stylus/fundamentals/data-types/compound-types)                       | Arrays, vectors, tuples, and custom structs                                                        |
+| [Storage](/docs/stylus/fundamentals/data-types/storage)                                     | Persistent contract state using storage types and the `sol_storage!` macro                         |
+| [Conversions between types](/docs/stylus/fundamentals/data-types/conversions-between-types) | Converting between Rust types and Solidity-compatible types                                        |
 
 ### Advanced topics
 
 | Article                                                                       | Description                                                              |
 | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| [Rust to Solidity differences](/stylus/advanced/rust-to-solidity-differences) | Key differences between writing contracts in Solidity versus Stylus Rust |
-| [Recommended packages](/stylus/advanced/recommended-libraries)                | Third-party Rust crates that work well with Stylus                       |
-| [Minimal entrypoint contracts](/stylus/advanced/minimal-entrypoint-contracts) | Lightweight contracts with custom entrypoints for maximum gas efficiency |
-| [Hostio exports](/stylus/advanced/hostio-exports)                             | Low-level host I/O functions for advanced contract behavior              |
+| [Rust to Solidity differences](/docs/stylus/advanced/rust-to-solidity-differences) | Key differences between writing contracts in Solidity versus Stylus Rust |
+| [Recommended packages](/docs/stylus/advanced/recommended-libraries)                | Third-party Rust crates that work well with Stylus                       |
+| [Minimal entrypoint contracts](/docs/stylus/advanced/minimal-entrypoint-contracts) | Lightweight contracts with custom entrypoints for maximum gas efficiency |
+| [Hostio exports](/docs/stylus/advanced/hostio-exports)                             | Low-level host I/O functions for advanced contract behavior              |
 
 ### Using the CLI
 
 | Article                                                                                | Description                                                                        |
 | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| [Commands reference](/stylus/cli-tools/commands-reference)                             | Complete reference for all `cargo stylus` commands, flags, and aliases             |
-| [Verify contracts](/stylus/cli-tools/verify-contracts)                                 | Verify deployed contracts using reproducible builds                                |
-| [Exporting ABI](/stylus/how-tos/exporting-abi)                                         | Generate Solidity-compatible ABI files for frontend integration                    |
-| [Debugging with replay](/stylus/cli-tools/debugging-tx)                                | Debug transactions by replaying them locally with GDB, LLDB, or StylusDB           |
-| [Optimizing WASM binary size](/stylus/how-tos/optimizing-binaries)                     | Reduce contract size for lower deployment costs                                    |
-| [Deploying non-Rust WASM contracts](/stylus/how-tos/deploying-non-rust-wasm-contracts) | Deploy contracts written in C, C++, or other languages that compile to WebAssembly |
+| [Commands reference](/docs/stylus/cli-tools/commands-reference)                             | Complete reference for all `cargo stylus` commands, flags, and aliases             |
+| [Verify contracts](/docs/stylus/cli-tools/verify-contracts)                                 | Verify deployed contracts using reproducible builds                                |
+| [Exporting ABI](/docs/stylus/how-tos/exporting-abi)                                         | Generate Solidity-compatible ABI files for frontend integration                    |
+| [Debugging with replay](/docs/stylus/cli-tools/debugging-tx)                                | Debug transactions by replaying them locally with GDB, LLDB, or StylusDB           |
+| [Optimizing WASM binary size](/docs/stylus/how-tos/optimizing-binaries)                     | Reduce contract size for lower deployment costs                                    |
+| [Deploying non-Rust WASM contracts](/docs/stylus/how-tos/deploying-non-rust-wasm-contracts) | Deploy contracts written in C, C++, or other languages that compile to WebAssembly |
 
 ### WASM concepts
 
 | Article                                               | Description                                                                   |
 | ----------------------------------------------------- | ----------------------------------------------------------------------------- |
-| [WebAssembly](/stylus/concepts/webassembly)           | How WASM compilation, deployment, and execution work in Arbitrum Nitro        |
-| [VM differences](/stylus/concepts/vm-differences)     | Behavioral differences between Stylus WASM execution and traditional EVM      |
-| [Activation](/stylus/concepts/activation)             | The contract activation process required before a Stylus contract can execute |
-| [Caching strategy](/stylus/how-tos/caching-contracts) | Leveraging the WASM caching system for contract performance                   |
+| [WebAssembly](/docs/stylus/concepts/webassembly)           | How WASM compilation, deployment, and execution work in Arbitrum Nitro        |
+| [VM differences](/docs/stylus/concepts/vm-differences)     | Behavioral differences between Stylus WASM execution and traditional EVM      |
+| [Activation](/docs/stylus/concepts/activation)             | The contract activation process required before a Stylus contract can execute |
+| [Caching strategy](/docs/stylus/how-tos/caching-contracts) | Leveraging the WASM caching system for contract performance                   |
 
 ### Troubleshooting
 
 | Article                                                            | Description                                                                               |
 | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| [Configuration reference](/stylus/reference/stylus-toml-reference) | Complete reference for `Stylus.toml`, `Cargo.toml`, and `rust-toolchain.toml` options.    |
-| [Troubleshooting](/stylus/troubleshooting-building-stylus)         | Find solutions to common issues encountered when building and deploying Stylus contracts. |
+| [Configuration reference](/docs/stylus/reference/stylus-toml-reference) | Complete reference for `Stylus.toml`, `Cargo.toml`, and `rust-toolchain.toml` options.    |
+| [Troubleshooting](/docs/stylus/troubleshooting-building-stylus)         | Find solutions to common issues encountered when building and deploying Stylus contracts. |
 
 ### External references
 

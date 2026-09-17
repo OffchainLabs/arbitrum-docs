@@ -107,7 +107,7 @@ So failover state-sharing rides on persistent, signed Redis storage plus L1-deri
 
 - **Parent-chain reorg, revert polling**: if the chain went backward (`nextRevertCheckBlock > blockNum`) it resets to re-check; the >100-block gap warning fast-forwards and skips.
 - **Mempool nonce-gap avoidance**: before sending a transaction of a different type than its predecessor (or whose predecessor isn't yet reorg-resistant), it checks the sender nonce one block back (latest − 1) and, if the nonce exceeds the reorg-resistant count, leaves the transaction queued—`"DataPoster is avoiding creating a mempool nonce gap"`—rather than risk a gap a reorg would expose.
-- **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see also [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx)).
+- **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see also [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting)).
 
 ## Where state physically lives
 

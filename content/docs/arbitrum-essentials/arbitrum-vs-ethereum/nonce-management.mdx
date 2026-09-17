@@ -7,7 +7,7 @@ author: Jason-W123
 sme: Jason-W123
 ---
 
-Arbitrum does not maintain a long-lived "pending" mempool as an Ethereum node does. Transactions submitted to the [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) are ordered and executed almost immediately, so out-of-order nonces cannot wait minutes or hours for their predecessor to arrive — they are held only briefly, then rejected.
+Arbitrum does not maintain a long-lived "pending" mempool as an Ethereum node does. Transactions submitted to the [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) are ordered and executed almost immediately, so out-of-order nonces cannot wait minutes or hours for their predecessor to arrive — they are held only briefly, then rejected.
 
 This page explains how Arbitrum's sequencer handles out-of-order nonces, the error you will see when the wait window expires, what `eth_getTransactionCount("pending")` returns, and the submission patterns that work safely under these constraints.
 
@@ -54,5 +54,5 @@ On Arbitrum, `eth_getTransactionCount(address, "pending")` returns the same valu
 
 ## Further reading
 
-- [RPC methods](/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods.mdx) — full list of RPC method differences between Arbitrum and Ethereum.
-- [The Sequencer and Censorship Resistance](/how-arbitrum-works/deep-dives/sequencer.mdx) — how the sequencer orders and processes transactions in Arbitrum.
+- [RPC methods](/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods) — full list of RPC method differences between Arbitrum and Ethereum.
+- [The Sequencer and Censorship Resistance](/docs/how-arbitrum-works/deep-dives/sequencer) — how the sequencer orders and processes transactions in Arbitrum.

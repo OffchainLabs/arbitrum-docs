@@ -8,18 +8,18 @@ author: pete-vielhaber
 sme: TBD
 ---
 
-This guide covers the operational sequencing of a <a data-quicklook-from="bold">BoLD</a> upgrade for chains where the `execute` call is performed by a multisig or a security council rather than a single <a data-quicklook-from="chain-owner">chain owner</a> key. It continues from the step-by-step upgrade in [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold.mdx) and assumes you have read it. Concepts, the full parameter table, and the base upgrade steps are not repeated here.
+This guide covers the operational sequencing of a <a data-quicklook-from="bold">BoLD</a> upgrade for chains where the `execute` call is performed by a multisig or a security council rather than a single <a data-quicklook-from="chain-owner">chain owner</a> key. It continues from the step-by-step upgrade in [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) and assumes you have read it. Concepts, the full parameter table, and the base upgrade steps are not repeated here.
 
-If your chain owner is a single key that can send the upgrade <a data-quicklook-from="transaction">transaction</a> immediately, you do not need this guide—follow the [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) instead.
+If your chain owner is a single key that can send the upgrade <a data-quicklook-from="transaction">transaction</a> immediately, you do not need this guide—follow the [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) instead.
 
 ## The problem this guide solves
 
-The [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) sequence contains two steps that appear to conflict when a security council is involved:
+The [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) sequence contains two steps that appear to conflict when a security council is involved:
 
 - **Step 4** runs `bold-populate-lookup`, which reads the last confirmed <a data-quicklook-from="assertion">assertion</a> so the new Rollup contract can be initialized from it.
 - **Step 5** executes the upgrade, and reverts if a new <a data-quicklook-from="assertion">assertion</a> has been confirmed since Step 4.
 
-The [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) therefore recommends stopping all <a data-quicklook-from="validator">validators</a> at [Step 4](/launch-arbitrum-chain/chain-config/validation/bold.mdx#step-4-gather-the-information-of-the-current-state-of-the-chain) to prevent a new <a data-quicklook-from="confirmation">confirmation</a> from blocking [Step 5](/launch-arbitrum-chain/chain-config/validation/bold#step-5-run-the-upgrade-script).
+The [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) therefore recommends stopping all <a data-quicklook-from="validator">validators</a> at [Step 4](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#step-4-gather-the-information-of-the-current-state-of-the-chain) to prevent a new <a data-quicklook-from="confirmation">confirmation</a> from blocking [Step 5](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#step-5-run-the-upgrade-script).
 
 For a production chain, Step 5 is not a <a data-quicklook-from="transaction">transaction</a> you can send on demand. Signers must review a simulation before signing, and collecting a security council's signatures can take days. Read literally, the base sequence implies you must keep every validator stopped for that entire period—a multi-day halt to assertion posting and confirmation on a production chain, which is unacceptable and carries its own risks.
 
@@ -62,7 +62,7 @@ Three consequences follow, and together they resolve the conflict:
 2. **Populating the lookup is additive, not destructive.** `set` writes to a new mapping key per state hash. Repeated runs accumulate entries; they do not overwrite or clear earlier ones. A lookup entry for an assertion that has since been superseded is harmless.
 3. **Anyone can populate the lookup at any time.** `set` is `public` and requires no privileged key, so refreshing the lookup is not itself a governance action and needs no signatures.
 
-What `perform` actually requires is narrower than the [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) implies. Confirming another assertion after Step 4 is fine—what matters is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
+What `perform` actually requires is narrower than the [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) implies. Confirming another assertion after Step 4 is fine—what matters is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
 
 <VanillaAdmonition type="caution">
 
@@ -76,7 +76,7 @@ This sequence keeps validators running throughout signature collection.
 
 ### Step 1: Prepare and deploy the upgrade action
 
-Follow Steps 0 through 3 of the [base upgrade guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx#step-0-pre-requisites) without changes. Validators keep running. This deploys the action contract with your chain's configuration and fixes the address that the `execute` payload will target.
+Follow Steps 0 through 3 of the [base upgrade guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#step-0-pre-requisites) without changes. Validators keep running. This deploys the action contract with your chain's configuration and fixes the address that the `execute` payload will target.
 
 ### Step 2: Populate the lookup once, to produce the payload and simulation
 
@@ -117,7 +117,7 @@ The script finds the last confirmed assertion by searching for its `NodeCreated`
 
 ### Step 5: Execute the upgrade
 
-Submit the signed multisig transaction. Then continue with Steps 6 and 7 of the [base guide](/launch-arbitrum-chain/chain-config/validation/bold.mdx) to update node configuration, restart nodes, and monitor the new Rollup contract.
+Submit the signed multisig transaction. Then continue with Steps 6 and 7 of the [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) to update node configuration, restart nodes, and monitor the new Rollup contract.
 
 ## Closing the residual race
 
@@ -150,7 +150,7 @@ To keep validation permissioned:
 
 - Set `disableValidatorWhitelist` to `false` and populate `validators[]`.
 - Set `validatorAfkBlocks` to `0`, which disables the escape hatch entirely. This is preferable to setting an artificially large value, which achieves the same intent less clearly and still leaves a finite window.
-- If you keep the escape hatch enabled, alert on assertion inactivity well before the window elapses. See the validator section of [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring.mdx) for the metrics to watch.
+- If you keep the escape hatch enabled, alert on assertion inactivity well before the window elapses. See the validator section of [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the metrics to watch.
 
 <VanillaAdmonition type="caution">
 
@@ -158,7 +158,7 @@ Disabling the escape hatch with `validatorAfkBlocks: 0` is a deliberate trade-of
 
 </VanillaAdmonition>
 
-To weigh permissioned against <a data-quicklook-from="permissionless-validation">permissionless validation</a>, see [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold.mdx#caveats-that-come-with-adopting-arbitrum-bold-for-permissionless-validation). It covers bond sizing and resource exhaustion risk.
+To weigh permissioned against <a data-quicklook-from="permissionless-validation">permissionless validation</a>, see [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#caveats-that-come-with-adopting-arbitrum-bold-for-permissionless-validation). It covers bond sizing and resource exhaustion risk.
 
 ## Preparing the bond token
 
@@ -197,8 +197,8 @@ Before you execute the upgrade:
 - Ensure each validator wallet holds enough of that token to meet `stakeAmt`, in addition to parent-chain native currency for gas. With the default auto-deposit flags and a **WETH**-compatible `stakeToken`, native currency alone is enough — the node wraps and approves it automatically.
 - Plan for first-time bonding on the new contract. Validators bond only once, but existing bonds do not carry over from the old Rollup contract, so every validator must bond again after the upgrade.
 
-For guidance on choosing `stakeToken` and `stakeAmt` values, see [Bond and validator configurations](/launch-arbitrum-chain/chain-config/validation/bond-and-validator.mdx) and [Economics of disputes](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx).
+For guidance on choosing `stakeToken` and `stakeAmt` values, see [Bond and validator configurations](/docs/launch-arbitrum-chain/configuration/validation/stake-and-validator-configurations) and [Economics of disputes](/docs/how-arbitrum-works/bold/bold-economics-of-disputes).
 
 ## After the upgrade
 
-Once the upgrade executes, watch for `AssertionCreated` and `AssertionConfirmed` events on the new Rollup contract, as described in the base guide. If assertions do not appear, or validators fail to start or bond, see [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx).
+Once the upgrade executes, watch for `AssertionCreated` and `AssertionConfirmed` events on the new Rollup contract, as described in the base guide. If assertions do not appear, or validators fail to start or bond, see [Validator troubleshooting](/docs/launch-arbitrum-chain/operate/validator-troubleshooting).

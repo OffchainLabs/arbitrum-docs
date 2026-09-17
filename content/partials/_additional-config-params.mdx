@@ -32,11 +32,11 @@ Either in the `wasmModuleRoot` field in the `RollupCreator` config, or by callin
 
 ## Gas target
 
-Target gas usage per second, over which the congestion mechanism activates. For the values set on Arbitrum One and Nova, [refer to child chain gas fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#child-chain-gas-fees). Alterations to this should be considered carefully, as setting it too high may result in state bloat that impacts the performance of the chain.
+Target gas usage per second, over which the congestion mechanism activates. For the values set on Arbitrum One and Nova, [refer to child chain gas fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees). Alterations to this should be considered carefully, as setting it too high may result in state bloat that impacts the performance of the chain.
 
 #### How to set
 
-Call `ArbOwner.setSpeedLimit()` passing in the maximum number of gas units to be executed per second for single gas target. Call `ArbOwner.setGasPricingConstraints()` with an array of gas targets to set up [dynamic pricing](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx).
+Call `ArbOwner.setSpeedLimit()` passing in the maximum number of gas units to be executed per second for single gas target. Call `ArbOwner.setGasPricingConstraints()` with an array of gas targets to set up [dynamic pricing](/docs/launch-arbitrum-chain/configuration/costs/dynamic-pricing-for-arbitrum-chains).
 
 ## Block gas limit
 

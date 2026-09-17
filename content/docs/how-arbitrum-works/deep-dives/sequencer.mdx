@@ -27,17 +27,17 @@ Once the Sequencer has a finalized ordering, it calls the ExecutionEngine, which
 
 <VanillaAdmonition type="note" title="Handoff: execution belongs to ArbOS and the STF">
 
-Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/how-arbitrum-works/deep-dives/stf.mdx) and [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
+Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/how-arbitrum-works/deep-dives/stf.mdx) and [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
 
 </VanillaAdmonition>
 
 #### 4. Persistence and broadcast {#persistence-and-broadcast}
 
-The produced block comes back to the Sequencer as a sequenced message. The TransactionStreamer persists it to the local database and, if a coordinator is configured, replicates it to Redis for high availability. It then hands the message to the Broadcaster, which pushes it to subscribers over the <a data-quicklook-from="sequencer-feed">real-time feed</a>. This is the moment users get [<a data-quicklook-from="soft-confirmation">soft finality</a>](/how-arbitrum-works/reference/finality-and-reorgs.mdx#the-three-confirmation-levels): a sub-second provisional confirmation that depends on the Sequencer behaving honestly.
+The produced block comes back to the Sequencer as a sequenced message. The TransactionStreamer persists it to the local database and, if a coordinator is configured, replicates it to Redis for high availability. It then hands the message to the Broadcaster, which pushes it to subscribers over the <a data-quicklook-from="sequencer-feed">real-time feed</a>. This is the moment users get [<a data-quicklook-from="soft-confirmation">soft finality</a>](/docs/how-arbitrum-works/reference/finality-and-reorgs#the-three-confirmation-levels): a sub-second provisional confirmation that depends on the Sequencer behaving honestly.
 
 #### 5. Posting to the parent chain {#posting-to-the-parent-chain}
 
-Independent of the loop above, the <a data-quicklook-from="batch-poster">batch poster</a> reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive [compression levels](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#compression-levels), and posts them to the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> using either calldata or EIP-4844 blobs. To configure this component, see [Run a batch poster](/launch-arbitrum-chain/run-a-node/batch-poster.mdx). Once those batches are finalized on the parent chain, the transactions reach [<a data-quicklook-from="hard-finality">hard finality</a>](/how-arbitrum-works/reference/finality-and-reorgs.mdx#the-three-confirmation-levels).
+Independent of the loop above, the <a data-quicklook-from="batch-poster">batch poster</a> reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive [compression levels](/docs/how-arbitrum-works/deep-dives/gas-and-fees#compression-levels), and posts them to the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> using either calldata or EIP-4844 blobs. To configure this component, see [Run a batch poster](/docs/run-a-node/run-batch-poster). Once those batches are finalized on the parent chain, the transactions reach [<a data-quicklook-from="hard-finality">hard finality</a>](/docs/how-arbitrum-works/reference/finality-and-reorgs#the-three-confirmation-levels).
 
 ## High availability: the Sequencer coordinator
 
@@ -53,7 +53,7 @@ Timeboost layers a priority auction on top of the default <a data-quicklook-from
 
 ## Censorship Timeout
 
-As mentioned in the original [Arbitrum BoLD forum post](https://forum.arbitrum.foundation/t/aip-bold-permissionless-validation-for-arbitrum/23232/70?), the initial release of [Arbitrum <a data-quicklook-from="bold">BoLD</a>](/how-arbitrum-works/bold/gentle-introduction.mdx) includes a feature called Censorship Timeout (formerly known as Delay Buffer).
+As mentioned in the original [Arbitrum BoLD forum post](https://forum.arbitrum.foundation/t/aip-bold-permissionless-validation-for-arbitrum/23232/70?), the initial release of [Arbitrum <a data-quicklook-from="bold">BoLD</a>](/docs/how-arbitrum-works/bold/gentle-introduction) includes a feature called Censorship Timeout (formerly known as Delay Buffer).
 
 Censorship Timeout aims to limit the negative effects of:
 
@@ -82,4 +82,4 @@ We believe that the Censorship Timeout feature provides stronger guarantees of c
 
 ## Decentralized fair sequencing
 
-Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or <a data-quicklook-from="validator">validators</a>) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with broader blockchain principles of enhanced security, transparency, and decentralization. The [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) ordering policy is designed to be compatible with decentralized sequencing.
+Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or <a data-quicklook-from="validator">validators</a>) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with broader blockchain principles of enhanced security, transparency, and decentralization. The [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction) ordering policy is designed to be compatible with decentralized sequencing.

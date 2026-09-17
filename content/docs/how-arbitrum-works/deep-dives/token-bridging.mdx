@@ -7,7 +7,7 @@ author: dzgoldman
 sme: dzgoldman
 ---
 
-The Arbitrum protocol itself has no notion of token standards and gives no built-in advantage or special recognition to any particular token bridge. In this article, we describe the "canonical bridge," which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized <a data-quicklook-from="dapp">app</a> with contracts on both Ethereum (parent chain) and Arbitrum (child chain) that leverages Arbitrum's [cross-chain messaging protocol](/arbitrum-essentials/bridging/cross-chain-messaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it! For the protocol-level mechanics this bridge sits on top of, see [Bridging from a parent chain to a child chain](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) and [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx).
+The Arbitrum protocol itself has no notion of token standards and gives no built-in advantage or special recognition to any particular token bridge. In this article, we describe the "canonical bridge," which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized <a data-quicklook-from="dapp">app</a> with contracts on both Ethereum (parent chain) and Arbitrum (child chain) that leverages Arbitrum's [cross-chain messaging protocol](/docs/arbitrum-essentials/bridging/cross-chain-messaging) to achieve basic desired token-bridging functionality. We recommend that you use it! For the protocol-level mechanics this bridge sits on top of, see [Bridging from a parent chain to a child chain](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging) and [Child to parent chain messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging).
 
 ## Design rationale
 
@@ -44,11 +44,11 @@ Our architecture consists of three types of contracts:
 
 <ImageZoom src="/img/apps-gatewayUML.svg" alt="" className="img-600px" />
 
-All Ethereum-to-Arbitrum token transfers are initiated via the router contract on the parent chain, specifically the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping the parent chain token addresses to L1Gateway contracts, thus acting as a parent/child chain address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on the child chain, the `L2ArbitrumGateway` contract (typically/expectedly via [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx)).
+All Ethereum-to-Arbitrum token transfers are initiated via the router contract on the parent chain, specifically the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping the parent chain token addresses to L1Gateway contracts, thus acting as a parent/child chain address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on the child chain, the `L2ArbitrumGateway` contract (typically/expectedly via [retryable tickets](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging)).
 
 <ImageZoom src="/img/apps-bridge_deposits.png" alt="" className="img-600px" />
 
-Similarly, Arbitrum-to-Ethereum transfers initiate via the router contract on the child chain, specifically the `L2GatewayRouter` contract, which in turn calls the token's gateway contract on the child chain. This `L2ArbitrumGateway` contract in turn communicates to its corresponding gateway contract on the parent chain, the `L1ArbitrumGateway` contract (typically/expectedly via [sending child-to-parent messages to the outbox](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)).
+Similarly, Arbitrum-to-Ethereum transfers initiate via the router contract on the child chain, specifically the `L2GatewayRouter` contract, which in turn calls the token's gateway contract on the child chain. This `L2ArbitrumGateway` contract in turn communicates to its corresponding gateway contract on the parent chain, the `L1ArbitrumGateway` contract (typically/expectedly via [sending child-to-parent messages to the outbox](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging)).
 
 <ImageZoom src="/img/apps-bridge_withdrawals.png" alt="" className="img-600px" />
 
@@ -58,7 +58,7 @@ For any given gateway pairing, we require that calls initiate through the corres
 
 By default, any **ERC-20** token on a parent chain that isn't registered to a gateway can be bridged permissionlessly through the `StandardERC20Gateway`.
 
-You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard **ERC-20** gateway](/arbitrum-essentials/bridging/deposit/eth-and-messages.mdx) to bridge a token to a child chain via this gateway.
+You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard **ERC-20** gateway](/docs/arbitrum-essentials/bridging/deposit/eth-and-messages) to bridge a token to a child chain via this gateway.
 
 ### Example: Standard `Arb-ERC-20` deposit and withdraw
 
@@ -100,7 +100,7 @@ Some examples of token features suitable for the generic-custom gateway:
 
 ### Setting up your token with the generic-custom gateway
 
-Follow the steps below to set up your token for use with the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum’s generic-custom gateway](/arbitrum-essentials/bridging/overview.mdx).
+Follow the steps below to set up your token for use with the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum’s generic-custom gateway](/docs/arbitrum-essentials/bridging/overview).
 
 **0. Have a parent chain token**
 
@@ -136,11 +136,11 @@ Take our wrapped Ether implementation for example: here, a single **WETH** contr
 
 Regardless of a token's complexity in bridging needs, it is possible to create a gateway to accommodate it within our canonical bridging system.
 
-You can find an example of implementation of a custom gateway in the page [How to bridge tokens via a custom gateway](/arbitrum-essentials/bridging/overview.mdx).
+You can find an example of implementation of a custom gateway in the page [How to bridge tokens via a custom gateway](/docs/arbitrum-essentials/bridging/overview).
 
 ## Demos
 
-Our [How to bridge tokens](/arbitrum-essentials/bridging/overview.mdx) section provides an example of interacting with Arbitrum's token bridge via the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk).
+Our [How to bridge tokens](/docs/arbitrum-essentials/bridging/overview) section provides an example of interacting with Arbitrum's token bridge via the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk).
 
 ## A word of caution on bridges (aka, "I've got a bridge to sell you")
 

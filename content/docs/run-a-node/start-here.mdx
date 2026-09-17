@@ -8,7 +8,7 @@ sme: gblanchemain
 
 :::info
 
-If you’re interested in accessing an Arbitrum chain but don’t want to set up your own node, see our [Node Providers](/arbitrum-essentials/reference/node-providers.mdx) to get RPC access to fully managed nodes hosted by a third-party provider.
+If you’re interested in accessing an Arbitrum chain but don’t want to set up your own node, see our [Node Providers](/docs/arbitrum-essentials/reference/node-providers) to get RPC access to fully managed nodes hosted by a third-party provider.
 
 :::
 
@@ -31,7 +31,7 @@ Please note that:
 - The minimum requirements for RAM and CPU listed here are recommended for nodes that handle a limited number of RPC requests. For nodes that need to process multiple simultaneous requests, both the RAM size and the number of CPU cores should be increased to accommodate higher levels of traffic.
 - Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor.
 - The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended. Note that snapshot extraction requires approximately 2x the snapshot size in temporary disk space, so plan accordingly during initial setup.
-- Nitro stores its state trie using either <a data-quicklook-from="hashdb">HashDB</a> (the default) or <a data-quicklook-from="pathdb">PathDB</a>. The choice affects which snapshot you can use, so make it before you initialize the database. Both <a data-quicklook-from="state-scheme">schemes</a> have published full node snapshots; PathDB <a data-quicklook-from="state-pruning">prunes</a> automatically but cannot validate blocks. See [Choose a state scheme](/run-arbitrum-node/02-run-full-node.mdx#choose-a-state-scheme).
+- Nitro stores its state trie using either <a data-quicklook-from="hashdb">HashDB</a> (the default) or <a data-quicklook-from="pathdb">PathDB</a>. The choice affects which snapshot you can use, so make it before you initialize the database. Both <a data-quicklook-from="state-scheme">schemes</a> have published full node snapshots; PathDB <a data-quicklook-from="state-pruning">prunes</a> automatically but cannot validate blocks. See [Choose a state scheme](/docs/run-a-node/run-full-node#choose-a-state-scheme).
 
 ### Parent chain (L1) client
 
@@ -64,7 +64,7 @@ Snapshots are published per state scheme, and a snapshot only works with a node 
 
 Only the HashDB kinds distinguish pruned from unpruned. PathDB prunes as it runs, so every PathDB snapshot is already pruned to its state-history window—there is no separate unpruned variant to publish. The `pruned` kind exists because a HashDB database is pruned manually, and the published HashDB full node snapshots happen to be pruned ones.
 
-`--init.latest` cannot download the PathDB kinds. See [PathDB snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
+`--init.latest` cannot download the PathDB kinds. See [PathDB snapshots](/docs/run-a-node/nitro/nitro-database-snapshots#pathdb-snapshots).
 
 Database snapshots for other Arbitrum chains may be available at the discretion of the chain's team. Get in touch with them if you're interested in using a database snapshot for their chains.
 
@@ -72,12 +72,12 @@ Database snapshots for other Arbitrum chains may be available at the discretion 
 
 Supplying a database snapshot when starting your node for the first time is required for Arbitrum One (to provide information from the Classic era) but is optional for other chains. Supplying a database snapshot on the first run will provide the state and data for that chain up to a specific block, allowing the node to sync faster to the head of the chain.
 
-We provide a summary of the available parameters here, but it is recommended to read the [complete guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx) if you plan to use snapshots.
+We provide a summary of the available parameters here, but it is recommended to read the [complete guide](/docs/run-a-node/nitro/nitro-database-snapshots) if you plan to use snapshots.
 
 - Use the parameter `--init.latest <snapshot type>` (accepted values: `archive`, `pruned`, `genesis`) to instruct your node to download the corresponding snapshot from the configured URL
 - Optionally, use the parameter `--init.latest-base` to set the base URL when searching for the latest snapshot
 - Note that these parameters get ignored if a database already exists
-- When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually) for instructions on how to do that.
+- When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. Please see [Downloading the snapshot manually](/docs/run-a-node/nitro/nitro-database-snapshots#downloading-the-snapshot-manually) for instructions on how to do that.
 - Only snapshots formatted with your node's specified state scheme are compatible. In other words, a PathDB snapshot won't work for a node using HashDB, and vice versa. Each snapshot directory publishes a `metadata.json` file naming its `state_scheme`; check it before downloading.
 
 :::tip Which initialization mode should I use?
@@ -92,13 +92,13 @@ We provide a summary of the available parameters here, but it is recommended to 
 | Hosting one snapshot for **multiple nodes**     | Download manually, then use `--init.url file:///path/to/archive.tar` on each node                                                                                                   |
 | Using a **custom snapshot URL**                 | `--init.url https://your-snapshot-url/archive.tar`                                                                                                                                  |
 
-For more details on snapshot downloading and initialization, see the [complete snapshot guide](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx).
+For more details on snapshot downloading and initialization, see the [complete snapshot guide](/docs/run-a-node/nitro/nitro-database-snapshots).
 
 :::
 
 :::warning Fusaka upgrade: historical blobs
 
-If you're running a beacon node, historical data will now be in <a data-quicklook-from="blob">blobs</a>. To make this transition to using historical blobs, refer to the [Historical Blobs for Beacon Nodes](/run-arbitrum-node/beacon-nodes-historical-blobs.mdx) guide.
+If you're running a beacon node, historical data will now be in <a data-quicklook-from="blob">blobs</a>. To make this transition to using historical blobs, refer to the [Historical Blobs for Beacon Nodes](/docs/run-a-node/beacon-nodes-historical-blobs) guide.
 
 :::
 
@@ -124,4 +124,4 @@ import OrbitChainsParameters from './partials/run-full-node/_orbit-chains-parame
 
 ## Run a full node
 
-Now that you have all the prerequisite information prepared—it's time to run your node. Follow the instructions on the [Run a full node](/run-arbitrum-node/02-run-full-node.mdx) page.
+Now that you have all the prerequisite information prepared—it's time to run your node. Follow the instructions on the [Run a full node](/docs/run-a-node/run-full-node) page.

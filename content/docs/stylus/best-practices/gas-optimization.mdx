@@ -28,7 +28,7 @@ _Figure: Stylus WASM executes natively, avoiding EVM interpretation overhead._
 
 The EVM-side costs are fixed protocol prices: `ecrecover` = 3,000 gas, `MLOAD`/`MSTORE` = 3 gas/word, and `KECCAK256` = 30 gas + 6 gas per 32-byte word. The Stylus-side figures and the multipliers are directional — drawn from Offchain Labs' Stylus benchmarks — and vary with workload, input size, and ArbOS version. Benchmark your own contract to get numbers you can rely on. Note that Keccak256 is already cheap per byte on the EVM, so hashing is not a headline saving; Stylus' large wins come from compute-heavy logic, memory, and native cryptography.
 
-**Key insight**: [Storage operations](/stylus/advanced/hostio-exports#storage-operations) map to the same underlying EVM `SLOAD`/`SSTORE` costs in Stylus as in Solidity, so they are not where Stylus saves gas. Optimize by reducing storage access and maximizing compute efficiency.
+**Key insight**: [Storage operations](/docs/stylus/advanced/hostio-exports#storage-operations) map to the same underlying EVM `SLOAD`/`SSTORE` costs in Stylus as in Solidity, so they are not where Stylus saves gas. Optimize by reducing storage access and maximizing compute efficiency.
 
 ## Storage optimization
 
@@ -458,7 +458,7 @@ cargo stylus check
 `cargo stylus` does not expose `--optimize` flags. Control binary size through your
 Cargo release profile (see "Optimize compilation flags" above) and, if you need
 further shrinking, by running `wasm-opt` from [Binaryen](https://github.com/WebAssembly/binaryen)
-on the compiled `.wasm`. See [optimizing binaries](/stylus/how-tos/optimizing-binaries) for details.
+on the compiled `.wasm`. See [optimizing binaries](/docs/stylus/how-tos/optimizing-binaries) for details.
 
 ## Gas measurement
 
@@ -557,7 +557,7 @@ pub fn optimized_hash(&self, data: &[u8]) -> [u8; 32] {
 
 ## Next steps
 
-- Apply [security best practices](/stylus/best-practices/security)
-- Study [deployment optimization](/stylus/how-tos/optimizing-binaries)
-- Learn about [caching strategies](/stylus/how-tos/caching-contracts)
-- Review [debugging techniques](/stylus/cli-tools/debugging-tx)
+- Apply [security best practices](/docs/stylus/best-practices/security)
+- Study [deployment optimization](/docs/stylus/how-tos/optimizing-binaries)
+- Learn about [caching strategies](/docs/stylus/how-tos/caching-contracts)
+- Review [debugging techniques](/docs/stylus/cli-tools/debugging-tx)

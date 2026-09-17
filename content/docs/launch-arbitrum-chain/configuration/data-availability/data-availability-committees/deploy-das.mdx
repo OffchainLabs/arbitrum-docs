@@ -12,14 +12,14 @@ sme: Mehdi Salehi, jose-franco
 
 In this how-to, you'll learn how to deploy a DAS that exposes:
 
-1. **An RPC interface** that the [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) uses to store batches of data on the DAS.
+1. **An RPC interface** that the [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) uses to store batches of data on the DAS.
 2. **An HTTP REST interface** that lets the DAS respond to requests for those batches of data.
 
-For more information related to configuring a DAC, refer to the [Introduction](/launch-arbitrum-chain/chain-config/data-availability/dac-get-started.mdx).
+For more information related to configuring a DAC, refer to the [Introduction](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started).
 
 This how-to assumes that you're familiar with:
 
-- The DAC's role in the AnyTrust protocol. Refer to [Inside AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) for a refresher.
+- The DAC's role in the AnyTrust protocol. Refer to [Inside AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## How does a DAS work?
@@ -88,7 +88,7 @@ As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `
 Gather the following information:
 
 - The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@`
-- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/arbitrum-essentials/reference/node-providers.mdx#third-party-rpc-providers) or [run your own node](/run-arbitrum-node/02-run-full-node.mdx) to prevent being rate limited.
+- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/docs/arbitrum-essentials/reference/node-providers#third-party-rpc-providers) or [run your own node](/docs/run-a-node/run-full-node) to prevent being rate limited.
 - The `SequencerInbox` contract address in the parent chain.
 
 - If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept.
@@ -422,7 +422,7 @@ After you decode a batch poster transaction and get its `data` within the functi
 
 The first part (1 byte) is the `header flag`, which is used to specify which type of batch it is. Here we need to check if it has bit `0x80` (For example, `0x88` and `0x80` are both valid, but `0x55` is wrong).
 
-The second part (32 bytes) is the keyset hash. You can learn more about what keyset is [here](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx#keysets).
+The second part (32 bytes) is the keyset hash. You can learn more about what keyset is [here](/docs/how-arbitrum-works/deep-dives/anytrust-protocol#keysets).
 
 The third part (32 bytes) is the data hash, and this is what we need to retrieve data. When you get this hash, you can retrieve data directly by following what we demonstrate in Step 4.
 
@@ -435,7 +435,7 @@ In general, mirror DA servers serve two main purposes:
 1. Prevent the main DAS from having to serve requests for data, allowing it to focus only on storing the data received.
 2. Provide resiliency to the network in the case of a DAS going down.
 
-Find information about how to set up a mirror DAS in [How to deploy a mirror DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das.mdx).
+Find information about how to set up a mirror DAS in [How to deploy a mirror DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das).
 
 ## Security considerations
 

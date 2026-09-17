@@ -29,17 +29,17 @@ The [`arbitrum-monitoring`](https://github.com/OffchainLabs/arbitrum-monitoring)
 
 ### Retryable monitor
 
-[Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) are messages sent from a parent chain and executed on the Arbitrum chain. Due to their asynchronous nature (they are executed several minutes after being created), if insufficient funds are provided at the time of creation, they might not automatically redeem (execute) upon arrival at the Arbitrum chain. When this occurs, a manual redemption of the ticket is required.
+[Retryable tickets](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging) are messages sent from a parent chain and executed on the Arbitrum chain. Due to their asynchronous nature (they are executed several minutes after being created), if insufficient funds are provided at the time of creation, they might not automatically redeem (execute) upon arrival at the Arbitrum chain. When this occurs, a manual redemption of the ticket is required.
 
 The [retryable monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/retryable-monitor) tracks these tickets from creation through execution: it watches for ticket creation events on the parent chain, then checks each ticket's status on the Arbitrum chain — automatically redeemed, manually redeemed, still pending, or failed. It alerts on tickets that failed to redeem automatically and on tickets approaching their seven-day expiration window, so that no cross-chain message expires unexecuted.
 
 ### Batch poster monitor
 
-The [batch poster monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/batch-poster-monitor) tracks batch posting activity and data availability. It alerts when no batches have been posted within the chain's expected time bounds while user transactions are pending, when the batch poster account balance falls below an estimate of about three days of posting costs, and when a backlog of unposted blocks accumulates. For [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chains, it also detects when the chain has fallen back to posting full calldata on the parent chain instead of <a data-quicklook-from="data-availability-certificate">DACerts</a>, which indicates a problem with the <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee</a>.
+The [batch poster monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/batch-poster-monitor) tracks batch posting activity and data availability. It alerts when no batches have been posted within the chain's expected time bounds while user transactions are pending, when the batch poster account balance falls below an estimate of about three days of posting costs, and when a backlog of unposted blocks accumulates. For [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) chains, it also detects when the chain has fallen back to posting full calldata on the parent chain instead of <a data-quicklook-from="data-availability-certificate">DACerts</a>, which indicates a problem with the <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee</a>.
 
 ### Assertion monitor
 
-The [assertion monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/assertion-monitor) tracks the creation and confirmation of <a data-quicklook-from="assertion">assertions</a> on the chain's Rollup contract, supporting both [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx) and legacy (pre-BoLD) chains. It alerts when no assertions are being created despite chain activity, when assertions remain unconfirmed after the challenge period has elapsed, and on validator-related risks such as low validator participation, a base stake below the expected threshold on BoLD chains, or a disabled validator allowlist on legacy chains.
+The [assertion monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree/main/packages/assertion-monitor) tracks the creation and confirmation of <a data-quicklook-from="assertion">assertions</a> on the chain's Rollup contract, supporting both [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) and legacy (pre-BoLD) chains. It alerts when no assertions are being created despite chain activity, when assertions remain unconfirmed after the challenge period has elapsed, and on validator-related risks such as low validator participation, a base stake below the expected threshold on BoLD chains, or a disabled validator allowlist on legacy chains.
 
 ### ArbOS version monitor
 
@@ -51,7 +51,7 @@ The [node sync monitor](https://github.com/OffchainLabs/arbitrum-monitoring/tree
 
 ## Data Availability Server (DAS) health checks
 
-If you've deployed an [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) chain with a Data Availability Committee, it is recommended to actively monitor the endpoints of the different configured DA servers. The [How to deploy a DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx) guide contains a section for testing both the RPC and REST endpoints of any given DAS, by using the `anytrusttool` available in <a data-quicklook-from="arbitrum-nitro">Nitro</a>.
+If you've deployed an [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) chain with a Data Availability Committee, it is recommended to actively monitor the endpoints of the different configured DA servers. The [How to deploy a DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das) guide contains a section for testing both the RPC and REST endpoints of any given DAS, by using the `anytrusttool` available in <a data-quicklook-from="arbitrum-nitro">Nitro</a>.
 
 ## Enabling Nitro metrics
 
@@ -63,7 +63,7 @@ nitro --metrics \
   --metrics-server.port 6070
 ```
 
-For metrics-server flags, memory-related metrics, health-check patterns, and Kubernetes `ServiceMonitor` examples, see [Node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
+For metrics-server flags, memory-related metrics, health-check patterns, and Kubernetes `ServiceMonitor` examples, see [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring).
 
 The signals that are not Nitro metrics — onchain events and account balances on the parent chain — are called out explicitly in each table below.
 
@@ -84,7 +84,7 @@ The sequencer accepts <a data-quicklook-from="transaction">transactions</a>, ord
 
 <VanillaAdmonition type="caution">
 
-`eth_syncing` returns `false` once a node is fully synced, so it is useful for tracking a node that is catching up, not for steady-state health. Its out-of-sync output is **not a stable API** and can change between Nitro versions, so do not build production alerting on the exact field shape. For a fully synced node, use the metrics above and an RPC liveness check (an `eth_chainId` call returning HTTP 200) instead. See [`eth_syncing`](/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods.mdx#eth_syncing) for the full field reference.
+`eth_syncing` returns `false` once a node is fully synced, so it is useful for tracking a node that is catching up, not for steady-state health. Its out-of-sync output is **not a stable API** and can change between Nitro versions, so do not build production alerting on the exact field shape. For a fully synced node, use the metrics above and an RPC liveness check (an `eth_chainId` call returning HTTP 200) instead. See [`eth_syncing`](/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods#eth_syncing) for the full field reference.
 
 </VanillaAdmonition>
 
@@ -105,7 +105,7 @@ Monitor the batch poster account balance directly through `arb/batchposter/walle
 
 </VanillaAdmonition>
 
-If batches stop being posted, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx) for common causes and tuning flags.
+If batches stop being posted, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting) for common causes and tuning flags.
 
 ### Validator
 
@@ -133,11 +133,11 @@ If you are relying on `arb/staker/action/last_success` and seeing it go stale fo
 
 **Long periods of inactivity can disable the validator allowlist.** If the latest confirmed assertion (or its first child, once one exists) is older than `validatorAfkBlocks` parent-chain blocks, the Rollup contract's validator allowlist can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). `validatorAfkBlocks` is configured per chain — read it from your Rollup contract; a value of `0` disables this mechanism entirely. Alert on assertion inactivity well before this window elapses. For example, on Arbitrum One `validatorAfkBlocks` is set to `201600` (~28 days of parent-chain blocks).
 
-This applies regardless of `disableValidatorWhitelist`. Setting `disableValidatorWhitelist` to `false` keeps your chain permissioned in normal operation but does not protect the allowlist from this escape hatch. To learn how the two parameters interact, and why any deliberate validator pause counts toward this window, see [Keeping validation permissioned across the upgrade](/launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx#keeping-validation-permissioned-across-the-upgrade).
+This applies regardless of `disableValidatorWhitelist`. Setting `disableValidatorWhitelist` to `false` keeps your chain permissioned in normal operation but does not protect the allowlist from this escape hatch. To learn how the two parameters interact, and why any deliberate validator pause counts toward this window, see [Keeping validation permissioned across the upgrade](/docs/launch-arbitrum-chain/operate/bold-upgrade-playbook#keeping-validation-permissioned-across-the-upgrade).
 
 </VanillaAdmonition>
 
-If assertions stop being posted or confirmed, see [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting.mdx) for common causes and tuning flags.
+If assertions stop being posted or confirmed, see [Validator troubleshooting](/docs/launch-arbitrum-chain/operate/validator-troubleshooting) for common causes and tuning flags.
 
 ### Chain fees and load
 
@@ -150,7 +150,7 @@ The chain's base fee is a useful signal of sustained demand. An Arbitrum chain h
 | `ArbGasInfo.getGasAccountingParams()`   | Precompile (RPC)                                         | Returns the chain's speed limit, pool size, and block gas limit. Use to confirm configuration.                     | Values differ from expected configuration |
 | `ArbGasInfo.getGasPricingConstraints()` | Precompile (RPC)                                         | Returns the configured gas pricing constraints. An empty array means the chain uses a single gas target.           | Values differ from expected configuration |
 
-For guidance on choosing a gas target, see [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx). If a sustained spike means your chain has outgrown its current target, follow [how to set the gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx#how-to-set-the-gas-target).
+For guidance on choosing a gas target, see [Manage gas target](/docs/launch-arbitrum-chain/operate/gas-target). If a sustained spike means your chain has outgrown its current target, follow [how to set the gas target](/docs/launch-arbitrum-chain/operate/gas-target#how-to-set-the-gas-target).
 
 ## Deployment guidance
 
@@ -172,4 +172,4 @@ The following are the canonical hardware specifications used by Offchain Labs fo
 | Validator | 3 cores      | 32 GB | 4 TB        | —                  |
 | RPC       | 4 cores      | 32 GB | —           | —                  |
 
-Fast, locally attached NVMe SSD storage is strongly recommended, especially for the sequencer and archive nodes, because disk latency directly affects performance as read volume grows. See [State growth](/launch-arbitrum-chain/operate/state-growth.mdx) for more on storage sizing over time.
+Fast, locally attached NVMe SSD storage is strongly recommended, especially for the sequencer and archive nodes, because disk latency directly affects performance as read volume grows. See [State growth](/docs/launch-arbitrum-chain/operate/state-growth) for more on storage sizing over time.

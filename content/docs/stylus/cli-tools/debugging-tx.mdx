@@ -31,7 +31,7 @@ Cargo Stylus provides several debugging capabilities:
   - **LLDB** (macOS)
   - **StylusDB** (macOS/Linux) - recommended for advanced debugging
 - **[Cast](https://book.getfoundry.sh/cast/)** (an Ethereum CLI tool)
-- **[Arbitrum RPC provider](#rpc-endpoint-compatibility)** with tracing endpoints enabled or a [local Stylus dev node](/run-arbitrum-node/run-nitro-dev-node)
+- **[Arbitrum RPC provider](#rpc-endpoint-compatibility)** with tracing endpoints enabled or a [local Stylus dev node](/docs/run-a-node/run-nitro-dev-node)
 
 ## Installation and setup
 
@@ -154,7 +154,7 @@ cargo stylus trace --tx=$TX_HASH --endpoint=$RPC_URL --use-native-tracer
 | `-p, --project <PROJECT>`   | Project path (default: `.`)                                         |
 | `--use-native-tracer`       | Use native Stylus tracer instead of JavaScript tracer (recommended) |
 
-This produces a JSON trace showing functions called and [ink](/stylus/concepts/gas-metering#ink-and-gas) consumption:
+This produces a JSON trace showing functions called and [ink](/docs/stylus/concepts/gas-metering#ink-and-gas) consumption:
 
 ```json
 [{"args":[0,0,0,4],"endInk":846200000,"name":"user_entrypoint","outs":[],"startInk":846200000},{"args":[],"endInk":846167558,"name":"msg_reentrant","outs":[0,0,0,0],"startInk":846175958},...]
@@ -294,7 +294,7 @@ Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that
 | `jsTracer`     | (default)             | Limited - most providers don't support this |
 | `stylusTracer` | `--use-native-tracer` | Broader support from RPC providers          |
 
-Both tracers are available on local nodes, but `stylusTracer` is more efficient. See the [list of RPC providers](/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) for tracing support information.
+Both tracers are available on local nodes, but `stylusTracer` is more efficient. See the [list of RPC providers](/docs/chain-info#third-party-rpc-providers) for tracing support information.
 
 ## Limitations
 

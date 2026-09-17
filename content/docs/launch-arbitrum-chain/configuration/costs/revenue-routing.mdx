@@ -12,7 +12,7 @@ Every <a data-quicklook-from="transaction">transaction</a> on an <a data-quicklo
 
 This page traces the complete life of a transaction fee: which address collects each component, when funds actually move, why block explorers estimate, and how and when to retrieve funds.
 
-To change the fee parameters and collector addresses described here, follow the step by step instructions in [How to manage the fee parameters of your Arbitrum chain](/launch-arbitrum-chain/chain-config/costs/fee-management.mdx).
+To change the fee parameters and collector addresses described here, follow the step by step instructions in [How to manage the fee parameters of your Arbitrum chain](/docs/launch-arbitrum-chain/configuration/costs/fee-management).
 
 ## Main fee components
 
@@ -51,7 +51,7 @@ The first two components are straightforward: <a data-quicklook-from="arbos">Arb
 
    If the pool doesn't hold enough to cover everything owed, the remainder stays on the books as funds due and is paid from future collections.
 
-6. **The price adjusts.** ArbOS compares the pool's balance against the total funds due and nudges the price per data unit up or down, so that over time, collections converge on actual costs. The full algorithm is described in [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
+6. **The price adjusts.** ArbOS compares the pool's balance against the total funds due and nudges the price per data unit up or down, so that over time, collections converge on actual costs. The full algorithm is described in [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing).
 
 ## When do funds move?
 
@@ -75,13 +75,13 @@ Block explorers such as Blockscout display a per transaction "Gas used for <a da
 
 </VanillaAdmonition>
 
-You can read the parent chain fee charged to the current transaction from within a contract, or inspect a live chain's pricing state, using the [`ArbGasInfo`](/arbitrum-essentials/precompiles/reference.mdx#arbgasinfo) <a data-quicklook-from="precompile">precompile</a> (`getCurrentTxL1GasFees()`, `getL1BaseFeeEstimate()`).
+You can read the parent chain fee charged to the current transaction from within a contract, or inspect a live chain's pricing state, using the [`ArbGasInfo`](/docs/arbitrum-essentials/precompiles/reference#arbgasinfo) <a data-quicklook-from="precompile">precompile</a> (`getCurrentTxL1GasFees()`, `getL1BaseFeeEstimate()`).
 
 ## Funds are stagnant unless moved
 
 All four collector addresses are addresses **on your chain**, and every payout described above is a native token transfer on your chain. The protocol never bridges revenue to the parent chain on your behalf. Two balances that operators sometimes conflate are entirely separate:
 
-- **The batch poster's parent chain balance**: the wallet that pays for posting batches. It spends the parent chain's gas token and depletes over time. You must keep it funded. If you hold that key in a KMS or a remote signer rather than locally, see [Batch poster: External signing (KMS)](/launch-arbitrum-chain/integrations/bp-kms-signing-services.mdx).
+- **The batch poster's parent chain balance**: the wallet that pays for posting batches. It spends the parent chain's gas token and depletes over time. You must keep it funded. If you hold that key in a KMS or a remote signer rather than locally, see [Batch poster: External signing (KMS)](/docs/launch-arbitrum-chain/integrations/bp-kms-signing-services).
 - **The fee collector's child chain balance**: where reimbursement and revenue accumulate, denominated in your chain's gas token.
 
 The protocol's pricing loop makes the second balance grow in proportion to what the first one spends, but moving value between them is the chain operator's job.
@@ -89,11 +89,11 @@ The protocol's pricing loop makes the second balance grow in proportion to what 
 There are two options to move revenue from the child chain to the parent chain:
 
 1. **Withdraw manually through the bridge.** If a collector is an EOA or multisig you control, initiate a standard child to parent withdrawal and execute it on the parent chain after the <a data-quicklook-from="challenge">challenge</a> period.
-2. **Use the AEP fee router contracts.** Set your collector addresses to `ChildToParentRouter` contracts, which route received funds to a configurable parent chain address and can be triggered permissionlessly. This is the recommended setup for chains with [Arbitrum Expansion Program](/launch-arbitrum-chain/chain-config/costs/aep-overview.mdx) obligations (see [AEP fee router contracts](/launch-arbitrum-chain/chain-config/costs/aep-router-contracts.mdx)).
+2. **Use the AEP fee router contracts.** Set your collector addresses to `ChildToParentRouter` contracts, which route received funds to a configurable parent chain address and can be triggered permissionlessly. This is the recommended setup for chains with [Arbitrum Expansion Program](/docs/launch-arbitrum-chain/configuration/costs/aep-fee-router-introduction) obligations (see [AEP fee router contracts](/docs/launch-arbitrum-chain/configuration/costs/set-up-aep-fee-router)).
 
 <VanillaAdmonition type="warning" title="Custom gas token chains">
 
-On chains with a <a data-quicklook-from="custom-gas-token">custom gas token</a>, fee collection is denominated in your gas token while the batch poster spends the parent chain's native token, so the reimbursement stream and the actual cost are in different assets. Such chains typically disable the parent chain base fee (set the price per unit to zero) and handle batch posting costs off-protocol. See [How to use a custom gas token](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx) and the custom gas token scenario in [AEP fee reporting](/launch-arbitrum-chain/chain-config/costs/reporting-on-fees.mdx).
+On chains with a <a data-quicklook-from="custom-gas-token">custom gas token</a>, fee collection is denominated in your gas token while the batch poster spends the parent chain's native token, so the reimbursement stream and the actual cost are in different assets. Such chains typically disable the parent chain base fee (set the price per unit to zero) and handle batch posting costs off-protocol. See [How to use a custom gas token](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup) and the custom gas token scenario in [AEP fee reporting](/docs/launch-arbitrum-chain/configuration/costs/reporting-on-fees).
 
 </VanillaAdmonition>
 
@@ -127,12 +127,12 @@ The pricer only pays out funds it has accounted for. If tokens are transferred d
 
 </VanillaAdmonition>
 
-For structured daily reporting across all fee streams, see [AEP fee reporting](/launch-arbitrum-chain/chain-config/costs/reporting-on-fees.mdx), which includes a ready made [RPC reporting script](https://github.com/yahgwai/aep-fee-tracker/).
+For structured daily reporting across all fee streams, see [AEP fee reporting](/docs/launch-arbitrum-chain/configuration/costs/reporting-on-fees), which includes a ready made [RPC reporting script](https://github.com/yahgwai/aep-fee-tracker/).
 
 ## See also
 
-- [How to manage the fee parameters of your Arbitrum chain](/launch-arbitrum-chain/chain-config/costs/fee-management.mdx) — configuring every parameter and collector mentioned here
-- [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing) — the parent chain pricing mechanism and adaptive algorithm in depth
-- [AEP fee router contracts](/launch-arbitrum-chain/chain-config/costs/aep-router-contracts.mdx) — routing revenue to the parent chain automatically
+- [How to manage the fee parameters of your Arbitrum chain](/docs/launch-arbitrum-chain/configuration/costs/fee-management) — configuring every parameter and collector mentioned here
+- [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing) — the parent chain pricing mechanism and adaptive algorithm in depth
+- [AEP fee router contracts](/docs/launch-arbitrum-chain/configuration/costs/set-up-aep-fee-router) — routing revenue to the parent chain automatically
 - [Configure your chain's batch poster](/launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster.mdx) — the operational side of the component this revenue reimburses
-- [Batch poster: External signing (KMS)](/launch-arbitrum-chain/integrations/bp-kms-signing-services.mdx) — securing the parent chain wallet that this revenue stream reimburses
+- [Batch poster: External signing (KMS)](/docs/launch-arbitrum-chain/integrations/bp-kms-signing-services) — securing the parent chain wallet that this revenue stream reimburses

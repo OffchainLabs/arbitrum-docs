@@ -29,7 +29,7 @@ AEP fees will apply here in the future.
 
 ## tldr;
 
-<a data-quicklook-from="timeboost">Arbitrum Timeboost</a> is a novel <a data-quicklook-from="transaction">transaction</a> ordering policy that can be optionally deployed and enabled for any Arbitrum chain. Timeboost allows a <a data-quicklook-from="chain-owner">chain owner</a> to capture some of the available Maximum Extractable Value (MEV) on their <a data-quicklook-from="blockchain">blockchain</a> and reduces latency-related spamming, in exchange for a small impact on user response times (despite block times not changing). It is therefore recommended that chains only consider deploying and enabling Timeboost if there is substantial DeFi and related MEV activity (e.g., liquidations, arbitrage, backrunning) on the chain. Please read the [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) to learn more about how Timeboost works.
+<a data-quicklook-from="timeboost">Arbitrum Timeboost</a> is a novel <a data-quicklook-from="transaction">transaction</a> ordering policy that can be optionally deployed and enabled for any Arbitrum chain. Timeboost allows a <a data-quicklook-from="chain-owner">chain owner</a> to capture some of the available Maximum Extractable Value (MEV) on their <a data-quicklook-from="blockchain">blockchain</a> and reduces latency-related spamming, in exchange for a small impact on user response times (despite block times not changing). It is therefore recommended that chains only consider deploying and enabling Timeboost if there is substantial DeFi and related MEV activity (e.g., liquidations, arbitrage, backrunning) on the chain. Please read the [gentle introduction to Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction) to learn more about how Timeboost works.
 
 As with all features on the Arbitrum stack, Arbitrum chains can adopt Timeboost at their own discretion and on their own timeline. To deploy and enable Arbitrum Timeboost on your chain, please refer to this guide on how to [deploy and configure Timeboost](#enabling-timeboost-for-your-arbitrum-chain).
 
@@ -41,7 +41,7 @@ Again, Arbitrum chains can adopt Timeboost at their discretion and on their time
 
 ## Benefits of adopting Timeboost
 
-Timeboost enables a chain owner to capture a portion of the available MEV on their blockchain, reducing latency-related spam while preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy. A more in-depth overview of the benefits of Timeboost is explored in the [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), and also a paper on how Timeboost is more profitable for arbitrageurs compared to other forms of MEV capture, like Priority Gas Auctions (PGA) [here](https://arxiv.org/abs/2410.10797).
+Timeboost enables a chain owner to capture a portion of the available MEV on their blockchain, reducing latency-related spam while preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy. A more in-depth overview of the benefits of Timeboost is explored in the [gentle introduction to Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction), and also a paper on how Timeboost is more profitable for arbitrageurs compared to other forms of MEV capture, like Priority Gas Auctions (PGA) [here](https://arxiv.org/abs/2410.10797).
 
 ### Fair(er) MEV capture
 
@@ -67,13 +67,13 @@ As explained in the guide on [how to deploy and configure Timeboost](#enabling-t
 
 - An offchain auctioneer (responsible for receiving and validating bids, and resolving <a data-quicklook-from="express-lane">Express Lane</a> auctions),
 - An onchain <a data-quicklook-from="smart-contract">smart contract</a> (to manage the Express Lane auction), and
-- A new configuration on the [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) is implemented to take advantage of the Express Lane time.
+- A new configuration on the [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) is implemented to take advantage of the Express Lane time.
 
 Often times, the cost required to set up, configure, and maintain the infrastructure above (especially the auctioneer) will exceed that of the potential revenue that Timeboost brings in. Most importantly, the revenue that Timeboost can generate for the chain is _not guaranteed_ either.
 
 ### User experience
 
-As explained in the [gentle introduction to Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), the Timeboost Express Lane time advantage is implemented by imposing an artificial delay (default: `@@timeboostNonExpressDelayMs=200@@ms`) on all non-express lane transactions whenever there is an <a data-quicklook-from="express-lane-controller">Express Lane Controller</a> for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `@@l2BlockTimeMs=250@@ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artificial delay and the block time of the chain. Note that this artificial delay is only applied when there is an express lane controller for a round, meaning there is no change in user experience if nobody is using Timeboost, even though it is enabled (for the duration of that round).
+As explained in the [gentle introduction to Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction), the Timeboost Express Lane time advantage is implemented by imposing an artificial delay (default: `@@timeboostNonExpressDelayMs=200@@ms`) on all non-express lane transactions whenever there is an <a data-quicklook-from="express-lane-controller">Express Lane Controller</a> for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `@@l2BlockTimeMs=250@@ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artificial delay and the block time of the chain. Note that this artificial delay is only applied when there is an express lane controller for a round, meaning there is no change in user experience if nobody is using Timeboost, even though it is enabled (for the duration of that round).
 
 ## Enabling Timeboost for your Arbitrum chain
 

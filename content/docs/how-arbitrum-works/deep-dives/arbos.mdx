@@ -12,7 +12,7 @@ ArbOS is the child-EVM virtual machine monitor (VMM) for <a data-quicklook-from=
 ## Core responsibilities
 
 1. **Network resource management**: Allocating and tracking the required resources to execute <a data-quicklook-from="child-chain">child-chain</a> <a data-quicklook-from="transaction">transactions</a> and pricing them.
-2. **Block production**: Turning [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx)-delivered messages into child-chain blocks with correct state updates.
+2. **Block production**: Turning [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer)-delivered messages into child-chain blocks with correct state updates.
 3. **Cross-chain messaging**: Enabling cross-chain communication between <a data-quicklook-from="parent-chain">parent</a> and child chains for deposits, withdrawals, and <a data-quicklook-from="retryable-ticket">retryable tickets</a>.
 4. **Enhanced EVM execution**: Running instrumented <a data-quicklook-from="geth">Geth</a> to execute <a data-quicklook-from="smart-contract">smart contracts</a> with child-chain specific logic.
 5. **<a data-quicklook-from="stylus">Stylus</a> support**: Managing <a data-quicklook-from="host-io">host I/O</a>, memory, and execution context for <a data-quicklook-from="wasm">WASM</a>-based contracts.
@@ -39,19 +39,19 @@ ArbOS keeps its books in the same Geth state trie that holds account balances, u
 
 Most of this state is reachable from contracts through <a data-quicklook-from="precompile">precompiles</a>. Two components deserve special mention because they back headline features:
 
-- `sendMerkle` is the accumulator that records every <a data-quicklook-from="L2">L2</a> → L1 message; its root is what the parent-chain <a data-quicklook-from="outbox">Outbox</a> verifies against when a withdrawal is finalized. See [child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) for how a withdrawal proves against that root.
+- `sendMerkle` is the accumulator that records every <a data-quicklook-from="L2">L2</a> → L1 message; its root is what the parent-chain <a data-quicklook-from="outbox">Outbox</a> verifies against when a withdrawal is finalized. See [child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging) for how a withdrawal proves against that root.
 - `programs` hold Stylus <a data-quicklook-from="activation">activation</a> state, which is why WASM contracts can be priced and executed deterministically.
 
-For the subspace-by-subspace breakdown, including `blockhashes`, `l1PricingState`, and `l2PricingState`, see the [ArbOS state reference](/how-arbitrum-works/reference/arbos-reference.mdx#arbos-state).
+For the subspace-by-subspace breakdown, including `blockhashes`, `l1PricingState`, and `l2PricingState`, see the [ArbOS state reference](/docs/how-arbitrum-works/reference/arbos-reference#arbos-state).
 
 ## Gas and fees
 
 - Child-chain execution is priced by `l2PricingState`, which runs a dynamic base-fee mechanism. A gas pool tracks demand across a time window, pushing that base fee up under load and down when idle, smoothing spikes while preserving capacity.
-- Parent-chain data is tracked by `l1PricingState`, which records what the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) spent posting compressed data to Ethereum and reimburses the <a data-quicklook-from="batch-poster">batch poster</a> from user fees.
+- Parent-chain data is tracked by `l1PricingState`, which records what the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) spent posting compressed data to Ethereum and reimburses the <a data-quicklook-from="batch-poster">batch poster</a> from user fees.
 
 Fees are routed to the configured network and infrastructure fee accounts.
 
-For the complete breakdown, including the pricing formulas and the per-block gas limit, see [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx). For how ArbOS meters calldata and reimburses the batch poster, see [parent chain gas pricing](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
+For the complete breakdown, including the pricing formulas and the per-block gas limit, see [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees). For how ArbOS meters calldata and reimburses the batch poster, see [parent chain gas pricing](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing).
 
 ## Precompiles
 
@@ -63,15 +63,15 @@ ArbOS exposes system functionality to contracts through <a data-quicklook-from="
 
 This lets an EVM CALL reach native operating-system code without breaking the EVM’s type and ABI guarantees. Some precompiles (or specific methods) are gated to a minimum ArbOS version.
 
-For the reflection and dispatch mechanics, see the [precompile architecture reference](/how-arbitrum-works/reference/arbos-reference.mdx#how-precompiles-work). For every precompile, its address, and its methods, see the [precompiles reference](/arbitrum-essentials/precompiles/reference.mdx).
+For the reflection and dispatch mechanics, see the [precompile architecture reference](/docs/how-arbitrum-works/reference/arbos-reference#how-precompiles-work). For every precompile, its address, and its methods, see the [precompiles reference](/docs/arbitrum-essentials/precompiles/reference).
 
 ## Retryables
 
-Retryable tickets are a special message type that enables atomic parent-to-child messaging: a ticket is created on the parent chain and redeemed on the child chain, with funds and execution handled together. Retryable state lives in the `retryables` subspace. See the [parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) documentation for the full lifecycle.
+Retryable tickets are a special message type that enables atomic parent-to-child messaging: a ticket is created on the parent chain and redeemed on the child chain, with funds and execution handled together. Retryable state lives in the `retryables` subspace. See the [parent-to-child messaging](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging) documentation for the full lifecycle.
 
 ## ArbOS versions and upgrades
 
-ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple <a data-quicklook-from="gas-target">gas targets</a> over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) (for parent chain data costs) and the network (for child chain execution).
+ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple <a data-quicklook-from="gas-target">gas targets</a> over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) (for parent chain data costs) and the network (for child chain execution).
 
 Because the STF must stay deterministic across every node and across every historical replay, ArbOS cannot change behavior simply by shipping a new binary—old blocks must still reproduce exactly. Upgrades are therefore scheduled as onchain events.
 
@@ -84,4 +84,4 @@ This is how the chain has evolved over time—for example, Stylus activated at A
 
 Stylus extends ArbOS to support WASM-based smart contracts alongside the EVM. When a transaction targets a Stylus contract, ArbOS routes execution to the WASM runtime, which uses host I/O calls for blockchain state access instead of EVM opcodes. Stylus contracts use a multi-dimensional gas model based on <a data-quicklook-from="ink">Ink</a> units, with LRU caching to minimize execution overhead.
 
-For the full technical details of Stylus execution flow, caching, gas pricing, and Go-WASI integration, see the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx#stylus-specific-differences).
+For the full technical details of Stylus execution flow, caching, gas pricing, and Go-WASI integration, see the [ArbOS technical reference](/docs/how-arbitrum-works/reference/arbos-reference#stylus-specific-differences).

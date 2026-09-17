@@ -121,7 +121,7 @@ stylus-sdk = { version = "@@stylusSdkVersion=0.10.7@@", default-features = false
 ls -lh target/wasm32-unknown-unknown/release/*.wasm
 ```
 
-See [Optimizing binaries guide](/stylus/how-tos/optimizing-binaries) for more strategies.
+See [Optimizing binaries guide](/docs/stylus/how-tos/optimizing-binaries) for more strategies.
 
 ### Linker errors
 
@@ -160,7 +160,7 @@ rustup update
 serde = { version = "1.0", default-features = false, features = ["derive"] }
 ```
 
-3. **Use Stylus-compatible alternatives**: See [recommended libraries](/stylus/advanced/recommended-libraries).
+3. **Use Stylus-compatible alternatives**: See [recommended libraries](/docs/stylus/advanced/recommended-libraries).
 
 ## Deployment errors
 
@@ -207,7 +207,7 @@ cargo stylus deploy \
   --gas-limit=10000000
 ```
 
-See [Activation concepts](/stylus/concepts/activation) for more details.
+See [Activation concepts](/docs/stylus/concepts/activation) for more details.
 
 ### Transaction reverted
 
@@ -342,7 +342,7 @@ cast send <CONTRACT> "function()" \
 cargo stylus trace <TX_HASH> --endpoint <RPC_URL>
 ```
 
-See [Gas optimization guide](/stylus/best-practices/gas-optimization) for more strategies.
+See [Gas optimization guide](/docs/stylus/best-practices/gas-optimization) for more strategies.
 
 ## Testing issues
 
@@ -454,7 +454,7 @@ cargo stylus export-abi > abi.json
 # Verify types in abi.json match your frontend
 ```
 
-See [Type conversions guide](/stylus/fundamentals/data-types/conversions-between-types).
+See [Type conversions guide](/docs/stylus/fundamentals/data-types/conversions-between-types).
 
 ## Network and RPC issues
 
@@ -537,7 +537,7 @@ cargo stylus replay \
   <TX_HASH>
 ```
 
-See [Debugging guide](/stylus/cli-tools/debugging-tx) for detailed walkthrough.
+See [Debugging guide](/docs/stylus/cli-tools/debugging-tx) for detailed walkthrough.
 
 ### Trace execution
 
@@ -591,7 +591,7 @@ Include:
 
 ## Next steps
 
-- Review [security best practices](/stylus/best-practices/security)
-- Study [gas optimization](/stylus/best-practices/gas-optimization)
-- Learn [debugging techniques](/stylus/cli-tools/debugging-tx)
-- Explore [testing strategies](/stylus/fundamentals/testing-contracts)
+- Review [security best practices](/docs/stylus/best-practices/security)
+- Study [gas optimization](/docs/stylus/best-practices/gas-optimization)
+- Learn [debugging techniques](/docs/stylus/cli-tools/debugging-tx)
+- Explore [testing strategies](/docs/stylus/fundamentals/testing-contracts)

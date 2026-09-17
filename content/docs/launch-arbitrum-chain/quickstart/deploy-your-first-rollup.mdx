@@ -56,7 +56,7 @@ DEPLOYER_PRIVATE_KEY=0xYourPrivateKeyHere
 | Variable                            | Required?              | When         | Description                                                                                                                                                                            |
 | :---------------------------------- | :--------------------- | :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DEPLOYER_PRIVATE_KEY`              | **Yes**                | Step 1       | Your wallet's private key (starts with `0x`, 66 chars). Used to deploy the chain and token bridge. Never share or commit it.                                                           |
-| `PARENT_CHAIN_RPC`                  | Optional               | Step 2, 3, 6 | Arbitrum Sepolia RPC URL. If omitted, uses the default public RPC (can be slow or time out). Use a [node provider](/arbitrum-essentials/reference/node-providers.mdx) for reliability. |
+| `PARENT_CHAIN_RPC`                  | Optional               | Step 2, 3, 6 | Arbitrum Sepolia RPC URL. If omitted, uses the default public RPC (can be slow or time out). Use a [node provider](/docs/arbitrum-essentials/reference/node-providers) for reliability. |
 | `BATCH_POSTER_PRIVATE_KEY`          | Optional               | Step 2       | Private key for the batch poster. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                    |
 | `VALIDATOR_PRIVATE_KEY`             | Optional               | Step 2       | Private key for the validator. If omitted, the deploy script generates one and prints it—copy it into `.env` for the next steps.                                                       |
 | `CHAIN_DEPLOYMENT_TRANSACTION_HASH` | **Yes** (after Step 2) | Step 3, 6    | Transaction hash from the deploy script. Copy it from Step 2's output into `.env`.                                                                                                     |
@@ -217,7 +217,7 @@ node prepare-node-config.mjs
 
 ## Step 4: Fund the batch poster and validator
 
-The batch poster and validator need **ETH** on Arbitrum Sepolia to pay for gas when posting [batches and assertions](/how-arbitrum-works/deep-dives/assertions.mdx). Send **ETH** to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
+The batch poster and validator need **ETH** on Arbitrum Sepolia to pay for gas when posting [batches and assertions](/docs/how-arbitrum-works/deep-dives/assertions). Send **ETH** to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
 
 - Get the addresses from your Step 2 output (the lines starting with `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`).
 - Send at least 0.01 **ETH** to each address from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
@@ -427,5 +427,5 @@ eth_blockNumber advances; RPC reachable at http://localhost:8449
 
 ### Next steps
 
-- **Product-level testnet:** To run your chain with production infrastructure (HA sequencers, separate nodes, public RPC) instead of locally, complete Steps 1–4 above, then follow [Run L3 rollup infrastructure (product-level testnet)](/launch-arbitrum-chain/quickstart/l3-rollup-testnet.mdx).
-- For production chains, customization, and more details, see the [full deployment guide](/launch-arbitrum-chain/deploy/deploy-chain.mdx), [node config guide](/launch-arbitrum-chain/deploy/configure-node.mdx), and [token bridge guide](/launch-arbitrum-chain/deploy/token-bridge.mdx).
+- **Product-level testnet:** To run your chain with production infrastructure (HA sequencers, separate nodes, public RPC) instead of locally, complete Steps 1–4 above, then follow [Run L3 rollup infrastructure (product-level testnet)](/docs/launch-arbitrum-chain/quickstart/run-testnet-infrastructure-first-rollup).
+- For production chains, customization, and more details, see the [full deployment guide](/docs/launch-arbitrum-chain/deploy/deploying-an-arbitrum-chain), [node config guide](/docs/launch-arbitrum-chain/arbitrum-chain-sdk-preparing-node-config), and [token bridge guide](/docs/launch-arbitrum-chain/deploy/deploying-token-bridge).

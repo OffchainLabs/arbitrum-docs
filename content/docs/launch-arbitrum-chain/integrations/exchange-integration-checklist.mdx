@@ -127,7 +127,7 @@ For an internal **ETH** transfer, recursively scan the `callTracer` frames for t
 
 <VanillaAdmonition type="caution" title="Arbitrum-specific deposits to watch">
 
-Besides ordinary externally owned account transactions, value can arrive through Arbitrum-native transaction types. When a user bridges directly to an exchange-controlled address, the credit appears as an `ArbitrumDepositTx` (type `0x64`), where ArbOS adds balance to the destination after the parent-chain bridge locks the same funds. Retryable-ticket execution (`ArbitrumRetryTx`, `0x68`, and `ArbitrumSubmitRetryableTx`, `0x69`) can also deliver value. System transactions of type `ArbitrumInternalTx` (`0x6A`) are ArbOS-generated bookkeeping and must never be credited. Classify by observed value movement, as in A through C, rather than assuming every credit is a standard transfer. See [Geth at the core](/how-arbitrum-works/reference/geth.mdx) for the full list of transaction types.
+Besides ordinary externally owned account transactions, value can arrive through Arbitrum-native transaction types. When a user bridges directly to an exchange-controlled address, the credit appears as an `ArbitrumDepositTx` (type `0x64`), where ArbOS adds balance to the destination after the parent-chain bridge locks the same funds. Retryable-ticket execution (`ArbitrumRetryTx`, `0x68`, and `ArbitrumSubmitRetryableTx`, `0x69`) can also deliver value. System transactions of type `ArbitrumInternalTx` (`0x6A`) are ArbOS-generated bookkeeping and must never be credited. Classify by observed value movement, as in A through C, rather than assuming every credit is a standard transfer. See [Geth at the core](/docs/how-arbitrum-works/reference/geth) for the full list of transaction types.
 
 </VanillaAdmonition>
 
@@ -178,7 +178,7 @@ Each fixture should record the block hash, the transaction hash, the raw `eth_ge
 
 ## Version compatibility
 
-ArbOS upgrades can change the details this logic depends on, so confirm versions against the [ArbOS releases overview](/run-arbitrum-node/arbos-releases/01-overview.mdx) and the [Nitro releases page](https://github.com/OffchainLabs/nitro/releases) before each integration cycle. Three things can change across an upgrade and affect your indexer:
+ArbOS upgrades can change the details this logic depends on, so confirm versions against the [ArbOS releases overview](/docs/run-a-node/arbos-releases/overview) and the [Nitro releases page](https://github.com/OffchainLabs/nitro/releases) before each integration cycle. Three things can change across an upgrade and affect your indexer:
 
 - **Tracer output** — the structure or completeness of `debug_traceBlockByHash` call frames.
 - **Gas accounting** — how `gasUsed` is computed and how the parent-chain data fee is represented.
@@ -196,7 +196,7 @@ Run this whenever a new Nitro release or ArbOS upgrade targets your chain, befor
 4. **Diff the raw responses.** Compare `debug_traceBlockByHash`, `eth_getTransactionReceipt`, and `eth_getBlockByNumber` payloads before and after the upgrade for the same fixtures, and investigate any structural change.
 5. **Verify the two invariants explicitly.** Confirm that no invalid or reverted transaction produces a credit, and that no valid deposit on any path is missed.
 6. **Confirm the finality tags.** Check that the `finalized` height advances and that you are not crediting on `latest`.
-7. **Upgrade your own node** to the required Nitro version per the [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx), then re-run Steps 3 through 6 on your production chain shortly after activation.
+7. **Upgrade your own node** to the required Nitro version per the [Nitro support policy](/docs/run-a-node/nitro-support-policy), then re-run Steps 3 through 6 on your production chain shortly after activation.
 8. **Record the result** — node version, ArbOS version, date, and pass or fail, so the next upgrade has a baseline to diff against.
 
 <VanillaAdmonition type="note" title="For Dedicated Blockchain owners">
@@ -207,7 +207,7 @@ We recommend waiting at least four weeks after an ArbOS release is live on Arbit
 
 ## Related resources
 
-- [ArbOS software releases: overview](/run-arbitrum-node/arbos-releases/01-overview.mdx)
-- [Geth at the core](/how-arbitrum-works/reference/geth.mdx)
-- [RPC methods: Arbitrum compared with Ethereum](/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods.mdx)
-- [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx)
+- [ArbOS software releases: overview](/docs/run-a-node/arbos-releases/overview)
+- [Geth at the core](/docs/how-arbitrum-works/reference/geth)
+- [RPC methods: Arbitrum compared with Ethereum](/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods)
+- [Nitro support policy](/docs/run-a-node/nitro-support-policy)

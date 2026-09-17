@@ -13,17 +13,17 @@ import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.m
 
 :::info Prerequisites
 
-This page assumes that you've completed the steps from the [Start here](/run-arbitrum-node/start-here.mdx) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, <a data-quicklook-from="database-snapshot">database snapshots</a>, and other information required to run the node.
+This page assumes that you've completed the steps from the [Start here](/docs/run-a-node/start-here) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, <a data-quicklook-from="database-snapshot">database snapshots</a>, and other information required to run the node.
 
-To view the short and long term support policy, visit the [Nitro support policy](/run-arbitrum-node/nitro-support-policy.mdx) page.
+To view the short and long term support policy, visit the [Nitro support policy](/docs/run-a-node/nitro-support-policy) page.
 
-If you're looking to run a node with a different role — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, <a data-quicklook-from="archive-node">archive node</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—see [How to assign roles to a Nitro node](/run-arbitrum-node/assign-node-roles.mdx) for the flags that define each role.
+If you're looking to run a node with a different role — <a data-quicklook-from="sequencer">sequencer</a>, <a data-quicklook-from="batch-poster">batch poster</a>, <a data-quicklook-from="validator">validator</a>, <a data-quicklook-from="archive-node">archive node</a>, or <a data-quicklook-from="feed-relay">feed relay</a>—see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles) for the flags that define each role.
 
 :::
 
 <VanillaAdmonition type="tip" title="Running on Kubernetes or want a more reliable setup?">
 
-This page covers running a node with Docker. If you want to deploy on Kubernetes, or you want a more production-ready setup with monitoring, log signals, and network egress guidance, follow [How to run a full node with Helm on Kubernetes](/launch-arbitrum-chain/run-a-node/run-full-node-with-helm.mdx) instead.
+This page covers running a node with Docker. If you want to deploy on Kubernetes, or you want a more production-ready setup with monitoring, log signals, and network egress guidance, follow [How to run a full node with Helm on Kubernetes](/docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm) instead.
 
 </VanillaAdmonition>
 
@@ -48,7 +48,7 @@ Pick based on how you want to handle <a data-quicklook-from="state-pruning">prun
 - **Choose HashDB** if your node runs the block validator, or if you want the simplest initialization. `--init.latest pruned` downloads and verifies the snapshot for you. You then prune manually, and your node is offline while it does.
 - **Choose PathDB** if you want to avoid manual prune cycles. Nitro prunes online, so the node keeps serving RPC and disk use stays within the window you set with `--execution.caching.state-history`. Initialization takes more work: you pass the snapshot URL to `--init.url` yourself.
 
-On **<a data-quicklook-from="archive-node">archive</a>** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/run-arbitrum-node/more-types/01-run-archive-node.mdx).
+On **<a data-quicklook-from="archive-node">archive</a>** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/docs/run-a-node/more-types/run-archive-node).
 
 <VanillaAdmonition type="caution" title="PathDB and block validation">
 
@@ -62,7 +62,7 @@ A default full node is unaffected: it runs the watchtower strategy, which does n
 
 :::warning Caution
 
-If you are running more than one node, you should [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx).
+If you are running more than one node, you should [run a feed relay](/docs/run-a-node/run-feed-relay).
 
 :::
 
@@ -70,7 +70,7 @@ If you are running more than one node, you should [run a feed relay](/run-arbitr
 
 `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and every snapshot it resolves for those kinds uses HashDB. Adding `--execution.caching.state-scheme=path` to the examples below fails, because the downloaded snapshot's scheme won't match.
 
-PathDB snapshots are published under the separate `full-path` and `archive-path` kinds, which `--init.latest` does not accept. To initialize a PathDB database, pass the snapshot URL to `--init.url` instead. See [PathDB snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#pathdb-snapshots).
+PathDB snapshots are published under the separate `full-path` and `archive-path` kinds, which `--init.latest` does not accept. To initialize a PathDB database, pass the snapshot URL to `--init.url` instead. See [PathDB snapshots](/docs/run-a-node/nitro/nitro-database-snapshots#pathdb-snapshots).
 
 :::
 
@@ -141,7 +141,7 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
 - By default, the full node runs in Watchtower mode, meaning that it watches the onchain assertions and, if it disagrees with them, logs an error containing the string `found incorrect assertion in watchtower mode`. For a BoLD-enabled chain like Arbitrum One or Arbitrum Nova if you are running Nitro before v3.6.0, the `--node.bold.enable=true` flag should be set to ensure your node can monitor for onchain assertions properly.
 - Setting this flag is not required as your node will continue to operate correctly, validate the Arbitrum One/Nova chain, and serve RPC requests as usual, regardless of this flag.
 - Note that watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode using the parameter `--node.staker.enable=false`.
-- For details on watchtower mode alongside the other validator strategies (`defensive`, `stakeLatest`, `resolveNodes`, `makeNodes`), see [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx).
+- For details on watchtower mode alongside the other validator strategies (`defensive`, `stakeLatest`, `resolveNodes`, `makeNodes`), see [How to run a validator](/docs/run-a-node/more-types/run-validator-node).
 
 ### Pruning
 
@@ -166,7 +166,7 @@ If you are using the default storage scheme (HashDB), then you can activate prun
 - `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:
   - `minimal`: The most aggressive prune and retains only the genesis state and the head state (at the latest snapshot). Takes the least amount of time to complete. Duration depends on the chain and database size (several hours for smaller chains; potentially days for large chains like Arbitrum One).
   - `full` : Mostly intended for full nodes serving RPC requests, this mode retains the genesis state, the state of the latest confirmed block, and the head state (at the latest snapshot). Will not work if the node is in `validator` mode. Duration varies significantly by chain and database size—for Arbitrum One, this may take multiple days on NVMe SSDs. For smaller chains, it will be much faster. If pruning takes too long, consider downloading a fresh pruned snapshot with `--init.latest pruned` instead.
-  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, the latest confirmed assertion root (obtained from L1), the last locally validated block root, and the head state (at the latest snapshot). This mode is expected to take longer than `full` pruning mode. For validator-specific setup details, see [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx).
+  - `validator`: Meant to be used by validator nodes and requires an RPC URL for L1 Ethereum. This mode retains the genesis state, the state of the latest confirmed block, the latest confirmed assertion root (obtained from L1), the last locally validated block root, and the head state (at the latest snapshot). This mode is expected to take longer than `full` pruning mode. For validator-specific setup details, see [How to run a validator](/docs/run-a-node/more-types/run-validator-node).
 
 ### Memory management
 
@@ -175,7 +175,7 @@ Under heavy RPC load or during operations such as large `debug_traceBlockByNumbe
 - `--node.resource-mgmt.mem-free-limit`: Declines incoming RPC requests when free system memory drops below the specified threshold (e.g., `--node.resource-mgmt.mem-free-limit=4GiB`). This helps protect the node from OOM under high request load.
 - `GOMEMLIMIT` environment variable: Sets a soft memory limit for the Go runtime garbage collector (e.g., `GOMEMLIMIT=48GiB` for a 64 GB machine), helping reduce memory spikes.
 
-For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx).
+For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring).
 
 :::tip
 For Docker deployments, you can set these in your `docker run` command:

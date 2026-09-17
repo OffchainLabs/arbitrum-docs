@@ -14,7 +14,7 @@ Stylus contracts undergo a two-step process to become executable on Arbitrum cha
 Unlike traditional EVM contracts that become immediately executable after deployment, Stylus contracts require an additional activation step:
 
 1. **Deployment**: Stores the compressed WASM bytecode onchain at a contract address
-2. **Activation**: Converts the bytecode into an executable Stylus program by registering it with the [ArbWasm precompile](/arbitrum-essentials/precompiles/reference#common-precompiles)
+2. **Activation**: Converts the bytecode into an executable Stylus program by registering it with the [ArbWasm precompile](/docs/arbitrum-essentials/precompiles/reference#common-precompiles)
 
 **Why two steps?**
 
@@ -170,7 +170,7 @@ The `cargo-stylus` CLI maps directly onto the two steps above:
 - `cargo stylus activate --address=<ADDRESS>` activates a previously deployed contract.
 - `cargo stylus check` validates the contract and reports whether matching code is already activated, the estimated data fee, or any validation errors.
 
-For the full command syntax and options, see the [check and deploy guide](/stylus/cli-tools/check-and-deploy) and the [`cargo-stylus` command reference](/stylus/cli-tools/commands-reference).
+For the full command syntax and options, see the [check and deploy guide](/docs/stylus/cli-tools/check-and-deploy) and the [`cargo-stylus` command reference](/docs/stylus/cli-tools/commands-reference).
 
 ## Deployment with constructors
 
@@ -310,7 +310,7 @@ error ProgramInsufficientValue(uint256 have, uint256 want);
 
 ### Estimating costs
 
-Before deploying, `cargo stylus deploy --estimate-gas` reports the deployment gas and `cargo stylus check` reports the estimated activation data fee. See the [check and deploy guide](/stylus/cli-tools/check-and-deploy) for details.
+Before deploying, `cargo stylus deploy --estimate-gas` reports the deployment gas and `cargo stylus check` reports the estimated activation data fee. See the [check and deploy guide](/docs/stylus/cli-tools/check-and-deploy) for details.
 
 ### Fee bump configuration
 
@@ -354,7 +354,7 @@ You can deploy the contract normally, and it will automatically use the existing
 
 ### Contract caching
 
-After activation, contracts can be [cached](../how-tos/caching-contracts) for cheaper calls:
+After activation, contracts can be [cached](/docs/stylus/how-tos/caching-contracts) for cheaper calls:
 
 ```solidity
 // ArbWasmCache precompile (0x0000000000000000000000000000000000000072)
@@ -549,7 +549,7 @@ cargo stylus activate --address=0x...
 
 ### Debugging and verifying activation
 
-To inspect status or debug a failed activation, `cargo stylus check` validates a contract (add `--verbose` for detail), and `cargo stylus check --address=0x...` reports whether an existing deployment is activated. For verbose deploy logging and `cast`-based status checks against the ArbWasm precompile, see the [debugging transactions guide](/stylus/cli-tools/debugging-tx) and the [check and deploy guide](/stylus/cli-tools/check-and-deploy).
+To inspect status or debug a failed activation, `cargo stylus check` validates a contract (add `--verbose` for detail), and `cargo stylus check --address=0x...` reports whether an existing deployment is activated. For verbose deploy logging and `cast`-based status checks against the ArbWasm precompile, see the [debugging transactions guide](/docs/stylus/cli-tools/debugging-tx) and the [check and deploy guide](/docs/stylus/cli-tools/check-and-deploy).
 
 ## Best practices
 
@@ -564,7 +564,7 @@ To inspect status or debug a failed activation, `cargo stylus check` validates a
   stylus-sdk = "@@stylusSdkVersion=0.10.7@@"
   ```
 
-For the full deployment walkthrough — project setup, gas estimation, reproducible builds, and verification — see the [check and deploy guide](/stylus/cli-tools/check-and-deploy).
+For the full deployment walkthrough — project setup, gas estimation, reproducible builds, and verification — see the [check and deploy guide](/docs/stylus/cli-tools/check-and-deploy).
 
 ## Summary
 
@@ -578,7 +578,7 @@ For the full deployment walkthrough — project setup, gas estimation, reproduci
 
 ## See also
 
-- [Contracts](../fundamentals/contracts.mdx): Writing Stylus contracts
-- [Global Variables and Functions](../fundamentals/global-variables-and-functions.mdx): VM interface methods
-- [Check and deploy](/stylus/cli-tools/check-and-deploy): Full `cargo stylus` deployment walkthrough
-- [`cargo-stylus` command reference](/stylus/cli-tools/commands-reference): Complete CLI option reference
+- [Contracts](/docs/stylus/fundamentals/contracts): Writing Stylus contracts
+- [Global Variables and Functions](/docs/stylus/fundamentals/global-variables-and-functions): VM interface methods
+- [Check and deploy](/docs/stylus/cli-tools/check-and-deploy): Full `cargo stylus` deployment walkthrough
+- [`cargo-stylus` command reference](/docs/stylus/cli-tools/commands-reference): Complete CLI option reference

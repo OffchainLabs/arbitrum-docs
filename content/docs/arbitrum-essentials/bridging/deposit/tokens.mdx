@@ -7,14 +7,14 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-This guide shows you how to deposit **ERC-20** tokens from a parent chain (like Ethereum) to an Arbitrum child chain. This assumes your token is already configured for bridging. If you need to set up bridging for a new token, see [Configure token bridging](/arbitrum-essentials/bridging/configure-token-gateway/standard.mdx).
+This guide shows you how to deposit **ERC-20** tokens from a parent chain (like Ethereum) to an Arbitrum child chain. This assumes your token is already configured for bridging. If you need to set up bridging for a new token, see [Configure token bridging](/docs/arbitrum-essentials/bridging/configure-token-gateway/standard).
 
 ## Prerequisites
 
 - Your token must already be bridgeable (registered with a gateway)
 - A wallet with the tokens you want to deposit on the parent chain
 - **ETH** on the parent chain to pay for gas fees
-- Familiarity with [Arbitrum's token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- Familiarity with [Arbitrum's token bridge architecture](/docs/how-arbitrum-works/deep-dives/token-bridging)
 
 ## Depositing tokens using the Arbitrum SDK
 
@@ -125,7 +125,7 @@ if (result.complete) {
 }
 ```
 
-`ETH` deposits use Arbitrum's parent-to-child message passing system. The SDK handles computing the retryable ticket's max submission cost and forwards the appropriate fees automatically. For details, see [`ETH` deposits under the hood](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#depositing-native-tokens).
+`ETH` deposits use Arbitrum's parent-to-child message passing system. The SDK handles computing the retryable ticket's max submission cost and forwards the appropriate fees automatically. For details, see [`ETH` deposits under the hood](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#depositing-native-tokens).
 
 ## Depositing tokens manually
 
@@ -133,7 +133,7 @@ If you prefer to interact with the contracts directly:
 
 ### Step 1: Get contract addresses
 
-Find the router and gateway addresses for your network on the [contract addresses page](/arbitrum-essentials/reference/contract-addresses.mdx#token-bridge-smart-contracts).
+Find the router and gateway addresses for your network on the [contract addresses page](/docs/arbitrum-essentials/reference/contract-addresses#token-bridge-smart-contracts).
 
 ### Step 2: Approve the gateway
 
@@ -198,7 +198,7 @@ When you deposit tokens:
 2. **Message sent**: A retryable ticket is created to mint/release tokens on the child chain
 3. **Child chain**: After a few minutes, tokens are minted/released to your address
 
-For more details on the underlying protocol, see [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx).
+For more details on the underlying protocol, see [Token bridging overview](/docs/how-arbitrum-works/deep-dives/token-bridging).
 
 ## Troubleshooting
 
@@ -208,7 +208,7 @@ If your deposit doesn't appear after 10-15 minutes:
 
 1. Check the transaction status on the [Retryables Dashboard](https://retryable-dashboard.arbitrum.io/)
 2. If the retryable ticket failed, you may need to redeem it manually
-3. Check that you provided sufficient gas fees for child chain execution — see [How to estimate gas](/arbitrum-essentials/how-to-estimate-gas.mdx) for sizing retryable submission and redemption costs
+3. Check that you provided sufficient gas fees for child chain execution — see [How to estimate gas](/docs/arbitrum-essentials/how-to-estimate-gas) for sizing retryable submission and redemption costs
 
 ### "Insufficient allowance" error
 
@@ -216,13 +216,13 @@ Make sure you approved the correct gateway contract (not the router). Use `getGa
 
 ## Next steps
 
-- [Withdraw tokens back to parent chain](/arbitrum-essentials/bridging/withdraw/tokens.mdx)
-- [Understand token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
-- [Configure bridging for a new token](/arbitrum-essentials/bridging/configure-token-gateway/standard.mdx)
+- [Withdraw tokens back to parent chain](/docs/arbitrum-essentials/bridging/withdraw/tokens)
+- [Understand token bridge architecture](/docs/how-arbitrum-works/deep-dives/token-bridging)
+- [Configure bridging for a new token](/docs/arbitrum-essentials/bridging/configure-token-gateway/standard)
 
 ## Resources
 
 - [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 - [ETH deposit source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-deposit)
 - [ERC-20 deposit source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
-- [Contract addresses](/arbitrum-essentials/reference/contract-addresses.mdx)
+- [Contract addresses](/docs/arbitrum-essentials/reference/contract-addresses)

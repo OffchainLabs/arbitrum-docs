@@ -35,13 +35,13 @@ For foundational concepts about the STF, see the [State Transition Function deep
 
 The submission process for a transaction on Arbitrum starts with the user sending the request, with options tailored to balance factors such as speed, control, and reliability based on specific needs. Most transactions route through the Sequencer, a specialized node that orders transactions and issues quick confirmations.
 
-This path accommodates various submission methods, including [public RPC](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#public-rpc) for development and light usage, [third-party RPCs](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#third-party-rpc) for improved throughput, [direct Sequencer endpoints](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#sequencer-endpoint) for minimal latency in critical operations, and [self-hosted Arbitrum nodes](/run-arbitrum-node/02-run-full-node.mdx) for ultimate privacy and customization.
+This path accommodates various submission methods, including [public RPC](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#public-rpc) for development and light usage, [third-party RPCs](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#third-party-rpc) for improved throughput, [direct Sequencer endpoints](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#sequencer-endpoint) for minimal latency in critical operations, and [self-hosted Arbitrum nodes](/docs/run-a-node/run-full-node) for ultimate privacy and customization.
 
-Alternatively, to mitigate the risks of exclusion or delays by the Sequencer, users can submit directly to the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on Ethereum, thereby bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed for more than @@arbOneForceIncludePeriodHours=24@@ hours, any network participant can [force inclusion](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx#force-inclusion-after-delays) into the main inbox, limiting the Sequencer's ability to block transactions permanently—it can only add a temporary delay.
+Alternatively, to mitigate the risks of exclusion or delays by the Sequencer, users can submit directly to the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on Ethereum, thereby bolstering system resilience. In this mechanism, non-Sequencer transactions enter a dedicated queue, where a well-functioning Sequencer typically integrates them within about ten minutes. If delayed for more than @@arbOneForceIncludePeriodHours=24@@ hours, any network participant can [force inclusion](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#force-inclusion-after-delays) into the main inbox, limiting the Sequencer's ability to block transactions permanently—it can only add a temporary delay.
 
 While the Sequencer route offers faster soft finality and streamlines workflows, the Delayed Inbox path doubles processing time but emphasizes censorship resistance (blocking transactions). Overall, the Sequencer’s <a data-quicklook-from="commitment">commitment</a> to ordered inclusion provides “soft finality” for a responsive experience, complemented by these alternatives for robust, flexible operations across applications.
 
-For more technical detail about the transaction lifecycle, refer to the [Transaction Lifecycle deep dive](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx).
+For more technical detail about the transaction lifecycle, refer to the [Transaction Lifecycle deep dive](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle).
 
 ## Step 2: Ordering and broadcasting: the Sequencer
 
@@ -49,7 +49,7 @@ Once a transaction reaches the Sequencer, it integrates into a refined system fo
 
 This feed delivers immediate <a data-quicklook-from="confirmation">confirmation</a> of acceptance and sequencing, keeping all nodes synchronized with the latest order and enabling soft finality, allowing users to proceed with confidence based on the Sequencer’s reliable commitment.
 
-To further optimize, the sequencer [groups transactions into batches](/how-arbitrum-works/deep-dives/batchposter.mdx) rather than processing them individually, reducing costs and boosting efficiency. Batches form when transactions accumulate to a predefined size or after a set time interval to prevent lags. The data is then compressed using the [Brotli algorithm](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#compression-levels), with the compression level dynamically adjusted from 0 to 11 based on congestion. Higher compression reduces Layer 1 posting expenses at the cost of increased computation, while the system prioritizes speed during heavy backlogs.
+To further optimize, the sequencer [groups transactions into batches](/docs/how-arbitrum-works/deep-dives/batchposter) rather than processing them individually, reducing costs and boosting efficiency. Batches form when transactions accumulate to a predefined size or after a set time interval to prevent lags. The data is then compressed using the [Brotli algorithm](/docs/how-arbitrum-works/deep-dives/gas-and-fees#compression-levels), with the compression level dynamically adjusted from 0 to 11 based on congestion. Higher compression reduces Layer 1 posting expenses at the cost of increased computation, while the system prioritizes speed during heavy backlogs.
 
 After batches and compression, the data posts to Ethereum through the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract using one of two methods:
 
@@ -57,7 +57,7 @@ After batches and compression, the data posts to Ethereum through the <a data-qu
 
 2. As a fallback, calldata transactions embed data directly, ensuring compatibility even if blob fees rise or [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844) blobs are unavailable. This process yields 10-100 times the cost savings over individual postings and adapts to network conditions for consistent efficiency.
 
-For a deeper look at how the Sequencer orders, batches, and posts transactions, see the [Sequencer deep dive](/how-arbitrum-works/deep-dives/sequencer.mdx). For the component that builds and ships each batch, see the [batch poster deep dive](/how-arbitrum-works/deep-dives/batchposter.mdx). For details on how <a data-quicklook-from="parent-chain">parent chain</a> costs are calculated and priced, including the adaptive pricing algorithm, see the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#parent-chain-gas-pricing).
+For a deeper look at how the Sequencer orders, batches, and posts transactions, see the [Sequencer deep dive](/docs/how-arbitrum-works/deep-dives/sequencer). For the component that builds and ships each batch, see the [batch poster deep dive](/docs/how-arbitrum-works/deep-dives/batchposter). For details on how <a data-quicklook-from="parent-chain">parent chain</a> costs are calculated and priced, including the adaptive pricing algorithm, see the [Gas and fees deep dive](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing).
 
 ## Step 3: Execution phase: State Transition Function
 
@@ -67,19 +67,19 @@ For foundational concepts about how the STF works, see the [State Transition Fun
 
 Arbitrum ensures full Ethereum Virtual Machine (EVM) compatibility via a three-layer architecture. At the base, the <a data-quicklook-from="geth">Geth</a> core handles EVM execution, aligning behaviors with Ethereum and drawing on its extensively tested code for security.
 
-For more technical details about Geth, refer to the [Geth deep dive](/how-arbitrum-works/reference/geth.mdx).
+For more technical details about Geth, refer to the [Geth deep dive](/docs/how-arbitrum-works/reference/geth).
 
 Above this, <a data-quicklook-from="arbos">ArbOS</a>—the Arbitrum operating system—adds <a data-quicklook-from="child-chain">child chain</a> features such as cross-chain messaging, fee management, gas pricing, deposit and withdrawal handling, and advanced tooling, such as <a data-quicklook-from="stylus">Stylus</a>. The top layer, the node interface, manages RPC connections and APIs, providing Ethereum-like functionality for clients.
 
 In the STF, transactions follow a structured workflow: first, ArbOS validates formatting and funds, then charges gas for Layer 2 execution and Layer 1 posting. Then Geth executes per EVM standards. Finally, ArbOS updates state and cross-chain elements, generating receipts and logs to finalize the process.
 
-For technical details about ArbOS, refer to the [ArbOS deep dive documentation](/how-arbitrum-works/deep-dives/arbos.mdx) and the [ArbOS technical reference](/how-arbitrum-works/reference/arbos-reference.mdx).
+For technical details about ArbOS, refer to the [ArbOS deep dive documentation](/docs/how-arbitrum-works/deep-dives/arbos) and the [ArbOS technical reference](/docs/how-arbitrum-works/reference/arbos-reference).
 
 <ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
 
-For Stylus contracts that use [WebAssembly](/stylus/concepts/webassembly.mdx) (<a data-quicklook-from="wasm">WASM</a>), execution is diverted to a WASM runtime, where contracts access state via specialized host I/O calls. This diversion yields 10-70 times faster performance than EVM equivalents and full interoperability for mixed calls. The Geth base lets Ethereum apps run unchanged, while ArbOS and Stylus enable Layer 2 optimizations and high-performance innovations.
+For Stylus contracts that use [WebAssembly](/docs/stylus/concepts/webassembly) (<a data-quicklook-from="wasm">WASM</a>), execution is diverted to a WASM runtime, where contracts access state via specialized host I/O calls. This diversion yields 10-70 times faster performance than EVM equivalents and full interoperability for mixed calls. The Geth base lets Ethereum apps run unchanged, while ArbOS and Stylus enable Layer 2 optimizations and high-performance innovations.
 
-Consult the [State Transition Function deep dive](/how-arbitrum-works/reference/stf-inputs.mdx) for further mechanics.
+Consult the [State Transition Function deep dive](/docs/how-arbitrum-works/reference/stf-inputs) for further mechanics.
 
 ## Step 4: Finality
 
@@ -91,37 +91,37 @@ At this stage, the transaction achieves two complementary levels of finality, ea
 
 The dual model combines quick "soft finality" for a better user experience with Ethereum-level safeguards for hard finality, along with censorship-resistant paths for assured inclusion. This balance delivers immediate feedback alongside strong protections, which is ideal for high-stakes transactions.
 
-For more on how assertions work, see the [Assertions deep dive](/how-arbitrum-works/deep-dives/assertions.mdx) page. For the full treatment of both levels—latency figures, trust models, and guidance on which level your app should wait for—see [Finality](/how-arbitrum-works/deep-dives/finality.mdx).
+For more on how assertions work, see the [Assertions deep dive](/docs/how-arbitrum-works/deep-dives/assertions) page. For the full treatment of both levels—latency figures, trust models, and guidance on which level your app should wait for—see [Finality](/docs/how-arbitrum-works/deep-dives/finality).
 
 ## Step 5: Validation and dispute resolution
 
 Following execution, Arbitrum verifies correctness through its validation and dispute systems. Central to this is the <a data-quicklook-from="bold">BoLD</a> (Bounded Liquidity Delay) protocol, which is an advanced dispute framework that enables <a data-quicklook-from="permissionless-validation">permissionless validation</a>. Unlike conventional optimistic Rollups, BoLD permits any participant to validate without approval, while ensuring dispute resolution within bounded timeframes to prevent indefinite delays.
 
-BoLD facilitates a <a data-quicklook-from="challenge">Challenge</a>-based defense where honest parties can protect the chain's state against malicious actors. The individual who raises the dispute and the <a data-quicklook-from="validator">validator</a> will [narrow the conflict to a single execution step](/how-arbitrum-works/bold/how-bold-bisection-works.mdx) via supporting claims, which culminate in a one-step proof (OSP) that Ethereum, as an impartial arbiter, verifies to determine the outcome. While BoLD's intricacies—such as its multi-round challenge games and economic incentives—are extensive, they enhance the chain's decentralization and resilience. Validation occurs through assertions submitted to the Rollup contract.
+BoLD facilitates a <a data-quicklook-from="challenge">Challenge</a>-based defense where honest parties can protect the chain's state against malicious actors. The individual who raises the dispute and the <a data-quicklook-from="validator">validator</a> will [narrow the conflict to a single execution step](/docs/how-arbitrum-works/bold/how-bold-bisection-works) via supporting claims, which culminate in a one-step proof (OSP) that Ethereum, as an impartial arbiter, verifies to determine the outcome. While BoLD's intricacies—such as its multi-round challenge games and economic incentives—are extensive, they enhance the chain's decentralization and resilience. Validation occurs through assertions submitted to the Rollup contract.
 
 #### BoLD references
 
-- For details on how assertions structure validation and disputes, see the [Assertions deep dive](/how-arbitrum-works/deep-dives/assertions.mdx).
-- For an introduction to BoLD, see the [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx).
-- For technical implementation details, see the [BoLD technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx).
-- For how the bisection protocol narrows disputes to a single step, see [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx).
-- For economic considerations, see the [Economics of disputes documentation](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx).
+- For details on how assertions structure validation and disputes, see the [Assertions deep dive](/docs/how-arbitrum-works/deep-dives/assertions).
+- For an introduction to BoLD, see the [BoLD gentle introduction](/docs/how-arbitrum-works/bold/gentle-introduction).
+- For technical implementation details, see the [BoLD technical deep dive](/docs/how-arbitrum-works/bold/bold-technical-deep-dive).
+- For how the bisection protocol narrows disputes to a single step, see [How BoLD bisection works](/docs/how-arbitrum-works/bold/how-bold-bisection-works).
+- For economic considerations, see the [Economics of disputes documentation](/docs/how-arbitrum-works/bold/bold-economics-of-disputes).
 
 ## Step 6: Bridging—Cross-chain communication
 
-Many transactions involve asset or data transfers between Ethereum and Arbitrum, which are managed through secure bridging protocols (see the [Token bridging deep dive](/how-arbitrum-works/deep-dives/token-bridging.mdx) for the architecture overview). For parent-to-child transfers from Ethereum to Arbitrum, options include native token bridging for direct **ETH** [deposits](/arbitrum-essentials/bridging/deposit/tokens.mdx), **ERC-20** transfers via the canonical <a data-quicklook-from="bridge">bridge</a>, or support for [custom gas tokens](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx).
+Many transactions involve asset or data transfers between Ethereum and Arbitrum, which are managed through secure bridging protocols (see the [Token bridging deep dive](/docs/how-arbitrum-works/deep-dives/token-bridging) for the architecture overview). For parent-to-child transfers from Ethereum to Arbitrum, options include native token bridging for direct **ETH** [deposits](/docs/arbitrum-essentials/bridging/deposit/tokens), **ERC-20** transfers via the canonical <a data-quicklook-from="bridge">bridge</a>, or support for [custom gas tokens](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup).
 
-[Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#retryable-tickets) enable atomic operations with guaranteed retries if execution fails, featuring predictable gas costs and a one-week validity period redeemable by anyone. Direct messaging handles signed EOA messages with verification or unsigned contract messages using [address aliasing](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#address-aliasing) for security.
+[Retryable tickets](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets) enable atomic operations with guaranteed retries if execution fails, featuring predictable gas costs and a one-week validity period redeemable by anyone. Direct messaging handles signed EOA messages with verification or unsigned contract messages using [address aliasing](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#address-aliasing) for security.
 
-See the [Parent-to-child messaging deep dive](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) for details.
+See the [Parent-to-child messaging deep dive](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging) for details.
 
-Child-to-parent transfers from Arbitrum to Ethereum begin with creating a message via [`ArbSys.sendTxToL1()`](/arbitrum-essentials/precompiles/reference.mdx#arbsys), followed by inclusion in a Rollup <a data-quicklook-from="assertion">Assertion</a>, a 6.4-day <a data-quicklook-from="challenge-period">challenge period</a>, and manual Layer 1 execution by any party (see [withdrawing tokens](/arbitrum-essentials/bridging/withdraw/tokens.mdx) for a hands-on guide). Messages are validated via Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints.
+Child-to-parent transfers from Arbitrum to Ethereum begin with creating a message via [`ArbSys.sendTxToL1()`](/docs/arbitrum-essentials/precompiles/reference#arbsys), followed by inclusion in a Rollup <a data-quicklook-from="assertion">Assertion</a>, a 6.4-day <a data-quicklook-from="challenge-period">challenge period</a>, and manual Layer 1 execution by any party (see [withdrawing tokens](/docs/arbitrum-essentials/bridging/withdraw/tokens) for a hands-on guide). Messages are validated via Merkle proofs, persist indefinitely until executed, and require manual triggering due to Ethereum's constraints.
 
-For details on how Rollup assertions work and their role in finality, see the [Assertions deep dive](/how-arbitrum-works/deep-dives/assertions.mdx).
+For details on how Rollup assertions work and their role in finality, see the [Assertions deep dive](/docs/how-arbitrum-works/deep-dives/assertions).
 
-See the [Child-to-parent messaging deep dive](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx) documentation for more details on how cross-chain messages work.
+See the [Child-to-parent messaging deep dive](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging) documentation for more details on how cross-chain messages work.
 
-The [canonical bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx#canonical-token-bridge-implementation) comprises asset contracts on both chains, gateway pairs for specific logic, and routers to direct traffic flow. It securely locks tokens on one chain while minting equivalents on the other, with a seven-day challenge period to safeguard withdrawals. This setup fosters unified interactions while safeguarding the integrity of each chain.
+The [canonical bridge architecture](/docs/how-arbitrum-works/deep-dives/token-bridging#canonical-token-bridge-implementation) comprises asset contracts on both chains, gateway pairs for specific logic, and routers to direct traffic flow. It securely locks tokens on one chain while minting equivalents on the other, with a seven-day challenge period to safeguard withdrawals. This setup fosters unified interactions while safeguarding the integrity of each chain.
 
 ## Step 7: The economics of execution: gas and fees
 
@@ -129,23 +129,23 @@ The [canonical bridge architecture](/how-arbitrum-works/deep-dives/token-bridgin
 
 Fees accumulate throughout the transaction lifecycle to fund processing (computation) and security. Arbitrum’s dual-fee model separates child chain gas fees, which cover the cost of EVM computation and storage with [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559)-style dynamic pricing that adjusts for congestion, from parent chain data fees (blobs or calldata).
 
-Parent chain data fees account for posting data to Ethereum in compressed batches and apply only to Sequencer submissions. For a complete breakdown of how fees are calculated and collected, including the dynamic pricing algorithm and both parent and child chain components, refer to the [Gas and fees deep dive](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
+Parent chain data fees account for posting data to Ethereum in compressed batches and apply only to Sequencer submissions. For a complete breakdown of how fees are calculated and collected, including the dynamic pricing algorithm and both parent and child chain components, refer to the [Gas and fees deep dive](/docs/how-arbitrum-works/deep-dives/gas-and-fees).
 
 ### Gas
 
 A <a data-quicklook-from="gas-target">gas target</a> is an optimal gas consumption rate per second. Exceeding this rate triggers [EIP-1559](https://eips.ethereum.org/EIPS/eip-1559) fee escalations to prevent node overloads and maintain chain activity. This rate prioritizes high-value transactions during peak periods while deterring spam, ensuring that validators and the Sequencer remain operational, even though parent contracts handle security.
 
-You can read more about [how the child chain gas fees are calculated](/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees) in the gas and fees deep dive.
+You can read more about [how the child chain gas fees are calculated](/docs/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees) in the gas and fees deep dive.
 
-Fee calculation during execution involves assessing child-chain gas using EVM standards, estimating the parent-chain batch impact, applying current pricing, and collecting **ETH** totals. This model effectively covers all costs, with the gas target reinforcing security by keeping validation in sync. For practical gas estimation in decentralized apps, see [How to estimate gas](/arbitrum-essentials/how-to-estimate-gas.mdx).
+Fee calculation during execution involves assessing child-chain gas using EVM standards, estimating the parent-chain batch impact, applying current pricing, and collecting **ETH** totals. This model effectively covers all costs, with the gas target reinforcing security by keeping validation in sync. For practical gas estimation in decentralized apps, see [How to estimate gas](/docs/arbitrum-essentials/how-to-estimate-gas).
 
 ## Step 8: Advanced features
 
 ### Stylus
 
-Arbitrum extends beyond standard Layer 2 capabilities with features like Stylus, which supports smart contracts written in languages such as Rust, C, and C++ via WASM. It offers [10-70 times faster execution and 100-500 times better memory efficiency](/stylus/concepts/vm-differences.mdx) than the EVM, with full cross-call interoperability. Stylus runs in the co-located [WASM VM](/stylus/concepts/webassembly.mdx) using host I/O for state access.
+Arbitrum extends beyond standard Layer 2 capabilities with features like Stylus, which supports smart contracts written in languages such as Rust, C, and C++ via WASM. It offers [10-70 times faster execution and 100-500 times better memory efficiency](/docs/stylus/concepts/vm-differences) than the EVM, with full cross-call interoperability. Stylus runs in the co-located [WASM VM](/docs/stylus/concepts/webassembly) using host I/O for state access.
 
-For more details, refer to the [Stylus gentle introduction](/stylus/gentle-introduction.mdx) page, or jump into the [Stylus quickstart](/stylus/quickstart.mdx) to build a contract.
+For more details, refer to the [Stylus gentle introduction](/docs/stylus/gentle-introduction) page, or jump into the [Stylus quickstart](/docs/stylus/quickstart) to build a contract.
 
 ### Timeboost
 
@@ -153,9 +153,9 @@ For more details, refer to the [Stylus gentle introduction](/stylus/gentle-intro
 
 #### Timeboost references
 
-- For an introduction to Timeboost, see the [Timeboost gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
-- For implementation details and usage instructions, see the [How to use Timeboost](/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx) documentation.
-- For troubleshooting guidance, see the [Timeboost troubleshooting](/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx) and [FAQ](/how-arbitrum-works/timeboost/timeboost-faq.mdx) pages.
+- For an introduction to Timeboost, see the [Timeboost gentle introduction](/docs/how-arbitrum-works/timeboost/gentle-introduction).
+- For implementation details and usage instructions, see the [How to use Timeboost](/docs/how-arbitrum-works/timeboost/how-to-use-timeboost) documentation.
+- For troubleshooting guidance, see the [Timeboost troubleshooting](/docs/how-arbitrum-works/timeboost/troubleshoot-timeboost) and [FAQ](/docs/how-arbitrum-works/timeboost/timeboost-faq) pages.
 
 ### AnyTrust
 
@@ -163,7 +163,7 @@ AnyTrust enables cost-optimized data availability with a mild trust model that r
 
 Keysets define member keys and thresholds; DACerts include hashes, expirations, and signatures; and servers support various storage, such as local files or Amazon S3. The Sequencer sends batches to the committee, gathers signatures for DACerts, and posts them to Layer 1, defaulting to full data if the required signatures are not present. Ideal for low-cost apps like gaming.
 
-For a more complete understanding of AnyTrust, refer to the [AnyTrust protocol documentation](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx). For the operator-side view of running a DAS, see the [data availability node guide](/run-arbitrum-node/data-availability.mdx).
+For a more complete understanding of AnyTrust, refer to the [AnyTrust protocol documentation](/docs/how-arbitrum-works/deep-dives/anytrust-protocol). For the operator-side view of running a DAS, see the [data availability node guide](/docs/run-a-node/data-availability).
 
 ## Related topics
 
@@ -171,28 +171,28 @@ In this overview, you've learned about the complete transaction journey through 
 
 ### Deep dives
 
-- [Transaction Lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx): Detailed transaction lifecycle from submission to finality
-- [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx): How the Sequencer orders, batches, and posts transactions
-- [Finality](/how-arbitrum-works/deep-dives/finality.mdx): Soft and hard finality, trust models, and when to wait for each
-- [Batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx): How a sequenced batch is built, compressed, and posted to the parent chain
-- [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx): Gas pricing, fee calculations, and adaptive pricing algorithm
+- [Transaction Lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle): Detailed transaction lifecycle from submission to finality
+- [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer): How the Sequencer orders, batches, and posts transactions
+- [Finality](/docs/how-arbitrum-works/deep-dives/finality): Soft and hard finality, trust models, and when to wait for each
+- [Batch poster](/docs/how-arbitrum-works/deep-dives/batchposter): How a sequenced batch is built, compressed, and posted to the parent chain
+- [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees): Gas pricing, fee calculations, and adaptive pricing algorithm
 - [State Transition Function](/how-arbitrum-works/deep-dives/stf.mdx): Foundational concepts of the STF
-- [Geth](/how-arbitrum-works/reference/geth.mdx): Geth core and EVM compatibility
-- [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx): Arbitrum Operating System features and capabilities
-- [State Transition Function inputs](/how-arbitrum-works/reference/stf-inputs.mdx): Message types and STF processing mechanics
-- [Assertions](/how-arbitrum-works/deep-dives/assertions.mdx): Rollup assertions and validation structure
-- [Parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx): L1 to L2 messaging and bridging
-- [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx): L2 to L1 messaging and withdrawals
-- [Token bridging](/how-arbitrum-works/deep-dives/token-bridging.mdx): Canonical bridge architecture, gateways, and routers
-- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx): Data availability committee and cost optimization
+- [Geth](/docs/how-arbitrum-works/reference/geth): Geth core and EVM compatibility
+- [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos): Arbitrum Operating System features and capabilities
+- [State Transition Function inputs](/docs/how-arbitrum-works/reference/stf-inputs): Message types and STF processing mechanics
+- [Assertions](/docs/how-arbitrum-works/deep-dives/assertions): Rollup assertions and validation structure
+- [Parent-to-child messaging](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging): L1 to L2 messaging and bridging
+- [Child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging): L2 to L1 messaging and withdrawals
+- [Token bridging](/docs/how-arbitrum-works/deep-dives/token-bridging): Canonical bridge architecture, gateways, and routers
+- [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol): Data availability committee and cost optimization
 
 ### BoLD (Bounded Liquidity Delay)
 
-- [BoLD: Gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx): Overview of permissionless validation
-- [BoLD technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive.mdx): Implementation details of the dispute protocol
-- [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works.mdx): Narrowing disputes to a single execution step
-- [Economics of disputes](/how-arbitrum-works/bold/bold-economics-of-disputes.mdx): Bonding, incentives, and cost considerations
+- [BoLD: Gentle introduction](/docs/how-arbitrum-works/bold/gentle-introduction): Overview of permissionless validation
+- [BoLD technical deep dive](/docs/how-arbitrum-works/bold/bold-technical-deep-dive): Implementation details of the dispute protocol
+- [How BoLD bisection works](/docs/how-arbitrum-works/bold/how-bold-bisection-works): Narrowing disputes to a single execution step
+- [Economics of disputes](/docs/how-arbitrum-works/bold/bold-economics-of-disputes): Bonding, incentives, and cost considerations
 
 ### Timeboost
 
-- [Timeboost: Gentle Introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx): MEV capture and transaction ordering
+- [Timeboost: Gentle Introduction](/docs/how-arbitrum-works/timeboost/gentle-introduction): MEV capture and transaction ordering

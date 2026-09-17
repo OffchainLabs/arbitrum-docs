@@ -10,7 +10,7 @@ sme: jason-w123
 
 When launching an Arbitrum chain, the Sequencer plays a central role in ordering transactions and producing blocks. Several timing-related parameters can be adjusted in the node configuration (via the Nitro node's JSON config or command-line flags) to optimize performance, user experience, security, and cost for your specific use case.
 
-To configure [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) timing parameters when launching an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, you'll primarily adjust settings in two places:
+To configure [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) timing parameters when launching an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, you'll primarily adjust settings in two places:
 
 1. **Chain-level parameters**: Set during deployment via the Chain SDK; these affect Sequencer behavior boundaries.
 2. **Node-level parameters**: Set when running your Nitro Sequencer node—these control runtime behavior, such as block production speed and <a data-quicklook-from="batch">batch</a> posting.
@@ -25,7 +25,7 @@ Most timing tweaks happen at the node level for the Sequencer. Use the official 
 | Delayed sequencer rescan interval                                                    | Node (`node.delayed-sequencer`)                     | `1s`                                                                                                                    | CLI: `--node.delayed-sequencer.rescan-interval=1s`                                                                                                                    | How often to rescan for new delayed messages. The parent chain reader's poll-interval is usually the more impactful setting.                                       |
 | Delayed sequencer filtered-tx retry interval                                         | Node (`node.delayed-sequencer`)                     | `30s`                                                                                                                   | CLI: `--node.delayed-sequencer.filtered-tx-full-retry-interval=30s`                                                                                                   | How often to do a full re-execution when halted on a filtered delayed message.                                                                                     |
 | <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> max time variation      | Chain deployment (`sequencerInboxMaxTimeVariation`) | `delayBlocks`: @@arbOneForceIncludePeriodBlocks=5760@@, `futureBlocks`: 12, `delaySeconds`: 86400, `futureSeconds`:3600 | In Chain SDK config struct or `chainConfig` JSON during deployment.                                                                                                   | Allows sequencer minor timestamp adjustments to avoid re-orgs if batch posting lags. Rarely needs change from defaults.                                            |
-| [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) non-express delay | Node (`execution.sequencer.timeboost`)              | @@timeboostNonExpressDelayMs=200@@ms                                                                                    | In node config: `"execution": { "sequencer": { "timeboost": { "non-express-delay-msec": 300 } } }`                                                                    | Larger delay for more advantage/revenue for <a data-quicklook-from="express-lane">Express Lane</a> winner. Increases latency for regular transactions.             |
+| [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction) non-express delay | Node (`execution.sequencer.timeboost`)              | @@timeboostNonExpressDelayMs=200@@ms                                                                                    | In node config: `"execution": { "sequencer": { "timeboost": { "non-express-delay-msec": 300 } } }`                                                                    | Larger delay for more advantage/revenue for <a data-quicklook-from="express-lane">Express Lane</a> winner. Increases latency for regular transactions.             |
 
 ## Step-by-step configuration process
 
@@ -57,7 +57,7 @@ docker run -v /path/to/nodeConfig.json:/config/nodeConfig.json \
 
 <VanillaAdmonition type="info" title="Latest version of Nitro">
 
-You can find the latest recommended version of Nitro on the [Run a Node](/run-arbitrum-node/start-here.mdx#recommended-nitro-version) page.
+You can find the latest recommended version of Nitro on the [Run a Node](/docs/run-a-node/start-here#recommended-nitro-version) page.
 
 </VanillaAdmonition>
 
@@ -65,7 +65,7 @@ You can find the latest recommended version of Nitro on the [Run a Node](/run-ar
 
 4. **Test changes** on a devnet or testnet first—monitor TPS, state growth, posting costs, and deposit latency.
 
-For a full list of flags, run `nitro-node --help`. Refer to Arbitrum Docs sections on [Running a Sequencer Node](/run-arbitrum-node/sequencer/04-run-sequencer-node.mdx) and [How to configure your Arbitrum chain's node using the Chain SDK](/launch-arbitrum-chain/deploy/configure-node.mdx) for your exact version. If using <a data-quicklook-from="timeboost">Timeboost</a> or advanced features, additional setup (e.g., <a data-quicklook-from="auction-contract">Auction Contract</a>) is needed.
+For a full list of flags, run `nitro-node --help`. Refer to Arbitrum Docs sections on [Running a Sequencer Node](/docs/run-a-node/sequencer/run-sequencer-node) and [How to configure your Arbitrum chain's node using the Chain SDK](/docs/launch-arbitrum-chain/arbitrum-chain-sdk-preparing-node-config) for your exact version. If using <a data-quicklook-from="timeboost">Timeboost</a> or advanced features, additional setup (e.g., <a data-quicklook-from="auction-contract">Auction Contract</a>) is needed.
 
 ## Understanding `maxTimeVariation`
 
@@ -116,7 +116,7 @@ For example, with `delaySeconds` set to `345600` (four days), a message may be u
 
 **`delayBlocks` also sets the force-inclusion wait.** The same `delayBlocks` value determines how long a message submitted through the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> must wait before it can be <a data-quicklook-from="forceinclusion">force-included</a>, bypassing the Sequencer. `forceInclusion` reverts with `ForceIncludeBlockTooSoon` until `delayBlocks` parent-chain blocks have elapsed since the message was submitted. Raising `delayBlocks` therefore lengthens the Sequencer's exclusive window and delays when users can force their transactions in. The optional delay-buffer feature can shorten this window under sustained delay, but never lengthen it.
 
-For more on force inclusion and the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>, see the [Sequencer deep dive](/how-arbitrum-works/deep-dives/sequencer.mdx).
+For more on force inclusion and the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>, see the [Sequencer deep dive](/docs/how-arbitrum-works/deep-dives/sequencer).
 
 ## Default values
 
@@ -163,7 +163,7 @@ With `reorg-resistance-margin=0`, a parent-chain reorg — or simply a batch lan
 
 </VanillaAdmonition>
 
-Note the interaction with `maxTimeVariation`: a wider past window (`delayBlocks` and `delaySeconds`) gives the batch poster more room before the margin is threatened, while a narrower window makes the margin bite sooner. See the [CLI flags reference](/run-arbitrum-node/nitro/cli-flags-reference.mdx) for the full batch-poster flag set.
+Note the interaction with `maxTimeVariation`: a wider past window (`delayBlocks` and `delaySeconds`) gives the batch poster more room before the margin is threatened, while a narrower window makes the margin bite sooner. See the [CLI flags reference](/docs/run-a-node/nitro/cli-flags-reference) for the full batch-poster flag set.
 
 ## Changing `maxTimeVariation`
 

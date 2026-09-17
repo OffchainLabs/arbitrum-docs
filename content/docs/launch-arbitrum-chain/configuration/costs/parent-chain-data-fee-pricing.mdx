@@ -10,7 +10,7 @@ sme: petevielhaber
 
 Your Arbitrum chain charges users for the cost of posting their transaction data to the <a data-quicklook-from="parent-chain">parent chain</a>. Four `ArbOwner` methods control how that charge adjusts over time. Tune them when fee revenue drifts away from what your <a data-quicklook-from="batch-poster">batch poster</a> actually spends.
 
-These parameters are separate from congestion pricing. They set what the chain charges for data, not what it charges when demand exceeds the <a data-quicklook-from="gas-target">gas target</a>. To tune congestion pricing, refer to the [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx) page.
+These parameters are separate from congestion pricing. They set what the chain charges for data, not what it charges when demand exceeds the <a data-quicklook-from="gas-target">gas target</a>. To tune congestion pricing, refer to the [Manage gas target](/docs/launch-arbitrum-chain/operate/gas-target) page.
 
 ## How the pricing algorithm works
 
@@ -21,7 +21,7 @@ Two of the parameters below map directly onto that algorithm:
 - **Equilibration units** set the time horizon for eliminating the surplus.
 - **Pricing inertia** smooths the adjustment so the price does not swing sharply between updates.
 
-For the full derivation, refer to [gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx).
+For the full derivation, refer to [gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees).
 
 ## The parameters
 
@@ -40,7 +40,7 @@ The `160,000,000` default for equilibration units applies from ArbOS 6 onward. C
 
 `setL1PricingInertia` and `setL1BaseFeeEstimateInertia` write the same stored value. To read it back, call `ArbGasInfo.getL1BaseFeeEstimateInertia()`.
 
-`ArbGasInfo.getPricingInertia()` does not return this value. It returns the congestion pricing inertia set by `setL2GasPricingInertia`, which is a different parameter for a different algorithm. Refer to [Manage gas target](/launch-arbitrum-chain/chain-config/costs/gas-target.mdx#parameters-that-only-the-single-gas-target-model-uses).
+`ArbGasInfo.getPricingInertia()` does not return this value. It returns the congestion pricing inertia set by `setL2GasPricingInertia`, which is a different parameter for a different algorithm. Refer to [Manage gas target](/docs/launch-arbitrum-chain/operate/gas-target#parameters-that-only-the-single-gas-target-model-uses).
 
 </VanillaAdmonition>
 
@@ -90,7 +90,7 @@ Test every change on a devnet or testnet chain first. A short equilibration hori
 
 Two more `ArbOwner` methods affect what the chain collects for data, covered elsewhere:
 
-- `setL1PricePerUnit(uint256 pricePerUnit)` and `setPerBatchGasCharge(int64 cost)`, in [configure and optimize gas](/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx).
-- `setL1PricingRewardRate(uint64 weiPerUnit)` and `setL1PricingRewardRecipient(address recipient)`, which route the batch poster reward. Refer to [revenue routing](/launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx).
+- `setL1PricePerUnit(uint256 pricePerUnit)` and `setPerBatchGasCharge(int64 cost)`, in [configure and optimize gas](/docs/launch-arbitrum-chain/configuration/costs/gas-optimization-tools).
+- `setL1PricingRewardRate(uint64 weiPerUnit)` and `setL1PricingRewardRecipient(address recipient)`, which route the batch poster reward. Refer to [revenue routing](/docs/launch-arbitrum-chain/configuration/costs/revenue-routing).
 
-For the full list of `ArbOwner` methods, refer to the [precompiles reference](/arbitrum-essentials/precompiles/reference.mdx#arbowner).
+For the full list of `ArbOwner` methods, refer to the [precompiles reference](/docs/arbitrum-essentials/precompiles/reference#arbowner).

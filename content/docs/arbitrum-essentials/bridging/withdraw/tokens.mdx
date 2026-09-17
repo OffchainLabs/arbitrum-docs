@@ -7,7 +7,7 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-This guide shows you how to withdraw **ERC-20** tokens from an Arbitrum child chain back to a parent chain (like Ethereum). This assumes your token is already configured for bridging. If you need to set up bridging for a new token, see [Configure token bridging](/arbitrum-essentials/bridging/configure-token-gateway/standard.mdx).
+This guide shows you how to withdraw **ERC-20** tokens from an Arbitrum child chain back to a parent chain (like Ethereum). This assumes your token is already configured for bridging. If you need to set up bridging for a new token, see [Configure token bridging](/docs/arbitrum-essentials/bridging/configure-token-gateway/standard).
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ This guide shows you how to withdraw **ERC-20** tokens from an Arbitrum child ch
 - A wallet with tokens on the child chain
 - **ETH** on both chains (child chain for initiation, parent chain for final execution)
 - **Important**: Withdrawals require @@arbOneDisputeWindowDays=6.4@@ days to finalize due to the challenge period
-- Familiarity with [child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
+- Familiarity with [child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging)
 
 ## Withdraw tokens using the Arbitrum SDK
 
@@ -200,8 +200,8 @@ The token withdrawal process:
 
 For more details on the underlying protocol, see:
 
-- [Child to parent chain messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
-- [Token bridging overview](/how-arbitrum-works/deep-dives/token-bridging.mdx)
+- [Child to parent chain messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging)
+- [Token bridging overview](/docs/how-arbitrum-works/deep-dives/token-bridging)
 
 ## Troubleshooting
 
@@ -224,9 +224,9 @@ If you need to construct the proof manually, you can find the batch number and i
 
 ## Next steps
 
-- [Deposit tokens to child chain](/arbitrum-essentials/bridging/deposit/tokens.mdx)
-- [Understand token bridge architecture](/how-arbitrum-works/deep-dives/token-bridging.mdx)
-- [General child-to-parent messaging](/arbitrum-essentials/bridging/withdraw/eth-and-messages.mdx)
+- [Deposit tokens to child chain](/docs/arbitrum-essentials/bridging/deposit/tokens)
+- [Understand token bridge architecture](/docs/how-arbitrum-works/deep-dives/token-bridging)
+- [General child-to-parent messaging](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages)
 
 ## Resources
 
@@ -234,5 +234,5 @@ If you need to construct the proof manually, you can find the batch number and i
 - [`ETH` withdrawal source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
 - [`ERC-20` withdrawal source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-withdraw)
 - [Outbox execution source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/outbox-execute)
-- [Contract addresses](/arbitrum-essentials/reference/contract-addresses.mdx)
+- [Contract addresses](/docs/arbitrum-essentials/reference/contract-addresses)
 - [Arbitrum Bridge UI](https://bridge.arbitrum.io/)

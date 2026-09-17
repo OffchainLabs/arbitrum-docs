@@ -21,7 +21,7 @@ When calling [`eth_getTransactionByHash`](https://ethereum.org/en/developers/doc
 
 ### Transaction types
 
-In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/reference/geth.mdx#transaction-types). Many of these types are emitted when [bridging from a parent chain](/arbitrum-essentials/bridging/cross-chain-messaging.mdx#ethereum-to-arbitrum-messaging).
+In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/docs/how-arbitrum-works/reference/geth#transaction-types). Many of these types are emitted when [bridging from a parent chain](/docs/arbitrum-essentials/bridging/cross-chain-messaging#ethereum-to-arbitrum-messaging).
 
 On RPC calls that return transactions, the `type` field will reflect the custom codes where applicable.
 
@@ -30,8 +30,8 @@ On RPC calls that return transactions, the `type` field will reflect the custom 
 | `100`                 | `ArbitrumDepositTxType`         | Used to deposit **ETH** from a parent chain to a child chain via the Arbitrum bridge                                                                                               |
 | `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parent chain, originated by a user through the Arbitrum bridge                                                                          |
 | `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                                      |
-| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
-| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#submission) via the Arbitrum bridge on the parent chain                                  |
+| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging) on a child chain that failed to execute automatically (usually due to low gas) |
+| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#submission) via the Arbitrum bridge on the parent chain                                  |
 | `106`                 | `ArbitrumInternalTxType`        | Internal transactions created by the ArbOS itself for certain state updates, like the parent chain base fee and the block number                                                   |
 
 ### Additional fields
@@ -60,7 +60,7 @@ On RPC calls that return transactions, the following fields will have different 
 
 | Field name | Description                                                                                                                                                                                       |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `from`     | On parent to child chain transactions, this field will contain the [_aliased_ version](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx#address-aliasing) of the parent chain's `msg.sender` |
+| `from`     | On parent to child chain transactions, this field will contain the [_aliased_ version](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#address-aliasing) of the parent chain's `msg.sender` |
 
 ## Transaction receipts
 
@@ -72,8 +72,8 @@ On RPC calls that return transaction receipts, the following fields are added to
 
 | Field name      | Description                                                                                                                                                                                                           |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1BlockNumber` | The block number of the first non-Arbitrum ancestor chain that is usable for `block.number` calls. More information in [Block numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time.mdx) |
-| `gasUsedForL1`  | The amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx)                                                     |
+| `l1BlockNumber` | The block number of the first non-Arbitrum ancestor chain that is usable for `block.number` calls. More information in [Block numbers and time](/docs/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time) |
+| `gasUsedForL1`  | The amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees)                                                     |
 
 ## Blocks
 
@@ -85,7 +85,7 @@ On RPC calls that return a block, the following fields are added to the returned
 
 | Field name      | Description                                                                                                                                                                                                                          |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `l1BlockNumber` | An approximate block number of the first non-Arbitrum ancestor chain that occurred before this child chain block. More information in [Block numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time.mdx) |
+| `l1BlockNumber` | An approximate block number of the first non-Arbitrum ancestor chain that occurred before this child chain block. More information in [Block numbers and time](/docs/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time) |
 | `sendCount`     | The number of child-to-parent chain messages since Nitro genesis                                                                                                                                                                     |
 | `sendRoot`      | The Merkle root of the outbox tree state                                                                                                                                                                                             |
 
@@ -98,7 +98,7 @@ On RPC calls that return a block, the following fields will have different conte
 | `extraData`  | This field is equivalent to `sendRoot`                                                                                                                                                                                           |
 | `mixHash`    | First 8 bytes are equivalent to `sendCount`, second 8 bytes are equivalent to `l1BlockNumber`                                                                                                                                    |
 | `difficulty` | Fixed at `0x1`                                                                                                                                                                                                                   |
-| `gasLimit`   | Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum One currently has a 32M gas limit per block. See [Chain params](/arbitrum-essentials/reference/chain-params.mdx) for the gas limit of other chains |
+| `gasLimit`   | Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum One currently has a 32M gas limit per block. See [Chain params](/docs/arbitrum-essentials/reference/chain-params) for the gas limit of other chains |
 
 ## Other methods that are slightly different
 
@@ -153,7 +153,7 @@ With the result of this tracer and the code for the Stylus contract, you have al
 :::info
 
 The `cargo-stylus` command-line tool uses the `stylusTracer` to replay transactions locally inside a debugger.
-More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/cli-tools/debugging-tx).
+More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/docs/stylus/cli-tools/debugging-tx).
 
 :::
 
@@ -216,7 +216,7 @@ The result of this call will be something along the lines of:
 
 Nitro's default HTTP API namespaces are `net`, `web3`, `eth`, and `arb`. The `txpool` namespace is **not** among them, so `txpool_content`, `txpool_contentFrom`, `txpool_status`, and `txpool_inspect` return a method-not-found error on a default node.
 
-Enabling the namespace (by adding `txpool` to the node's `--http.api` list) changes less than you might expect, because Arbitrum has no transaction pool at all — the concept does not exist in Nitro's architecture. On Ethereum, the pool holds transactions waiting to be picked up by whichever validator builds the next block. An Arbitrum chain has no equivalent: the <a data-quicklook-from="sequencer">sequencer</a> receives transactions and orders them directly through its internal queue, other nodes simply forward transactions to it, and no node ever holds a pool of pending transactions. Nitro ships only a compatibility stub for tooling that probes this namespace: with it enabled, `txpool_content` responds but always returns empty `pending` and `queued` sets, and `txpool_contentFrom`, `txpool_status`, and `txpool_inspect` remain unavailable. Do not build tooling that expects these methods to show the sequencer's intake. Nonce handling differs for the same reason — to learn more, see [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management.mdx).
+Enabling the namespace (by adding `txpool` to the node's `--http.api` list) changes less than you might expect, because Arbitrum has no transaction pool at all — the concept does not exist in Nitro's architecture. On Ethereum, the pool holds transactions waiting to be picked up by whichever validator builds the next block. An Arbitrum chain has no equivalent: the <a data-quicklook-from="sequencer">sequencer</a> receives transactions and orders them directly through its internal queue, other nodes simply forward transactions to it, and no node ever holds a pool of pending transactions. Nitro ships only a compatibility stub for tooling that probes this namespace: with it enabled, `txpool_content` responds but always returns empty `pending` and `queued` sets, and `txpool_contentFrom`, `txpool_status`, and `txpool_inspect` remain unavailable. Do not build tooling that expects these methods to show the sequencer's intake. Nonce handling differs for the same reason — to learn more, see [Nonce management](/docs/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management).
 
 ### `eth_getLogs` block ranges
 

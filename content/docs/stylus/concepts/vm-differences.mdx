@@ -131,7 +131,7 @@ let ink_price = self.vm().tx_ink_price();
 
 The two execution models price work differently. The EVM charges a fixed gas cost per opcode, so compute-heavy logic accumulates cost quickly. Stylus meters each WASM instruction in ink and converts ink to gas at execution time, which lets compute-intensive code run for less gas. Operations that touch shared state — `SLOAD`, `SSTORE`, external calls, value transfers, and event emission — cost the same in both environments because they use the same underlying mechanisms.
 
-For verified per-operation figures, see the [performance comparison](/stylus/best-practices/gas-optimization#performance-comparison) in the gas optimization guide.
+For verified per-operation figures, see the [performance comparison](/docs/stylus/best-practices/gas-optimization#performance-comparison) in the gas optimization guide.
 
 ## Instruction sets
 
@@ -243,7 +243,7 @@ Compute-bound work — integer arithmetic, loops, memory copying, cryptography, 
 
 State-bound work is identical across the two environments. Storage reads and writes (`SLOAD`, `SSTORE`), storage refunds, contract calls, value transfers, and event emission all use the same underlying mechanisms and cost the same gas. Stylus adds storage caching within a call, so repeated reads of the same slot in one execution are cheaper.
 
-For verified per-operation gas figures, see the [performance comparison](/stylus/best-practices/gas-optimization#performance-comparison) in the gas optimization guide.
+For verified per-operation gas figures, see the [performance comparison](/docs/stylus/best-practices/gas-optimization#performance-comparison) in the gas optimization guide.
 
 ## Call semantics
 

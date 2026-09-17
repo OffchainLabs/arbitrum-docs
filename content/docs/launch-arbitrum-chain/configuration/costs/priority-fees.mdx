@@ -17,7 +17,7 @@ On Arbitrum One, enabling this feature requires a **Constitutional DAO vote**—
 
 ## How to enable tip collection
 
-The chain owner calls the [`ArbOwner` precompile](/arbitrum-essentials/precompiles/reference.mdx#arbowner) at `0x0000000000000000000000000000000000000070`:
+The chain owner calls the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner) at `0x0000000000000000000000000000000000000070`:
 
 ```solidity
 // Enable tip collection
@@ -52,10 +52,10 @@ Enabling collection alone does **not** change how transactions are ordered. For 
 1. **`setCollectTips(true)`**: activates fee collection via `ArbOwner`.
 2. **Updated sequencer logic**: the sequencer must be configured to read the `PriorityFee` field when sorting transactions.
 
-Without Step 2, the sequencer continues to use its existing ordering rules—[Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), if enabled, or otherwise first-come, first-served—regardless of the transaction's priority fee.
+Without Step 2, the sequencer continues to use its existing ordering rules—[Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction), if enabled, or otherwise first-come, first-served—regardless of the transaction's priority fee.
 
 ## References
 
 - [Constitutional AIP: ArbOS61 Elara — Priority fees](https://forum.arbitrum.foundation/t/constitutional-aip-arbos-60-elara/30601)
-- [`ArbOwner` precompile reference](/arbitrum-essentials/precompiles/reference.mdx#arbowner)
+- [`ArbOwner` precompile reference](/docs/arbitrum-essentials/precompiles/reference#arbowner)
 - [`setCollectTips` source](https://github.com/OffchainLabs/nitro/blob/6dce8d13902649a1acdfd3f2504129f1f5612358/precompiles/ArbOwner.go#L666)

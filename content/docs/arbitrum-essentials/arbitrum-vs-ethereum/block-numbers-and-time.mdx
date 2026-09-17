@@ -16,7 +16,7 @@ Throughout this and other pages, we note that the block number of a chain does n
 
 :::
 
-As with Ethereum, Arbitrum clients submit transactions, and the system executes them later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) or via the chain's [Delayed Inbox](/how-arbitrum-works/deep-dives/sequencer.mdx).
+As with Ethereum, Arbitrum clients submit transactions, and the system executes them later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) or via the chain's [Delayed Inbox](/docs/how-arbitrum-works/deep-dives/sequencer).
 
 Once in the chain's core inbox contract, transaction processing occurs in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
 
@@ -52,7 +52,7 @@ The "first non-Arbitrum ancestor chain" is:
 block.number // => returns the approximate block number of the first non-Arbitrum ancestor chain
 ```
 
-As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (These are generally the same assumptions one should operate under when using block numbers directly on Ethereum!) For how this affects specific Solidity operations like `block.number` and `block.timestamp`, see [Solidity support](/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support.mdx).
+As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (These are generally the same assumptions one should operate under when using block numbers directly on Ethereum!) For how this affects specific Solidity operations like `block.number` and `block.timestamp`, see [Solidity support](/docs/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support).
 
 :::info EIP-2935 difference
 
@@ -75,7 +75,7 @@ const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
 */
 ```
 
-The Arbitrum block number can also be retrieved within an Arbitrum contract via the [ArbSys](/arbitrum-essentials/precompiles/reference.mdx#arbsys) precompile:
+The Arbitrum block number can also be retrieved within an Arbitrum contract via the [ArbSys](/docs/arbitrum-essentials/precompiles/reference#arbsys) precompile:
 
 ```solidity
 ArbSys(100).arbBlockNumber() // returns Arbitrum block number

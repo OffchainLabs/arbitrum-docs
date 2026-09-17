@@ -8,13 +8,13 @@ sme: Jason Wan
 
 :::note
 
-This documentation is for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, see [How to run a testnet sequencer node](/run-arbitrum-node/sequencer/04-run-sequencer-node.mdx).
+This documentation is for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, see [How to run a testnet sequencer node](/docs/run-a-node/sequencer/run-sequencer-node).
 
 :::
 
 ## Introduction
 
-The [sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) is a critical component of your <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from <a data-quicklook-from="arbitrum-full-node">full nodes</a>, queuing them, and returning <a data-quicklook-from="sequencer-feed">feed</a> messages to those full nodes. It subsequently sends queued transactions to <a data-quicklook-from="batch-poster">batch posters</a> for data posting.
+The [sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) is a critical component of your <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from <a data-quicklook-from="arbitrum-full-node">full nodes</a>, queuing them, and returning <a data-quicklook-from="sequencer-feed">feed</a> messages to those full nodes. It subsequently sends queued transactions to <a data-quicklook-from="batch-poster">batch posters</a> for data posting.
 
 If your sequencer goes offline, the network cannot process new transactions arriving at the <a data-quicklook-from="child-chain">child chain</a>'s RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
 
@@ -114,7 +114,7 @@ helm install external-relay offchainlabs/relay \
   --set configmap.data.node.feed.input.url=ws://sequencer-relay:9642
 ```
 
-You can check [run a feed relay](/run-arbitrum-node/run-feed-relay.mdx) to see how to set up a relay node.
+You can check [run a feed relay](/docs/run-a-node/run-feed-relay) to see how to set up a relay node.
 
 ### 3. Nitro full node setup
 
@@ -199,13 +199,13 @@ The sequencer coordinator is the key component for high availability. These para
 | `node.seq-coordinator.redis-url` | Redis URL for coordination   | Your Redis URL       |
 | `node.seq-coordinator.my-url`    | URL for this sequencer       | Unique per sequencer |
 
-For the full set of coordinator flags and their defaults, see [Sequencer configuration reference](/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference.mdx#sequencer-coordinator-flags).
+For the full set of coordinator flags and their defaults, see [Sequencer configuration reference](/docs/launch-arbitrum-chain/configuration/sequencer/sequencer-config-reference#sequencer-coordinator-flags).
 
 #### Redis priority registration
 
 Configuring `redis-url` and `my-url` is not enough to make a sequencer eligible. Each sequencer must also appear in the Redis priority list, stored under the key `coordinator.priorities` as a comma-separated list of URLs in priority order.
 
-Nitro treats this key as **read-only**. No sequencer can write itself into it. You populate it with the [Sequencer Coordination Manager (SQM)](/run-arbitrum-node/sequencer/03-run-sequencer-coordination-manager.mdx), which is the only component that writes the key.
+Nitro treats this key as **read-only**. No sequencer can write itself into it. You populate it with the [Sequencer Coordination Manager (SQM)](/docs/run-a-node/sequencer/run-sequencer-coordination-manager), which is the only component that writes the key.
 
 A sequencer that is not in the list starts cleanly, syncs, serves RPC, and broadcasts to the feed—but never becomes the active sequencer.
 
@@ -248,7 +248,7 @@ Two log messages tell you the priority list is the problem:
 - `sequencer priorities unset` — the key does not exist. This is expected on a new Redis instance and means no sequencer can ever be chosen until you populate it.
 - `no sequencer appears to want the lockout on redis` — the key exists, but nothing on it is eligible. The log includes the `priorities` value, so compare it against your running sequencers. This starts at `DEBUG`, escalates to `WARN` after 10 seconds and `ERROR` after 20.
 
-For a full diagnostic path, see [Sequencer troubleshooting](/launch-arbitrum-chain/operate/sequencer-troubleshooting.mdx#1-no-sequencer-is-chosen).
+For a full diagnostic path, see [Sequencer troubleshooting](/docs/launch-arbitrum-chain/operate/sequencer-troubleshooting#1-no-sequencer-is-chosen).
 
 <VanillaAdmonition type="caution" title="Redis persistence">
 
@@ -291,7 +291,7 @@ These individual services are critical for a proper high-availability setup beca
 
 To manage active sequencer selection, use the built-in sequencer coordinator UI:
 
-- Follow detailed instructions at: [How to run a Sequencer Coordination Manager (SQM)](/run-arbitrum-node/sequencer/03-run-sequencer-coordination-manager.mdx)
+- Follow detailed instructions at: [How to run a Sequencer Coordination Manager (SQM)](/docs/run-a-node/sequencer/run-sequencer-coordination-manager)
 - Use this interface to manually switch between sequencer replicas when needed
 - Configure permissions and access controls appropriately
 
@@ -330,11 +330,11 @@ Implement comprehensive health checks for all components:
 
 ### Troubleshooting
 
-If you run into any issues, visit the [node-running troubleshooting guide](/run-arbitrum-node/06-troubleshooting.mdx).
+If you run into any issues, visit the [node-running troubleshooting guide](/docs/run-a-node/troubleshooting).
 
 ## References
 
 - [How to run a full node](https://docs.arbitrum.io/node-running/how-tos/running-a-node)
-- [How to run a Sequencer Coordination Manager (SQM)](/run-arbitrum-node/sequencer/03-run-sequencer-coordination-manager.mdx)
+- [How to run a Sequencer Coordination Manager (SQM)](/docs/run-a-node/sequencer/run-sequencer-coordination-manager)
 - [Kubernetes Documentation](https://kubernetes.io/docs/)
 - [Offchain Labs Community Helm Charts](https://github.com/OffchainLabs/community-helm-charts)
