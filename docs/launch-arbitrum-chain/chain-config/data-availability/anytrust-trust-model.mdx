@@ -42,16 +42,6 @@ A DACert needs `K` signatures, where `K = N + 1 - H`.
 | 5   | 3   | 3                         | 2                     | 3                             |
 | 7   | 3   | 5                         | 2                     | 3                             |
 
-<!-- ============================================================= -->
-<!-- REVIEW NEEDED — "H does double duty" claim.                   -->
-<!-- Pete: derived from K = N + 1 - H, so failure tolerance is     -->
-<!-- N - K = H - 1, and the honesty requirement is H. The          -->
-<!-- consequence — raising N alone buys you nothing               -->
-<!-- operationally — does not appear anywhere else in the docs,    -->
-<!-- so it is new assertion rather than restatement. Worth an SME  -->
-<!-- confirmation that the derivation matches Nitro's behavior.    -->
-<!-- ============================================================= -->
-
 `H` does two jobs at once:
 
 - It sets how many members can go offline before the <a data-quicklook-from="batch-poster">batch poster</a> stops collecting enough signatures. That number is `H - 1`.
@@ -59,25 +49,11 @@ A DACert needs `K` signatures, where `K = N + 1 - H`.
 
 Raising `H` buys uptime and costs trust. Raising `N` while holding `H` at 2 does not improve uptime, because tolerance stays at `H - 1`. It does weaken the assumption you depend on, since two honest members out of seven is an easier bet than two out of three.
 
-<!-- REVIEW END — "H does double duty" claim. -->
-
-<!-- ============================================================= -->
-<!-- REVIEW NEEDED — SDK default claim.                            -->
-<!-- Pete: taken from dac-configuration-defaults.mdx, which shows  -->
-<!-- prepareNodeConfig() emitting "assumed-honest": 1 with a       -->
-<!-- single backend. Confirm this still matches the current Chain  -->
-<!-- SDK before merge — that page notes its generated types may    -->
-<!-- lag Nitro v3.10.0 renames, so the default could have moved.   -->
-<!-- Also confirm "danger" is the right admonition level here.     -->
-<!-- ============================================================= -->
-
 <VanillaAdmonition type="danger" title="The SDK default is a development scaffold">
 
-`prepareNodeConfig()` generates `assumed-honest: 1` with a single backend. That is a one-member committee: no member can fail, and that one member holds all of your chain's data. Use it for local development. Set `N` and `H` deliberately before you run a production chain.
+`prepareNodeConfig()` from `@arbitrum/chain-sdk` generates `assumed-honest: 1` with a single backend. That is a one-member committee: no member can fail, and that one member holds all of your chain's data. The generated backend also points at `localhost` and carries a placeholder public key of all zeros. Use it for local development. Set `N` and `H` deliberately before you run a production chain.
 
 </VanillaAdmonition>
-
-<!-- REVIEW END — SDK default claim. -->
 
 Your keyset and your node configuration must agree on `H`. If they diverge, the aggregator can reject valid certificates or accept insufficient ones. Refer to [DAC and DAS operations](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx#dac-failure-modes-and-fallback-to-batch-posting) for the full failure-mode table.
 
@@ -120,26 +96,23 @@ AnyTrust is a technical design. Whether a given configuration meets a specific r
 
 </VanillaAdmonition>
 
-| Question                                                 | Where your answer comes from                                         |
-| -------------------------------------------------------- | -------------------------------------------------------------------- |
-| Who are the committee members, as legal entities?        | Your keyset, plus the agreements you hold with each member           |
-| Are the members independent of each other and of you?    | Your own governance. The protocol does not check independence.       |
-| Which jurisdictions do the members operate in?           | Your member agreements                                               |
-| How many members must stay honest?                       | `H` in your registered keyset                                        |
-| How long do members retain data?                         | `anytrust-retention-period`, which defaults to `360h` (15 days)      |
-| Who can change the committee, and how quickly?           | The chain owner account, by calling `setValidKeyset`                 |
-| What happens if the committee stops signing?             | The batch poster falls back to posting full data to the parent chain |
-| Can you reconstruct chain history without the committee? | Only if you run an archive or mirror DAS                             |
-| Which parties can read transaction data?                 | Every committee member, plus anyone who queries a REST endpoint      |
+| Question                                                 | Where your answer comes from                                                                                                                                       |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Who are the committee members, as legal entities?        | Your keyset, plus the agreements you hold with each member                                                                                                         |
+| Are the members independent of each other and of you?    | Your own governance. The protocol does not check independence.                                                                                                     |
+| Which jurisdictions do the members operate in?           | Your member agreements                                                                                                                                             |
+| How many members must stay honest?                       | `H` in your registered keyset                                                                                                                                      |
+| How long do members retain data?                         | `node.batch-poster.anytrust-retention-period`, which defaults to `360h` (15 days). The batch poster requests this period; it is not a guarantee each member makes. |
+| Who can change the committee, and how quickly?           | The chain owner account, by calling `setValidKeyset`                                                                                                               |
+| What happens if the committee stops signing?             | The batch poster falls back to posting full data to the parent chain, unless you disable that fallback                                                             |
+| Can you reconstruct chain history without the committee? | Only if you run an archive or mirror DAS                                                                                                                           |
+| Which parties can read transaction data?                 | Every committee member, plus anyone who queries a REST endpoint                                                                                                    |
 
 ### Three points worth reiterating
 
-<!-- REVIEW: item 1 is the one most likely to matter and most likely -->
-<!-- to be challenged. Verify the "not encrypted" claim reads right. -->
-
 1. **AnyTrust does not encrypt your data.** Committee members hold full <a data-quicklook-from="batch">batch</a> data, compressed but readable. The DAS REST API is designed to be public and cacheable. If your chain carries data that must not leave a jurisdiction or must not reach a third party, the committee is a party to that data, and AnyTrust alone does not protect it.
 
-2. **Retention has a default and a floor.** Members retain data for `360h` (15 days) by default, and the child chain rejects a DACert whose expiration is less than two weeks out. Neither number is a permanent archive. If you must keep history, run an [archive DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#archive-da-servers).
+2. **Retention has a default and a floor.** The batch poster asks members to retain data for `360h` (15 days) by default, set by `node.batch-poster.anytrust-retention-period`. Separately, every node that reads a batch rejects a DACert that expires less than one week after the batch's maximum timestamp. Neither number is a permanent archive. If you must keep history, run an [archive DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#archive-da-servers).
 
 3. **Committee independence is a governance property, not a protocol property.** The chain owner can swap the whole keyset. An auditor who accepts your committee today is accepting your owner-key governance along with it.
 
