@@ -7,7 +7,7 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-ArbOS is the child-EVM virtual machine monitor (VMM) for <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>. It's a trusted system component that lives inside the [State Transition Function (STF)](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx) and provides the execution environment for the chain. Unlike a conventional operating system, ArbOS is not a process running beside the chain—it's ordinary Go code compiled into the STF, so every node (and <a data-quicklook-from="fraud-proof">fraud prover</a>) can replay it deterministically.
+ArbOS is the child-EVM virtual machine monitor (VMM) for <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>. It's a trusted system component that lives inside the [State Transition Function (STF)](/how-arbitrum-works/deep-dives/stf.mdx) and provides the execution environment for the chain. Unlike a conventional operating system, ArbOS is not a process running beside the chain—it's ordinary Go code compiled into the STF, so every node (and <a data-quicklook-from="fraud-proof">fraud prover</a>) can replay it deterministically.
 
 ## Core responsibilities
 
@@ -47,7 +47,7 @@ For the subspace-by-subspace breakdown, including `blockhashes`, `l1PricingState
 ## Gas and fees
 
 - Child-chain execution is priced by `l2PricingState`, which runs a dynamic base-fee mechanism. A gas pool tracks demand across a time window, pushing that base fee up under load and down when idle, smoothing spikes while preserving capacity.
-- Parent-chain data is tracked by `l1PricingState`, which records what the [batch poster](/how-arbitrum-works/deep-dives/sequencer.mdx#batch-posting) spent posting compressed data to Ethereum and reimburses the <a data-quicklook-from="batch-poster">batch poster</a> from user fees.
+- Parent-chain data is tracked by `l1PricingState`, which records what the [batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx) spent posting compressed data to Ethereum and reimburses the <a data-quicklook-from="batch-poster">batch poster</a> from user fees.
 
 Fees are routed to the configured network and infrastructure fee accounts.
 

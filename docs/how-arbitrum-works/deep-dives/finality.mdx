@@ -18,7 +18,7 @@ This section explores the concepts of soft and <a data-quicklook-from="hard-fina
 
 ## Authority and finality
 
-- **Exclusive access**: Only authorized [<a data-quicklook-from="batch-poster">batch posters</a>](/how-arbitrum-works/deep-dives/sequencer.mdx#batch-posting) can call these batch-submission methods on the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract (access is gated by the contract’s `isBatchPoster` mapping, a role distinct from the sequencer, though the two are typically operated by the same party). This exclusivity ensures that no other party can include messages directly.
+- **Exclusive access**: Only authorized [<a data-quicklook-from="batch-poster">batch posters</a>](/how-arbitrum-works/deep-dives/batchposter.mdx) can call these batch-submission methods on the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract (access is gated by the contract’s `isBatchPoster` mapping, a role distinct from the sequencer, though the two are typically operated by the same party). This exclusivity ensures that no other party can include messages directly.
 - **Soft-confirmation receipts**: The Sequencer’s unique ability to immediately process and include transactions allows it to provide users with instant, “soft-confirmation” receipts.
 - **Parent chain finality**: Once batches post, the transactions achieve parent-chain-level finality, secured by the parent chain’s consensus mechanism.
 

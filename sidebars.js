@@ -394,6 +394,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/sequencer/timeboost',
                   label: `Timeboost`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/pga',
+                  label: `PGA`,
+                },
               ],
             },
             {
@@ -1065,8 +1070,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/reference/stf-inputs',
+              label: 'STF',
+              id: 'how-arbitrum-works/deep-dives/stf',
             },
           ],
         },
@@ -1088,6 +1093,11 @@ const sidebars = {
               type: 'doc',
               label: 'Finality and reorgs',
               id: 'how-arbitrum-works/reference/finality-and-reorgs',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
             },
           ],
         },
@@ -1124,6 +1134,16 @@ const sidebars = {
               type: 'link',
               href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
               label: 'Deploy a validator on testnet',
+            },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2404.10491',
+              label: 'BoLD Whitepaper',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/bold',
+              label: 'Specification on GitHub',
             },
           ],
         },
@@ -1165,6 +1185,22 @@ const sidebars = {
               type: 'link',
               href: 'https://arxiv.org/abs/2306.02179',
               label: 'White paper: Timeboost',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'PGA and Fast Feed',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/pga',
+              label: 'How PGA works',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/fast-feed',
+              label: 'Introduction to the Fast Feed',
             },
           ],
         },

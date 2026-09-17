@@ -29,7 +29,7 @@ Transactions first enter the Inbox, serving as the primary gateway into the ecos
 
 The deterministic model ensures that identical inputs will always produce the same outputs, among honest nodes, forming the bedrock of Arbitrum’s security. It supports efficient fraud proofs and dispute resolution, enabling verification of execution correctness without re-running entire transactions, thereby minimizing computational overhead.
 
-For foundational concepts about the STF, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx).
+For foundational concepts about the STF, see the [State Transition Function deep dive](/how-arbitrum-works/deep-dives/stf.mdx).
 
 ## Step 1: Submitting a transaction
 
@@ -49,7 +49,7 @@ Once a transaction reaches the Sequencer, it integrates into a refined system fo
 
 This feed delivers immediate <a data-quicklook-from="confirmation">confirmation</a> of acceptance and sequencing, keeping all nodes synchronized with the latest order and enabling soft finality, allowing users to proceed with confidence based on the Sequencer’s reliable commitment.
 
-To further optimize, the sequencer [groups transactions into batches](/how-arbitrum-works/deep-dives/sequencer.mdx#batching-and-compression) rather than processing them individually, reducing costs and boosting efficiency. Batches form when transactions accumulate to a predefined size or after a set time interval to prevent lags. The data is then compressed using the [Brotli algorithm](/how-arbitrum-works/deep-dives/sequencer.mdx#compression-level-in-the-brotli-algorithm), with the compression level dynamically adjusted from 0 to 11 based on congestion. Higher compression reduces Layer 1 posting expenses at the cost of increased computation, while the system prioritizes speed during heavy backlogs.
+To further optimize, the sequencer [groups transactions into batches](/how-arbitrum-works/deep-dives/batchposter.mdx) rather than processing them individually, reducing costs and boosting efficiency. Batches form when transactions accumulate to a predefined size or after a set time interval to prevent lags. The data is then compressed using the [Brotli algorithm](/how-arbitrum-works/deep-dives/gas-and-fees.mdx#compression-levels), with the compression level dynamically adjusted from 0 to 11 based on congestion. Higher compression reduces Layer 1 posting expenses at the cost of increased computation, while the system prioritizes speed during heavy backlogs.
 
 After batches and compression, the data posts to Ethereum through the <a data-quicklook-from="sequencer-inbox">Sequencer Inbox</a> contract using one of two methods:
 
@@ -63,7 +63,7 @@ For a deeper look at how the Sequencer orders, batches, and posts transactions, 
 
 With ordering and batching complete, execution shifts to the State Transition Function (STF), the core of Arbitrum's processing engine.
 
-For foundational concepts about how the STF works, see the [State Transition Function gentle introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx).
+For foundational concepts about how the STF works, see the [State Transition Function deep dive](/how-arbitrum-works/deep-dives/stf.mdx).
 
 Arbitrum ensures full Ethereum Virtual Machine (EVM) compatibility via a three-layer architecture. At the base, the <a data-quicklook-from="geth">Geth</a> core handles EVM execution, aligning behaviors with Ethereum and drawing on its extensively tested code for security.
 
@@ -176,7 +176,7 @@ In this overview, you've learned about the complete transaction journey through 
 - [Finality](/how-arbitrum-works/deep-dives/finality.mdx): Soft and hard finality, trust models, and when to wait for each
 - [Batch poster](/how-arbitrum-works/deep-dives/batchposter.mdx): How a sequenced batch is built, compressed, and posted to the parent chain
 - [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees.mdx): Gas pricing, fee calculations, and adaptive pricing algorithm
-- [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx): Foundational concepts of the STF
+- [State Transition Function](/how-arbitrum-works/deep-dives/stf.mdx): Foundational concepts of the STF
 - [Geth](/how-arbitrum-works/reference/geth.mdx): Geth core and EVM compatibility
 - [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx): Arbitrum Operating System features and capabilities
 - [State Transition Function inputs](/how-arbitrum-works/reference/stf-inputs.mdx): Message types and STF processing mechanics
