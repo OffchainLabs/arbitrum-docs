@@ -15,11 +15,19 @@ The <a data-quicklook-from="sequencer">Sequencer’s</a> job is to receive, admi
 
 #### 1. Receipt and admission {#receipt-and-admission}
 
-A user transaction arrives over JSON-RPC. Before it is allowed anywhere near a block, it passes a series of admission checks: if this node is not the active Sequencer, the transaction is forwarded to the active one; optional sender allowlists and <a data-quicklook-from="parent-chain">parent chain</a> fee-surplus thresholds can reject it; and internal Arbitrum transaction types and <a data-quicklook-from="blob">blob</a> transactions are filtered out. When <a data-quicklook-from="timeboost">Timeboost</a> is active, and the current round has an <a data-quicklook-from="express-lane-controller">express-lane controller</a>, ordinary transactions are held back by a small advantage delay (200ms by default) so that express-lane transactions can go first. Admitted transactions are placed into a bounded queue.
+A user transaction arrives over JSON-RPC. Before it is allowed anywhere near a block, it passes a series of admission checks: if this node is not the active Sequencer, the transaction is forwarded to the active one; optional sender allowlists and <a data-quicklook-from="parent-chain">parent chain</a> fee-surplus thresholds can reject it; and internal Arbitrum transaction types and <a data-quicklook-from="blob">blob</a> transactions are filtered out. Admitted transactions land in an unordered waiting list, the first stage of the Sequencer’s two-stage mempool. What happens next depends on the chain’s <a data-quicklook-from="transaction-ordering-policy">transaction ordering policy</a>. Under <a data-quicklook-from="first-come-first-serve-fcfs">first-come, first-serve (FCFS)</a>, arrival time sets the order. Under [Priority Gas Auctions (PGA)](/how-arbitrum-works/priority-gas-auction/pga.md), each ordering round moves the whole waiting list into a priority queue keyed on the <a data-quicklook-from="priority-fee">priority fee</a> each transaction pays.
 
 #### 2. Block creation loop {#block-creation-loop}
 
-The Sequencer runs a tight loop that drains its queues and groups transactions into a block. It services three queues in priority order: auction-resolution transactions first, then a retry queue, then the regular queue—and, after the first transaction, keeps draining for a brief period (10ms by default) so multiple transactions land in a single block. Lightweight pre-checks happen here: per-transaction data-size limits, a base-fee check, and a nonce cache that parks too-high nonces and revives them once their predecessor succeeds. The loop also confirms that the parent-chain block number and timestamp are within an acceptable range before producing a block.
+The Sequencer runs a tight loop that drains its queues and groups transactions into a block. It services a retry queue ahead of the regular queue. Under PGA, the loop runs in fixed ordering rounds: each round moves the waiting list into the priority queue, then transfers that queue into the block under construction, highest priority fee first. [PGA ordering](#pga-ordering) covers the rounds in detail. Lightweight pre-checks happen here: per-transaction data-size limits, a base-fee check, and a nonce cache that parks too-high nonces and revives them once their predecessor succeeds. The loop also confirms that the parent-chain block number and timestamp are within an acceptable range before producing a block.
+
+A block closes when it reaches the first of these limits:
+
+- A gas target of 32 Mgas. The hard limit is 64 Mgas, and a single transaction can use at most 32 Mgas.
+- A calldata limit of 95,000 bytes.
+- The end of its last round.
+
+If a block fills before its last round, the Sequencer finalizes it right away and starts the next block rather than idling for the rest of the window. Under load, the chain then produces blocks faster than its nominal block time, up to a cap of 8 blocks per second. That cap keeps the spacing between rounds consistent, which the anti-starvation boost depends on.
 
 #### 3. Handoff to ArbOS and the STF {#handoff-to-arbos-and-the-stf}
 
@@ -27,13 +35,15 @@ Once the Sequencer has a finalized ordering, it calls the ExecutionEngine, which
 
 <VanillaAdmonition type="note" title="Handoff: execution belongs to ArbOS and the STF">
 
-Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/how-arbitrum-works/deep-dives/stf.mdx) and [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
+Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx) and [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
 
 </VanillaAdmonition>
 
 #### 4. Persistence and broadcast {#persistence-and-broadcast}
 
 The produced block comes back to the Sequencer as a sequenced message. The TransactionStreamer persists it to the local database and, if a coordinator is configured, replicates it to Redis for high availability. It then hands the message to the Broadcaster, which pushes it to subscribers over the <a data-quicklook-from="sequencer-feed">real-time feed</a>. This is the moment users get [<a data-quicklook-from="soft-confirmation">soft finality</a>](/how-arbitrum-works/reference/finality-and-reorgs.mdx#the-three-confirmation-levels): a sub-second provisional confirmation that depends on the Sequencer behaving honestly.
+
+On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, a second stream runs alongside the standard feed. The [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed.mdx) is a paid, authenticated WebSocket stream that publishes each transaction as soon as the Sequencer orders and executes it, inside the PGA round and before the block closes. The Sequencer publishes to the Fast Feed before it stores the transaction, so the block number each message carries is tentative. Soft finality still comes from the standard feed.
 
 #### 5. Posting to the parent chain {#posting-to-the-parent-chain}
 
@@ -47,9 +57,41 @@ In production, several Sequencer nodes run under a single logical Sequencer, wit
 
 Not every transaction originates with a direct RPC submission. Deposits and <a data-quicklook-from="retryable-ticket">retryable tickets</a> enter through the parent chain’s <a data-quicklook-from="delayed-inbox">delayed inbox</a>. The DelayedSequencer watches for these messages to finalize on the parent chain, then sequences them into the <a data-quicklook-from="child-chain">child chain</a> so they appear in the ordering and on the feed alongside ordinary transactions. As with execution generally, the act of applying a delayed message is ArbOS/STF territory; the DelayedSequencer’s role is to decide when it enters the order.
 
-## Timeboost express lane
+## PGA ordering {#pga-ordering}
 
-Timeboost layers a priority auction on top of the default <a data-quicklook-from="first-come-first-serve-fcfs">first-come, first-serve (FCFS)</a> ordering. Time is divided into fixed rounds (at least 10 seconds), and an offchain auction assigns each round an express-lane controller. That controller’s transactions take a dedicated <a data-quicklook-from="express-lane">express lane</a>: they are validated (correct sender, round, and chain ID), placed into a per-round ordering queue, and delivered in sequence with no advantage delay, while ordinary transactions wait out the 200ms delay before queuing.
+PGA orders transactions by the priority fee each one pays, rather than by the moment each one arrives. The Sequencer evaluates that order in short rounds that run several times per block. Three parts work together.
+
+### The two-stage mempool
+
+Arriving transactions land in an unordered waiting list. Intake runs continuously, independent of any ordering work. At the start of each round, the whole list moves into a priority queue keyed on the priority fee, which <a data-quicklook-from="eip-1559">EIP-1559</a> computes as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`.
+
+Ties break on the arrival timestamp the Sequencer recorded when the transaction first reached it, not on when it entered the queue. Because the priority fee depends on the base fee, the Sequencer re-keys the queue against the new base fee at the start of every block.
+
+The mempool stays private. PGA gives nobody the right to see or reorder another user’s transactions, so Arbitrum’s protections against harmful MEV are unchanged.
+
+### Ordering rounds
+
+A new round starts every `B/K`, where `B` is the block time and `K` is the number of rounds per block. On Arbitrum One, `B` is @@l2BlockTimeMs=250@@ms and `K` is 2, so each round lasts 125ms. Each round runs two phases:
+
+- **Intake** covers the full round window and absorbs new arrivals into the waiting list. It overlaps with the previous round’s execute phase.
+- **Execute** starts as soon as intake closes. The waiting list moves into the priority queue, and the Sequencer transfers the queue into the block, highest priority first.
+
+The transfer ends when the queue empties, the block fills, or the round runs out of time. Anything still queued waits for the next round.
+
+### The anti-starvation boost
+
+At the end of every round in which the priority queue holds transactions, each transaction still waiting gains a priority boost of `p / (2K)`. Here `p` is the priority of the last transaction the previous round included, or zero if that round included none.
+
+Two properties matter:
+
+- The boost moves a transaction’s position in the queue and nothing else. It never changes the fee the transaction pays.
+- The boost compounds across rounds. A transaction that pays no priority fee climbs until it outranks the marginal paying transaction, which bounds its wait to a small number of blocks.
+
+<VanillaAdmonition type="note" title="PGA replaces Timeboost on Arbitrum One">
+
+<a data-quicklook-from="timeboost">Timeboost</a> auctioned a 60-second <a data-quicklook-from="express-lane">express lane</a> to one <a data-quicklook-from="express-lane-controller">express lane controller</a> per round and delayed every other transaction by 200ms. PGA removes that delay: no transaction waits on another’s lane. Chain owners can still choose Timeboost instead, but a chain that enables both policies behaves unpredictably. See [Timeboost for Arbitrum chains](/launch-arbitrum-chain/chain-config/sequencer/timeboost.mdx) and [PGA for Arbitrum chains](/launch-arbitrum-chain/chain-config/sequencer/pga.mdx).
+
+</VanillaAdmonition>
 
 ## Censorship Timeout
 
@@ -62,7 +104,7 @@ Censorship Timeout aims to limit the negative effects of:
 
 ## How the Censorship Timeout works
 
-To explain how this feature improves the security of chains settling to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, consider a scenario where an <a data-quicklook-from="layer-3-l3">L3</a>’s parent chain Sequencer (the <a data-quicklook-from="L2">L2</a> Sequencer) is censoring or offline. In such a case, every <a data-quicklook-from="assertion">assertion</a> and/or sub-<a data-quicklook-from="challenge">challenge</a> move would need to wait @@arbOneForceIncludePeriodHours=24@@ hours before bypassing the L2 Sequencer (using the Sequencer Inbox’s <a data-quicklook-from="forceinclusion">`forceInclusion`</a> method). In this scenario, a challenge resolution would be delayed by a time t where t = (@@arbOneForceIncludePeriodHours=24@@ hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
+To explain how this feature improves the security of chains settling to Arbitrum One, consider a scenario where an <a data-quicklook-from="layer-3-l3">L3</a>’s parent chain Sequencer (the <a data-quicklook-from="L2">L2</a> Sequencer) is censoring or offline. In such a case, every <a data-quicklook-from="assertion">assertion</a> and/or sub-<a data-quicklook-from="challenge">challenge</a> move would need to wait @@arbOneForceIncludePeriodHours=24@@ hours before bypassing the L2 Sequencer (using the Sequencer Inbox’s <a data-quicklook-from="forceinclusion">`forceInclusion`</a> method). In this scenario, a challenge resolution would be delayed by a time t where t = (@@arbOneForceIncludePeriodHours=24@@ hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
 
 The Censorship Timeout feature mitigates this by lowering the force inclusion threshold when unexpected delays in message inclusion occur due to one (or all) of the above-mentioned cases of censorship or a sequencer outage, enabling entities to make moves without the 24-hour delay-per-move.
 
@@ -82,4 +124,4 @@ We believe that the Censorship Timeout feature provides stronger guarantees of c
 
 ## Decentralized fair sequencing
 
-Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or <a data-quicklook-from="validator">validators</a>) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with broader blockchain principles of enhanced security, transparency, and decentralization. The [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) ordering policy is designed to be compatible with decentralized sequencing.
+Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or <a data-quicklook-from="validator">validators</a>) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with broader blockchain principles of enhanced security, transparency, and decentralization. A transaction ordering policy sits above this layer. Decentralized sequencing changes who enforces the ordering rules, not the rules themselves.
