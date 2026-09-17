@@ -7,9 +7,9 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: concept
 ---
 
-AnyTrust is a variant of the [<a data-quicklook-from="arbitrum">Arbitrum</a> Nitro technology](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx) that lowers costs by accepting a mild trust assumption.
+AnyTrust is a variant of the [Arbitrum Nitro technology](/how-arbitrum-works/01-inside-arbitrum-nitro.mdx) that lowers costs by accepting a mild trust assumption.
 
-The Arbitrum protocol requires that all Arbitrum nodes, including [validators](/how-arbitrum-works/deep-dives/assertions.mdx) (nodes that verify the correctness of the chain and place bonds on correct results), have access to the data of every child chain <a data-quicklook-from="transaction">transaction</a> in the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>’s inbox. An Arbitrum Rollup provides data access by [posting the data (in batched, compressed form) on the parent chain](/how-arbitrum-works/deep-dives/batchposter.mdx), Ethereum, as blobs or calldata. The Ethereum gas used to pay for this is the largest component of the cost of using Arbitrum.
+The <a data-quicklook-from="arbitrum">Arbitrum</a> protocol requires that all Arbitrum nodes, including [validators](/how-arbitrum-works/deep-dives/assertions.mdx) (nodes that verify the correctness of the chain and place bonds on correct results), have access to the data of every child chain <a data-quicklook-from="transaction">transaction</a> in the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>’s inbox. An Arbitrum Rollup provides data access by [posting the data (in batched, compressed form) on the parent chain](/how-arbitrum-works/deep-dives/batchposter.mdx), Ethereum, as blobs or calldata. The Ethereum gas used to pay for this is the largest component of the cost of using Arbitrum.
 
 AnyTrust relies instead on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has `N` members. AnyTrust assumes that at least two of them are honest.
 
