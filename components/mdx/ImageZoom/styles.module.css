@@ -1,0 +1,23 @@
+.figure {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.thumbnail {
+  cursor: zoom-in;
+  border-radius: 0.4rem;
+  max-width: 100%;
+  height: auto;
+}
+
+.caption {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: rgb(115 115 115);
+  text-align: center;
+}
+
+:global(.dark) .caption {
+  color: rgb(163 163 163);
+}

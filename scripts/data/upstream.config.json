@@ -1,0 +1,22 @@
+{
+  "$comment": [
+    "Locates the upstream Docusaurus docs repo (OffchainLabs/arbitrum-docs) and pins the comparison",
+    "window, so a multi-day sync is not chasing a moving target while upstream keeps committing.",
+    "Resolution order used by scripts/lib/upstream-tree.mjs: --tree-a flag, then UPSTREAM_DOCS_REPO env",
+    "var, then `repo` below, then sibling-directory probes. When none resolves, the drift scripts print",
+    "and exit 0 so CI stays green without an upstream checkout; pass --require-tree-a to make it fatal.",
+    "This file is checked in on purpose: .gitignore excludes .env*, so an env-file default could not be",
+    "shared, which is why a machine-specific absolute path was hardcoded in upstream-drift.mjs before."
+  ],
+  "repo": "../arbitrum-docs",
+  "docsSubdir": "docs",
+  "globalVarsPath": "src/resources/globalVars.js",
+  "probePaths": ["../arbitrum-docs", "../../arbitrum-docs", "~/OCL/arbitrum-docs"],
+  "portWindow": {
+    "$comment": "Upstream commits bracketing the migration port waves (2026-07-13/14). Pinned 2026-08-17.",
+    "baseSha": "1f8111f",
+    "headSha": "1e53ec9",
+    "baseDate": "2026-07-16",
+    "headDate": "2026-08-14"
+  }
+}

@@ -1,0 +1,34 @@
+name: merge-controlled
+
+# Blocks merging while the `merge-controlled` label is on the PR. The label is
+# the whole gate: any other label, or no label, merges normally. Enforcement
+# comes from requiring the `merge-controlled` check on the default branch.
+#
+# `labeled` and `unlabeled` are required trigger types. Without them the check
+# does not re-run when the label is added or removed, and the PR keeps a stale
+# verdict until the next push.
+#
+# The job must never be skipped. A required check that never reports stays
+# pending forever, which makes the PR unmergeable with no visible reason. The
+# condition therefore sits on the step, not the job: a skipped step still
+# produces a successful job.
+#
+# No checkout and no token, so `pull_request` is safe here and fork PRs are
+# handled the same as branch PRs.
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+permissions: {}
+
+jobs:
+  merge-controlled:
+    name: merge-controlled
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail while the merge-controlled label is present
+        if: contains(github.event.pull_request.labels.*.name, 'merge-controlled')
+        run: |
+          echo "::error::This PR carries the 'merge-controlled' label. Remove the label to allow merging."
+          exit 1

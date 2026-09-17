@@ -1,0 +1,429 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+@import 'fumadocs-twoslash/twoslash.css';
+
+/* Arbitrum brand palette, ported from arbitrum-docs `src/css/partials/_variables.scss` (:root).
+   Values kept in hsl() notation so each line is directly comparable against the source. */
+@theme {
+  --color-fd-background: hsl(0 0% 100%);
+  --color-fd-foreground: hsl(222 47% 11%);
+  --color-fd-muted: hsl(210 40% 96%);
+  --color-fd-muted-foreground: hsl(215 16% 47%);
+  --color-fd-popover: hsl(0 0% 100%);
+  --color-fd-popover-foreground: hsl(222 47% 11%);
+  --color-fd-card: hsl(0 0% 100%);
+  --color-fd-card-foreground: hsl(222 47% 11%);
+  --color-fd-border: hsl(214 32% 91%);
+  --color-fd-primary: hsl(211 99% 45%);
+  --color-fd-primary-foreground: hsl(0 0% 100%);
+  --color-fd-secondary: hsl(210 40% 96%);
+  --color-fd-secondary-foreground: hsl(222 47% 11%);
+  --color-fd-accent: hsl(210 40% 96%);
+  --color-fd-accent-foreground: hsl(222 47% 11%);
+  --color-fd-ring: hsl(211 99% 45%);
+  --color-fd-overlay: hsl(222 47% 11% / 0.5);
+
+  /* Hero gradient: a darkened variant of the brand blue->teal gradient. The
+     source gradient (hsl(211 99% 45%) -> hsl(188 100% 53%)) fails WCAG AA with
+     white text at the teal end (1.61:1), so the hero runs logo navy -> brand
+     blue instead: 13.35:1 and 4.78:1 against white. */
+  --color-arbitrum-gradient-from: hsl(215 37% 20%);
+  --color-arbitrum-gradient-to: hsl(211 99% 45%);
+
+  --spacing-page: 1436px;
+}
+
+/* Dark: navy-tinted surfaces, teal primary. Ported from arbitrum-docs
+   `src/css/partials/_darkmode.scss` ([data-theme='dark']). */
+.dark {
+  --color-fd-background: hsl(222 47% 6%);
+  --color-fd-foreground: hsl(210 40% 98%);
+  --color-fd-muted: hsl(217 33% 12%);
+  --color-fd-muted-foreground: hsl(215 20% 65%);
+  --color-fd-popover: hsl(222 47% 8%);
+  --color-fd-popover-foreground: hsl(210 40% 98%);
+  --color-fd-card: hsl(222 47% 8%);
+  --color-fd-card-foreground: hsl(210 40% 98%);
+  --color-fd-border: hsl(217 33% 17%);
+  --color-fd-primary: hsl(188 100% 53%);
+  --color-fd-primary-foreground: hsl(222 47% 6%);
+  --color-fd-secondary: hsl(217 33% 17%);
+  --color-fd-secondary-foreground: hsl(210 40% 98%);
+  --color-fd-accent: hsl(217 33% 17%);
+  --color-fd-accent-foreground: hsl(210 40% 98%);
+  --color-fd-ring: hsl(188 100% 53%);
+  --color-fd-overlay: hsl(222 47% 4% / 0.8);
+}
+
+/* Arbitrum prose treatment, ported from arbitrum-docs `_typography.scss` (which
+   scopes to `article .markdown`; Fumadocs' DocsBody renders `.prose`).
+
+   Colour is almost free: Fumadocs' typography plugin already defaults every
+   --tw-prose-* variable to a --color-fd-* token, so Task 1 cascades into prose
+   automatically. Only three variables differ from the reference.
+
+   Selectors use :where() to keep specificity at 0,1,0 so Tailwind utilities can
+   still override, and exclude `.not-prose` (Fumadocs' heading-anchor links) and
+   `[data-card]` (Fumadocs Card links) — both would otherwise pick up the
+   underline treatment. All heading weights are 500: Aeonik has no heavier face. */
+.prose {
+  --tw-prose-quote-borders: var(--color-fd-primary);
+  --tw-prose-captions: var(--color-fd-muted-foreground);
+  --tw-prose-kbd-shadows: color-mix(in oklab, var(--color-fd-primary) 50%, transparent);
+
+  font-size: 1rem;
+  line-height: 1.75;
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-weight: 500;
+    scroll-margin-top: 80px;
+    text-wrap: balance;
+  }
+
+  :where(h1) {
+    font-size: 2.5rem;
+    line-height: 1.1;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+
+  :where(h1:first-child) {
+    font-size: 2.25rem;
+  }
+
+  :where(h2) {
+    font-size: 1.625rem;
+    line-height: 1.25;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-fd-border);
+  }
+
+  :where(h3) {
+    font-size: 1.375rem;
+    line-height: 1.4;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+  }
+
+  :where(h4) {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    margin-top: 1.75em;
+    margin-bottom: 0.5em;
+  }
+
+  :where(h5, h6) {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  :where(h6) {
+    color: var(--color-fd-muted-foreground);
+  }
+
+  :where(strong) {
+    font-weight: 500;
+  }
+
+  :where(a):not(:where([data-card], [data-quicklook-from], .not-prose, .not-prose *)) {
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: var(--color-fd-primary);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    transition:
+      color 0.2s ease,
+      text-decoration-color 0.2s ease;
+
+    &:hover {
+      color: var(--color-fd-primary);
+      text-decoration-color: currentColor;
+    }
+  }
+
+  :where(ul > li)::marker {
+    color: var(--color-fd-primary);
+    font-size: 0.9em;
+  }
+
+  :where(ol > li)::marker {
+    color: var(--color-fd-primary);
+    font-weight: 500;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  :where(blockquote) {
+    border-inline-start-width: 3px;
+    border-inline-start-color: var(--color-fd-primary);
+    background: color-mix(in oklab, var(--color-fd-primary) 5%, transparent);
+    padding: 1rem 1.25rem;
+  }
+
+  /* Inline code reads as *bigger* than its neighbours even though the glyphs are
+     smaller (14px vs 16px, x-height 7.5px vs 8.5px measured on screen). Two
+     causes, both about the pill rather than the type:
+
+     1. Aeonik Fono ships a 400 face only (see app/layout.tsx), so `font-weight:
+        500` made the browser synthesize a fake medium — thicker, wider strokes
+        than the real face. The same synthesis the heading clamp and the `dt` /
+        `thead th` rule below already guard against. Fumadocs' own default is 400.
+     2. Fono's content area is 1.140em, so `padding: 0.2em` + a 1px border put the
+        pill at 23.5px inside a 28px line box — 84% of the line, which optically
+        dominates. 0.125em brings that to 21.5px.
+
+     font-size stays at 0.875em: Aeonik and Aeonik Fono share identical metrics
+     (x-height 510, cap 700 per 1000 upem), so unlike a typical monospace there is
+     no larger x-height to compensate for — shrinking further would undersize it. */
+  :where(:not(pre) > code) {
+    font-size: 0.875em;
+    font-weight: 400;
+    padding: 0.125em 0.375em;
+    border: 1px solid var(--color-fd-border);
+    background: var(--color-fd-muted);
+  }
+
+  :where(thead) {
+    background: color-mix(in oklab, var(--color-fd-primary) 8%, var(--color-fd-muted));
+  }
+
+  :where(thead th) {
+    font-size: 0.8125rem;
+    padding: 0.75rem 1rem;
+  }
+
+  :where(tbody td) {
+    padding: 0.75rem 1rem;
+    vertical-align: top;
+  }
+
+  :where(tbody tr) {
+    border-bottom: 1px solid color-mix(in oklab, var(--color-fd-border) 50%, transparent);
+  }
+}
+
+@media (max-width: 736px) {
+  .prose {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+
+    :where(h1) {
+      font-size: 1.875rem;
+    }
+
+    :where(h1:first-child) {
+      font-size: 1.75rem;
+    }
+
+    :where(h2) {
+      font-size: 1.375rem;
+      margin-top: 2em;
+    }
+
+    :where(h3) {
+      font-size: 1.25rem;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    :where(h4) {
+      font-size: 1.0625rem;
+    }
+
+    :where(table) {
+      font-size: 0.8125rem;
+    }
+
+    :where(thead th),
+    :where(tbody td) {
+      padding: 0.625rem 0.75rem;
+    }
+  }
+}
+
+/* Headings inside a `not-prose` island are interactive controls, not document
+   structure: Fumadocs' accordion renders its trigger inside a Radix
+   `Accordion.Header`, which is an `<h3>`. The heading rules above carry no
+   `not-prose` exclusion (only `:where(a)` does), so an accordion trigger picked
+   up `font-size: 1.375rem` and `margin: 2em 0 0.75em` *inside* its own card —
+   44px of dead space above each title, which made a 50px collapsed row render
+   113px tall and read as a static panel rather than something expandable.
+
+   Reset rather than editing all thirteen heading selectors (the media query
+   included): one rule keeps the diff small and covers every future `not-prose`
+   component. `:is()` lifts specificity to 0,2,0 so it beats the `:where()`
+   rules above regardless of source order. font-weight is left alone — the
+   inherited 500 is what the component asks for anyway. */
+.prose :where(h1, h2, h3, h4, h5, h6):is(.not-prose, .not-prose *) {
+  font-size: inherit;
+  line-height: inherit;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Fumadocs' accordion trigger ships no pointer and no hover state — only
+   `has-focus-visible:bg-fd-accent`, which a mouse user never sees. Anchoring on
+   the Radix trigger (`button[data-state]`) means this cannot catch an ordinary
+   prose heading. Hover uses --color-fd-accent to match the component's own
+   focus treatment. */
+h3:has(> button[data-state]) {
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: var(--color-fd-accent);
+  }
+
+  & > button {
+    cursor: pointer;
+  }
+}
+
+/* Fenced code blocks use a true monospace; inline code keeps brand Aeonik Fono.
+   See the --font-code comment in app/[lang]/layout.tsx. */
+pre,
+pre code {
+  font-family: var(--font-code), ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+}
+
+/* Fumadocs' typography plugin sets these two to 600 in the `utilities` layer,
+   and the prose block above does not declare them — so definition terms and
+   table headers were the last prose elements still asking for a weight Aeonik
+   does not have (it ships 400 and 500 only), which the browser synthesizes.
+   Unlayered, so this wins over the plugin. */
+.prose :where(dt),
+.prose :where(thead th) {
+  font-weight: 500;
+}
+
+/* Table of contents (right rail + the mobile popover): Fumadocs gives each TOC
+   link `class="prose … text-sm"` — `prose` only to inherit link colour. But the
+   `.prose` block above is unlayered, so it beats Tailwind's `utilities` layer
+   and overrode that `text-sm`: 16px/1.75 links in a 268px rail, wrapping most
+   headings onto two or three lines. Restore the size the component asks for.
+   The ID/attribute selectors keep this off document prose. */
+#nd-toc .prose,
+[data-toc-popover-content] .prose {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* Sidebar (desktop rail): match the 13px of the TOC rule above. Fumadocs puts
+   `text-sm` (14px/20px) on the `#nd-sidebar` aside itself, so the nav tree read
+   a step larger than the right rail. The id selector targets that same element
+   and outranks the utility, and every item inherits from it.
+
+   Children that declare their own size keep it — the section dropdown label
+   ("Launch arbitrum chain") stays 14px, which is the intended hierarchy. The
+   mobile drawer (#nd-sidebar-mobile, 15px) is left alone: bigger touch targets.  */
+#nd-sidebar {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* Top navbar (notebook layout, nav mode "top"): mirror the legacy Docusaurus
+   navbar — logo, nav links on a single line, search pushed to the far right.
+   Overrides the default row (title flex-1 | search | links flex-1), which
+   squeezes the links into half the row and wraps their labels. */
+#nd-subnav [data-header-body] {
+  /* Title group: natural width instead of half the row */
+  & > div:first-child {
+    flex: 0 0 auto;
+  }
+
+  /* Search: far right, like the legacy navbar; hugs its content
+     (default w-full stretches it, leaving a blank gap before the hotkey) */
+  & > [data-search-full] {
+    order: 1;
+    width: auto;
+    max-width: 15rem;
+  }
+
+  /* Nav links centered between the logo and the right-side controls,
+     so they sit over the content column */
+  & > div:last-child > div:first-child {
+    margin-inline: auto;
+  }
+
+  /* Keep each link label on one line */
+  a,
+  button {
+    white-space: nowrap;
+  }
+
+  /* Tight zone (lg–xl): links are visible but space is scarce —
+     compress link gaps and drop the search hotkey hint */
+  @media (max-width: 1280px) {
+    & > div:last-child > div:first-child {
+      gap: 0.75rem;
+    }
+
+    & > [data-search-full] kbd {
+      display: none;
+    }
+  }
+
+  /* Narrowest band before links collapse into the sidebar (lg = 1024px):
+     icon-only search (font-size: 0 hides its bare text node) */
+  @media (max-width: 1104px) {
+    & > div:last-child > div:first-child {
+      gap: 0.5rem;
+    }
+
+    & > [data-search-full] {
+      font-size: 0;
+      gap: 0;
+      padding-inline: 0.5rem;
+    }
+  }
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+@theme inline {
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+}
+
+/* Scenario/solution tables on the node troubleshooting page. Ported from arbitrum-docs
+   `.small-table`: dense rows so long log lines and their fixes stay scannable side by side. */
+.prose :where(table.small-table) {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.prose :where(table.small-table th),
+.prose :where(table.small-table td) {
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+}

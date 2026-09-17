@@ -1,0 +1,10 @@
+.reference-list__item {
+  scroll-margin-top: 6rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-fd-border);
+  margin-bottom: 1.5rem;
+}
+
+.reference-list__term {
+  margin-bottom: 0.5rem;
+}
