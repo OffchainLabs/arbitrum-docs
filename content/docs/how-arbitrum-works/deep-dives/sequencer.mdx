@@ -1,10 +1,10 @@
 ---
 title: The Sequencer and censorship resistance
 description: 'Learn the fundamentals of the Arbitrum Sequencer.'
+user_story: As a current or prospective Arbitrum user, I need to learn more about the Sequencer.
+content_type: 'concept'
 author: pete-vielhaber
 sme: Mehdi
-user_story: As a current or prospective Arbitrum user, I need to learn more about the Sequencer.
-content_type: concept
 ---
 
 The <a data-quicklook-from="sequencer">Sequencer’s</a> job is to receive, admit, and order <a data-quicklook-from="transaction">transactions</a> and then publish and post the resulting blocks. The moment ordered transactions are handed to the execution engine, responsibility shifts to the <a data-quicklook-from="state-transition-function">State Transition Function (STF)</a> and <a data-quicklook-from="arbos">ArbOS</a>, where transactions are executed against the chain state, gas is metered, and the new state root is computed. Throughout this section, we flag those handoff points and point to the relevant pages rather than duplicating them.

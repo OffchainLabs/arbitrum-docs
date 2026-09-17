@@ -1,11 +1,9 @@
 ---
 title: 'How to migrate state and history from a classic (pre-Nitro) node to a Nitro node'
 description: This how-to provides step-by-step instructions for migrating the state and history from a classic (pre-Nitro) node to a Nitro node
+content_type: 'how-to'
 author: jose-franco
 sme: jose-franco
-target_audience: 'Node runners interested in creating the full state of the Arbitrum One chain on their own'
-content_type: how-to
-sidebar_position: 11
 ---
 
 When running a Nitro node for the first time on a chain that produced [classic blocks](/arbitrum-essentials/public-chains.mdx#classic-deprecated) in the past (like <a data-quicklook-from="arbitrum-one">Arbitrum One</a>), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a <a data-quicklook-from="database-snapshot">database snapshot</a> using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/run-arbitrum-node/02-run-full-node.mdx)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.

@@ -1,13 +1,10 @@
 ---
 title: 'Nonce management'
-sidebar_position: 5
 description: "Understand how Arbitrum handles transaction nonces differently from Ethereum. Arbitrum's sequencer keeps only a short retry window for out-of-order nonces instead of a long-lived pending pool, so concurrent submitters must coordinate nonce allocation."
 user_story: 'As a developer submitting transactions to Arbitrum from a service or bot, I want to understand how the sequencer treats out-of-order nonces so I can submit transactions concurrently without triggering `nonce too high` errors.'
+content_type: 'concept'
 author: Jason-W123
 sme: Jason-W123
-target_audience: developers who want to build on Arbitrum
-content_type: concept
-displayed_sidebar: arbitrumEssentialsSidebar
 ---
 
 Arbitrum does not maintain a long-lived "pending" mempool as an Ethereum node does. Transactions submitted to the [Sequencer](/how-arbitrum-works/deep-dives/sequencer.mdx) are ordered and executed almost immediately, so out-of-order nonces cannot wait minutes or hours for their predecessor to arrive — they are held only briefly, then rejected.

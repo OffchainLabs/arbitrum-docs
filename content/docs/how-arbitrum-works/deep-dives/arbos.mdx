@@ -1,10 +1,10 @@
 ---
 title: 'ArbOS'
 description: 'How ArbOS works as the child chain hypervisor, managing resources, block production, cross-chain messaging, and EVM execution.'
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitro's design.
+content_type: 'concept'
 author: petevielhaber
 sme: mehdi salehi
-user_story: As a current or prospective Arbitrum user, I need to learn more about Nitro's design.
-content_type: concept
 ---
 
 ArbOS is the child-EVM virtual machine monitor (VMM) for <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>. It's a trusted system component that lives inside the [State Transition Function (STF)](/how-arbitrum-works/deep-dives/stf.mdx) and provides the execution environment for the chain. Unlike a conventional operating system, ArbOS is not a process running beside the chain—it's ordinary Go code compiled into the STF, so every node (and <a data-quicklook-from="fraud-proof">fraud prover</a>) can replay it deterministically.

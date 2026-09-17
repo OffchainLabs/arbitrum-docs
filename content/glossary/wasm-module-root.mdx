@@ -1,7 +1,6 @@
 ---
-title: WASM module root
-key: wasm-module-root
-titleforSort: WASM module root
+id: wasm-module-root
+title: 'WASM module root'
 ---
 
 A 32-byte cryptographic hash that uniquely identifies a specific version of Arbitrum's [State Transition Function](/intro/glossary#state-transition-function) (STF), compiled to [WASM](/intro/glossary#wasm) for use in [fraud proofs](/intro/glossary#fraud-proof). It is computed as the Merkle root over the Keccak256 hashes of every module in the compiled prover image—the main STF replay binary plus runtime libraries such as `soft-float`, `host_io`, `user_host`, and `program_exec`.

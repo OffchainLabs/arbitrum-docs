@@ -1,11 +1,11 @@
 ---
 title: 'Batch poster recovery'
-sidebar_label: 'Batch poster recovery'
 description: 'Learn how the batch poster recovers state and the mechanisms that make recovery possible.'
+sidebar_label: 'Batch poster recovery'
+user_story: As an Arbitrum chain operator, I want to understand how the batch poster recovers after a crash, restart, or bad state so I can restore reliable batch posting.
+content_type: 'reference'
 author: pete-vielhaber
 sme: Jason-W123
-user_story: As an Arbitrum chain operator, I want to understand how the batch poster recovers after a crash, restart, or bad state so I can restore reliable batch posting.
-content_type: reference
 ---
 
 This section covers how the batch poster recovers state after a crash, restart, or bad start—including DB restore from a batch-poster checkpoint, storage backends, revert and halt recovery, Redis failover, nonce sync, and reorg handling.

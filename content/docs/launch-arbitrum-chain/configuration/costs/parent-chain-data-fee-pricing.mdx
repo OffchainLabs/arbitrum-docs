@@ -1,13 +1,11 @@
 ---
 title: 'Tune parent chain data fee pricing'
-sidebar_label: 'Parent chain data fee pricing'
 description: 'How to tune the ArbOwner parameters that control what your Arbitrum chain charges users for posting transaction data to the parent chain.'
+sidebar_label: 'Parent chain data fee pricing'
+user_story: As an Arbitrum chain owner, I want to tune how my chain prices parent chain data costs so that fee revenue tracks my batch posting costs.
+content_type: 'how-to'
 author: petevielhaber
 sme: petevielhaber
-target_audience: 'Developers deploying and maintaining Arbitrum chains.'
-sidebar_position: 7
-user_story: As an Arbitrum chain owner, I want to tune how my chain prices parent chain data costs so that fee revenue tracks my batch posting costs.
-content_type: how-to
 ---
 
 Your Arbitrum chain charges users for the cost of posting their transaction data to the <a data-quicklook-from="parent-chain">parent chain</a>. Four `ArbOwner` methods control how that charge adjusts over time. Tune them when fee revenue drifts away from what your <a data-quicklook-from="batch-poster">batch poster</a> actually spends.

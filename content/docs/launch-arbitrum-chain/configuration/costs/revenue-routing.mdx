@@ -1,11 +1,11 @@
 ---
 title: 'Understand network revenue routing on your Arbitrum chain'
-sidebar_label: 'Revenue routing'
 description: 'Learn how transaction fees flow through an Arbitrum chain: which addresses collect each fee component, when funds actually move, and how to withdraw revenue to the parent chain'
+sidebar_label: 'Revenue routing'
+user_story: As an Arbitrum chain owner or RaaS provider, I need to understand where my chain's fee revenue accumulates, when it is paid out, and how to move it.
+content_type: 'concept'
 author: emredincoglu
 sme: emredincoglu
-user_story: As an Arbitrum chain owner or RaaS provider, I need to understand where my chain's fee revenue accumulates, when it is paid out, and how to move it.
-content_type: concept
 ---
 
 Every <a data-quicklook-from="transaction">transaction</a> on an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> pays a single fee, but under the hood that fee is split into components that travel very different paths before reaching their final destination. Some components are credited to a collector address in the same transaction that paid them, while others are routed through a system pool and paid out after batches are posted.

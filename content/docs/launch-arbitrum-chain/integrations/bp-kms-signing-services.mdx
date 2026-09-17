@@ -1,11 +1,11 @@
 ---
 title: 'Batch poster: External signing (KMS)'
-sidebar_label: 'KMS and signing services'
 description: "Learn how to integrate external signing—including AWS KMS—for your chain's batch poster."
+sidebar_label: 'KMS and signing services'
+user_story: As an Arbitrum chain operator, I want to integrate KMS and signing services for my batch poster.
+content_type: 'how-to'
 author: pete-vielhaber
 sme: jason-w123
-user_story: As an Arbitrum chain operator, I want to integrate KMS and signing services for my batch poster.
-content_type: how-to
 ---
 
 Nitro's batch poster (and staker) sign their parent chain transactions through the **DataPoster** component. By default, it signs locally with a private key, but it also supports **generic RPC-based external signing**: instead of holding the key, Nitro sends an unsigned transaction to a remote signer over (m)TLS, gets back a signed transaction, and independently verifies it.
