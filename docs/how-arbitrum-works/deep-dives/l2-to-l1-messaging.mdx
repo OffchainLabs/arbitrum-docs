@@ -17,6 +17,8 @@ This document explains the protocol-level concepts of child-to-parent messaging.
 
 Child-to-parent chain messages (i.e., outgoing messages) bear some things in common with Arbitrum’s [parent chain to child chain messages](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx), which are “in reverse” with differences, which we’ll explore in this section.
 
+Executing one of these messages on the parent chain requires the containing <a data-quicklook-from="assertion">assertion</a> to be confirmed, which is a stronger guarantee than a batch reaching the parent chain. [Finality](/how-arbitrum-works/deep-dives/finality.mdx) explains why posting a batch does not make funds withdrawable.
+
 ## Protocol flow
 
 Messages from child to parent chains are included in Arbitrum’s Rollup state and finalized through the Rollup protocol. The process follows these steps:
