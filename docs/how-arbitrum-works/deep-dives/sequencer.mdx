@@ -27,7 +27,7 @@ Once the Sequencer has a finalized ordering, it calls the ExecutionEngine, which
 
 <VanillaAdmonition type="note" title="Handoff: execution belongs to ArbOS and the STF">
 
-Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/how-arbitrum-works/deep-dives/01-stf-gentle-intro.mdx) and [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
+Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/how-arbitrum-works/deep-dives/stf.mdx) and [ArbOS](/how-arbitrum-works/deep-dives/arbos.mdx). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
 
 </VanillaAdmonition>
 
