@@ -22,9 +22,8 @@ In addition to the hardware requirements, the following prerequisites will be ne
 
 The following are the minimum hardware requirements to set up a <Term id="arbitrum-nitro">Nitro</Term> full node (not archival):
 
-import HardwarePartial from '../partials/_hardware-requirements.mdx';
 
-<HardwarePartial />
+<include cwd>content/partials/_hardware-requirements.mdx</include>
 
 Please note that:
 
@@ -45,7 +44,7 @@ Although there are beta and release candidate versions of the Arbitrum Nitro sof
 
 </VanillaAdmonition>
 
-Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@</code>
+Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code><Var name="latestNitroNodeImage" /></code>
 
 ### Database snapshots
 
@@ -108,16 +107,14 @@ The following list contains all the parameters needed to configure your node. Se
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import DAOChainsParameters from './partials/run-full-node/_dao-chains-parameters.mdx';
-import OrbitChainsParameters from './partials/run-full-node/_orbit-chains-parameters.mdx';
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
     <TabItem value="dao-governed-chains" label="Arbitrum One, Nova, Sepolia">
-      <DAOChainsParameters />
+      <include cwd>content/partials/run-a-node/_dao-chains-parameters.mdx</include>
     </TabItem>
     <TabItem value="orbit-chains" label="Arbitrum chains">
-      <OrbitChainsParameters />
+      <include cwd>content/partials/run-a-node/_orbit-chains-parameters.mdx</include>
     </TabItem>
   </Tabs>
 </div>

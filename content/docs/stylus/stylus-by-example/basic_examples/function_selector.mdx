@@ -16,9 +16,8 @@ You can compute a specific function selector by using the `function_selector!` m
 
 Here's an example that computes the selector of a function named `foo`:
 
-import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
-<NotForProductionBannerPartial />
+<include cwd>content/partials/_not-for-production-banner-partial.mdx</include>
 
 ```rust
 function_selector!("foo") // returns 0xc2985578

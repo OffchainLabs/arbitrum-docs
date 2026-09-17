@@ -14,9 +14,8 @@ This is a simple bytes in, bytes out contract that shows a minimal `entrypoint` 
 
 ### src/main.rs
 
-import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
-<NotForProductionBannerPartial />
+<include cwd>content/partials/_not-for-production-banner-partial.mdx</include>
 
 ```rust
 #![cfg_attr(not(feature = "export-abi"), no_main)]

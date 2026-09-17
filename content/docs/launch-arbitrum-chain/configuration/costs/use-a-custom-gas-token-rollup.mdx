@@ -6,7 +6,6 @@ author: allan-gulley
 sme: allan-gulley
 ---
 
-import CustomGasTokenNote from '../../partials/_custom-gas-token-note.mdx';
 
 When deploying an <Term id="arbitrum-chain">Arbitrum chain</Term> in [Rollup mode](/docs/run-a-node/data-availability#rollup-mode), you can use a custom **ERC-20** token as the native gas token. This token is usable for <Term id="transaction">Transaction</Term> fees on that specific Arbitrum chain and reimbursing the [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) for data posted to Ethereum. An example would be an <Term id="L2">L2</Term> Rollup that uses **USDC** as its custom gas token but pays **ETH** to post data to <Term id="L1">L1</Term> Ethereum.
 
@@ -97,4 +96,4 @@ You can refer to the source files for more details on:
 
 You can also find more info about how Nitro manages [gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with <Term id="offchain-labs">Offchain Labs</Term> or your chain’s deployment provider.
 
-<CustomGasTokenNote />
+<include cwd>content/partials/launch-arbitrum-chain/_custom-gas-token-note.mdx</include>

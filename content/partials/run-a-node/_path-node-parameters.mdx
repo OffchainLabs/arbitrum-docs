@@ -1,4 +1,3 @@
-import StateHistoryDefaults from './_state-history-defaults.mdx';
 
 These flags apply only when you set `--execution.caching.state-scheme=path`.
 
@@ -12,7 +11,7 @@ The two schemes are not interchangeable. A node can only start from a snapshot c
 
 Sets how many blocks of state history Nitro retains, counting back from the chain head. `0` means the entire chain, and is therefore required — but not enough on its own — to run an archive node on PathDB. You also need `--execution.caching.archive`, described below.
 
-<StateHistoryDefaults />
+<include>./_state-history-defaults.mdx</include>
 
 Nitro stores state history as reverse diffs in the cold database, also called the state freezer or ancients. State history lets the node recover historical state, which should allow a reorg to a historical block. Offchain Labs has not tested that reorg path.
 

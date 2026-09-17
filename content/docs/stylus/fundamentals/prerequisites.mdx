@@ -8,10 +8,6 @@ author: anegg0
 sme: anegg0
 ---
 
-import RustSetup from '../partials/_setup-rust-toolchain.mdx';
-import CargoStylusSetup from '../partials/_setup-cargo-stylus.mdx';
-import DockerSetup from '../partials/_setup-docker-nitro.mdx';
-import FoundrySetup from '../partials/_setup-foundry.mdx';
 
 # Prerequisites and setup
 
@@ -25,19 +21,19 @@ This guide will help you set up everything you need to develop Stylus contracts.
 
 ## Install Rust
 
-<RustSetup />
+<include cwd>content/partials/stylus/_setup-rust-toolchain.mdx</include>
 
 ## Install cargo-stylus CLI
 
-<CargoStylusSetup />
+<include cwd>content/partials/stylus/_setup-cargo-stylus.mdx</include>
 
 ## Install Docker (for local testnet)
 
-<DockerSetup />
+<include cwd>content/partials/stylus/_setup-docker-nitro.mdx</include>
 
 ## Install Foundry
 
-<FoundrySetup />
+<include cwd>content/partials/stylus/_setup-foundry.mdx</include>
 
 ## Verify installation
 
@@ -58,8 +54,8 @@ cast --version
 Expected output:
 
 ```
-rustc @@stylusRustToolchainFull=1.91.0@@ (or higher)
-cargo-stylus @@cargoStylusVersion=0.10.7@@ (or higher)
+rustc <Var name="stylusRustToolchainFull" /> (or higher)
+cargo-stylus <Var name="cargoStylusVersion" /> (or higher)
 Docker version 24.0.0 (or higher)
 cast 1.0.0 (or higher)
 ```

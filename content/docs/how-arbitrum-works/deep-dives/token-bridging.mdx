@@ -110,9 +110,8 @@ Your token on the parent chain should conform to the [ICustomToken](https://gith
 
 Your token should conform to the minimum [`IArbToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface; i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [`L2GatewayToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
 
-import TokenCompatibilityPartial from '../../arbitrum-essentials/bridging/partials/_token-compatibility.mdx';
 
-<TokenCompatibilityPartial />
+<include cwd>content/partials/arbitrum-essentials/_token-compatibility.mdx</include>
 
 **2. Register your token on the parent chain to your token on the child chain via the `L1CustomGateway` contract**
 

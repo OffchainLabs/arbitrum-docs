@@ -16,7 +16,7 @@ Validators on Arbitrum can post their claim on the validity of state roots, know
 
 The disputed assertions concern block hashes on an <Term id="arbitrum-chain">Arbitrum chain</Term> at a given <Term id="batch">batch</Term> or inbox position. Because <Term id="arbitrum-chains">Arbitrum chains</Term> are deterministic, only one history is correct for anyone running the standard Nitro software. Using the notion of a one-step proof, Ethereum can check whether someone is making a fraudulent assertion after an interactive game narrows down a dispute to a single winner.
 
-If a claim is honest, Ethereum can confirm it after a @@arbOneDisputeWindowDays=6.4@@ day period (the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can challenge it within that @@arbOneDisputeWindowDays=6.4@@-day window _and always win_ within a <Term id="challenge-period">challenge period</Term> (plus a small delta).
+If a claim is honest, Ethereum can confirm it after a <Var name="arbOneDisputeWindowDays" /> day period (the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can challenge it within that <Var name="arbOneDisputeWindowDays" />-day window _and always win_ within a <Term id="challenge-period">challenge period</Term> (plus a small delta).
 
 The current implementation of BoLD involves both onchain and offchain components:
 
@@ -32,7 +32,7 @@ A helpful mental model for understanding the system is: Ethereum itself is the r
 
 <ImageZoom src="/img/haw-transaction-lifecycle.png" alt="Transaction lifecycle diagram showing various pathways for submitting transactions" className="img-600px" />
 
-_From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. Parent chain blocks are “settled to the parent chain” after a @@arbOneDisputeWindowDays=6.4@@ day period has elapsed and nobody has challenged their validity on Ethereum._
+_From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. Parent chain blocks are “settled to the parent chain” after a <Var name="arbOneDisputeWindowDays" /> day period has elapsed and nobody has challenged their validity on Ethereum._
 
 In effect, a miniature Arbitrum state-transition VM is [deployed as an Ethereum smart contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/osp/OneStepProofEntry.sol) to prove which assertions are correct. However, computation on Ethereum is expensive, so this mini-VM is built to handle "one-step proofs" consisting of a single step of WebAssembly (<Term id="wasm">WASM</Term>) code. The Arbitrum state transition logic, written in Golang, is also compiled to WASM and will therefore obtain the same results as the VM found in the onchain smart contract. The protocol's soundness depends on the assumption that computation is deterministic and equivalent between the onchain VM and the Golang state transition compiled to WASM.
 
@@ -49,7 +49,7 @@ A key responsibility for Arbitrum <Term id="proposer">proposers</Term> is to reg
 
 The assertion to be posted onchain must consume the specified number of inbox messages from the previous assertion. There is a required delay measured in blocks of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for <Term id="L2">L2</Term> chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain) for assertion posting. Currently, this value is set to equal one hour for BoLD.
 
-Anyone can confirm assertions after @@arbOneDisputeWindowDays=6.4@@ days if they have not been challenged. In particular, assertions help with [withdrawing from Arbitrum back to Ethereum](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging). Arbitrum withdrawals require specifying a blockhash, which must be confirmed onchain as an assertion. This is why withdrawals have a @@arbOneDisputeWindowDays=6.4@@ day delay if they are not actively challenged.
+Anyone can confirm assertions after <Var name="arbOneDisputeWindowDays" /> days if they have not been challenged. In particular, assertions help with [withdrawing from Arbitrum back to Ethereum](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging). Arbitrum withdrawals require specifying a blockhash, which must be confirmed onchain as an assertion. This is why withdrawals have a <Var name="arbOneDisputeWindowDays" /> day delay if they are not actively challenged.
 
 Validators must become proposers in the rollup contract before they can post assertions. For <Term id="arbitrum-one">Arbitrum One</Term> and <Term id="arbitrum-nova">Arbitrum Nova</Term>, this involves placing a one-time bond of 3600 **WETH**, locked in the contract until they choose to withdraw. Validators can only withdraw their bond once the protocol confirms their latest bonded assertion. Posting a new assertion does not require a new bond; instead, the protocol "moves" a validator's bond to their latest posted assertion.
 
@@ -181,7 +181,7 @@ Afterward, assertions will be posted to the new Rollup contract. During the upgr
 
 The confirmation timing for any withdrawal in flight when the BoLD upgrade is activated will be delayed until the first BoLD assertion is confirmed. When any Arbitrum chain upgrades to BoLD—including Arbitrum One and Arbitrum Nova—any pending withdrawal to Ethereum initiated before the upgrade will be delayed by one additional challenge period, plus however much time passed between the withdrawal initiation and the BoLD upgrade. This is because the upgrade effectively "resets" the challenge period for those that are not yet finalized.
 
-For example, if the upgrade happens at time `t`, then a withdrawal initiated at time `t-2` days will need to wait an additional @@arbOneDisputeWindowDays=6.4@@ days for its withdrawal to be finalized, totaling 8.4 days of maximum delay. Withdrawals that finalize before the upgrade takes place at time `t` will be unaffected. In other words, the maximum delay a withdrawal will experience leading up to the upgrade is 12.8 days (two challenge periods).
+For example, if the upgrade happens at time `t`, then a withdrawal initiated at time `t-2` days will need to wait an additional <Var name="arbOneDisputeWindowDays" /> days for its withdrawal to be finalized, totaling 8.4 days of maximum delay. Withdrawals that finalize before the upgrade takes place at time `t` will be unaffected. In other words, the maximum delay a withdrawal will experience leading up to the upgrade is 12.8 days (two challenge periods).
 
 </VanillaAdmonition>
 

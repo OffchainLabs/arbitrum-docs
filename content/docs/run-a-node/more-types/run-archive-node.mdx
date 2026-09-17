@@ -89,18 +89,17 @@ For Arbitrum Sepolia, substitute `sepolia-rollup` for `arb1` in both URLs.
 
 The minimum storage requirements will change as the Nitro chains grow (see the growth rates below). We recommend exceeding the minimum requirements as much as you can to minimize risk and maintenance overhead. The disk size for archive nodes is expected to grow over time. Carefully monitor your node's disk requirements and disk growth rates to ensure your node has adequate resources.
 
-import HardwarePartial from '../../partials/_hardware-requirements.mdx';
 
-<HardwarePartial />
+<include cwd>content/partials/_hardware-requirements.mdx</include>
 
 1. **Docker images:** We'll specify these in the below commands; you don't need to download them manually.
-   - Latest Docker image for **Arbitrum One Nitro**: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@</code>
-   - Latest Docker image for **Arbitrum One Classic**: <code>@@latestClassicNodeImage=offchainlabs/arb-node:v1.4.6-551a39b3@@</code>
+   - Latest Docker image for **Arbitrum One Nitro**: <code><Var name="latestNitroNodeImage" /></code>
+   - Latest Docker image for **Arbitrum One Classic**: <code><Var name="latestClassicNodeImage" /></code>
 2. **<Term id="database-snapshot">Database snapshots</Term>:**
    - Nitro database snapshot
-     - Use the parameter `--init.url=` on the first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot-explorer.arbitrum.io/)). Example: <code>--init.url="@@arbOneNitroArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar@@"</code>
+     - Use the parameter `--init.url=` on the first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot-explorer.arbitrum.io/)). Example: <code>--init.url="<Var name="arbOneNitroArchiveSnapshot" />"</code>
    - Arbitrum One Classic database snapshot
-     - Download the latest Arbitrum One Classic database snapshot at [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@) and place it in the mounted point directory
+     - Download the latest Arbitrum One Classic database snapshot at [<Var name="arbOneClassicArchiveSnapshot" />](<Var name="arbOneClassicArchiveSnapshot" />) and place it in the mounted point directory
      - Note that other chains don't have Classic blocks and thus don't require an initial genesis database.
    - Snapshot Explorer
      - You can find more snapshots on our [snapshot explorer](https://snapshot-explorer.arbitrum.io/)
@@ -141,15 +140,15 @@ To run both <Term id="arbitrum-nitro">Arbitrum Nitro</Term> and/or Arbitrum Clas
 
 - **Arbitrum One Nitro archive node**:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 <Var name="latestNitroNodeImage" /> --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
   ```
 - **Arbitrum One Classic archive node**:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestClassicNodeImage=offchainlabs/arb-node:v1.4.6-551a39b3@@ --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000 --core.lazy-load-core-machine
+  docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 <Var name="latestClassicNodeImage" /> --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000 --core.lazy-load-core-machine
   ```
 - **Arbitrum One Nitro archive node with forwarding classic execution support**:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --execution.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 <Var name="latestNitroNodeImage" /> --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --execution.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
   ```
 
 Note that the above commands both map to port `8547` on their hosts. To run both on the same host, you should edit those mapping to different ports and specify your Classic node RPC URL as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).
@@ -171,9 +170,8 @@ Both Nitro and Classic have multiple other parameters that can be used to config
 
 ## PathDB configuration reference
 
-import PathNodeConfiguration from '../partials/run-full-node/_path-node-parameters.mdx';
 
-<PathNodeConfiguration />
+<include cwd>content/partials/run-a-node/_path-node-parameters.mdx</include>
 
 ## Troubleshooting
 

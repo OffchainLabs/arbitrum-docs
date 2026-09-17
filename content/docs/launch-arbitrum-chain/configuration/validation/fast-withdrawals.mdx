@@ -58,7 +58,7 @@ For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency r
 
 For an <Term id="arbitrum-one">Arbitrum One</Term>-based Layer-3, there are three tiers of finality to consider:
 
-1. Soft finality from the [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer)'s confirmation of <Term id="transaction">transaction</Term> inclusion (~@@l2BlockTimeMs=250@@ms)
+1. Soft finality from the [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer)'s confirmation of <Term id="transaction">transaction</Term> inclusion (~<Var name="l2BlockTimeMs" />ms)
 2. Safe finality from <Term id="batch">batch</Term> inclusion after Arbitrum One's [assertion](/docs/how-arbitrum-works/deep-dives/assertions) is included in an Ethereum block.
 3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes). For BoLD-enabled chains, this finality is a mandatory threshold for fast withdrawals.
 

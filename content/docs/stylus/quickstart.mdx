@@ -25,7 +25,7 @@ cover the following steps:
 <Accordions>
 <Accordion title="Rust toolchain">
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v@@stylusRustToolchain=1.91@@ or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v<Var name="stylusRustToolchain" /> or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </Accordion>
 </Accordions>
@@ -381,7 +381,7 @@ To enable testing, you'll need to add the following to your `Cargo.toml`:
 
 ```toml
 [dev-dependencies]
-stylus-sdk = { version = "@@stylusSdkVersion=0.10.7@@", features = ["stylus-test"] }
+stylus-sdk = { version = "<Var name="stylusSdkVersion" />", features = ["stylus-test"] }
 ```
 
 ### Running your tests

@@ -7,9 +7,8 @@ author: GreatSoshiant
 sme: GreatSoshiant
 ---
 
-import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
-<RaaSNotice />
+<include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>
 
 This how-to is where you should start if you have not deployed a chain on Arbitrum before. You will walk through how to deploy a chain with the default settings—the intent is to familiarize you with the process before you begin adding modifications to a custom chain. Here we will create an Arbitrum L3 chain that settles to Arbitrum Sepolia chain.
 
@@ -239,7 +238,7 @@ cp node-config.json ./arbitrum-data/node-config.json
 docker run --rm -it \
   -v $(pwd)/arbitrum-data:/home/user/.arbitrum \
   -p 8547:8547 -p 8548:8548 \
-  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ \
+  <Var name="latestNitroNodeImage" /> \
   --conf.file /home/user/.arbitrum/node-config.json
 ```
 

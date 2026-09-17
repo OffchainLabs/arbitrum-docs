@@ -47,10 +47,10 @@ The dominant term in time-to-claimable is the challenge period, set by the chain
 
 | Chain configuration                                                                                                         | Challenge period                                                                       | Typical time-to-claimable                                                                                                |
 | :-------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- |
-| <Term id="arbitrum-one">Arbitrum One</Term> (Rollup)                                                             | @@arbOneDisputeWindowBlocks=45818@@ blocks ≈ @@arbOneDisputeWindowDays=6.4@@ days      | ~7 days (batch + assertion cadence + challenge period)                                                                   |
-| <Term id="arbitrum-nova">Arbitrum Nova</Term> (<Term id="arbitrum-anytrust-protocol">AnyTrust</Term>) | @@novaDisputeWindowBlocks=45818@@ blocks ≈ @@novaDisputeWindowDays=6.4@@ days          | ~7 days—AnyTrust changes data availability, **not** the challenge period                                                 |
+| <Term id="arbitrum-one">Arbitrum One</Term> (Rollup)                                                             | <Var name="arbOneDisputeWindowBlocks" /> blocks ≈ <Var name="arbOneDisputeWindowDays" /> days      | ~7 days (batch + assertion cadence + challenge period)                                                                   |
+| <Term id="arbitrum-nova">Arbitrum Nova</Term> (<Term id="arbitrum-anytrust-protocol">AnyTrust</Term>) | <Var name="novaDisputeWindowBlocks" /> blocks ≈ <Var name="novaDisputeWindowDays" /> days          | ~7 days—AnyTrust changes data availability, **not** the challenge period                                                 |
 | Arbitrum chain with <Term id="fast-withdrawals">fast withdrawals</Term>                                          | Bypassed by unanimous committee confirmation                                           | As low as ~15 minutes on <Term id="bold">BoLD</Term>-enabled chains, plus batch posting and assertion cadence |
-| Arbitrum Sepolia (testnet)                                                                                                  | @@sepoliaDisputeWindowBlocks=20@@ blocks ≈ @@sepoliaDisputeWindowMinutes=4.0@@ minutes | Minutes                                                                                                                  |
+| Arbitrum Sepolia (testnet)                                                                                                  | <Var name="sepoliaDisputeWindowBlocks" /> blocks ≈ <Var name="sepoliaDisputeWindowMinutes" /> minutes | Minutes                                                                                                                  |
 
 Additional timing facts your alerting thresholds should account for:
 
@@ -60,7 +60,7 @@ Additional timing facts your alerting thresholds should account for:
 
 ## Withdrawals from an L3
 
-A withdrawal from an <Term id="layer-3-l3">L3</Term> (an Arbitrum chain that settles on Arbitrum One or another child chain) to Ethereum is **two sequential child-to-parent withdrawals**: L3 → L2, then L2 → L1. Each leg has its own challenge period—by default @@arbOneDisputeWindowBlocks=45818@@ parent chain blocks (≈ @@arbOneDisputeWindowDays=6.4@@ days) per leg on mainnet configurations—and each leg's claim must execute before the next leg can begin. The worst case with default settings is therefore roughly two weeks end to end.
+A withdrawal from an <Term id="layer-3-l3">L3</Term> (an Arbitrum chain that settles on Arbitrum One or another child chain) to Ethereum is **two sequential child-to-parent withdrawals**: L3 → L2, then L2 → L1. Each leg has its own challenge period—by default <Var name="arbOneDisputeWindowBlocks" /> parent chain blocks (≈ <Var name="arbOneDisputeWindowDays" /> days) per leg on mainnet configurations—and each leg's claim must execute before the next leg can begin. The worst case with default settings is therefore roughly two weeks end to end.
 
 Monitor each leg independently with the same code from this guide, pointing the provider pair at the relevant chains (L3 + L2 for the first leg, L2 + L1 for the second).
 

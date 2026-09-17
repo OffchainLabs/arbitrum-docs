@@ -8,18 +8,17 @@ sme: jason-w123
 
 The <Term id="smart-contract">smart contract</Term> size limit must be set during the initial configuration and deployment of a custom chain (Layer 2 or Layer 3 Rollup). It is not possible to modify it post-deployment due to the lack of a versioning mechanism for such parameters.
 
-The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). `MaxCodeSize` is configurable up to 96KB (98,304 bytes) and `MaxInitCodeSize` is configurable up to 192KB (196,608 bytes), which is higher than the default 24.5KB (@@maxCodeSizeBytes=24,576@@ bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
+The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). `MaxCodeSize` is configurable up to 96KB (98,304 bytes) and `MaxInitCodeSize` is configurable up to 192KB (196,608 bytes), which is higher than the default 24.5KB (<Var name="maxCodeSizeBytes" /> bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
 
 ## Key specifics
 
-- **Default values**: 24KB (@@maxCodeSizeBytes=24,576@@ bytes) for `MaxCodeSize` and `MaxInitCodeSize` is `2 * DefaultMaxCodeSize`.
+- **Default values**: 24KB (<Var name="maxCodeSizeBytes" /> bytes) for `MaxCodeSize` and `MaxInitCodeSize` is `2 * DefaultMaxCodeSize`.
 - **Maximum values**: 96KB (98,304 bytes) for `MaxCodeSize`. 192KB (196,608 bytes) for `MaxInitCodeSize`. Setting higher is not supported and may cause deployment failures or compatibility issues.
 - **Where applicable**: Only in custom <Term id="arbitrum-chain">Arbitrum chains</Term>. Public chains like <Term id="arbitrum-one">Arbitrum One</Term> or Nova remain fixed at 24KB without a network-wide upgrade.
 - **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @arbitrum/chain-sdk` or similar), a funded <Term id="wallet">wallet</Term> on the <Term id="parent-chain">parent chain</Term> (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
 
-import SizeLimit from '../../partials/_size-limit.mdx';
 
-<SizeLimit />
+<include cwd>content/partials/launch-arbitrum-chain/_size-limit.mdx</include>
 
 ### Process overview
 

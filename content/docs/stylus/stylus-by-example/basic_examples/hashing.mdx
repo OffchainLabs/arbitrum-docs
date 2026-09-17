@@ -24,9 +24,8 @@ Some use cases are:
 
 Here we will use [`stylus-sdk::crypto::keccak`](https://docs.rs/stylus-sdk/latest/stylus_sdk/crypto/fn.keccak.html) to calculate the keccak256 hash of the input data:
 
-import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
-<NotForProductionBannerPartial />
+<include cwd>content/partials/_not-for-production-banner-partial.mdx</include>
 
 ```rust
 pub fn keccak<T: AsRef<[u8]>>(bytes: T) -> B256
