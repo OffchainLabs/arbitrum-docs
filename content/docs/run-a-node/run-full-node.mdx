@@ -6,19 +6,15 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 <VanillaAdmonition type="info" title="Prerequisites">
 
-This page assumes that you've completed the steps from the [Start here](/docs/run-a-node/start-here) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, <Term id="database-snapshot">database snapshots</Term>, and other information required to run the node.
+This page assumes you've completed the steps from the [Start here](/docs/run-a-node/start-here) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, database snapshots, and other information required to run the node.
 
 To view the short and long term support policy, visit the [Nitro support policy](/docs/run-a-node/nitro-support-policy) page.
 
-If you're looking to run a node with a different role — <Term id="sequencer">sequencer</Term>, <Term id="batch-poster">batch poster</Term>, <Term id="validator">validator</Term>, <Term id="archive-node">archive node</Term>, or <Term id="feed-relay">feed relay</Term>—see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles) for the flags that define each role.
+If you're looking to run a node with a different role — <Term id="sequencer">sequencer</Term>, <Term id="batch-poster">batch poster</Term>, <Term id="validator">validator</Term>, archive node, or feed relay — see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles) for the flags that define each role.
 
 </VanillaAdmonition>
-
 <VanillaAdmonition type="tip" title="Running on Kubernetes or want a more reliable setup?">
 
 This page covers running a node with Docker. If you want to deploy on Kubernetes, or you want a more production-ready setup with monitoring, log signals, and network egress guidance, follow [How to run a full node with Helm on Kubernetes](/docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm) instead.
@@ -27,10 +23,10 @@ This page covers running a node with Docker. If you want to deploy on Kubernetes
 
 ## Choose a state scheme
 
-Nitro stores its state trie using one of two <Term id="state-scheme">schemes</Term>: **<Term id="hashdb">HashDB</Term>** (the default) or **<Term id="pathdb">PathDB</Term>**. Choose before you initialize the database. You cannot switch an existing database—moving between schemes means re-initializing from a snapshot built with the scheme you want.
+Nitro stores its state trie using one of two schemes: **HashDB** (the default) or **PathDB**. Choose before you initialize the database. You cannot switch an existing database — moving between schemes means re-initializing from a snapshot built with the scheme you want.
 
 | Property                      | HashDB (default)                         | PathDB                                     |
-| :---------------------------- | :--------------------------------------- | :----------------------------------------- |
+| :----------------------------- | :----------------------------------------- | :-------------------------------------------- |
 | Flag                          | None; Nitro uses HashDB by default       | `--execution.caching.state-scheme=path`    |
 | State trie pruning            | Manual and offline, via `--init.prune`   | Automatic and online                       |
 | Block validation              | Supported                                | Not supported                              |
@@ -41,14 +37,14 @@ Nitro stores its state trie using one of two <Term id="state-scheme">schemes</Te
 
 Both schemes have a published full node snapshot, so either one can initialize without syncing from genesis. At comparable dates the two are close in size: on Arbitrum One, the `pruned` HashDB snapshot is about 2.3 TB and the `full-path` PathDB snapshot is about 2.4 TB.
 
-Pick based on how you want to handle <Term id="state-pruning">pruning</Term> and whether you need block validation:
+Pick based on how you want to handle pruning and whether you need block validation:
 
 - **Choose HashDB** if your node runs the block validator, or if you want the simplest initialization. `--init.latest pruned` downloads and verifies the snapshot for you. You then prune manually, and your node is offline while it does.
 - **Choose PathDB** if you want to avoid manual prune cycles. Nitro prunes online, so the node keeps serving RPC and disk use stays within the window you set with `--execution.caching.state-history`. Initialization takes more work: you pass the snapshot URL to `--init.url` yourself.
 
-On **<Term id="archive-node">archive</Term>** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/docs/run-a-node/more-types/run-archive-node).
+On **archive** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/docs/run-a-node/more-types/run-archive-node).
 
-<VanillaAdmonition type="caution" title="PathDB and block validation">
+<VanillaAdmonition type="warning" title="PathDB and block validation">
 
 PathDB cannot validate blocks. If a node requires the block validator, Nitro exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required`.
 
@@ -63,15 +59,13 @@ A default full node is unaffected: it runs the watchtower strategy, which does n
 If you are running more than one node, you should [run a feed relay](/docs/run-a-node/run-feed-relay).
 
 </VanillaAdmonition>
-
-<VanillaAdmonition type="warning" title="PathDB and `--init.latest`">
+<VanillaAdmonition type="warning" title="PathDB and --init.latest">
 
 `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and every snapshot it resolves for those kinds uses HashDB. Adding `--execution.caching.state-scheme=path` to the examples below fails, because the downloaded snapshot's scheme won't match.
 
 PathDB snapshots are published under the separate `full-path` and `archive-path` kinds, which `--init.latest` does not accept. To initialize a PathDB database, pass the snapshot URL to `--init.url` instead. See [PathDB snapshots](/docs/run-a-node/nitro/nitro-database-snapshots#pathdb-snapshots).
 
 </VanillaAdmonition>
-
 <VanillaAdmonition type="warning" title="Docker volume mount">
 
 To ensure the database persists across restarts, mount an external volume to **`/home/user/.arbitrum`** inside the Docker container. Make sure to:
@@ -80,27 +74,25 @@ To ensure the database persists across restarts, mount an external volume to **`
 - If you encounter permission errors on Linux or macOS, run `chmod -fR 777 /some/local/dir/arbitrum` on the host directory.
 
 </VanillaAdmonition>
-
 <VanillaAdmonition type="note" title="Node config file">
 
 If using a `node-config.json` file with Docker to mount, use the following command:
 
 ```
-docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 <Var name="latestNitroNodeImage" /> --conf.file /home/user/.arbitrum/node-config.json
+docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 offchainlabs/nitro-node:v3.11.3-beb2108 --conf.file /home/user/.arbitrum/node-config.json
 ```
 
 </VanillaAdmonition>
-
 - Here is an example of how to run `nitro-node`:
 
 <div className="dynamic-content-tabs">
-  <Tabs className="tabgroup" defaultValue={null}>
-    <TabItem value="dao-governed-chains-example" label="Arbitrum One, Nova, Sepolia">
+  <Tabs items={["Arbitrum One, Nova, Sepolia","Arbitrum chains"]} defaultValue={null}>
+    <Tab value="Arbitrum One, Nova, Sepolia">
       <include cwd>content/partials/run-a-node/_dao-chains-example.mdx</include>
-    </TabItem>
-    <TabItem value="orbit-chains-example" label="Arbitrum chains">
+    </Tab>
+    <Tab value="Arbitrum chains">
       <include cwd>content/partials/run-a-node/_orbit-chains-example.mdx</include>
-    </TabItem>
+    </Tab>
   </Tabs>
 </div>
 
@@ -149,15 +141,20 @@ On **HashDB**, the default, pruning is a _manual, opt-in_ operation. It removes 
 
 On **PathDB**, pruning is automatic and runs online. Nitro discards state older than the `--execution.caching.state-history` window as it goes, so you never schedule a prune and the node never goes offline to run one. Disk use stays within that window instead of growing between manual prunes.
 
+When you leave `--execution.caching.state-history` unset, Nitro chooses the default at startup:
 
-<include cwd>content/partials/run-a-node/_state-history-defaults.mdx</include>
+| Node type                                         | Default `state-history`                                      |
+| :--------------------------------------------------- | :--------------------------------------------------------------- |
+| Full node (`--execution.caching.archive=false`)   | 345,600 blocks — 24 hours at the default 250 ms block speed |
+| Archive node (`--execution.caching.archive=true`) | `0`, meaning the entire chain                                |
+
+From v3.10.0, Nitro derives this default from the archive flag. On earlier versions the default was always 24 hours' worth of blocks, so an archive node needs an explicit `--execution.caching.state-history=0`.
 
 <VanillaAdmonition type="note">
 
 The pruning process occurs when the node starts (upon initialization) and will not serve RPC requests during pruning.
 
 </VanillaAdmonition>
-
 If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
 
 - `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:
@@ -172,9 +169,10 @@ Under heavy RPC load or during operations such as large `debug_traceBlockByNumbe
 - `--node.resource-mgmt.mem-free-limit`: Declines incoming RPC requests when free system memory drops below the specified threshold (e.g., `--node.resource-mgmt.mem-free-limit=4GiB`). This helps protect the node from OOM under high request load.
 - `GOMEMLIMIT` environment variable: Sets a soft memory limit for the Go runtime garbage collector (e.g., `GOMEMLIMIT=48GiB` for a 64 GB machine), helping reduce memory spikes.
 
-For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring).
+For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [Nitro memory management](/docs/run-a-node/nitro/nitro-memory-management).
 
 <VanillaAdmonition type="tip">
+
 For Docker deployments, you can set these in your `docker run` command:
 
 ```shell
@@ -182,18 +180,15 @@ docker run ... -e GOMEMLIMIT=48GiB ... offchainlabs/nitro-node:... --node.resour
 ```
 
 </VanillaAdmonition>
-
 ### Transaction prechecker
 
 - Enabling the transaction prechecker will add extra checks before your node forwards `eth_sendRawTransaction` to the Sequencer endpoint.
 - Below, we list the flags to set up the prechecker:
-
 
 <include cwd>content/partials/run-a-node/_tx-prechecker-parameters.mdx</include>
 
 ### Optional parameters
 
 Below, we listed the most commonly used parameters when running a node. You can also use the flag `--help` for a comprehensive list of the available parameters.
-
 
 <include cwd>content/partials/run-a-node/_optional-parameters.mdx</include>

@@ -1,0 +1,19 @@
+{
+  "title": "Deep dives",
+  "pages": [
+    "transaction-lifecycle",
+    "sequencer",
+    "sequencer-transaction-flow",
+    "batchposter",
+    "assertions",
+    "finality",
+    "stf",
+    "arbos",
+    "gas-and-fees",
+    "l1-to-l2-messaging",
+    "l2-to-l1-messaging",
+    "token-bridging",
+    "anytrust-protocol",
+    "..."
+  ]
+}

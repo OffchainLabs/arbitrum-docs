@@ -104,7 +104,7 @@ Common validation errors include:
 
 - **Missing entrypoint**: Contract lacks `#[entrypoint]` attribute
 - **Invalid exports**: Contract exports reserved symbols
-- **Size limit exceeded**: Decompressed WASM exceeds `MaxWasmSize` (the chain-configurable limit, 128 KB by default and 256 KB at ArbOS61+)
+- **Size limit exceeded**: Decompressed WASM exceeds `MaxWasmSize` (the chain-configurable limit, 128 KB by default and 256 KB at ArbOS 60+)
 - **Invalid imports**: Contract imports functions outside `vm_hooks`
 - **Memory violations**: Incorrect memory handling or growth
 
@@ -261,7 +261,7 @@ cargo stylus deploy \
 # Specify cargo-stylus version
 cargo stylus deploy \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=<Var name="cargoStylusVersion" />
+  --cargo-stylus-version=0.10.7
 ```
 
 Skip Docker for local development (non-reproducible):
@@ -399,7 +399,7 @@ cargo stylus deploy \
 cargo stylus deploy \
   --endpoint="https://arb1.arbitrum.io/rpc" \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=<Var name="cargoStylusVersion" />
+  --cargo-stylus-version=0.10.7
 
 # 4. Verify the deployed contract
 cargo stylus verify \
@@ -520,7 +520,7 @@ cargo stylus deploy \
 cargo stylus deploy \
   --endpoint="https://arb1.arbitrum.io/rpc" \
   --private-key-path=./key.txt \
-  --cargo-stylus-version=<Var name="cargoStylusVersion" />
+  --cargo-stylus-version=0.10.7
 
 # Then verify on Arbiscan
 cargo stylus verify \
@@ -581,7 +581,7 @@ cargo stylus deploy --private-key-path=./key.txt --estimate-gas
 
    ```toml
    [dependencies]
-   stylus-sdk = "<Var name="stylusSdkVersion" />"
+   stylus-sdk = "0.10.7"
    # Remove unnecessary crates
    ```
 
@@ -688,7 +688,7 @@ cargo stylus deploy --private-key-path=./key.txt --estimate-gas
 4. Check SDK version compatibility:
    ```toml
    [dependencies]
-   stylus-sdk = "<Var name="stylusSdkVersion" />"  # Use latest stable version
+   stylus-sdk = "0.10.7"  # Use latest stable version
    ```
 
 ## Non-Rust WASM Deployment

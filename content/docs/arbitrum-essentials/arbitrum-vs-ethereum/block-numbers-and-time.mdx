@@ -7,7 +7,7 @@ author: dzgoldman, jose-franco
 sme: jose-franco
 ---
 
-<VanillaAdmonition type="info" title="block number vs `block.number`">
+<VanillaAdmonition type="info" title="block number vs block.number">
 
 Throughout this and other pages, we note that the block number of a chain does not match the value obtained from `block.number`. When using `block.number` in a smart contract, the value obtained will be the block of the first non-Arbitrum ancestor chain. That is:
 
@@ -15,7 +15,6 @@ Throughout this and other pages, we note that the block number of a chain does n
 - The parent chain, if it's not Ethereum or an Arbitrum chain (for example, a chain that settles to Base)
 
 </VanillaAdmonition>
-
 As with Ethereum, Arbitrum clients submit transactions, and the system executes them later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) or via the chain's [Delayed Inbox](/docs/how-arbitrum-works/deep-dives/sequencer).
 
 Once in the chain's core inbox contract, transaction processing occurs in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
@@ -59,7 +58,6 @@ As a general rule, any timing assumptions a contract makes about block numbers a
 [EIP-2935](https://eips.ethereum.org/EIPS/eip-2935) adds another way to retrieve block hashes by making a call to a contract. The contract is at the same address and has the same interface as the original. It was modified to have a larger buffer and different code, but it remains usable in the same way to retrieve past L2 block hashes.
 
 </VanillaAdmonition>
-
 ### Arbitrum block numbers
 
 Arbitrum blocks have their own block numbers, starting at `0` at the Arbitrum genesis block and updating sequentially.

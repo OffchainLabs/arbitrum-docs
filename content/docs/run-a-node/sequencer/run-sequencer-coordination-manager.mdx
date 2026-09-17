@@ -6,14 +6,13 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-The Sequencer Coordinator Manager (SQM) is a command-line tool that allows you to manage the priority list of <Term id="sequencer">sequencers</Term>, update their positions, add new sequencers to the list, and refresh the lists from the Redis server.
-
+The Sequencer Coordinator Manager (SQM) is a command-line tool that allows you to manage the priority list of sequencers, update their positions, add new sequencers to the list, and refresh the lists from the Redis server.
 The tool offers keyboard-only support. Any changes you make are stored locally until you choose to save and push them to the Redis server.
 
 - Clone and enter nitro repository:
 
   ```shell
-  git clone --branch <Var name="nitroVersionTag" /> https://github.com/OffchainLabs/nitro.git
+  git clone --branch v3.9.9 https://github.com/OffchainLabs/nitro.git
   cd nitro
   ```
 
@@ -27,7 +26,6 @@ The tool offers keyboard-only support. Any changes you make are stored locally u
   ```
 
 If mouse support is enabled, you can use your mouse to explore the tool. Otherwise, use your keyboard to explore the UI. The `enter` key selects options; `c` switches focus between lists.
-
 When you bring up any form, you can navigate within the form's options using the `Tab` key and use the up/down arrow keys to select options from the dropdown menu.
 
 <ImageZoom src="/img/run-node-seq-coordinator-manager.png" alt="Sequencer coordinator manager" className="img-600px" />
@@ -35,7 +33,6 @@ When you bring up any form, you can navigate within the form's options using the
 <VanillaAdmonition type="note">
 One of the sequencers is marked with a `chosen` indicator. This visual cue helps you identify the current chosen sequencer.
 </VanillaAdmonition>
-
 You can click/enter on any sequencer element in the priority list to bring up a form for updating its position. Within this form, you have the options to make changes via a dropdown menu and then either click `Update` to see the change locally, `Cancel` to cancel the operation, or `Remove` to remove the sequencer from the priority list.
 
 When a sequencer is removed, it is automatically added to the `--Not in priority list but online--` list if it is online. Please remember that all changes made using this method are local and need to be saved to the Redis server by pressing `s` from the keyboard shortcuts to make them permanent.

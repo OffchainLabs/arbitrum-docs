@@ -1,14 +1,35 @@
 ---
-title: 'Configure assertion control'
-description: 'Learn how to configure assertion control.'
-sidebar_label: 'Assertion control'
-user_story:
+title: 'Configure Batch Poster and Assertion Control'
+description: 'Learn how to configure the Batch Poster and Assertion Control.'
+sidebar_label: 'Batch Poster and Assertion Control'
 content_type: 'quickstart'
 author: pete-vielhaber
 sme: Jason-W123
 ---
 
-## Validator action minimum frequency
+<Term id="batch">Batch</Term> posting configurations allow the <Term id="sequencer">sequencer</Term> to group, compress, and post <Term id="transaction">transaction</Term> batches from the <Term id="arbitrum-chain">Arbitrum chain</Term> (L3) to its <Term id="parent-chain">parent chain</Term> (typically an <Term id="layer-2-l2">L2</Term> such as <Term id="arbitrum-one">Arbitrum One</Term> or Nova). Key parameters include the maximum delay before posting a batch and the maximum size of a batch to be posted, both of which control the frequency and timeliness of postings. These help prevent transaction reordering by ensuring that the sequencer commits batches in the order transactions are received, posting them atomically to the parent chain's inbox contract. This batch posting creates an immutable record on <Term id="layer-1-l1">L1</Term> (via the L2), reducing the risk of malicious reordering. For chain reorganizations, timely batch posting minimizes the window for L1 reorgs to affect unposted data, as posted batches become part of the canonical chain history.
+
+<Term id="assertion">Assertion</Term> posting configurations enable validators to periodically create and post assertions (state roots) of the <Term id="arbitrum-chain">Arbitrum chain's</Term> execution to the parent chain. Parameters control the interval between assertions and staking requirements. These prevent reordering and reorgs by allowing any honest <Term id="validator">validator</Term> to <Term id="challenge">challenge</Term> incorrect assertions during a dispute window (typically seven days on Arbitrum chains). Regular assertions ensure state commitments are frequent enough to detect discrepancies early, triggering onchain resolution via bisection games, which enforce the correct <Term id="chain-state">chain state</Term> and deter reorganizations.
+
+## Batch posting minimum frequency:
+
+### Maximum wait time to post a batch
+
+The batch posting minimum frequency is primarily controlled by the `--node.batch-poster.max-delay` parameter in the [Nitro node's configuration](https://github.com/OffchainLabs/nitro/blob/master/arbnode/batch_poster.go) (set via the JSON config file or command-line flags when deploying an Arbitrum chain). This parameter defines the maximum time the <Term id="batch-poster">Batch Poster</Term> will wait after receiving a transaction before posting a batch that includes it. The default value is one hour (3600 seconds).
+
+- **Configuration Options**: Set this in the `node.batch-poster` section of the config, e.g., `"max-delay": "30m"` for a 30-minute maximum wait. Lower values increase posting frequency but may result in smaller, less efficient batches during periods of low activity, thereby increasing gas costs on the parent chain. If no transactions are received, no batches will post regardless of this setting.
+- **Prevention of Issues**: A shorter max delay reduces the opportunity for transaction reordering by minimizing the time transactions sit uncommitted in the sequencer's mempool. It also limits exposure to chain reorgs, as batches post sooner, anchoring them to the parent chain before potential L1 fluctuations can invalidate sequencing. However, extremely low settings (e.g., seconds) could spam the parent chain with tiny batches, resulting in increased costs without any benefits.
+- **Recommended Settings**: For high-throughput chains, set to 5-15 minutes to balance latency and efficiency. For low-activity chains, stick to the default one hour to avoid unnecessary postings.
+
+### Maximum batch size to post a batch
+
+Maximum size of a batch, if total queued but not posted transaction size archive this number, then batch poster will post this batch, it is controlled by the `--node.batch-poster.max-size` parameter in the [Nitro node's configuration](https://github.com/OffchainLabs/nitro/blob/master/arbnode/batch_poster.go) (set via the JSON config file or command-line flags when deploying an Arbitrum chain).
+
+- **Configuration Options**: Set this in the `node.batch-poster` section of the config, e.g., `"max-size": "100000"` for 100000 bytes. Lower values increase posting frequency but may result in smaller, less efficient batches during periods of low activity, thereby increasing gas costs on the parent chain. If no transactions are received, no batches will post regardless of this setting.
+- **Prevention of Issues**: A smaller max size reduces the opportunity for transaction reordering by minimizing the time transactions sit uncommitted in the sequencer's mempool. It also limits exposure to chain reorgs, as batches post sooner, anchoring them to the parent chain before potential L1 fluctuations can invalidate sequencing. However, extremely low settings (e.g., seconds) could spam the parent chain with tiny batches, resulting in increased costs without any benefits.
+- **Recommended Settings**: For high-throughput chains, set to 5-15 minutes to balance latency and efficiency. For low-activity chains, stick to the default one hour to avoid unnecessary postings.
+
+## Validator action minimum frequency:
 
 ### Validator node creation frequency: Interval between validator assertions posting
 
@@ -33,7 +54,7 @@ The validator assertion confirming frequency is controlled by the --node.staker.
 
 ### Reorg resistance margin
 
-Reorg prevention interacts with batch posting through `maxTimeVariation` and `reorg-resistance-margin`. See the [Configure Sequencer timing adjustments](/docs/launch-arbitrum-chain/configuration/sequencer/config-sequencer-timing-adjustments) page for the full mechanism.
+The reorganization resistance margin is configurable via the `--node.batch-poster.reorg-resistance-margin` parameter, which specifies a time duration (e.g., in minutes) during which the batch poster will avoid posting batches if their minimum L1 block number or timestamp is too close to the current L1 head. This margin serves as a safety buffer to prevent posting batches that reference recent L1 states, which are prone to reorganization. The default value is ten minutes (600 seconds), based on observed usage in deployments and error logs.
 
 - **Detailed Explanation of the Message**: The message "Disabling batch posting due to batch being within <Term id="reorg">reorg</Term> resistance margin from Layer 1 minimum block or timestamp bounds" signifies that the batch poster's logic has detected the proposed batch's minimum required L1 block or timestamp falls within the configured margin of the current L1 chain head. For example, if the margin is ten minutes and the L1 head timestamp is `T`, the poster disables itself if the batch requires a minimum timestamp greater than (`T - 10m`) or a minimum block that is too close to the head. This message serves as a protective mechanism: L1 chains, such as Ethereum, can undergo short reorganizations (e.g., uncle blocks or brief forks), which could invalidate a posted batch if it references a block/timestamp that gets reorganized. By temporarily disabling posting, the system waits for L1 to stabilize, ensuring the batch remains valid once posted. The disablement is transient; posting resumes once the margin clears (e.g., as L1 advances). This message often appears in logs during periods of high L1 volatility or when the sequencer's clock/L1 sync is slightly off. It's normal in such cases, but it may indicate setup issues if it persists.
 - **Guidance on Configuration**: Set this in the `node.batch-poster` config section, e.g., `"reorg-resistance-margin": "5m"`. Lower values allow for faster posting but increase the risk; higher values enhance safety. Monitor logs for frequent disablements and adjust accordingly based on the parent chain stability (e.g., Ethereum mainnet vs. testnets).
@@ -86,7 +107,7 @@ While both `ReorgResistanceMargin` and `MaxTimeVariation` are timing-related sec
 2. Add `ReorgResistanceMargin` to L1 minimum bounds:
 
 ```
-   safeBlockThreshold = l1BoundMinBlockNumber + (ReorgResistanceMargin / <Var name="l1SlotTimeSeconds" /> seconds)
+   safeBlockThreshold = l1BoundMinBlockNumber + (ReorgResistanceMargin / 12 seconds)
    safeTimestampThreshold = l1BoundMinTimestamp + (ReorgResistanceMargin / 1 second)
 ```
 

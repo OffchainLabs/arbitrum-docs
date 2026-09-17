@@ -50,7 +50,6 @@ For a working example of using `ArbAddressTable` to register addresses and retri
 
 Precompile address: `0x0000000000000000000000000000000000000066`
 
-
 <include cwd>content/partials/precompile-tables/_ArbAddressTable.mdx</include>
 
 ### `ArbAggregator`
@@ -61,23 +60,20 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 
 Precompile address: `0x000000000000000000000000000000000000006D`
 
-
 <include cwd>content/partials/precompile-tables/_ArbAggregator.mdx</include>
 
 ### `ArbBLS`
 
-<VanillaAdmonition type="caution" title="Disabled">
+<VanillaAdmonition type="warning" title="Disabled">
 
 This precompile has been disabled. It previously provided a registry of BLS public keys for accounts.
 
 </VanillaAdmonition>
-
 ### `ArbDebug`
 
 ArbDebug ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbDebug.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbDebug.go)) provides mechanisms useful for testing. The methods of `ArbDebug` are only available for chains with the `AllowDebugPrecompiles` chain parameter set. Otherwise, calls to this precompile will revert.
 
 Precompile address: `0x00000000000000000000000000000000000000ff`
-
 
 <include cwd>content/partials/precompile-tables/_ArbDebug.mdx</include>
 
@@ -87,7 +83,6 @@ ArbFunctionTable ([Interface](https://github.com/OffchainLabs/<Var name="nitroPr
 
 Precompile address: `0x0000000000000000000000000000000000000068`
 
-
 <include cwd>content/partials/precompile-tables/_ArbFunctionTable.mdx</include>
 
 ### `ArbGasInfo`
@@ -95,7 +90,6 @@ Precompile address: `0x0000000000000000000000000000000000000068`
 ArbGasInfo ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbGasInfo.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbGasInfo.go)) provides insight into the cost of using the chain. These methods have been adjusted to account for Nitro's heavy use of calldata compression. Of note to end-users, we no longer make a distinction between non-zero and zero-valued calldata bytes. For a practical guide on using these methods alongside `NodeInterface` to estimate transaction costs, see [How to estimate gas](/docs/arbitrum-essentials/how-to-estimate-gas).
 
 Precompile address: `0x000000000000000000000000000000000000006C`
-
 
 <include cwd>content/partials/precompile-tables/_ArbGasInfo.mdx</include>
 
@@ -105,7 +99,6 @@ ArbInfo ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompiles
 
 Precompile address: `0x0000000000000000000000000000000000000065`
 
-
 <include cwd>content/partials/precompile-tables/_ArbInfo.mdx</include>
 
 ### `ArbNativeTokenManager`
@@ -114,7 +107,6 @@ ArbNativeTokenManager ([Interface](https://github.com/OffchainLabs/<Var name="ni
 
 Precompile address: `0x0000000000000000000000000000000000000073`
 
-
 <include cwd>content/partials/precompile-tables/_ArbNativeTokenManager.mdx</include>
 
 ### `ArbosTest`
@@ -122,7 +114,6 @@ Precompile address: `0x0000000000000000000000000000000000000073`
 ArbosTest ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbosTest.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbosTest.go)) provides a method of burning arbitrary amounts of gas, which exists for historical reasons. In Classic, `ArbosTest` had additional methods only the zero address could call. These have been removed since users don't use them and calls to missing methods revert.
 
 Precompile address: `0x0000000000000000000000000000000000000069`
-
 
 <include cwd>content/partials/precompile-tables/_ArbosTest.mdx</include>
 
@@ -138,7 +129,6 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 
 Precompile address: `0x0000000000000000000000000000000000000070`
 
-
 <include cwd>content/partials/precompile-tables/_ArbOwner.mdx</include>
 
 ### `ArbOwnerPublic`
@@ -146,7 +136,6 @@ Precompile address: `0x0000000000000000000000000000000000000070`
 ArbOwnerPublic ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbOwnerPublic.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbOwnerPublic.go)) provides non-owners with info about the current chain owners.
 
 Precompile address: `0x000000000000000000000000000000000000006b`
-
 
 <include cwd>content/partials/precompile-tables/_ArbOwnerPublic.mdx</include>
 
@@ -156,7 +145,6 @@ ArbRetryableTx ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrec
 
 Precompile address: `0x000000000000000000000000000000000000006E`
 
-
 <include cwd>content/partials/precompile-tables/_ArbRetryableTx.mdx</include>
 
 ### `ArbStatistics`
@@ -164,7 +152,6 @@ Precompile address: `0x000000000000000000000000000000000000006E`
 ArbStatistics ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbStatistics.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbStatistics.go)) provides statistics about the chain as of just before the Nitro upgrade. In Arbitrum Classic, this was how a user would get info such as the total number of accounts, but there are better ways to get that info in Nitro.
 
 Precompile address: `0x000000000000000000000000000000000000006F`
-
 
 <include cwd>content/partials/precompile-tables/_ArbStatistics.mdx</include>
 
@@ -174,7 +161,6 @@ ArbSys ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesR
 
 Precompile address: `0x0000000000000000000000000000000000000064`
 
-
 <include cwd>content/partials/precompile-tables/_ArbSys.mdx</include>
 
 ### `ArbWasm`
@@ -183,7 +169,6 @@ ArbWasm ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompiles
 
 Precompile address: `0x0000000000000000000000000000000000000071`
 
-
 <include cwd>content/partials/precompile-tables/_ArbWasm.mdx</include>
 
 ### `ArbWasmCache`
@@ -191,6 +176,5 @@ Precompile address: `0x0000000000000000000000000000000000000071`
 ArbWasmCache ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbWasmCache.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbWasmCache.go)) provides helper methods for managing Stylus cache
 
 Precompile address: `0x0000000000000000000000000000000000000072`
-
 
 <include cwd>content/partials/precompile-tables/_ArbWasmCache.mdx</include>

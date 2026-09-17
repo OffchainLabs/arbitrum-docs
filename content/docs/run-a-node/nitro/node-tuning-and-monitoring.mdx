@@ -4,11 +4,9 @@ description: 'Memory management, cache configuration, validator tuning, metrics 
 sidebar_label: 'Node tuning and monitoring'
 user_story: 'As a node operator, I want to optimize my node memory, CPU, and storage settings and monitor its health'
 content_type: 'how-to'
-author: 'gzeoneth'
-sme: 'gzeoneth'
+author: gzeoneth
+sme: gzeoneth
 ---
-
-import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
 Although Nitro is a Go application, it can use significantly more memory than Go's runtime reports. Nitro relies on multiple allocators: the Go garbage-collected heap, CGO (Go's mechanism for calling C code) allocations via `calloc`, and direct `mmap` system calls, each with its own accounting. Understanding where memory lives, which configuration knobs control it, how to tune validators, and how to monitor node health is essential for stable operation.
 
@@ -40,7 +38,7 @@ Go reports its total memory usage via `runtime.MemStats.Sys`, which includes the
 
 ### CGO allocations (Pebble and Stylus)
 
-Nitro's on-disk database, <Term id="pebble">Pebble</Term>, allocates its block cache and memtables through CGO `calloc()` calls (see `pebble/internal/manual/manual.go` in the source). These allocations go through the C memory allocator and are out of scope for Go's memory tracking.
+Nitro's on-disk database, Pebble, allocates its block cache and memtables through CGO `calloc()` calls (see `pebble/internal/manual/manual.go` in the source). These allocations go through the C memory allocator and are out of scope for Go's memory tracking.
 
 **Pebble block cache** is the largest CGO consumer. It caches frequently read database blocks in memory to avoid disk I/O. Its size is set directly by the `database-cache` configuration parameter.
 
@@ -96,7 +94,9 @@ All cache sizes are configured under `execution.caching`:
 | `stylus-lru-cache-capacity` | 256 MB  | Rust (via CGO)     | Compiled Stylus WASM modules.                            |
 
 <VanillaAdmonition type="tip">
+
 All of these caches are bounded by configuration and won't grow beyond their configured limits. This means total non-Go memory is predictable and can be calculated from your configuration.
+
 </VanillaAdmonition>
 
 ## Calculating `GOMEMLIMIT`
@@ -149,10 +149,11 @@ You should use a safety margin of 300-500 MB to account for allocator overhead, 
 GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
 ```
 
-<VanillaAdmonition type="caution">
-If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
-</VanillaAdmonition>
+<VanillaAdmonition type="warning">
 
+If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.
+
+</VanillaAdmonition>
 ### Helm chart shortcut
 
 The community Helm chart calculates `GOMEMLIMIT` automatically using a multiplier of `0.9` against the container memory limit. It subtracts non-Go memory defaults (database-cache 2048, trie-clean-cache 600, snapshot-cache 400, stylus-lru-cache 256, malloc arena size 64) before applying the multiplier. If you use the Helm chart with default values, `GOMEMLIMIT` is set for you.
@@ -317,7 +318,7 @@ nitro \
 
 #### Archive node with 128 GB RAM
 
-<Term id="archive-node">Archive nodes</Term> benefit from larger caches to reduce disk I/O for historical queries:
+Archive nodes benefit from larger caches to reduce disk I/O for historical queries:
 
 ```shell
 # Non-Go: 4096 + 2048 + 1200 + 800 + 256 + 128 + 300 = 8,828 MB

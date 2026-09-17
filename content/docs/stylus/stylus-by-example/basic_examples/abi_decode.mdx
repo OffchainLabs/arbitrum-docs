@@ -14,7 +14,6 @@ The `decode` can not be used for `encode_packed` data because it ignores padding
 
 So here we show an example for using `decode` on data encoded with `abi_encode_sequence`:
 
-
 <include cwd>content/partials/_not-for-production-banner-partial.mdx</include>
 
 ```rust
@@ -57,12 +56,10 @@ pub fn encode_and_decode(
 #![cfg_attr(not(any(feature = "export-abi", test)), no_main)]
 extern crate alloc;
 
-
 /// Import items from the SDK. The prelude contains common traits and macros.
 use stylus_sdk::{alloy_primitives::{U256, Address}, prelude::*};
 // Because the naming of `alloy_primitives` and `alloy_sol_types` is the same, we need to rename the types in `alloy_sol_types`.
 use alloy_sol_types::{sol_data::{Address as SOLAddress, *}, SolType, sol};
-
 
 // Define error
 sol! {
@@ -78,7 +75,6 @@ pub enum DecoderError{
 #[storage]
 #[entrypoint]
 pub struct Decoder;
-
 
 /// Declare that `Decoder` is a contract with the following external methods.
 #[public]

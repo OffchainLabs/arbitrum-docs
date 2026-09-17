@@ -1,0 +1,12 @@
+{
+  "title": "Data availability committees",
+  "pages": [
+    "get-started",
+    "deploy-das",
+    "deploy-mirror-das",
+    "configure-dac",
+    "dac-configuration-defaults",
+    "dac-das-operations",
+    "das-rpc-method-reference"
+  ]
+}

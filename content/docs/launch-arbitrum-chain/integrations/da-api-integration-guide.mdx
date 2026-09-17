@@ -1,13 +1,11 @@
 ---
 title: 'How to integrate with the DA API'
 description: 'Learn how to implement your own custom DA provider for Nitro'
+sidebar_position: 4
 content_type: 'how-to'
 author: Tristan-Wilson
 sme: Tristan-Wilson
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 <include cwd>content/partials/launch-arbitrum-chain/_arbitrum-chain-customize-caution-banner-partial.mdx</include>
 
@@ -23,7 +21,7 @@ The DA API is an extensibility feature in Arbitrum Nitro that allows external da
 
 - **No forking required**: Integrate your DA system without modifying Nitro or contracts
 - **Pluggable architecture**: Define your own certificate formats and validation logic
-- **Fraud-proof compatible**: Full support for [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) <Term id="challenge">challenge</Term> protocol and fraud proofs
+- **Fraud-proof compatible**: Full support for <Term id="bold">BoLD</Term> <Term id="challenge">challenge</Term> protocol and fraud proofs
 - **Multi-provider support**: Multiple DA systems can coexist on the same chain
 
 ### Architecture overview
@@ -37,7 +35,7 @@ The DA API has four main components:
 
 These components work together to enable:
 
-- **Normal execution**: [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) stores data -> generates certificate -> posts to <Term id="L1">L1</Term>
+- **Normal execution**: <Term id="batch-poster">Batch Poster</Term> stores data -> generates certificate -> posts to <Term id="layer-1-l1">L1</Term>
 - **Validation**: Node reads certificate -> recovers data -> executes
 - **Fraud proofs**: Prover generates proof -> enhances with DA data -> validates onchain
 
@@ -48,7 +46,7 @@ This guide is for development teams who want to:
 - Integrate an existing DA system with Nitro's DA API
 - Understand how the DA API works under the hood
 
-**Prerequisites**: Familiarity with JSON-RPC, Solidity, Ethereum L1/<Term id="L2">L2</Term> architecture, and Arbitrum Nitro basics. Experience with any backend programming language.
+**Prerequisites**: Familiarity with JSON-RPC, Solidity, Ethereum L1/<Term id="layer-2-l2">L2</Term> architecture, and Arbitrum Nitro basics. Experience with any backend programming language.
 
 ### Reference implementation
 
@@ -124,7 +122,7 @@ Your JSON-RPC server must implement three Reader methods that Nitro nodes call t
 
 ### Method 1: `daprovider_getSupportedHeaderBytes`
 
-Returns the header byte that identifies your DA provider in [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) messages.
+Returns the header byte that identifies your DA provider in <Term id="sequencer">Sequencer</Term> messages.
 
 **Parameters**: None
 
@@ -224,11 +222,10 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
 - Use other errors for infrastructure failures (stops syncing until resolved)
 
 </VanillaAdmonition>
-
 **Detection mechanism**: Nitro detects CertificateValidationError by checking if the error message **contains the string** `"certificate validation failed"`. The error can include additional context after this string.
 
-<Tabs>
-  <TabItem value="success" label="Success: returns data" default>
+<Tabs items={["Success: returns data","Success with empty batch","Invalid certificate","Storage error: syncing stops"]}>
+  <Tab value="Success: returns data">
     ```json
     {
     "jsonrpc": "2.0",
@@ -238,8 +235,8 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
       }
     }
     ```
-  </TabItem>
-  <TabItem value="orange" label="Success with empty batch">
+  </Tab>
+  <Tab value="Success with empty batch">
     ```json
     {
     "jsonrpc": "2.0",
@@ -249,8 +246,8 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
       }
     }
     ```
-  </TabItem>
-  <TabItem value="banana" label="Invalid certificate">
+  </Tab>
+  <Tab value="Invalid certificate">
 ```json
 {
   "jsonrpc": "2.0",
@@ -261,8 +258,8 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
   }
 }
 ```
-  </TabItem>
-  <TabItem value="pouet" label="Storage error: syncing stops">
+  </Tab>
+  <Tab value="Storage error: syncing stops">
 ```json
 {
   "jsonrpc": "2.0",
@@ -273,7 +270,7 @@ The DA provider is a **trusted component**. Nitro cannot validate what you retur
   }
 }
 ```
-</TabItem>
+</Tab>
 </Tabs>
 
 ### Method 3: `daprovider_collectPreimages`
@@ -611,7 +608,6 @@ The Batch Poster supports multiple DA writers in a sequential fallback chain (Ex
 The fallback error and the resize error are the **only** ways to trigger automatic recovery. Any other error will **stop the batch posting entirely** without trying other writers or resizing. This design prevents expensive surprise costs from fixable infrastructure issues.
 
 </VanillaAdmonition>
-
 ### Error handling
 
 **Return errors for**:
@@ -706,7 +702,6 @@ Generates an **opening proof** for reading a specific **32-byte range** of the c
 The `offset` must be 32-byte aligned (0, 32, 64, 96, ...). The proof covers exactly 32 bytes starting at this offset.
 
 </VanillaAdmonition>
-
 **Returns**:
 
 ```json
@@ -794,7 +789,7 @@ Proof format: [element_value, opening_proof, auxiliary_data]
 
 **Comparison**:
 | Approach | Proof Size (5MB batch) | Pros | Cons |
-| ---------------------- | ---------------------- | ------------------------ | ----------------------------------------------- |
+|----------|----------------------|------|------|
 | **Full Preimage** | 5MB | Simple to implement | Huge proofs, expensive L1 verification |
 | **KZG Commitments** | ~128 bytes | Constant size, efficient | Requires trusted setup, pairing-friendly curves |
 | **Merkle Trees** | ~512 bytes | No trusted setup, simple | Logarithmic size, multiple hashes to verify |
@@ -872,7 +867,6 @@ Generates a proof of whether a certificate is valid or invalid according to your
 Invalid certificates (bad format, bad signature, untrusted signer) must return a successful response with `claimedValid=0` in the proof. Do **not** return an error.
 
 </VanillaAdmonition>
-
 **Only return errors for**:
 
 - Network failures (can't reach L1, database down)
@@ -919,8 +913,8 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
 
 **Example responses**
 
-<Tabs>
-  <TabItem value="success" label="Valid certificate" default>
+<Tabs items={["Valid certificate","invalid certificate - still success!","network error - only now return Error"]}>
+  <Tab value="Valid certificate">
 ```json
 {
   "jsonrpc": "2.0",
@@ -930,8 +924,8 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
   }
 }
     ```
-  </TabItem>
-  <TabItem value="orange" label="invalid certificate - still success!">
+  </Tab>
+  <Tab value="invalid certificate - still success!">
 ```json
 {
   "jsonrpc": "2.0",
@@ -941,8 +935,8 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
   }
 }
 ```
-  </TabItem>
-  <TabItem value="banana" label="network error - only now return Error">
+  </Tab>
+  <Tab value="network error - only now return Error">
 ```json
 {
   "jsonrpc": "2.0",
@@ -953,7 +947,7 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
   }
 }
 ```
-  </TabItem>
+  </Tab>
 </Tabs>
 
 **`ReferenceDA` Proof format**:
@@ -1173,7 +1167,6 @@ This function **must not revert for invalid certificates**. It should:
 - Only revert for truly unexpected conditions (e.g., internal contract errors)
 
 </VanillaAdmonition>
-
 **Why?** The fraud-proof system needs to be able to prove "this certificate is invalid" onchain. If the function reverts, this proof becomes impossible.
 
 ### Proof format
@@ -1416,7 +1409,6 @@ To use a custom DA validator contract for the onchain proving process, the minim
 Nitro contracts v3.2 have not been publicly released yet and is not supported in the latest version of the Arbitrum Chain SDK. The following instructions specify how to deploy a RollupCreator factory contract and create a new chain with it. However, it's recommended to use the canonical RollupCreator factory contract and the Arbitrum Chain SDK once they are available.
 
 </VanillaAdmonition>
-
 You can deploy a RollupCreator factory contract following the instructions in [How to deploy new factory contracts](/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts#deploying-a-rollupcreator).
 
 Before creating the Arbitrum chain, you must have the onchain custom validator contract and the OneStepProof (OSP) contracts deployed on the <Term id="parent-chain">parent chain</Term>. Deploy the onchain validator contract first, and then use the script available at `scripts/deployOsp.ts` to deploy the OSP contracts. Specify the address of the custom validator contract in a `CUSTOM_DA_VALIDATOR` env variable and use hardhat to run the script:
@@ -1474,7 +1466,6 @@ Nitro nodes connect to DA providers via JSON-RPC. Configure your provider with t
 The maximum batch size is determined dynamically by querying your DA provider's `daprovider_getMaxMessageSize` method before each batch is built. There is no static configuration for maximum batch size.
 
 </VanillaAdmonition>
-
 ### JWT authentication
 
 Secure communication between Nitro nodes and DA providers using JWT:
@@ -1862,7 +1853,7 @@ To enable data streaming on your Nitro node, use the following command-line flag
 
 ### Server-side protocol implementation (integrators)
 
-When configuring the Nitro node with the streaming flag (`--node.da.external-provider.use-data-streaming`), it utilizes an internal sender implementation that relies on a server-side JSON-RPC API exposed by the DA provider. Integrators must implement the following three endpoints to enable the streaming protocol.
+When configuring the Nitro Node with the streaming flag (`--node.da.external-provider.use-data-streaming`), it utilizes an internal sender implementation that relies on a server-side JSON-RPC API exposed by the DA provider. Integrators must implement the following three endpoints to enable the streaming protocol.
 
 | `daprovider_startChunkedStore`  | Initiates the streaming and allocates a batch identifier.   |
 | ------------------------------- | ----------------------------------------------------------- |
@@ -1880,7 +1871,6 @@ Integrators can customize these names using the following CLI flags on the Nitro
 All `uint64` integer parameters (e.g., `timestamp`, `nChunks`, `BatchId`) must be encoded as JSON strings prefixed with `0x` (hexadecimal encoding).
 
 </VanillaAdmonition>
-
 #### Start stream: (`daprovider_startChunkedStore`)
 
 **Arguments**:
@@ -1933,7 +1923,7 @@ The current default <Term id="client">client</Term> implementation relies on und
 
 Integrators can limit the maximum allowed size for individual chunk transmissions to manage server load.
 
-- **Limit Control:** Use the following flag on the Nitro node:
+- **Limit Control:** Use the following flag on the Nitro Node:
   `--node.da.external-provider.data-stream.max-store-chunk-body-size`
 - **Action:** The client will ensure that all `StreamChunk` requests, including overhead, do not exceed the size specified by this flag.
 
@@ -1955,7 +1945,6 @@ Implementing the required JSON-RPC endpoints can be reduced to simple wrappers a
 We use the `hexutil` types to correctly handle the required `0x`-prefixed integer encoding specified in [3. Implementing reader RPC methods](#3-implementing-reader-rpc-methods).
 
 </VanillaAdmonition>
-
 ```go
 func (s *Server) StartChunkedStore(ctx context.Context, timestamp, nChunks, chunkSize, totalSize, timeout hexutil.Uint64, sig hexutil.Bytes) (*data_streaming.StartStreamingResult, error) {
   return s.dataReceiver.StartReceiving(ctx, uint64(timestamp), uint64(nChunks), uint64(chunkSize), uint64(totalSize), uint64(timeout), sig)

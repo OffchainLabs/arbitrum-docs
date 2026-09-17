@@ -16,7 +16,6 @@ We will walk you through the entire process step by step, providing as much deta
 Arbitrum One supports two distinct forms of **USDC** (native and bridged). Before you deposit, see [USDC on Arbitrum One](/docs/arbitrum-bridge/usdc-arbitrum-one) so you receive the form you intend.
 
 </VanillaAdmonition>
-
 The only prerequisite for this quickstart is to have a Web3 <Term id="wallet">wallet</Term> installed, such as MetaMask or OKX Wallet. If you don’t have one installed, visit the [Arbitrum portal](https://portal.arbitrum.io/?categories=wallet) for a list of available wallets to download.
 
 ## Deposit **ETH** or **ERC-20** tokens (from parent chain to child chain)
@@ -59,14 +58,11 @@ To bridge your **ETH** or **ERC-20** tokens to a different chain, start by visit
 2. Ensure the **source** network is selected (from where you want to deposit your assets) at the top of the page.
 3. Select the **destination** network (where you want your assets to go), e.g., Arbitrum One.
 
-<VanillaAdmonition type="caution">
-
-Note that testnets like Arbitrum Sepolia only appear if you have an established connection to the appropriate parent testnet network (Ethereum Sepolia).
+<VanillaAdmonition type="warning" title="Note that testnets like Arbitrum Sepolia only appear if you have an established connection to the appropriate parent testnet network (Ethereum Sepolia).">
 
 Also note, that when choosing the **source** or **destination** network, a pop up will appear where you can make your selection (illustrated below).
 
 </VanillaAdmonition>
-
 <ImageZoom src="/img/arb-bridge-getting-started-users-2.png" alt="Add the desired network to your Web3 wallet" className="img-600px" />
 
 <ImageZoom src="/img/arb-bridge-getting-started-users-3.png" alt="Add the desired network to your Web3 wallet" className="img-600px" />
@@ -86,7 +82,6 @@ Also note, that when choosing the **source** or **destination** network, a pop u
 Please ensure you have sufficient **ETH** in your wallet to cover the transation costs; otherwise, the Web3 wallet pop-up will not appear.
 
 </VanillaAdmonition>
-
 <ImageZoom src="/img/arb-bridge-getting-started-users-6.png" alt="Enter the amount of tokens to bridge" className="img-600px" />
 
 After you submit the <Term id="transaction">transaction</Term> through your Web3 wallet, you can expect your funds to arrive on the destination chain within roughly 15-30 minutes (depending on chain congestion).
@@ -100,15 +95,13 @@ Also, ensure your wallet is set to the destination network so you can see when y
 Once you withdraw your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least seven days to receive them on the Ethereum mainnet. For more details, see [Arbitrum Bridge: Troubleshooting](/docs/arbitrum-bridge/troubleshooting#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-a-withdrawal-from-arbitrum-chains-one-and-nova). For the protocol-level reason behind the dispute window, see [Child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging) and the FAQ entry on [why one week was chosen](/docs/get-started/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window).
 
 </VanillaAdmonition>
-
 To bridge your funds back to the parent chain, you must be connected to the [Arbitrum bridge](https://bridge.arbitrum.io/) with your wallet and ensure you establish a connection to the source network (from which you want to withdraw assets) at the top of the page. Then, select the destination network (where you want your assets to go), e.g., Ethereum mainnet.
 
-<VanillaAdmonition type="caution">
+<VanillaAdmonition type="warning">
 
 Testnets like Arbitrum Sepolia only appear if you have an established connection to the appropriate parent testnet network (Ethereum Sepolia).
 
 </VanillaAdmonition>
-
 <ImageZoom src="/img/arb-bridge-getting-started-users-7.png" alt="Select the token to withdraw" className="img-600px" />
 
 1. Select the token you want to bridge in the token drop-down menu.
@@ -121,7 +114,6 @@ Testnets like Arbitrum Sepolia only appear if you have an established connection
 Please ensure you have sufficient **ETH** in your wallet to cover the transaction costs; otherwise, no Web3 wallet pop-up will appear.
 
 </VanillaAdmonition>
-
 <ImageZoom src="/img/arb-bridge-getting-started-users-8.png" alt="Enter the amount of token to withdraw" className="img-600px" />
 
 A countdown will appear stating that you'll receive your funds in 7-8 days.

@@ -1,9 +1,9 @@
 ---
 title: 'Finality and chain reorganizations'
-description: 'How finality works on Arbitrum chains, how and why a child chain can reorganize, how deep a reorg can go, and the confirmation levels an indexer should wait for before treating data as irreversible.'
 sidebar_label: 'Finality and reorgs'
+description: 'How finality works on Arbitrum chains, how and why a child chain can reorganize, how deep a reorg can go, and the confirmation levels an indexer should wait for before treating data as irreversible.'
 user_story: 'As a developer building an indexer or integration on an Arbitrum chain, I want to understand the confirmation levels, reorg behavior, and detection patterns so that my index never treats reversible data as final.'
-content_type: 'reference'
+content_type: reference
 author: petevielhaber
 sme: petevielhaber
 ---
@@ -12,17 +12,17 @@ This reference explains how finality works on <Term id="arbitrum">Arbitrum</Term
 
 This is intended for developers building indexers, block explorers, bridges, and custodial integrations, and it applies to <Term id="arbitrum-one">Arbitrum One</Term>, <Term id="arbitrum-nova">Nova</Term>, and Dedicated Blockchains (Arbitrum chains)—including <Term id="arbitrum-anytrust-protocol">AnyTrust</Term> chains that settle to another Arbitrum chain.
 
-For a step-by-step deposit and withdrawal detection procedure, see the [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/exchange-integration-checklist). This page provides the finality and reorg model that the checklist builds on.
+For a step-by-step deposit and withdrawal detection procedure, see the [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/exchange-integration-checklist). This page provides the finality and reorg model that the checklist builds on. For an introduction to soft and hard finality, see [Finality](/docs/how-arbitrum-works/deep-dives/finality).
 
 ## The three confirmation levels
 
 An Arbitrum node exposes three levels of confirmation, surfaced as the standard Ethereum JSON-RPC block tags. Each maps to a different point in the transaction lifecycle and carries a different reversibility guarantee.
 
-| Level                                                            | Block tag   | What it means                                                                                                                                                                                | Can it be reverted?                                                                               |
-| ---------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| <Term id="soft-confirmation">Soft confirmation</Term> | `latest`    | The <Term id="sequencer">Sequencer</Term> has ordered and executed the transaction and emitted it on the <Term id="sequencer-feed">Sequencer feed</Term>.              | Yes—this is a promise from the Sequencer, not yet backed by the parent chain.                     |
-| Parent-chain safe                                                | `safe`      | The <Term id="batch">batch</Term> containing the block has been posted to the <Term id="parent-chain">parent chain</Term> and reached the parent chain's `safe` block. | Only by a deep parent-chain reorg.                                                                |
-| Parent-chain final                                               | `finalized` | The batch containing the block has been posted to the parent chain and reached the parent chain's `finalized` block.                                                                         | Only if the parent chain itself reverts a finalized block (on Ethereum, economically infeasible). |
+| Level                                                | Block tag   | What it means                                                                                                                                                       | Can it be reverted?                                                                                |
+| ----------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| <Term id="soft-confirmation">Soft confirmation</Term> | `latest`    | The <Term id="sequencer">Sequencer</Term> has ordered and executed the transaction and emitted it on the <Term id="sequencer-feed">Sequencer feed</Term>.           | Yes—this is a promise from the Sequencer, not yet backed by the parent chain.                       |
+| Parent-chain safe                                     | `safe`      | The <Term id="batch">batch</Term> containing the block has been posted to the <Term id="parent-chain">parent chain</Term> and reached the parent chain's `safe` block. | Only by a deep parent-chain reorg.                                                                  |
+| Parent-chain final                                    | `finalized` | The batch containing the block has been posted to the parent chain and reached the parent chain's `finalized` block.                                                | Only if the parent chain itself reverts a finalized block (on Ethereum, economically infeasible).   |
 
 <VanillaAdmonition type="tip" title="The load-bearing rule">
 
@@ -60,11 +60,11 @@ The `safe` and `finalized` tags are always available on Arbitrum One and Nova. O
 
 The confirmation _model_ is identical across chains; what differs is which parent chain finality is inherited from, and therefore the latency.
 
-| Chain type                                   | Parent chain       | `finalized` inherits from                          | Approximate hard-finality latency                                       |
-| -------------------------------------------- | ------------------ | -------------------------------------------------- | ----------------------------------------------------------------------- |
-| Arbitrum One / Nova                          | Ethereum           | Ethereum `finalized` (~2 epochs, ~13 min)          | Time to post the batch, plus Ethereum finality.                         |
-| Arbitrum chain atop Ethereum (L2)            | Ethereum           | Ethereum `finalized`                               | Same as above.                                                          |
-| Arbitrum chain atop an L2 (L3, e.g. on Base) | The L2 (e.g. Base) | The L2's `finalized`, which itself tracks Ethereum | The L2's finality latency, which is bounded below by Ethereum finality. |
+| Chain type                                   | Parent chain        | `finalized` inherits from                          | Approximate hard-finality latency                                       |
+| --------------------------------------------- | -------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------- |
+| Arbitrum One / Nova                          | Ethereum            | Ethereum `finalized` (~2 epochs, ~13 min)            | Time to post the batch, plus Ethereum finality.                             |
+| Arbitrum chain atop Ethereum (L2)            | Ethereum            | Ethereum `finalized`                                 | Same as above.                                                              |
+| Arbitrum chain atop an L2 (L3, e.g. on Base) | The L2 (e.g. Base)  | The L2's `finalized`, which itself tracks Ethereum   | The L2's finality latency, which is bounded below by Ethereum finality.     |
 
 For an L3 on Base, `finalized` on your chain cannot be more final than Base's `finalized`, and Base's `finalized` ultimately tracks Ethereum. The DAC does not shorten this—it only affects how data is made available, not how the parent chain finalizes.
 
@@ -80,7 +80,7 @@ On an AnyTrust chain the <Term id="batch-poster">batch poster</Term> asks the DA
 
 - **Does not change the finality model.** Finality still tracks the parent chain. A DACert reaching parent-chain finality is what makes the block final; the DAC signature by itself is a data-availability guarantee.
 - **Does not change reorg behavior.** A DACert is posted to the Sequencer Inbox exactly like a full-data batch, so the reorg rules below apply unchanged.
-- **Affects liveness under DAC failure.** If the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter#4-the-data-is-routed-to-storage-da-handoff) cannot collect enough signatures within a few minutes, it falls back to posting the full batch data directly to the parent chain as calldata, and the chain keeps producing and finalizing blocks. Fallback can be disabled (`disable-dap-fallback-store-data-on-chain: true`), in which case a DAC outage halts batch posting. See [DAC and DAS operations](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-das-operations) for the full failure-mode table.
+- **Affects liveness under DAC failure.** If the batch poster cannot collect enough signatures within a few minutes, it falls back to posting the full batch data directly to the parent chain as calldata, and the chain keeps producing and finalizing blocks. Fallback can be disabled (`disable-dap-fallback-store-data-on-chain: true`), in which case a DAC outage halts batch posting. See [DAC and DAS operations](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-das-operations) for the full failure-mode table.
 
 ## The reorg model
 
@@ -103,10 +103,10 @@ After a reorg, the same block _number_ can hold different transactions with a di
 
 Child-chain reorg depth is bounded by parent-chain reorg depth, not by anything on the child chain and not by how often you post <Term id="assertion">assertions</Term>.
 
-A common misconception is to reason from the assertion (state-root) cadence: "we post state roots every hour, which at <Var name="l2BlockTimeMs" /> ms blocks is ~14,400 blocks, so a reorg could be 14,400 blocks deep." That conflates two independent things:
+A common misconception is to reason from the assertion (state-root) cadence: "we post state roots every hour, which at 250 ms blocks is ~14,400 blocks, so a reorg could be 14,400 blocks deep." That conflates two independent things:
 
 - **Assertions / state roots** are periodic settlement checkpoints posted to the Rollup contract for the dispute protocol. They do **not** cause or bound reorgs, and their cadence is irrelevant to reorg depth.
-- **Batches (data)** are posted continuously by the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter)—not on the assertion cadence. Reorgs are driven by parent-chain reorgs of these batches, and only for the batches that are not yet final on the parent chain.
+- **Batches (data)** are posted continuously by the batch poster—not on the assertion cadence. Reorgs are driven by parent-chain reorgs of these batches, and only for the batches that are not yet final on the parent chain.
 
 So the practical bound on a child-chain reorg is: **the child blocks whose batches were posted within the parent chain's unfinalized window.** For an indexer, this collapses to a simple rule:
 
@@ -132,11 +132,11 @@ Consequences for an indexer:
 
 On Ethereum, indexers often wait a fixed number of confirmations (for example, 12 blocks). That model does not translate to Arbitrum: child blocks are produced far faster than the parent chain finalizes, and reorg exposure is a function of parent-chain finality, not of a child-block count. Wait on the **block tag**, not on a fixed depth.
 
-| Use case                                                     | Wait for                                       | Rationale                                                                                   |
-| ------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Crediting deposits, releasing funds, any irreversible action | `finalized`                                    | Finalized parent-chain blocks do not revert, so a credited entry can never be reorged away. |
-| Low-value or reversible UX (pending balances, activity feed) | `safe`, or `latest` with active reorg handling | Faster, but you must be able to roll back if a reorg occurs.                                |
-| Real-time display only                                       | `latest`                                       | Sub-second, but explicitly provisional—label it as unconfirmed and expect it to change.     |
+| Use case                                                     | Wait for                                       | Rationale                                                                                    |
+| -------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Crediting deposits, releasing funds, any irreversible action | `finalized`                                    | Finalized parent-chain blocks do not revert, so a credited entry can never be reorged away.  |
+| Low-value or reversible UX (pending balances, activity feed) | `safe`, or `latest` with active reorg handling | Faster, but you must be able to roll back if a reorg occurs.                                 |
+| Real-time display only                                       | `latest`                                       | Sub-second, but explicitly provisional—label it as unconfirmed and expect it to change.       |
 
 If your chain does not expose `safe`/`finalized` (see the note above), treat the Sequencer tip as soft and derive your own finality signal from the parent chain—for example, by tracking which batches have reached the parent chain's `finalized` block.
 
@@ -188,15 +188,12 @@ This halts batch posting **only if fallback is disabled** (`disable-dap-fallback
 
 The Sequencer keeps producing soft-confirmed blocks on the feed, and the batch poster retries until it can post. Until a batch reaches parent-chain finality, those blocks are soft only—treat them as reversible for indexing purposes, even though they appear immediately on the feed.
 
-One case does not retry: if a posted batch reverts on the parent chain, the batch poster halts all posting and waits for an operator. See [Finality and feedback](/docs/how-arbitrum-works/deep-dives/batchposter#7-finality-and-feedback).
-
 ## Related resources
 
+- [Finality](/docs/how-arbitrum-works/deep-dives/finality) — an introduction to soft and hard finality, trust considerations, and when to rely on each.
 - [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/exchange-integration-checklist) — end-to-end deposit/withdrawal detection built on this model.
 - [Geth at the core](/docs/how-arbitrum-works/reference/geth) — transaction types, `ArbitrumInternalTx`, and `ReorgToOldBlock`.
-- [Finality](/docs/how-arbitrum-works/deep-dives/finality) — soft and hard finality, trust models, and which level to require per use case.
 - [The Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) — soft vs hard finality and batch posting.
-- [The batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) — batch building, the DA handoff, and the revert watcher that halts posting.
 - [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) — <Term id="keyset">keysets</Term>, DACerts, and the fallback to Rollup mode.
 - [DAC and DAS operations](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-das-operations) — DAC failure modes and fallback behavior.
 - [Block numbers and time](/docs/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time) — parent-chain block numbers on the child chain.

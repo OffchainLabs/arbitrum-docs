@@ -6,13 +6,12 @@ author: Jason Wan
 sme: Jason Wan
 ---
 
-<VanillaAdmonition type="caution">
+<VanillaAdmonition type="warning">
 
 The following instructions are meant for Arbitrum chains only. This article only applies to test environments. If you need support spinning up a production Arbitrum chain, we recommend contacting a [provider](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
 
 We also provide a [guide for running a high-availability sequencer node for an Arbitrum chain](/docs/run-a-node/high-availability-sequencer-docs).
 </VanillaAdmonition>
-
 This how-to provides step-by-step instructions for running a sequencer node on your local machine.
 
 For background on how sequencers fit into Arbitrum's data flow (batch posting, the sequencer feed, and how full nodes consume sequencer output), see [Data availability](/docs/run-a-node/data-availability). For how the sequencer role relates to the other Nitro node roles and the flags that define them, see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles).
@@ -20,7 +19,6 @@ For background on how sequencers fit into Arbitrum's data flow (batch posting, t
 ## Minimum hardware configuration
 
 The following are the minimum hardware configurations required to set up a <Term id="arbitrum-nitro">Nitro</Term> full node (not archival):
-
 
 <include cwd>content/partials/_hardware-requirements.mdx</include>
 
@@ -32,12 +30,11 @@ Please note that:
 
 ## Recommended Nitro version
 
-<VanillaAdmonition type="caution">
+<VanillaAdmonition type="warning">
 
 Even though there are alpha and beta versions of the Arbitrum Nitro software, only use release versions when running your node. Running alpha or beta versions is unsupported and might lead to unexpected behaviors.
 
 </VanillaAdmonition>
-
 Latest Docker image: <code><Var name="latestNitroNodeImage" /></code>
 
 ## Required parameters
@@ -112,8 +109,7 @@ This step is only required in Anytrust mode. For an explanation of AnyTrust mode
 As of Nitro v3.10.0, these settings live under `--node.da.anytrust.*` (the previous `--node.data-availability.*` namespace is deprecated), and the node no longer takes `sequencer-inbox-address` or `parent-chain-node-url` in this section — it uses the chain info and the `--parent-chain.connection.url` configuration instead.
 
 </VanillaAdmonition>
-
-Enable your node to send batches to a <Term id="data-availability-server-das">DAS</Term> and get DACerts from them.
+Enable your node to send batches to DAS and get DACerts from them.
 
 ```shell
 --node.da.anytrust.enable=true
@@ -132,7 +128,7 @@ Enable your node to send batches to a <Term id="data-availability-server-das">DA
 - Example:
 
   ```shell wordWrap=true
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 <Var name="latestNitroNodeImage" /> --node.sequencer=true --node.delayed-sequencer.enable=true --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1 --node.batch-poster.enable=true --node.batch-poster.max-calldata-batch-size=90000 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.staker.enable=true --node.staker.strategy=MakeNodes --node.staker.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.da.anytrust.enable=true --node.da.anytrust.max-batch-size=90000 --node.da.anytrust.rest-aggregator.enable=true --node.da.anytrust.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL> --node.da.anytrust.rpc-aggregator.enable=true --node.da.anytrust.rpc-aggregator.assumed-honest=1 --node.da.anytrust.rpc-aggregator.backends=<A list of RPC backends> --execution.sequencer.enable=true --execution.sequencer.max-tx-data-size=85000
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v3.11.3-beb2108 --node.sequencer=true --node.delayed-sequencer.enable=true --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1 --node.batch-poster.enable=true --node.batch-poster.max-calldata-batch-size=90000 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.staker.enable=true --node.staker.strategy=MakeNodes --node.staker.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.da.anytrust.enable=true --node.da.anytrust.max-batch-size=90000 --node.da.anytrust.rest-aggregator.enable=true --node.da.anytrust.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL> --node.da.anytrust.rpc-aggregator.enable=true --node.da.anytrust.rpc-aggregator.assumed-honest=1 --node.da.anytrust.rpc-aggregator.backends=<A list of RPC backends> --execution.sequencer.enable=true --execution.sequencer.max-tx-data-size=85000
   ```
 
   - Ensure that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the Docker container won't be able to write to it.
@@ -148,7 +144,7 @@ Enable your node to send batches to a <Term id="data-availability-server-das">DA
         "finalize-distance": 1
       },
       "batch-poster": {
-        "max-calldata-batch-size": 90000,
+        "max-size": 90000,
         "enable": true,
         "parent-chain-wallet": {
           "private-key": "<batch post key>"
@@ -161,19 +157,18 @@ Enable your node to send batches to a <Term id="data-availability-server-das">DA
           "port": "<Sequencer feed port>"
         }
       },
-      "da": {
-        "anytrust": {
+      "data-availability": {
+        "enable": true,
+        "sequencer-inbox-address": "<Sequencer inbox address>",
+        "parent-chain-node-url": "https://sepolia-rollup.arbitrum.io/rpc",
+        "rest-aggregator": {
           "enable": true,
-          "max-batch-size": 90000,
-          "rest-aggregator": {
-            "enable": true,
-            "urls": ["http://das-server:9877"]
-          },
-          "rpc-aggregator": {
-            "enable": true,
-            "assumed-honest": 1,
-            "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"}]"
-          }
+          "urls": ["http://das-server:9877"]
+        },
+        "rpc-aggregator": {
+          "enable": true,
+          "assumed-honest": 1,
+          "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"}]"
         }
       }
     },
@@ -199,6 +194,5 @@ chmod -fR 777 /data/arbitrum
 ## Optional parameters
 
 Here's a list of the parameters that are most commonly used when running your Arbitrum chain sequencer node. You can also use the flag `--help` for a comprehensive list of available parameters.
-
 
 <include cwd>content/partials/run-a-node/_optional-orbit-sequencer-compatible-cli-partial.mdx</include>

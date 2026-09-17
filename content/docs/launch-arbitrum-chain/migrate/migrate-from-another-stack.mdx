@@ -2,17 +2,19 @@
 title: 'Migrate from another stack to an Arbitrum chain'
 description: 'Migrate to Arbitrum chain from another stack'
 sidebar_label: 'Migrate from another stack'
+sidebar_position: '2'
 content_type: 'how-to'
-author: 'Lam'
-sme: 'Lam'
+author: Lam
+sme: Lam
 editor: 'anegg0'
+target_audience: 'Arbitrum chains owners and operators'
 ---
 
 ## Overview of the stack migration process
 
 <VanillaAdmonition type="warning">
 
-This document is provided for informational purposes only and does not constitute an end-to-end guide for executing the migration. <Term id="offchain-labs">Offchain Labs</Term> doesn’t have special knowledge or a private “fast path.” This document provides the extent of our guidance. Your current <Term id="raas">RaaS</Term> provider owns and executes the migration. We can provide [introductions to RaaSes](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
+This document is provided for informational purposes only and does not constitute an end-to-end guide for executing the migration. <Term id="offchain-labs">Offchain Labs</Term> doesn’t have special knowledge or a private “fast path.” This document provides the extent of our guidance. Your current <Term id="raas">RaaS</Term> provider owns and executes the migration. We can provide [introductions to RaaSes](../third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
 
 </VanillaAdmonition>
 
@@ -20,8 +22,8 @@ This document is provided for informational purposes only and does not constitut
 
 Teams typically migrate when they need one or more of the following:
 
-- **Lower fees**: <Term id="arbitrum-chain">Arbitrum chain</Term> Rollup or [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) for low <Term id="transaction">transaction</Term> fees.
-- **Various customization options**: Custom gas token, flexible DA, [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction), [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction), etc.
+- **Lower fees**: <Term id="arbitrum-chain">Arbitrum chain</Term> Rollup or AnyTrust for low <Term id="transaction">transaction</Term> fees.
+- **Various customization options**: Custom gas token, flexible DA, <Term id="timeboost">Timeboost</Term>, <Term id="bold">BoLD</Term>, etc.
 - **Mature tooling and ecosystem**: Bridges, indexers, wallets, monitoring, and partners with Arbitrum chain-ready integrations.
 
 ### Two migration paths
@@ -77,7 +79,6 @@ Expect a freeze window of hours for snapshot integrity. The full project timelin
 Pause withdrawals earlier than the main freeze window to ensure no funds get trapped in in-flight bridges (i.e., deposits paused at the start of the freeze and withdrawals paused earlier, as per bridge requirements).
 
 </VanillaAdmonition>
-
 ### How can we migrate without losing state? Ideally, we would like to keep the full state
 
 You can use the chain-state migration process. The two common approaches are:
@@ -98,7 +99,7 @@ Coordinate early with wallets, indexers, bridges, and oracles to repoint routes 
 
 ### What breaks with zk-specific features?
 
-Zero knowledge (zk) pre-compiles don’t carry over. Port logic to Solidity or [Stylus](/docs/stylus/gentle-introduction) or remove/replace functionality. Please check with your RaaS regarding this matter.
+Zero knowledge (zk) pre-compiles don’t carry over. Port logic to Solidity or <Term id="stylus">Stylus</Term> or remove/replace functionality. Please check with your RaaS regarding this matter.
 
 #### What is the process for migrating an existing chain on a different stack to Arbitrum chain?
 
@@ -116,7 +117,7 @@ The rest of this answer assumes that the team wants to perform the latter. For c
 #### Node Migration & Set Up:
 
 1. Freeze legacy chain writes and make RPC read-only:
-   1. Stop the legacy chain’s proposer/[Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) so no new blocks or transactions get created after the chosen upgrade block.
+   1. Stop the legacy chain’s proposer/<Term id="sequencer">Sequencer</Term> so no new blocks or transactions get created after the chosen upgrade block.
    2. Configure the legacy RPC to reject write methods (e.g., `eth_sendRawTransaction`) and only serve readable requests for historical data.
 2. Ensure that you can export required state from your EVM-compatible <Term id="client">client</Term> at the upgrade block.
 3. Expect a freeze window of hours (depends on state size) for snapshot integrity.
@@ -144,7 +145,7 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 #### 3 weeks before → 2 weeks before migration: build and test
 
 - [ ] RaaS: set up private Arbitrum chain
-- [ ] Testnet deployment: Sequencer, [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions), <Term id="bonder">Bonder</Term>, DA config.
+- [ ] Testnet deployment: Sequencer, <Term id="batch-poster">Batch Poster</Term>, <Term id="bonder">Bonder</Term>, DA config.
 - [ ] Inventory contracts & state: Addresses, precompiles, proxies, admin keys, governance
 - [ ] Stand up Dual-RPC gateway prototype: Route pre-migration range to old stack archive; post-migration to Arbitrum chain.
 - [ ] Prepare official asset list: Canonical bridge(s), authoritative token addresses, symbols, decimals.
@@ -166,7 +167,7 @@ Here is a rough outline of the tasks you need to complete to ensure a smooth cut
 - [ ] Stop old chain block/transaction production: disable proposer/sequencer, set legacy RPC to read-only, block `eth_sendRawTransaction` method, thus no new blocks or transactions.
 - [ ] Take a snapshot or confirm the last block for state replay
 - [ ] Bring up the new Arbitrum chain mainnet: import state or launch genesis.
-- [ ] Start batch poster/bonder and verify assertions on <Term id="L1">L1</Term>.
+- [ ] Start batch poster/bonder and verify assertions on <Term id="layer-1-l1">L1</Term>.
 - [ ] Flip DNS for RPC/explorer; enable dual-RPC gateway for historical queries
 - [ ] Open canonical bridges and publish asset list
 - [ ] Make announcements after all health checks clear and partner confirmations pass.

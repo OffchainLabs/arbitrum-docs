@@ -6,16 +6,15 @@ author: jose-franco
 sme: jose-franco
 ---
 
-When running a Nitro node for the first time on a chain that produced [classic blocks](/docs/arbitrum-essentials/public-chains#classic-deprecated) in the past (like <Term id="arbitrum-one">Arbitrum One</Term>), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a <Term id="database-snapshot">database snapshot</Term> using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/docs/run-a-node/run-full-node)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.
+When running a Nitro node for the first time on a chain that produced [classic blocks](/docs/arbitrum-essentials/public-chains#classic-deprecated) in the past (like Arbitrum One), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a database snapshot using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/docs/run-a-node/run-full-node)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.
 
 <VanillaAdmonition type="info" title="Is this How-to for you?">
 
 As mentioned, the recommended way of initializing a Nitro node is by using a pre-initialized database snapshot with the `--init.url` option. This guide is for those that are interested in re-creating the full state of the chain from the genesis block using their own classic node.
 
-Keep in mind that this process only applies to Arbitrum One. Other <Term id="arbitrum-chains">Arbitrum chains</Term> didn't produce <Term id="arbitrum-classic">classic</Term> blocks in the past, they started as Nitro chains.
+Keep in mind that this process only applies to Arbitrum One. Other Arbitrum chains didn't produce classic blocks in the past, they started as Nitro chains.
 
 </VanillaAdmonition>
-
 ## Prerequisites
 
 To successfully migrate the state and history of the chain from a classic (pre-Nitro) node to a Nitro node, you'll need:
@@ -27,21 +26,19 @@ To successfully migrate the state and history of the chain from a classic (pre-N
 
 Launch your classic node with the option `--node.rpc.nitroexport.enable=true`. All exported data will be written to directory "nitroexport" under the classic instance directory (e.g., `${HOME}/.arbitrum/mainnet/nitroexport`). Make sure the classic node has read the entire rollup state.
 
-<VanillaAdmonition type="caution" title="Caution">
+<VanillaAdmonition type="warning" title="Caution">
 
 Enabling the export options is only recommended for nodes with no public/external interfaces.
 
 </VanillaAdmonition>
-
 <VanillaAdmonition type="info" title="Exported file contents are not deterministic">
 
 Exporting the state of your own classic node should produce the same state as using files supplied by the Arbitrum Foundation (i.e., the same genesis blockhash). However, multiple exports of the same state will not necessarily create identical intermediate files. For example, state export is done in parallel, so the order of entries in the file is not deterministic.
 
 </VanillaAdmonition>
-
 ## Step 2: Export information from your classic node
 
-### Block and transaction history
+### Block & transaction history
 
 These are block headers, transactions and receipts executed in the classic node. Nitro node uses the history to be able to answer simple requests, like `eth_getTransactionReceipt`, from the classic history. The last block in the chain is the only one that affects the genesis block: timestamp is copied from the last block, and `parentHash` is taken from the last block's `blockHash`.
 
@@ -60,7 +57,7 @@ The rollup state is exported as a series of JSON files. State read from these JS
 
 This data does not impact consensus and is optional. It allows a Nitro node to provide the information required when executing a withdrawal made on the classic rollup.
 
-- Call the RPC method `arb_exportOutbox` with parameter `"0xffffffffffffffff"` to initiate <Term id="outbox">outbox</Term> export. It will return immediately.
+- Call the RPC method `arb_exportOutbox` with parameter `"0xffffffffffffffff"` to initiate outbox export. It will return immediately.
 - Calling `arb_exportOutboxStatus` will return the latest outbox batch exported, or an error if the export failed.
 - Data will be stored in the directory `nitroexport/nitro/classic-msg`.
 
@@ -69,12 +66,11 @@ This data does not impact consensus and is optional. It allows a Nitro node to p
 - Place the `l2chaindata` and `classic-msg` (if exported) directories in Nitro's instance directory (e.g., `${HOME}/.arbitrum/arb1-nitro/`).
 - Launch the Nitro node with the argument `--init.import-file=/path/to/state/index.json`
 
-<VanillaAdmonition type="caution" title="Caution">
+<VanillaAdmonition type="warning" title="Caution">
 
 This state import operation requires more resources than a regular run of a Nitro node.
 
 </VanillaAdmonition>
-
 ### Other useful Nitro options
 
 | Flag                       | Description                                                                                                                                                                                                                                                                       |

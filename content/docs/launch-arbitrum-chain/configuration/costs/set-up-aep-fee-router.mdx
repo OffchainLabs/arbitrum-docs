@@ -58,8 +58,8 @@ Here are a few flows to help visualize the deployment:
 <ImageZoom src="/img/arb-chain-aep-scenario-2.svg" alt="AEP scenario 2" className="img-800px" />
 
 <VanillaAdmonition type="info"  title="Please reach out if:">
-    1. Your chain is on another <Term id="L2">L2</Term> for which we do not have a `ChildToParent` router deployed
-    2. Your custom gas token is only available on the L2 and non-EVM <Term id="L1">L1</Term>
+    1. Your chain is on another <Term id="layer-2-l2">L2</Term> for which we do not have a `ChildToParent` router deployed
+    2. Your custom gas token is only available on the L2 and non-EVM <Term id="layer-1-l1">L1</Term>
 
 </VanillaAdmonition>
 
@@ -82,7 +82,7 @@ The script performs the following operations:
 
 3. Deploy the `ChildToParentRouter` contract, configured to send the amounts received to the appropriate target address on the parent chain.
 
-4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and 10% to the ChildToParentRouter contract deployed in the previous step.
+4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and <Var name="aepRevenueSharePercent" />% to the ChildToParentRouter contract deployed in the previous step.
 
 5. Set each of the fee collectors to the `RewardDistributor` contracts.
 
@@ -91,7 +91,6 @@ The script performs the following operations:
 If the same address collects all three fee types, only one `RewardDistributor` contract will be deployed, which will collect all those fees.
 
 </VanillaAdmonition>
-
 To configure the script, you need to specify the following [environment variables](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/setup-aep-fee-router/.env.example):
 
 - `ROLLUP_ADDRESS`: address of the rollup contract
@@ -180,7 +179,6 @@ The [router contracts repository](https://github.com/OffchainLabs/fund-distribut
 If the `ChildToParentRouter` is routing its chain's native token, this step should be skipped.
 
 </VanillaAdmonition>
-
 ```shell
 cast send <router_on_child_address> "routeToken()" --rpc-url <child_rpc_url> --private_key <private_key>
 ```

@@ -21,12 +21,12 @@ There are four fee types that are collected on every transaction of an Arbitrum 
 
 - **Parent chain base fee**: relative fees paid for posting the transaction on the <Term id="parent-chain">parent chain</Term>. This amount is calculated based on the transaction's estimated size and the current view of the parent chain's base fee.
 
-- **Parent chain surplus fee**: if configured, these are extra fees rewarded to the [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions).
+- **Parent chain surplus fee**: if configured, these are extra fees rewarded to the <Term id="batch-poster">Batch Poster</Term>.
 
 You can find more detailed information about these fee types in these pages:
 
-- [L2 fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-pricing) for the Arbitrum chain base fee and surplus fee
-- [L1 fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing) for the Parent chain base fee and surplus fee
+- [L2 fees](/docs/launch-arbitrum-chain/features/common/gas-and-fees#child-chain-gas-pricing) for the Arbitrum chain base fee and surplus fee
+- [L1 fees](/docs/launch-arbitrum-chain/features/common/gas-and-fees#parent-chain-gas-pricing) for the Parent chain base fee and surplus fee
 
 ## How to configure the fees collected?
 
@@ -53,12 +53,11 @@ const orbitMinimumBaseFee = await orbitChainClient.arbGasInfoReadContract({
 });
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 This minimum base fee defines the minimum value that the chain's base fee can have. However, in periods of congestion, the actual base fee might be higher than this minimum. Check the next section "Arbitrum chain surplus fee" for more information.
 
-:::
-
+</VanillaAdmonition>
 To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [`ArbOwner`](/docs/arbitrum-essentials/precompiles/reference#arbowner) precompile, and pass the new minimum base fee in `wei`. For example:
 
 ```shell
@@ -96,18 +95,16 @@ cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C 
 
 You can then calculate the current Arbitrum chain surplus fees as `currentBaseFee - minimumBaseFee`.
 
-:::note
+<VanillaAdmonition type="note">
 
 `getPricesInWei()` also returns the correspondent fees due to congestion in the second-to-last result of the returned tuple.
 
-:::
-
-:::info Arbitrum chain surplus fees are automatically adjusted
+</VanillaAdmonition>
+<VanillaAdmonition type="info" title="Arbitrum chain surplus fees are automatically adjusted">
 
 Arbitrum chains automatically adjust the Arbitrum chain surplus fee based on the traffic of the chain. If the gas consumed goes over the <Term id="gas-target">gas target</Term>, the chain's base fee will start increasing. Likewise, the base fee will gradually go down if demand of gas returns to below the configured gas target, until it reaches the minimum base fee configured.
 
-:::
-
+</VanillaAdmonition>
 ### Parent chain base fee
 
 To obtain the current parent chain base fee of your chain, you can call the method `getL1BaseFeeEstimate()(uint256)` of the [`ArbGasInfo`](/docs/arbitrum-essentials/precompiles/reference#arbgasinfo) precompile.
@@ -156,18 +153,16 @@ await orbitChainClient.sendRawTransaction({
 });
 ```
 
-:::info Parent chain base fees are automatically adjusted
+<VanillaAdmonition type="info" title="Parent chain base fees are automatically adjusted">
 
 Arbitrum chains are configured to automatically adjust the current parent chain base fee estimation based on the batch poster reports sent from the parent chain. That means that even though you can set a new parent chain base fee, the chain will automatically adjust it based on the reports received afterwards.
 
-:::
-
-:::info Parent chain base fee configuration for chains using a custom gas token
+</VanillaAdmonition>
+<VanillaAdmonition type="info" title="Parent chain base fee configuration for chains using a custom gas token">
 
 Arbitrum chains that use a custom gas token should have their parent chain base fees disabled (set to 0), to avoid charging users for a non-existent parent chain's base fee, as explained in [How to use a custom gas token](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup#configuration-of-the-rollup-when-using-a-custom-gas-token).
 
-:::
-
+</VanillaAdmonition>
 ### Parent chain surplus fee
 
 The parent chain surplus fee collected is based on a reward rate configured in the chain. To obtain this parameter, you can call the method `getL1RewardRate()(uint64)` of the [`ArbGasInfo`](/docs/arbitrum-essentials/precompiles/reference#arbgasinfo) precompile. This function will return the amount of `wei` per gas unit paid to the appropriate fee collector. For example:
@@ -228,12 +223,11 @@ Arbitrum chain base fees are paid to the `infraFeeAccount` configured in your ch
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getInfraFeeAccount() (address)"
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 The [`ArbOwner`](/docs/arbitrum-essentials/precompiles/reference#arbowner) precompile also has a `getInfraFeeAccount()(address)` method that can be used, but only by the owner of the chain.
 
-:::
-
+</VanillaAdmonition>
 Alternatively, you can use the Chain SDK to retrieve the current address configured as `infraFeeAccount`:
 
 ```typescript
@@ -282,12 +276,11 @@ Arbitrum chain surplus fees are paid to the `networkFeeAccount` configured in yo
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getNetworkFeeAccount() (address)"
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 The [`ArbOwner`](/docs/arbitrum-essentials/precompiles/reference#arbowner) precompile also has a `getNetworkFeeAccount()(address)` method that can be used, but only by the owner of the chain.
 
-:::
-
+</VanillaAdmonition>
 Alternatively, you can use the Chain SDK to retrieve the current address configured as `networkFeeAccount`:
 
 ```typescript
@@ -362,15 +355,16 @@ You can also query batch posters by calling the `getBatchPosters()(address[])` m
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
 ```
 
-:::caution
+<VanillaAdmonition type="warning">
+
 The list returned by `ArbAggregator.getBatchPosters()` may be incomplete. It only includes:
 
 - Addresses that have been manually added via `addBatchPoster()`
 - Addresses that have successfully posted at least one batch
 
 This method is primarily used for fee management purposes, not for authoritative permission verification. Always verify batch poster permissions against the `SequencerInbox` contract on the parent chain.
-:::
 
+</VanillaAdmonition>
 #### Managing fee collectors
 
 Once you have the batch poster address, you can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)(address)` of the [`ArbAggregator`](/docs/arbitrum-essentials/precompiles/reference#arbaggregator) precompile:
@@ -395,12 +389,14 @@ const networkFeeAccount = await orbitChainClient.arbAggregatorReadContract({
 
 #### Setting a fee collector
 
-:::important
+<VanillaAdmonition type="info">
+
 Before calling `ArbAggregator.setFeeCollector()`, you must ensure the batch poster address is already registered in the `BatchPostersTable`. This is done either by:
 
 - Manually calling `ArbAggregator.addBatchPoster()` for the address, or
 - The address having successfully posted at least one batch
-  :::
+
+</VanillaAdmonition>
 
 To set a new fee collector for a specific batch poster, use the method `setFeeCollector(address, address)` of the [`ArbAggregator`](/docs/arbitrum-essentials/precompiles/reference#arbaggregator) precompile:
 
@@ -445,12 +441,11 @@ If you want to configure a fee collector before the batch poster sends its first
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "addBatchPoster(address) ()" $NEW_BATCH_POSTER_ADDRESS
 ```
 
-:::note
+<VanillaAdmonition type="note">
 
 When setting a new batch poster, its fee collector will be configured to the same address by default.
 
-:::
-
+</VanillaAdmonition>
 ### Parent chain surplus fee
 
 Parent chain surplus fees are paid to a specific `L1RewardRecipient` address that is configured individually per chain. The current fee collector address can be obtained by calling the method `getL1RewardRecipient()(address)` of the [`ArbGasInfo`](/docs/arbitrum-essentials/precompiles/reference#arbgasinfo) precompile. For example:
@@ -505,12 +500,11 @@ In the previous section we described how to set the individual collector address
 
 This section shows how to configure a distributor contract to manage the fees of a specific type.
 
-:::info Example scripts available in the Chain SDK
+<VanillaAdmonition type="info" title="Example scripts available in the Chain SDK">
 
 This section will explain the process of deploying and configuring a distribution contract manually, but the Chain SDK includes an [example to perform this process through a script](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/setup-fee-distributor-contract).
 
-:::
-
+</VanillaAdmonition>
 ### Step 1. Deploy the distributor contract
 
 An example implementation of a distributor contract can be found [in the fund-distribution-contracts repo](https://github.com/OffchainLabs/fund-distribution-contracts/blob/main/src/RewardDistributor.sol). You'll have to deploy this contract on your Arbitrum chain.

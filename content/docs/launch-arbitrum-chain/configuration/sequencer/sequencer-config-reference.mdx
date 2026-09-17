@@ -1,11 +1,11 @@
 ---
 title: 'Sequencer configuration reference'
-description: 'Operational guidance for sequencer flags, including expected surplus thresholds, block production timing, and sequencer coordinator tuning.'
 sidebar_label: 'Configuration reference'
-user_story: As an Arbitrum chain operator, I need to understand what each sequencer flag does and what happens when I change it, so I can tune my sequencer safely.
-content_type: 'reference'
+description: 'Operational guidance for sequencer flags, including expected surplus thresholds, block production timing, and sequencer coordinator tuning.'
 author: pete-vielhaber
 sme: jasonw-123
+user_story: As an Arbitrum chain operator, I need to understand what each sequencer flag does and what happens when I change it, so I can tune my sequencer safely.
+content_type: 'reference'
 ---
 
 This page explains what the operational <Term id="sequencer">sequencer</Term> flags do and what changes when you set them. For the complete list of every Nitro flag, see the [CLI flags reference](/docs/run-a-node/nitro/cli-flags-reference). For failure diagnosis, see [Sequencer troubleshooting](/docs/launch-arbitrum-chain/operate/sequencer-troubleshooting).
@@ -40,7 +40,7 @@ Selects how the sequencer prices the backlog it has not yet posted. Default: `Bl
 | `CalldataPrice`     | Parent chain base fee per calldata unit                       | Correct when you post calldata rather than blobs                                    |
 | `CalldataPrice7623` | Base fee scaled by 40/16 to model the EIP-7623 calldata floor | Correct when you post calldata and the parent chain charges the EIP-7623 floor cost |
 
-<VanillaAdmonition type="caution" title="The accepted value is CalldataPrice7623">
+<VanillaAdmonition type="warning" title="The accepted value is CalldataPrice7623">
 
 Nitro's own `--help` output lists this value as `CalldataPrice7523`. That string is a typo in the help text. The sequencer validates against `CalldataPrice7623`, matching [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623). Passing `CalldataPrice7523` fails at startup with `undefined expected-surplus-gas-price-mode`.
 

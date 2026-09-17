@@ -1,6 +1,6 @@
-<!--
+{/*
     Breaking the title ordering here (it should be h3 instead of h4) so these titles don't appear in the right-hand sidebar
--->
+*/}
 
 #### 1. Parent chain parameters
 
@@ -10,24 +10,22 @@ The `--parent-chain.connection.url` parameter needs to provide a standard RPC en
 --parent-chain.connection.url=<Parent chain RPC URL>
 ```
 
+<VanillaAdmonition type="info" title="Try it out">
+
+If you choose to self-host an EVM node, the [Prysm client software](https://www.offchainlabs.com/prysm/docs) is a great choice. It's straightforward, efficient, and effective—ensuring your setup runs smoothly!
+
+</VanillaAdmonition>
 Additionally, if the chain is a Layer-2 (L2) chain on top of Ethereum and uses blobs to post calldata, use the parameter `--parent-chain.blob-client.beacon-url` to provide a beacon chain RPC endpoint:
 
 ```shell
 --parent-chain.blob-client.beacon-url=<Parent chain beacon chain RPC URL>
 ```
 
-<VanillaAdmonition type="tip" title="Self-hosting the Ethereum node">
-
-If you self-host the Ethereum node, you need both an execution layer client and a consensus layer client. For the consensus layer, the [Prysm client software](https://www.offchainlabs.com/prysm/docs) is a great choice. It's straightforward, efficient, and effective—ensuring your setup runs smoothly!
-
-</VanillaAdmonition>
-
 <VanillaAdmonition type="info" title="Public Arbitrum RPC endpoints">
 
 [Public Arbitrum RPC endpoints](/docs/arbitrum-essentials/reference/node-providers#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
 
 </VanillaAdmonition>
-
 You can find beacon providers in our [list of Ethereum beacon chain RPC providers](/docs/run-a-node/l1-ethereum-beacon-chain-rpc-providers). Note that historical blob data is required for these chains to properly sync up if they are new or have been offline for more than 18 days. This means that the beacon chain RPC endpoint you use may also need to provide historical blob data. Please see [Special notes on ArbOS 20: Atlas support for EIP-4844](/docs/run-a-node/arbos-releases/arbos20#special-notes-on-arbos-20-atlas-support-for-eip-4844) for more details.
 
 #### 2. Child chain parameters
@@ -66,13 +64,13 @@ Use the parameter `--execution.forwarding-target` to point at the sequencer node
 
 #### 3. Additional parameters for AnyTrust chains
 
-If you're running a node for an AnyTrust chain, you need to specify information about the Data Availability Committee (DAC) in the configuration of your node.
+If you're running a node for an Anytrust chain, you need to specify information about the Data Availability Committee (DAC) in the configuration of your node.
 
-First, enable AnyTrust data availability using the following parameters (prior to Nitro v3.10.0, these lived under the now-deprecated `--node.data-availability.*` namespace):
+First, enable `data-availability` using the following parameters:
 
 ```shell
---node.da.anytrust.enable
---node.da.anytrust.rest-aggregator.enable
+--node.data-availability.enable
+--node.data-availability.rest-aggregator.enable
 ```
 
 Then, choose one of these methods to specify the DAS REST endpoints that your node will read the information from. These endpoints should also be provided by the chain owner.
@@ -80,19 +78,19 @@ Then, choose one of these methods to specify the DAS REST endpoints that your no
     1. Set the DAS REST endpoints directly:
 
     ```shell
-    --node.da.anytrust.rest-aggregator.urls=<A list of DAS REST endpoints, separated by commas>
+    --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, separated by commas>
     ```
 
     2. Set a URL that returns a list of the DAS REST endpoints:
 
     ```shell
-    --node.da.anytrust.rest-aggregator.online-url-list=<A URL that returns a list of the DAS REST endpoints>
+    --node.data-availability.rest-aggregator.online-url-list=<A URL that returns a list of the DAS REST endpoints>
     ```
 
 <VanillaAdmonition type="tip" title="Setting a DAS (for chain owners)">
 
-If you are a chain owner, please refer to the [DAC setup guide](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started#if-you-are-a-chain-owner) to set it up.
+If you are a chain owner, please refer to the [DAC setup guide](/docs/launch-arbitrum-chain/chain-config/data-availability/dac-get-started#if-you-are-a-chain-owner) to set it up.
 
-Additionally, for your batch poster to post data to the DAS, follow [Step 3 of How to configure a DAC](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/configure-dac#step-3-craft-the-new-configuration-for-the-batch-poster) to configure your batch poster node.
+Additionally, for your batch poster to post data to the DAS, follow [Step 3 of How to configure a DAC](/docs/launch-arbitrum-chain/chain-config/data-availability/configure-dac#step-3-craft-the-new-configuration-for-the-batch-poster) to configure your batch poster node.
 
 </VanillaAdmonition>

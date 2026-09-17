@@ -24,7 +24,6 @@ Some use cases are:
 
 Here we will use [`stylus-sdk::crypto::keccak`](https://docs.rs/stylus-sdk/latest/stylus_sdk/crypto/fn.keccak.html) to calculate the keccak256 hash of the input data:
 
-
 <include cwd>content/partials/_not-for-production-banner-partial.mdx</include>
 
 ```rust
@@ -143,7 +142,6 @@ impl Hasher {
         // hash the encoded data
         keccak(tx_hash_data_encode_packed).into()
     }
-
 
     // The func example: "transfer(address,uint256)"
     pub fn encode_with_signature(

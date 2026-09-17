@@ -290,7 +290,7 @@ impl Hashes {
 
 Storage collections provide persistent arrays, vectors, and maps.
 
-<VanillaAdmonition type="note" title="`.set()` vs `.setter()` — when to use each">
+<VanillaAdmonition type="note" title=".set() vs .setter() — when to use each">
 
 - **Primitives** (`StorageUint`, `StorageAddress`, `StorageBool`, …): call `.set(value)` directly to write.
 - **Collections** (`StorageMap`, `StorageVec`, `StorageArray`): call `.setter(key)` to obtain a `StorageGuardMut` handle, then `.set(value)`, `.get()`, or `.erase()` on it. The guard enforces Rust's borrow rules and prevents storage aliasing at compile time.

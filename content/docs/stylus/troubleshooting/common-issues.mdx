@@ -50,7 +50,7 @@ source ~/.bashrc  # or source ~/.zshrc
 rustup target add wasm32-unknown-unknown
 
 # If using specific toolchain
-rustup target add wasm32-unknown-unknown --toolchain <Var name="stylusRustToolchain" />
+rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
 **Verify**:
@@ -112,7 +112,7 @@ wasm-opt -Oz target/wasm32-unknown-unknown/release/your_contract.wasm \
 
 ```toml
 # Remove unnecessary features
-stylus-sdk = { version = "<Var name="stylusSdkVersion" />", default-features = false }
+stylus-sdk = { version = "0.10.7", default-features = false }
 ```
 
 4. **Check binary size**:
@@ -383,7 +383,7 @@ mod tests {
 
 ```toml
 [toolchain]
-channel = "<Var name="stylusRustToolchainFull" />"
+channel = "1.91.0"
 components = ["rustfmt", "clippy"]
 targets = ["wasm32-unknown-unknown"]
 ```

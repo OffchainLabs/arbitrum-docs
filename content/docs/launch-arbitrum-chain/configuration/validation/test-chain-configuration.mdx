@@ -1,7 +1,7 @@
 ---
 title: 'Configure a test Arbitrum chain'
-description: 'Configure a non-production Arbitrum chain so that assertions post and confirm in seconds rather than days, and understand which parameters differ on testnets.'
 sidebar_label: 'Test chain configuration'
+description: 'Configure a non-production Arbitrum chain so that assertions post and confirm in seconds rather than days, and understand which parameters differ on testnets.'
 user_story: As an Arbitrum chain developer, I want assertions to confirm quickly on my test chain so that integration tests do not wait out a production challenge period.
 content_type: 'how-to'
 author: pete-vielhaber
@@ -10,7 +10,7 @@ sme: TBD
 
 On a production Arbitrum chain, an <Term id="assertion">assertion</Term> takes about a week to confirm (6.4 days). That delay is the security model working as intended, but it makes integration testing impractical. This page covers how to shorten it on a chain you do not need to secure. It also covers which parameters differ on a testnet.
 
-<VanillaAdmonition type="caution" title="These values are unsafe for production">
+<VanillaAdmonition type="warning" title="These values are unsafe for production">
 
 Every value on this page trades security for speed. A chain configured this way offers no meaningful dispute window, so an incorrect <Term id="assertion">assertion</Term> can be confirmed before anyone has time to dispute it — and if the validator allowlist is disabled, any address can trigger that confirmation. Use these settings only on chains that hold no value.
 
@@ -63,11 +63,11 @@ The interaction between `minimumAssertionPeriod` and the posting interval is the
 
 These are Nitro flags, set per validator. Lower them so your validator acts promptly inside the onchain floor you configured above.
 
-<!--
+{/*
 SME REVIEW: defaults below read from OffchainLabs/nitro at a618155
 (staker/bold/bold_staker.go:138-158 for BoLD, staker/legacy/staker.go:171-191
 for legacy). Confirm they still match the Nitro release this page targets.
--->
+*/}
 
 | Flag                                          | Default  | Applies to    | For a test chain                                                                           |
 | --------------------------------------------- | -------- | ------------- | ------------------------------------------------------------------------------------------ |

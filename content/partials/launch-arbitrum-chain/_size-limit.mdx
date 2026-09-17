@@ -1,9 +1,8 @@
-:::info
+<VanillaAdmonition type="info">
 
 The `chainId` and `InitialChainOwner` parameters must be equal to the `chainId` and `owner` defined in the `Config` struct.
 
-:::
-
+</VanillaAdmonition>
 #### `MaxCodeSize` limitations
 
 - Entering a contract requires reading its code from the database, which means larger code requires more work. The EVM doesn't charge differently based on code size, but the computation cost could vary. However, that doesn't seem to be a strict limit compared to the readability aspect.
@@ -34,4 +33,3 @@ The conclusion is that using a 96KB code size limit is conservative and safe.
 | Config A | 24kb | 48kb |
 | Config B | 48kb | 96kb |
 
-:::

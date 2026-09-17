@@ -8,7 +8,7 @@ author: pete-vielhaber
 sme: jason-w123
 ---
 
-The [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the <Term id="parent-chain">parent chain</Term>. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions aren't included promptly.
+The <Term id="batch-poster">Batch Poster</Term> relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the <Term id="parent-chain">parent chain</Term>. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions aren't included promptly.
 
 This guide covers how to tune fee-related parameters to balance cost efficiency against batch posting reliability. For initial setup of blob posting, see [Enabling blob transactions](/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs). For general batch poster configuration, see [Run a batch poster](/docs/run-a-node/run-batch-poster).
 
@@ -81,12 +81,11 @@ Each duration triggers a replacement attempt with a higher fee. The schedule sta
 4. If gas prices exceed [`node.batch-poster.data-poster.target-price-gwei` formula](https://github.com/OffchainLabs/nitro/blob/02a590530cffa9a1f79ab8f692d66582b2ec4371/arbnode/dataposter/data_poster.go#L1451), the data poster pauses new batch submissions until prices decrease.
 5. During this pause, batches queue up. Once prices fall, the data poster resumes and works through the backlog.
 
-<VanillaAdmonition type="caution">
+<VanillaAdmonition type="warning">
 
 If the data poster pauses due to gas prices exceeding the fee cap for an extended period, unposted batches accumulate. Monitor your batch posting logs for signs of a growing backlog. See [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting) for guidance on diagnosing and resolving backlogs.
 
 </VanillaAdmonition>
-
 ## Tuning recommendations
 
 The right fee configuration depends on your chain’s activity level and cost sensitivity. The following table provides general guidance:

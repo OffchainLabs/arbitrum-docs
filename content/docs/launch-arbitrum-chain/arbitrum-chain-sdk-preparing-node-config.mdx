@@ -5,8 +5,8 @@ user_story: As a current or prospective Arbitrum chain deployer, I need to under
 content_type: 'how-to'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
 ---
-
 
 <include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>
 
@@ -57,26 +57,23 @@ The following table briefly describes the type of parameters that can be configu
 
 ### Additional configuration for Arbitrum AnyTrust chains:
 
-For [Arbitrum AnyTrust chains](/docs/how-arbitrum-works/deep-dives/anytrust-protocol), the Nitro node configuration object has an additional `da.anytrust` segment under the `node` field to configure the AnyTrust-specific properties (prior to Nitro v3.10.0, this segment was named `data-availability` and also held the `sequencer-inbox-address` and `parent-chain-node-url` keys, which current versions no longer accept):
+For <Term id="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</Term>, the Nitro node configuration object has an additional segment under the `node` field to configure the AnyTrust specific properties:
 
 ```typescript
 {
   ...
   "node": {
     ...
-    "da": {
-      "anytrust": {
-        "enable": true,
-        "rest-aggregator": {
-          "enable": true,
-          "urls": "http://localhost:9877",
-        },
-        "rpc-aggregator": {
-          "enable": true,
-          "assumed-honest": 3,
-          "backends": "[...]",
-        },
-      },
+    "sequencer-inbox-address": "0xSequencerInbox",
+    "parent-chain-node-url": "http://parentChainRpcUrl",
+    "rest-aggregator": {
+      "enable": true,
+      "urls": "http://localhost:9876",
+    },
+    "rpc-aggregator": {
+      "enable": true,
+      "assumed-honest": 3,
+      "backends": "[...]",
     },
   }
   ...
@@ -94,7 +91,6 @@ Let's look at what methods to use for generating a configuration file for the Ni
 The Arbitrum Chain SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/prepare-node-config/index.ts) script.
 
 </VanillaAdmonition>
-
 ### 1. Gather information from the deployed chain
 
 To generate the configuration file for your node, you'll need the following information:
@@ -115,7 +111,6 @@ Below is an example of how to use `prepareNodeConfig` to obtain the node configu
 This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node.
 
 </VanillaAdmonition>
-
 ```typescript
 import { createPublicClient, http } from 'viem';
 import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, ChainConfig, prepareNodeConfig } from '@arbitrum/chain-sdk';
@@ -151,8 +146,6 @@ const nodeConfig = prepareNodeConfig({
 `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
 
 After generating the node configuration object, it can be saved to a file for later use by the Nitro node.
-
-If the chain uses a custom genesis, also give the node the generated `genesis.json` on its first startup by setting `--init.genesis-json-file`. Follow [Generate a custom genesis file with the Chain SDK](/docs/launch-arbitrum-chain/deploy/custom-genesis-state#initialize-every-nitro-node) to keep the node's file consistent with the genesis assertion committed during deployment.
 
 ### 3. Next step
 

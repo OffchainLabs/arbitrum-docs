@@ -4,8 +4,8 @@ description: 'Learn how to import Solidity interfaces and call external contract
 sidebar_label: 'Importing interfaces'
 user_story: 'As a Rust developer building Stylus smart contracts, I want to interact with other contracts on the blockchain'
 content_type: 'how-to'
-author: 'anegg0'
-sme: 'anegg0'
+author: anegg0
+sme: anegg0
 ---
 
 Interfaces enable your Stylus contract to interact with other contracts on the blockchain, regardless of whether they're written in Solidity, Rust, or another language. This guide shows you how to import and use external contract interfaces in your Stylus smart contracts.
@@ -44,8 +44,8 @@ cargo install --force cargo-stylus
 Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The example below sets your default Rust toolchain to <Var name="stylusRustToolchain" />, as well as adding the WASM build target:
 
 ```shell
-rustup default <Var name="stylusRustToolchain" />
-rustup target add wasm32-unknown-unknown --toolchain <Var name="stylusRustToolchain" />
+rustup default 1.91
+rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
 You can verify that `cargo stylus` is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.

@@ -1,11 +1,11 @@
 ---
 title: 'Batch poster: External signing (KMS)'
-description: "Learn how to integrate external signing—including AWS KMS—for your chain's batch poster."
 sidebar_label: 'KMS and signing services'
-user_story: As an Arbitrum chain operator, I want to integrate KMS and signing services for my batch poster.
-content_type: 'how-to'
+description: "Learn how to integrate external signing—including AWS KMS—for your chain's batch poster."
 author: pete-vielhaber
 sme: jason-w123
+user_story: As an Arbitrum chain operator, I want to integrate KMS and signing services for my batch poster.
+content_type: 'how-to'
 ---
 
 Nitro's batch poster (and staker) sign their parent chain transactions through the **DataPoster** component. By default, it signs locally with a private key, but it also supports **generic RPC-based external signing**: instead of holding the key, Nitro sends an unsigned transaction to a remote signer over (m)TLS, gets back a signed transaction, and independently verifies it.
@@ -31,12 +31,12 @@ There is **no native AWS KMS integration** in the Nitro codebase. KMS support is
 The config struct is `ExternalSignerCfg`:
 
 | Field                | koanf key              | Purpose                                                                                      |
-| -------------------- | ---------------------- | -------------------------------------------------------------------------------------------- |
+| --------------------- | ------------------------ | ----------------------------------------------------------------------------------------------- |
 | `URL`                | `url`                  | RPC endpoint of the signer. **Setting this enables external signing** (overrides local key). |
 | `Address`            | `address`              | Hex Ethereum address the signer controls; used to verify returned signatures.                |
 | `Method`             | `method`               | RPC method name, e.g., `eth_signTransaction`.                                                |
 | `RootCA`             | `root-ca`              | (Optional) CA cert to trust — enables self-signed server certs.                              |
-| `ClientCert`         | `client-cert`          | (Optional) client cert for mTLS.                                                             |
+| `ClientCert`         | `client-cert`          | (Optional) client cert for mTLS.                                                              |
 | `ClientPrivateKey`   | `client-private-key`   | (Optional) client key for mTLS (required if `client-cert` set).                              |
 | `InsecureSkipVerify` | `insecure-skip-verify` | Skip server TLS verification (not recommended).                                              |
 

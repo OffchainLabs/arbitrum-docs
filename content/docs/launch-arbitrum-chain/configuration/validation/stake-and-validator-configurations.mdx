@@ -7,7 +7,7 @@ sme: Jason-W123
 unlisted: true
 ---
 
-<Term id="arbitrum">Arbitrum</Term> chains are customizable Layer 3 (L3) chains that settle to an Arbitrum Layer 2 (<Term id="L2">L2</Term>) chain, such as Arbitrum One. They support <Term id="validator">validator</Term> configurations to ensure chain security through bonding and [assertion](/docs/how-arbitrum-works/deep-dives/assertions) challenges. Validators post assertions about the chain's state on the parent L2 chain and can <Term id="challenge">challenge</Term> incorrect assertions. <Term id="arbitrum-chains">Arbitrum Chains</Term> can be permissioned, meaning validators must be allowlisted. For chains that use that elect to use the [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) protocol, <Term id="permissionless-validation">permissionless validation</Term> is an option (BoLD also supports permissioned validation).
+<Term id="arbitrum">Arbitrum</Term> chains are customizable Layer 3 (L3) chains that settle to an Arbitrum Layer 2 (<Term id="layer-2-l2">L2</Term>) chain, such as Arbitrum One. They support <Term id="validator">validator</Term> configurations to ensure chain security through bonding and <Term id="assertion">assertion</Term> challenges. Validators post assertions about the chain's state on the parent L2 chain and can <Term id="challenge">challenge</Term> incorrect assertions. <Term id="arbitrum-chains">Arbitrum Chains</Term> can be permissioned, meaning validators must be allowlisted. For chains that use that elect to use the <Term id="bold">BoLD</Term> protocol, <Term id="permissionless-validation">permissionless validation</Term> is an option (BoLD also supports permissioned validation).
 
 Bonding is required for active validation, where validators place bond funds to participate. If a validator loses a challenge (e.g., due to a faulty assertion), their bond is escrowed or burned. Configurations such as the `stakeToken`, `baseStake`, and `loserStakeEscrow` are configurable during chain deployment or post-deployment via contract calls.
 
@@ -358,7 +358,7 @@ Validators are configured during chain deployment and can be run post-launch. Ar
 Start with the base configuration for a full node, then add validator-specific flags. Use a Docker command to run the Nitro node image (replace placeholders like version numbers, RPC URLs, and chain IDs with your specifics). For example, on Arbitrum One (chain ID 42161):
 
 ```shell
-docker run --rm -it -v /path/to/local/dir/arbitrum:/home/user/.arbitrum <Var name="latestNitroNodeImage" /> \
+docker run --rm -it -v /path/to/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v3.11.3-beb2108 \
   --parent-chain.connection.url=https://your-l1-rpc-url:8545 \
   --chain.id=42161 \
   --node.staker.enable=true \
@@ -398,7 +398,7 @@ Run the command in a persistent setup (e.g., using Docker Compose or a systemd s
 If you need a new wallet specifically for validation, use Nitro to generate one:
 
 ```shell
-docker run --rm -it -v /path/to/local/dir/arbitrum:/home/user/.arbitrum <Var name="latestNitroNodeImage" /> \
+docker run --rm -it -v /path/to/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v3.11.3-beb2108 \
   --parent-chain.connection.url=https://your-l1-rpc-url:8545 \
   --chain.id=42161 \
   --node.staker.enable=true \
@@ -427,7 +427,6 @@ Keep your node synced and monitor it regularly to ensure it contributes effectiv
 Refer to the [Run a full node](/docs/run-a-node/run-full-node) article for instructions on how to get up and running.
 
 </VanillaAdmonition>
-
 ### Assertion interval
 
 Default to 15 minutes for new assertions (via `--node.bold.assertion-posting-interval` (BoLD) or `--node.staker.make-assertion-interval` (Legacy ~1 hour is default)); must exceed the Rollup's `minimumAssertionPeriod` (~15 minutes).

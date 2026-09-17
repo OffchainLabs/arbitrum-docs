@@ -1,6 +1,6 @@
-<!--
+{/*
     Breaking the title ordering here (it should be h3 instead of h4) so these titles don't appear in the right-hand sidebar
--->
+*/}
 
 #### 1. Parent chain (Ethereum) parameters
 
@@ -16,12 +16,11 @@ Additionally, use the parameter `--parent-chain.blob-client.beacon-url` to provi
 --parent-chain.blob-client.beacon-url=<Ethereum beacon chain RPC URL>
 ```
 
-<VanillaAdmonition type="tip" title="Self-hosting the Ethereum node">
+<VanillaAdmonition type="info" title="Try it out">
 
-If you self-host the Ethereum node, you need both an execution layer client and a consensus layer client. For the consensus layer, the [Prysm client software](https://www.offchainlabs.com/prysm/docs) is a great choice. It's straightforward, efficient, and effective—ensuring your setup runs smoothly!
+If you choose to self-host an EVM node, the [Prysm client software](https://www.offchainlabs.com/prysm/docs) is a great choice. It's straightforward, efficient, and effective—ensuring your setup runs smoothly!
 
 </VanillaAdmonition>
-
 You can also consult our [list of Ethereum beacon chain RPC providers](/docs/run-a-node/l1-ethereum-beacon-chain-rpc-providers). Note that historical blob data is required for these chains to properly sync up if they are new or have been offline for more than 18 days. The beacon chain RPC endpoint you use may also need to provide historical blob data. Please see [Special notes on ArbOS 20: Atlas support for EIP-4844](/docs/run-a-node/arbos-releases/arbos20#special-notes-on-arbos-20-atlas-support-for-eip-4844) for more details.
 
 #### 2. Arbitrum chain parameters

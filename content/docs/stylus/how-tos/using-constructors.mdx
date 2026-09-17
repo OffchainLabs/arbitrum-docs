@@ -4,8 +4,8 @@ description: 'A comprehensive guide to implementing and deploying smart contract
 sidebar_label: 'Using constructors'
 user_story: 'As a Rust developer, I want to understand how to implement and use constructors in Stylus smart contracts'
 content_type: 'how-to'
-author: 'anegg0'
-sme: 'anegg0'
+author: anegg0
+sme: anegg0
 ---
 
 Constructors allow you to initialize your Stylus smart contracts with specific parameters when deploying them. This guide will show you how to implement constructors in Rust, understand their behavior, and deploy contracts using them.
@@ -41,8 +41,8 @@ cargo install --force cargo-stylus
 Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to <Var name="stylusRustToolchain" /> as well as adding the WASM build target:
 
 ```shell
-rustup default <Var name="stylusRustToolchain" />
-rustup target add wasm32-unknown-unknown --toolchain <Var name="stylusRustToolchain" />
+rustup default 1.91
+rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
@@ -204,7 +204,7 @@ pub fn constructor(
     self.balances.setter(deployer).set(initial_supply);
 
     // Emit initialization event
-    self.vm().log(TokenCreated {
+    log(self.vm(), TokenCreated {
         creator: deployer,
         name: name.clone(),
         symbol: symbol.clone(),
@@ -220,30 +220,12 @@ pub fn constructor(
 Stylus uses trait-based composition instead of traditional inheritance. When implementing constructors with traits, each component typically has its own initialization logic:
 
 ```rust
-use alloy_primitives::{Address, U256};
-use alloy_sol_types::sol;
-use stylus_sdk::prelude::*;
-use stylus_sdk::storage::{StorageAddress, StorageMap, StorageString, StorageU256};
-
-sol! {
-    #[derive(Debug)]
-    error InvalidSupply();
-}
-
-#[derive(SolidityError, Debug)]
-pub enum TokenError {
-    InvalidSupply(InvalidSupply),
-}
-
-// Define traits for different functionality. Traits exposed through
-// #[implements(...)] must themselves be annotated with #[public].
-#[public]
+// Define traits for different functionality
 trait IErc20 {
     fn balance_of(&self, account: Address) -> U256;
     fn transfer(&mut self, to: Address, value: U256) -> bool;
 }
 
-#[public]
 trait IOwnable {
     fn owner(&self) -> Address;
     fn transfer_ownership(&mut self, new_owner: Address) -> bool;
@@ -300,48 +282,13 @@ impl MyToken {
 
     fn initialize_erc20(&mut self, initial_supply: U256) -> Result<(), TokenError> {
         if initial_supply == U256::ZERO {
-            return Err(TokenError::InvalidSupply(InvalidSupply {}));
+            return Err(TokenError::InvalidSupply);
         }
 
         let deployer = self.vm().tx_origin();
         self.erc20.total_supply.set(initial_supply);
         self.erc20.balances.setter(deployer).set(initial_supply);
         Ok(())
-    }
-}
-
-// Each trait listed in #[implements(...)] must have a matching implementation.
-#[public]
-impl IErc20 for MyToken {
-    fn balance_of(&self, account: Address) -> U256 {
-        self.erc20.balances.get(account)
-    }
-
-    fn transfer(&mut self, to: Address, value: U256) -> bool {
-        let from = self.vm().msg_sender();
-        let from_balance = self.erc20.balances.get(from);
-        if from_balance < value {
-            return false;
-        }
-        self.erc20.balances.setter(from).set(from_balance - value);
-        let to_balance = self.erc20.balances.get(to);
-        self.erc20.balances.setter(to).set(to_balance + value);
-        true
-    }
-}
-
-#[public]
-impl IOwnable for MyToken {
-    fn owner(&self) -> Address {
-        self.ownable.owner.get()
-    }
-
-    fn transfer_ownership(&mut self, new_owner: Address) -> bool {
-        if self.vm().msg_sender() != self.ownable.owner.get() {
-            return false;
-        }
-        self.ownable.owner.set(new_owner);
-        true
     }
 }
 ```
@@ -414,14 +361,12 @@ mod tests {
 
 Deploy your contract with constructor arguments using `cargo stylus deploy`:
 
-```shell
-# Deploy with constructor parameters.
-# The constructor is annotated #[payable], so use --constructor-value to send ETH to it.
+```bash
+# Deploy with constructor parameters
 cargo stylus deploy \
   --private-key-path ~/.arbitrum/key \
   --endpoint https://sepolia-rollup.arbitrum.io/rpc \
-  --constructor-args "MyToken" "MTK" 1000000 \
-  --constructor-value 0
+  --constructor-args "MyToken" "MTK" 1000000
 ```
 
 ### Constructor argument encoding
@@ -435,7 +380,7 @@ For complex types:
 - **Addresses**: Provide as hex strings with 0x prefix
 - **Arrays**: Use JSON array syntax
 
-```shell
+```bash
 # Example with multiple argument types
 cargo stylus deploy \
   --constructor-args "TokenName" "TKN" 1000000 "0x742d35Cc6635C0532925a3b8D95B5C1b0ea3C28F"
@@ -516,7 +461,7 @@ pub fn constructor(&mut self, params: ConstructorParams) -> Result<(), Error> {
     self.balances.setter(deployer).set(params.initial_supply);
 
     // 6. Emit events last
-    self.vm().log(ContractInitialized { /* ... */ });
+    log(self.vm(), ContractInitialized { /* ... */ });
 
     Ok(())
 }

@@ -1,0 +1,15 @@
+{
+  "title": "Notices",
+  "icon": "Bell",
+  "description": "Upgrade notices for Arbitrum chains and node operators.",
+  "pages": [
+    "fusaka-upgrade-notice",
+    "arbos61-upgrade-notice",
+    "arbos60-upgrade-notice",
+    "arbos51-upgrade-notice",
+    "...",
+    "[Chain info](/docs/chain-info)",
+    "[Audit reports](/docs/audit-reports)",
+    "[Contribute](/docs/contribute)"
+  ]
+}

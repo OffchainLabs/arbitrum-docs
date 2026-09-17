@@ -8,15 +8,14 @@ sme: jason-w123
 
 The <Term id="smart-contract">smart contract</Term> size limit must be set during the initial configuration and deployment of a custom chain (Layer 2 or Layer 3 Rollup). It is not possible to modify it post-deployment due to the lack of a versioning mechanism for such parameters.
 
-The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). `MaxCodeSize` is configurable up to 96KB (98,304 bytes) and `MaxInitCodeSize` is configurable up to 192KB (196,608 bytes), which is higher than the default 24.5KB (<Var name="maxCodeSizeBytes" /> bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
+The limit applies to both deployed contract code (`MaxCodeSize`) and initialization code during deployment (`MaxInitCodeSize`). Both are configurable up to 96KB (98,304 bytes), which is higher than the default 24KB (<Var name="maxCodeSizeBytes" /> bytes) inherited from Ethereum's [EIP-170](https://eips.ethereum.org/EIPS/eip-170) for compatibility.
 
 ## Key specifics
 
 - **Default values**: 24KB (<Var name="maxCodeSizeBytes" /> bytes) for `MaxCodeSize` and `MaxInitCodeSize` is `2 * DefaultMaxCodeSize`.
-- **Maximum values**: 96KB (98,304 bytes) for `MaxCodeSize`. 192KB (196,608 bytes) for `MaxInitCodeSize`. Setting higher is not supported and may cause deployment failures or compatibility issues.
+- **Maximum values**: 96KB (98,304 bytes) for each. Setting higher is not supported and may cause deployment failures or compatibility issues.
 - **Where applicable**: Only in custom <Term id="arbitrum-chain">Arbitrum chains</Term>. Public chains like <Term id="arbitrum-one">Arbitrum One</Term> or Nova remain fixed at 24KB without a network-wide upgrade.
 - **Requirements**: You'll need the Arbitrum Chain SDK (installed via `npm install @arbitrum/chain-sdk` or similar), a funded <Term id="wallet">wallet</Term> on the <Term id="parent-chain">parent chain</Term> (e.g., Ethereum or Arbitrum One), and access to deployment tools like Hardhat or Foundry for integration.
-
 
 <include cwd>content/partials/launch-arbitrum-chain/_size-limit.mdx</include>
 
@@ -27,15 +26,12 @@ The limit applies to both deployed contract code (`MaxCodeSize`) and initializat
 3. Deploy the chain contracts to the parent chain.
 4. Run the node with the generated config.
 
-<VanillaAdmonition type="caution">
-
-- This change is immutable after deployment—plan carefully.
+<VanillaAdmonition type="warning" title="- This change is immutable after deployment—plan carefully.">
 - Higher limits increase risks like state bloat, slower node performance, and potential DoS vulnerabilities.
 - Test on a devnet or testnet first to ensure stability.
 - Ensure values are in bytes (not KB) when setting them in code.
 
 </VanillaAdmonition>
-
 ## Code examples
 
 The example below assumes you've set up a project with the SDK installed and have environment variables for your private key and RPC URLs.
@@ -57,7 +53,7 @@ const orbitChainParams = {
   arbitrum: {
     // Arbitrum-specific extensions
     MaxCodeSize: 98304, // Set to 96KB (98,304 bytes) for deployed contract code size limit
-    MaxInitCodeSize: 196608, // Set to 192KB (196,608 bytes) for init code size during contract deployment
+    MaxInitCodeSize: 98304, // Set to 96KB for init code size during contract deployment
     // Note: Init code can often be set higher (e.g., 2x MaxCodeSize) if needed for complex constructors,
     // but stick to <= 96KB to avoid issues. Default is 24576 bytes (24KB) if omitted.
     // Warning: Higher values may increase state size and node resource demands.
@@ -78,7 +74,7 @@ console.log(JSON.stringify(chainConfig, null, 2));
 
 ### 2. Full node configuration and deployment example
 
-- This extends Step 1 in preparation of the full node config (e.g., for running a [sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) or validator node). Place this in a file like `deployOrbitChain.ts`. It assumes you’re deploying to a parent chain, such as Sepolia (testnet).
+- This extends Step 1 in preparation of the full node config (e.g., for running a <Term id="sequencer">sequencer</Term> or validator node). Place this in a file like `deployOrbitChain.ts`. It assumes you’re deploying to a parent chain, such as Sepolia (testnet).
 
 ```typescript
 import { prepareChainConfig, prepareNodeConfig } from '@offchainlabs/chain-sdk'; // Import SDK functions
@@ -94,7 +90,7 @@ const orbitChainParams = {
   chainId: 123456,
   arbitrum: {
     MaxCodeSize: 98304, // Increase to max 96KB for larger contracts
-    MaxInitCodeSize: 196608, // Matching increase for init code
+    MaxInitCodeSize: 98304, // Matching increase for init code
     // Additional params: e.g., InitialChainOwner: '0xYourAddress' for governance
   },
 };
@@ -135,4 +131,4 @@ console.log('Use the generated my-arbitrum-chain.toml to run your node.');
 
 - Run this with `ts-node deployOrbitChain.ts`. This script deploys the chain and generates the node config with your custom limits embedded.
 
-For exact SDK function signatures and more options, refer to the official [Arbitrum Chain SDK repository on GitHub](https://github.com/OffchainLabs/arbitrum-chain-sdk). Always test in a development environment, as incorrect configs can lead to failed deployments or insecure chains. If your contracts still exceed the limit, consider optimizations such as code splitting or using [Stylus](/docs/stylus/gentle-introduction) to create more efficient <Term id="wasm">WASM</Term>-based contracts.
+For exact SDK function signatures and more options, refer to the official [Arbitrum Chain SDK repository on GitHub](https://github.com/OffchainLabs/arbitrum-chain-sdk). Always test in a development environment, as incorrect configs can lead to failed deployments or insecure chains. If your contracts still exceed the limit, consider optimizations such as code splitting or using <Term id="stylus">Stylus</Term> to create more efficient <Term id="wasm">WASM</Term>-based contracts.

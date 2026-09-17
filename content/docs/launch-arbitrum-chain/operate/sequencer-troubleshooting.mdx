@@ -1,11 +1,11 @@
 ---
 title: 'Sequencer troubleshooting'
-description: 'Diagnose and resolve sequencer feed problems, broadcast backlog errors, feed stalls, and the conditions that stop block production.'
 sidebar_label: 'Sequencer troubleshooting'
-user_story: As an Arbitrum chain operator, I need to diagnose why my sequencer stopped producing blocks or why its feed stalled, so I can restore normal operation.
-content_type: 'how-to'
+description: 'Diagnose and resolve sequencer feed problems, broadcast backlog errors, feed stalls, and the conditions that stop block production.'
 author: pete-vielhaber
 sme: jasonw-123
+user_story: As an Arbitrum chain operator, I need to diagnose why my sequencer stopped producing blocks or why its feed stalled, so I can restore normal operation.
+content_type: 'how-to'
 ---
 
 This guide covers sequencer feed and block production problems. For setup, see [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs). For metric names and alert thresholds, see [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations). For batch posting problems, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting).
@@ -104,7 +104,7 @@ A "stalled feed" describes three different failures. They need different fixes, 
 | `arb/feed/backlog/messages` grows steadily | Batches are not landing on the parent chain | <Term id="batch-poster">Batch poster</Term> |
 | Your node lags but the feed is live        | Your node cannot keep up executing          | Your node's resources                                  |
 
-<VanillaAdmonition type="caution" title="A growing feed backlog is not a lagging follower">
+<VanillaAdmonition type="warning" title="A growing feed backlog is not a lagging follower">
 
 `arb/feed/backlog/messages` counts messages the broadcast server retains until it sees them covered by batches on the parent chain. Growth means batches are not landing. It does not mean a subscriber is behind. See [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations#sequencer) for the full metric list.
 
@@ -125,7 +125,7 @@ The feed carries no _heartbeat_ at the application level, so silence is ambiguou
 3. **Check for rate limiting.** Public feed endpoints may throttle excessive connections. If you added redundant connections, remove them and reconnect.
 4. **Fall back to the parent chain.** A node with a working parent chain connection still syncs from batches without any feed. Sync is slower but correct, so a feed outage degrades latency rather than halting your node.
 
-<VanillaAdmonition type="caution" title="Redundant feed connections">
+<VanillaAdmonition type="warning" title="Redundant feed connections">
 
 You can point a relay at the same endpoint twice to survive a reset without waiting for a reconnect. This doubles bandwidth and risks rate limiting. Configure it at the relay, never at individual nodes, and never use more than one redundant connection. See [How to run a feed relay](/docs/run-a-node/run-feed-relay).
 
@@ -172,7 +172,7 @@ With the coordinator enabled, exactly one sequencer holds the lockout in Redis. 
 - [MEANING]—Two very different faults share this message: a parent chain connection that is down or lagging, and a local clock that has drifted.
 - [ACTION]—Check parent chain RPC reachability and freshness first, then verify NTP on the sequencer host. Raising the delta hides the symptom without fixing either cause.
 
-<VanillaAdmonition type="caution" title="This check only runs with a parent chain reader">
+<VanillaAdmonition type="warning" title="This check only runs with a parent chain reader">
 
 The timestamp check applies only when the sequencer has a parent chain reader configured. A sequencer without one never halts for this reason, which is why local dev nodes do not reproduce it.
 

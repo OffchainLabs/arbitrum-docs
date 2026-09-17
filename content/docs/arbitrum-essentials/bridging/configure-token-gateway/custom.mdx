@@ -8,12 +8,11 @@ sme: gblanchemain
 reader_audience: developers who want to build on Ethereum/Arbitrum and bridge tokens between parent and child chains
 ---
 
-<VanillaAdmonition type="caution" title="Do you really need a custom gateway?">
+<VanillaAdmonition type="warning" title="Do you really need a custom gateway?">
 
 Before implementing and deploying a custom gateway, strongly consider the current solutions that Arbitrum's token bridge provides: the [standard gateway](/docs/arbitrum-essentials/bridging/configure-token-gateway/standard) and the [generic-custom gateway](/docs/arbitrum-essentials/bridging/configure-token-gateway/generic-custom). These solutions cover the majority of bridging needs. If you're unsure about your approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
 
 </VanillaAdmonition>
-
 In this how-to, you'll learn how to bridge your own token between Ethereum (the parent chain) and Arbitrum (the child chain), using a custom gateway. For alternative ways of bridging tokens, check out the [token bridging overview](/docs/arbitrum-essentials/bridging/overview).
 
 Familiarity with [Arbitrum's token bridge system](/docs/how-arbitrum-works/deep-dives/token-bridging), smart contracts, and decentralized application development is expected. If you're new to developing on Arbitrum, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Remix)](/docs/build-decentralized-apps/quickstart-solidity-remix) before proceeding. We'll use [Arbitrum's SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
@@ -49,12 +48,11 @@ If you are deploying custom gateways, you will likely want to support your custo
 
 ## Step 1: Create a gateway and deploy it on the parent chain
 
-<VanillaAdmonition type="caution" title="This code is for testing purposes">
+<VanillaAdmonition type="warning" title="This code is for testing purposes">
 
 The code in the following sections is intended for testing purposes only and doesn't guarantee any level of security. It hasn't undergone any formal audit or security analysis, so it isn't ready for production use. Exercise caution and due diligence while using this code in any environment.
 
 </VanillaAdmonition>
-
 We'll begin by creating our custom gateway and deploying it to the parent chain. A good example of a custom gateway is [Arbitrum’s generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol). It implements all required methods and adds additional methods, enabling the gateway to support a wide variety of tokens for bridging.
 
 In this case, we’ll use a simpler approach. We’ll create a gateway that supports only one token and can be enabled or disabled by the contract owner. It will also implement all necessary methods. To simplify the deployment process even further, we won’t worry about setting the addresses of the counterpart gateway and the custom tokens at deployment time. Instead, we will use a function, `setTokenBridgeInformation`, that the contract owner will call to initialize the gateway.

@@ -8,6 +8,8 @@ author: offchainlabs
 sme: offchainlabs
 ---
 
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
 # Choose your learning path
 
 Not sure where to start with Stylus? This guide helps you find the optimal learning path based on your background and goals.
@@ -27,28 +29,44 @@ Not sure where to start with Stylus? This guide helps you find the optimal learn
 
 ### Recommended journey
 
-1. **Learn Rust basics** (1-2 weeks)
+<Steps>
+<Step>
 
-   - Work through [The Rust Book](https://doc.rust-lang.org/book/) chapters 1-10
-   - Focus on: ownership, borrowing, structs, enums, error handling
-   - Practice with [Rustlings](https://github.com/rust-lang/rustlings)
+**Learn Rust basics** (1-2 weeks)
 
-2. **Start with Stylus**
+- Work through [The Rust Book](https://doc.rust-lang.org/book/) chapters 1-10
+- Focus on: ownership, borrowing, structs, enums, error handling
+- Practice with [Rustlings](https://github.com/rust-lang/rustlings)
 
-   - Complete the [Quickstart](/docs/stylus/quickstart)
-   - Understand [project structure](/docs/stylus/fundamentals/project-structure)
-   - Deploy your first contract
+</Step>
+<Step>
 
-3. **Build fundamentals** (1 week)
+**Start with Stylus**
 
-   - Study [data types](/docs/stylus/fundamentals/data-types/primitives)
-   - Learn [storage patterns](/docs/stylus/fundamentals/data-types/storage)
-   - Practice [writing tests](/docs/stylus/fundamentals/testing-contracts)
+- Complete the [Quickstart](/docs/stylus/quickstart)
+- Understand [project structure](/docs/stylus/fundamentals/project-structure)
+- Deploy your first contract
 
-4. **Explore advanced topics** (ongoing)
-   - Review [best practices](/docs/stylus/best-practices/security)
-   - Study [gas optimization](/docs/stylus/best-practices/gas-optimization)
-   - Build real projects
+</Step>
+<Step>
+
+**Build fundamentals** (1 week)
+
+- Study [data types](/docs/stylus/fundamentals/data-types/primitives)
+- Learn [storage patterns](/docs/stylus/fundamentals/data-types/storage)
+- Practice [writing tests](/docs/stylus/fundamentals/testing-contracts)
+
+</Step>
+<Step>
+
+**Explore advanced topics** (ongoing)
+
+- Review [best practices](/docs/stylus/best-practices/security)
+- Study [gas optimization](/docs/stylus/best-practices/gas-optimization)
+- Build real projects
+
+</Step>
+</Steps>
 
 ### Key resources
 
@@ -74,28 +92,44 @@ Not sure where to start with Stylus? This guide helps you find the optimal learn
 
 ### Recommended journey
 
-1. **Understand the differences** (1 day)
+<Steps>
+<Step>
 
-   - Read [Rust to Solidity differences](/docs/stylus/advanced/rust-to-solidity-differences)
-   - Review [VM differences](/docs/stylus/concepts/vm-differences)
-   - Understand [type conversions](/docs/stylus/fundamentals/data-types/conversions-between-types)
+**Understand the differences** (1 day)
 
-2. **Quick start**
+- Read [Rust to Solidity differences](/docs/stylus/advanced/rust-to-solidity-differences)
+- Review [VM differences](/docs/stylus/concepts/vm-differences)
+- Understand [type conversions](/docs/stylus/fundamentals/data-types/conversions-between-types)
 
-   - Complete the [Quickstart](/docs/stylus/quickstart)
-   - Compare with familiar Solidity patterns
-   - Deploy a simple contract
+</Step>
+<Step>
 
-3. **Learn Rust patterns**
+**Quick start**
 
-   - Study [ownership and borrowing](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
-   - Learn [error handling](/docs/stylus/fundamentals/data-types/primitives)
-   - Understand [storage macros](/docs/stylus/fundamentals/data-types/storage)
+- Complete the [Quickstart](/docs/stylus/quickstart)
+- Compare with familiar Solidity patterns
+- Deploy a simple contract
 
-4. **Port existing contracts** (ongoing)
-   - Start with simple contracts
-   - Apply [security best practices](/docs/stylus/best-practices/security)
-   - Optimize for [gas efficiency](/docs/stylus/best-practices/gas-optimization)
+</Step>
+<Step>
+
+**Learn Rust patterns**
+
+- Study [ownership and borrowing](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
+- Learn [error handling](/docs/stylus/fundamentals/data-types/primitives)
+- Understand [storage macros](/docs/stylus/fundamentals/data-types/storage)
+
+</Step>
+<Step>
+
+**Port existing contracts** (ongoing)
+
+- Start with simple contracts
+- Apply [security best practices](/docs/stylus/best-practices/security)
+- Optimize for [gas efficiency](/docs/stylus/best-practices/gas-optimization)
+
+</Step>
+</Steps>
 
 ### Common migration patterns
 
@@ -131,28 +165,44 @@ Not sure where to start with Stylus? This guide helps you find the optimal learn
 
 ### Recommended journey
 
-1. **Jump right in**
+<Steps>
+<Step>
 
-   - Complete the [Quickstart](/docs/stylus/quickstart)
-   - Explore [project structure](/docs/stylus/fundamentals/project-structure)
-   - Deploy and interact with a contract
+**Jump right in**
 
-2. **Understand the execution model**
+- Complete the [Quickstart](/docs/stylus/quickstart)
+- Explore [project structure](/docs/stylus/fundamentals/project-structure)
+- Deploy and interact with a contract
 
-   - Study [WebAssembly concepts](/docs/stylus/concepts/webassembly)
-   - Review [VM differences](/docs/stylus/concepts/vm-differences)
-   - Learn about [activation](/docs/stylus/concepts/activation)
+</Step>
+<Step>
 
-3. **Master Rust for smart contracts** (1 week)
+**Understand the execution model**
 
-   - Focus on [storage patterns](/docs/stylus/fundamentals/data-types/storage)
-   - Learn [contract structure](/docs/stylus/fundamentals/contracts)
-   - Understand [testing approaches](/docs/stylus/fundamentals/testing-contracts)
+- Study [WebAssembly concepts](/docs/stylus/concepts/webassembly)
+- Review [VM differences](/docs/stylus/concepts/vm-differences)
+- Learn about [activation](/docs/stylus/concepts/activation)
 
-4. **Advanced development** (ongoing)
-   - Apply platform-specific optimizations
-   - Implement cross-contract calls
-   - Build production applications
+</Step>
+<Step>
+
+**Master Rust for smart contracts** (1 week)
+
+- Focus on [storage patterns](/docs/stylus/fundamentals/data-types/storage)
+- Learn [contract structure](/docs/stylus/fundamentals/contracts)
+- Understand [testing approaches](/docs/stylus/fundamentals/testing-contracts)
+
+</Step>
+<Step>
+
+**Advanced development** (ongoing)
+
+- Apply platform-specific optimizations
+- Implement cross-contract calls
+- Build production applications
+
+</Step>
+</Steps>
 
 ### Key resources
 
@@ -178,28 +228,44 @@ Not sure where to start with Stylus? This guide helps you find the optimal learn
 
 ### Recommended journey
 
-1. **Learn blockchain basics**
+<Steps>
+<Step>
 
-   - Understand [smart contracts](https://ethereum.org/en/developers/docs/smart-contracts/)
-   - Learn about [gas and transactions](https://ethereum.org/en/developers/docs/gas/)
-   - Study [EVM basics](https://ethereum.org/en/developers/docs/evm/)
+**Learn blockchain basics**
 
-2. **Quick start with Stylus** (1 day)
+- Understand [smart contracts](https://ethereum.org/en/developers/docs/smart-contracts/)
+- Learn about [gas and transactions](https://ethereum.org/en/developers/docs/gas/)
+- Study [EVM basics](https://ethereum.org/en/developers/docs/evm/)
 
-   - Complete the [Quickstart](/docs/stylus/quickstart)
-   - Your Rust skills transfer directly!
-   - Deploy your first contract
+</Step>
+<Step>
 
-3. **Web3-specific patterns**
+**Quick start with Stylus** (1 day)
 
-   - Learn [storage patterns](/docs/stylus/fundamentals/data-types/storage)
-   - Understand [global variables](/docs/stylus/fundamentals/global-variables-and-functions)
-   - Study [security considerations](/docs/stylus/best-practices/security)
+- Complete the [Quickstart](/docs/stylus/quickstart)
+- Your Rust skills transfer directly!
+- Deploy your first contract
 
-4. **Build applications** (ongoing)
-   - Start with simple DeFi primitives
-   - Implement events and logs
-   - Optimize for [gas efficiency](/docs/stylus/best-practices/gas-optimization)
+</Step>
+<Step>
+
+**Web3-specific patterns**
+
+- Learn [storage patterns](/docs/stylus/fundamentals/data-types/storage)
+- Understand [global variables](/docs/stylus/fundamentals/global-variables-and-functions)
+- Study [security considerations](/docs/stylus/best-practices/security)
+
+</Step>
+<Step>
+
+**Build applications** (ongoing)
+
+- Start with simple DeFi primitives
+- Implement events and logs
+- Optimize for [gas efficiency](/docs/stylus/best-practices/gas-optimization)
+
+</Step>
+</Steps>
 
 ### Rust skills that transfer well
 

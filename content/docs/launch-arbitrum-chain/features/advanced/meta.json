@@ -1,0 +1,10 @@
+{
+  "title": "Advanced",
+  "pages": [
+    "choose-arbos-version",
+    "choose-chain-precompiles",
+    "choose-custom-behavior",
+    "choose-custom-delay-inbox-finality",
+    "sequencer-timing-adjustments"
+  ]
+}

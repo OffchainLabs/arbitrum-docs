@@ -1,10 +1,10 @@
 ---
 title: 'Customize genesis state'
 description: 'How to configure your Arbitrum chain with a custom genesis state'
-user_story: 'As an Arbitrum chain operator, I want to create a chain with a custom genesis state.'
-content_type: 'how-to'
 author: gmetha2
 sme: Jason-W123
+content_type: 'how-to'
+user_story: 'As an Arbitrum chain operator, I want to create a chain with a custom genesis state.'
 ---
 
 Arbitrum chain operators increasingly want to deploy chains with pre-existing state by loading an initial state from a file such as `genesis.json`. Specifically, chain operators want to predeploy smart contracts (like Gnosis Safe) to an <Term id="arbitrum-chain">Arbitrum chain</Term> so they exist from genesis, before any user interaction or post-launch governance.
@@ -170,7 +170,7 @@ jq '{blockHash, sendRoot}' genesis-result.json
 
 Store `genesis-result.json` with your deployment records. It ties the exact genesis file to the values committed on the parent chain.
 
-<VanillaAdmonition type="caution" title="Generate the genesis before deploying the chain">
+<VanillaAdmonition type="warning" title="Generate the genesis before deploying the chain">
 
 The Rollup contract commits to the genesis state during deployment. If you change an allocation or any genesis parameter afterward, the resulting block hash no longer matches the onchain genesis <Term id="assertion">assertion</Term>. Generate and review the final file before you call `createRollup`.
 
@@ -303,7 +303,7 @@ You still need to supply two values: `parentChainPublicClient`, a public client 
 
 Continue with [`createRollup` in the chain deployment guide](/docs/launch-arbitrum-chain/deploy/deploying-an-arbitrum-chain#2-deploy-the-arbitrum-chain), passing `createRollupConfig` as `params.config`. That guide documents these inputs, along with the batch poster and validator addresses.
 
-<VanillaAdmonition type="caution" title="Preserve the generated chain configuration and base fee">
+<VanillaAdmonition type="warning" title="Preserve the generated chain configuration and base fee">
 
 Pass the parsed `serializedChainConfig` without changing its values. Set `dataCostEstimate` to the generated `arbOSInit.initialL1BaseFee`, and keep it non-zero. Omitting `dataCostEstimate` is a common cause of failed custom-genesis deployments. If either value differs from the genesis file, validators can fail to find the onchain genesis assertion when they stake on the first assertion.
 

@@ -32,13 +32,11 @@ Recoverable errors are represented using the `Result` type, which can either be 
 
 Here's a simplified Rust Stylus contract demonstrating how to define and handle recoverable errors:
 
-
 <include cwd>content/partials/_not-for-production-banner-partial.mdx</include>
 
 ```rust
 #![cfg_attr(not(feature = "export-abi"), no_main)]
 extern crate alloc;
-
 
 use alloy_sol_types::sol;
 use stylus_sdk::{abi::Bytes, alloy_primitives::{Address, U256}, call::RawCall, prelude::*};

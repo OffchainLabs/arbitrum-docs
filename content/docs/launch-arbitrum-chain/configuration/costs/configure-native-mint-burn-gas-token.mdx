@@ -8,20 +8,20 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-<VanillaAdmonition type="caution" title="Bridge counterparty risk">
+<VanillaAdmonition type="warning" title="Bridge counterparty risk">
 
 While this feature allows an <Term id="arbitrum-chain">Arbitrum chain</Term> to use native interop tokens as gas tokens via third-party protocols, it introduces new trust assumptions. In a standard Arbitrum chain, the canonical bridge is the sole authority for minting the chain's gas token, inheriting the security of the <Term id="parent-chain">parent chain</Term>.
 
 However, by using a third-party <Term id="bridge">bridge</Term> for the chain's gas token, your chain's gas token—and thus its liveness—becomes directly dependent on the security and integrity of the third-party bridge provider.
 
 </VanillaAdmonition>
-
 <VanillaAdmonition type="info">
 
-While Native Mint/Burn was introduced in [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos) 41, we strongly recommend that teams upgrade to [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) to enable this feature.
+While Native Mint/Burn was introduced in ArbOS 41, we strongly recommend that teams upgrade to [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) to enable this feature.
+
+If you want to learn more about the concept of native mint/burn and the impact on your chain, refer to the [Choose native mint/burn page](/docs/launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn).
 
 </VanillaAdmonition>
-
 ## Recommended configuration
 
 ### Prerequisites
@@ -49,7 +49,6 @@ We suggest the following baseline or values for production chains:
 The native token mint/burn feature is currently not available for implementation at chain genesis. The ability to activate it during chain initialization will be part of a future release.
 
 </VanillaAdmonition>
-
 ### Enable the feature post-genesis
 
 Below steps show the flow a <Term id="chain-owner">chain owners</Term> can use to allowlist a bridge adapter. The example below uses a Foundry call, but you can also use other tools to interact with the precompiles directly.
@@ -57,11 +56,11 @@ Below steps show the flow a <Term id="chain-owner">chain owners</Term> can use t
 1. Update your chain to [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) binaries and deploy the consensus-v51 WASM root.
 2. Call [`setNativeTokenManagementFrom`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L38-L40) with the chain owner and a UNIX timestamp that is 7+ days in the future to enable the feature, otherwise the call will fail.
 
-   :::important
+   <VanillaAdmonition type="info">
 
    The feature becomes live once the chain timestamp passes `NativeTokenManagementFromTime`. Until then, the `add/removeNativeTokenOwner` call will revert.
 
-   :::
+   </VanillaAdmonition>
 
 3. Deploy your bridge adapter (e.g., LayerZero OFT) and note the contract address.
 4. Add the deployed bridge adapter as a native-token owner:
@@ -173,7 +172,7 @@ When the last native-token owner is removed, Nitro automatically re-opens canoni
 
 Filter event `OwnerActs(bytes4 indexed method, address indexed owner, bytes data)` with first index `0xbdb8f707` to get all results, and decode the latest result's data field to get the last valid timestamp. That timestamp would be the point after which `ArbOwner`'s can take action to `nativeTokenOwner` list.
 
-<VanillaAdmonition type="caution" title="Testing Responsibility">
+<VanillaAdmonition type="warning" title="Testing Responsibility">
 
 While Offchain Labs has conducted comprehensive [system tests](https://github.com/OffchainLabs/nitro/blob/master/system_tests/arbos_upgrade_test.go#L292)
 to verify the core ArbOS logic for native mint/burn functionality, this does not cover your specific

@@ -1,0 +1,14 @@
+{
+  "title": "Sequencer configuration",
+  "pages": [
+    "bold-adoption-for-arbitrum-chains",
+    "batch-posting-assertion-control",
+    "config-sequencer-timing-adjustments",
+    "batch-poster-fee-tuning",
+    "batch-poster-troubleshooting",
+    "timeboost-for-arbitrum-chains",
+    "compliance-filtering",
+    "sequencer-config-reference",
+    "..."
+  ]
+}

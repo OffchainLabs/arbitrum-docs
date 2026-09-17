@@ -14,7 +14,7 @@ This how-to assumes that you're familiar with the following:
 
 - How to run a full node (see instructions [here](/docs/run-a-node/run-full-node))
 - [How the Rollup protocol works](/docs/how-arbitrum-works/inside-arbitrum-nitro)
-- [How BoLD works](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#how-bold-leverages-ethereum), if you're running a validator for a chain that has BoLD activated
+- [How BoLD works](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD activated
 - [Data availability](/docs/run-a-node/data-availability), for how Rollup-mode and AnyTrust-mode chains differ in the data your validator must reconstruct
 - [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles), for how the validator role relates to the other node roles and what converting a node to a validator involves
 
@@ -76,15 +76,15 @@ On top of the configuration of a regular full node, you'll need to configure the
 | `--node.staker.strategy`                        | `Watchtower`, `Defensive`, `StakeLatest`, `ResolveNodes`, `MakeNodes` | Strategy that your node will use                                                                                                                                      |
 | `--node.staker.parent-chain-wallet.private-key` | 0xPrivateKey                                                          | Private key of the wallet used to perform the operations onchain. Use either `private-key` or `password` (below)                                                      |
 | `--node.staker.parent-chain-wallet.password`    | Password                                                              | Password of a wallet generated with nitro (see instructions [here](#use-nitro-to-create-a-wallet-for-your-validator)). Use either `private-key` (above) or `password` |
-| `--node.bold.enable`                            | true                                                                  | Enables validation with BoLD (not needed if BoLD is not activated, only needed before Nitro v3.6.0)                                                                   |
+| `--node.bold.enable`                            | true                                                                  | Enables validation with BoLD (not needed if BoLD is not activated, only needed before nitro v3.6.0)                                                                   |
 
 Here's an example of how to run a defensive validator for Arbitrum One:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum <Var name="latestNitroNodeImage" /> --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.staker.strategy=Defensive
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v3.11.3-beb2108 --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.staker.strategy=Defensive
 ```
 
-### Step 2: Verify that your node is running as a validator
+### Step 2: verify that your node is running as a validator
 
 To verify that your node is acting as a validator, you can look for the following log line:
 
@@ -118,13 +118,12 @@ Additionally, keep in mind that some chains might not have BoLD activated yet, s
 This section shows how to manage a validator wallet using a password. Like any command that requires passing a password or private key, you should take extra precautions to secure your credentials. Failure to protect your password may compromise your validator wallet.
 
 </VanillaAdmonition>
-
 Nitro includes a tool to create a validator wallet for a specific chain automatically. You can access it by using the option `--node.staker.parent-chain-wallet.only-create-key` and setting a password for the wallet with `--node.staker.parent-chain-wallet.password`.
 
 Here is an example of how to create a validator wallet for Arbitrum One and exit:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum <Var name="latestNitroNodeImage" /> --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.parent-chain-wallet.only-create-key --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v3.11.3-beb2108 --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.parent-chain-wallet.only-create-key --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
 ```
 
 The wallet file will be created under the mounted directory inside the `<chain-name>/wallet/` directory (for example, `arb1/wallet/` for Arbitrum One, or `nova/wallet/` for Arbitrum Nova). Be sure to backup the wallet file, as it will be the only way to withdraw the bond when desired.
@@ -136,7 +135,6 @@ Once the wallet is created, you can instruct your validator to use it by adding 
 If you prefer not to include your password in the command line, you can use environment variables or a secure secrets management solution to supply the password at runtime.
 
 </VanillaAdmonition>
-
 ### How to add new validators to the allowlist (Arbitrum chains)
 
 On permissioned validation setups, the set of validators that can act on a given chain is limited to the ones added to the allowlist of validators in the Rollup contract.

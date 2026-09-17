@@ -8,9 +8,6 @@ sme: gblanchemain
 third_party_content_owner: 'alexandratran'
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 The [MetaMask Smart Accounts Kit](https://docs.metamask.io/smart-accounts-kit/) enables embedding MetaMask Smart Accounts into dapps.
 Smart accounts support programmable account behavior and advanced features like delegated permissions, multi-signature approvals, and gas abstraction.
 Delegation is a core feature of smart accounts, enabling secure, rule-based permission sharing.
@@ -23,32 +20,34 @@ Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia.
 
 Follow these steps to create your first smart account and send a user operation.
 
-:::note Prerequisites
+<VanillaAdmonition type="note" title="Prerequisites">
+
 Before starting, ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/en/download) v18 or later.
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm), [Yarn](https://yarnpkg.com/), or another package manager.
-  :::
+
+</VanillaAdmonition>
 
 ### 1. Install the Smart Accounts Kit
 
 Install the [Smart Accounts Kit](https://www.npmjs.com/package/@metamask/smart-accounts-kit) in your project:
 
-<Tabs>
-<TabItem value='npm'>
+<Tabs items={["npm","Yarn"]}>
+<Tab value="npm">
 
 ```bash
 npm install @metamask/smart-accounts-kit
 ```
 
-</TabItem>
-<TabItem value='Yarn'>
+</Tab>
+<Tab value="Yarn">
 
 ```bash
 yarn add @metamask/smart-accounts-kit
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### 2. Set up a public client
@@ -57,8 +56,8 @@ Set up a [Viem Public Client](https://viem.sh/docs/clients/public) using Viem's 
 This client will let the smart account query the signer's account state and interact with the blockchain network.
 Make sure to import your desired Arbitrum network from `viem/chains`.
 
-<Tabs>
-<TabItem value="Arbitrum One">
+<Tabs items={["Arbitrum One","Arbitrum Nova","Arbitrum Sepolia"]}>
+<Tab value="Arbitrum One">
 
 ```typescript
 import { createPublicClient, http } from 'viem';
@@ -70,8 +69,8 @@ const publicClient = createPublicClient({
 });
 ```
 
-</TabItem>
-<TabItem value="Arbitrum Nova">
+</Tab>
+<Tab value="Arbitrum Nova">
 
 ```typescript
 import { createPublicClient, http } from 'viem';
@@ -83,8 +82,8 @@ const publicClient = createPublicClient({
 });
 ```
 
-</TabItem>
-<TabItem value="Arbitrum Sepolia">
+</Tab>
+<Tab value="Arbitrum Sepolia">
 
 ```typescript
 import { createPublicClient, http } from 'viem';
@@ -96,7 +95,7 @@ const publicClient = createPublicClient({
 });
 ```
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ### 3. Set up a bundler client

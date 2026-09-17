@@ -1,7 +1,7 @@
 ---
 title: 'How to deploy a Data Availability Server (DAS) with Docker'
-description: 'Deploy a Data Availability Server (DAS) for your AnyTrust chain using Docker and Docker Compose, without Kubernetes: generate BLS keys in a container, run the server, and verify it.'
 sidebar_label: 'Deploy DAS with Docker'
+description: 'Deploy a Data Availability Server (DAS) for your AnyTrust chain using Docker and Docker Compose, without Kubernetes: generate BLS keys in a container, run the server, and verify it.'
 user_story: 'As a Data Availability Committee member, I want to deploy a DAS with Docker and Docker Compose so that I can run a committee member server without a Kubernetes cluster.'
 content_type: 'how-to'
 author: 'Gowtham118'
@@ -70,7 +70,7 @@ The keypair is generated with the `anytrusttool keygen` utility, which ships in 
 
 ```shell
 docker run --rm -v $(pwd)/bls_keys:/home/user/bls_keys --entrypoint anytrusttool \
-<Var name="latestNitroNodeImage" /> keygen --dir /home/user/bls_keys
+offchainlabs/nitro-node:v3.11.3-beb2108 keygen --dir /home/user/bls_keys
 ```
 
 This creates two files in `bls_keys/`, both base64-encoded and readable only by their owner (mode `600`):
@@ -91,7 +91,7 @@ Save the following as `docker-compose.yml` in your working directory, replacing 
 ```yaml
 services:
   das-server:
-    image: <Var name="latestNitroNodeImage" />
+    image: offchainlabs/nitro-node:v3.11.3-beb2108
     entrypoint: ['/usr/local/bin/anytrustserver']
     command:
       - --parent-chain.node-url=<YOUR PARENT CHAIN RPC ENDPOINT>
@@ -149,8 +149,8 @@ docker compose logs -f das-server
 You should see the hex-encoded BLS public key logged at startup (in the line `AnyTrust public key used for signing`), followed by lines similar to:
 
 ```shell
-INFO [...] Starting HTTP-RPC server    addr=0.0.0.0 port=9876 revision=v3.11.1-8512b8c
-INFO [...] Starting REST server        addr=0.0.0.0 port=9877 revision=v3.11.1-8512b8c
+INFO [...] Starting HTTP-RPC server    addr=0.0.0.0 port=9876 revision=v3.9.9-6b0af88
+INFO [...] Starting REST server        addr=0.0.0.0 port=9877 revision=v3.9.9-6b0af88
 ```
 
 ## Volumes and persistence
@@ -210,7 +210,7 @@ First, generate an ECDSA keypair (again, no local Nitro build needed):
 ```shell
 mkdir -p ecdsa_keys
 docker run --rm -v $(pwd)/ecdsa_keys:/home/user/ecdsa_keys --entrypoint anytrusttool \
-<Var name="latestNitroNodeImage" /> keygen --dir /home/user/ecdsa_keys --ecdsa
+offchainlabs/nitro-node:v3.11.3-beb2108 keygen --dir /home/user/ecdsa_keys --ecdsa
 ```
 
 Then add the extra signer to your `docker-compose.yml` — a new flag in `command` and a new entry in `volumes` — and apply the change with `docker compose up -d`:
@@ -249,7 +249,7 @@ Remove the extra signer configuration when you're done testing, or keep it (with
 
 - **The container exits immediately or logs `permission denied` on `/home/user/das-data`**: the bind-mounted directory isn't writable by the container user (UID `1000`). This typically happens on Linux when Docker auto-created the directory as `root` or your host user has a different UID. Create the directories before starting the container and run `sudo chown -R 1000:1000 bls_keys das-data`.
 
-- **The batch poster can't gather enough signatures, and batches fall back to the parent chain**: a keyset with `N` members and `assumed-honest` `H` needs `K = N + 1 - H` live, signing committee members for every batch. If any DAS in the keyset is unreachable — for example, a keyset registered with two members while only one server is actually running — the batch poster can't produce a DACert and, by default, silently falls back to posting the full batch data to the parent chain, like a regular <Term id="rollup">Rollup</Term>. The chain keeps working, but you lose the cost savings of AnyTrust. Make sure every member listed in the keyset is deployed, reachable at its registered RPC URL, and configured with the matching BLS key, and that `assumed-honest` is consistent between the keyset and the batch poster configuration. Refer to [DAC failure modes and fallback to batch posting](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-das-operations#dac-failure-modes-and-fallback-to-batch-posting) for the full failure mode table.
+- **The batch poster can't gather enough signatures, and batches fall back to the parent chain**: a keyset with `N` members and `assumed-honest` `H` needs `K = N + 1 - H` live, signing committee members for every batch. If any DAS in the keyset is unreachable — for example, a keyset registered with two members while only one server is actually running — the batch poster can't produce a DACert and, by default, silently falls back to posting the full batch data to the parent chain, like a regular Rollup. The chain keeps working, but you lose the cost savings of AnyTrust. Make sure every member listed in the keyset is deployed, reachable at its registered RPC URL, and configured with the matching BLS key, and that `assumed-honest` is consistent between the keyset and the batch poster configuration. Refer to [DAC failure modes and fallback to batch posting](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-das-operations#dac-failure-modes-and-fallback-to-batch-posting) for the full failure mode table.
 
 - **Store requests fail after the host sleeps or on a laptop running Docker Desktop**: store requests are time-limited, so a significant clock drift between the batch poster and the DAS can cause them to be rejected. Keep the host clock NTP-synced; on Docker Desktop, the VM clock can drift after the host sleeps, and restarting Docker Desktop resyncs it.
 
@@ -276,7 +276,6 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 - The https URL for the REST endpoint (e.g., `das.your-chain.io/rest`)
 
 The chain owner then follows [How to configure the DAC in your chain](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/configure-dac) to generate and register the keyset.
-
 
 ## Optional parameters
 

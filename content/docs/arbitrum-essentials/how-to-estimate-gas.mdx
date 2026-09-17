@@ -12,7 +12,6 @@ sme: TucksonDev
 Head over to [the Stylus gas docs](/docs/stylus/reference/opcode-hostio-pricing) for Stylus-specific guidance.
 
 </VanillaAdmonition>
-
 This how-to covers how gas operates in <Term id="arbitrum">Arbitrum</Term>, how it's calculated, and how to estimate it before submitting transactions. For a deeper understanding of the underlying pricing mechanisms, see the [Gas and Fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees) concept page.
 
 ## Quick start: use `eth_estimateGas`
@@ -34,7 +33,6 @@ The model below explains a two-dimensional fee model that captures both L1 and <
 Arbitrum converts L1 calldata costs into equivalent L2 gas, so the user sees a single fee rather than two (as explained in the model below). The formula detailed below is precisely how it is calculated—but just remember it is shown as a single fee to the user.
 
 </VanillaAdmonition>
-
 Arbitrum uses a [two-dimensional fee model](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) where a transaction's total fee has two components: child chain execution costs and parent chain data posting costs. The total transaction fee is:
 
 ```
@@ -87,7 +85,6 @@ You can use the [`NodeInterface`](/docs/arbitrum-essentials/nodeinterface/refere
 <VanillaAdmonition type="note">
 For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`.
 </VanillaAdmonition>
-
 ## Code example
 
 Here's how to estimate gas using the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk) and `NodeInterface`:

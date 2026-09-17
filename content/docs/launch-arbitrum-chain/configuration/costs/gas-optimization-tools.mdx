@@ -3,7 +3,7 @@ title: 'Configure and optimize gas'
 description: 'Learn how to configure and optimize gas for your Arbitrum chain'
 content_type: 'how-to'
 author: petevielhaber
-sme:
+sme: petevielhaber
 ---
 
 To configure gas behavior on an <Term id="arbitrum-chain">Arbitrum chain</Term> using the [Chain SDK](https://github.com/OffchainLabs/arbitrum-chain-sdk), you primarily use the `ArbOwner` precompile (at address `0x0000000000000000000000000000000000000070`), which allows the <Term id="chain-owner">chain owner</Term> to manage key parameters via function calls. These are called with post-deployment using tools like `cast` (from Foundry) or a custom script with a library like `ethers.js` or `viem`. The defaults inherit from the <Term id="parent-chain">parent chain</Term> or standard Nitro settings, but it is possible to customize your Arbitrum chain as they are permissioned by design.
@@ -15,14 +15,13 @@ Below is a breakdown of each specified parameter, including its role, typical de
 Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible.
 
 </VanillaAdmonition>
-
 ## Gas target
 
-This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos) uses this to update gas pools and enforce dynamic per-block gas limits.
+This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). <Term id="arbos">ArbOS</Term> uses this to update gas pools and enforce dynamic per-block gas limits.
 
 <Term id="arbitrum-chains">Arbitrum Chains</Term> support two configuration modes -
 
-- **[RECOMMENDED] Multiple <Term id="gas-target">Gas Targets</Term> (supported starting [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51))**
+- **[RECOMMENDED] Multiple Gas Targets (supported starting [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51))**
 
   - **Description**: Provides smoother price transitions. It uses multiple gas targets to reduce the frequency and severity of <Term id="child-chain">child chain</Term> gas price spikes.
   - **Configuration**: Call the `setGasPricingConstraints(uint64[3][] calldata constraints)` method on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `constraints` is an array of `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]` triples. \
@@ -47,7 +46,7 @@ Refer to the [Chain parameters](/docs/arbitrum-essentials/reference/chain-params
 
 ## Block gas limit
 
-- **Description**: This limits the maximum amount consumable by all <Term id="transaction">transactions</Term> in a single <Term id="L2">L2</Term> block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
+- **Description**: This limits the maximum amount consumable by all <Term id="transaction">transactions</Term> in a single <Term id="layer-2-l2">L2</Term> block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
 - **Default**: <Var name="arbOneBlockGasLimit" /> gas per block.
 - **Configuration**: Call the [`setMaxTxGasLimit(uint64 limit)`](/docs/arbitrum-essentials/precompiles/reference#arbowner) method on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `limit` is the desired max gas. Despite its name, on chains running ArbOS versions earlier than [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) this method caps total block gas usage. From ArbOS 51 onward, it caps individual transactions instead: the block limit is set separately with `setMaxBlockGasLimit(uint64 limit)`, and the final transaction in a block may exceed it by up to the transaction limit (the effective block gas limit is `MaxBlockGasLimit + MaxTxGasLimit`).
 
@@ -81,7 +80,7 @@ Refer to the [Chain parameters](/docs/arbitrum-essentials/reference/chain-params
 
 ## Per batch gas cost
 
-- **Description**: This refers to the fixed <Term id="L1">L1</Term> base charge applied for the overhead of posting each <Term id="batch">batch</Term> to the parent chain. It is used in transaction pricing to amortize the parent chain's fixed costs (like calldata posting) over the batch's transactions. It can be adjusted to reflect actual posting costs or incentivize batching. The surplus (if any) gets rewarded to the <Term id="batch-poster">Batch Poster</Term>.
+- **Description**: This refers to the fixed <Term id="layer-1-l1">L1</Term> base charge applied for the overhead of posting each <Term id="batch">batch</Term> to the parent chain. It is used in transaction pricing to amortize the parent chain's fixed costs (like calldata posting) over the batch's transactions. It can be adjusted to reflect actual posting costs or incentivize batching. The surplus (if any) gets rewarded to the <Term id="batch-poster">Batch Poster</Term>.
 - **Default**: Varies based on parent chain fees, but typically around 210,000 gas (adjustable to match).
 - **Configuration**: Call the `setPerBatchGasCharge(int64 newCharge)` on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `newCharge` is the fixed gas units per batch. This configuration adjusts the allocation of L2 gas for batch overhead in pricing. Additionally, you can configure related surplus fees (extra reward to batch poster) via `setL1PricingRewardRate(uint64 rate)`. The parent chain base fee estimates influence the actual cost, which is dynamic; therefore, monitor them via `ArbGasInfo`'s `getPricesInWei()` method.
 
@@ -98,7 +97,9 @@ Refer to the [How to manage the fee parameters](/docs/launch-arbitrum-chain/conf
 ## Gas floor per token
 
 <VanillaAdmonition type="info">
+
 This setting is only available starting from [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51).
+
 </VanillaAdmonition>
 
 - **Description**: Gas floor per token refers to the minimum <Term id="gas-price-floor">gas price floor</Term> applied for batch posting to [EIP-7623](https://eips.ethereum.org/EIPS/eip-7623)- enabled parent chains. It ensures that transactions with large calldata pay enough fees to cover data posting costs.
@@ -110,9 +111,10 @@ This setting is only available starting from [ArbOS 51 Dia](/docs/run-a-node/arb
 - **Configuration**: Call the `setParentGasFloorPerToken(uint64 newFloor)` on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner) to set the value for `gasFloorPerToken`. This value should be adjusted based on the parent chain's EIP-7623 settings to ensure the data-posting costs are fully covered.
 
 <VanillaAdmonition type="warning">
-Changing this value from the recommended default is not advised and should be left untouched in most circumstances, unless required by your parent chain.
-</VanillaAdmonition>
 
+Changing this value from the recommended default is not advised and should be left untouched in most circumstances, unless required by your parent chain.
+
+</VanillaAdmonition>
 Example using `cast` (for per batch charge):
 
 ```shell

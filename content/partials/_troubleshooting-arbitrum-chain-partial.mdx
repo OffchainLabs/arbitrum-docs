@@ -57,7 +57,7 @@ Learn more: [ZeroDev smart account integration](https://docs.arbitrum.io/for-dev
 
 There is currently no native Arbitrum-to-Arbitrum chain bridging solution, except for going through the parent chain (even if they share the same parent chain). However, many third-party bridges have expressed interest in supporting Arbitrum chains.
 
-Learn more: [Cross-chain messaging](/docs/arbitrum-essentials/bridging/cross-chain-messaging).
+Learn more: [Cross-chain messaging](https://docs.arbitrum.io/build-decentralized-apps/04-cross-chain-messaging).
 
 ### Is there an official block explorer for Arbitrum chains?
 
@@ -161,7 +161,7 @@ The actual maximum throughput depends on the configurable execution parameters:
 
 **Using standard Arbitrum chain defaults**
 
-- Block time: <Var name="l2BlockTimeMs" />ms
+- Block time: 250ms
 - Block gas limit: 32M L2 gas
 - Max L2 gas per second: 128M gas/sec
 - These parameters are entirely configurable, for example, by dropping the block time to 100ms or by increasing the block gas limit (which comes at the cost of faster state bloat).
@@ -231,7 +231,7 @@ Learn more: [Nitro database snapshots](https://docs.arbitrum.io/run-arbitrum-nod
 
 Over time, without creating assertions, the validator whitelist in the Rollup contract can become disabled. If you look at the [`removeWhitelistAfterValidatorAfk`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62) method, it allows you to disable the whitelist after `confirmPeriodBlocks + VALIDATOR_AFK_BLOCKS` L1 blocks have passed since the last assertion created.
 
-As a default, that's 7200 + <Var name="arbOneDisputeWindowBlocks" /> blocks (a bit less than eight days). Disabling the whitelist is not a significant issue if you continue to monitor the chain and run a validator. It can be enabled using [`setValidatorWhitelistDisabled()`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378) by the chain owner. But it's always better to avoid reaching that point.
+As a default, that's 7200 + 45818 blocks (a bit less than eight days). Disabling the whitelist is not a significant issue if you continue to monitor the chain and run a validator. It can be enabled using [`setValidatorWhitelistDisabled()`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378) by the chain owner. But it's always better to avoid reaching that point.
 
 ### Is there a way to increase idle timeout on RPC nodes for websocket connections?
 

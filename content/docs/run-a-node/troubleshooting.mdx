@@ -6,11 +6,7 @@ author: symbolpunk
 sme: Jason-W123
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 The guidance displayed on this page will change based on your selected configuration:
-
 
 <include cwd>content/partials/_multidimensional-content-controls-partial.mdx</include>
 
@@ -21,111 +17,21 @@ At the end of this troubleshooting guide, you'll find a **Generate troubleshooti
 **Using this page to generate a troubleshooting report is helpful** because it gathers the information that we need in order to resolve your issue.
 
 </VanillaAdmonition>
-
 ## Step 1: Try the troubleshooting checklist
 
 If you're running into unexpected outputs or errors, the following checklist may help you independently resolve your issue.
 
-<div className="hide-tabs">
-  <div className="checklist">
-    <div className="task">
-      <div className="input-container">
-        <input id="tc-1" type="checkbox" />
-        <span className="done"></span>
-      </div>
-      <div className="guidance-container">
-        <label htmlFor="tc-1">1. Select an Operating system, Network, and Node type above</label>
-        <p>The guidance displayed on this page will change based on your selected configuration.</p>
-      </div>
-    </div>
-    <div className="task">
-      <div className="input-container">
-        <input id="tc-2" type="checkbox" />
-        <span className="done"></span>
-      </div>
-      <div className="guidance-container">
-        <label htmlFor="tc-2">2. Review the docs</label>
-        <Tabs
-          className="tabgroup-with-label node-type-tabgroup"
-          groupId="node-type"
-          defaultValue="full-node"
-          values={[
-            { label: 'Node type:', value: 'label' },
-            { label: 'Full node', value: 'full-node' },
-            { label: 'Archive node', value: 'archive-node' },
-            { label: 'Validator node', value: 'validator-node' },
-          ]}
-        >
-          <TabItem className="unclickable-element" value="label"></TabItem>
-          <TabItem value="full-node">
-            <Tabs
-              className="tabgroup-with-label network-tabgroup"
-              groupId="network"
-              defaultValue="arb-one-nitro"
-              values={[
-                { label: 'Network:', value: 'label' },
-                { label: 'Arbitrum One (Nitro)', value: 'arb-one-nitro' },
-                { label: 'Arbitrum One (Classic)', value: 'arb-one-classic' },
-                { label: 'Arbitrum Nova', value: 'arb-nova' },
-                { label: 'Arbitrum Sepolia', value: 'arb-sepolia' },
-                { label: 'Localhost', value: 'localhost' },
-              ]}
-            >
-              <TabItem className="unclickable-element" value="label"></TabItem>
-              <TabItem value="arb-one-nitro">
-                <p>
-                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a> may address your issue.
-                </p>
-              </TabItem>
-              <TabItem value="arb-one-classic">
-                <p>
-                  <a href="/run-arbitrum-node/more-types/run-classic-node">How to run a full node (Classic, pre-Nitro)</a> may address your issue.
-                </p>
-              </TabItem>
-              <TabItem value="arb-nova">
-                <p>
-                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a> may address your issue.
-                </p>
-              </TabItem>
-              <TabItem value="arb-sepolia">
-                <p>
-                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a> may address your issue.
-                </p>
-              </TabItem>
-              <TabItem value="localhost">
-                <p>
-                  The <a href="/run-arbitrum-node/run-local-dev-node">How to run a local dev node</a> may address your issue.
-                </p>
-              </TabItem>
-            </Tabs>
-          </TabItem>
-          <TabItem value="archive-node">
-            <p>
-              <a href="/run-arbitrum-node/more-types/run-archive-node">How to run an archive node</a> may address your issue.
-            </p>
-          </TabItem>
-          <TabItem value="validator-node">
-            <p>
-              <a href="/run-arbitrum-node/more-types/run-validator-node">How to run a validator</a> may address your issue.
-            </p>
-          </TabItem>
-        </Tabs>
-      </div>
-    </div>
-    <div className="task">
-      <div className="input-container">
-        <input id="tc-3" type="checkbox" />
-        <span className="done"></span>
-      </div>
-      <div className="guidance-container">
-        <label htmlFor="tc-3">3. Review the FAQ</label>
-        <p>
-          Answers to frequently asked questions can be found in <a href="/node-running/faq">Frequently asked questions: Run a node</a>.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
+<TroubleshootingChecklist>
+  <ChecklistItem id="tc-1" label="1. Select an Operating system, Network, and Node type above">
+    The guidance displayed on this page will change based on your selected configuration.
+  </ChecklistItem>
+  <ChecklistItem id="tc-2" label="2. Review the docs">
+    <ConfigGuidance />
+  </ChecklistItem>
+  <ChecklistItem id="tc-3" label="3. Review the FAQ">
+    Answers to frequently asked questions can be found in [Frequently asked questions: Run a node](/docs/run-a-node/faq).
+  </ChecklistItem>
+</TroubleshootingChecklist>
 
 ## Step 2: Look for your scenario
 
@@ -133,19 +39,8 @@ Common troubleshooting scenarios and solutions are detailed below.
 
 You can check logs by different log types: info, warn, and error.
 
-<Tabs
-  className="tabgroup-with-label log-taggroup"
-  groupId="logs"
-  defaultValue="info"
-  values={[
-    { label: 'Logs type:', value: 'label' },
-    { label: 'Info', value: 'info' },
-    { label: 'Warn', value: 'warn' },
-    { label: 'Error', value: 'error' },
-  ]}
->
-  <TabItem className="unclickable-element" value="label"></TabItem>
-  <TabItem value="info">
+<Tabs items={["Info", "Warn", "Error"]} label="Logs type:">
+  <Tab value="Info">
     <table className="small-table" id="troubleshooting-table-info">
       <tbody>
         <tr>
@@ -174,7 +69,7 @@ You can check logs by different log types: info, warn, and error.
         </tr>
         <tr className="scenario">
           <td>
-            Your Arbitrum node can’t connect to your <Term id="parent-chain">parent chain</Term> node on <code>localhost:8545</code>
+            Your Arbitrum node can’t connect to your parent chain node on <code>localhost:8545</code>
           </td>
           <td>This is often because of a Docker port configuration issue. See https://stackoverflow.com/questions/43884981/unable-to-connect-localhost-in-docker.</td>
         </tr>
@@ -218,8 +113,8 @@ You can check logs by different log types: info, warn, and error.
         </tr>
       </tbody>
     </table>
-  </TabItem>
-  <TabItem value="warn">
+  </Tab>
+  <Tab value="Warn">
     <table className="small-table" id="troubleshooting-table-warn">
       <tbody>
         <tr>
@@ -242,16 +137,14 @@ You can check logs by different log types: info, warn, and error.
           <td>
             You see <code>`Failed to load snapshot` err="head doesn't match snapshot: have a, want b”</code>
           </td>
-          <td>
-            This is usually because an ungraceful shutdown caused a corrupted database; try restarting the node without a <Term id="state-pruning">prune</Term> flag, and after your node goes back to normal, then graceful shut it down and restart to prune it.
-          </td>
+          <td>This is usually because an ungraceful shutdown caused a corrupted database; try restarting the node without a prune flag, and after your node goes back to normal, then graceful shut it down and restart to prune it.</td>
         </tr>
         <tr className="scenario">
           <td>
             You see <code>failed to get blobs: expected at least six blobs for slot `[slot_number]` but only got 0</code>
           </td>
           <td>
-            This often happens when you connect to a beacon chain endpoint while the blob you are querying is expired. To resolve this error, connect to a beacon endpoint that supports historical blob data (see <a href="/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers">List of Ethereum beacon chain RPC providers</a>
+            This often happens when you connect to a beacon chain endpoint while the blob you are querying is expired. To resolve this error, connect to a beacon endpoint that supports historical blob data (see <a href="/docs/run-a-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers">List of Ethereum beacon chain RPC providers</a>
             ).
           </td>
         </tr>
@@ -266,7 +159,7 @@ You can check logs by different log types: info, warn, and error.
             You see <code>Getting file info dir=&lt;path&gt;/machines error="stat &lt;path&gt;/machines: no such file or directory"</code>.
           </td>
           <td>
-            Nitro is checking one of the expected locations for WASM machine artifacts, but that particular <code>machines/</code> directory does not exist. This warning can be harmless if Nitro finds the required machine artifacts in another location. If it is followed by validation or WASM module-root errors, make sure you're running a supported/current Nitro image for your chain, and that the image or mounted <code>machines/</code> directory contains artifacts matching the chain's onchain <Term id="wasm-module-root">WASM module root</Term>. If you're using an older Docker image, upgrade to a newer Nitro release; if you're building or running from source, mount or download the matching machine artifacts for that Nitro version/module root.
+            Nitro is checking one of the expected locations for WASM machine artifacts, but that particular <code>machines/</code> directory does not exist. This warning can be harmless if Nitro finds the required machine artifacts in another location. If it is followed by validation or WASM module-root errors, make sure you're running a supported/current Nitro image for your chain, and that the image or mounted <code>machines/</code> directory contains artifacts matching the chain's onchain WASM module root. If you're using an older Docker image, upgrade to a newer Nitro release; if you're building or running from source, mount or download the matching machine artifacts for that Nitro version/module root.
           </td>
         </tr>
         <tr className="scenario">
@@ -293,9 +186,7 @@ You can check logs by different log types: info, warn, and error.
           <td>
             You see <code>`error reading inbox` err="previous delayed accumulator mismatch for message N"</code>.
           </td>
-          <td>
-            The <Term id="delayed-inbox">delayed-inbox</Term> accumulator your node computed doesn't match the onchain one at message N—typically caused by a parent-chain endpoint serving inconsistent data or by a <Term id="reorg">reorg</Term>. Switch to a different parent-chain RPC and restart; if it persists, re-sync from a recent snapshot.
-          </td>
+          <td>The delayed-inbox accumulator your node computed doesn't match the onchain one at message N—typically caused by a parent-chain endpoint serving inconsistent data or by a reorg. Switch to a different parent-chain RPC and restart; if it persists, re-sync from a recent snapshot.</td>
         </tr>
         <tr className="scenario">
           <td>
@@ -321,9 +212,9 @@ You can check logs by different log types: info, warn, and error.
         </tr>
       </tbody>
     </table>
-  </TabItem>
-  <TabItem value="error">
-    <table className="small-table" id="troubleshooting-table-warn">
+  </Tab>
+  <Tab value="Error">
+    <table className="small-table" id="troubleshooting-table-error">
       <tbody>
         <tr>
           <th style={{ minWidth: 180 + 'px' }}>Scenario</th>
@@ -347,7 +238,7 @@ You can check logs by different log types: info, warn, and error.
             or <code>batch is within reorg resistance margin from layer 1 minimum block or timestamp bounds</code>
           </td>
           <td>
-            It indicates that there has been an issue with <Term id="batch">batch</Term> posting on the network. This could occur if your <Term id="batch-poster">batch poster</Term> didn't post a batch for an extended period. Common reasons include the node being shut down inadvertently or the batch poster running out of funds, leading to no new blocks being produced or posted by the batch poster. <br />
+            It indicates that there has been an issue with batch posting on the network. This could occur if your batch poster didn't post a batch for an extended period. Common reasons include the node being shut down inadvertently or the batch poster running out of funds, leading to no new blocks being produced or posted by the batch poster. <br />
             To resolve this, If re-org doesn’t matter, you can just start the batch poster with `--node.batch-poster.reorg-resistance-margin=0` and `node.batch-poster.l1-block-bound` to ignore, If it does, you'd want to modify the time bounds on the sequencer inbox to allow the sequencer to post a batch containing the transactions with the old timestamp
           </td>
         </tr>
@@ -368,7 +259,7 @@ You can check logs by different log types: info, warn, and error.
             You see <code>wrong msgIdx got X expected Y</code>.
           </td>
           <td>
-            The transaction streamer received a message whose index doesn't match the next expected one—your node's local DB is behind or ahead of the <Term id="sequencer-feed">sequencer feed</Term>. Restart the node; if the gap persists, re-sync from a snapshot or use <code>--init.reorg-to-message-batch</code> to roll back to a known-good index.
+            The transaction streamer received a message whose index doesn't match the next expected one—your node's local DB is behind or ahead of the sequencer feed. Restart the node; if the gap persists, re-sync from a snapshot or use <code>--init.reorg-to-message-batch</code> to roll back to a known-good index.
           </td>
         </tr>
         <tr className="scenario">
@@ -409,16 +300,16 @@ You can check logs by different log types: info, warn, and error.
         </tr>
       </tbody>
     </table>
-  </TabItem>
+  </Tab>
 </Tabs>
 
-<!--
+{/*
 #### Troubleshooting your feed relay
 
 import FeedRelayTroubleshootingPartial from '@site/../arbitrum-docs/node-running/partials/_feed-relay-troubleshooting.md';
 
 <FeedRelayTroubleshootingPartial />
--->
+*/}
 
 ## Step 3: Generate a troubleshooting report
 
@@ -427,27 +318,6 @@ import FeedRelayTroubleshootingPartial from '@site/../arbitrum-docs/node-running
 3.  Click **Generate troubleshooting report**.
 4.  Copy and paste the **generated report text** when asking for support on [Discord](https://discord.gg/ZpZuw7p) or any other support channel.
 
-<br />
+<TroubleshootingReport />
 
-import { GenerateTroubleshootingReportWidget } from '@site/src/components/GenerateTroubleshootingReportWidget.js';
-
-<GenerateTroubleshootingReportWidget />
-
-<div className="troubleshooting-report-area">
-  <p>Node startup command (make sure to remove any sensitive information like, i.e., private keys)</p>
-  <textarea id="vn-cmd" rows="3" placeholder='Paste here the command you use to run your node: "docker run ..."'></textarea>
-  <p>Unexpected output</p>
-  <span>
-    <strong>Tip:</strong> Paste the ~100 lines of output <strong>before and including</strong> the unexpected output you're asking about. You can use the following command to get the logs:{' '}
-  </span>
-  <code>docker logs --tail 100 YOUR_CONTAINER_ID</code>
-  <textarea id="output" rows="3" placeholder="Paste your unexpected output here..."></textarea>
-  <a id="generate-report" className="generate-report">
-    Generate troubleshooting report
-  </a>
-  <div id="generated-report" className="generated-report">
-    Complete the checklist above before generating...
-  </div>
-</div>
-
-<!-- todo: gpt-n + langchain + pinecone -->
+{/* todo: gpt-n + langchain + pinecone */}

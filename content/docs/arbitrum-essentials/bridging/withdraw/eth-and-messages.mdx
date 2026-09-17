@@ -13,7 +13,7 @@ This guide explains how to programmatically send messages and withdraw assets fr
 
 - A child chain <Term id="wallet">wallet</Term> with funds
 - Access to parent chain infrastructure (for executing the final step)
-- Awareness that child-to-parent messages require <Var name="arbOneDisputeWindowDays" /> days to finalize
+- Awareness that child-to-parent messages require 6.4 days to finalize
 
 ## Overview of the process
 
@@ -94,10 +94,9 @@ const proofData = await nodeInterface.constructOutboxProof(batchNumber, indexInB
 
 <VanillaAdmonition type="note">
 
-`NodeInterface` is a "virtual" contract accessible at `0x00000000000000000000000000000000000000C8`. It isn't a true <Term id="precompile">precompile</Term> but provides Arbitrum-specific data without requiring a custom RPC.
+`NodeInterface` is a "virtual" contract accessible at `0x00000000000000000000000000000000000000C8`. It isn't a true precompile but provides Arbitrum-specific data without requiring a custom RPC.
 
 </VanillaAdmonition>
-
 ### Step 2: Execute on the parent chain
 
 Call `Outbox.executeTransaction` with the proof data from Step 1:
@@ -149,7 +148,7 @@ Returns a unique identifier for the withdrawal message.
 ### How **ETH** withdrawal works
 
 1. **On the child chain**: The **ETH** balance is burned, and a message is created
-2. **Challenge period**: Wait <Var name="arbOneDisputeWindowDays" /> days for the <Term id="assertion">assertion</Term> to finalize
+2. **Challenge period**: Wait 6.4 days for the <Term id="assertion">assertion</Term> to finalize
 3. **On the parent chain**: Execute via `Outbox.executeTransaction` to claim your **ETH**
 
 `ArbSys.withdrawEth` is equivalent to calling `ArbSys.sendTxToL1` with an empty calldata argument. Like any child-to-parent message, it requires executing on the parent chain after the dispute period.
@@ -165,7 +164,7 @@ const tx = await arbSys.withdrawEth(parentChainAddress, {
 });
 const receipt = await tx.wait();
 
-// After <Var name="arbOneDisputeWindowDays" /> days, execute on parent chain using the steps above
+// After 6.4 days, execute on parent chain using the steps above
 ```
 
 The withdrawal process:
@@ -231,11 +230,11 @@ For a complete example, see the [eth-withdraw tutorial](https://github.com/Offch
 
 Child-to-parent messages go through these stages:
 
-| Stage                                    | Description                                                                                            |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Posted on child chain                    | The message is sent via `ArbSys.sendTxToL1`                                                            |
-| Waiting for finalization                 | The assertion containing the message is in the challenge period (<Var name="arbOneDisputeWindowDays" /> days) |
-| Confirmed and executable on parent chain | The assertion is confirmed, and the message can be executed in the outbox                              |
+| Stage                                    | Description                                                                |
+| ---------------------------------------- | -------------------------------------------------------------------------- |
+| Posted on child chain                    | The message is sent via `ArbSys.sendTxToL1`                                |
+| Waiting for finalization                 | The assertion containing the message is in the challenge period (6.4 days) |
+| Confirmed and executable on parent chain | The assertion is confirmed, and the message can be executed in the outbox  |
 
 ## Next steps
 

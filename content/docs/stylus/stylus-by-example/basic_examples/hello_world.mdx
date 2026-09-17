@@ -16,7 +16,6 @@ The `console!` macro works similar to the built-in `println!` macro that comes w
 
 ### Examples
 
-
 <include cwd>content/partials/_not-for-production-banner-partial.mdx</include>
 
 ```rust
@@ -39,13 +38,11 @@ console!("When will you try out {}?", local_variable);
 
 extern crate alloc;
 
-
 use stylus_sdk::{console, prelude::*, stylus_proc::entrypoint, ArbResult};
 
 #[storage]
 #[entrypoint]
 pub struct Hello;
-
 
 #[public]
 impl Hello {

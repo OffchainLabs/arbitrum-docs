@@ -1,0 +1,24 @@
+{
+  "title": "Build apps with Stylus",
+  "icon": "Braces",
+  "root": true,
+  "description": "Build apps with Stylus in Rust, C, and C++.",
+  "pages": [
+    "index",
+    "fundamentals",
+    "advanced",
+    "best-practices",
+    "cli-tools",
+    "concepts",
+    "gentle-introduction",
+    "how-tos",
+    "reference",
+    "troubleshooting",
+    "quickstart",
+    "troubleshooting-building-stylus",
+    "...",
+    "[Chain info](/docs/chain-info)",
+    "[Audit reports](/docs/audit-reports)",
+    "[Contribute](/docs/contribute)"
+  ]
+}

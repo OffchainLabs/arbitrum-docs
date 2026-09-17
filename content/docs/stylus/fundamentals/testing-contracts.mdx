@@ -444,11 +444,11 @@ keywords = ["arbitrum", "ethereum", "stylus", "alloy"]
 [dependencies]
 alloy-primitives = "1.5.7"
 alloy-sol-types = "1.5.7"
-stylus-sdk = "<Var name="stylusSdkVersion" />"
+stylus-sdk = "0.10.7"
 
 # Enable the in-memory TestVM only for tests, so it never ships in your contract.
 [dev-dependencies]
-stylus-sdk = { version = "<Var name="stylusSdkVersion" />", features = ["stylus-test"] }
+stylus-sdk = { version = "0.10.7", features = ["stylus-test"] }
 
 [features]
 default = ["mini-alloc"]

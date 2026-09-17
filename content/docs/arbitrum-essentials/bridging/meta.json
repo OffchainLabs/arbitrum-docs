@@ -1,0 +1,13 @@
+{
+  "title": "Bridging",
+  "pages": [
+    "overview",
+    "deposit",
+    "withdraw",
+    "cross-chain-messaging",
+    "configure-token-gateway",
+    "custom-gas-token-chains",
+    "l1-l3-teleportation",
+    "..."
+  ]
+}

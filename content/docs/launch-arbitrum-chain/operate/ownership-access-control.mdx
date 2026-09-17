@@ -4,6 +4,7 @@ description: 'Overview of the technical architecture of chain ownership affordan
 content_type: 'how-to'
 author: dzgoldman
 sme: dzgoldman
+target_audience: 'RaaSes and developers deploying and maintaining Arbitrum chains.'
 ---
 
 A **<Term id="chain-owner">chain owner</Term>** of an Arbitrum chain is an entity that can carry out critical upgrades to the chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding and removing other chain owners.
@@ -16,7 +17,7 @@ The chain-ownership architecture is designed to give Arbitrum chain creators fle
 
 Chain ownership affordance is handled via [**Upgrade Executor**](https://github.com/OffchainLabs/upgrade-executor) contracts.
 
-Each Arbitrum chain is deployed with two Upgrade Executors — one on the Arbitrum chain itself, and one on its <Term id="parent-chain">parent chain.</Term> At deployment, the chain's critical affordances are given to the Upgrade Executor contracts.
+Each Arbitrum chain is deployed with two Upgrade Executors — one on the Arbitrum chain itself, and one on its <Term id="parent-chain">parent chain</Term>. At deployment, the chain's critical affordances are given to the Upgrade Executor contracts.
 
 Some examples:
 
@@ -56,7 +57,7 @@ The Chain SDK's `sequencerInboxPrepareTransactionRequest` and `rollupAdminLogicP
 Access is enforced by the `onlyRollupOwner` and `onlyRollupOwnerOrBatchPosterManager` modifiers.
 
 | Function                                | Required caller                                                            | Chain SDK helper                                                                    |
-| --------------------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| ---------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `setValidKeyset(bytes)`                 | Rollup owner — via Upgrade Executor                                        | `setValidKeyset` / `buildSetValidKeyset`                                            |
 | `invalidateKeysetHash(bytes32)`         | Rollup owner — via Upgrade Executor                                        | `buildInvalidateKeysetHash`                                                         |
 | `setIsBatchPoster(address, bool)`       | Rollup owner (via Upgrade Executor) **or** batch poster manager (directly) | `buildSetIsBatchPoster` (also `buildEnableBatchPoster` / `buildDisableBatchPoster`) |
@@ -78,7 +79,7 @@ Access is enforced by the `onlyRollupOwner` and `onlyRollupOwnerOrBatchPosterMan
 Every function on `RollupAdminLogic` is reachable only through the Rollup proxy's admin, which in a standard deployment is the Upgrade Executor. There is no per-function modifier—the proxy routes admin calls to this logic contract only when the caller is the admin—so **all of these require the Upgrade Executor** and none have a dedicated Chain SDK helper. They are all issued through the generic `rollupAdminLogicPrepareTransactionRequest({ functionName, args, upgradeExecutor, rollup, account })` dispatcher.
 
 | Function                                           | Required caller                     | Chain SDK helper                            |
-| -------------------------------------------------- | ----------------------------------- | ------------------------------------------- |
+| ---------------------------------------------------- | -------------------------------------- | ---------------------------------------------- |
 | `setValidator(address[], bool[])`                  | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
 | `setOwner(address)`                                | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
 | `setConfirmPeriodBlocks(uint64)`                   | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
@@ -113,7 +114,7 @@ The function set above reflects the <Term id="bold">BoLD</Term>-era `RollupAdmin
 Access is enforced by the `onlyRollupOrOwner` modifier. The caller must be the Rollup contract itself or the Rollup owner. The owner path runs through the Upgrade Executor. The Chain SDK has no dedicated Bridge helpers; these are configured during deployment or via the `Rollup` admin forwarders above.
 
 | Function                                       | Required caller                                                    | Chain SDK helper |
-| ---------------------------------------------- | ------------------------------------------------------------------ | ---------------- |
+| ------------------------------------------------- | ---------------------------------------------------------------------- | ------------------- |
 | `setSequencerInbox(address)`                   | Rollup contract, or Rollup owner — owner path via Upgrade Executor | —                |
 | `setDelayedInbox(address, bool)`               | Rollup contract, or Rollup owner — owner path via Upgrade Executor | —                |
 | `setOutbox(address, bool)`                     | Rollup contract, or Rollup owner — owner path via Upgrade Executor | —                |
@@ -125,7 +126,7 @@ Access is enforced by the `onlyRollupOrOwner` modifier. The caller must be the R
 `setAllowListEnabled` and the allowlist setter live on the `Inbox` (`AbsInbox`), not on `SequencerInbox`. Access is enforced by `onlyRollupOrOwner`.
 
 | Function                          | Required caller                                                    | Chain SDK helper           |
-| --------------------------------- | ------------------------------------------------------------------ | -------------------------- |
+| ------------------------------------ | ---------------------------------------------------------------------- | ------------------------------- |
 | `setAllowListEnabled(bool)`       | Rollup contract, or Rollup owner — owner path via Upgrade Executor | `buildSetAllowListEnabled` |
 | `setAllowList(address[], bool[])` | Rollup contract, or Rollup owner — owner path via Upgrade Executor | `buildSetAllowList`        |
 

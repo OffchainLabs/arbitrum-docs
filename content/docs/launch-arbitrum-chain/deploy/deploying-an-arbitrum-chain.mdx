@@ -5,31 +5,28 @@ user_story: As a current or prospective Arbitrum chain deployer, I need to confi
 content_type: 'how-to'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
 ---
-
 
 <include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>
 
 Creating a new Arbitrum chain involves deploying a set of contracts on your chain's <Term id="parent-chain">parent chain</Term>. These contracts are:
 
 - **Bridge contracts**: Used to send cross-chain messages between the Arbitrum chain and its parent chain, including batches posted by the sequencer
-- **Rollup contracts**: Used by validators to create and confirm [assertions](/docs/how-arbitrum-works/deep-dives/assertions) of the current state of the Arbitrum chain
+- **Rollup contracts**: Used by validators to create and confirm assertions of the current state of the Arbitrum chain
 - **Challenge protocol contracts**: Used by validators to dispute current assertions of the state of the chain, and ultimately resolve those disputes
 
 You can explore the code of these contracts in the [nitro-contracts repository](https://github.com/OffchainLabs/nitro-contracts).
 
-Upon deployment, an Arbitrum chain can be configured as a <Term id="arbitrum-rollup-chain">Rollup</Term> or [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) chain, and use **ETH** or any standard **ERC-20** token as its gas token.
+Upon deployment, an Arbitrum chain can be configured as a <Term id="arbitrum-rollup-chain">Rollup</Term> or <Term id="arbitrum-anytrust-chain">AnyTrust</Term> chain, and use **ETH** or any standard `ERC-20 `token as its gas token.
 
 This page explains how to deploy an <Term id="arbitrum-chain">Arbitrum chain</Term> using the Arbitrum Chain SDK. See the [Overview](/docs/launch-arbitrum-chain/overview/arbitrum-chain-sdk-introduction) for an introduction to the process of creating and configuring an Arbitrum chain.
-
-If you want to launch with predeployed contracts, balances, or storage, first [generate a custom genesis file with the Chain SDK](/docs/launch-arbitrum-chain/deploy/custom-genesis-state#use-the-chain-sdk). The generated block hash, send root, chain configuration, and initial L1 base fee must be included in the deployment configuration described below.
 
 <VanillaAdmonition type="info" title="About custom gas token Arbitrum chains">
 
 Custom gas token Arbitrum chains let participants pay transaction fees in an **ERC-20** token instead of **ETH**. Standard **ERC-20** tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup#requirements-of-the-custom-gas-token) to be used as gas tokens. Remember that the **ERC-20** token to be used must be deployed on your chain's parent chain.
 
 </VanillaAdmonition>
-
 ## Parameters used when deploying a new chain
 
 Before we describe the process of creating a chain using the Chain SDK, let's see what configuration options we have available when creating a chain.
@@ -53,16 +50,16 @@ struct RollupDeploymentParams {
 
 The following table describes `RollupDeploymentParams`'s parameters:
 
-| Parameter                   | Type        | Description                                                                                                                                                                                                                                                                                                                                                         |
-| :-------------------------- | :---------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `config`                    | Config      | The chain's configuration, explained below.                                                                                                                                                                                                                                                                                                                         |
-| `validators`                | `address[]` | Initial set of <Term id="validator">validator</Term> addresses. Validators are responsible for validating the <Term id="chain-state">chain state</Term> and posting assertions (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty assertions submitted by other validators. |
-| `maxDataSize`               | `uint256`   | Maximum message size for the Inbox contract (`<Var name="maxDataSizeL2" />` for <Term id="L2">L2</Term> chains, and `<Var name="maxDataSizeL3" />` for L3 chains).                                                                                                                                                                                               |
-| `nativeToken`               | `address`   | Address of the token contract in the parent chain, used for paying gas fees on the Arbitrum chain. It can be set to **ETH** for regular chains or to any **ERC-20** token for custom gas token Arbitrum chains.                                                                                                                                                     |
-| `deployFactoriesToL2`       | `bool`      | Whether or not to deploy several deterministic factory contracts to the Arbitrum chain.                                                                                                                                                                                                                                                                             |
-| `maxFeePerGasForRetryables` | `uint256`   | Gas price bid to use when sending the <Term id="retryable-ticket">retryable tickets</Term>.                                                                                                                                                                                                                                                              |
-| `batchPosters`              | `address[]` | Initial set of <Term id="batch-poster">batch poster</Term> addresses. Batch posters batch and compress transactions on the Arbitrum chain and transmit them back to the parent chain.                                                                                                                                                                    |
-| `batchPosterManager`        | `address`   | Address of the account responsible for managing currently active batch posters. Not mandatory, as these actions can also be taken by the chain owner.                                                                                                                                                                                                               |
+| Parameter                   | Type      | Description                                                                                                                                                                                                                                                                                                                |
+| :-------------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `config`                    | Config    | The chain's configuration, explained below.                                                                                                                                                                                                                                                                                |
+| `validators`                | address[] | Initial set of <Term id="validator">validator</Term> addresses. Validators are responsible for validating the chain state and posting assertions (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty assertions submitted by other validators. |
+| `maxDataSize`               | uint256   | Maximum message size for the Inbox contract (<code><Var name="maxDataSizeL2" /></code> for L2 chains, and <code><Var name="maxDataSizeL3" /></code> for L3 chains).                                                                                                                                                                                                                          |
+| `nativeToken`               | address   | Address of the token contract in the parent chain, used for paying gas fees on the Arbitrum chain. It can be set to **ETH** for regular chains or to any **ERC-20** token for custom gas token Arbitrum chains.                                                                                                            |
+| `deployFactoriesToL2`       | bool      | Whether or not to deploy several deterministic factory contracts to the Arbitrum chain.                                                                                                                                                                                                                                    |
+| `maxFeePerGasForRetryables` | uint256   | Gas price bid to use when sending the retryable tickets.                                                                                                                                                                                                                                                                   |
+| `batchPosters`              | address[] | Initial set of batch poster addresses. Batch posters batch and compress transactions on the Arbitrum chain and transmit them back to the parent chain.                                                                                                                                                                     |
+| `batchPosterManager`        | address   | Address of the account responsible for managing currently active batch posters. Not mandatory, as these actions can also be taken by the chain owner.                                                                                                                                                                      |
 
 The `Config` struct used in the previous configuration looks like this:
 
@@ -94,17 +91,17 @@ struct Config {
 
 Most of these parameters don't need to be configured, since the Chain SDK will provide the right default values for them. However, the following table describes some of the parameters that you might want to configure:
 
-| Parameter             | Type      | Description                                                                                                                                                                                                                                                                                                                    |
-| :-------------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `confirmPeriodBlocks` | `uint64`  | Sets the <Term id="challenge-period">challenge period</Term> in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. Learn more about it in [Customizable challenge period](/docs/launch-arbitrum-chain/configuration/validation/customizable-challenge-period).                    |
-| `stakeToken`          | `address` | Address of the token that validators must bond to participate in the chain's validation process.                                                                                                                                                                                                                               |
-| `baseStake`           | `uint256` | Arbitrum chain validator nodes must bond a certain amount to incentivize honest participation. This parameter specifies this amount.                                                                                                                                                                                           |
-| `wasmModuleRoot`      | `address` | Hash of the <Term id="wasm">WASM</Term> module root to be used when validating.                                                                                                                                                                                                                                     |
-| `owner`               | `address` | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain. You **will** have to fund this address with enough **ETH** to cover the gas costs of deploying your core contracts to L2.                                                                            |
-| `loserStakeEscrow`    | `address` | Address that will receive any extra bonds deposited in the same assertion (when creating disputes).                                                                                                                                                                                                                            |
-| `chainId`             | `uint256` | Your chain's unique identifier. It differentiates your chain from others in the ecosystem. Don't worry about this; it's inconsequential for devnets. In production scenarios, you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org). |
-| `chainConfig`         | `string`  | Additional chain configuration, explained below.                                                                                                                                                                                                                                                                               |
-| `chainName`           | `string`  | This name provides a way for people to distinguish your Arbitrum chain from other Arbitrum chains. You’ll want to make this a name that you can easily remember, and that your users and developers will recognize.                                                                                                            |
+| Parameter             | Type    | Description                                                                                                                                                                                                                                                                                                                    |
+| :-------------------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `confirmPeriodBlocks` | uint64  | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. Learn more about it in [Customizable challenge period](/docs/launch-arbitrum-chain/configuration/validation/customizable-challenge-period).                   |
+| `stakeToken`          | address | Address of the token that validators must bond to participate in the chain's validation process.                                                                                                                                                                                                                               |
+| `baseStake`           | uint256 | Arbitrum chain validator nodes must bond a certain amount to incentivize honest participation. This parameter specifies this amount.                                                                                                                                                                                           |
+| `wasmModuleRoot`      | address | Hash of the WASM module root to be used when validating.                                                                                                                                                                                                                                                                       |
+| `owner`               | address | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain. You **will** have to fund this address with enough **ETH** to cover the gas costs of deploying your core contracts to L2.                                                                            |
+| `loserStakeEscrow`    | address | Address that will receive any extra bonds deposited in the same assertion (when creating disputes).                                                                                                                                                                                                                            |
+| `chainId`             | uint256 | Your chain's unique identifier. It differentiates your chain from others in the ecosystem. Don't worry about this; it's inconsequential for devnets. In production scenarios, you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org). |
+| `chainConfig`         | string  | Additional chain configuration, explained below.                                                                                                                                                                                                                                                                               |
+| `chainName`           | string  | This name provides a way for people to distinguish your Arbitrum chain from other Arbitrum chains. You’ll want to make this a name that you can easily remember, and that your users and developers will recognize.                                                                                                            |
 
 The `chainConfig` parameter within the `Config` struct is a stringified `JSON` object that looks like this:
 
@@ -144,15 +141,14 @@ The `chainConfig` parameter within the `Config` struct is a stringified `JSON` o
 
 Again, most of these parameters don't need to be configured, since the Chain SDK will provide the right default values for them. However, the following table describes some of the parameters that you might want to configure:
 
-| Parameter                            | Type      | Description                                                                                                                                                                                                                                                                     |
-| :----------------------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `chainId`                            | `number`  | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                                                                                                                                                      |
-| `arbitrum.DataAvailabilityCommittee` | `bool`    | Whether or not to use a <Term id="data-availability-committee-dac">Data Availability Committee (DAC)</Term> to store your chain's data (this should be `false` for Rollup chains, and `true` for AnyTrust chains).                                                   |
-| `arbitrum.InitialArbOSVersion`       | `number`  | <Term id="arbos">ArbOS</Term> version to use (it should be the latest ArbOS version available).                                                                                                                                                                      |
-| `arbitrum.InitialChainOwner`         | `address` | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain.                                                                                                                                                       |
-| `arbitrum.MaxCodeSize`               | `number`  | Sets the maximum size for contract bytecodes on the chain (it's recommended to use the default 24Kb, and not set it higher than 96Kb). For more information, refer to [Smart contract size limit](/docs/launch-arbitrum-chain/configuration/core/config-smart-contract-size-limit). |
-| `arbitrum.MaxInitCodeSize`           | `number`  | Maximum initialization bytecode size allowed (usually double the amount set in `MaxCodeSize`).                                                                                                                                                                                  |
-
+| Parameter                            | Type    | Description                                                                                                                                                                                                                                                                                                            |
+| :----------------------------------- | :------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chainId`                            | number  | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                                                                                                                                                                                             |
+| `arbitrum.DataAvailabilityCommittee` | bool    | Whether or not to use a Data Availability Committee (DAC) to store your chain's data (this should be `false` for Rollup chains, and `true` for AnyTrust chains).                                                                                                                                                       |
+| `arbitrum.InitialArbOSVersion`       | number  | ArbOS version to use (it should be the latest ArbOS version available).                                                                                                                                                                                                                                                |
+| `arbitrum.InitialChainOwner`         | address | Account address responsible for deploying, owning, and managing your Arbitrum chain's base contracts on its parent chain.                                                                                                                                                                                              |
+| `arbitrum.MaxCodeSize`               | number  | Sets the maximum size for contract bytecodes on the chain (it's recommended to use the default 24Kb, and not set it higher than 96Kb). For more information, refer to [Smart contract size limit](/docs/launch-arbitrum-chain/configuration/core/config-smart-contract-size-limit). |
+| `arbitrum.MaxInitCodeSize`           | number  | Maximum initialization bytecode size allowed (usually double the amount set in `MaxCodeSize`).                                                                                                                                                                                                                         |
 
 <include cwd>content/partials/launch-arbitrum-chain/_size-limit.mdx</include>
 
@@ -168,7 +164,6 @@ The Chain SDK includes an example script for creating an Arbitrum chain. We reco
 - [`create-rollup-custom-fee-token`](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/create-rollup-custom-fee-token) for creating an Arbitrum AnyTrust chain with an **ERC-20** as the gas token.
 
 </VanillaAdmonition>
-
 Here are the steps involved in the deployment process:
 
 1. [Create the chain's configuration object](#1-create-the-chains-configuration-object)
@@ -224,7 +219,6 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
 The above defaults to Arbitrum Sepolia. We've added the import `viem/chains` and the chain info to demonstrate from a popular library (`viem`) how to import the chain information already available in the Arbitrum Chain SDK.
 
 </VanillaAdmonition>
-
 ### 2. Deploy the Arbitrum chain
 
 With the new crafted configuration, we can call the `createRollup` method which will send the transaction to the `RollupCreator` contract and wait until it is executed.
@@ -236,7 +230,6 @@ Besides the `Config` structure created in the previous step, other parameters fr
 If you want to configure a custom gas token, the deployer needs to give allowance to the `RollupCreator` contract before starting the deployment process, so that it can spend enough tokens to send the correspondant `Parent-to-Child` messages during the deployment process. This process is handled within the `createRollup` function, but the deployer must own enough tokens to create these messages.
 
 </VanillaAdmonition>
-
 If you want to configure a custom gas token, you can pass the address in the parent chain of the **ERC-20** token to use in the `nativeToken` parameter of the `createRollup` function.
 
 Below is an example of how to use `createRollup` using the `createRollupConfig` crafted in the previous step:
@@ -282,14 +275,13 @@ type CreateRollupResults = {
 
 ### 4. Set the DAC keyset in the `SequencerInbox` (for AnyTrust chains)
 
-If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS keys. See [How to configure a DAC](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started) to learn more about setting up a DAC.
+If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started) to learn more about setting up a DAC.
 
 <VanillaAdmonition type="info">
 
 The Arbitrum Chain SDK includes an example script for setting up the keyset in the `SequencerInbox`. We recommend that you first understand the process described in this section and then check the [`set-valid-keyset`](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
 
 </VanillaAdmonition>
-
 The Chain SDK includes a `setValidKeyset` function to help set the keyset in the SequencerInbox. From the last step, you can gather the `sequencerInbox` and `upgradeExecutor` addresses and pass them to the function along with the `keyset`, a public client of the parent chain, and a wallet client of an account that has executor privileges in the `UpgradeExecutor` contract (to learn more about `UpgradeExecutor`, see [Ownership structure and access control](/docs/launch-arbitrum-chain/operate/ownership-access-control)).
 
 Below is an example of how to use `setValidKeyset` using the parameters described above:

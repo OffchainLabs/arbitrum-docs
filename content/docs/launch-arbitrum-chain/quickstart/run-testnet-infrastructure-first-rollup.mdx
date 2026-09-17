@@ -5,8 +5,8 @@ user_story: I have a deployed chain and want to run it with high availability so
 content_type: 'how-to'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
+target_audience: 'Chain runners who want to run their testnet chain with production-like infrastructure.'
 ---
-
 
 <include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>
 
@@ -35,24 +35,24 @@ The setup uses multiple sequencers with automatic failover, Redis for coordinati
 The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`, `$REDIS_URL`). Run Steps 1–11 in the **same terminal session** so these variables persist, or re-export them if you open a new terminal.
 
 </VanillaAdmonition>
-
 ## Prerequisites
 
-| Requirement            | What you need                                                                                                                                                                                       |
-| :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Requirement            | What you need                                                                                                                                                                                                          |
+| :--------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Deployed chain**     | Complete [Deploy your first rollup](/docs/launch-arbitrum-chain/quickstart/deploy-your-first-rollup), Steps 1–4 (deploy, generate config, fund batch poster and validator), **do not complete Step 5** |
-| **Kubernetes cluster** | Access to a cluster with multiple availability zones (e.g., EKS, GKE, AKS)                                                                                                                          |
-| **Helm**               | [Install Helm](https://helm.sh/docs/intro/install/)                                                                                                                                                 |
-| **kubectl**            | Configured to access your cluster                                                                                                                                                                   |
-| **jq**                 | [Install jq](https://jqlang.github.io/jq/download/) for parsing `node-config.json`                                                                                                                  |
-| **Go**                 | [Install Go](https://go.dev/dl/) (for Step 10, building SQM)                                                                                                                                        |
-| **Redis**              | In-cluster (Step 3) or managed (e.g., AWS ElastiCache)                                                                                                                                              |
+| **Kubernetes cluster** | Access to a cluster with multiple availability zones (e.g., EKS, GKE, AKS)                                                                                                                                             |
+| **Helm**               | [Install Helm](https://helm.sh/docs/intro/install/)                                                                                                                                                                    |
+| **kubectl**            | Configured to access your cluster                                                                                                                                                                                      |
+| **jq**                 | [Install jq](https://jqlang.github.io/jq/download/) for parsing `node-config.json`                                                                                                                                     |
+| **Go**                 | [Install Go](https://go.dev/dl/) (for Step 10, building SQM)                                                                                                                                                           |
+| **Redis**              | In-cluster (Step 3) or managed (e.g., AWS ElastiCache)                                                                                                                                                                 |
 
 ## Step 1: Extract chain info from `node-config.json`
 
 - On your local machine, in the folder that contains `node-config.json`, run:
 
-<CustomDetails summary="node-config.json">
+<Accordions>
+<Accordion title="node-config.json">
 
 ```bash
 # Export so variables persist for all steps below
@@ -72,7 +72,8 @@ echo "PARENT_RPC=$PARENT_RPC"
 echo "chain-info.json saved"
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - In Step 8, you will extract the batch poster private key—never commit it to Git or expose it in logs.
 
@@ -122,7 +123,8 @@ export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
 
 - Deploy 3 sequencer replicas with the sequencer coordinator enabled. Replace placeholders with your values. Use `--set-file` for the chain info JSON to avoid shell escaping issues:
 
-<CustomDetails summary="Deploy sequencers:">
+<Accordions>
+<Accordion title="Deploy sequencers:">
 
 ```shell \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
   configmap.data.parent-chain.connection.url=$PARENT_RPC \ --set configmap.data.chain.id=$CHAIN_ID \
@@ -135,11 +137,13 @@ export REDIS_URL="redis://YOUR_REDIS_ENDPOINT:6379"
   --set perReplicaHeadlessService.enabled=true
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - If sequencers fail to coordinate, each needs a unique URL.:
 
-<CustomDetails summary="Create sequencer-extra-env.yaml">
+<Accordions>
+<Accordion title="Create sequencer-extra-env.yaml">
 
 ```yaml
 extraEnv: - name: POD_NAME valueFrom: fieldRef: fieldPath: metadata.name - name:
@@ -147,7 +151,8 @@ NITRO_NODE_SEQ__COORDINATOR_MY__URL value:
 'http://$(POD_NAME).sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc'
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - Then add `-f sequencer-extra-env.yaml` to the `helm install` command above.
 
@@ -162,19 +167,20 @@ kubectl get pods -l app.kubernetes.io/name=nitro -w
 After deploying sequencers, you must set at least one sequencer in the priority list. Without this, no sequencer will be active, and your chain won’t produce blocks. Complete Step 10 to set priorities using the Sequencer Coordinator Manager, or set them directly in Redis.
 
 </VanillaAdmonition>
-
 ## Step 5: Deploy sequencer relays
 
 Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
 
-<CustomDetails summary="Run the following commands:">
+<Accordions>
+<Accordion title="Run the following commands:">
 
 ```shell
 replicaCount=2 \ --set configmap.data.chain.id=$CHAIN_ID \ --set
 configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro-headless:9642\,ws://sequencer-nitro-1.sequencer-nitro-headless:9642\,ws://sequencer-nitro-2.sequencer-nitro-headless:9642
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - The relay service names (`sequencer-nitro-0`, etc.) depend on your Helm release name. If you used a different release name for the sequencer, adjust accordingly (format: `<release>-nitro-<index>.<release>-nitro-headless`).
 
@@ -196,7 +202,8 @@ helm install external-relay offchainlabs/relay \
 
 Full nodes serve RPC requests and forward transactions to the active sequencer. They use Redis to find the active sequencer automatically.
 
-<CustomDetails summary="Run the following commands:">
+<Accordions>
+<Accordion title="Run the following commands:">
 
 ```shell
 \ --set configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
@@ -207,7 +214,8 @@ configmap.data.node.feed.input.url=ws://external-relay:9642 \ --set configmap.da
 \ --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - If your chain already has blocks, use `--set configmap.data.init.latest=pruned` instead of `init.empty=true`.
 
@@ -221,7 +229,8 @@ The batch poster posts transaction batches to the parent chain.
 printf '%s' "$(jq -r '.node["batch-poster"]["parent-chain-wallet"]["private-key"]' node-config.json)" > batch-poster-key.txt
 ```
 
-<CustomDetails summary="Deploy the batch poster:">
+<Accordions>
+<Accordion title="Deploy the batch poster:">
 
 ```shell
 configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
@@ -235,7 +244,8 @@ configmap.data.node.feed.input.url=ws://sequencer-relay:9642 \ --set-file
 configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-key.txt
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - Remove the key file after deployment:
 
@@ -248,10 +258,9 @@ rm batch-poster-key.txt
 Do **not** add the batch poster to the Sequencer Coordinator Manager's sequencer priority list. Otherwise, it could become the active sequencer unintentionally.
 
 </VanillaAdmonition>
-
 ## Step 9: Deploy validator
 
-The validator validates blocks and posts [assertions](/docs/how-arbitrum-works/deep-dives/assertions) to the parent chain. It is required for chain security. The validator wallet needs **ETH** on the parent chain (Arbitrum Sepolia) for gas.
+The validator validates blocks and posts assertions to the parent chain. It is required for chain security. The validator wallet needs **ETH** on the parent chain (Arbitrum Sepolia) for gas.
 
 - Save the validator private key to a file (do not commit to Git):
 
@@ -259,7 +268,8 @@ The validator validates blocks and posts [assertions](/docs/how-arbitrum-works/d
 printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' node-config.json)" > validator-key.txt
 ```
 
-<CustomDetails summary="Deploy the validator:">
+<Accordions>
+<Accordion title="Deploy the validator:">
 
 ```bash
   configmap.data.parent-chain.id=$PARENT_CHAIN_ID \ --set
@@ -273,7 +283,8 @@ printf '%s' "$(jq -r '.node["staker"]["parent-chain-wallet"]["private-key"]' nod
   configmap.data.init.empty=true
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - Remove the key file after deployment:
 
@@ -288,7 +299,6 @@ rm validator-key.txt
 This step is **required**, not optional.
 
 </VanillaAdmonition>
-
 You **must** set sequencer priority for your chain to work. Without setting a priority, no sequencer will be active. The Sequencer Coordinator Manager (SQM) provides a UI to manage the sequencer priority list. You can also set priority directly in Redis (advanced users).
 
 #### 1. Port-forward Redis (if using in-cluster Redis from Step 3):
@@ -333,13 +343,11 @@ When you first run SQM, all sequencers will be in the `--Not in priority list bu
 For proper high availability with automatic failover, add all 3 sequencers to the priority list at different positions (1, 2, 3). The sequencer at position 1 becomes active. If it fails, position 2 takes over automatically.
 
 </VanillaAdmonition>
-
 <VanillaAdmonition type="warning">
 
 Do **not** add the batch poster to the priority list. The batch poster should never become the active sequencer.
 
 </VanillaAdmonition>
-
 Alternatively, you can press `a` to manually add a new sequencer by entering its URL. The URL must match the `my-url` configured for each sequencer (e.g., `http://sequencer-nitro-0.sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc`).
 
 ## Step 11: Expose RPC
@@ -403,7 +411,8 @@ This enables bridging tokens between your chain and Arbitrum Sepolia. Run this f
 
 - Create `deploy-token-bridge.mjs` in your project folder:
 
-<CustomDetails summary="deploy-token-bridge.mjs">
+<Accordions>
+<Accordion title="deploy-token-bridge.mjs">
 
 ```javascript
 import { createPublicClient, http, defineChain } from 'viem';
@@ -486,7 +495,8 @@ async function main() {
 main().catch(console.error);
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - Run it with your chain's RPC URL (the LoadBalancer IP from Step 11):
 
@@ -522,4 +532,4 @@ Your chain RPC is at your full node URL (load balancer or CDN). Users and apps c
 
 ### Next steps
 
-For running production mainnet, consider a RaaS provider. See the [list of RaaSes on the Third-party providers page](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
+For running production mainnet, consider a RaaS provider. For a [list of RaaSes is on the Third-party providers page](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).

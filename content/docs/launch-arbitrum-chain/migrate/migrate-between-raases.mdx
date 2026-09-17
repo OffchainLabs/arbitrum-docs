@@ -2,10 +2,12 @@
 title: 'Migrate between RaaSes'
 description: 'Learn how to migrate your chain from a RaaS provider'
 sidebar_label: 'Migrate between RaaSes'
+sidebar_position: '2'
 content_type: 'how-to'
-author: 'Lam'
-sme: ''
+author: Lam
+sme: Lam
 editor: 'anegg0'
+target_audience: 'Chain owners and operators using RaaS providers'
 ---
 
 ## Overview of the provider migration process
@@ -24,7 +26,7 @@ Chain owners and operators.
 
 #### What are the must-transfer items?
 
-[Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) runtime, batch poster, bonder/validators, DAC signer set for [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol), RPC/explorer domains, alerting/monitoring credentials. Your RaaS may have other requirements.
+<Term id="sequencer">Sequencer</Term> runtime, batch poster, bonder/validators, DAC signer set for AnyTrust, RPC/explorer domains, alerting/monitoring credentials. Your RaaS may have other requirements.
 
 #### Do chain ID or L1 contracts change?
 
@@ -42,7 +44,7 @@ The full transfer (infra spin-up, partner handovers, comms) typically spans seve
 
 #### What should we monitor during handover?
 
-Retryables creation, batch posting cadence, [Assertion](/docs/how-arbitrum-works/deep-dives/assertions) <Term id="confirmation">Confirmation</Term>, base fee, sequencer health, DAC signer liveness. Please see '[Monitoring Tools and Considerations](https://docs.arbitrum.io/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations)’ for more information.
+Retryables creation, batch posting cadence, <Term id="assertion">Assertion</Term> <Term id="confirmation">Confirmation</Term>, base fee, sequencer health, DAC signer liveness. Please see '[Monitoring Tools and Considerations](https://docs.arbitrum.io/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations)’ for more information.
 
 #### What legal/administrative assets need to move?
 

@@ -4,17 +4,11 @@ description: Learn how to read the sequencer feed
 content_type: 'how-to'
 author: gblanchemain
 sme: gblanchemain
-todos:
-  - Follow convention and style guide
-  - Communicate "who this is for" and "under which scenarios this is useful".
-  - Set expectations - prior knowledge, what to expect
-  - Build supporting conceptual content
-  - Align on what we want to treat as proper nouns vs common nouns
 ---
 
 [Running an Arbitrum relay locally as a feed relay](/docs/run-a-node/run-feed-relay) lets you subscribe to an uncompressed <Term id="sequencer-feed">sequencer feed</Term> for real-time data as the sequencer accepts and orders transactions offchain.
 
-This page covers the standard sequencer feed, which publishes complete blocks and is free to consume. Arbitrum One also offers the <Term id="fast-feed">Fast Feed</Term>, a paid stream that publishes individual transactions before their block closes. See the [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) to compare the two.
+This page covers the standard sequencer feed, which publishes complete blocks and is free to consume. Arbitrum One also offers the <Term id="fast-feed">Fast Feed</Term>, a paid stream that publishes individual transactions before their block closes. See the [introduction to the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed) to compare the two.
 
 When connected to websocket port `9642` of the local relay, you'll receive a data feed that looks something like this:
 
@@ -95,6 +89,6 @@ Using the feed relay, you can also retrieve the `L2 block number` of a message:
 
 <VanillaAdmonition type="info">
 
-The `messages[0].message.message.header.blockNumber` is `L1 block number` instead of `L2 block number`
+Note that the `messages[0].message.message.header.blockNumber` is `L1 block number` instead of `L2 block number`
 
 </VanillaAdmonition>

@@ -1,15 +1,12 @@
 ---
 title: 'How to run a full node with Helm on Kubernetes'
-description: 'Deploy an Arbitrum chain full node on Kubernetes with the community Helm chart, including memory configuration, monitoring, log signals, and network egress.'
 sidebar_label: 'Run a full node (Helm/Kubernetes)'
+description: 'Deploy an Arbitrum chain full node on Kubernetes with the community Helm chart, including memory configuration, monitoring, log signals, and network egress.'
 user_story: 'As a node operator, I want to deploy and reliably operate an full node for an Arbitrum chain on Kubernetes using the community Helm chart.'
 content_type: 'how-to'
 author: 'Jason-W123'
 sme: 'Jason-W123'
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 This guide shows how to deploy a full node for an Arbitrum chain on Kubernetes using the [community Helm chart](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/nitro). It applies to any Arbitrum chain—[Arbitrum One](https://arbitrum.io), Nova, Sepolia, and your own Arbitrum chain—and covers installation, memory configuration, first sync from a snapshot, monitoring, the log signals that distinguish a healthy node from a broken one, and the outbound endpoints to allow through a firewall.
 
@@ -38,8 +35,9 @@ helm repo update
 
 Then install, selecting the configuration for your chain:
 
-<Tabs className="tabgroup" defaultValue="dao-governed">
-  <TabItem value="dao-governed" label="Arbitrum One, Nova, Sepolia">
+<div className="dynamic-content-tabs">
+  <Tabs items={["Arbitrum One, Nova, Sepolia", "Your Arbitrum chain"]}>
+    <Tab value="Arbitrum One, Nova, Sepolia">
 
 The chart defaults to Arbitrum One (`chain.id` `42161`, `parent-chain.id` `1`), so an Arbitrum One node needs only three values:
 
@@ -62,8 +60,8 @@ helm install arbsepolia-fullnode offchainlabs/nitro \
   --set configmap.data.chain.id=421614
 ```
 
-  </TabItem>
-  <TabItem value="your-arbitrum-chain" label="Your Arbitrum chain">
+    </Tab>
+    <Tab value="Your Arbitrum chain">
 
 A node for your own Arbitrum chain needs its chain info, sequencer endpoint, and feed URL. Because `chain.info-json` is a large JSON string, supply these through a values file rather than `--set`:
 
@@ -93,10 +91,11 @@ helm install mychain-fullnode offchainlabs/nitro -f values-mychain.yaml
 
 If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-client.beacon-url`. AnyTrust chains additionally need a Data Availability configuration (`node.da.anytrust.*`, including a `rest-aggregator`); see [Data Availability](/docs/run-a-node/data-availability). The older `node.data-availability.*` flags still work but are deprecated in Nitro and will be removed in a future release.
 
-  </TabItem>
-</Tabs>
+    </Tab>
+  </Tabs>
+</div>
 
-<VanillaAdmonition type="caution" title="Defaults that commonly trip up operators">
+<VanillaAdmonition type="warning" title="Defaults that commonly trip up operators">
 
 - **Don't copy the chart README's init example verbatim.** It uses `nitro-genesis.tar`, which syncs from genesis — a huge, slow process on a chain with a long history, such as Arbitrum One. Where a pruned snapshot exists, prefer `configmap.data.init.latest=pruned` (default base `https://snapshot.arbitrum.foundation/`).
 - **The chart changes the RPC path prefix.** Defaults are `http.rpcprefix=/rpc` and `ws.rpcprefix=/ws`, so RPC is served at `http://host:8547/rpc`, not vanilla Nitro's `/`. Clients that omit `/rpc` get a 404.
@@ -147,7 +146,7 @@ Once enabled, the node exposes Prometheus metrics at `http://<pod>:6070/debug/me
 
 ### Grafana dashboard
 
-The repository’s README points to the Grafana dashboard's [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases). If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
+The repository's README points to the Grafana dashboard's [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases). If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
 
 ```shell
 git clone https://github.com/OffchainLabs/community-helm-charts
@@ -156,7 +155,7 @@ git -C community-helm-charts show 430a2cc~1:operations/grafana/dashboards/overvi
 
 Then in Grafana, go to **Dashboards → Import** and paste `overview.json`.
 
-<VanillaAdmonition type="caution">
+<VanillaAdmonition type="warning">
 
 This exported dashboard has no `__inputs` datasource prompt, and its `Source` variable is hard-pinned to an internal Mimir UID. After importing, you **must** repoint the `Source` variable to your own Prometheus instance, or every panel will read "No data." Then set `nitronodejob` to this node's scrape job, and leave `sequencerjob`, `validatorjob`, and `relayjob` empty so only the full-node rows render.
 
@@ -171,7 +170,7 @@ The chart wires a built-in **startup probe** by default, but **liveness and read
 The chart sets `log-type=json`. The following INFO/WARN/ERROR strings distinguish a healthy node from a broken one on any Arbitrum chain (the sequencer hostnames in the examples below are Arbitrum One's; your chain's will differ):
 
 | Event                              | Healthy signal                                                                              | Broken / warning signal                                                                                                                               |
-| ---------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ----------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **New block created**              | `INFO created block` with `l2Block` / `l2BlockHash`, advancing continuously while producing | No advancing `created block` line → block production stalled                                                                                          |
 | **User tx forwarded to sequencer** | Success is not logged                                                                       | `WARN error forwarding transaction trying different target`; `ERROR Failed to publish transaction to any of the forwarding targets`                   |
 | **Sequencer feed message**         | `INFO Feed connected`; `DEBUG received batch item`                                          | `WARN failed connect to sequencer broadcast, waiting and retrying`; `ERROR Server connection timed out without receiving data`                        |
@@ -210,7 +209,7 @@ ERROR Error checking memory limit  err=...  checker=CgroupsMemoryLimitChecker   
 A full node reaches out to a fixed set of endpoints. If you run on a cloud provider, outbound traffic is often restricted by default, so you'll likely need to allow these destinations explicitly in your cloud security group or firewall rules (for example, AWS security groups, GCP firewall rules, or an egress `NetworkPolicy`). The specific hostnames depend on the chain: for DAO-governed networks, they come from the chain's built-in chain info, and for your own Arbitrum chain, they come from the `chain.info-json`, `execution.forwarding-target`, and feed URLs you configure. The categories are the same across chains:
 
 | Purpose                       | Where the endpoint comes from                                       | When                                        |
-| ----------------------------- | ------------------------------------------------------------------- | ------------------------------------------- |
+| ------------------------------ | --------------------------------------------------------------------- | -------------------------------------------- |
 | **Sequencer** (tx forwarding) | chain info `sequencer-url` / `execution.forwarding-target`          | Always—the node forwards user txs here      |
 | Sequencer fallbacks           | chain info `secondary-forwarding-target`                            | Failover                                    |
 | **Sequencer feed**            | chain info `feed-url` / `node.feed.input.url`                       | Always                                      |
@@ -223,7 +222,7 @@ A full node reaches out to a fixed set of endpoints. If you run on a cloud provi
 For **Arbitrum One**, those resolve to:
 
 | Purpose                   | Endpoint(s)                                                                                    |
-| ------------------------- | ---------------------------------------------------------------------------------------------- |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
 | Sequencer (tx forwarding) | `https://arb1-sequencer.arbitrum.io/rpc`                                                       |
 | Sequencer fallbacks       | `https://arb1-sequencer-fallback-{1..5}.arbitrum.io/rpc`                                       |
 | Sequencer feed (primary)  | `wss://arb1-feed.arbitrum.io/feed`                                                             |
@@ -232,7 +231,7 @@ For **Arbitrum One**, those resolve to:
 | DB snapshot               | `https://snapshot.arbitrum.foundation/`                                                        |
 | Parent chain              | Your Ethereum L1 execution RPC + L1 beacon/blob endpoint                                       |
 
-<VanillaAdmonition type="caution" title="Firewall egress">
+<VanillaAdmonition type="warning" title="Firewall egress">
 
 For a default Arbitrum One full node, allow `*.arbitrum.io` (443 HTTPS + WSS), `snapshot.arbitrum.foundation` (443, init only), and your own L1 RPC + beacon hosts. For other chains, allow that chain's sequencer, feed, and snapshot hosts, plus your parent-chain endpoints. **Additional outbound paths exist only if you enable them:** the version alerter (off by default, queries an operator-set endpoint), the classic redirect, or DA/REST endpoints (AnyTrust chains such as Nova).
 

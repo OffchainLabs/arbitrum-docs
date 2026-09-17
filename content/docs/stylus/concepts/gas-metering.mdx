@@ -8,14 +8,14 @@ sme: rachel-bousfield
 
 **Gas and ink** are the pricing primitives that are used to determine the cost of handling specific opcodes and host I/Os on Stylus. For an overview of specific opcode and host I/O costs, see [Gas and ink costs](/docs/stylus/reference/opcode-hostio-pricing).
 
-<!-- todo as a future optimization: pull the "Ink and gas" content up top; give devs what they need to know in order to build stuff - the "just in time" information - progressively disclose the "just in case" details. An example flow:
+{/* todo as a future optimization: pull the "Ink and gas" content up top; give devs what they need to know in order to build stuff - the "just in time" information - progressively disclose the "just in case" details. An example flow:
    1. "think of gas and ink as dollars and cents"
    2. "here's what you need to know about how it works, how it differs from traditional Solidity dApp cost modeling"
    3. "here's where costs are incurred along the lifecycle, simply said"
    4. "here's where costs are incurred along the lifecycle, with more technical precision
 
    If devs need more guidance, we could author a how-to titled "Measure and manage your gas costs"
--->
+*/}
 
 ## Stylus gas costs
 
@@ -25,8 +25,6 @@ Stylus introduces new pricing models for WASM programs. Intended for high-comput
 - Memory, which is **100-500x** cheaper due to Stylus's novel exponential pricing mechanism intended to address Vitalik's concerns with the EVM's per-call, [quadratic memory pricing policy](https://notes.ethereum.org/@vbuterin/proposals_to_adjust_memory_gas_costs). For the first time ever, high-memory applications are possible on an EVM-equivalent chain.
 - Storage, for which the Rust SDK promotes better access patterns and type choices. Note that while the underlying <a href="https://www.evm.codes/#54"><code>SLOAD</code></a> and <a href="https://www.evm.codes/#55"><code>SSTORE</code></a> operations cost as they do in the EVM, the Rust SDK implements an optimal caching policy that minimizes their use. Exact savings depends on the program.
 - VM affordances, including common operations like `keccak` and reentrancy detection. No longer is it expensive to make safety the default.
-
-These models also change how costs scale: while the EVM reprices memory quadratically within each call, Stylus charges for memory by the 64 KB WASM page, and a program can use up to 8 MB of memory by default (a `PageLimit` of 128 pages, configurable by the <Term id="chain-owner">chain owner</Term>). In practice, the gas cost of a compute- and memory-heavy Stylus call grows near-linearly with the size of its workload. For more benchmarks, see the [Stylus benchmarking projects](https://github.com/OffchainLabs/stylus-nanoGPT/blob/main/benchmark-compare/README.md).
 
 There are, however, minor overheads to using Stylus that may matter to your application:
 
