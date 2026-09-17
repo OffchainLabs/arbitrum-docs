@@ -21,7 +21,7 @@ Whatever the door, every input lands as one `L1IncomingMessage`: a header plus a
 
 #### 3. One byte decides the path
 
-The header’s `Kind` routes the message. A handful of kinds are system messages minted by the protocol: `Initialize` (the genesis message that sets the chain ID and base fee), `EthDeposit` (native-token bridging), `SubmitRetryable` (the <a data-quicklook-from="retryable-ticket">retryable-ticket</a> mechanism behind robust L1→L2 messaging), and `BatchPostingReport` (which lets the STF charge the <a data-quicklook-from="batch-poster">batch poster</a> for the L1 data it consumes). The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity.
+The header’s `Kind` routes the message. A handful of kinds are system messages that the protocol mints: `Initialize` (kind 11) is the genesis message that sets the chain ID and base fee, `EthDeposit` (kind 12) bridges the native token, `SubmitRetryable` (kind 9) carries the <a data-quicklook-from="retryable-ticket">retryable-ticket</a> mechanism behind robust parent-to-child chain messaging, and `BatchPostingReport` (kind 13) lets the STF charge the <a data-quicklook-from="batch-poster">batch poster</a> for the parent-chain data it consumes. The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity. For every kind, its value, and the name the bridge contracts use for it, see the [message type reference](/how-arbitrum-works/reference/stf-inputs.mdx#message-types).
 
 #### 4. The envelope inside the envelope
 
