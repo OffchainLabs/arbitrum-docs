@@ -1012,6 +1012,11 @@ export const currentRedirects = [
     permanent: true,
   },
   {
+    source: '/Offchain-pattern-guide',
+    destination: '/docs/Offchain-pattern-guide',
+    permanent: true,
+  },
+  {
     source: '/run-arbitrum-node/arbos-releases/arbos11',
     destination: '/docs/run-a-node/arbos-releases/arbos11',
     permanent: true,

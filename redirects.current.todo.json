@@ -5,12 +5,5 @@
     "reason": "no-counterpart",
     "added": "2025-07-16",
     "kind": "MISS"
-  },
-  {
-    "source": "/Offchain-pattern-guide",
-    "upstream": "docs/Offchain-pattern-guide.md",
-    "reason": "no-counterpart",
-    "added": "2026-06-03",
-    "kind": "MISS"
   }
 ]

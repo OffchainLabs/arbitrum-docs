@@ -2,6 +2,7 @@
 title: 'Offchain Pattern guide'
 description: 'Offchain Pattern guide'
 author: anegg0
+sme: anegg0
 user_story: As an Offchain content contributor, I want to ensure my write-up complies with Offchain standards
 content_type: reference
 ---
@@ -32,7 +33,7 @@ Choose the right content type based on your audience and purpose:
 | **Minimize technical jargon** | Use plain language when possible                          | "How to reuse contract methods"                                                                                                                                  | "How to leverage trait-based composition"                                                             |
 | **Lead with what matters**    | Put important information first                           | Start with the outcome or benefit                                                                                                                                | Bury the key point                                                                                    |
 | **Write concisely**           | Use short, clear sentences                                | Break up complex ideas                                                                                                                                           | Write three-line sentences                                                                            |
-| Use Quicklooks                | Use Quicklooks with terms found in docs/partials/glossary | In the past, Arbitrum chains ordered incoming transactions on a <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> basis. | In the past, Arbitrum chains ordered incoming transactions on "First-Come, First-Serve (FCFS)" basis. |
+| Use glossary terms            | Wrap terms defined in `content/glossary/` in `<Term>`     | In the past, Arbitrum chains ordered incoming transactions on a `<Term id="first-come-first-serve-fcfs">First-Come, First-Serve (FCFS)</Term>` basis.            | In the past, Arbitrum chains ordered incoming transactions on "First-Come, First-Serve (FCFS)" basis. |
 
 ## Plain language
 
@@ -50,7 +51,7 @@ Every rule below is testable in review.
 | **One idea per sentence**               | Two sentences of about 15 words each.                                          | One sentence of 40 words with three clauses.                     |
 | **Use verbs, not nominalizations**      | "Configure the sequencer."                                                     | "Perform configuration of the sequencer."                        |
 | **Put the condition before the action** | "If you run an AnyTrust chain, enable the DA server."                          | "Enable the DA server if you run an AnyTrust chain."             |
-| **Use the imperative for steps**        | "Run `yarn build`."                                                            | "You should now proceed to run `yarn build`."                    |
+| **Use the imperative for steps**        | "Run `pnpm build`."                                                            | "You should now proceed to run `pnpm build`."                    |
 | **State things positively**             | "Wait until the assertion is confirmed."                                       | "Do not continue before the assertion is no longer unconfirmed." |
 | **Give concrete numbers**               | "The challenge period is 6.4 days."                                            | "The challenge period takes a while."                            |
 | **Reserve must, should, and can**       | must = required, should = recommended, can = optional                          | "should" for a step the reader has no choice about               |
@@ -99,7 +100,7 @@ Never write "simply", "just", "easy", "obvious", or "of course". When the step d
 
 ### Authoring conventions
 
-- Use `<VanillaAdmonition type="…">` instead of Docusaurus `:::info` / `:::note` for callouts in MDX. The component is registered globally via `src/theme/MDXComponents.js`, so no import is needed.
+- Use `<VanillaAdmonition type="…">` instead of `:::info` / `:::note` fences for callouts in MDX. The component is registered globally in `components/mdx.tsx`, so no import is needed.
 - Wrap a term in a Quicklook (`<a data-quicklook-from='…'>`) once per file, on its first mention. Leave every later mention of that same term as plain text. A second Quicklook on the same term tells the reader nothing new and turns the page into a field of links.
 
 ## Terminology guide
