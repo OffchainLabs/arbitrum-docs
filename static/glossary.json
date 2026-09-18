@@ -471,6 +471,10 @@
     "title": "Priority Fee",
     "text": "<p>The per-gas tip you add on top of the base fee to bid for earlier inclusion, set in the <code>max_priority_fee_per_gas</code> field of an <a href=\"/intro/glossary#eip-1559\">EIP-1559</a> transaction. The chain computes the effective value as <code>min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)</code>. Under PGA, the <a href=\"/intro/glossary#sequencer\">Sequencer</a> orders transactions by this value, highest first.</p>\n"
   },
+  "priority-gas-auction": {
+    "title": "Priority Gas Auction (PGA)",
+    "text": "<p>A <a href=\"/intro/glossary#transaction-ordering-policy\">transaction ordering policy</a> in which you bid for ordering by attaching a <a href=\"/intro/glossary#priority-fee\">priority fee</a> to each transaction. The <a href=\"/intro/glossary#sequencer\">Sequencer</a> sorts transactions by that fee, highest first, and evaluates the order in short rounds that run several times per block. An anti-starvation boost raises the queue position of transactions still waiting at the end of a round, so a transaction that pays no priority fee is still included within a small number of blocks. PGA replaces <a href=\"/intro/glossary#timeboost\">Timeboost</a> on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a>.</p>\n"
+  },
   "propamm": {
     "title": "propAMM",
     "text": "<p>A proprietary automated market maker is an onchain pool that a single market maker operates. That market maker is the only party permitted to supply liquidity, and it sets the quote from its own pricing model, which draws on multiple sources, rather than from a passive reserve curve.</p>\n<p>A propAMM differs from a constant-product AMM, which holds no view on the external price. A constant-product quote moves only when someone trades against it, so arbitrageurs are what pull it back toward the market. A propAMM instead pushes price updates onchain, or derives the price at execution time. propAMMs need cheap, frequent, priority-ordered inclusion to keep those quotes current, so they depend on an ordering policy that sells priority, such as PGA.</p>\n"
