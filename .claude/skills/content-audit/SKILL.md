@@ -1,6 +1,6 @@
 ---
 name: content-audit
-description: Run full documentation quality audit — orphan pages, markdown lint, frontmatter validation, globalVars consistency, and broken internal links. Triggers on "audit docs", "check docs quality", "find problems", "content audit".
+description: Run full documentation quality audit — MDX structure, internal links, nav integrity, partials, glossary references, variables, formatting, and types. Triggers on "audit docs", "check docs quality", "find problems", "content audit".
 disable-model-invocation: true
 ---
 
@@ -10,76 +10,107 @@ Orchestrate all doc quality checks into a single unified report.
 
 ## Checks (run in order)
 
-### 1. Markdown lint
+### 1. MDX structure
 
 ```shell
-yarn lint:markdown 2>&1
+pnpm content:lint 2>&1
 ```
 
-Captures all markdownlint violations (excludes `docs/sdk/`). If violations found, offer `yarn lint:markdown:fix` for auto-fixable issues.
+Reports structural MDX defects: stray `:::` fences left by the Docusaurus migration, malformed
+admonitions, and link targets that keep a `.md`/`.mdx` suffix. Not auto-fixable — each finding is an
+edit.
 
-### 2. Orphan pages
+### 2. Internal links
 
 ```shell
-yarn find-orphan-pages
+pnpm check-links 2>&1
 ```
 
-Finds docs not linked in any sidebar. Cross-reference with `sidebars.js` to confirm.
+Every internal doc link resolves to a real page. This is the gate that stands in for Docusaurus'
+`onBrokenLinks: 'throw'`, and `pnpm build` runs it first, so a failure here also fails the Vercel
+deploy. It does **not** validate `#anchor` fragments — a live page with a dead anchor passes. Check
+those in a browser.
 
-### 3. Orphaned files
+### 3. Nav integrity
 
 ```shell
-node scripts/find-orphaned-files.js
+pnpm nav:check 2>&1
 ```
 
-Finds files in `docs/` that aren't referenced anywhere (images, partials, etc.).
+Validates the `meta.json` files that control sidebar ordering: entries pointing at pages that do not
+exist, and pages missing from their directory's nav.
 
-### 4. Doc manifest + audit
+### 4. Partials
 
 ```shell
-yarn audit-docs
+pnpm partials:check 2>&1
 ```
 
-Generates a doc manifest then audits for: missing frontmatter fields, broken internal links, inconsistent terminology, missing `user_story`, and undocumented content types.
+Resolves every `<include>` and ESM import, confirms no partial leaks into routing, and confirms
+`content/partials/CATALOG.md` is current. Regenerate the catalog with `pnpm partials:catalog` — never
+hand-edit it.
 
-### 5. GlobalVars consistency
+### 5. Glossary and inline references
 
 ```shell
-yarn check-globalvars-updates 2>&1 || true
+pnpm references:check 2>&1
 ```
 
-Checks if `src/resources/globalVars.js` has been modified without running `yarn update-variable-refs`. If stale, report which files need updating.
+Every `<Reference>` / `<Term>` target resolves to a real `content/glossary/` entry.
 
-### 6. Formatting check
+### 6. Variables
 
 ```shell
-yarn format:check 2>&1
+pnpm vars:check 2>&1
 ```
 
-Checks Prettier formatting across docs and app code without modifying files.
+Every `<Var name="…" />` resolves to a key in `content/vars.json`.
 
-### 7. TypeScript
+### 7. Formatting
 
 ```shell
-yarn typecheck 2>&1
+pnpm format:check 2>&1
 ```
 
-Runs `tsc --noEmit` to catch type errors in components and scripts.
+Prettier across content and app code without modifying files. `pnpm format` writes the fixes.
+
+### 8. TypeScript
+
+```shell
+pnpm types:check 2>&1
+```
+
+Regenerates the `.source/` collection, generates Next types, then runs `tsc --noEmit`. This proves
+the frontmatter schema and the types — it does **not** prove a page renders. Confirm content changes
+in a browser on `http://localhost:3000` (on `127.0.0.1` React does not hydrate and every component
+looks broken).
+
+## Not available
+
+Two checks from the Docusaurus toolchain have no Fumadocs equivalent. Do not substitute another
+command for them — say they were not run:
+
+- **Orphan pages** (`find-orphan-pages`) — pages absent from every sidebar. `nav:check` validates
+  what `meta.json` claims, not what it omits.
+- **Doc manifest audit** (`audit-docs`) — missing `user_story`, terminology consistency. The
+  frontmatter half is now enforced at build time by the Zod schema in `source.config.ts`, which fails
+  `types:check` on a missing `title`, `description`, `content_type`, `author` or `sme`.
 
 ## Output format
 
 Produce a summary table first, then details per check:
 
 ```
-| Check               | Status | Issues |
-|---------------------|--------|--------|
-| Markdown lint       | PASS/FAIL | N violations |
-| Orphan pages        | PASS/FAIL | N orphans |
-| Orphaned files      | PASS/FAIL | N unused files |
-| Doc audit           | PASS/FAIL | N issues |
-| GlobalVars sync     | PASS/FAIL | N stale refs |
-| Formatting          | PASS/FAIL | N unformatted |
-| TypeScript          | PASS/FAIL | N errors |
+| Check            | Status    | Issues          |
+|------------------|-----------|-----------------|
+| MDX structure    | PASS/FAIL | N defects       |
+| Internal links   | PASS/FAIL | N broken        |
+| Nav integrity    | PASS/FAIL | N problems      |
+| Partials         | PASS/FAIL | N unresolved    |
+| References       | PASS/FAIL | N missing       |
+| Variables        | PASS/FAIL | N unresolved    |
+| Formatting       | PASS/FAIL | N unformatted   |
+| TypeScript       | PASS/FAIL | N errors        |
 ```
 
 Then for each FAIL, list:
@@ -91,5 +122,5 @@ Then for each FAIL, list:
 ## Arguments
 
 - No args: run all checks
-- `--fix`: auto-fix what's possible (lint, format), then report remaining
-- `--quick`: skip typecheck and full build (faster, covers content only)
+- `--fix`: auto-fix what's possible (`pnpm format`), then report remaining
+- `--quick`: skip `types:check` (faster, covers content only)
