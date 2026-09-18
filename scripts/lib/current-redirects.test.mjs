@@ -126,17 +126,15 @@ test('resolveDestination refuses a slug match whose titles disagree', () => {
 });
 
 test('resolveDestination falls back to a unique exact title match', () => {
+  // The slug matches nothing and the directory pairing fails, so only the title can resolve it.
   const page = {
-    rel: 'launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx',
-    route: '/launch-arbitrum-chain/extend-the-protocol/da-api-guide',
-    title: 'How to integrate with the DA API',
+    rel: 'for-devs/concepts/vocabulary.mdx',
+    route: '/for-devs/concepts/vocabulary',
+    title: 'Arbitrum glossary',
   };
   const result = resolveDestination(page, ctx());
   assert.equal(result.rule, 'title');
-  assert.equal(
-    result.destination,
-    '/docs/launch-arbitrum-chain/integrations/da-api-integration-guide',
-  );
+  assert.equal(result.destination, '/docs/glossary');
 });
 
 test('resolveDestination gives up rather than guessing', () => {
