@@ -417,6 +417,11 @@ export const currentRedirects = [
     permanent: true,
   },
   {
+    source: '/how-arbitrum-works/bold/bold-faq',
+    destination: '/docs/how-arbitrum-works/bold/bold-faq',
+    permanent: true,
+  },
+  {
     source: '/how-arbitrum-works/bold/bold-technical-deep-dive',
     destination: '/docs/how-arbitrum-works/bold/bold-technical-deep-dive',
     permanent: true,
@@ -482,7 +487,7 @@ export const currentRedirects = [
     permanent: true,
   },
   {
-    source: '/how-arbitrum-works/deep-dives/stf-gentle-intro',
+    source: '/how-arbitrum-works/deep-dives/stf',
     destination: '/docs/how-arbitrum-works/deep-dives/stf',
     permanent: true,
   },
@@ -499,6 +504,16 @@ export const currentRedirects = [
   {
     source: '/how-arbitrum-works/inside-arbitrum-nitro',
     destination: '/docs/how-arbitrum-works/inside-arbitrum-nitro',
+    permanent: true,
+  },
+  {
+    source: '/how-arbitrum-works/priority-gas-auction/fast-feed',
+    destination: '/docs/how-arbitrum-works/priority-gas-auction/fast-feed',
+    permanent: true,
+  },
+  {
+    source: '/how-arbitrum-works/priority-gas-auction/pga',
+    destination: '/docs/how-arbitrum-works/priority-gas-auction/pga',
     permanent: true,
   },
   {
@@ -622,6 +637,16 @@ export const currentRedirects = [
     permanent: true,
   },
   {
+    source: '/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing',
+    destination: '/docs/launch-arbitrum-chain/configuration/costs/parent-chain-data-fee-pricing',
+    permanent: true,
+  },
+  {
+    source: '/launch-arbitrum-chain/chain-config/costs/priority-fees',
+    destination: '/docs/launch-arbitrum-chain/configuration/costs/priority-fees',
+    permanent: true,
+  },
+  {
     source: '/launch-arbitrum-chain/chain-config/costs/reporting-on-fees',
     destination: '/docs/launch-arbitrum-chain/configuration/costs/reporting-on-fees',
     permanent: true,
@@ -701,6 +726,16 @@ export const currentRedirects = [
     permanent: true,
   },
   {
+    source: '/launch-arbitrum-chain/chain-config/sequencer/pga',
+    destination: '/docs/launch-arbitrum-chain/configuration/sequencer/pga',
+    permanent: true,
+  },
+  {
+    source: '/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference',
+    destination: '/docs/launch-arbitrum-chain/configuration/sequencer/sequencer-config-reference',
+    permanent: true,
+  },
+  {
     source: '/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
     destination:
       '/docs/launch-arbitrum-chain/configuration/sequencer/config-sequencer-timing-adjustments',
@@ -742,6 +777,11 @@ export const currentRedirects = [
     permanent: true,
   },
   {
+    source: '/launch-arbitrum-chain/chain-config/validation/test-chain-configuration',
+    destination: '/docs/launch-arbitrum-chain/configuration/validation/test-chain-configuration',
+    permanent: true,
+  },
+  {
     source: '/launch-arbitrum-chain/deploy/canonical-factory-contracts',
     destination: '/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts',
     permanent: true,
@@ -752,6 +792,11 @@ export const currentRedirects = [
     permanent: true,
   },
   {
+    source: '/launch-arbitrum-chain/deploy/custom-genesis-state',
+    destination: '/docs/launch-arbitrum-chain/deploy/custom-genesis-state',
+    permanent: true,
+  },
+  {
     source: '/launch-arbitrum-chain/deploy/deploy-chain',
     destination: '/docs/launch-arbitrum-chain/deploy/deploying-an-arbitrum-chain',
     permanent: true,
@@ -759,6 +804,11 @@ export const currentRedirects = [
   {
     source: '/launch-arbitrum-chain/deploy/token-bridge',
     destination: '/docs/launch-arbitrum-chain/deploy/deploying-token-bridge',
+    permanent: true,
+  },
+  {
+    source: '/launch-arbitrum-chain/deploy/token-bridge-troubleshooting',
+    destination: '/docs/launch-arbitrum-chain/deploy/token-bridge-troubleshooting',
     permanent: true,
   },
   {
@@ -837,6 +887,11 @@ export const currentRedirects = [
     permanent: true,
   },
   {
+    source: '/launch-arbitrum-chain/operate/error-index',
+    destination: '/docs/launch-arbitrum-chain/operate/error-index',
+    permanent: true,
+  },
+  {
     source: '/launch-arbitrum-chain/operate/key-rotation',
     destination: '/docs/launch-arbitrum-chain/operate/key-rotation',
     permanent: true,
@@ -854,6 +909,11 @@ export const currentRedirects = [
   {
     source: '/launch-arbitrum-chain/operate/post-launch-deployments',
     destination: '/docs/launch-arbitrum-chain/operate/post-launch-contract-deployments',
+    permanent: true,
+  },
+  {
+    source: '/launch-arbitrum-chain/operate/sequencer-troubleshooting',
+    destination: '/docs/launch-arbitrum-chain/operate/sequencer-troubleshooting',
     permanent: true,
   },
   {
@@ -974,6 +1034,11 @@ export const currentRedirects = [
   {
     source: '/run-arbitrum-node/arbos-releases/arbos51',
     destination: '/docs/run-a-node/arbos-releases/arbos51',
+    permanent: true,
+  },
+  {
+    source: '/run-arbitrum-node/arbos-releases/arbos61',
+    destination: '/docs/run-a-node/arbos-releases/arbos61',
     permanent: true,
   },
   {
