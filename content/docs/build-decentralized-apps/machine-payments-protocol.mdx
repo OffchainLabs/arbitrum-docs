@@ -1,0 +1,172 @@
+---
+title: 'Machine Payments Protocol (MPP)'
+description: This quickstart shows you how to implement the Machine Payments Protocol (MPP) on Arbitrum.
+user_story: As a developer, I want to understand how to implement the Machine Payments Protocol (MPP) on Arbitrum.
+content_type: 'quickstart'
+author: pete-vielhaber
+sme: EmreDincoglu
+---
+
+This quickstart will guide you through implementing an Arbitrum-specific payment method plugin for the `mppx` library, which implements the Machine Payments Protocol (MPP). MPP defines a generic **challenge → credential → settlement** flow for payments between two parties:
+
+- **Server**: the merchant/payee (the one that wants to get paid)
+- **Client**: the payer (a user or AI agent)
+
+`mppx` itself is payment-method-agnostic. This plugin provides methods for settling payments on Arbitrum One or Arbitrum Sepolia with **ERC-20** stablecoins (currently **USDC**) through [EIP-3009](https://eips.ethereum.org/EIPS/eip-3009) `authorization`, and with almost any **ERC-20** via `permit2`.
+
+## Core concepts
+
+The client (payer) never broadcasts a transaction and never pays gas.
+
+1. The merchant requests payment (issues a challenge).
+2. The payer signs an EIP-712 typed-data authorization offchain—no gas, no prior onchain approval is needed.
+3. The merchant's server submits the signature onchain, completing the fund transfer. The merchant pays for the gas.
+
+This is exactly the "402 Payment Required" flow you'd want for machine/agent commerce: an HTTP request hits a paywalled endpoint, the agent signs a payment authorization, and the server settles it atomically before serving the response.
+
+It supports two settlement mechanisms:
+
+| Type          | Onchain mechanism                                   | Supports splits?                                | Need prior approval?                                |
+| ------------- | --------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------- |
+| authorization | EIP-3009 transferWithAuthorization (native to USDC) | ❌                                              | ❌                                                  |
+| permit2       | Uniswap's Permit2 permitWitnessTransferFrom         | ✅ (pay multiple recipients in one transaction) | ✅ payer must pre-approve Permit2 on the token once |
+
+<VanillaAdmonition type="warning" title="Other options">
+
+`transaction` and `hash` credential types are stubbed but intentionally not implemented—these have weaker challenge-binding and carry fraud risk.
+
+</VanillaAdmonition>
+<ImageZoom src="/img/mpp.png" className="img-600px" alt="MPP Flow">
+  MPP Flow
+</ImageZoom>
+
+## What the client does
+
+`charge()` returns a `Method.toClient` handler. In `createCredential`:
+
+1. Validates the challenge’s `chainId` is supported and unexpired.
+2. Checks the payer’s token balance onchain (`balanceOf`).
+3. Branches on `credentialTypes`:
+
+- **permit2** (or undefined): builds permitted/`transferDetails` arrays (handling splits, with the primary recipient pushed to the front), derives the nonce from a challenge hash, and signs the Permit2 witness typed-data.
+
+<VanillaAdmonition type="info" title="permit2 splits">
+  The sum of the amounts in the split must be strictly lower than the total amount for the transaction. So if the total transaction is 10,000 and splits have two recipients that will receive 2,000 and 3,000—the main recipient will receive 5,000.
+</VanillaAdmonition>
+
+- **authorization**: derives nonce = `keccak256(challenge.id, challenge.realm)` for challenge-binding (anti-replay), looks up the token's EIP-712 domain from the local erc3009Tokens registry (not an onchain query), and signs the `TransferWithAuthorization` struct.
+
+4. Returns `Credential.serialize(...)`. No transaction is broadcast.
+
+## What the server does
+
+`charge()` returns a `Method.toServer` handler. In `verify(credential, request)`, it independently re-derives and re-checks every value the client claimed (recipient, amount, deadline, nonce/challenge-hash, signature via `verifyTypedData`, `balance`, and, for permit2, the Permit2 allowance and split amounts). Then it:
+
+1. Simulates the transaction with `eth_call` (so a bad credential doesn’t waste gas).
+2. Submits `transferWithAuthorization` (authorization) or `permitWitnessTransferFrom` (permit2) from the merchant’s account.
+3. `waitForTransactionReceipt`, then verifies the emitted Transfer logs match the expected recipients/amounts.
+4. Returns an `mppx` Receipt: `method: "arbitrum", status: "success", timestamp, reference: txHash`.
+
+## How to implement it — server (merchant) side
+
+`mppx` has an Express adapter:
+
+```typescript
+import express from 'express';
+import { Mppx } from 'mppx/express';
+import { privateKeyToAccount } from 'viem/accounts';
+import { charge } from '@arbitrum/mpp/server';
+import * as defaults from '@arbitrum/mpp/default';
+
+const account = privateKeyToAccount(process.env.SERVER_PRIVATE_KEY as `0x${string}`);
+const app = express();
+
+const mppx = Mppx.create({
+  methods: [
+    charge({
+      recipient: account.address, // where funds land
+      currency: defaults.TOKEN_CONTRACTS.USDC_ARBITRUM_SEPOLIA, // which token
+      methodDetails: { chainId: 421614, decimals: 6 },
+      account, // pays gas to settle
+    }),
+  ],
+  secretKey: process.env.SERVER_PRIVATE_KEY,
+});
+
+// Gate an endpoint behind a charge:
+app.get(
+  '/authorization',
+  mppx.charge({
+    amount: '1000', // raw units: 1000 = 0.001 USDC (6 decimals)
+    description: 'My favorite food',
+    methodDetails: { chainId: 421614, credentialTypes: ['authorization'] },
+  }),
+  (req, res) => res.json({ data: 'authorization worked!' }), // only runs after payment settles
+);
+
+app.listen(3000);
+```
+
+- Set `credentialTypes` to `['permit2']` to use Permit2 instead, and add a `splits: [...]` array to pay multiple recipients in one transaction.
+- ⚠️ `amount` uses raw token units — human-readable decimal conversion isn't supported yet.
+
+## How to implement it - client (payer) side
+
+```typescript
+import { Mppx } from 'mppx/client';
+import { privateKeyToAccount } from 'viem/accounts';
+import { charge } from '@arbitrum/mpp/client';
+
+const account = privateKeyToAccount(process.env.CLIENT_PRIVATE_KEY as `0x${string}`);
+
+const mppx = Mppx.create({
+  methods: [charge({ account, chainId: 421614 })],
+});
+
+// mppx intercepts the 402, signs the challenge, retries automatically:
+const response = await mppx.fetch('http://localhost:3000/authorization');
+const data = await response.json();
+console.log(`Response: ${data}`); // Payment response ('authorization worked!')
+const receipt = response.headers.get('payment-receipt'); // base64-encoded mppx Receipt
+console.log(Buffer.from(receipt!, 'base64').toString('binary')); // Transaction information including hash
+```
+
+## Run the bundled example locally
+
+```shell
+pnpm install
+
+# .env (copy from .env.example)
+CLIENT_PRIVATE_KEY=0x...   # this wallet needs USDC on Arbitrum Sepolia
+SERVER_PRIVATE_KEY=0x...   # this wallet needs ETH (gas) on Arbitrum Sepolia
+
+# Terminal 1
+pnpm run server   # tsx test/server  → listens on :3000
+
+# Terminal 2
+pnpm run client   # tsx test/client  → hits /authorization, signs, settles
+```
+
+### Funding requirements
+
+- Server needs **ETH** on the chain (it pays gas to submit the settlement transaction).
+- Client needs **USDC** on the same chain (the funds being pulled).
+- For Permit2, the client must first approve the Permit2 contract (`0x000000000022D473030F116dDEE9F6B43aC78BA3`) as a spender on the **USDC** token—Permit2 can’t move tokens it hasn’t been allowed to.
+
+### Current limitations
+
+- Only **USDC** on Arbitrum One/Sepolia is registered. To add a token, register its address and EIP-712 name/version/chainId.
+- `amount` is raw units only—no human-readable decimal conversion yet.
+- For authorization, the `validBefore` expiry is trusted from the server's challenge; a far-future expiry theoretically widens the window in which an unsubmitted authorization could be settled late. (**Note**: the EIP-3009 nonce is challenge-bound—`keccak256(id, realm)`—and single-use onchain, so a literal replay of an already-settled authorization is blocked once the nonce is consumed.)
+- `transaction` and `hash` credential types are intentionally unimplemented (weak challenge-binding).
+- Status is v0.1.0 — early/experimental.
+
+### Reference links
+
+- [Protocol overview](https://mpp.dev/protocol)
+- [Custom/first-party SDK](https://mpp.dev/payment-methods/custom#first-party-sdk)
+- [Method.from](https://mpp.dev/sdk/typescript/Method.from)
+- [Method.toServer](https://mpp.dev/sdk/typescript/core/Method.toServer)
+- [Method.toClient](https://mpp.dev/sdk/typescript/core/Method.toClient)
+- [Unified EVM Spec](https://github.com/tempoxyz/mpp-specs/blob/main/specs/methods/evm/draft-evm-charge-00.md)
+- [EIP-3009 Transfer with Authorization](https://eips.ethereum.org/EIPS/eip-3009)

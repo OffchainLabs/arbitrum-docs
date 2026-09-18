@@ -1,0 +1,11 @@
+{
+  "title": "Common",
+  "pages": [
+    "configure-aep",
+    "data-availability",
+    "gas-and-fees",
+    "mev",
+    "ux",
+    "validation-and-security"
+  ]
+}

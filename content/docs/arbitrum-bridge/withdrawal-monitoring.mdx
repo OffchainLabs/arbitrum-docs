@@ -1,0 +1,273 @@
+---
+title: 'Monitor withdrawals programmatically'
+sidebar_label: 'Monitoring withdrawals'
+description: 'Track child-to-parent withdrawals on Arbitrum chains through their full lifecycle: statuses, expected timelines per chain type, SDK and onchain queries, and how to diagnose stuck withdrawals'
+author: Gowtham118
+sme: ''
+user_story: As a chain operator or integration partner, I want to monitor the status of child-to-parent withdrawals made through the canonical (native) bridge programmatically, so that I can track them through the challenge period and alert on withdrawals that get stuck.
+content_type: how-to
+---
+
+This page is intended for chain operators and integration partners (exchanges, bridges, infrastructure providers) who need to track withdrawals programmatically and be alerted when one gets stuck. To trace a single transaction end to end, see [Tracing bridge transactions](/docs/arbitrum-bridge/bridge-transaction-traceability). To initiate withdrawals from code, see [Withdraw ETH and messages](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages). To learn the protocol-level background, see [Child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging).
+
+A withdrawal from an Arbitrum chain is a <Term id="child-chain">child chain</Term>-to-<Term id="parent-chain">parent chain</Term> message that passes through several protocol stages before funds are claimable. Most "where is my withdrawal?" questions come down to not knowing which stage a withdrawal is in, or how long each stage is expected to take on a given chain. This guide maps the lifecycle to observable onchain state and to the [`@arbitrum/sdk`](https://github.com/OffchainLabs/arbitrum-sdk) status model, gives expected timelines per chain type, and shows how to diagnose a withdrawal that gets stuck.
+
+## The withdrawal lifecycle
+
+Every withdrawal—whether a token withdrawal through the <Term id="arbitrum-bridge-ui">bridge UI</Term> or a raw `ArbSys.sendTxToL1` call—moves through the same stages:
+
+| Stage            | What happens onchain                                                                                                                                                                                                                                                                                    | SDK status    |
+| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------ |
+| **1. Initiated** | The child chain transaction calls the [`ArbSys`](/docs/arbitrum-essentials/precompiles/reference#arbsys) <Term id="precompile">precompile</Term> (directly, or via a <Term id="token-gateway">token gateway</Term>), which emits an `L2ToL1Tx` event containing the withdrawal's `position`           | `UNCONFIRMED` |
+| **2. Batched**   | The <Term id="sequencer">sequencer</Term> posts the <Term id="batch">batch</Term> containing the transaction to the parent chain (typically within minutes)                                                                                                                                            | `UNCONFIRMED` |
+| **3. Asserted**  | A <Term id="validator">validator</Term> posts an <Term id="assertion">assertion</Term> covering the withdrawal's child chain block (`AssertionCreated` event on the Rollup contract)                                                                                                                    | `UNCONFIRMED` |
+| **4. Confirmed** | After the <Term id="challenge-period">challenge period</Term> passes without a successful challenge, the assertion is confirmed (`AssertionConfirmed` event); the Rollup contract registers the assertion's send root in the <Term id="outbox">outbox</Term> (`SendRootUpdated` event)                 | `CONFIRMED`   |
+| **5. Executed**  | Someone calls `Outbox.executeTransaction()` with a Merkle proof (obtained from a child chain node via `NodeInterface.constructOutboxProof()`); the outbox marks the withdrawal spent (`OutBoxTransactionExecuted` event) and releases the funds                                                         | `EXECUTED`    |
+
+Two properties of this lifecycle cause most confusion:
+
+- **Execution is manual.** Confirmation makes a withdrawal _claimable_; it doesn't deliver funds. Someone (the user through the bridge UI's **Claim** button, or your infrastructure) must execute the claim on the parent chain—see [Executing the message on the parent chain](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#executing-the-message-on-the-parent-chain) for the execution steps. A withdrawal can sit in `CONFIRMED` indefinitely.
+- **Time-to-claimable is more than the challenge period.** The clock users care about includes batch posting (minutes) _plus_ waiting for the next assertion to cover their block (up to the chain's assertion posting interval, commonly up to an hour) _plus_ the challenge period after that assertion is created. On a chain with [fast withdrawals](/docs/launch-arbitrum-chain/configuration/validation/fast-withdrawals), the committee's confirmation frequency replaces the challenge period wait, but batch posting and assertion cadence still apply—which is why a "15-minute fast withdrawal chain" can legitimately take an hour or more to reach claimable.
+
+### Mapping bridge UI phases to protocol states
+
+The [Arbitrum bridge UI](https://bridge.arbitrum.io/) presents a withdrawal as three user-facing steps, and support conversations often reference them as "phases." They map to the lifecycle above as follows:
+
+| Bridge UI step                                     | Lifecycle stages                               | SDK status               |
+| :-------------------------------------------------- | :---------------------------------------------- | :------------------------- |
+| Phase 1 — withdrawal submitted                     | Initiated                                      | `UNCONFIRMED`             |
+| Phase 2 — countdown or waiting                     | Batched → Asserted → challenge period elapsing | `UNCONFIRMED`             |
+| Phase 3 — **Claim** button available, then claimed | Confirmed → Executed                           | `CONFIRMED` → `EXECUTED` |
+
+A withdrawal "stuck between phase 2 and phase 3" is a withdrawal that stayed `UNCONFIRMED` past its expected time-to-claimable: either no assertion covering its block exists yet, or the covering assertion hasn't been confirmed. The [diagnosis table](#diagnose-stuck-withdrawals) below separates those cases.
+
+## Expected timelines by chain type
+
+The dominant term in time-to-claimable is the challenge period, set by the chain's `confirmPeriodBlocks` parameter and measured in parent chain blocks. Values for Arbitrum's own chains:
+
+| Chain configuration                                                                            | Challenge period                     | Typical time-to-claimable                                                 |
+| :------------------------------------------------------------------------------------------------ | :-------------------------------------- | :---------------------------------------------------------------------------- |
+| <Term id="arbitrum-one">Arbitrum One</Term> (Rollup)                                             | 45,818 blocks ≈ 6.4 days               | ~7 days (batch + assertion cadence + challenge period)                       |
+| <Term id="arbitrum-nova">Arbitrum Nova</Term> (<Term id="arbitrum-anytrust-protocol">AnyTrust</Term>) | 45,818 blocks ≈ 6.4 days               | ~7 days—AnyTrust changes data availability, **not** the challenge period    |
+| Arbitrum chain with <Term id="fast-withdrawals">fast withdrawals</Term>                          | Bypassed by unanimous committee confirmation | As low as ~15 minutes on <Term id="bold">BoLD</Term>-enabled chains, plus batch posting and assertion cadence |
+| Arbitrum Sepolia (testnet)                                                                        | 20 blocks ≈ 4 minutes                  | Minutes                                                                       |
+
+Additional timing facts your alerting thresholds should account for:
+
+- **A challenged assertion takes longer.** If an assertion acquires a <Term id="rival">rival</Term>, confirmation waits for the challenge to resolve (bounded by the challenge period) plus a grace period (14,400 parent chain blocks ≈ 48 hours on Arbitrum One's configuration) before the winner can be confirmed. Under BoLD, an honest withdrawal is delayed by at most one additional challenge period even during a dispute—see [Assertions](/docs/how-arbitrum-works/deep-dives/assertions).
+- **Time-to-funds = time-to-claimable + execution.** Budget for the claim transaction separately; nothing executes it automatically.
+- **Custom chains choose their own values.** Read `confirmPeriodBlocks()` from the chain's Rollup contract (shown [below](#query-assertion-and-outbox-state-onchain)) rather than assuming the defaults. To learn how operators configure this, see [Customizable challenge period](/docs/launch-arbitrum-chain/configuration/validation/customizable-challenge-period).
+
+## Withdrawals from an L3
+
+A withdrawal from an <Term id="layer-3-l3">L3</Term> (an Arbitrum chain that settles on Arbitrum One or another child chain) to Ethereum is **two sequential child-to-parent withdrawals**: L3 → L2, then L2 → L1. Each leg has its own challenge period—by default 45,818 parent chain blocks (≈ 6.4 days) per leg on mainnet configurations—and each leg's claim must execute before the next leg can begin. The worst case with default settings is therefore roughly two weeks end to end.
+
+Monitor each leg independently with the code in this guide, pointing the provider pair at the relevant chains (L3 + L2 for the first leg, L2 + L1 for the second).
+
+Chain operators have three options for reducing the delay:
+
+| Option                                                                                                | Time-to-claimable                                  | Trade-off                                                                                                                                 |
+| :------------------------------------------------------------------------------------------------------ | :---------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Fast withdrawals](/docs/launch-arbitrum-chain/configuration/validation/fast-withdrawals)              | Down to ~15 minutes per leg on BoLD-enabled chains | Adds a committee trust assumption (unanimous validator committee); recommended primarily for AnyTrust chains where the DAC already exists     |
+| [Customizable challenge period](/docs/launch-arbitrum-chain/configuration/validation/customizable-challenge-period) | Whatever `confirmPeriodBlocks` is set to           | Shrinks the window in which fraud can be challenged; weakens the chain's security model                                                       |
+| Third-party liquidity bridges                                                                        | Minutes                                            | Users receive funds from a liquidity provider rather than the canonical bridge; adds provider trust and fees; per-asset liquidity limits       |
+
+## Monitor withdrawals with the SDK
+
+The [`@arbitrum/sdk`](https://github.com/OffchainLabs/arbitrum-sdk) (v4, ethers v5) exposes the lifecycle through `ChildToParentMessage` objects and the `ChildToParentMessageStatus` enum, whose three values match the lifecycle table above: `UNCONFIRMED` (0), `CONFIRMED` (1), and `EXECUTED` (2). The SDK handles both current (BoLD) and legacy assertion models automatically, so the same code works across chains. For the base pattern of getting these message objects from a transaction receipt and executing a claim, see [Using the Arbitrum SDK](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#using-the-arbitrum-sdk).
+
+Arbitrum One, Nova, and Arbitrum Sepolia are pre-registered in the SDK. For any other Arbitrum chain, register it first—all required parameters can be derived from the chain's Rollup contract address:
+
+```ts
+import { providers } from 'ethers';
+import { registerCustomArbitrumNetwork, getArbitrumNetworkInformationFromRollup } from '@arbitrum/sdk';
+
+const parentProvider = new providers.JsonRpcProvider(PARENT_RPC_URL);
+
+const rollupData = await getArbitrumNetworkInformationFromRollup(ROLLUP_ADDRESS, parentProvider);
+
+registerCustomArbitrumNetwork({
+  chainId: CHILD_CHAIN_ID,
+  name: 'my-arbitrum-chain',
+  parentChainId: rollupData.parentChainId,
+  ethBridge: rollupData.ethBridge,
+  confirmPeriodBlocks: rollupData.confirmPeriodBlocks,
+  isCustom: true,
+  isTestnet: false,
+});
+```
+
+### Check the status of a withdrawal and estimate a countdown
+
+Given the withdrawal's child chain transaction hash:
+
+```ts
+import { providers } from 'ethers';
+import { ChildTransactionReceipt, ChildToParentMessageStatus } from '@arbitrum/sdk';
+
+const withdrawalTxHash = WITHDRAWAL_TX_HASH;
+
+const parentProvider = new providers.JsonRpcProvider(PARENT_RPC_URL);
+const childProvider = new providers.JsonRpcProvider(CHILD_RPC_URL);
+
+async function main() {
+  const receipt = await childProvider.getTransactionReceipt(withdrawalTxHash);
+  const childReceipt = new ChildTransactionReceipt(receipt);
+  const messages = await childReceipt.getChildToParentMessages(parentProvider);
+  const message = messages[0];
+
+  const status = await message.status(childProvider);
+  console.log('Status:', ChildToParentMessageStatus[status]);
+
+  if (status === ChildToParentMessageStatus.UNCONFIRMED) {
+    // Estimated parent chain block at which the withdrawal becomes executable
+    const firstExecutableBlock = await message.getFirstExecutableBlock(childProvider);
+    console.log('Estimated first executable parent chain block:', firstExecutableBlock.toString());
+  }
+}
+main();
+```
+
+`getFirstExecutableBlock()` returns an estimate of the parent chain block at which the message becomes claimable (based on the covering assertion's creation block plus the challenge period), or `null` once the message is already `CONFIRMED` or `EXECUTED`. Comparing it against the parent chain's current block number gives you a countdown you can surface to users—the same countdown the bridge UI shows. Once the message reaches `CONFIRMED`, follow [Using the Arbitrum SDK](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#using-the-arbitrum-sdk) to execute the claim.
+
+### Index many withdrawals
+
+To monitor every withdrawal on a chain (for example, all withdrawals initiated through your bridge frontend), fetch `L2ToL1Tx` events in bulk instead of tracking individual transaction hashes:
+
+```ts
+import { providers } from 'ethers';
+import { ChildToParentMessage, ChildToParentMessageStatus } from '@arbitrum/sdk';
+
+const parentProvider = new providers.JsonRpcProvider(PARENT_RPC_URL);
+const childProvider = new providers.JsonRpcProvider(CHILD_RPC_URL);
+
+const fromBlock = START_BLOCK;
+const toBlock = 'latest';
+
+async function main() {
+  const events = await ChildToParentMessage.getChildToParentEvents(childProvider, {
+    fromBlock,
+    toBlock,
+  });
+  console.log(`Found ${events.length} withdrawal(s)`);
+
+  for (const event of events) {
+    const message = ChildToParentMessage.fromEvent(parentProvider, event);
+    const status = await message.status(childProvider);
+    console.log(`position ${event.position.toString()} | ` + `child tx ${event.transactionHash} | ` + `destination ${event.destination} | ` + `${ChildToParentMessageStatus[status]}`);
+  }
+}
+main();
+```
+
+`getChildToParentEvents` also accepts optional `position`, `destination`, and `hash` filters (all indexed fields of the `L2ToL1Tx` event), so you can restrict the scan to withdrawals bound for addresses you care about.
+
+For a production monitor, a practical pattern is:
+
+1. **Ingest**: scan `L2ToL1Tx` events in block-range windows on a schedule; store each withdrawal's `position`, transaction hash, destination, and initiation timestamp.
+2. **Track**: poll `status()` for stored withdrawals that aren't `EXECUTED` yet. Withdrawals in `UNCONFIRMED` only change state when an assertion is confirmed, so polling them more often than the chain's assertion cadence adds no information; hourly is plenty on a seven-day chain.
+3. **Alert**: flag any withdrawal that is `UNCONFIRMED` past your chain's expected time-to-claimable (challenge period + assertion cadence + margin), and any withdrawal sitting in `CONFIRMED` longer than you expect users to leave claims unexecuted.
+
+## Query assertion and outbox state onchain
+
+If you prefer raw contract calls—or want to monitor the assertion pipeline itself rather than individual messages—the same lifecycle is observable from three contracts: the `ArbSys` precompile on the child chain, and the Rollup and Outbox contracts on the parent chain. This differs from [tracing a withdrawal to its execution transaction](/docs/arbitrum-bridge/bridge-transaction-traceability#tracing-withdrawals-from-child-chain-to-parent-chain): the snippet below checks every stage for one withdrawal, which is useful for building an alerting dashboard rather than answering "which parent-chain transaction executed this."
+
+```ts
+import { providers, Contract } from 'ethers';
+
+const withdrawalTxHash = WITHDRAWAL_TX_HASH;
+const rollupAddress = ROLLUP_ADDRESS;
+
+const ARBSYS_ADDRESS = '0x0000000000000000000000000000000000000064';
+const NODE_INTERFACE_ADDRESS = '0x00000000000000000000000000000000000000C8';
+
+const arbSysAbi = ['event L2ToL1Tx(address caller, address indexed destination, uint256 indexed hash, uint256 indexed position, uint256 arbBlockNum, uint256 ethBlockNum, uint256 timestamp, uint256 callvalue, bytes data)'];
+const rollupAbi = ['function outbox() view returns (address)', 'function confirmPeriodBlocks() view returns (uint64)', 'event AssertionConfirmed(bytes32 indexed assertionHash, bytes32 blockHash, bytes32 sendRoot)'];
+const outboxAbi = ['function roots(bytes32) view returns (bytes32)', 'function isSpent(uint256 index) view returns (bool)'];
+const nodeInterfaceAbi = ['function constructOutboxProof(uint64 size, uint64 leaf) view returns (bytes32 send, bytes32 root, bytes32[] proof)'];
+
+const parentProvider = new providers.JsonRpcProvider(PARENT_RPC_URL);
+const childProvider = new providers.JsonRpcProvider(CHILD_RPC_URL);
+
+async function main() {
+  // 1. The L2ToL1Tx event from the withdrawal transaction identifies the message
+  const receipt = await childProvider.getTransactionReceipt(withdrawalTxHash);
+  const arbSys = new Contract(ARBSYS_ADDRESS, arbSysAbi, childProvider);
+  const l2ToL1TxTopic = arbSys.interface.getEventTopic('L2ToL1Tx');
+  const event = receipt.logs.filter((log) => log.topics[0] === l2ToL1TxTopic).map((log) => arbSys.interface.parseLog(log))[0];
+  const { position, arbBlockNum } = event.args;
+  console.log('position (outbox leaf index):', position.toString(), '| child block:', arbBlockNum.toString());
+
+  // 2. Latest confirmed assertion: its send root commits to all withdrawals up to
+  //    the child chain block it covers
+  const rollup = new Contract(rollupAddress, rollupAbi, parentProvider);
+  const confirmed = await rollup.queryFilter(rollup.filters.AssertionConfirmed(), -100000);
+  const latestConfirmation = confirmed[confirmed.length - 1];
+  const { blockHash, sendRoot } = latestConfirmation.args;
+
+  // 3. sendCount of that block = how many withdrawals the confirmed assertion covers
+  const confirmedBlock = await childProvider.send('eth_getBlockByHash', [blockHash, false]);
+  const sendCount = Number(confirmedBlock.sendCount);
+  const isCovered = position.lt(sendCount);
+  console.log('confirmed sendCount:', sendCount, '| withdrawal covered by confirmed assertion:', isCovered);
+
+  // 4. The send root must be registered in the outbox for claims to succeed
+  const outboxAddress = await rollup.outbox();
+  const outbox = new Contract(outboxAddress, outboxAbi, parentProvider);
+  const registered = (await outbox.roots(sendRoot)) !== '0x' + '0'.repeat(64);
+  console.log('send root registered in outbox:', registered);
+
+  // 5. Already claimed?
+  console.log('outbox.isSpent(position):', await outbox.isSpent(position));
+
+  // 6. Merkle proof for a manual Outbox.executeTransaction call
+  const nodeInterface = new Contract(NODE_INTERFACE_ADDRESS, nodeInterfaceAbi, childProvider);
+  const proofData = await nodeInterface.constructOutboxProof(sendCount, position.toNumber());
+  console.log('proof root matches confirmed sendRoot:', proofData.root === sendRoot);
+}
+main();
+```
+
+How each check maps to the lifecycle:
+
+- **`L2ToL1Tx`** (`ArbSys`, child chain): emitted at initiation. Its `position` is the withdrawal's leaf index in the send Merkle tree—the same `index` that `Outbox.executeTransaction()` and `Outbox.isSpent()` take, and the `leaf` argument to `NodeInterface.constructOutboxProof()`. The `destination`, `hash`, and `position` fields are indexed, so monitors can subscribe to them directly.
+- **`AssertionCreated`** and **`AssertionConfirmed`** (Rollup contract, parent chain): the assertion pipeline. A withdrawal is covered once an assertion whose child chain block has `sendCount > position` exists; it is claimable once such an assertion is _confirmed_. `AssertionConfirmed` carries the confirmed `blockHash` and `sendRoot`. You can also read `latestConfirmed()` and `getAssertion()` on the Rollup contract for point-in-time checks. For an alerting-oriented view of this pipeline (assertion cadence, missed confirmations, validator health), run the [assertion monitor](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations#assertion-monitor).
+- **`SendRootUpdated`** and **`roots`** (Outbox, parent chain): set by the Rollup contract at assertion confirmation. A claim can only succeed if the proof's root is registered in `roots`—this is the onchain meaning of "ready to execute."
+- **`OutBoxTransactionExecuted`** and **`isSpent(position)`** (Outbox, parent chain): terminal state. The event's `transactionIndex` field equals the withdrawal's `position`.
+- **`constructOutboxProof(size, leaf)`** (`NodeInterface`, child chain): builds the Merkle proof for a manual claim, where `size` is the confirmed block's `sendCount` and `leaf` is the withdrawal's `position`. The `NodeInterface` is a node-provided virtual contract—call it with `eth_call` against a child chain node; it doesn't exist onchain.
+
+<VanillaAdmonition type="note" title="Chains on the legacy (pre-BoLD) protocol">
+
+On chains that haven't upgraded to BoLD, the Rollup contract identifies assertions by sequential node number instead of hash, and the corresponding events are `NodeCreated` and `NodeConfirmed(nodeNum, blockHash, sendRoot)`. The `ArbSys`, `Outbox`, and `NodeInterface` surfaces are unchanged, and the SDK abstracts the difference entirely.
+
+</VanillaAdmonition>
+
+If the parent chain is itself an Arbitrum chain (the L3 case), use the Rollup contract's `getAssertionCreationBlockForLogLookup(assertionHash)` getter to obtain block numbers suitable for event queries on the parent chain.
+
+## Diagnose stuck withdrawals
+
+Work through the stages in order—each row's check assumes the previous rows passed. "Phase" refers to the [bridge UI mapping](#mapping-bridge-ui-phases-to-protocol-states) above.
+
+| Symptom                                                                                    | Stuck at                             | What to check                                                                                                                                                                                                                                                                                       | Escalation                                                                                                                                                                                          |
+| :-------------------------------------------------------------------------------------------- | :-------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UNCONFIRMED`, and the transaction isn't in a posted batch yet                             | Batch posting (phase 2, early)       | `NodeInterface.getL1Confirmations(blockHash)` returns `0`, or `findBatchContainingBlock(blockNum)` reverts, for the withdrawal's child chain block                                                                                                                                                  | <Term id="batch-poster">Batch poster</Term> is down or backed up—chain operator; see [batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting) |
+| `UNCONFIRMED`, batched, but no assertion covers the block                                  | Assertion creation (phase 2)         | Latest `AssertionCreated` on the Rollup contract: does the assertion's child chain block have `sendCount > position`? No recent `AssertionCreated` events at all means the active validator isn't posting                                                                                          | Chain operator (validator or proposer health); the [assertion monitor](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations#assertion-monitor) alerts on this automatically      |
+| `UNCONFIRMED`, assertion created, challenge period elapsed, still no `AssertionConfirmed`  | Assertion confirmation (phase 2 → 3) | Whether the assertion has a rival (a challenge is in progress—confirmation waits for resolution plus a grace period); whether any validator is calling the confirmation function at all                                                                                                            | Chain operator; on a challenged chain, monitor the challenge and expect up to one extra challenge period plus grace period                                                                          |
+| `CONFIRMED`, but the claim transaction reverts                                             | Execution (phase 3)                  | `Outbox.isSpent(position)`—`true` means it was already claimed (find the claim via the `OutBoxTransactionExecuted` event with `transactionIndex == position`); for an L3 withdrawal, confirm you're claiming the correct leg on the correct chain; re-derive the proof with `constructOutboxProof` | If the proof root isn't in `Outbox.roots` despite `CONFIRMED` status, something is inconsistent—collect the position, child chain transaction hash, and chain ID, and contact the chain operator     |
+| "Withdrawal is claimable, but funds never arrived"                                         | Execution (phase 3)                  | Nobody executed the claim—execution is manual. Check `isSpent(position)`; if `false`, execute via the SDK or the bridge UI's **Claim** button. For token withdrawals, funds are released by the parent chain gateway to the destination address once executed                                     | End-user cases: [bridge troubleshooting](/docs/arbitrum-bridge/troubleshooting)                                                                                                                      |
+
+<VanillaAdmonition type="warning" title="Historical data availability">
+
+Ethereum consensus nodes are required to serve blob data for only 4,096 epochs (≈18 days). Monitors that reconstruct old withdrawal history need archive access: an [archive beacon endpoint for historical blobs](/docs/run-a-node/beacon-nodes-historical-blobs) to re-derive the chain from batch data, and an archive child chain node for the event logs that `constructOutboxProof` reads. On AnyTrust chains, the equivalent concern is the <Term id="data-availability-committee-dac">Data Availability Committee</Term>'s retention window. Claiming a confirmed withdrawal itself is unaffected—proofs are built from child chain logs, not blobs.
+
+</VanillaAdmonition>
+
+## See also
+
+- [Tracing bridge transactions](/docs/arbitrum-bridge/bridge-transaction-traceability) — follow a single deposit or withdrawal end to end
+- [Withdraw ETH and messages](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages) and [Withdraw tokens](/docs/arbitrum-essentials/bridging/withdraw/tokens) — initiating withdrawals and executing claims
+- [Child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging) and [Assertions](/docs/how-arbitrum-works/deep-dives/assertions) — protocol deep dives
+- [Fast withdrawals](/docs/launch-arbitrum-chain/configuration/validation/fast-withdrawals) and [Customizable challenge period](/docs/launch-arbitrum-chain/configuration/validation/customizable-challenge-period) — chain owner configuration
+- [Monitoring tools for your chain](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) — the `arbitrum-monitoring` alerting suite
+- [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/exchange-integration-checklist) — deposit and withdrawal handling for exchanges
+- [Precompiles reference](/docs/arbitrum-essentials/precompiles/reference) (`ArbSys`) and [NodeInterface reference](/docs/arbitrum-essentials/nodeinterface/reference) (`constructOutboxProof`)

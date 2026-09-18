@@ -1,0 +1,10 @@
+{
+  "title": "Cli tools",
+  "pages": [
+    "check-and-deploy",
+    "debugging-tx",
+    "overview",
+    "verify-contracts",
+    "commands-reference"
+  ]
+}

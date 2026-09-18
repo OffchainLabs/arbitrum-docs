@@ -1,113 +1,114 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+> **Machine-facing. Not written for humans, and not the canonical documentation.**
+>
+> This file provides guidance to Claude Code (claude.ai/code) when working with code in this
+> repository. It is tied to a specific commercial tool; parts of it are rewritten automatically by
+> `next dev`.
+>
+> The canonical docs are [README.md](README.md) (how to work on the docs) and
+> [INTERNALS.md](INTERNALS.md) (how the codebase works, and why). Humans should read those.
+>
+> **Duplication here is expected and fine** — agents need the context in-session, so anything
+> canonical that an agent needs belongs in this file too. When the same material lives in both
+> places, **edit INTERNALS.md first**, then mirror what agents need back here.
 
-## Working with branches
-
-Always confirm with the user before choosing which branch to commit to, push to, or modify — especially when multiple branches are in play (stacked PRs, feature branches). Do not assume the user agrees with a branch choice just because it seems logical. Ask first, act after confirmation.
-
-## Project overview
-
-Arbitrum documentation portal ([docs.arbitrum.io](https://docs.arbitrum.io/)), built with Docusaurus 3.10.x, React 19, MDX, TypeScript 6.x. Package manager: Yarn. Node 22.x.
+Arbitrum documentation portal — a Next.js 16 / Fumadocs migration of [`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs) off Docusaurus. Serves English MDX docs (single locale; i18n was removed 2026-08-18). Phase 0 MVP: single-committer. CI landed 2026-08-17 (`.github/workflows/`); the repo is linked to the Vercel project `fumadocs-test`.
 
 ## Commands
 
-```shell
-yarn                              # Install dependencies
-yarn start --no-open              # Dev server (always use --no-open)
-yarn build                        # Production build (yarn && yarn clear && docusaurus build — always a cold rebuild)
-vercel build                      # Vercel-parity build (use to verify before deploying)
-yarn serve --no-open              # Serve built site locally
-yarn typecheck                    # TypeScript checking (tsc --noEmit)
-yarn format                       # Prettier (docs + app + check)
-yarn lint:markdown                # Markdownlint on docs/**/*.{md,mdx}
-yarn lint:markdown:fix            # Auto-fix markdown lint issues
-yarn generate-precompiles-ref-tables  # Regenerate precompile reference tables
-yarn update-variable-refs         # Propagate globalVars.js changes into doc files
-yarn build-glossary               # Rebuild glossary from partials/glossary/*.mdx
-yarn generate                     # Run all generators (precompiles, contract addresses, glossary, variable refs)
-yarn generate:check               # Same, --check mode — CI fails if generated files are stale
-yarn test:llms-tracking           # Test middleware tracking logic
-node scripts/sync-stylus-content.js   # Refresh Stylus examples — NOTE: expects submodules/stylus-by-example, which no longer exists
-yarn find-orphan-pages            # Find docs not linked in sidebars
-yarn sync-redirects               # Sync redirects.config.js → vercel.json
+```bash
+pnpm install        # runs `fumadocs-mdx` postinstall → regenerates .source/
+pnpm dev            # http://localhost:3000
+pnpm types:check    # fumadocs-mdx && next typegen && tsc --noEmit — the verification gate
+pnpm build          # next build --experimental-build-mode=compile
+pnpm start          # serve the production build
+pnpm partials:catalog  # regenerate content/partials/CATALOG.md + manifest.json
+pnpm partials:check    # validate partials: include/import resolution, no routing leak, catalog freshness
+pnpm test              # node --test over scripts/**/*.test.mjs (6 suites)
+pnpm check-links       # broken internal doc links
+pnpm content:lint      # MDX structural defects (stray :::, admonition shape)
+pnpm vars:check        # every <Var name> resolves in content/vars.json
+pnpm nav:check         # meta.json nav integrity
+pnpm references:check  # glossary ids + <Reference> targets
+pnpm drift             # compare content tree against upstream arbitrum-docs
+pnpm tree:map          # injective legacy-path -> current-path map; fails on a duplicate target
+pnpm redirects:legacy  # regenerate the legacy docs.arbitrum.io redirect map
+pnpm redirects:check   # every redirect destination is a real page (needs `pnpm dev` running)
+pnpm format:check      # prettier
+pnpm precompiles:check # precompile tables match the pinned Nitro refs (--check = no writes)
+pnpm nitro:check-release  # bump the pinned Nitro release in content/vars.json
 ```
+
+- **CI runs on push and PR to `main` ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) in three jobs — only the first one blocks.** A green PR does not mean the content is clean: eight checks block, three report and pass anyway.
+  - **`Gates` (blocking):** `types:check`, `test`, `vars:check`, `nav:check`, `partials:check`, `node scripts/versioned-docs-check.mjs`, `references:check`, `check-links`. Fumadocs has no `onBrokenLinks: 'throw'`, so `check-links` supplies it — `pnpm build` now chains it ahead of `next build`, which fails the Vercel deploy on a broken link as well. It does **not** validate anchors, so a live page with a dead `#anchor` still passes; verify those in a browser.
+  - **`Content debt` (non-blocking):** `format:check`, `content:lint` — each marked `continue-on-error` because each still fails on pre-existing debt. The job comment records the counts as of the last update; **promote a step into `Gates` once its count reaches zero.** That promotion is the point of the split — the tier is a backlog, not a policy.
+  - **`Build` (non-blocking):** `pnpm build`, deliberately not blocking — the MDX image pipeline fetches remote images at build time, so a dead third-party URL turns it red for reasons unrelated to the change under review. It still catches MDX compile errors that `types:check` cannot see.
+- **`drift`, `precompiles:check`, `redirects:legacy` and `redirects:check` run nowhere automatically** — invoke them by hand. `redirects:check` cannot run in CI as-is: it reads `/llms.txt` off a running site, because no plain-node script can import `lib/source` (neither the `collections/*` alias nor TypeScript resolves — the same wall `versioned-docs-check` hits, which is why that one text-parses `lib/versions.ts`). Point it at a Vercel preview with `--base-url` to check a PR. `types:check` regenerates the collection, generates Next types, then type-checks. `build` runs `versioned-docs-check` then `check-links` first.
+- **`upstream-refresh.yml`** runs Mondays 08:00 UTC (and on `workflow_dispatch`): `nitro:check-release`, then `precompiles:generate`, then opens `automated/upstream-refresh` as a PR if anything changed. It never writes to `main`, and no-ops when the tree is clean.
+- **`types:check` proves the schema, not the render.** It exits 0 on pages that serve literal `:::`, `undefined`, or HTTP 500. Confirm content changes in a browser on `http://localhost:3000` — on `127.0.0.1` React does not hydrate and every component looks broken.
+- **Node 22 only** (`>=22 <23`), pnpm 10. Other Node majors are rejected by `engines`.
+- The `.source/` directory is generated by `fumadocs-mdx` (postinstall / `types:check` / build). Never hand-edit it; regenerate instead.
 
 ## Architecture
 
-### Strict link enforcement
+**Build → render pipeline** (understanding it requires reading `source.config.ts`, `lib/source.ts`, and `app/docs/[[...slug]]/page.tsx` together):
 
-`onBrokenLinks: 'throw'` and `onBrokenMarkdownLinks: 'throw'` in `docusaurus.config.js`. Builds fail on any dead link. Always verify links after renaming/moving files.
+1. `fumadocs-mdx` scans `content/docs/**`, validates every page's frontmatter against the Zod schema in `source.config.ts`, and emits the `.source/` collection.
+2. `lib/source.ts` runs Fumadocs `loader()` over that collection with the icons plugin → the exported `source` object.
+3. Route handlers read `source`: `app/docs/[[...slug]]/page.tsx` renders pages; the `llms.txt`, `llms-full.txt`, `llms.mdx/`, and `og/` routes all derive from the same `source`. Change the content model in one place and every consumer follows.
 
-`onBrokenAnchors` is set to `'warn'` (not `'throw'`) because TypeDoc-generated pages emit false-positive anchor warnings. These are expected and not actionable.
+**`source` is a deliberate choke point — treat `source.config.ts` + `lib/source.ts` as one unit.** Seven files under `app/` import it (five routes, the docs page, the docs layout) and nothing else reads content:
 
-### Edge middleware
+- `docs.toFumadocsSource()` is the **only** adapter for `.source/`. Never build a second read path.
+- `baseUrl` is an argument to the single `loader()` call. A second loader would restate it and silently drift page URLs.
+- Helpers are typed `(typeof source)['$inferPage']`, so editing the frontmatter schema re-types every helper and every consumer at once.
+- `postprocess.includeProcessedMarkdown: true` is what makes `getLLMText()`'s `page.data.getText('processed')` work — remove it and the `llms*` routes break, far from where the flag lives.
+- Put URL derivation next to `source` (`getPageImage`, `getPageMarkdownUrl`, `getLLMText`), not in routes.
+- **Server-only.** Never import `lib/source` — or a constant that transitively pulls it — from a client component; it drags the compiled collection into the browser bundle (one such import cost a 24 MB chunk on every docs page). No gate catches this.
 
-`middleware.ts` runs on Vercel Edge (`@vercel/edge`). It serves raw Markdown to LLM/agent user-agents via content negotiation and dispatches PostHog server-side tracking. The tracking logic lives in `lib/llms-tracking.ts` and is tested via `yarn test:llms-tracking`.
+**Frontmatter contract (enforced at build).** `source.config.ts` extends the Fumadocs page schema so every non-partial `.mdx` page **must** have `title`, `description`, `content_type`, `author`, `sme`. `content_type` is a fixed enum: `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. Optional: `sidebar_label`, `user_story`, `draft`. A missing/invalid field fails `types:check` and `build` — this is the primary reason a build breaks after adding content.
 
-### Stylus and SDK content origins
+**Partials (registry model).** Reusable `_`-prefixed fragments live in **`content/partials/`** — outside the doc collection `dir` entirely, so they can never be routed (no glob exclusion needed). Two consumption paths, both tracked by the tooling:
 
-- `docs/stylus-by-example/` is checked into this repo directly (no submodule, no `.gitmodules`). Its `DONT-EDIT-THIS-FOLDER` marker points at `submodules/stylus-by-example`, which no longer exists — so edit the files here directly. `node scripts/sync-stylus-content.js` still exists but expects that missing submodule.
-- **The SDK API docs subsystem is dead.** `docs/sdk/` and `scripts/sdkDocsHandler.ts` no longer exist; `sdk-sidebar.js` is orphaned; `docs/api/` is a 3-file stub not referenced by `docusaurus.config.js`. The `sdk-docs` job in `.github/workflows/update-external-content.yml` still targets them and would fail if run. Do not treat any of these as a live pipeline.
+- **`<include>` directive** (build-time splice). Doc→partial includes use the root-anchored `<include cwd>content/partials/…</include>` form, so moving a page never breaks its includes. **Partial→partial includes must be file-relative** (`<include>../x.mdx</include>`) — a partial may be compiled outside the docs pipeline when ESM-imported, where fumadocs-mdx's `cwd` context is undefined and crashes. `partials-check` enforces this.
+- **ESM import** as an MDX component module: `import X from '@/content/partials/…/_x.mdx'`. Supported by the tooling (`scripts/lib/partials.mjs` scans the importer roots) but **currently used by no component** — the last consumer, `FloatingHoverModal`, was deleted as dead code. See the [README](README.md) for the shape.
 
-### Global variables and markdown preprocessor
+**Discoverability: before writing a banner, note, config table, or troubleshooting block, search [`content/partials/CATALOG.md`](content/partials/CATALOG.md)** (⌘F by intent) and reuse the partial instead of duplicating prose. `CATALOG.md` + `manifest.json` (for agents) are generated — never hand-edit. Curate titles/summaries/tags in the optional `content/partials/registry.json` (`{ "content/partials/…/_x.mdx": { "summary": "…", "tags": ["…"], "scope": "neutral|localized" } }`). Partials carry no frontmatter (`<include>` strips it; the lint flags vestigial frontmatter).
 
-`src/resources/globalVars.js` defines version numbers, snapshot URLs, gas parameters, and chain config used across docs. Variables are embedded in MDX files as `@@variableName=value@@` and resolved by `scripts/markdown-preprocessor.js` at build time.
+Design: [`.claude/docs/superpowers/specs/2026-07-09-partials-registry-design.md`](.claude/docs/superpowers/specs/2026-07-09-partials-registry-design.md).
 
-**After modifying globalVars.js**, run `yarn update-variable-refs` to update all doc files (required for Vercel cache invalidation).
+**Routing.** Single locale, no i18n: pages live directly under `content/docs/...` and serve at `/docs/...`. There is no `[lang]` route segment and no locale middleware — `lib/i18n.ts` was deleted 2026-08-18 along with the `ja` and `zh-CN` trees. `proxy.ts` now does exactly two things: (1) an explicit **bypass list** of routes served verbatim (`/_next/`, `/img/`, `/favicon.ico`, `/llms*`, `/og/`, `/api/`), and (2) `.md`-suffix rewrites plus `Accept: text/markdown` content negotiation to the markdown route. **A new top-level route still belongs in that bypass list** or markdown negotiation will try to rewrite it. Re-adding localization means restoring `defineI18n`, the `i18n` argument to `loader()`, a `[lang]` segment, and `createI18nMiddleware`.
 
-### Partials convention
+**Global variables.** Writer-edited values live in `content/vars.json`, validated by the Zod schema in `content/vars.ts`, and rendered in MDX via `<Var name="..." />`. A bad value fails at module load.
 
-Files starting with `_` in `docs/partials/` are reusable content fragments. The `parseFrontMatter` hook in `docusaurus.config.js` clears their frontmatter to suppress Docusaurus warnings. Partials are content-rich and imported across many pages — changes propagate widely, so trace imports before editing.
+**Partial versioning.** Archived pages live in `content/_versions/<id>/…` — a separate non-routed collection, outside `content/docs` for the same reason partials are. `lib/versions.ts` indexes them by path; only hand-registered pages are versioned. Spec: [`.claude/docs/superpowers/specs/2026-07-17-partial-versioning-design.md`](.claude/docs/superpowers/specs/2026-07-17-partial-versioning-design.md).
 
-### Generated content — do not hand-edit
+**Glossary / inline references.** `content/glossary/*.mdx` is a reference collection (`{ id, title, sortAs? }` — *not* the page contract), surfaced by `<Reference>` / `<Term>` / `<ReferenceList>` via the registry in `lib/references.ts`. New reference types add a collection plus one registry entry. Spec: [`.claude/docs/superpowers/specs/2026-07-10-references-glossary-design.md`](.claude/docs/superpowers/specs/2026-07-10-references-glossary-design.md).
 
-`docs/api/`, `docs/stylus-by-example/`, `docs/partials/glossary/` (138 files), `docs/partials/_reference-arbitrum-contract-addresses-partial.mdx`, `docs/run-arbitrum-node/nitro/cli-flags-reference.mdx`, `docs/run-arbitrum-node/assign-node-roles.mdx`, and `vercel.json` (generated from `redirects.config.js`). `docs/superpowers/` holds internal plans/specs, not published docs.
+**Custom MDX components.** `components/mdx.tsx` is the registry and the source of truth — read it rather than trusting a list here. Implementations in `components/mdx/`; Fumadocs' `Accordion`/`Accordions` and `Tab`/`Tabs` are re-exported. Some names are aliases of the same component (`AEL` → `AddressExplorerLink`, `ImageWithCaption` → `ImageZoom`). Unported Docusaurus widgets are mapped to `PendingWidget`, which renders a placeholder — a page using one is not broken, just incomplete. Add a component here to make it available in all MDX.
 
-### Sidebar configuration
+**Sidebar ordering** is controlled by `meta.json` in each content directory, not by file names.
 
-`sidebars.js` (1855 lines) defines all navigation sidebars and is **self-contained — it imports nothing**. `sdk-sidebar.js` and `docs/stylus-by-example/*/sidebar.js` exist on disk but are not imported by it.
+## Known trade-off (not a bug)
 
-### Pre-commit hooks (Husky)
+`app/docs/[[...slug]]/page.tsx` has `generateStaticParams` return `[]`, deliberately disabling static prerendering (ISR-on-first-request) to work around a Next 16.2.6 prerender crash — hence `build` uses `--experimental-build-mode=compile`. The inline comment documents the restore path; don't "fix" it without addressing that.
 
-The pre-commit hook (`.husky/pre-commit`) runs on staged files only:
+## Conventions
 
-1. Prettier formatting + re-stage
-2. Markdownlint (excludes `docs/sdk/`)
-3. TypeScript type checking (if .ts/.tsx files staged)
+- Theme tokens are `--color-fd-*` (Fumadocs). Never use `--ifm-*` (legacy Docusaurus).
+- `lib/shared.ts` holds route constants (`docsRoute`, `docsImageRoute`, `docsContentRoute`) and the git config used for edit links — reference these rather than hardcoding paths.
+- **Redirects.** All of them live in `redirects.config.mjs`, consumed by `next.config.mjs`. Both blocks in it are generated — `pnpm move-doc` writes moved-page entries between the `AUTO-GENERATED` markers, `pnpm redirects:legacy` writes `redirects.legacy.mjs` — so never hand-edit it. Next's `redirects()` runs **before** `proxy.ts`, so a redirected URL gets markdown negotiation on the destination, not the first hop. Unresolvable legacy URLs are parked in `redirects.legacy.todo.json` rather than pointed at a plausible page: a redirect to the wrong page is worse than a 404, and `redirects:check` cannot catch one because the destination exists. **That file reached `[]` on 2026-08-31 and is now a tripwire, not a backlog** — a non-empty todo after `pnpm redirects:legacy` means upstream added a redirect this site cannot resolve, so map it in `MANUAL_DESTINATIONS` (confirm the upstream page's frontmatter title against the local candidates) instead of leaving it parked. See [INTERNALS](INTERNALS.md#redirects).
+- **Image zoom.** `<ImageZoom>` resolves to the wrapper in `components/mdx/ImageZoom/` (plain `<img>` child; supports `caption`; no dimensions needed; no Next image optimization). To use Fumadocs' native component instead — for `_next/image` optimization — import it per file: `import { ImageZoom } from 'fumadocs-ui/components/image-zoom'` (shadows the wrapper for that file). The native component then requires `width`/`height` or the build fails; add `style={{ width: '100%', height: 'auto' }}` for responsiveness and drop `caption`. Live example: `content/docs/en/get-started/arbitrum-introduction.mdx`.
 
-The hook also contains a submodule-update step, but it only fires if `.gitmodules` is staged — the repo has no submodules, so it never runs.
+- Always get your fumadocs-related information on https://www.fumadocs.dev/llms.txt
 
-Skip with `HUSKY=0 git commit` when needed.
+<!-- BEGIN:nextjs-agent-rules -->
 
-### Key directories
+# This is NOT the Next.js you know
 
-- `docs/` — MDX documentation content (routed at `/`)
-- `docs/partials/` — reusable content (prefixed with `_`) + ~110 glossary partials
-- `src/components/` — React components (interactive diagrams, address helpers, quicklooks)
-- `src/plugins/` — remark/rehype transforms that generate the LLM-crawlable `llms.txt` output
-- `src/resources/globalVars.js` — shared variables injected into docs
-- `src/theme/` — Docusaurus theme overrides (Footer, Layout, NotFound)
-- `scripts/` — build tooling, content sync, doc auditing
-- `static/` — images, PDFs, JSON data
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-### Path aliases
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
-`tsconfig.json` defines `@/*` and `@site/*` both mapping to project root.
-
-## Content writing guidelines
-
-ALWAYS READ THE [PATTERN GUIDE](docs/Offchain-pattern-guide.md) AND APPLY ITS RULES IN YOUR WRITING
-
-- **One Quicklook per term per file.** Wrap a term in `<a data-quicklook-from='…'>` on its first mention only. Leave every later mention of that same term as plain text.
-
-## PR Authoring conventions
-
-- PR descriptions start from `.github/pull_request_template.md` — preserve its top-level headings (`## Description`, `## Document type`, `## Checklist`, `## Additional Notes`) and fill the sections rather than replacing them.
-- See `AGENTS.md` at the repo root for notes on relevant agents/subagents/skills used while working in this repo.
-
-## Security audit workflow
-
-- `yarn audit --level moderate` lists advisories at moderate or higher.
-- `package.json` has a `resolutions` block to pin transitive deps with security fixes (currently `elliptic` and `serialize-javascript`). Update resolutions when new advisories appear that aren't reachable through a direct-dep bump.
-- Dependabot opens PRs labeled `dependencies`. Some are obsoleted by `resolutions` entries — check before merging.
+<!-- END:nextjs-agent-rules -->

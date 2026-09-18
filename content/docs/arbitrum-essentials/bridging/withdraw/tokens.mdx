@@ -1,0 +1,238 @@
+---
+title: Withdraw tokens to parent chain
+description: 'Step-by-step guide to withdrawing ERC-20 tokens from an Arbitrum child chain back to Ethereum (parent chain) using the token bridge gateway system, including the 6.4-day challenge period.'
+user_story: 'As a developer, I want to withdraw ERC-20 tokens from Arbitrum back to Ethereum programmatically so I can integrate token bridging into my application.'
+content_type: 'how-to'
+author: gblanchemain
+sme: gblanchemain
+---
+
+This guide shows you how to withdraw **ERC-20** tokens from an Arbitrum child chain back to a parent chain (like Ethereum). This assumes your token is already configured for bridging. If you need to set up bridging for a new token, see [Configure token bridging](/docs/arbitrum-essentials/bridging/configure-token-gateway/standard).
+
+## Prerequisites
+
+- Your token must already be bridgeable (registered with a gateway)
+- A wallet with tokens on the child chain
+- **ETH** on both chains (child chain for initiation, parent chain for final execution)
+- **Important**: Withdrawals require 6.4 days to finalize due to the challenge period
+- Familiarity with [child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging)
+
+## Withdraw tokens using the Arbitrum SDK
+
+The simplest way to withdraw tokens is using the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk):
+
+### Step 1: Initiate the withdrawal on the child chain
+
+```javascript
+import { getArbitrumNetwork, Erc20Bridger } from '@arbitrum/sdk';
+import { providers, Wallet } from 'ethers';
+
+// Set up providers and wallet
+const parentProvider = new providers.JsonRpcProvider(process.env.PARENT_RPC);
+const childProvider = new providers.JsonRpcProvider(process.env.CHILD_RPC);
+const childWallet = new Wallet(process.env.PRIVATE_KEY, childProvider);
+
+// Initialize the bridge
+const childNetwork = await getArbitrumNetwork(childProvider);
+const erc20Bridge = new Erc20Bridger(childNetwork);
+
+// Initiate withdrawal
+const withdrawTx = await erc20Bridge.withdraw({
+  amount: ethers.utils.parseUnits('100', 18),
+  erc20ParentAddress: parentTokenAddress,
+  childSigner: childWallet,
+});
+
+const withdrawReceipt = await withdrawTx.wait();
+console.log(`Withdrawal initiated: ${withdrawReceipt.transactionHash}`);
+```
+
+### Step 2: Wait for the challenge period (~6.4 days)
+
+```javascript
+import { ChildToParentMessageStatus, ChildTransactionReceipt } from '@arbitrum/sdk';
+
+// Get the withdrawal message
+const childReceipt = new ChildTransactionReceipt(withdrawReceipt);
+const messages = await childReceipt.getChildToParentMessages(childWallet);
+const message = messages[0];
+
+// Wait for the message to be confirmed (takes ~6.4 days)
+await message.waitUntilReadyToExecute(childProvider);
+console.log('Message confirmed! Ready to execute on parent chain.');
+```
+
+### Step 3: Execute on the parent chain
+
+After the challenge period, use the SDK to execute the withdrawal via the outbox. This requires a parent chain wallet with `ETH` for gas:
+
+```javascript
+import { providers, Wallet } from 'ethers';
+import { ChildTransactionReceipt, ChildToParentMessageStatus } from '@arbitrum/sdk';
+
+const parentChainProvider = new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC);
+const childChainProvider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+const parentChainWallet = new Wallet(process.env.PRIVATE_KEY, parentChainProvider);
+
+// Get the withdrawal transaction receipt from the child chain
+const receipt = await childChainProvider.getTransactionReceipt(withdrawTxHash);
+const childReceipt = new ChildTransactionReceipt(receipt);
+
+// Extract child-to-parent messages (typically one per withdrawal)
+const messages = await childReceipt.getChildToParentMessages(parentChainWallet);
+const message = messages[0];
+
+// Check the current status
+const status = await message.status(childChainProvider);
+if (status === ChildToParentMessageStatus.EXECUTED) {
+  console.log('Already executed — tokens are on the parent chain');
+} else {
+  // Wait until the outbox entry exists (challenge period must pass)
+  await message.waitUntilReadyToExecute(childChainProvider, 60_000);
+  console.log('Ready to execute — submitting parent chain transaction');
+
+  const executeTx = await message.execute(childChainProvider);
+  const executeReceipt = await executeTx.wait();
+  console.log(`Withdrawal complete: ${executeReceipt.transactionHash}`);
+}
+```
+
+## Withdrawing `ETH` (or native token) using the Arbitrum SDK
+
+To withdraw the chain's native token (typically `ETH`) rather than an `ERC-20`, use `EthBridger`:
+
+```javascript
+import { utils, providers, Wallet } from 'ethers';
+import { getArbitrumNetwork, EthBridger } from '@arbitrum/sdk';
+
+const childChainProvider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+const childChainWallet = new Wallet(process.env.PRIVATE_KEY, childChainProvider);
+
+const childChainNetwork = await getArbitrumNetwork(childChainProvider);
+const ethBridger = new EthBridger(childChainNetwork);
+
+// Initiate withdrawal of 0.000001 ETH
+const withdrawTx = await ethBridger.withdraw({
+  amount: utils.parseEther('0.000001'),
+  childSigner: childChainWallet,
+  destinationAddress: childChainWallet.address,
+});
+
+const withdrawReceipt = await withdrawTx.wait();
+console.log(`Withdrawal initiated: ${withdrawReceipt.transactionHash}`);
+
+// Get withdrawal event data
+const withdrawEvents = withdrawReceipt.getChildToParentEvents();
+console.log('Withdrawal data:', withdrawEvents);
+console.log(`After the challenge period (~6.4 days), execute via the outbox using tx hash: ${withdrawReceipt.transactionHash}`);
+```
+
+The withdrawal creates a child-to-parent message. After the challenge period, execute it using the outbox as shown in Step 3 above. The same outbox execution pattern works for both `ETH` and `ERC-20` withdrawals.
+
+## Withdraw tokens manually
+
+If you prefer to interact with the contracts directly:
+
+### Step 1: Initiate the withdrawal on the child chain
+
+Approve and call the `L2GatewayRouter`:
+
+```javascript
+// Approve the L2 gateway
+const childToken = new ethers.Contract(childTokenAddress, erc20ABI, childWallet);
+const childRouter = new ethers.Contract(childRouterAddress, routerABI, childWallet);
+
+// Get the gateway address
+const gateway = await childRouter.getGateway(parentTokenAddress);
+
+// Approve
+await childToken.approve(gateway, amountToWithdraw);
+
+// Initiate withdrawal
+const withdrawTx = await childRouter.outboundTransfer(
+  parentTokenAddress, // Parent chain token address
+  parentDestination, // Where to send tokens on parent chain
+  amountToWithdraw,
+  '0x', // Extra data (usually empty)
+);
+
+await withdrawTx.wait();
+```
+
+### Step 2: Wait for the challenge period
+
+After initiating the withdrawal, you must wait approximately 6.4 days for the assertion containing your withdrawal to be confirmed.
+
+You can check the status on the [Arbitrum Bridge UI](https://bridge.arbitrum.io/) by connecting your wallet, or programmatically track the message status.
+
+### Step 3: Construct proof and execute on the parent chain
+
+After the challenge period, get the proof data using `NodeInterface`:
+
+```javascript
+const nodeInterface = new ethers.Contract('0x00000000000000000000000000000000000000C8', nodeInterfaceABI, childProvider);
+
+// Get proof data (you'll need the batch number and index from the withdrawal receipt)
+const proofData = await nodeInterface.constructOutboxProof(batchNumber, indexInBatch);
+```
+
+Then execute on the parent chain using the Outbox contract:
+
+```javascript
+const outbox = new ethers.Contract(outboxAddress, outboxABI, parentWallet);
+
+const executeTx = await outbox.executeTransaction(proofData.proof, proofData.path, proofData.l2Sender, proofData.l1Dest, proofData.l2Block, proofData.l1Block, proofData.timestamp, proofData.amount, proofData.calldataForL1);
+
+await executeTx.wait();
+console.log('Withdrawal executed on parent chain!');
+```
+
+## How withdrawals work
+
+The token withdrawal process:
+
+<ImageZoom src="/img/apps-bridge_withdrawals.png" alt="Withdrawal process using the gateway" className="img-800px" />
+
+1. **Child chain**: Tokens are burned (or escrowed for custom tokens)
+2. **Message created**: A child-to-parent message is encoded and included in an assertion
+3. **Challenge period**: Wait 6.4 days for the assertion to be confirmed
+4. **Parent chain**: After confirmation, execute the message to release tokens from the parent gateway
+
+For more details on the underlying protocol, see:
+
+- [Child to parent chain messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging)
+- [Token bridging overview](/docs/how-arbitrum-works/deep-dives/token-bridging)
+
+## Troubleshooting
+
+### "Withdrawal not ready to execute"
+
+The challenge period hasn't passed yet. Withdrawals take approximately 6.4 days to finalize. Check the status using:
+
+```javascript
+const status = await message.status(childProvider);
+console.log(ChildToParentMessageStatus[status]); // Should show "CONFIRMED" when ready
+```
+
+### "Message already executed"
+
+This withdrawal has already been executed. Check the parent chain token balance—the tokens should already be there.
+
+### Find the batch number and index
+
+If you need to construct the proof manually, you can find the batch number and index from the withdrawal transaction receipt events. Look for the `L2ToL1Tx` event emitted by `ArbSys`.
+
+## Next steps
+
+- [Deposit tokens to child chain](/docs/arbitrum-essentials/bridging/deposit/tokens)
+- [Understand token bridge architecture](/docs/how-arbitrum-works/deep-dives/token-bridging)
+- [General child-to-parent messaging](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages)
+
+## Resources
+
+- [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
+- [`ETH` withdrawal source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/eth-withdraw)
+- [`ERC-20` withdrawal source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-withdraw)
+- [Outbox execution source code](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/outbox-execute)
+- [Contract addresses](/docs/arbitrum-essentials/reference/contract-addresses)
+- [Arbitrum Bridge UI](https://bridge.arbitrum.io/)

@@ -1,0 +1,8 @@
+{
+  "content/partials/launch-arbitrum-chain/_config-challenge-period-l1.mdx": {
+    "summary": "General pros/cons of enforcing the challenge period on L1. Distinct from _config-l1-challenge-period.mdx (which covers confirmPeriodBlocks configuration plus an L1-vs-L2 comparison table) — reviewed and kept separately, not a duplicate."
+  },
+  "content/partials/launch-arbitrum-chain/_config-l1-challenge-period.mdx": {
+    "summary": "How to configure the L1 challenge period (confirmPeriodBlocks) plus an L1-vs-L2 tradeoff table. Distinct from _config-challenge-period-l1.mdx (a general pros/cons prose explainer) — reviewed and kept separately, not a duplicate."
+  }
+}

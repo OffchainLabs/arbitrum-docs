@@ -1,0 +1,13 @@
+---
+id: wasm-module-root
+title: 'WASM module root'
+---
+
+A 32-byte cryptographic hash that uniquely identifies a specific version of Arbitrum's [State Transition Function](/docs/glossary#state-transition-function) (STF), compiled to [WASM](/docs/glossary#wasm) for use in [fraud proofs](/docs/glossary#fraud-proof). It is computed as the Merkle root over the Keccak256 hashes of every module in the compiled prover image—the main STF replay binary plus runtime libraries such as `soft-float`, `host_io`, `user_host`, and `program_exec`.
+
+The same WASM module root appears in two places:
+
+- **Onchain**, as the `wasmModuleRoot` field on the Rollup contract. It is set at deployment and updated by the chain owner via `setWasmModuleRoot`; every [Assertion](/docs/glossary#assertion) records the root used to compute it.
+- **Offchain**, by every [Validator](/docs/glossary#validator), as a compiled prover image under `target/machines/<root>/`. To validate or challenge an assertion, a validator must have the prover image matching the root recorded on **that** assertion—which may be the current onchain root, or an older one if the assertion predates an [ArbOS](/docs/glossary#arbos) upgrade.
+
+Every ArbOS upgrade changes the STF and therefore produces a new WASM module root. Validators must retain the prover images for every older root they may still need to validate or dispute historical assertions against.

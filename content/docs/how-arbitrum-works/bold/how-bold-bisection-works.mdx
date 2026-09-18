@@ -1,0 +1,16 @@
+---
+title: 'How BoLD bisection works'
+description: 'Interactive visualization of the BoLD edge challenge flow, replaying real onchain events from Arbitrum Sepolia.'
+sidebar_label: 'How bisection works'
+content_type: 'concept'
+author: Jason-W123
+sme: Jason-W123
+---
+
+# How BoLD bisection works
+
+The [BoLD (Bounded Liquidity Delay) dispute protocol](/docs/how-arbitrum-works/bold/gentle-introduction) resolves disagreements between validators through a process called [**bisection**](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#bisections). When two or more validators disagree about the state of the chain, they narrow down the exact point of disagreement by repeatedly splitting (bisecting) their claims until the dispute is reduced to a single step of execution, which can then be verified with a [**one-step proof**](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#one-step-proof) (OSP).
+
+The interactive visualization below replays real onchain events from a [ChallengeManager](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#challenge-resolution) contract on Arbitrum Sepolia, showing how edges are created, bisected across multiple [levels (block, bigstep, smallstep)](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#sub-challenges), and eventually resolved.
+
+<EdgeChallengeFlow />

@@ -1,0 +1,14 @@
+---
+title: 'NodeInterface overview'
+description: "Overview of Arbitrum's NodeInterface, a virtual contract at address 0xc8 accessible only via RPCs. Provides gas estimation, proof construction, and other node-level utilities not available onchain."
+user_story: 'As a developer, I want to understand what the NodeInterface is so I can use its RPC-only methods for gas estimation and other utilities.'
+content_type: 'concept'
+author: gblanchemain
+sme: gblanchemain
+---
+
+{/* todo: remove this doc, redirect to existing ref doc */}
+
+The Arbitrum Nitro software includes a special `NodeInterface` contract available at address `0xc8` that is only accessible via [RPCs](/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods) (it's not actually deployed onchain and thus can't be called by smart contracts). The way it works is that the node uses Geth's [`InterceptRPCMessage`](https://github.com/OffchainLabs/go-ethereum/blob/<Var name="goEthereumCommit" />/internal/ethapi/api.go#L1034) hook to detect messages sent to the address `0xc8`, and swaps out the message it's handling before deriving a transaction from it.
+
+The [reference page](/docs/arbitrum-essentials/nodeinterface/reference) contains information about all methods available in the `NodeInterface`.

@@ -1,0 +1,49 @@
+---
+title: 'Bridging overview'
+description: 'Choose the right approach for bridging assets and messages between Ethereum and Arbitrum.'
+user_story: 'As a developer, I want to quickly find the right bridging guide for my use case so I can move assets or messages between chains.'
+content_type: 'concept'
+author: gblanchemain
+sme: gblanchemain
+---
+
+Token bridging and cross-chain messaging are fundamental aspects of building on Arbitrum. This page helps you find the right guide for your use case.
+
+## Move **ETH** between chains
+
+- **[Deposit ETH to Arbitrum](/docs/arbitrum-essentials/bridging/deposit/eth-and-messages#bridging-eth-to-a-child-chain)**: Bridge **ETH** from the parent chain to a child chain using the Inbox contract
+- **[Withdraw **ETH** to Ethereum](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#withdrawing-eth)**: Withdraw **ETH** from a child chain back to the parent chain via ArbSys
+
+## Move ERC-20 tokens between chains
+
+- **[Deposit tokens to Arbitrum](/docs/arbitrum-essentials/bridging/deposit/tokens)**: Move **ERC-20** tokens from the parent chain to the child chain
+- **[Withdraw tokens to Ethereum](/docs/arbitrum-essentials/bridging/withdraw/tokens)**: Move **ERC-20** tokens from the child chain back to the parent chain
+
+## Make my token bridgeable
+
+Choose a gateway based on your token's requirements:
+
+- **[Standard gateway](/docs/arbitrum-essentials/bridging/configure-token-gateway/standard)** (recommended): Automatic deployment of a standard **ERC-20** on Arbitrum, no configuration required
+- **[Generic-custom gateway](/docs/arbitrum-essentials/bridging/configure-token-gateway/generic-custom)**: Custom functionality in your child chain token while using Arbitrum's built-in gateway
+- **[Custom gateway](/docs/arbitrum-essentials/bridging/configure-token-gateway/custom)**: Specialized gateway logic for advanced use cases
+
+## Send arbitrary cross-chain messages
+
+- **[Parent → child messaging](/docs/arbitrum-essentials/bridging/deposit/eth-and-messages#creating-retryable-tickets)**: Send messages from Ethereum to Arbitrum using retryable tickets
+- **[Child → parent messaging](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#sending-a-message-from-the-child-to-the-parent-chain)**: Send messages from Arbitrum to Ethereum via ArbSys and the Outbox
+
+## Build on a custom gas token chain
+
+If you're working with an Arbitrum chain that uses a non-**ETH** gas token, see [Custom gas token chain bridging](/docs/arbitrum-essentials/bridging/custom-gas-token-chains) for SDK APIs and workflows.
+
+## Example code
+
+- [Token deposits (parent → child)](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit)
+- [Token withdrawals (child → parent)](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-withdraw)
+- [Custom token bridging setup](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-token-bridging)
+
+## Learn more
+
+- [Cross-chain messaging concepts](/docs/arbitrum-essentials/bridging/cross-chain-messaging)
+- [Token bridge architecture](/docs/how-arbitrum-works/deep-dives/token-bridging)
+- [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 372" width="540" height="372" role="img" aria-labelledby="title desc" font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <title id="title">The Geth sandwich</title>
+  <desc id="desc">A Nitro node built as three layers: a top Node-software layer and a bottom Geth-core layer (both from Geth, the "bread"), with the ArbOS layer as the "filling" in between. The State Transition Function spans the bottom Geth layer and part of ArbOS.</desc>
+
+  <!-- Top bread: Node software (Geth) -->
+  <path d="M160,48 H490 A10,10 0 0 1 500,58 V126 A4,4 0 0 1 496,130 H154 A4,4 0 0 1 150,126 V58 A10,10 0 0 1 160,48 Z" fill="#213147"/>
+  <text x="325" y="83" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700">Node software</text>
+  <text x="325" y="105" text-anchor="middle" fill="#9dcced" font-size="12.5">RPC &amp; client connections · mostly Geth</text>
+
+  <!-- Filling: ArbOS -->
+  <path d="M155,142 H495 A5,5 0 0 1 500,147 V219 A5,5 0 0 1 495,224 H155 A5,5 0 0 1 150,219 V147 A5,5 0 0 1 155,142 Z" fill="#12aaff"/>
+  <text x="325" y="177" text-anchor="middle" fill="#0b1b2e" font-size="20" font-weight="700">ArbOS</text>
+  <text x="325" y="199" text-anchor="middle" fill="#0b1b2e" font-size="12.5" opacity="0.85">L2 logic: batches · L1 gas · bridging</text>
+
+  <!-- Bottom bread: Geth core -->
+  <path d="M154,236 H496 A4,4 0 0 1 500,240 V308 A10,10 0 0 1 490,318 H160 A10,10 0 0 1 150,308 V240 A4,4 0 0 1 154,236 Z" fill="#213147"/>
+  <text x="325" y="271" text-anchor="middle" fill="#ffffff" font-size="20" font-weight="700">Geth core</text>
+  <text x="325" y="293" text-anchor="middle" fill="#9dcced" font-size="12.5">EVM execution &amp; Ethereum state</text>
+
+  <!-- State Transition Function bracket: bottom Geth layer + lower part of ArbOS -->
+  <path d="M116,178 H100 V318 H116" fill="none" stroke="#12aaff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <g transform="translate(52,248) rotate(-90)">
+    <rect x="-88" y="-14" width="176" height="28" rx="7" fill="#213147"/>
+    <text x="0" y="1" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-size="9.5" font-weight="700" letter-spacing="0.2">STATE TRANSITION FUNCTION</text>
+  </g>
+
+  <!-- Legend: the naming of the sandwich -->
+  <rect x="168" y="336" width="314" height="26" rx="6" fill="#213147"/>
+  <text x="325" y="353" text-anchor="middle" font-size="13" font-weight="600" xml:space="preserve"><tspan fill="#ffffff">Geth = the bread</tspan><tspan fill="#6b7f9e">     ·     </tspan><tspan fill="#12aaff">ArbOS = the filling</tspan></text>
+</svg>

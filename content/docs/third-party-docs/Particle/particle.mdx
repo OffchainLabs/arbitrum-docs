@@ -1,0 +1,201 @@
+---
+title: 'How to make your Arbitrum dApp chain-agnostic with Universal Accounts'
+description: "Guide covering the process of leveraging Particle Network's Universal Accounts SDK to accept deposits from any chain and interact cross-chain."
+sidebar_label: 'Particle Network'
+content_type: 'how-to'
+author: Davide Zambiasi
+sme: Soos3d
+---
+
+<VanillaAdmonition type="info" title="Community member contribution">
+Shout-out to [@Soos3d](https://github.com/Soos3d) for contributing the following [third-party document](/docs/third-party-docs/contribute)!
+</VanillaAdmonition>
+[Particle Network](https://particle.network) enables **chain abstraction** through its **Universal Accounts** (UA) infrastructure. This gives users a single unified account and balance across [multiple chains](https://developers.particle.network/universal-accounts/cha/chains#supported-networks). This means that a user can interact with your dApp on **Arbitrum** even if their assets are located on a completely different chain.
+
+<ImageZoom src="https://mintcdn.com/particlenetwork-fccf74d2/oXCulWNeMx80sJqa/intro/images/cha-overview.png?fit=max&auto=format&n=oXCulWNeMx80sJqa&q=85&s=760fd24d1b7d4e7067765f7aae3a4209" alt="Universal Accounts overview" />
+
+**Universal Accounts** unify EVM and non-EVM ecosystems under one identity.
+This allows:
+
+- Cross-chain deposits and swaps without manual bridging.
+- Unified balance fetching across chains.
+- Gas abstraction: users can pay fees in any [supported token](https://developers.particle.network/universal-accounts/cha/chains#primary-assets).
+
+**Arbitrum** is one of the earliest networks supported by Universal Accounts, with full support for **cross-chain transactions**, **unified balances**, and **universal gas**
+
+## Why this matters for your deposit flow
+
+Traditional deposit flows require users to choose a chain, bridge tokens, and manage gas tokens on that chain, all of which introduce friction and drop-offs. With Universal Accounts, your dApp on Arbitrum can accept deposits from **any supported chain** (Ethereum, Polygon, Base, Solana, etc), and the user's balance is unified behind the scenes.
+
+That means:
+
+- One deposit address per user.
+- No bridging steps, no chain switching required.
+- Simpler UX for the user; fewer errors, fewer abandoned flows.
+- Your contract infrastructure can live on Arbitrum without worrying about which chain the user's assets happen to be on.
+
+## Getting Started
+
+This tutorial shows how to build a **Next.js** app using the [Universal Accounts SDK](https://developers.particle.network/universal-accounts/cha/web-quickstart) to:
+
+- Fetch the unified balance
+- Accept deposits from _any chain_
+- Send a cross-chain transaction
+
+### Prerequisites
+
+- Node.js 18+
+- Yarn or npm
+- Basic familiarity with React / Next.js
+
+### Start from the starter app
+
+Start from the starter app with the authentication logic ([Particle Connect](https://developers.particle.network/social-logins/connect/introduction)) already implemented on [GitHub](https://github.com/Particle-Network/connectkit-starter).
+
+> Note that we use Particle Connect for authentication, but you can use any other provider or browser wallet.
+
+### 1. Install Dependencies
+
+After you initialize the starter app, you'll need the Universal Accounts SDK for cross-chain logic.
+
+```bash
+yarn add @particle-network/universal-account-sdk ethers
+```
+
+> Note that `ethers.js` is a dependency of the Universal Accounts SDK, but you can use any other library to interact with the blockchain.
+
+### 2. Configure the Particle Dashboard
+
+Go to the [Particle Dashboard](https://dashboard.particle.network/) and create a new project to get your credentials.
+
+You'll need:
+
+- `projectId`
+- `clientKey`
+- `appId`
+
+Store these in your `.env.local`:
+
+```bash
+NEXT_PUBLIC_PROJECT_ID='YOUR_PROJECT_ID'
+NEXT_PUBLIC_CLIENT_KEY='YOUR_CLIENT_KEY'
+NEXT_PUBLIC_APP_ID='YOUR_APP_ID'
+```
+
+### 3. Initialize a Universal Account
+
+The Universal Account is the core object that enables cross-chain logic, and it's a smart account owned by the user's EOA.
+
+After login, create a Universal Account instance tied to that user's EOA.
+
+```typescript
+import { UniversalAccount } from '@particle-network/universal-account-sdk';
+const { address } = useAccount();
+
+const universalAccountInstance = new UniversalAccount({
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
+  clientKey: process.env.NEXT_PUBLIC_CLIENT_KEY!,
+  appId: process.env.NEXT_PUBLIC_APP_ID!,
+  ownerAddress: address!, // The EOA from login from Particle Connect useAccount hook
+});
+```
+
+This object enables:
+
+- Fetching the Universal Account addresses.
+- Querying the unified balance.
+- Sending cross-chain transactions.
+
+### 4. Fetch Addresses and Balances
+
+The Universal Account SDK provides a few methods to fetch the user's balance and addresses.
+
+```typescript
+// Universal Account addresses. One for EVM assets and one for Solana assets
+const universalAccountData = await universalAccountInstance.getSmartAccountOptions();
+console.log('EVM Universal Account:', universalAccountData.evmSmartAccount);
+console.log('Solana Universal Account:', universalAccountData.solanaSmartAccount);
+
+// Primary assets aggregated across chains
+const primaryAssets = await universalAccountInstance.getPrimaryAssets();
+
+// Full breakdown of assets on all chains
+console.log(primaryAssets);
+
+// Total amount in USD
+console.log(primaryAssets.totalAmountInUSD);
+```
+
+Here you retrieve the Universal Account addresses, and the user's **primary assets** aggregated across chains (e.g., **USDC**, **ETH**, **USDT**).
+
+### 5. Interacting with your dApp
+
+Your dApp runs on Arbitrum, but the user holds assets on another chain like **Base**, **Polygon**, or **Solana**. Thanks to Universal Accounts, you can still interact with your dApp.
+
+In this example, we mint an NFT on Arbitrum, but the user can pay with any supported token from any chain:
+
+```typescript
+const CONTRACT_ADDRESS = '0x702E0755450aFb6A72DbE3cAD1fb47BaF3AC525C'; // NFT contract on Arbitrum
+
+const contractInterface = new Interface(['function mint() external']);
+
+const transaction = await universalAccountInstance.createUniversalTransaction({
+  chainId: CHAIN_ID.ARBITRUM_MAINNET_ONE,
+  expectTokens: [],
+  transactions: [
+    {
+      to: CONTRACT_ADDRESS,
+      data: contractInterface.encodeFunctionData('mint'),
+      // value: "0x0",
+    },
+  ],
+});
+```
+
+The `transaction` object contains all the transaction details, you only need to sign the `rootHash` returned and send it via the SDK:
+
+```typescript
+const signature = await walletClient?.signMessage({
+  account: address as `0x${string}`,
+  message: { raw: transaction.rootHash },
+});
+
+const result = await universalAccountInstance.sendTransaction(transaction, signature);
+```
+
+> This example shows how to use Particle Connect, but you can use any wallet client to sign the `rootHash`.
+
+And you can use UniversalX as a block explorer to track the transaction:
+
+`https://universalx.app/activity/details?id=${result.transactionId}`
+
+The SDK handles fund routing so the user can pay with any supported token from any chain.
+
+> Find a complete implementation of this example in the [GitHub repo](https://github.com/Particle-Network/universal-accounts-workshop-arbitrum/blob/949abdc011d66f97d7949dca9c26f2778fe503d1/workshop-completed/app/page.tsx#L87).
+
+## Deposit Flow
+
+The previous example demonstrates how to use **Universal Accounts** specifically to interact with a smart contract on **Arbitrum**, but a big use case is also to accept deposits directly from any chain and various assets:
+
+Here's a simplified sequence when your Arbitrum dApp accepts assets from any chain:
+
+1.  Get the user's UA deposit address (via `getSmartAccountOptions()`).
+2.  Display it in your UI: "Send **USDC**/**USDT** from any supported chain."
+3.  User sends on any chain (Ethereum, Polygon, Base, Solana, etc).
+4.  UA detects the deposit and credits it to the unified balance.
+5.  User interacts with your dApp on Arbitrum—UA automatically uses liquidity routing & abstracts gas.
+6.  Your contract logic on Arbitrum receives/uses funds as if they were local.
+
+No bridging step. No chain switching prompt. One unified experience.
+
+## Putting It All Together
+
+**Universal Accounts** turn multi-chain interaction into a single, unified experience.
+By integrating them into your Arbitrum dApp, you're no longer limited by where a user's funds live.
+
+Your app can accept deposits, perform swaps, and interact with smart contracts using liquidity from any supported chain.
+
+## Resources
+
+- Universal Accounts [Quickstart](https://developers.particle.network/universal-accounts/cha/web-quickstart)
+- [Particle Dashboard](https://dashboard.particle.network/)

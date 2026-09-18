@@ -1,0 +1,6 @@
+---
+id: state-pruning
+title: 'State Pruning'
+---
+
+Removing historical [chain state](/docs/glossary#chain-state) a node no longer needs, to keep its database from growing without bound. On [HashDB](/docs/glossary#hashdb) you prune manually with `--init.prune` and the node is offline while it runs. On [PathDB](/docs/glossary#pathdb) Nitro prunes online as the node runs, with no intervention and no downtime. An [archive node](/docs/glossary#archive-node) prunes nothing by definition.

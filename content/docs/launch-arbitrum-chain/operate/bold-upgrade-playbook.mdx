@@ -1,0 +1,204 @@
+---
+title: 'BoLD upgrade playbook for multisig and security council chains'
+sidebar_label: 'BoLD upgrade playbook'
+description: 'Sequence a BoLD upgrade when execution requires multisig or security council signatures that take days to collect, without freezing your validators for the entire window.'
+author: pete-vielhaber
+sme: TBD
+user_story: As an Arbitrum chain operator whose upgrades are executed by a multisig or security council, I want to sequence a BoLD upgrade so that I can collect signatures over several days without freezing my validators or invalidating the signed payload.
+content_type: how-to
+---
+
+This guide covers the operational sequencing of a <Term id="bold">BoLD</Term> upgrade for chains where the `execute` call is performed by a multisig or a security council rather than a single <Term id="chain-owner">chain owner</Term> key. It continues from the step-by-step upgrade in [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) and assumes you have read it. Concepts, the full parameter table, and the base upgrade steps are not repeated here.
+
+If your chain owner is a single key that can send the upgrade <Term id="transaction">transaction</Term> immediately, you do not need this guide—follow the [base steps](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) instead.
+
+## The problem this guide solves
+
+The [base upgrade](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) sequence contains two steps that appear to conflict when a security council is involved:
+
+- **Step 4** runs `bold-populate-lookup`, which reads the last confirmed <Term id="assertion">assertion</Term> so the new Rollup contract can be initialized from it.
+- **Step 5** executes the upgrade, and reverts if a new assertion has been confirmed since Step 4.
+
+The [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) therefore recommends stopping all <Term id="validator">validators</Term> at [Step 4](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#step-4-gather-the-information-of-the-current-state-of-the-chain) to prevent a new <Term id="confirmation">confirmation</Term> from blocking [Step 5](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#step-5-run-the-upgrade-script).
+
+For a production chain, Step 5 is not a transaction you can send on demand. Signers must review a simulation before signing, and collecting a security council's signatures can take days. Read literally, the base sequence implies you must keep every validator stopped for that entire period—a multi-day halt to assertion posting and confirmation on a production chain, which is unacceptable and carries its own risks.
+
+_You do not have to do this._ The following sections explain why.
+
+## Why the signed payload is independent of the assertion
+
+The upgrade action's entry point takes no assertion data:
+
+```solidity
+function perform(address[] memory validators) external
+```
+
+The genesis state for the new Rollup contract is not passed in as an argument. Instead, `perform` reads it at execution time from a separate helper contract, `StateHashPreImageLookup`:
+
+```solidity
+bytes32 latestConfirmedStateHash =
+    OLD_ROLLUP.getNode(OLD_ROLLUP.latestConfirmed()).stateHash;
+(ExecutionState memory genesisExecState, uint256 inboxMaxCount) =
+    PREIMAGE_LOOKUP.get(latestConfirmedStateHash);
+```
+
+That helper stores its entries in a mapping keyed by state hash, and its setter is permissionless with no access control beyond a hash-consistency check:
+
+```solidity
+mapping(bytes32 => bytes) internal preImages;
+
+function set(bytes32 h, ExecutionState calldata executionState, uint256 inboxMaxCount) public {
+    require(h == stateHash(executionState, inboxMaxCount), "Invalid hash");
+    preImages[h] = abi.encode(executionState, inboxMaxCount);
+    emit HashSet(h, executionState, inboxMaxCount);
+}
+```
+
+See [`BOLDUpgradeAction.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/BOLDUpgradeAction.sol) for both contracts.
+
+Three consequences follow, and together they resolve the conflict:
+
+1. **The calldata your signers approve never changes.** What the council signs is an <Term id="upgrade-executor">upgrade executor</Term> `execute` call wrapping `perform(validators)`. Because no assertion data appears in that calldata, running `bold-populate-lookup` again does not alter the payload, and therefore does not invalidate signatures already collected.
+2. **Populating the lookup is additive, not destructive.** `set` writes to a new mapping key per state hash. Repeated runs accumulate entries; they do not overwrite or clear earlier ones. A lookup entry for an assertion that has since been superseded is harmless.
+3. **Anyone can populate the lookup at any time.** `set` is `public` and requires no privileged key, so refreshing the lookup is not itself a governance action and needs no signatures.
+
+What `perform` actually requires is narrower than the [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) implies. It is not that no assertion may be confirmed after Step 4. It is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
+
+<VanillaAdmonition type="warning">
+
+Confirm this sequence with the Offchain Labs team before executing it on a production chain. The reasoning above is drawn from the contract source, but a mainnet BoLD upgrade is a high-consequence, one-way operation, and your chain may use customized contracts for which it does not hold.
+
+</VanillaAdmonition>
+
+## Recommended sequence
+
+This sequence keeps validators running throughout signature collection.
+
+### Step 1: Prepare and deploy the upgrade action
+
+Follow Steps 0 through 3 of the [base upgrade guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#step-0-pre-requisites) without changes. Validators keep running. This deploys the action contract with your chain's configuration and fixes the address that the `execute` payload will target.
+
+### Step 2: Populate the lookup once, to produce the payload and simulation
+
+Run `bold-populate-lookup` and then `bold-local-execute` with a non-owner key, which prints the payload rather than sending it:
+
+```shell
+$ L1_PRIV_KEY=xxx yarn script:bold-populate-lookup --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+$ L1_PRIV_KEY=xxx yarn script:bold-local-execute --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+```
+
+Use the printed `execute(...)` calldata as the payload for your multisig transaction, and use the populated state to produce the simulation your signers will review.
+
+### Step 3: Collect signatures with validators running
+
+Circulate the payload and simulation. Validators continue posting and confirming assertions normally during this period. Assertions confirmed now will not match the lookup entry from Step 2, which is expected and is corrected in the next step.
+
+<VanillaAdmonition type="note">
+
+Distinguish two things that behave differently as the chain advances. A **signature** covers the transaction calldata, which is fixed, so it stays valid. A **simulation** reflects onchain state at the time it was produced, so it goes stale as new assertions confirm. If your signing process requires signers to review a fresh simulation, re-run the simulation against current state and re-populate the lookup beforehand—but you do not need to re-collect signatures that were already given for the same calldata.
+
+</VanillaAdmonition>
+
+### Step 4: Re-populate the lookup immediately before execution
+
+Once you have the signatures and are ready to execute, run `bold-populate-lookup` again:
+
+```shell
+$ L1_PRIV_KEY=xxx yarn script:bold-populate-lookup --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+```
+
+This writes an entry for the assertion that is latest-confirmed right now. Any key can send it.
+
+<VanillaAdmonition type="info">
+
+The script finds the last confirmed assertion by searching for its `NodeCreated` event in the most recent 100,000 parent-chain blocks. If your chain confirms assertions infrequently enough that the event falls outside that window, the script cannot find it. Take this into account before pausing assertion creation for any length of time.
+
+</VanillaAdmonition>
+
+### Step 5: Execute the upgrade
+
+Submit the signed multisig transaction. Then continue with Steps 6 and 7 of the [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) to update node configuration, restart nodes, and monitor the new Rollup contract.
+
+## Closing the residual race
+
+One narrow race remains: an assertion could be confirmed in the interval between your final `bold-populate-lookup` in Step 4 and your `execute` transaction landing. If that happens, `perform` looks up a state hash that has no entry and the transaction reverts with:
+
+```shell
+Hash not yet set
+```
+
+This is a benign, recoverable failure. The upgrade did not partially apply—it reverted. Choose whichever mitigation fits your operations, in rough order of preference:
+
+- **Submit both in one bundle or block.** If your tooling can batch, sending `set` and `execute` together removes the gap entirely. This is the cleanest option and requires no validator downtime at all.
+- **Retry.** Because `set` is permissionless and inexpensive, simply re-running Step 4 and resubmitting is often the pragmatic answer, particularly on chains that confirm assertions hours apart.
+- **Freeze validators briefly, at execution time only.** Stop assertion-confirming validators shortly before you submit, rather than for the whole signature window. This is the base guide's recommendation, narrowed from days to minutes. If you choose this, read the following section first, because a freeze has a side effect on the validator allowlist.
+
+## Keeping validation permissioned across the upgrade
+
+Two configuration parameters govern whether your chain stays permissioned. They are often assumed to compete; they do not, and setting only the first is not sufficient.
+
+| Parameter                   | Role                                                                                                                                                                                            |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `disableValidatorWhitelist` | When `false` (the recommended value), only addresses in the `validators[]` array may post assertions.                                                                                            |
+| `validatorAfkBlocks`        | A liveness escape hatch. If assertions stop being confirmed for this many parent-chain blocks, **anyone can permissionlessly disable the allowlist**, regardless of `disableValidatorWhitelist`. |
+
+`validatorAfkBlocks` is not overridden by `disableValidatorWhitelist`. It is the mechanism that removes the allowlist, and it applies precisely when the allowlist is in force. The parameter table's note that `validatorAfkBlocks` is ignored when `disableValidatorWhitelist` is `true` is a statement that the escape hatch is redundant on a chain that is already permissionless—not that setting `disableValidatorWhitelist` to `false` protects you from it.
+
+This matters directly to the upgrade, because **any validator freeze is a period of assertion inactivity** and counts toward the window. It is the main reason not to hold a multi-day freeze while collecting signatures.
+
+To keep validation permissioned:
+
+- Set `disableValidatorWhitelist` to `false` and populate `validators[]`.
+- Set `validatorAfkBlocks` to `0`, which disables the escape hatch entirely. This is preferable to setting an artificially large value, which achieves the same intent less clearly and still leaves a finite window.
+- If you keep the escape hatch enabled, alert on assertion inactivity well before the window elapses. See the validator section of [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the metrics to watch.
+
+<VanillaAdmonition type="warning">
+
+Disabling the escape hatch with `validatorAfkBlocks: 0` is a deliberate trade-off. It removes the protection that lets a chain recover permissionlessly if every allowlisted validator becomes unavailable. Make this choice knowingly, and pair it with monitoring and an on-call rotation for your validator set.
+
+</VanillaAdmonition>
+
+To weigh permissioned against <Term id="permissionless-validation">permissionless validation</Term>, see [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#caveats-that-come-with-adopting-arbitrum-bold-for-permissionless-validation). It covers bond sizing and resource exhaustion risk.
+
+## Preparing the bond token
+
+BoLD changes what validators bond with. The new bond token must be in place before the upgrade, not after.
+
+**BoLD requires an ERC-20 bond token.** In the BoLD Rollup contract, bonding runs entirely through **ERC-20** transfers:
+
+```solidity
+function newStake(uint256 tokenAmount, address _withdrawalAddress) external whenNotPaused
+
+function receiveTokens(uint256 tokenAmount) private {
+    IERC20(stakeToken).safeTransferFrom(msg.sender, address(this), tokenAmount);
+}
+```
+
+No bonding function in the BoLD `RollupUserLogic` is `payable`, so there is no native-currency path.
+
+Whether this is a migration for your chain depends on which pre-BoLD variant you are upgrading from. Legacy `nitro-contracts` shipped two Rollup user logic contracts, and your chain uses exactly one of them:
+
+| Pre-BoLD contract      | Bonding                                                                                                                       | Effect of the upgrade                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RollupUserLogic`      | Native <Term id="parent-chain">parent chain</Term> currency, via `payable` functions calling `_newStake(msg.value)`          | The bond asset changes. By default the node handles this automatically: it wraps native currency into **WETH** (`--node.bold.auto-deposit`) and approves it for bonding (`--node.bold.auto-increase-allowance`), so validator wallets only need sufficient native currency. Manual acquisition and approval are only needed if these flags are set to `false`, or if the `stakeToken` is not **WETH**-compatible (auto-deposit cannot acquire other tokens). |
+| `ERC20RollupUserLogic` | An **ERC-20** token already                                                                                                  | The bond asset does not necessarily change. Confirm whether your configured `stakeToken` is staying the same.                                                                                                                                                                                                                                                                                                                                               |
+
+Determine which one your chain runs before planning validator preparation. Do not assume the native-currency case, even though it is the more common one.
+
+<VanillaAdmonition type="info" title="Why operators think BoLD chains bond in ETH">
+
+On Arbitrum One and Arbitrum Nova the `stakeToken` is **WETH**, the **ERC-20** wrapper around **ETH**. Explorers and dashboards often display this as **ETH**, which makes it look as though BoLD supports native bonding. It does not—the contract holds **WETH**. If you are checking your own chain's configuration, read `stakeToken` from the Rollup contract rather than relying on a display label.
+
+</VanillaAdmonition>
+
+Before you execute the upgrade:
+
+- Confirm the `stakeToken` address in your upgrade configuration is a compliant **ERC-20** on the parent chain. **WETH** is the recommended choice, and Offchain Labs does not recommend custom tokens as the bond asset.
+- Ensure each validator wallet holds enough of that token to meet `stakeAmt`, in addition to parent-chain native currency for gas.
+- Plan for first-time bonding on the new contract. Validators bond only once, but existing bonds do not carry over from the old Rollup contract, so every validator must bond again after the upgrade.
+
+For guidance on choosing `stakeToken` and `stakeAmt` values, see [Bond and validator configurations](/docs/launch-arbitrum-chain/configuration/validation/stake-and-validator-configurations) and [Economics of disputes](/docs/how-arbitrum-works/bold/bold-economics-of-disputes).
+
+## After the upgrade
+
+Once the upgrade executes, watch for `AssertionCreated` and `AssertionConfirmed` events on the new Rollup contract, as described in the base guide. If assertions do not appear, or validators fail to start or bond, see [Validator troubleshooting](/docs/launch-arbitrum-chain/operate/validator-troubleshooting).

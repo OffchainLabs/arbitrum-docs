@@ -1,0 +1,6 @@
+---
+id: native-mint-burn-gas-token
+title: 'Native mint/burn gas token'
+---
+
+A [custom gas token](/docs/glossary#custom-gas-token) variant whose supply on the [Arbitrum chain](/docs/glossary#arbitrum-chain) is controlled by mint and burn calls to the `ArbNativeTokenManager` precompile (address `0x73`) rather than by bridging from the parent chain. Only accounts in the chain's `nativeTokenOwners` set—managed through the `ArbOwner` precompile—may mint or burn. Suited to closed-economy chains that need full control over gas-token issuance.

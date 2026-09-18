@@ -1,0 +1,5 @@
+{
+  "title": "Migrate",
+  "icon": "ArrowRightLeft",
+  "pages": ["index", "migrate-from-another-stack", "migrate-between-raases"]
+}

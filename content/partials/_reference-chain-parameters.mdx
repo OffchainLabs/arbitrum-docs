@@ -1,0 +1,31 @@
+---
+partial_type: reference
+title: 'Chain parameters'
+description: 'Information about important system parameters for public Arbitrum chains'
+author: anegg0
+last_reviewed: 2026-01-05
+---
+
+| Param                | Description                                                                                               | Arbitrum One                                                                                 | Arbitrum Nova                                                                                | Arb Sepolia                                                                                   |
+| -------------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Dispute window       | Time for assertions to get confirmed during which validators can issue a challenge                        | <Var name="arbOneDisputeWindowBlocks" /> blocks (~ <Var name="arbOneDisputeWindowDays" /> days )         | <Var name="novaDisputeWindowBlocks" /> blocks (~ <Var name="novaDisputeWindowDays" /> days)              | <Var name="sepoliaDisputeWindowBlocks" /> blocks (~ <Var name="sepoliaDisputeWindowMinutes" /> minutes)      |
+| Minimum bond amount  | Amount of funds required for a validator to propose assertion on the parent chain                         | <Var name="arbOneBaesStakeEth" /> ETH                                                              | <Var name="novaBaesStakeEth" /> ETH                                                                   | <Var name="sepoliaBaesStakeEth" /> Sepolia ETH                                                         |
+| Force-include period | Period after which a delayed message can be included into the inbox without any action from the Sequencer | <Var name="arbOneForceIncludePeriodBlocks" /> blocks / <Var name="arbOneForceIncludePeriodHours" /> hours  | <Var name="novaForceIncludePeriodBlocks" /> blocks / <Var name="novaForceIncludePeriodHours" /> hours      | <Var name="sepoliaForceIncludePeriodBlocks" /> blocks / <Var name="sepoliaForceIncludePeriodHours" /> hours |
+| Gas target           | Target gas/sec, over which the congestion mechanism activates                                             | [See child chain gas fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees) | [See child chain gas fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees) | [See child chain gas fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#child-chain-gas-fees)  |
+| Gas price floor      | Minimum gas price                                                                                         | <Var name="arbOneGasFloorGwei" /> gwei                                                             | <Var name="novaGasFloorGwei" /> gwei                                                               | <Var name="sepoliaGasFloorGwei" /> gwei                                                              |
+| Block gas limit      | Maximum amount of gas that all the transactions inside a block are allowed to consume                     | <Var name="arbOneBlockGasLimit" />                                                           | <Var name="novaBlockGasLimit" />                                                             | <Var name="sepoliaBlockGasLimit" />                                                           |
+
+## Current gas targets
+
+| Gas target (Mgas/s) | Adjustment window (seconds) |
+| ------------------- | --------------------------- |
+| 60                  | 9                           |
+| 41                  | 52                          |
+| 29                  | 329                         |
+| 20                  | 2,105                       |
+| 14                  | 13,485                      |
+| 10                  | 86,400                      |
+
+To learn more about the gas target, refer to the [Gas and fees deep-dive](/docs/how-arbitrum-works/deep-dives/gas-and-fees#the-gas-target).
+
+To determine how to configure the gas target for your chain, refer to the [Dynamic pricing for Arbitrum chains page](/docs/launch-arbitrum-chain/chain-config/costs/dynamic-pricing). To calculate the values for your chain, refer to the [How to calculate the values for your chain section](/docs/launch-arbitrum-chain/chain-config/costs/dynamic-pricing#how-to-calculate-the-values-for-your-chain) on the same page.

@@ -1,31 +1,35 @@
 {
-  // This file is not used in compilation. It is here just for a nice editor experience.
-  "extends": "@tsconfig/docusaurus/tsconfig.json",
   "compilerOptions": {
-    // Silence TS5101 for the deprecated `baseUrl` (still used by the @/ and @site/ path aliases below).
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
-    "moduleResolution": "bundler",
-    "allowJs": false,
-    "esModuleInterop": true,
-    "jsx": "react",
-    "lib": ["ESNext", "DOM"],
-    "noEmit": true,
-    "target": "ES2020",
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "skipLibCheck": true,
-    "types": ["node", "@docusaurus/module-type-aliases"],
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
     "paths": {
       "@/*": ["./*"],
-      "@site/*": ["./*"]
-    }
+      "collections/*": ["./.source/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "exclude": [
-    "submodules",
-    "stylus-by-example",
-    "node_modules",
-    "build",
-    ".docusaurus",
-    "*.js",
-    "middleware.ts"
-  ]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
 }

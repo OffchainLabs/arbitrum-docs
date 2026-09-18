@@ -1,0 +1,12 @@
+---
+id: rollup-event-inbox
+title: 'Rollup Event Inbox'
+---
+
+A parent chain contract (one per [Arbitrum chain](/docs/glossary#arbitrum-chain)) that serves as an authorized [delayed inbox](/docs/glossary#delayed-inbox) used exclusively by the Rollup contract to communicate chain-level protocol events to the child chain. It is separate from the regular `Inbox`, `Bridge`, and `SequencerInbox` contracts that handle user transactions.
+
+Its main role is to seed the child chain with its bootstrap configuration. During initialization, the Rollup admin contract calls `rollupInitialized(chainId, chainConfig, l1BaseFeeEstimate)` exactly once; this enqueues a delayed message of type `INITIALIZATION_MSG_TYPE` carrying the chain's `chainId`, full chain config JSON, and an initial parent-chain base-fee estimate. That delayed message is then read by the child chain as its very first L2 message, which initializes the L2 state.
+
+Two implementations share the `IRollupEventInbox` interface and `AbsRollupEventInbox` base: `RollupEventInbox` for **ETH**-based chains, and `ERC20RollupEventInbox` for chains using a custom (**ERC-20**) gas token. The contract is deployed by `BridgeCreator` and registered as an allowed delayed inbox on the `Bridge`.
+
+In some support contexts the contract is informally referred to as "rollupEventBox"; the canonical name in the codebase is `RollupEventInbox`.

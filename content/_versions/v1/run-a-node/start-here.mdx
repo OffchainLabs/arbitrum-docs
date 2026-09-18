@@ -1,0 +1,65 @@
+---
+title: 'Prepare to run a node'
+description: Learn the prerequisites for running an Arbitrum node on your local machine
+content_type: 'how-to'
+author: gblanchemain
+sme: gblanchemain
+version: 'v1 (ArbOS 20)'
+---
+
+<VanillaAdmonition type="warning">
+
+You are viewing an archived version of this page. For current guidance, switch back to the latest version.
+
+</VanillaAdmonition>
+
+This how-to provides step-by-step instructions for preparing the information you will need to run a full node for Arbitrum on your local machine.
+
+## Prerequisites
+
+In addition to the hardware requirements, the following prerequisites will be necessary when initially setting up your node. **It is essential not to skip over these items**.
+
+### Minimum hardware configuration
+
+The following are the minimum hardware requirements to set up a <a data-quicklook-from="arbitrum-nitro">Nitro</a> full node (not archival):
+
+<include cwd>content/partials/_hardware-requirements.mdx</include>
+
+Please note that:
+
+- The minimum requirements for RAM and CPU listed here are recommended for nodes that handle a limited number of RPC requests.
+- Single core performance is important. If the node is falling behind and a single core is 100% busy, the recommendation is to upgrade to a faster processor.
+- In this release, HashDB is the only supported state scheme. PathDB support arrives in a later version.
+
+### Parent chain (L1) client
+
+Your Arbitrum node requires a connection to a parent chain RPC endpoint (e.g., an Ethereum execution client for Arbitrum One or Nova). Keep your parent chain client up to date.
+
+### Recommended Nitro version
+
+<VanillaAdmonition type="warning">
+
+Use only the release version when running your node. Running beta or RC versions is not supported.
+
+</VanillaAdmonition>
+
+This archived guide targets the ArbOS 20 release series.
+
+### Required parameters
+
+The following list contains all the parameters needed to configure your node. Select the appropriate option depending on the chain you want to run your node for.
+
+<div className="dynamic-content-tabs">
+  <Tabs items={["Arbitrum One, Nova, Sepolia","Arbitrum chains"]} defaultValue={null}>
+    <Tab value="Arbitrum One, Nova, Sepolia">
+      <include cwd>content/partials/run-a-node/_dao-chains-parameters.mdx</include>
+    </Tab>
+    <Tab value="Arbitrum chains">
+      <include cwd>content/partials/run-a-node/_orbit-chains-parameters.mdx</include>
+    </Tab>
+  </Tabs>
+</div>
+
+## Run a full node
+
+Now that you have all the prerequisite information prepared—it's time to run your node. Follow the instructions on the [Run a full node](/docs/run-a-node/run-full-node) page.

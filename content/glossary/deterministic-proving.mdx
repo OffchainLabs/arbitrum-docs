@@ -1,0 +1,12 @@
+---
+id: deterministic-proving
+title: 'Deterministic proving'
+---
+
+If challenged, state transitions are replayable and verified onchain.
+
+To achieve this, Arbitrum compiles the State Transition Function (STF) into different formats:
+
+- **Execution mode**: Uses Go's native compiler for high-performance execution on <Term id="validator">validator</Term> nodes.
+
+- **Proving mode**: Compiles to WebAssembly (<Term id="wasm">WASM</Term>), which transforms into WebAssembly for Arbitrum Virtual Machine (WAVM) for fraud-proof verification.

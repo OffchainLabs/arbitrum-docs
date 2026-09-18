@@ -1,0 +1,55 @@
+---
+title: 'Inputs to the State Transition Function'
+description: 'Reference for the message types and input channels that feed the Arbitrum State Transition Function.'
+user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
+content_type: 'reference'
+author: petevielhaber
+sme: Mehdi
+---
+
+<Term id="arbitrum">Arbitrum</Term> nodes receive transaction inputs through two channels:
+
+- Nodes subscribe to the <Term id="sequencer-feed">Sequencer feed</Term> and receive upcoming ordered <Term id="transaction">transactions</Term> published in real time. To learn more, refer to the [real-time sequencer feed documentation](/docs/how-arbitrum-works/deep-dives/sequencer#4-persistence-and-broadcast).
+- Nodes also subscribe to the `SequencerBatchDelivered` event on the <Term id="parent-chain">parent chain</Term>. This event occurs whenever a <Term id="batch">batch</Term> of transactions gets delivered to the parent chain via the <Term id="batch-poster">batch poster</Term>. Upon receiving this event, nodes verify that the transactions recorded on the parent chain match those from the [Sequencer feed](/docs/how-arbitrum-works/deep-dives/sequencer#4-persistence-and-broadcast). If discrepancies arise, nodes reorganize to adopt the transactions confirmed on the parent chain, treating it as the definitive source of truth.
+
+These transactions serve as inputs for the [<Term id="state-transition-function">State Transition Function</Term> (STF)](/docs/how-arbitrum-works/deep-dives/stf).
+
+## Message types
+
+Arbitrum supports multiple message types. These messages fall into two broad categories:
+
+- Messages submitted directly to the Sequencer as <Term id="child-chain">child chain</Term> messages
+- Messages submitted to the parent chain
+
+For other message types, see the [parent-to-child chain messaging documentation](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging).
+
+In the system, we refer to these messages as `L1IncomingMessage` (inspect the [source code reference](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54)).
+
+When submitted to the Sequencer feed, messages receive unique identifiers for proper routing. Below is the list of message types, their associated constant values, and descriptions:
+
+```solidity
+uint8 constant L2_MSG = 3;
+uint8 constant L1MessageType_L2FundedByL1 = 7;
+uint8 constant L1MessageType_submitRetryableTx = 9;
+uint8 constant L1MessageType_ethDeposit = 12;
+uint8 constant L1MessageType_batchPostingReport = 13;
+uint8 constant L2MessageType_unsignedEOATx = 0;
+uint8 constant L2MessageType_unsignedContractTx = 1;
+
+uint8 constant ROLLUP_PROTOCOL_EVENT_TYPE = 8;
+uint8 constant INITIALIZATION_MSG_TYPE = 11;
+```
+
+| Message Type                       | Value | Description                                                                                                                                                                                                                                               |
+| ---------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `L2MessageType_unsignedEOATx`      | 0     | Unsigned child chain messages from EOAs submitted to the parent chain.                                                                                                                                                                                    |
+| `L2MessageType_unsignedContractTx` | 1     | Unsigned child chain messages submitted to the parent chain.                                                                                                                                                                                              |
+| `L2_MSG`                           | 3     | Child chain messages submitted directly to the Sequencer.                                                                                                                                                                                                 |
+| `L1MessageType_L2FundedByL1`       | 7     | Child chain messages that go to the parent chain's [<Term id="delayed-inbox">delayed inbox</Term>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox), with funding provided on the parent chain itself. |
+| `ROLLUP_PROTOCOL_EVENT_TYPE`       | 8     | <Term id="arbitrum-classic">Arbitrum Classic</Term> used it for messages sent to <Term id="bridge">bridge</Term>; Nitro does not use it.                                                                                            |
+| `L1MessageType_submitRetryableTx`  | 9     | Submitting parent chain messages to the child chain via [retryable tickets](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets).                                                                                                     |
+| `INITIALIZATION_MSG_TYPE`          | 11    | The first message added to a new Rollup inbox. Its presence indicates proper initialization of the Rollup.                                                                                                                                                |
+| `L1MessageType_ethDeposit`         | 12    | Child chain messages that handle deposits of native tokens (**ETH**) into the child chain.                                                                                                                                                                |
+| `L1MessageType_batchPostingReport` | 13    | Used by the Sequencer to update the pricing model based on payment(s) by the batch poster.                                                                                                                                                                |
+
+These identifiers enable nodes to route messages correctly.

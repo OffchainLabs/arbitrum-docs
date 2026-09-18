@@ -1,0 +1,201 @@
+---
+title: 'Bridge tokens from L1 to an Arbitrum L3'
+description: 'Learn how to bridge ERC-20 tokens and ETH from Ethereum (L1) directly to an Arbitrum L3 chain using the Arbitrum SDK teleport feature, requiring only a single user transaction.'
+sidebar_label: 'L1-to-L3 teleportation'
+user_story: 'As a developer building on an Arbitrum L3, I want to bridge tokens directly from L1 to L3 so my users do not need to manually bridge through L2 first.'
+content_type: 'tutorial'
+author: anegg0
+sme: greatsoshiant
+---
+
+Arbitrum chains can be deployed as Layer 3 (L3) on top of an existing Arbitrum Layer 2. When users need to move assets from Ethereum (L1) to an L3, they would normally bridge L1 to L2 first, then L2 to L3—two separate transactions with separate wait times.
+
+The **teleport** feature in the Arbitrum SDK solves this by letting users bridge tokens from L1 directly to L3 in a single transaction. Under the hood, the SDK coordinates the intermediate bridging steps automatically.
+
+## How teleportation works
+
+A teleport deposit creates a chain of [retryable tickets](/docs/arbitrum-essentials/bridging/cross-chain-messaging) that propagate your tokens through each layer:
+
+1. **L1 transaction**: Your tokens are deposited into the L1-to-L2 token bridge
+2. **L2 retryable**: The L2 bridge receives the tokens and forwards them to the L2-to-L3 bridge
+3. **L3 retryable**: The L3 bridge mints or releases tokens to the destination address
+
+For `ETH` bridging, the flow uses a "double retryable"—a retryable ticket on L2 that creates another retryable ticket targeting L3.
+
+### Fee payment
+
+Each retryable in the chain requires gas fees on its destination chain:
+
+- **L1-to-L2 retryable**: Paid in `ETH` on L1 (or the L2 native token if using a custom gas token chain)
+- **L2-to-L3 retryable**: Paid in the L3 native token, forwarded through the bridge
+
+The SDK calculates and bundles all required fees into a single L1 transaction.
+
+## Prerequisites
+
+- An Arbitrum L3 chain accessible via RPC
+- A funded wallet on L1 (`ETH` for gas and any tokens you want to bridge)
+- The L3 chain must use Arbitrum's canonical token bridge
+- Node.js and the Arbitrum SDK installed:
+
+```shell
+npm install @arbitrum/sdk ethers@^5
+```
+
+## Bridge `ERC-20` tokens from L1 to L3
+
+### Step 1: Set up providers and the bridger
+
+```javascript
+import { providers, Wallet } from 'ethers';
+import { Erc20L1L3Bridger, getArbitrumNetwork } from '@arbitrum/sdk';
+
+// Connect to all three chains
+const l1Provider = new providers.JsonRpcProvider(process.env.L1_RPC);
+const l2Provider = new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC);
+const l3Provider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+
+const l1Wallet = new Wallet(process.env.PRIVATE_KEY, l1Provider);
+
+// Initialize the L1-to-L3 ERC-20 bridger
+const l3Network = await getArbitrumNetwork(l3Provider);
+const bridger = new Erc20L1L3Bridger(l3Network);
+```
+
+### Step 2: Approve token and gas token transfers
+
+The bridger needs approval to transfer your `ERC-20` tokens. If the L3 uses a custom gas token, you also need to approve that token for fee payment:
+
+```javascript
+import { utils } from 'ethers';
+
+const l1TokenAddress = '0x...'; // Your ERC-20 token address on L1
+const amount = utils.parseUnits('100', 18);
+
+// If L3 uses a custom gas token, approve it first
+if (l3Network.nativeToken) {
+  const gasTokenApproval = await bridger.approveGasToken({
+    l1Signer: l1Wallet,
+    l2Provider,
+  });
+  await gasTokenApproval.wait();
+  console.log('Gas token approved');
+}
+
+// Approve the ERC-20 token
+const tokenApproval = await bridger.approveToken({
+  erc20L1Address: l1TokenAddress,
+  l1Signer: l1Wallet,
+});
+await tokenApproval.wait();
+console.log('Token approved');
+```
+
+### Step 3: Execute the deposit
+
+```javascript
+// Deposit tokens — a single L1 transaction handles the full L1 → L2 → L3 flow
+const depositTx = await bridger.deposit({
+  erc20L1Address: l1TokenAddress,
+  amount,
+  l1Signer: l1Wallet,
+  l2Provider,
+  l3Provider,
+});
+
+const depositReceipt = await depositTx.wait();
+console.log(`Deposit initiated on L1: ${depositReceipt.transactionHash}`);
+```
+
+### Step 4: Monitor the deposit status
+
+The deposit progresses through multiple retryable tickets. You can monitor each one:
+
+```javascript
+// Using the bridger instance from Step 1
+
+// Check the status of all retryables in the teleport chain
+const depositStatus = await bridger.getDepositStatus({
+  txHash: depositReceipt.transactionHash,
+  l1Provider,
+  l2Provider,
+  l3Provider,
+});
+
+// Each field shows the status of one leg of the journey:
+// - l1l2GasTokenBridgeRetryable (if custom gas token)
+// - l1l2TokenBridgeRetryable
+// - l2ForwarderFactoryRetryable
+// - l2l3TokenBridgeRetryable
+console.log('Deposit status:', depositStatus);
+```
+
+Status values: `REDEEMED` (success), `CREATION_FAILED`, `EXPIRED`, `FUNDS_DEPOSITED_ON_L2`, `NOT_YET_CREATED`.
+
+## Bridge `ETH` from L1 to L3
+
+`ETH` teleportation uses a "double retryable" pattern—simpler than `ERC-20` because no token approvals are needed.
+
+```javascript
+import { EthL1L3Bridger, getArbitrumNetwork } from '@arbitrum/sdk';
+import { providers, Wallet, utils } from 'ethers';
+
+const l1Provider = new providers.JsonRpcProvider(process.env.L1_RPC);
+const l2Provider = new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC);
+const l3Provider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+const l1Wallet = new Wallet(process.env.PRIVATE_KEY, l1Provider);
+
+// Initialize the ETH bridger
+const l3Network = await getArbitrumNetwork(l3Provider);
+const ethBridger = new EthL1L3Bridger(l3Network);
+
+// Deposit ETH from L1 to L3
+const depositTx = await ethBridger.deposit({
+  amount: utils.parseEther('0.01'),
+  l1Signer: l1Wallet,
+  l2Provider,
+  l3Provider,
+});
+
+const depositReceipt = await depositTx.wait();
+console.log(`ETH deposit initiated on L1: ${depositReceipt.transactionHash}`);
+
+// Monitor status
+const status = await ethBridger.getDepositStatus({
+  txHash: depositReceipt.transactionHash,
+  l1Provider,
+  l2Provider,
+  l3Provider,
+});
+console.log('ETH deposit status:', status);
+```
+
+## Troubleshooting
+
+### Retryable stuck at `FUNDS_DEPOSITED_ON_L2`
+
+This means the L1-to-L2 leg completed but the L2-to-L3 retryable has not yet been created or executed. Possible causes:
+
+- The L2-to-L3 retryable is waiting for the L2 sequencer to process it (wait a few more minutes)
+- Insufficient gas was provided for the L2-to-L3 leg—the SDK should handle this automatically, but network conditions may have changed
+
+### Retryable shows `EXPIRED`
+
+Retryable tickets expire after their lifetime (default: 7 days). If a retryable expired, the tokens are sitting on L2 rather than L3. You can manually bridge them from L2 to L3 using the standard [deposit flow](/docs/arbitrum-essentials/bridging/deposit/tokens).
+
+### Custom gas token approval failed
+
+If the L3 chain uses a custom gas token (not `ETH`), you must approve the gas token before depositing. The `approveGasToken` step handles this—make sure your wallet holds enough of the gas token on L1.
+
+## Next steps
+
+- [Deposit tokens (L1 to L2)](/docs/arbitrum-essentials/bridging/deposit/tokens)
+- [Withdraw tokens (L2 to L1)](/docs/arbitrum-essentials/bridging/withdraw/tokens)
+- [Cross-chain messaging overview](/docs/arbitrum-essentials/bridging/cross-chain-messaging)
+- [Source code: L1-L3 teleport tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/l1-l3-teleport)
+
+## Resources
+
+- [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
+- [Token bridge architecture](/docs/how-arbitrum-works/deep-dives/token-bridging)
+- [Parent-to-child messaging details](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging)

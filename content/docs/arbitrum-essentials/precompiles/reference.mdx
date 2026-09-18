@@ -1,0 +1,180 @@
+---
+title: 'Precompiles reference'
+description: 'Complete reference for all Arbitrum precompiled contracts, including ArbSys, ArbRetryableTx, ArbGasInfo, ArbAggregator, and more. Lists methods, addresses, Solidity interfaces, and Go implementations.'
+user_story: 'As a developer, I want a detailed reference of all available Arbitrum precompiles so I can call their methods from my smart contracts.'
+content_type: 'reference'
+author: gblanchemain
+sme: gblanchemain
+---
+
+ArbOS provides child chain-specific precompiles with methods smart contracts can call the same way they can solidity functions. This reference page exhaustively documents the specific calls ArbOS makes available through precompiles. For a more conceptual description of what precompiles are and how they work, please refer to the [precompiles conceptual page](/docs/arbitrum-essentials/precompiles/overview).
+
+This reference page is divided into two sections. The first one lists all precompiles in a summary table with links to the reference of the specific precompile, along with the address where they live, their purpose and links to the go implementation and solidity interface. The second one details the methods available in each precompile with links to the specific implementation.
+
+## General information of precompiles
+
+This section is divided into two tables. We first list precompiles we expect users to most often use, and then the rest of precompiles. However, both tables display the same information: name and purpose of the precompile, address, and links to the solidity interface and the go implementation.
+
+### Common precompiles
+
+| Precompile                        | Address | Solidity interface                                                                                                                                                                                      | Go implementation                                                                                                                                                         | Purpose                             |
+| --------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| [ArbAggregator](#arbaggregator)   | `0x6d`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbAggregator.sol)  | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbAggregator.go)  | Configuring transaction aggregation |
+| [ArbGasInfo](#arbgasinfo)         | `0x6c`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbGasInfo.sol)     | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbGasInfo.go)     | Info about gas pricing              |
+| [ArbRetryableTx](#arbretryabletx) | `0x6e`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbRetryableTx.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbRetryableTx.go) | Managing retryables                 |
+| [ArbSys](#arbsys)                 | `0x64`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbSys.sol)         | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbSys.go)         | System-level functionality          |
+| [ArbWasm](#arbwasm)               | `0x71`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbWasm.sol)        | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbWasm.go)        | Manages Stylus contracts            |
+| [ArbWasmCache](#arbwasmcache)     | `0x72`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbWasmCache.sol)   | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbWasmCache.go)   | Manages Stylus cache                |
+
+### Other precompiles
+
+| Precompile                            | Address | Solidity interface                                                                                                                                                                                        | Go implementation                                                                                                                                                           | Purpose                                            |
+| ------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| [ArbAddressTable](#arbaddresstable)   | `0x66`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbAddressTable.sol)  | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbAddressTable.go)  | Supporting compression of addresses                |
+| ArbBLS                                | -       | -                                                                                                                                                                                                         | -                                                                                                                                                                           | **Disabled** (Former registry of BLS public keys)  |
+| [ArbDebug](#arbdebug)                 | `0xff`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbDebug.sol)         | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbDebug.go)         | Testing tools                                      |
+| [ArbFunctionTable](#arbfunctiontable) | `0x68`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbFunctionTable.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbFunctionTable.go) | No longer used                                     |
+| [ArbInfo](#arbinfo)                   | `0x65`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbInfo.sol)          | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbInfo.go)          | Info about accounts                                |
+| [ArbOwner](#arbowner)                 | `0x70`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbOwner.sol)         | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbOwner.go)         | Chain administration, callable only by chain owner |
+| [ArbOwnerPublic](#arbownerpublic)     | `0x6b`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbOwnerPublic.sol)   | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbOwnerPublic.go)   | Info about chain owners                            |
+| [ArbosTest](#arbostest)               | `0x69`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbosTest.sol)        | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbosTest.go)        | No longer used                                     |
+| [ArbStatistics](#arbstatistics)       | `0x6f`  | [Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbStatistics.sol)    | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbStatistics.go)    | Info about the pre-Nitro state                     |
+
+## Precompiles reference
+
+### `ArbAddressTable`
+
+ArbAddressTable ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbAddressTable.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbAddressTable.go)) provides the ability to create short-hands for commonly used accounts.
+
+For a working example of using `ArbAddressTable` to register addresses and retrieve their indices, see the [address-table tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/address-table).
+
+Precompile address: `0x0000000000000000000000000000000000000066`
+
+<include cwd>content/partials/precompile-tables/_ArbAddressTable.mdx</include>
+
+### `ArbAggregator`
+
+ArbAggregator ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbAggregator.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbAggregator.go)) provides aggregators and their users methods for configuring how they participate in parent chain aggregation. Arbitrum One's default aggregator is the Sequencer, which a user will prefer unless `SetPreferredAggregator` is invoked to change it.
+
+Compression ratios are measured in basis points. Methods that are checkmarked are access-controlled and will revert if not called by the aggregator, its fee collector, or a chain owner.
+
+Precompile address: `0x000000000000000000000000000000000000006D`
+
+<include cwd>content/partials/precompile-tables/_ArbAggregator.mdx</include>
+
+### `ArbBLS`
+
+<VanillaAdmonition type="warning" title="Disabled">
+
+This precompile has been disabled. It previously provided a registry of BLS public keys for accounts.
+
+</VanillaAdmonition>
+### `ArbDebug`
+
+ArbDebug ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbDebug.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbDebug.go)) provides mechanisms useful for testing. The methods of `ArbDebug` are only available for chains with the `AllowDebugPrecompiles` chain parameter set. Otherwise, calls to this precompile will revert.
+
+Precompile address: `0x00000000000000000000000000000000000000ff`
+
+<include cwd>content/partials/precompile-tables/_ArbDebug.mdx</include>
+
+### `ArbFunctionTable`
+
+ArbFunctionTable ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbFunctionTable.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbFunctionTable.go)) provides aggregators the ability to manage function tables, to enable one form of transaction compression. The Nitro aggregator implementation does not use these, so these methods have been stubbed and their effects disabled. They are kept for backwards compatibility.
+
+Precompile address: `0x0000000000000000000000000000000000000068`
+
+<include cwd>content/partials/precompile-tables/_ArbFunctionTable.mdx</include>
+
+### `ArbGasInfo`
+
+ArbGasInfo ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbGasInfo.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbGasInfo.go)) provides insight into the cost of using the chain. These methods have been adjusted to account for Nitro's heavy use of calldata compression. Of note to end-users, we no longer make a distinction between non-zero and zero-valued calldata bytes. For a practical guide on using these methods alongside `NodeInterface` to estimate transaction costs, see [How to estimate gas](/docs/arbitrum-essentials/how-to-estimate-gas).
+
+Precompile address: `0x000000000000000000000000000000000000006C`
+
+<include cwd>content/partials/precompile-tables/_ArbGasInfo.mdx</include>
+
+### `ArbInfo`
+
+ArbInfo ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbInfo.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbInfo.go)) provides the ability to lookup basic info about accounts and contracts.
+
+Precompile address: `0x0000000000000000000000000000000000000065`
+
+<include cwd>content/partials/precompile-tables/_ArbInfo.mdx</include>
+
+### `ArbNativeTokenManager`
+
+ArbNativeTokenManager ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbNativeTokenManager.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbNativeTokenManager.go)) enables minting and burning of the chain's native gas token by callers authorized through the `ArbOwner` precompile. Available since ArbOS 41.
+
+Precompile address: `0x0000000000000000000000000000000000000073`
+
+<include cwd>content/partials/precompile-tables/_ArbNativeTokenManager.mdx</include>
+
+### `ArbosTest`
+
+ArbosTest ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbosTest.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbosTest.go)) provides a method of burning arbitrary amounts of gas, which exists for historical reasons. In Classic, `ArbosTest` had additional methods only the zero address could call. These have been removed since users don't use them and calls to missing methods revert.
+
+Precompile address: `0x0000000000000000000000000000000000000069`
+
+<include cwd>content/partials/precompile-tables/_ArbosTest.mdx</include>
+
+### `ArbOwner`
+
+ArbOwner ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbOwner.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbOwner.go)) provides owners with tools for managing the rollup. Calls by non-owners will always revert.
+
+Most of Arbitrum Classic's owner methods have been removed since they no longer make sense in Nitro:
+
+- What were once chain parameters are now parts of ArbOS's state, and those that remain are set at genesis.
+- ArbOS upgrades happen with the rest of the system rather than being independent
+- Exemptions to address aliasing are no longer offered. Exemptions were intended to support backward compatibility for contracts deployed before aliasing was introduced, but no exemptions were ever requested.
+
+Precompile address: `0x0000000000000000000000000000000000000070`
+
+<include cwd>content/partials/precompile-tables/_ArbOwner.mdx</include>
+
+### `ArbOwnerPublic`
+
+ArbOwnerPublic ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbOwnerPublic.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbOwnerPublic.go)) provides non-owners with info about the current chain owners.
+
+Precompile address: `0x000000000000000000000000000000000000006b`
+
+<include cwd>content/partials/precompile-tables/_ArbOwnerPublic.mdx</include>
+
+### `ArbRetryableTx`
+
+ArbRetryableTx ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbRetryableTx.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbRetryableTx.go)) provides methods for managing retryables. The model has been adjusted for Nitro, most notably in terms of how retry transactions are scheduled. For more information on retryables, please see [the retryable documentation](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets). For a worked example of creating and redeeming retryables from application code, see [How to bridge from the parent chain](/docs/arbitrum-essentials/bridging/cross-chain-messaging#ethereum-to-arbitrum-messaging).
+
+Precompile address: `0x000000000000000000000000000000000000006E`
+
+<include cwd>content/partials/precompile-tables/_ArbRetryableTx.mdx</include>
+
+### `ArbStatistics`
+
+ArbStatistics ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbStatistics.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbStatistics.go)) provides statistics about the chain as of just before the Nitro upgrade. In Arbitrum Classic, this was how a user would get info such as the total number of accounts, but there are better ways to get that info in Nitro.
+
+Precompile address: `0x000000000000000000000000000000000000006F`
+
+<include cwd>content/partials/precompile-tables/_ArbStatistics.mdx</include>
+
+### `ArbSys`
+
+ArbSys ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbSys.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbSys.go)) provides system-level functionality for interacting with the parent chain and understanding the call stack.
+
+Precompile address: `0x0000000000000000000000000000000000000064`
+
+<include cwd>content/partials/precompile-tables/_ArbSys.mdx</include>
+
+### `ArbWasm`
+
+ArbWasm ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbWasm.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbWasm.go)) provides helper methods for managing Stylus contracts
+
+Precompile address: `0x0000000000000000000000000000000000000071`
+
+<include cwd>content/partials/precompile-tables/_ArbWasm.mdx</include>
+
+### `ArbWasmCache`
+
+ArbWasmCache ([Interface](https://github.com/OffchainLabs/<Var name="nitroPrecompilesRepositorySlug" />/blob/<Var name="nitroPrecompilesCommit" />/ArbWasmCache.sol) | [Implementation](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/<Var name="nitroVersionTag" />/<Var name="nitroPathToPrecompiles" />/ArbWasmCache.go)) provides helper methods for managing Stylus cache
+
+Precompile address: `0x0000000000000000000000000000000000000072`
+
+<include cwd>content/partials/precompile-tables/_ArbWasmCache.mdx</include>

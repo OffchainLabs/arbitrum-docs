@@ -1,0 +1,319 @@
+---
+title: 'Choose your learning path'
+description: 'Find the right Stylus learning path based on your background and goals'
+sidebar_label: 'Choose your path'
+user_story: 'As a developer new to Stylus, I want to find the most efficient learning path based on my background'
+content_type: 'concept'
+author: offchainlabs
+sme: offchainlabs
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+# Choose your learning path
+
+Not sure where to start with Stylus? This guide helps you find the optimal learning path based on your background and goals.
+
+## Quick path selector
+
+<Accordions>
+<Accordion title="Path 1: New to Rust">
+
+**Best for**: Developers experienced with other languages but new to Rust.
+
+### Prerequisites
+
+- Basic programming knowledge
+- Familiarity with concepts like variables, functions, and control flow
+- Optional: Smart contract development experience
+
+### Recommended journey
+
+<Steps>
+<Step>
+
+**Learn Rust basics** (1-2 weeks)
+
+- Work through [The Rust Book](https://doc.rust-lang.org/book/) chapters 1-10
+- Focus on: ownership, borrowing, structs, enums, error handling
+- Practice with [Rustlings](https://github.com/rust-lang/rustlings)
+
+</Step>
+<Step>
+
+**Start with Stylus**
+
+- Complete the [Quickstart](/docs/stylus/quickstart)
+- Understand [project structure](/docs/stylus/fundamentals/project-structure)
+- Deploy your first contract
+
+</Step>
+<Step>
+
+**Build fundamentals** (1 week)
+
+- Study [data types](/docs/stylus/fundamentals/data-types/primitives)
+- Learn [storage patterns](/docs/stylus/fundamentals/data-types/storage)
+- Practice [writing tests](/docs/stylus/fundamentals/testing-contracts)
+
+</Step>
+<Step>
+
+**Explore advanced topics** (ongoing)
+
+- Review [best practices](/docs/stylus/best-practices/security)
+- Study [gas optimization](/docs/stylus/best-practices/gas-optimization)
+- Build real projects
+
+</Step>
+</Steps>
+
+### Key resources
+
+- [The Rust Book](https://doc.rust-lang.org/book/)
+- [Stylus Quickstart](/docs/stylus/quickstart)
+- [Stylus by Example](https://stylus-by-example.org/)
+
+---
+
+</Accordion>
+</Accordions>
+
+<Accordions>
+<Accordion title="Path 2: Solidity developer">
+
+**Best for**: Experienced Solidity developers transitioning to Stylus.
+
+### Prerequisites
+
+- Strong Solidity knowledge
+- Understanding of EVM and smart contract security
+- No Rust experience required
+
+### Recommended journey
+
+<Steps>
+<Step>
+
+**Understand the differences** (1 day)
+
+- Read [Rust to Solidity differences](/docs/stylus/advanced/rust-to-solidity-differences)
+- Review [VM differences](/docs/stylus/concepts/vm-differences)
+- Understand [type conversions](/docs/stylus/fundamentals/data-types/conversions-between-types)
+
+</Step>
+<Step>
+
+**Quick start**
+
+- Complete the [Quickstart](/docs/stylus/quickstart)
+- Compare with familiar Solidity patterns
+- Deploy a simple contract
+
+</Step>
+<Step>
+
+**Learn Rust patterns**
+
+- Study [ownership and borrowing](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
+- Learn [error handling](/docs/stylus/fundamentals/data-types/primitives)
+- Understand [storage macros](/docs/stylus/fundamentals/data-types/storage)
+
+</Step>
+<Step>
+
+**Port existing contracts** (ongoing)
+
+- Start with simple contracts
+- Apply [security best practices](/docs/stylus/best-practices/security)
+- Optimize for [gas efficiency](/docs/stylus/best-practices/gas-optimization)
+
+</Step>
+</Steps>
+
+### Common migration patterns
+
+| Solidity Pattern              | Stylus Equivalent           | Guide                                                                   |
+| ----------------------------- | --------------------------- | ----------------------------------------------------------------------- |
+| `mapping(address => uint)`    | `StorageMap<Address, U256>` | [Storage types](/docs/stylus/fundamentals/data-types/storage)                |
+| `require(condition, "error")` | `Result<T, E>` + `?`        | [Error handling](/docs/stylus/fundamentals/contracts#error-handling)         |
+| `msg.sender`                  | `self.vm().msg_sender()`    | [Global functions](/docs/stylus/fundamentals/global-variables-and-functions) |
+| `constructor`                 | `#[constructor]` method     | [Contracts](/docs/stylus/fundamentals/contracts)                             |
+| Events                        | `self.vm().log(Event{})`    | [Global functions](/docs/stylus/fundamentals/global-variables-and-functions) |
+
+### Key resources
+
+- [Rust to Solidity Differences](/docs/stylus/advanced/rust-to-solidity-differences)
+- [Stylus by Example](https://stylus-by-example.org/)
+- [Solidity to Rust Cheat Sheet](https://docs.arbitrum.io/stylus)
+
+---
+
+</Accordion>
+</Accordions>
+
+<Accordions>
+<Accordion title="Path 3: Smart contract developer (non-Solidity)">
+
+**Best for**: Developers experienced with other smart contract platforms (e.g., Move, Cairo, Clarity, etc.).
+
+### Prerequisites
+
+- Smart contract development experience
+- Understanding of blockchain concepts
+- Basic programming knowledge
+
+### Recommended journey
+
+<Steps>
+<Step>
+
+**Jump right in**
+
+- Complete the [Quickstart](/docs/stylus/quickstart)
+- Explore [project structure](/docs/stylus/fundamentals/project-structure)
+- Deploy and interact with a contract
+
+</Step>
+<Step>
+
+**Understand the execution model**
+
+- Study [WebAssembly concepts](/docs/stylus/concepts/webassembly)
+- Review [VM differences](/docs/stylus/concepts/vm-differences)
+- Learn about [activation](/docs/stylus/concepts/activation)
+
+</Step>
+<Step>
+
+**Master Rust for smart contracts** (1 week)
+
+- Focus on [storage patterns](/docs/stylus/fundamentals/data-types/storage)
+- Learn [contract structure](/docs/stylus/fundamentals/contracts)
+- Understand [testing approaches](/docs/stylus/fundamentals/testing-contracts)
+
+</Step>
+<Step>
+
+**Advanced development** (ongoing)
+
+- Apply platform-specific optimizations
+- Implement cross-contract calls
+- Build production applications
+
+</Step>
+</Steps>
+
+### Key resources
+
+- [Quickstart](/docs/stylus/quickstart)
+- [WebAssembly Concepts](/docs/stylus/concepts/webassembly)
+- [Advanced Topics](/docs/stylus/advanced/rust-to-solidity-differences)
+
+---
+
+</Accordion>
+</Accordions>
+
+<Accordions>
+<Accordion title="Path 4: Rust developer new to Web3">
+
+**Best for**: Experienced Rust developers entering blockchain development.
+
+### Prerequisites
+
+- Strong Rust knowledge
+- Understanding of ownership, traits, and async programming
+- No blockchain experience required
+
+### Recommended journey
+
+<Steps>
+<Step>
+
+**Learn blockchain basics**
+
+- Understand [smart contracts](https://ethereum.org/en/developers/docs/smart-contracts/)
+- Learn about [gas and transactions](https://ethereum.org/en/developers/docs/gas/)
+- Study [EVM basics](https://ethereum.org/en/developers/docs/evm/)
+
+</Step>
+<Step>
+
+**Quick start with Stylus** (1 day)
+
+- Complete the [Quickstart](/docs/stylus/quickstart)
+- Your Rust skills transfer directly!
+- Deploy your first contract
+
+</Step>
+<Step>
+
+**Web3-specific patterns**
+
+- Learn [storage patterns](/docs/stylus/fundamentals/data-types/storage)
+- Understand [global variables](/docs/stylus/fundamentals/global-variables-and-functions)
+- Study [security considerations](/docs/stylus/best-practices/security)
+
+</Step>
+<Step>
+
+**Build applications** (ongoing)
+
+- Start with simple DeFi primitives
+- Implement events and logs
+- Optimize for [gas efficiency](/docs/stylus/best-practices/gas-optimization)
+
+</Step>
+</Steps>
+
+### Rust skills that transfer well
+
+- **Ownership model**: Natural fit for secure contract design
+- **Type safety**: Prevents common smart contract bugs
+- **Error handling**: `Result<T, E>` maps perfectly to contract errors
+- **Testing**: Your testing skills apply directly
+- **Performance optimization**: Critical for gas efficiency
+
+### Key resources
+
+- [Ethereum Smart Contracts](https://ethereum.org/en/developers/docs/smart-contracts/)
+- [Stylus Quickstart](/docs/stylus/quickstart)
+- [Storage Patterns](/docs/stylus/fundamentals/data-types/storage)
+
+---
+
+</Accordion>
+</Accordions>
+
+## General learning resources
+
+Regardless of your path, these resources are valuable:
+
+### Official documentation
+
+- [Stylus Rust SDK Docs](https://docs.rs/stylus-sdk/latest/stylus_sdk/)
+- [Cargo Stylus CLI](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus)
+- [Stylus by Example](https://stylus-by-example.org/)
+
+### Community and support
+
+- [Arbitrum Discord](https://discord.gg/arbitrum)
+- [Developer Forums](https://forum.arbitrum.foundation/)
+
+### Practice projects
+
+1. **Token contract**: Implement the **ERC-20** token standard
+2. **NFT contract**: Build an **ERC-721** compatible NFT
+3. **Simple DeFi**: Create a basic AMM or lending protocol
+4. **DAO governance**: Implement a voting and proposal system
+
+## Next steps
+
+Ready to start? Begin with these essential guides:
+
+1. [Prerequisites and setup](/docs/stylus/fundamentals/prerequisites)
+2. [Quickstart: Deploy your first contract](/docs/stylus/quickstart)
+3. [Project structure](/docs/stylus/fundamentals/project-structure)
+
+Good luck on your Stylus journey!

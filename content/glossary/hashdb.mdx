@@ -1,0 +1,6 @@
+---
+id: hashdb
+title: 'HashDB'
+---
+
+Nitro's default [state scheme](/docs/glossary#state-scheme), which stores the state trie keyed by node hash. HashDB supports block validation, so a node running the block validator must use it. Unlike [PathDB](/docs/glossary#pathdb), HashDB [prunes](/docs/glossary#state-pruning) manually and offline through `--init.prune`: the node stops serving RPC requests until the prune finishes.

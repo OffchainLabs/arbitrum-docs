@@ -1,0 +1,199 @@
+---
+title: 'Finality and chain reorganizations'
+sidebar_label: 'Finality and reorgs'
+description: 'How finality works on Arbitrum chains, how and why a child chain can reorganize, how deep a reorg can go, and the confirmation levels an indexer should wait for before treating data as irreversible.'
+user_story: 'As a developer building an indexer or integration on an Arbitrum chain, I want to understand the confirmation levels, reorg behavior, and detection patterns so that my index never treats reversible data as final.'
+content_type: reference
+author: petevielhaber
+sme: petevielhaber
+---
+
+This reference explains how finality works on <Term id="arbitrum">Arbitrum</Term> chains, why and when a chain can reorganize (<Term id="reorg">reorg</Term>), how deep a reorg can go, and which confirmation level an indexer should wait for before treating data as irreversible.
+
+This is intended for developers building indexers, block explorers, bridges, and custodial integrations, and it applies to <Term id="arbitrum-one">Arbitrum One</Term>, <Term id="arbitrum-nova">Nova</Term>, and Dedicated Blockchains (Arbitrum chains)—including <Term id="arbitrum-anytrust-protocol">AnyTrust</Term> chains that settle to another Arbitrum chain.
+
+For a step-by-step deposit and withdrawal detection procedure, see the [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/exchange-integration-checklist). This page provides the finality and reorg model that the checklist builds on. For an introduction to soft and hard finality, see [Finality](/docs/how-arbitrum-works/deep-dives/finality).
+
+## The three confirmation levels
+
+An Arbitrum node exposes three levels of confirmation, surfaced as the standard Ethereum JSON-RPC block tags. Each maps to a different point in the transaction lifecycle and carries a different reversibility guarantee.
+
+| Level                                                | Block tag   | What it means                                                                                                                                                       | Can it be reverted?                                                                                |
+| ----------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| <Term id="soft-confirmation">Soft confirmation</Term> | `latest`    | The <Term id="sequencer">Sequencer</Term> has ordered and executed the transaction and emitted it on the <Term id="sequencer-feed">Sequencer feed</Term>.           | Yes—this is a promise from the Sequencer, not yet backed by the parent chain.                       |
+| Parent-chain safe                                     | `safe`      | The <Term id="batch">batch</Term> containing the block has been posted to the <Term id="parent-chain">parent chain</Term> and reached the parent chain's `safe` block. | Only by a deep parent-chain reorg.                                                                  |
+| Parent-chain final                                    | `finalized` | The batch containing the block has been posted to the parent chain and reached the parent chain's `finalized` block.                                                | Only if the parent chain itself reverts a finalized block (on Ethereum, economically infeasible).   |
+
+<VanillaAdmonition type="tip" title="The load-bearing rule">
+
+An Arbitrum block is only as final as the parent-chain block that carries its batch. <Term id="soft-confirmation">Soft confirmation</Term> is fast (sub-second) but reversible. <Term id="hard-finality">Hard finality</Term>—the `safe` and `finalized` tags—is inherited from the parent chain and is what makes a block reorg-proof.
+
+</VanillaAdmonition>
+
+### What "seconds to finality" really means
+
+On an AnyTrust chain it is common to assume finality is achieved in seconds, as soon as the <Term id="data-availability-committee-dac">Data Availability Committee (DAC)</Term> signs the block's data. That describes **soft confirmation and data availability**, not <Term id="hard-finality">hard finality</Term>:
+
+- The Sequencer executes and broadcasts the queued transactions immediately—this is your sub-second soft confirmation.
+- The DAC signing a <Term id="data-availability-certificate">Data Availability Certificate (DACert)</Term> guarantees the data _is retrievable_, so the batch can be posted compactly. It does not settle the block against the parent chain.
+- Hard finality still requires the batch (or DACert) to be posted to the parent chain's <Term id="sequencer-inbox">Sequencer Inbox</Term> and for that parent-chain block to finalize.
+
+So on your chain, "seconds" is the soft-confirmation latency; the reorg-proof guarantee tracks your parent chain's finality, which in turn tracks Ethereum finality.
+
+## How the node derives `safe` and `finalized`
+
+A Nitro node is split into a consensus side (reads the parent chain) and an execution side (runs the EVM and serves RPC). Finality flows from the parent chain into the <Term id="child-chain">child chain</Term>'s `safe`/`finalized` heads:
+
+1. The node reads the parent chain's own `safe` and `finalized` blocks over RPC. It does not compute parent-chain finality itself—it defers to the parent chain's block tags. (Finality data is only used when the parent chain serves those tags—for example Ethereum proof-of-stake, another Arbitrum chain, or a chain built on another stack that exposes them—and when the node is configured to read them, via `node.parent-chain-reader.use-finality-data`, which defaults to `true`.)
+2. For each parent-chain `safe`/`finalized` block, the node finds the newest sequencer batch that was posted **at or before** that parent-chain block.
+3. The last child-chain block in that batch becomes the child chain's `safe` (or `finalized`) head, which is what the child-chain RPC serves for those tags.
+
+In other words, a child-chain block is `finalized` when the parent-chain block that carries its batch is itself `finalized`. Optionally, a chain can be configured to further hold `safe`/`finalized` back until a local <Term id="validator">validator</Term> has validated the block.
+
+<VanillaAdmonition type="note" title="Block-tag availability on Dedicated Blockchains">
+
+The `safe` and `finalized` tags are always available on Arbitrum One and Nova. On a self-managed chain, they are available only when your parent chain exposes finality data and your node is configured to track it. Confirm the behavior on your own chain before relying on `finalized`, and document the expected confirmation latency for your integrators.
+
+</VanillaAdmonition>
+
+## Per-chain-type guarantees
+
+The confirmation _model_ is identical across chains; what differs is which parent chain finality is inherited from, and therefore the latency.
+
+| Chain type                                   | Parent chain        | `finalized` inherits from                          | Approximate hard-finality latency                                       |
+| --------------------------------------------- | -------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------- |
+| Arbitrum One / Nova                          | Ethereum            | Ethereum `finalized` (~2 epochs, ~13 min)            | Time to post the batch, plus Ethereum finality.                             |
+| Arbitrum chain atop Ethereum (L2)            | Ethereum            | Ethereum `finalized`                                 | Same as above.                                                              |
+| Arbitrum chain atop an L2 (L3, e.g. on Base) | The L2 (e.g. Base)  | The L2's `finalized`, which itself tracks Ethereum   | The L2's finality latency, which is bounded below by Ethereum finality.     |
+
+For an L3 on Base, `finalized` on your chain cannot be more final than Base's `finalized`, and Base's `finalized` ultimately tracks Ethereum. The DAC does not shorten this—it only affects how data is made available, not how the parent chain finalizes.
+
+### Parent chains outside the Ethereum and Arbitrum stacks
+
+A few chains settle to a parent chain that is neither Ethereum nor an Arbitrum chain; in practice this means an OP Stack chain such as Base. The confirmation model is unchanged—your node still defers to the parent chain's `safe` and `finalized` tags—but the meaning of those tags is defined by that chain's stack rather than by Ethereum consensus. On an OP Stack parent chain, `safe` means the block has been derived from batch data already posted to Ethereum, and `finalized` means that Ethereum data is itself finalized, so the chain of inheritance still terminates at Ethereum finality.
+
+Before relying on `finalized` when your parent chain runs a different stack, confirm two things: that its RPC actually serves both tags, and what each tag guarantees on that chain. A parent chain that returns its own head for `safe` and `finalized` gives your child chain no guarantee beyond `latest`, in which case you should derive your own finality signal as described in [Recommended confirmation levels for indexers](#recommended-confirmation-levels-for-indexers).
+
+## AnyTrust and the DAC: what changes and what doesn't
+
+On an AnyTrust chain the <Term id="batch-poster">batch poster</Term> asks the DAC to sign a DACert over the batch data. If enough committee members sign against the current <Term id="keyset">keyset</Term>, the batch poster posts the compact DACert to the Sequencer Inbox instead of the full data. What this does and does not affect:
+
+- **Does not change the finality model.** Finality still tracks the parent chain. A DACert reaching parent-chain finality is what makes the block final; the DAC signature by itself is a data-availability guarantee.
+- **Does not change reorg behavior.** A DACert is posted to the Sequencer Inbox exactly like a full-data batch, so the reorg rules below apply unchanged.
+- **Affects liveness under DAC failure.** If the batch poster cannot collect enough signatures within a few minutes, it falls back to posting the full batch data directly to the parent chain as calldata, and the chain keeps producing and finalizing blocks. Fallback can be disabled (`disable-dap-fallback-store-data-on-chain: true`), in which case a DAC outage halts batch posting. See [DAC and DAS operations](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-das-operations) for the full failure-mode table.
+
+## The reorg model
+
+Once a batch is posted to the Sequencer Inbox, the only thing that can reorganize an Arbitrum chain is a reorg of its <Term id="underlying-chain">underlying (parent) chain</Term>. <Term id="fraud-proof">Fraud proofs</Term> and dispute resolution never cause a reorg—a rejected <Term id="assertion">assertion</Term> only prevents an invalid state from being confirmed for settlement; it never rewrites already-sequenced blocks.
+
+When a parent-chain reorg does change the Sequencer Inbox or <Term id="delayed-inbox">delayed inbox</Term> ordering, the child chain reorgs as follows:
+
+1. The node detects that the parent-chain-derived data has changed (the delayed-message accumulator or the sequencer-batch accumulator no longer matches what it stored).
+2. It walks back to the most recent block that still matches the canonical parent-chain-derived history—the common ancestor.
+3. It rolls the chain back to that block. **State reverts to the state root at the common ancestor, and every transaction after that point is discarded.** Block explorers and RPC no longer return the discarded transactions.
+4. It re-derives the chain forward from the parent chain. Messages that were reorged out (within the re-sequencing window) may be re-sequenced, but block hashes, block numbers, and transaction ordering after the common ancestor can all differ from before.
+
+<VanillaAdmonition type="warning" title="Never key an index on block number alone across a reorg">
+
+After a reorg, the same block _number_ can hold different transactions with a different block _hash_. Always store and compare block hashes and `parentHash` continuity, and rewind to the common ancestor rather than patching individual records. See [Reorg detection patterns](#reorg-detection-patterns).
+
+</VanillaAdmonition>
+
+## How deep can a reorg go?
+
+Child-chain reorg depth is bounded by parent-chain reorg depth, not by anything on the child chain and not by how often you post <Term id="assertion">assertions</Term>.
+
+A common misconception is to reason from the assertion (state-root) cadence: "we post state roots every hour, which at 250 ms blocks is ~14,400 blocks, so a reorg could be 14,400 blocks deep." That conflates two independent things:
+
+- **Assertions / state roots** are periodic settlement checkpoints posted to the Rollup contract for the dispute protocol. They do **not** cause or bound reorgs, and their cadence is irrelevant to reorg depth.
+- **Batches (data)** are posted continuously by the batch poster—not on the assertion cadence. Reorgs are driven by parent-chain reorgs of these batches, and only for the batches that are not yet final on the parent chain.
+
+So the practical bound on a child-chain reorg is: **the child blocks whose batches were posted within the parent chain's unfinalized window.** For an indexer, this collapses to a simple rule:
+
+- If you index at `finalized`, you will never observe a reorg, because finalized parent-chain blocks do not revert.
+- If you index at `safe`, you are exposed only to a deep parent-chain reorg (rare on Ethereum-backed chains).
+- If you index at `latest` (soft), you are exposed to the full unfinalized window and must handle reorgs actively.
+
+A 14,400-block child reorg would require the parent chain to reorg its entire corresponding unfinalized range at once—which for a Base → Ethereum-backed chain does not happen under normal finality assumptions. The correct defense is not to guess a maximum depth but to gate crediting on `finalized` (or to rewind to the common ancestor for anything you display before finality).
+
+## `ArbitrumInternalTx` behavior under a parent-chain reorg
+
+Every child-chain block begins with a system transaction of type `ArbitrumInternalTx` (`0x6A`), specifically an `InternalTxStartBlock`. It is guaranteed to be the first transaction in its block, and it records the parent-chain block number and parent-chain base fee that were in effect when the block's message was read. This is the mechanism that feeds parent-chain context (for example, the value returned by `block.number` and `BLOCKHASH`) into the EVM. See [Geth at the core](/docs/how-arbitrum-works/reference/geth#arbitruminternaltx) for details.
+
+Because this transaction's contents are _derived from_ the parent chain, a parent-chain reorg that changes a block's parent-chain context also changes that block's `InternalTxStartBlock`. There is no special handling that keeps it stable across a reorg—the affected blocks are reorged out and re-derived through the normal path above.
+
+Consequences for an indexer:
+
+- The `ArbitrumInternalTx` is <Term id="arbos">ArbOS</Term> bookkeeping. It never moves user value and must never be credited or treated as a user transaction.
+- Do **not** assume the ordering, block number, or block hash of the surrounding transactions is preserved across a reorg. After the common ancestor, everything is recomputed: the internal tx stays first, but the transactions after it, their block assignment, and the block hashes can all change.
+- The only stable anchor across a reorg is the common ancestor's block hash. Rewind to it and re-scan.
+
+## Recommended confirmation levels for indexers
+
+On Ethereum, indexers often wait a fixed number of confirmations (for example, 12 blocks). That model does not translate to Arbitrum: child blocks are produced far faster than the parent chain finalizes, and reorg exposure is a function of parent-chain finality, not of a child-block count. Wait on the **block tag**, not on a fixed depth.
+
+| Use case                                                     | Wait for                                       | Rationale                                                                                    |
+| -------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Crediting deposits, releasing funds, any irreversible action | `finalized`                                    | Finalized parent-chain blocks do not revert, so a credited entry can never be reorged away.  |
+| Low-value or reversible UX (pending balances, activity feed) | `safe`, or `latest` with active reorg handling | Faster, but you must be able to roll back if a reorg occurs.                                 |
+| Real-time display only                                       | `latest`                                       | Sub-second, but explicitly provisional—label it as unconfirmed and expect it to change.       |
+
+If your chain does not expose `safe`/`finalized` (see the note above), treat the Sequencer tip as soft and derive your own finality signal from the parent chain—for example, by tracking which batches have reached the parent chain's `finalized` block.
+
+## Reorg detection patterns
+
+Whichever level you index at below `finalized`, detect reorgs by tracking hash continuity and rewinding:
+
+1. Store each scanned block's hash, keyed by height.
+2. On each poll, confirm that each new block's `parentHash` matches the hash you stored for the height below it.
+3. On a mismatch, walk back to the most recent height whose stored hash still matches the canonical chain—the common ancestor.
+4. Discard every record and stored hash above the common ancestor, move your scan cursor back to it, and re-scan forward. Because a reorg can both remove and introduce transactions, re-checking only the records you already have is not enough.
+5. You never need to rewind below the `finalized` height, because finalized blocks cannot reorganize.
+
+The [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/exchange-integration-checklist#step-1-stay-in-sync-with-the-chain-head) works through this algorithm in the context of a full deposit-detection pipeline.
+
+## The `--node.bold.rpc-block-number` flag
+
+You may encounter the node flag `--node.bold.rpc-block-number`. It is a **validator-side** setting: it selects which parent-chain block tag the <Term id="bold">BoLD</Term> validator reads onchain Rollup and assertion state from. It accepts `latest`, `safe`, or `finalized`, and defaults to `finalized`.
+
+<VanillaAdmonition type="warning" title="Not the tag your indexer reads">
+
+`--node.bold.rpc-block-number` controls how the <Term id="bold">BoLD</Term> validator reads the _parent chain_ during dispute-protocol operations. It does **not** configure the `latest`/`safe`/`finalized` tags your indexer requests from the child-chain RPC. Do not set it expecting to change indexer-facing finality; use the block tags on your RPC queries instead.
+
+</VanillaAdmonition>
+
+The `latest` / `safe` / `finalized` names come from Ethereum's proof-of-stake finality: `finalized` is roughly two epochs (~64 slots, ~13 minutes) behind the head and `safe` roughly one epoch (~32 slots) behind. Nitro does not hard-code those distances — it reads the parent chain's own `safe`/`finalized` tags — but that is the origin of the "latest-64 / latest-32" shorthand you may have seen.
+
+## Corner cases
+
+The scenarios below are the ones integrators most often ask about. They follow directly from the model above.
+
+### A parent-chain reorg moves a block that held one of our state-root attestations
+
+No child-chain reorg results. State-root assertions are settlement checkpoints, not sequenced data; if the parent-chain block carrying an assertion is reorged, the node re-submits the assertion. A child-chain reorg happens only if the reorg changes the Sequencer Inbox or delayed-inbox ordering.
+
+### A reorg on Base's parent (Ethereum) affects a block holding some of our data
+
+Handled the same way. If it changes the derived batch/delayed-message ordering, the affected _unfinalized_ child blocks are re-derived; anything already `finalized` is unaffected.
+
+### The DAC has an outage and cannot sign attestations
+
+With fallback enabled (the default), the batch poster stops waiting after a few minutes and posts the full batch data directly to the parent chain as calldata. The Sequencer keeps producing blocks and they keep finalizing—hard finality is not blocked by the DAC outage, though batches temporarily cost more to post. Finality is only delayed if you have disabled fallback.
+
+### The DAC is completely down and the batch poster cannot reach it
+
+This halts batch posting **only if fallback is disabled** (`disable-dap-fallback-store-data-on-chain: true`). With fallback enabled, the chain continues via direct calldata posting. Decide this trade-off deliberately: fallback favors liveness, disabling it favors keeping all data off the parent chain.
+
+### The Sequencer cannot post batches (or DACerts) to the parent chain
+
+The Sequencer keeps producing soft-confirmed blocks on the feed, and the batch poster retries until it can post. Until a batch reaches parent-chain finality, those blocks are soft only—treat them as reversible for indexing purposes, even though they appear immediately on the feed.
+
+## Related resources
+
+- [Finality](/docs/how-arbitrum-works/deep-dives/finality) — an introduction to soft and hard finality, trust considerations, and when to rely on each.
+- [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/exchange-integration-checklist) — end-to-end deposit/withdrawal detection built on this model.
+- [Geth at the core](/docs/how-arbitrum-works/reference/geth) — transaction types, `ArbitrumInternalTx`, and `ReorgToOldBlock`.
+- [The Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) — soft vs hard finality and batch posting.
+- [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) — <Term id="keyset">keysets</Term>, DACerts, and the fallback to Rollup mode.
+- [DAC and DAS operations](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-das-operations) — DAC failure modes and fallback behavior.
+- [Block numbers and time](/docs/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time) — parent-chain block numbers on the child chain.
