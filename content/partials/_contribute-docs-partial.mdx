@@ -10,14 +10,14 @@ Thank you for considering to contribute to the Arbitrum documentation! We're exc
 
 The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
 
-This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
+This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Fumadocs](https://fumadocs.dev/docs) is expected.
 
 ### Add a new core document
 
 If a document isn't in a `Third-party content` sidebar node, it's a **core document**. To contribute a new core doc:
 
 1.  Begin by creating a branch (internal) or fork (external) of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs).
-2.  Issue a `Draft` pull request into `master`. Pull requests into `master` generate a preview of your changes via a PR-specific Docusaurus deployment; this preview will update as you push commits to your remote.
+2.  Issue a `Draft` pull request into `master`. Pull requests into `master` generate a preview of your changes via a PR-specific Vercel deployment; this preview will update as you push commits to your remote.
 3.  Include answers to the following questions in your PR description:
     - Audience: Who am I writing for?
     - Problem: What specific problem are they trying to solve?
@@ -36,74 +36,6 @@ See [Contribute third-party docs](/docs/third-party-docs/contribute) for detaile
 ### Request an update
 
 If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
-
-### Add a new translation page
-
-If you would like to participate in translating the Arbitrum docs, you can:
-
-1. Check whether `i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
-
-```shell
-npm run write-translations -- --locale fr
-```
-
-It will help generate folder `i18n/fr`.
-
-2. Create the folders `current` and `translated` under the newly generated folder `i18n/fr/docusaurus-plugin-content-docs`:
-
-```shell
-mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/translated
-```
-
-3. Translate one of more docs files located in `docs/`.
-
-4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`. For example, if you translated `/arbitrum-docs/how-arbitrum-works/arbos/introduction.md`, then its path in i18n should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/how-arbitrum-works/arbos/introduction.md`.
-
-Test run:
-
-1. Check that the i18n settings in `docusaurus.config.js` have included your new language:
-
-```js
-i18n: {
-    defaultLocale: 'en',
-    // locales: ['en', 'ja', 'zh'],
-    locales: ['en'], // You can add your new language to this array
-  },
-```
-
-2. Check whether the `locale Dropdown` component exists in navbar, if not, add it:
-
-```js
-navbar: {
-    title: 'Arbitrum Docs',
-    logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
-        href: '/get-started/arbitrum-introduction',
-    },
-    items: [
-        // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
-        //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
-        //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
-        {
-        type: 'localeDropdown',
-        position: 'right',
-        }
-    ],
-},
-```
-
-2. Build translation and docs:
-
-```shell
-yarn build-translation && yarn build
-```
-
-6. Start docs:
-
-```shell
-npm run serve
-```
 
 ### Document type conventions
 
@@ -187,7 +119,7 @@ Some important disclaimers:
 
 ### Banner conventions
 
-You can use banners (Docusaurus refers to them as ["admonitions"](https://docusaurus.io/docs/markdown-features/admonitions)) to set expectations for your readers and to emphasize important callouts. Use these conservatively, as they interrupt the flow of the document.
+You can use banners (also called "admonitions") to set expectations for your readers and to emphasize important callouts. Use these conservatively, as they interrupt the flow of the document.
 
 #### Under construction banner
 
