@@ -12,7 +12,7 @@ This guide shows you how to withdraw **ERC-20** tokens from an Arbitrum child ch
 - Your token must already be bridgeable (registered with a gateway)
 - A wallet with tokens on the child chain
 - **ETH** on both chains (child chain for initiation, parent chain for final execution)
-- **Important**: Withdrawals require 6.4 days to finalize due to the challenge period
+- **Important**: Withdrawals require @@arbOneDisputeWindowDays=6.4@@ days to finalize due to the challenge period
 - Familiarity with [child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx)
 
 ## Withdraw tokens using the Arbitrum SDK
@@ -45,7 +45,7 @@ const withdrawReceipt = await withdrawTx.wait();
 console.log(`Withdrawal initiated: ${withdrawReceipt.transactionHash}`);
 ```
 
-### Step 2: Wait for the challenge period (~6.4 days)
+### Step 2: Wait for the challenge period (~@@arbOneDisputeWindowDays=6.4@@ days)
 
 ```javascript
 import { ChildToParentMessageStatus, ChildTransactionReceipt } from '@arbitrum/sdk';
@@ -55,7 +55,7 @@ const childReceipt = new ChildTransactionReceipt(withdrawReceipt);
 const messages = await childReceipt.getChildToParentMessages(childWallet);
 const message = messages[0];
 
-// Wait for the message to be confirmed (takes ~6.4 days)
+// Wait for the message to be confirmed (takes ~@@arbOneDisputeWindowDays=6.4@@ days)
 await message.waitUntilReadyToExecute(childProvider);
 console.log('Message confirmed! Ready to execute on parent chain.');
 ```
@@ -122,7 +122,7 @@ console.log(`Withdrawal initiated: ${withdrawReceipt.transactionHash}`);
 // Get withdrawal event data
 const withdrawEvents = withdrawReceipt.getChildToParentEvents();
 console.log('Withdrawal data:', withdrawEvents);
-console.log(`After the challenge period (~6.4 days), execute via the outbox using tx hash: ${withdrawReceipt.transactionHash}`);
+console.log(`After the challenge period (~@@arbOneDisputeWindowDays=6.4@@ days), execute via the outbox using tx hash: ${withdrawReceipt.transactionHash}`);
 ```
 
 The withdrawal creates a child-to-parent message. After the challenge period, execute it using the outbox as shown in Step 3 above. The same outbox execution pattern works for both `ETH` and `ERC-20` withdrawals.
@@ -159,7 +159,7 @@ await withdrawTx.wait();
 
 ### Step 2: Wait for the challenge period
 
-After initiating the withdrawal, you must wait approximately 6.4 days for the assertion containing your withdrawal to be confirmed.
+After initiating the withdrawal, you must wait approximately @@arbOneDisputeWindowDays=6.4@@ days for the assertion containing your withdrawal to be confirmed.
 
 You can check the status on the [Arbitrum Bridge UI](https://bridge.arbitrum.io/) by connecting your wallet, or programmatically track the message status.
 
@@ -193,7 +193,7 @@ The token withdrawal process:
 
 1. **Child chain**: Tokens are burned (or escrowed for custom tokens)
 2. **Message created**: A child-to-parent message is encoded and included in an assertion
-3. **Challenge period**: Wait 6.4 days for the assertion to be confirmed
+3. **Challenge period**: Wait @@arbOneDisputeWindowDays=6.4@@ days for the assertion to be confirmed
 4. **Parent chain**: After confirmation, execute the message to release tokens from the parent gateway
 
 For more details on the underlying protocol, see:
@@ -205,7 +205,7 @@ For more details on the underlying protocol, see:
 
 ### "Withdrawal not ready to execute"
 
-The challenge period hasn't passed yet. Withdrawals take approximately 6.4 days to finalize. Check the status using:
+The challenge period hasn't passed yet. Withdrawals take approximately @@arbOneDisputeWindowDays=6.4@@ days to finalize. Check the status using:
 
 ```javascript
 const status = await message.status(childProvider);

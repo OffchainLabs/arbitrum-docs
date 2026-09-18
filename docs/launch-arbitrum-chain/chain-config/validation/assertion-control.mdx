@@ -86,7 +86,7 @@ While both `ReorgResistanceMargin` and `MaxTimeVariation` are timing-related sec
 2. Add `ReorgResistanceMargin` to L1 minimum bounds:
 
 ```
-   safeBlockThreshold = l1BoundMinBlockNumber + (ReorgResistanceMargin / 12 seconds)
+   safeBlockThreshold = l1BoundMinBlockNumber + (ReorgResistanceMargin / @@l1SlotTimeSeconds=12@@ seconds)
    safeTimestampThreshold = l1BoundMinTimestamp + (ReorgResistanceMargin / 1 second)
 ```
 

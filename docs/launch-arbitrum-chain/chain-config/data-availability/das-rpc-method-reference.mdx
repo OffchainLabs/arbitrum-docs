@@ -77,7 +77,7 @@ Sends a single chunk of batch data within an active chunked store session.
 
 ```
 'data-stream': {
-	'max-store-chunk-body-size': 5242880, // 5 MB per chunk
+	'max-store-chunk-body-size': @@dasMaxStoreChunkBytes=5242880@@, // 5 MB per chunk
 }
 ```
 
@@ -203,7 +203,7 @@ Full config path: `node.da.anytrust.rpc-aggregator.rpc-client`
     'url': 'http://...',              // DAS server URL
   },
   'data-stream': {
-    'max-store-chunk-body-size': 5242880,  // 5 MB
+    'max-store-chunk-body-size': @@dasMaxStoreChunkBytes=5242880@@,  // 5 MB
     'rpc-methods': {
       'start-stream':    'das_startChunkedStore',       // customizable
       'stream-chunk':    'das_sendChunk',               // customizable
@@ -224,7 +224,7 @@ Full config path: `node.da.external-provider`
   'use-data-streaming': true,                // use chunked protocol
   'with-writer': true,                       // server supports writes
   'data-stream': {
-    'max-store-chunk-body-size': 5242880,    // 5 MB
+    'max-store-chunk-body-size': @@dasMaxStoreChunkBytes=5242880@@,    // 5 MB
     'rpc-methods': {
       'start-stream':    'daprovider_startChunkedStore',
       'stream-chunk':    'daprovider_sendChunk',

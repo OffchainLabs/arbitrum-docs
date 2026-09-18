@@ -241,7 +241,7 @@ cp node-config.json ./arbitrum-data/node-config.json
 docker run --rm -it \
   -v $(pwd)/arbitrum-data:/home/user/.arbitrum \
   -p 8547:8547 -p 8548:8548 \
-  offchainlabs/nitro-node:v3.9.4-7f582c3 \
+  @@latestNitroNodeImage=offchainlabs/nitro-node:v3.11.3-beb2108@@ \
   --conf.file /home/user/.arbitrum/node-config.json
 ```
 

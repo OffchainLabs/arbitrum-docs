@@ -20,7 +20,7 @@ Chains settling to Ethereum or Arbitrum chains use `block.number` for all block 
 
 :::
 
-By default, the challenge period lasts approximately one week, which equates to roughly 45,818 L1 blocks for chains that settle to Ethereum or an Arbitrum chain. The default duration design is to provide sufficient time for validators to detect and challenge fraudulent assertions.
+By default, the challenge period lasts approximately one week, which equates to roughly @@arbOneDisputeWindowBlocks=45818@@ L1 blocks for chains that settle to Ethereum or an Arbitrum chain. The default duration design is to provide sufficient time for validators to detect and challenge fraudulent assertions.
 
 On the other hand, the extra challenge period adds a buffer of 40 minutes by default, 200 L1 blocks for chains settling to Ethereum or an Arbitrum chain. This time ensures that any last-minute challenges or ongoing dispute resolution processes can be completed before the Rollup finalizes its state.
 
@@ -66,7 +66,7 @@ Replace:
 
 For Arbitrum chains aligned with Arbitrum One's configuration, the recommended settings are:
 
-- **Challenge period blocks**: 45,818 Ethereum blocks (approximately one week).
+- **Challenge period blocks**: @@arbOneDisputeWindowBlocks=45818@@ Ethereum blocks (approximately one week).
 - **Extra challenge period blocks**: 200 Ethereum blocks (approximately 40 minutes).
 
 These values offer a robust and balanced setup for most Rollup use cases. Developers should consider their application’s requirements when adjusting these parameters:

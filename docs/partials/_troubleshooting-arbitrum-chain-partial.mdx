@@ -161,7 +161,7 @@ The actual maximum throughput depends on the configurable execution parameters:
 
 **Using standard Arbitrum chain defaults**
 
-- Block time: 250ms
+- Block time: @@l2BlockTimeMs=250@@ms
 - Block gas limit: 32M L2 gas
 - Max L2 gas per second: 128M gas/sec
 - These parameters are entirely configurable, for example, by dropping the block time to 100ms or by increasing the block gas limit (which comes at the cost of faster state bloat).
@@ -231,7 +231,7 @@ Learn more: [Nitro database snapshots](https://docs.arbitrum.io/run-arbitrum-nod
 
 Over time, without creating assertions, the validator whitelist in the Rollup contract can become disabled. If you look at the [`removeWhitelistAfterValidatorAfk`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62) method, it allows you to disable the whitelist after `confirmPeriodBlocks + VALIDATOR_AFK_BLOCKS` L1 blocks have passed since the last assertion created.
 
-As a default, that's 7200 + 45818 blocks (a bit less than eight days). Disabling the whitelist is not a significant issue if you continue to monitor the chain and run a validator. It can be enabled using [`setValidatorWhitelistDisabled()`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378) by the chain owner. But it's always better to avoid reaching that point.
+As a default, that's 7200 + @@arbOneDisputeWindowBlocks=45818@@ blocks (a bit less than eight days). Disabling the whitelist is not a significant issue if you continue to monitor the chain and run a validator. It can be enabled using [`setValidatorWhitelistDisabled()`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupAdminLogic.sol#L378) by the chain owner. But it's always better to avoid reaching that point.
 
 ### Is there a way to increase idle timeout on RPC nodes for websocket connections?
 

@@ -99,6 +99,8 @@ Skip with `HUSKY=0 git commit` when needed.
 
 ALWAYS READ THE [PATTERN GUIDE](docs/Offchain-pattern-guide.md) AND APPLY ITS RULES IN YOUR WRITING
 
+- **One Quicklook per term per file.** Wrap a term in `<a data-quicklook-from='…'>` on its first mention only. Leave every later mention of that same term as plain text.
+
 ## PR Authoring conventions
 
 - PR descriptions start from `.github/pull_request_template.md` — preserve its top-level headings (`## Description`, `## Document type`, `## Checklist`, `## Additional Notes`) and fill the sections rather than replacing them.

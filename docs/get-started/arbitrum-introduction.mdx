@@ -85,11 +85,11 @@ For the full protocol, read the [BoLD gentle introduction](/how-arbitrum-works/b
 
 There is a delay, but it applies to one action, not to everyday activity.
 
-| Action                                   | Delay                   |
-| ---------------------------------------- | ----------------------- |
-| Withdraw funds from Arbitrum to Ethereum | Yes, typically 6.4 days |
-| Use a third-party fast bridge            | No, for a fee           |
-| Deposit funds from Ethereum to Arbitrum  | No                      |
+| Action                                   | Delay                                               |
+| ---------------------------------------- | --------------------------------------------------- |
+| Withdraw funds from Arbitrum to Ethereum | Yes, typically @@arbOneDisputeWindowDays=6.4@@ days |
+| Use a third-party fast bridge            | No, for a fee                                       |
+| Deposit funds from Ethereum to Arbitrum  | No                                                  |
 
 The <a data-quicklook-from="challenge-period">challenge period</a> delays withdrawals back to Ethereum because that is the point where you cross a trust boundary. It does not affect the transactions you send inside Arbitrum.
 
