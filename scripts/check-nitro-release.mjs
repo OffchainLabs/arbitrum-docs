@@ -61,6 +61,10 @@ function isNewer(candidate, current) {
   return false;
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /**
  * The published node image for a release, read from Docker Hub.
  *
@@ -81,7 +85,7 @@ async function resolvePublishedNodeImage(tag) {
   }
 
   const { results = [] } = await response.json();
-  const exact = new RegExp(`^${tag.replace(/[.]/g, '\\.')}-[0-9a-f]{7}$`);
+  const exact = new RegExp(`^${escapeRegExp(tag)}-[0-9a-f]{7}$`);
   const matches = results
     .filter((result) => exact.test(result.name))
     .sort((a, b) => String(b.last_updated).localeCompare(String(a.last_updated)));
