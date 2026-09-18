@@ -26,7 +26,7 @@ Every withdrawal—whether a token withdrawal through the <Term id="arbitrum-bri
 
 Two properties of this lifecycle cause most confusion:
 
-- **Execution is manual.** Confirmation makes a withdrawal _claimable_; it doesn't deliver funds. Someone (the user through the bridge UI's **Claim** button, or your infrastructure) must execute the claim on the parent chain—see [Executing the message on the parent chain](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#executing-the-message-on-the-parent-chain) for the execution steps. A withdrawal can sit in `CONFIRMED` indefinitely. To learn why the protocol works this way, see [Why child to parent chain messages require manual execution](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging#why-child-to-parent-chain-messages-require-manual-execution).
+- **Execution is manual.** Confirmation makes a withdrawal _claimable_; it doesn't deliver funds. Someone (the user through the bridge UI's **Claim** button, or your infrastructure) must execute the claim on the parent chain. A withdrawal can sit in `CONFIRMED` indefinitely. To learn why the protocol works this way, see [Why child to parent chain messages require manual execution](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging#why-child-to-parent-chain-messages-require-manual-execution).
 - **Time-to-claimable is more than the challenge period.** The clock users care about includes batch posting (minutes) _plus_ waiting for the next assertion to cover their block (up to the chain's assertion posting interval, commonly up to an hour) _plus_ the challenge period after that assertion is created. On a chain with [fast withdrawals](/docs/launch-arbitrum-chain/configuration/validation/fast-withdrawals), the committee's confirmation frequency replaces the challenge period wait, but batch posting and assertion cadence still apply—which is why a "15-minute fast withdrawal chain" can legitimately take an hour or more to reach claimable.
 
 ### Mapping bridge UI phases to protocol states
@@ -74,7 +74,7 @@ Chain operators have three options for reducing the delay:
 
 ## Monitor withdrawals with the SDK
 
-The [`@arbitrum/sdk`](https://github.com/OffchainLabs/arbitrum-sdk) (v4, ethers v5) exposes the lifecycle through `ChildToParentMessage` objects and the `ChildToParentMessageStatus` enum, whose three values match the lifecycle table above: `UNCONFIRMED` (0), `CONFIRMED` (1), and `EXECUTED` (2). The SDK handles both current (BoLD) and legacy assertion models automatically, so the same code works across chains. For the base pattern of getting these message objects from a transaction receipt and executing a claim, see [Using the Arbitrum SDK](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#using-the-arbitrum-sdk).
+The [`@arbitrum/sdk`](https://github.com/OffchainLabs/arbitrum-sdk) (v4, ethers v5) exposes the lifecycle through `ChildToParentMessage` objects and the `ChildToParentMessageStatus` enum, whose three values match the lifecycle table above: `UNCONFIRMED` (0), `CONFIRMED` (1), and `EXECUTED` (2). The SDK handles both current (BoLD) and legacy assertion models automatically, so the same code works across chains.
 
 Arbitrum One, Nova, and Arbitrum Sepolia are pre-registered in the SDK. For any other Arbitrum chain, register it first—all required parameters can be derived from the chain's Rollup contract address:
 
@@ -128,7 +128,7 @@ async function main() {
 main();
 ```
 
-`getFirstExecutableBlock()` returns an estimate of the parent chain block at which the message becomes claimable (based on the covering assertion's creation block plus the challenge period), or `null` once the message is already `CONFIRMED` or `EXECUTED`. Comparing it against the parent chain's current block number gives you a countdown you can surface to users—the same countdown the bridge UI shows. Once the message reaches `CONFIRMED`, execute the claim as shown in [Wait for confirmation and execute the claim](#wait-for-confirmation-and-execute-the-claim).
+`getFirstExecutableBlock()` returns an estimate of the parent chain block at which the message becomes claimable (based on the covering assertion's creation block plus the challenge period), or `null` once the message is already `CONFIRMED` or `EXECUTED`. Comparing it against the parent chain's current block number gives you a countdown you can surface to users—the same countdown the bridge UI shows.
 
 ### Wait for confirmation and execute the claim
 
@@ -210,7 +210,7 @@ For a production monitor, a practical pattern is:
 
 ## Query assertion and outbox state onchain
 
-If you prefer raw contract calls—or want to monitor the assertion pipeline itself rather than individual messages—the same lifecycle is observable from three contracts: the `ArbSys` precompile on the child chain, and the Rollup and Outbox contracts on the parent chain. This differs from [tracing a withdrawal to its execution transaction](/docs/arbitrum-bridge/bridge-transaction-traceability#tracing-withdrawals-from-child-chain-to-parent-chain): the snippet below checks every stage for one withdrawal, which is useful for building an alerting dashboard rather than answering "which parent-chain transaction executed this."
+If you prefer raw contract calls—or want to monitor the assertion pipeline itself rather than individual messages—the same lifecycle is observable from three contracts: the `ArbSys` precompile on the child chain, and the Rollup and Outbox contracts on the parent chain. The following snippet checks every stage for one withdrawal:
 
 ```ts
 import { providers, Contract } from 'ethers';
