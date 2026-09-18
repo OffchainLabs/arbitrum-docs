@@ -8,7 +8,7 @@ user_story: As a current or prospective Arbitrum chain owner, I need to understa
 content_type: concept
 ---
 
-When you run an AnyTrust chain, you choose who holds your chain's data and how many of them must stay honest. This page covers four decisions and their consequences:
+When you run an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust chain</a>, you choose who holds your chain's data and how many of them must stay honest. This page covers four decisions and their consequences:
 
 - Who sits on your <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee</a> (DAC).
 - How to choose `N` (committee size) and `H` (assumed-honest count).
@@ -28,7 +28,7 @@ Committee membership is permissioned, and you control it.
 
 To change membership, generate a new keyset and register it. Refer to [rotate DAS keys](/launch-arbitrum-chain/operate/key-rotation.mdx) for the procedure.
 
-One consequence deserves attention: the chain owner account is the real root of trust. Whoever controls that account can replace your entire committee in a single transaction. If the owner is one key held by one person, your committee's independence rests on that key rather than on the committee.
+One consequence deserves attention: the chain owner account is the real root of trust. Whoever controls that account can replace your entire committee in a single <a data-quicklook-from="transaction">transaction</a>. If the owner is one key held by one person, your committee's independence rests on that key rather than on the committee.
 
 ## Choosing `N` and `H`
 
@@ -47,7 +47,7 @@ A DACert needs `K` signatures, where `K = N + 1 - H`.
 - It sets how many members can go offline before the <a data-quicklook-from="batch-poster">batch poster</a> stops collecting enough signatures. That number is `H - 1`.
 - It sets how many members must stay honest for the availability guarantee to hold. That number is `H`.
 
-Raising `H` buys uptime and costs trust. Raising `N` while holding `H` at 2 does not improve uptime, because tolerance stays at `H - 1`. It does weaken the assumption you depend on, since two honest members out of seven is an easier bet than two out of three.
+Raising `H` buys uptime and costs trust. Raising `N` while holding `H` at 2 does not improve uptime, because tolerance stays at `H - 1`. It does make the assumption easier to satisfy, since two honest members out of seven is a safer bet than two out of three.
 
 <VanillaAdmonition type="danger" title="The SDK default is a development scaffold">
 
@@ -63,16 +63,16 @@ Set `H` to 2 and work up the ladder.
 
 | Malicious members | Honest members | 2-of-N assumption | Result                                                                                          |
 | ----------------- | -------------- | ----------------- | ----------------------------------------------------------------------------------------------- |
-| Up to `N - 2`     | 2 or more      | Holds             | Every valid DACert carries at least one honest signature. That member serves the data.          |
+| Up to `N - 2`     | 2 or more      | Holds             | At least one honest member signs every valid DACert, and that member serves the data.           |
 | `N - 1`           | 1              | Broken            | The malicious members reach `K` without the honest one. They can certify data they never store. |
 | `N`               | 0              | Broken            | Same as above.                                                                                  |
 
-The `N - 1` row is the case worth understanding, because it is where the assumption fails rather than bends. With `H` set to 2 and only one honest member left, the malicious majority produces `K = N - 1` signatures among themselves. They sign a DACert for a data block, the batch poster posts it to the parent chain, and then they refuse to serve the data. The certificate is valid. The data is gone.
+The `N - 1` row is the case worth understanding, because it is where the assumption fails rather than bends. With `H` set to 2 and only one honest member left, the malicious majority produces `K = N - 1` signatures among themselves. They sign a DACert for a data block, the batch poster posts it to the <a data-quicklook-from="parent-chain">parent chain</a>, and then they refuse to serve the data. The certificate is valid. The data is gone.
 
 Here is the precise damage in that case:
 
-- **They cannot forge transactions, mint tokens, or move funds.** Validity comes from executing the data, and validators prove the correct result on the parent chain. Withholding data does not let anyone prove a false result.
-- **They can stop the chain.** Validators cannot reconstruct state from data they cannot read, so they cannot prove new assertions. The chain halts at the last provable point.
+- **They cannot forge transactions, mint tokens, or move funds.** Validity comes from executing the data, and <a data-quicklook-from="validator">validators</a> prove the correct result on the parent chain. Withholding data does not let anyone prove a false result.
+- **They can stop the chain.** Validators cannot reconstruct state from data they cannot read, so they cannot prove new <a data-quicklook-from="assertion">assertions</a>. The chain halts at the last provable point.
 - **Confirmed assertions stay confirmed.** Work already settled on the parent chain does not unwind.
 
 A committee that turns malicious costs you liveness. It does not let anyone steal from your users.
@@ -81,8 +81,8 @@ A committee that turns malicious costs you liveness. It does not let anyone stea
 
 Two measures help, and both are yours to take rather than the committee's:
 
-- **Run your own mirror DAS.** Anyone can run a server that syncs batch data and serves it over the REST API. A mirror you control means you can read your chain's history without asking the committee. Refer to [deploy a mirror DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das.mdx).
-- **Choose members that fail independently.** Five members in one data center under one operator give you `N` of 5 and the real resilience of 1. The protocol counts members; it does not check whether they are genuinely separate.
+- **Run your own mirror DAS.** Anyone can run a server that syncs <a data-quicklook-from="batch">batch</a> data and serves it over the REST API. With a mirror you control, you can read your chain's history without asking the committee. Refer to [deploy a mirror DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das.mdx).
+- **Choose members that fail independently.** Five members in one data center under one operator give you an `N` of 5 and the real resilience of 1. The protocol counts members; it does not check whether they are genuinely separate.
 
 ## What an auditor will ask you
 
@@ -108,7 +108,7 @@ AnyTrust is a technical design. Whether a given configuration meets a specific r
 
 ### Three points worth reiterating
 
-1. **AnyTrust does not encrypt your data.** Committee members hold full <a data-quicklook-from="batch">batch</a> data, compressed but readable. The DAS REST API is designed to be public and cacheable. If your chain carries data that must not leave a jurisdiction or must not reach a third party, the committee is a party to that data, and AnyTrust alone does not protect it.
+1. **AnyTrust does not encrypt your data.** Committee members hold full batch data, compressed but readable. The DAS REST API is designed to be public and cacheable. If your chain carries data that must not leave a jurisdiction or must not reach a third party, the committee is a party to that data, and AnyTrust alone does not protect it.
 
 2. **Retention has a default and a floor.** The batch poster asks members to retain data for `360h` (15 days) by default, set by `node.batch-poster.anytrust-retention-period`. Separately, every node that reads a batch rejects a DACert that expires less than one week after the batch's maximum timestamp. Neither number is a permanent archive. If you must keep history, run an [archive DAS](/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx#archive-da-servers).
 
@@ -117,7 +117,7 @@ AnyTrust is a technical design. Whether a given configuration meets a specific r
 ## Related pages
 
 - [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx) — how keysets, DACerts, and the DAS work
-- [Data availability options](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx) — choosing between <a data-quicklook-from="rollup">Rollup</a>, AnyTrust, and alt-DA
+- [Data availability options](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx) — choosing between <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a>, AnyTrust, and alt-DA
 - [Configure a DAC](/launch-arbitrum-chain/chain-config/data-availability/configure-dac.mdx) — generating and registering a keyset
 - [DAC and DAS operations](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx) — failure modes and fallback behavior
 - [Finality](/how-arbitrum-works/deep-dives/finality.mdx) — what each confirmation level guarantees
