@@ -14,6 +14,8 @@ content_type: reference
 
 These two channels suit different applications. To choose between them, see [when to rely on soft finality versus hard finality](/how-arbitrum-works/deep-dives/finality.mdx#application-implications).
 
+The [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed.mdx) on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is not a third channel. It is a read-only stream for latency-sensitive subscribers, and a Nitro node cannot consume it or follow the chain with it. It delivers no input to the STF.
+
 These transactions serve as inputs for the [<a data-quicklook-from="state-transition-function">State Transition Function</a> (STF)](/how-arbitrum-works/deep-dives/stf.mdx).
 
 ## Message types

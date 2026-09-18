@@ -27,6 +27,8 @@ You can send transactions to the Sequencer through four methods:
 
 The first three options route through a load balancer, while the Sequencer endpoint connects directly.
 
+Which pathway you pick affects how fast a transaction reaches the Sequencer, not where it lands in the block. The chain's <a data-quicklook-from="transaction-ordering-policy">transaction ordering policy</a> decides that. On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, [Priority Gas Auctions (PGA)](/how-arbitrum-works/priority-gas-auction/pga.md) order transactions by the <a data-quicklook-from="priority-fee">priority fee</a> each one pays, so the fee you attach matters more than the route you choose. Other chains may run <a data-quicklook-from="first-come-first-serve-fcfs">first-come, first-serve (FCFS)</a> or [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) instead.
+
 ### Non-sequencer pathway
 
 You can also submit transactions directly to the Delayed Inbox contract on the parent chain. This method works even when the Sequencer is unavailable, providing an additional layer of censorship resistance.
@@ -41,7 +43,7 @@ The Sequencer processes most transactions on Arbitrum. You have four options for
 
 ### Public RPC
 
-Arbitrum provides public RPC endpoints for <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, and Arbitrum Sepolia. These endpoints are rate-limited, making them best for:
+Arbitrum provides public RPC endpoints for Arbitrum One, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, and Arbitrum Sepolia. These endpoints are rate-limited, making them best for:
 
 - Testing and development
 - Light usage and general interactions

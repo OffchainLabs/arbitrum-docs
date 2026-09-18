@@ -203,7 +203,22 @@ For more details on how gas targets affect chain security and validator assumpti
 
 ### Child chain tips
 
-The sequencer prioritizes transactions on a first-come, first-served basis (chains running [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx) modify this for express-lane transactions). Because tips do not make sense in this model, they are ignored. Arbitrum users always pay the basefee regardless of the tip they choose.
+Whether a tip does anything depends on the chain's <a data-quicklook-from="transaction-ordering-policy">transaction ordering policy</a> and on whether the chain collects tips at all. Two settings control this, and a chain needs both before a tip changes anything:
+
+1. **Tip collection.** ArbOS 61 added `setCollectTips` on the [`ArbOwner` precompile](/arbitrum-essentials/precompiles/reference.mdx#arbowner). It ships disabled. Until a chain owner enables it, the chain ignores the tip and the sender pays the basefee alone.
+2. **Ordering that reads the tip.** The sequencer must run an ordering policy that sorts on the `PriorityFee` field.
+
+That gives three outcomes:
+
+| Chain configuration                                                                        | What a tip does                                                        |
+| ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
+| <a data-quicklook-from="first-come-first-serve-fcfs">FCFS</a>, tips not collected          | Nothing. Arrival time sets the order, and the sender pays the basefee. |
+| FCFS or [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction.mdx), tips collected | The chain collects the tip, but the order does not change.             |
+| [PGA](/how-arbitrum-works/priority-gas-auction/pga.md), tips collected                     | The tip sets the ordering position and the chain collects it.          |
+
+Under PGA, the sequencer keys its priority queue on the <a data-quicklook-from="priority-fee">priority fee</a>, computed per <a data-quicklook-from="eip-1559">EIP-1559</a> as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`. Paying more moves a transaction up the queue; it never lowers the basefee the transaction owes. A transaction that pays no tip still gets included, because the anti-starvation boost raises its position each round.
+
+<a data-quicklook-from="arbitrum-one">Arbitrum One</a> runs PGA and collects tips, sending 97% of the proceeds to the <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a> treasury and 3% to the Arbitrum Developer Guild. To turn either setting on for your own chain, see [Priority fees collection](/launch-arbitrum-chain/chain-config/costs/priority-fees.mdx) and [PGA for Arbitrum chains](/launch-arbitrum-chain/chain-config/sequencer/pga.mdx).
 
 ### Gas estimating retryables
 
@@ -227,7 +242,7 @@ Setting the gas target accurately depends on estimating the time required to val
 
 The total fee charged to a transaction is the child chain basefee multiplied by the sum of the child chain gas used and the parent chain calldata charge.
 
-As on Ethereum, a transaction will fail if it does not supply enough gas or specifies a basefee limit below the current basefee. Ethereum also allows a "tip," but Nitro ignores this field and never collects any tips.
+As on Ethereum, a transaction fails if it does not supply enough gas or specifies a basefee limit below the current basefee. Ethereum also allows a "tip." A Nitro chain ignores that field unless the chain owner enables tip collection, and the tip changes the ordering only under PGA. See [Child chain tips](#child-chain-tips).
 
 ### Allocating funds and paying what is owed
 
@@ -278,3 +293,13 @@ The new algorithm is more efficient because the STF doesn't need to continually 
 This change does not affect the `GasTarget`, and therefore does not affect how much overall gas per second the chain will use—only how transactions using that gas could be divided between different blocks.
 
 :::
+
+### How a block closes under PGA
+
+On a chain running PGA, the gas limits above are one of three conditions that close a block. The sequencer seals a block when it reaches the first of:
+
+- The 32 Mgas gas target, with the 64 Mgas effective limit described above and a 32 Mgas cap on any single transaction.
+- A calldata limit of 95,000 bytes.
+- The end of the block's last ordering round.
+
+A block that fills before its last round is finalized right away rather than idling, so a chain under load produces blocks faster than its nominal block time. On Arbitrum One that means 4 to 8 blocks per second. This changes how gas is divided between blocks, not how much gas per second the chain spends: the gas target still governs that. [Block creation under PGA](/how-arbitrum-works/deep-dives/sequencer-transaction-flow.mdx#block-creation-under-pga) covers the round mechanics.
