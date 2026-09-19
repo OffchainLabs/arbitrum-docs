@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 500" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg-grad" x1="800" y1="500" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12aaff" />
+      <stop offset=".3" stop-color="#1b4add" />
+      <stop offset=".75" stop-color="#152c4e" />
+    </linearGradient>
+    <marker id="arrowW" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#FFFFFF" />
+    </marker>
+    <marker id="arrowO" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#FF7700" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1600" height="500" fill="url(#bg-grad)" />
+
+  <!-- Decorative circuit lines (inspired by Arbitrum infographic) -->
+  <g opacity="0.1" stroke="#fff" stroke-width="0.86" fill="none">
+    <polyline points="0,160 120,160 150,140 220,140 250,170 400,170 430,155 520,155" />
+    <circle cx="520" cy="155" r="3.2" fill="#fff" />
+    <polyline points="1600,320 1480,320 1450,340 1380,340 1350,310 1200,310 1170,325 1080,325" />
+    <circle cx="1080" cy="325" r="3.2" fill="#fff" />
+    <polyline points="0,380 80,380 110,365 180,365 200,390 350,390" />
+    <circle cx="350" cy="390" r="3.2" fill="#fff" />
+    <polyline points="1600,120 1520,120 1490,105 1420,105 1390,130 1260,130" />
+    <circle cx="1260" cy="130" r="3.2" fill="#fff" />
+    <polyline points="600,0 600,60 620,80 620,140" />
+    <circle cx="620" cy="140" r="3.2" fill="#fff" />
+    <polyline points="1000,500 1000,440 1020,420 1020,370" />
+    <circle cx="1020" cy="370" r="3.2" fill="#fff" />
+  </g>
+
+  <!-- Title -->
+  <text x="800" y="55" fill="#FFFFFF" font-size="28" font-weight="bold" text-anchor="middle">Traditional architecture</text>
+  <text x="800" y="85" fill="#9DCCED" font-size="16" text-anchor="middle">Computation is opaque — clients trust the vendor</text>
+
+  <!-- Client -->
+  <rect x="120" y="180" width="160" height="80" rx="12" fill="#9DCCED" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="200" y="227" fill="#FFFFFF" font-size="18" text-anchor="middle">Client</text>
+
+  <!-- Arrow: Client -> API Gateway -->
+  <line x1="280" y1="220" x2="395" y2="220" stroke="#FFFFFF" stroke-width="2.5" marker-end="url(#arrowW)" />
+  <text x="337" y="208" fill="#FFFFFF" font-size="14" text-anchor="middle">Request</text>
+
+  <!-- API Gateway -->
+  <rect x="400" y="180" width="200" height="80" rx="12" fill="#12AAFF" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="500" y="227" fill="#FFFFFF" font-size="18" text-anchor="middle">API gateway</text>
+
+  <!-- Arrow: API Gateway -> Backend -->
+  <line x1="600" y1="220" x2="715" y2="220" stroke="#FFFFFF" stroke-width="2.5" marker-end="url(#arrowW)" />
+
+  <!-- Backend Service (opaque) -->
+  <rect x="720" y="170" width="240" height="100" rx="12" fill="#E3066E" stroke="#FFFFFF" stroke-width="1.5" />
+  <line x1="742" y1="170" x2="742" y2="270" stroke="#FFFFFF" stroke-width="1" opacity="0.4" />
+  <line x1="938" y1="170" x2="938" y2="270" stroke="#FFFFFF" stroke-width="1" opacity="0.4" />
+  <text x="840" y="215" fill="#FFFFFF" font-size="18" text-anchor="middle">Business logic</text>
+  <text x="840" y="243" fill="#CCCCCC" font-size="14" text-anchor="middle">(opaque)</text>
+
+  <!-- Arrow: Backend -> Database -->
+  <line x1="960" y1="220" x2="1095" y2="220" stroke="#FFFFFF" stroke-width="2.5" marker-end="url(#arrowW)" />
+
+  <!-- Database -->
+  <ellipse cx="1200" cy="195" rx="70" ry="16" fill="#12AAFF" stroke="#FFFFFF" stroke-width="1.5" />
+  <rect x="1130" y="195" width="140" height="55" fill="#12AAFF" stroke="none" />
+  <line x1="1130" y1="195" x2="1130" y2="250" stroke="#FFFFFF" stroke-width="1.5" />
+  <line x1="1270" y1="195" x2="1270" y2="250" stroke="#FFFFFF" stroke-width="1.5" />
+  <ellipse cx="1200" cy="250" rx="70" ry="16" fill="#12AAFF" stroke="#FFFFFF" stroke-width="1.5" />
+  <text x="1200" y="232" fill="#FFFFFF" font-size="18" text-anchor="middle">Database</text>
+
+  <!-- Trust callout -->
+  <rect x="250" y="340" width="340" height="65" rx="10" fill="none" stroke="#FF7700" stroke-width="2.5" stroke-dasharray="8,4" />
+  <text x="420" y="370" fill="#FF7700" font-size="16" text-anchor="middle">No independent verification.</text>
+  <text x="420" y="393" fill="#FF7700" font-size="16" text-anchor="middle">Client trusts the result.</text>
+
+  <!-- Dashed arrow from Client to callout -->
+  <line x1="200" y1="260" x2="200" y2="365" stroke="#FF7700" stroke-width="2" stroke-dasharray="6,4" />
+  <line x1="200" y1="365" x2="245" y2="365" stroke="#FF7700" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowO)" />
+
+</svg>
