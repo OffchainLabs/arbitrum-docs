@@ -573,6 +573,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/operate/nitro-contracts-upgrade',
+              label: 'Nitro contracts upgrade',
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/operate/ownership-and-access',
               label: 'Ownership and access',
             },
