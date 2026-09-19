@@ -1,0 +1,178 @@
+---
+title: 'Bring a regulated financial product onchain'
+sidebar_label: 'Financial Institutions'
+description: 'An opinionated, decision-by-decision blueprint for regulated institutions bringing tokenized assets, trading, or earn/yield onchain with Arbitrum.'
+user_story: 'As the product, engineering, or compliance lead at a regulated institution bringing a financial product onchain, I want an opinionated, objection-aware decision framework so I can choose a defensible Arbitrum configuration and clear my own risk committee.'
+content_type: concept
+author: anegg0
+sme: gmehta2
+---
+
+Bringing a regulated financial product onchain is a committee decision. Before a single contract ships, your product, engineering, security, and compliance leads all have to agree the architecture is sound — and your regulators have to be able to see it too.
+
+This blueprint is for that group. It treats the move onchain as what it actually is: a stack of dependent decisions, not a menu of features. For a regulated institution the binding constraints aren't block times or benchmarks — they're **regulatory defensibility, operational ownership, and whether your own risk committee will sign off**. Get the order of these decisions wrong and you re-architect mid-flight, hand away chain economics you could have captured, or find you can't show a regulator that your controls match how the system actually runs.
+
+So each decision below is framed around the objection your legal, compliance, and security reviewers will raise. The goal is a configuration you can take _through_ committee, not one that stalls in it.
+
+**What this is:** an opinionated decision framework for the architecture of a compliant, institution-operated chain. **What it isn't:** a step-by-step deployment tutorial (those are linked under [Implement it](#implement-it)) or a sales pitch. It assumes you've decided to go onchain; the open questions are which controls live at the chain level, who operates it, and how you prove it's sound.
+
+## The stack at a glance
+
+Your architecture is five dependent layers. Each builds on the one below it, and two concerns — operations and cost — run through all of them. Read the stack from the bottom up; the sections that follow walk each layer as a decision.
+
+<figure>
+  <img src="/img/solutions-financial-institutions-stack.svg" width="800" alt="Layered architecture for a regulated financial institution on Arbitrum: from the bottom, (1) chain foundation, (2) key management and signing, (3) compliance and controls, (4) interoperability and liquidity, (5) accounts and wallets, with your client product on top, and operations and cost spanning every layer." />
+  <figcaption>The regulated-fintech stack. Each layer is a decision; operations and cost apply at every layer.</figcaption>
+</figure>
+
+How to use this page: read the diagram, walk the five decisions in order, answer the [readiness questions](#are-you-ready) your reviewers will ask, and leave with a [recommended configuration](#recommended-configuration) you can take to committee.
+
+## Decision 1 — Chain foundation
+
+**The decision:** where your product runs, and on what trust model. First, a dedicated Arbitrum chain versus [Arbitrum One](/arbitrum-essentials/public-chains). Then, if dedicated, your data-availability model: a **Rollup** (post data to Ethereum) or an **AnyTrust** chain (a Data Availability Committee). This is the foundation everything else stacks on, and it sets your cost, your withdrawal options, and your decentralization posture.
+
+| Your situation                                                                                                                                   | Recommended                    | Alternative     | Why                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A regulated product that needs chain-level control — embedded compliance, a custom gas token, dedicated throughput, ownership of chain economics | **A dedicated Arbitrum chain** | Arbitrum One    | Only a dedicated chain can run [Compliance Filtering](#decision-3--compliance-and-controls), set its own gas token, and capture fee economics. Arbitrum One can't.                                                  |
+| A consumer product optimizing for fast, cheap UX at scale                                                                                        | **AnyTrust**                   | Rollup          | Lower cost, and it unlocks [Fast Withdrawals](#decision-4--interoperability-and-liquidity) with no new trust assumption. You accept a committee for data availability — structured with named, independent members. |
+| Maximal trust-minimization or L2Beat standing is the priority                                                                                    | **Rollup**                     | AnyTrust        | Strongest trust-minimization, at the cost of higher fees and multi-day withdrawals.                                                                                                                                 |
+| A time-boxed pilot                                                                                                                               | **Start on Arbitrum One**      | Dedicated chain | Immediate liquidity and lowest overhead; migrate to a dedicated chain when your control needs grow.                                                                                                                 |
+
+**If you get it wrong:** choose a Rollup, then discover your consumer product needs 15-minute withdrawals, and you'll bolt a fast-confirmation committee onto it — quietly dropping the trust-minimization you chose Rollup for. Choose AnyTrust without structuring the committee as named, independent members, and your chain's trust rests on a black box a regulator will open first.
+
+**The objection this answers:** _"Why do we need our own chain, which trust model, and what are we conceding on decentralization?"_
+
+## Decision 2 — Key management and signing
+
+**The decision:** how every privileged party on the chain is held and governed. On a dedicated AnyTrust chain with fast withdrawals, that set is larger than "who can move funds": the chain owner and upgrade authority, the sequencer, the validators, the Data Availability Committee, the fast-confirmation committee, and whoever can change the compliance rules.
+
+| Your situation                        | Recommended                                                                                                                                                                                                                        | Alternative                     | Why                                                                                                                                                                          |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A production chain holding real value | **A small set of at least three independent, named operators**, each running a DAC node, a validator, and a fast-confirm signer, and sitting on the security-council multisig; signing via HSM/KMS or MPC; documented key rotation | Ad-hoc or single-signer control | One auditable, named trust set covers data availability, fast finality, governance, and compliance authority — so you can answer "who can act?" with a single, provable list |
+| A testnet or early pilot              | **Managed keys, to move fast**                                                                                                                                                                                                     | A full council up front         | The overhead isn't justified yet — but commit to the migration path to institutional signing before mainnet value lands                                                      |
+
+**If you get it wrong:** scatter these roles or leave them opaque, and you can't give a regulator one clean answer to _"who can move funds, upgrade the chain, sign for data availability, confirm withdrawals, and change the sanctions list?"_ Retrofitting governance across all of them after launch is slow and high-risk.
+
+**The objection this answers:** _"Who can act on this chain — across funds, upgrades, data availability, fast confirmation, and compliance — and can we prove it?"_
+
+Implementation: [ownership and access controls](/launch-arbitrum-chain/operate/ownership-and-access.mdx), [key rotation](/launch-arbitrum-chain/operate/key-rotation.mdx), [KMS signing services](/launch-arbitrum-chain/integrations/bp-kms-signing-services.mdx).
+
+## Decision 3 — Compliance and controls
+
+**The decision:** where you enforce regulatory controls — sanctions screening, KYC and permissioning, and reporting. Arbitrum ships a protocol-level capability for the hardest part.
+
+| Your situation                                                     | Recommended                                                                                                                                                                                                                                                                      | Alternative                | Why                                                                                                                                                                                                          |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A regulated chain that must _prove_ sanctioned activity is blocked | **[Compliance Filtering](/launch-arbitrum-chain/chain-config/validation/compliance-filtering.mdx)** — screening in the Sequencer _and_ the State Transition Function — wired to a provider (TRM or Chainalysis), plus application-layer KYC/permissioning and your own reporting | Application-only screening | Only protocol-layer filtering, with the Transaction Guardian and Delayed Inbox Sentinel, closes the force-inclusion path — so _every_ route into your chain is screened, not just the ones your app controls |
+
+Compliance Filtering enforces at two layers: the Sequencer rejects violating transactions before they're sequenced, and the State Transition Function catches anything force-included through the Delayed Inbox. Restricted addresses come from your provider as salted hashes, so the list is never stored in the clear.
+
+:::note
+Compliance Filtering is available in the ArbOS 61 upgrade but is **off by default**, and the recommendation is to adopt it at least 30 days after ArbOS 61 reaches Arbitrum One. The Delayed Inbox Sentinel must be **activated at chain deployment** — adding it later requires an ArbOS upgrade. Design for the parent-chain deposit edge case (ETH deposited by a restricted address can be stranded in the bridge), and note the burn exception that lets lending protocols liquidate restricted balances.
+:::
+
+Screening addresses is the shipped, protocol-level piece. **KYC, identity, permissioning, and regulator reporting remain application-layer or operational concerns.** Account-level transaction monitoring (KYT) is available through ZeroDev — see [Decision 5](#decision-5--accounts-and-wallets).
+
+**If you get it wrong:** screen only at the application layer and a sanctioned actor can still transact through force-inclusion or a direct contract call — and you can't show a regulator that your controls match your operations. Discover the gap after launch and you're halting or re-architecting under scrutiny.
+
+**The objection this answers:** _"Can we prove to our regulator and our own legal team that every transaction is screened and reportable?"_
+
+## Decision 4 — Interoperability and liquidity
+
+**The decision:** how value moves in and out — withdrawal finality, the bridging model, and launch liquidity.
+
+| Your situation                                                             | Recommended                                                                                                                                                                            | Alternative                            | Why                                                                                                                                                                                                                              |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A consumer product where multi-day exits are unacceptable                  | **[Fast Withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx) on an AnyTrust chain** — a committee of your DAC members confirms withdrawals in ~15 minutes | The standard ~6.4-day challenge window | On AnyTrust, fast confirmation reuses the trust you already place in the DAC, so it adds **no new trusted party**. On a pure Rollup, the same feature introduces a committee trust layer — less trust-minimized than you started |
+| You need deep dollar liquidity and reliable UX at launch                   | **Native USDC (CCTP) over the canonical bridge**, with market-maker liquidity lined up for day one                                                                                     | Relying solely on third-party bridges  | Third-party bridge solver liquidity can run dry at launch, and users hit failed withdrawals                                                                                                                                      |
+| Moving tokenized assets across your chain, Arbitrum One, and future chains | **A mint-and-burn / committee interop model**                                                                                                                                          | Lock-and-mint canonical bridging       | Mint-and-burn keeps a single canonical supply across chains                                                                                                                                                                      |
+
+**If you get it wrong:** ship a consumer product on the standard challenge window and users can't exit for days; lean on third-party bridges and their liquidity dries up on launch day. Or flip on Fast Withdrawals on a _pure Rollup_ without grasping the tradeoff, and you've silently added a committee your decentralization story didn't account for.
+
+**The objection this answers:** _"Can our users exit reliably and quickly — and what trust tradeoff are we accepting to get there?"_
+
+Implementation: [Fast Withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx), [Delayed Inbox finality](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx), [bridged USDC](/launch-arbitrum-chain/integrations/bridged-usdc.mdx). A mint-and-burn interop model for tokenized assets is a custom build — talk to the Offchain Labs team.
+
+## Decision 5 — Accounts and wallets
+
+**The decision:** how your end users hold accounts and transact — smart accounts or raw externally-owned accounts — and how gas, onboarding, recovery, and controls work. This is the [ZeroDev](https://docs.zerodev.app) layer.
+
+| Your situation                                               | Recommended                                                                                                                                                                                                                                                                                | Alternative                               | Why                                                                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Onboarding mainstream users at scale                         | **ZeroDev smart accounts** (ERC-4337 / EIP-7702) with [passkey/social login and recovery](https://docs.zerodev.app/sdk/advanced/recovery)                                                                                                                                                  | Raw EOAs and seed phrases                 | Mainstream users can't manage seed phrases; smart accounts give familiar login and account recovery  |
+| Users shouldn't have to hold or understand gas               | **[Gas sponsorship](https://docs.zerodev.app/sdk/core-api/sponsor-gas)** and/or **[paying gas in a stablecoin](https://docs.zerodev.app/sdk/core-api/pay-gas-with-erc20s)**                                                                                                                | Making users acquire the native gas token | Removes the single biggest onboarding drop-off, and pairs with the gas token you chose in Decision 1 |
+| The institution needs custodial or policy-controlled signing | ZeroDev with a **[custodial signer](https://docs.zerodev.app/sdk/signers/fireblocks)** (Fireblocks, Turnkey, Dfns) plus **[server-side gas policies](https://docs.zerodev.app/meta-infra/gas-policies)** and **[session-key permissions](https://docs.zerodev.app/sdk/permissions/intro)** | Client-only keys                          | Plugs institutional custody and programmable spending limits into the account layer                  |
+
+**If you get it wrong:** ship raw EOAs and a native-gas requirement, and a mainstream product bleeds users at onboarding — and adding account abstraction later means migrating live users. No recovery means lockouts and a support burden.
+
+:::info
+Running ZeroDev on your own dedicated (Orbit) chain, and account-level transaction monitoring (KYT), are supported today but not yet covered in the public ZeroDev docs. **Talk to the ZeroDev team** to scope both for your chain.
+:::
+
+**The objection this answers:** _"How do millions of mainstream users transact without touching crypto or gas — and can we plug in our own custody and controls?"_
+
+## Are you ready? {#are-you-ready}
+
+Answer each question about your own system. Answer with a decision, not a _maybe_ — every "unsure" is a pre-launch work item for the owner named beside it.
+
+**Foundation and data availability** — _product, engineering_
+
+- Do your compliance, gas-token, throughput, or economic requirements need control at the chain level, or can they live in your application on shared infrastructure? _(Decision 1)_
+- Does your cost and withdrawal-latency profile favor AnyTrust — and can you name and govern the DAC members a regulator will ask about? _(Decisions 1, 4)_
+
+**Key management and governance** — _security, engineering_
+
+- Can you name every privileged party — owner, sequencer, validators, DAC, fast-confirm committee, compliance admin — the threshold required to act, and how keys are stored and rotated? _(Decision 2)_
+
+**Compliance and controls** — _compliance, legal_
+
+- Can every transaction path, including force-inclusion and direct contract calls, be screened before it settles? _(Decision 3)_
+- Can you produce the reporting your regulator requires, and who owns updating the restricted-address list? _(Decision 3)_
+
+**Interoperability and finality** — _engineering, product_
+
+- What withdrawal latency does your product require, and does your chain type achieve it without adding trust your risk committee hasn't approved? _(Decision 4)_
+- Is launch liquidity provisioned so users can't hit dry-bridge failures? _(Decision 4)_
+
+**Accounts and UX** — _product, engineering_
+
+- Can users onboard, transact, and recover without managing keys or gas? _(Decision 5)_
+- Does your account layer integrate your custody and controls? _(Decision 5)_
+
+**Operations and cost** — _operations, finance_
+
+- Who operates the chain, and who owns the 24/7 SLA, monitoring, and upgrades?
+- Who funds gas sponsorship, and what are your gas-token and fee-capture economics?
+
+## Recommended configuration {#recommended-configuration}
+
+For a regulated institution bringing a consumer financial product onchain, this is the configuration we recommend — and the reasoning is the same one your committee will apply.
+
+| Layer               | Recommended                                                                                                                                                            |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Foundation          | A dedicated Arbitrum chain, **AnyTrust** data availability, settling to Ethereum                                                                                       |
+| Key management      | At least three named, independent operators running DAC, validator, and fast-confirm roles on a security-council multisig; HSM/KMS or MPC signing; documented rotation |
+| Compliance          | Compliance Filtering (ArbOS 61) in the Sequencer and STF, wired to TRM or Chainalysis; application-layer KYC and permissioning; scheduled regulator reporting          |
+| Interoperability    | Fast Withdrawals via the DAC committee (~15-minute finality, no new trust); native USDC over the canonical bridge; launch liquidity provisioned                        |
+| Accounts            | ZeroDev smart accounts with gas sponsorship or stablecoin gas, session-key policies, and an optional custodial signer                                                  |
+| Operations and cost | A 24/7 operated chain (by you or Offchain Labs); a stablecoin gas token; fee economics captured by the institution                                                     |
+
+Why this configuration: every privileged party is named and governed, every transaction path is screened and reportable, users exit in about 15 minutes without a new trust assumption, and mainstream users onboard without touching gas — with the one real tradeoff, the AnyTrust committee, made explicit and structured as named, independent members.
+
+**When it differs:** if maximal decentralization or L2Beat standing outranks cost and latency, choose a **Rollup** foundation and accept multi-day withdrawals. If you're running a limited pilot, **start on Arbitrum One** and migrate later.
+
+## Implement it {#implement-it}
+
+Once you've made the decisions above, build in the same order.
+
+1. **Foundation and data availability** — [Launch an Arbitrum chain](/launch-arbitrum-chain/overview/introduction.mdx), the [quickstart](/launch-arbitrum-chain/quickstart/sdk-introduction.mdx), [data availability configuration](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx), and [how AnyTrust works](/how-arbitrum-works/deep-dives/anytrust-protocol.mdx).
+2. **Key management** — [ownership and access controls](/launch-arbitrum-chain/operate/ownership-and-access.mdx), [key rotation](/launch-arbitrum-chain/operate/key-rotation.mdx), [KMS signing services](/launch-arbitrum-chain/integrations/bp-kms-signing-services.mdx).
+3. **Compliance** — [Compliance Filtering](/launch-arbitrum-chain/chain-config/validation/compliance-filtering.mdx).
+4. **Interoperability and finality** — [Fast Withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx), [Delayed Inbox finality](/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx), [bridged USDC](/launch-arbitrum-chain/integrations/bridged-usdc.mdx).
+5. **Accounts** — ZeroDev [gas sponsorship](https://docs.zerodev.app/sdk/core-api/sponsor-gas), [pay gas in stablecoins](https://docs.zerodev.app/sdk/core-api/pay-gas-with-erc20s), [session keys](https://docs.zerodev.app/sdk/permissions/intro), and [signer integrations](https://docs.zerodev.app/sdk/signers/fireblocks).
+
+New to this? Start with the [testnet walkthrough](/solutions/financial-institutions/prove-your-first-compliant-chain) to stand up a compliant AnyTrust testnet chain end to end.
+
+:::info
+Custom interop for tokenized assets, running ZeroDev on your dedicated chain, and a fully operated chain with an SLA are scoped directly with the Offchain Labs Enterprise Services team.
+:::
