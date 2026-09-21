@@ -66,6 +66,7 @@
     "@offchainlabs/prettier-config": "0.3.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@trivago/prettier-plugin-sort-imports": "5.2.2",
+    "@types/mdast": "4.0.4",
     "@types/mdx": "^2.0.14",
     "@types/node": "^25.9.5",
     "@types/react": "^19.2.18",
@@ -73,6 +74,7 @@
     "postcss": "^8.5.26",
     "prettier": "3.9.6",
     "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vfile": "6.0.3"
   }
 }

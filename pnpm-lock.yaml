@@ -72,6 +72,9 @@ importers:
       '@trivago/prettier-plugin-sort-imports':
         specifier: 5.2.2
         version: 5.2.2(prettier@3.9.6)
+      '@types/mdast':
+        specifier: 4.0.4
+        version: 4.0.4
       '@types/mdx':
         specifier: ^2.0.14
         version: 2.0.14
@@ -95,6 +98,9 @@ importers:
         version: 4.3.3
       typescript:
         specifier: ^6.0.3
+        version: 6.0.3
+      vfile:
+        specifier: 6.0.3
         version: 6.0.3
 
 packages:
