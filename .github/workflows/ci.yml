@@ -56,6 +56,12 @@ jobs:
       - name: Glossary references resolve
         run: pnpm references:check
 
+      # `<Var>` cannot render inside a code fence, so every `docker run offchainlabs/nitro-node:…`
+      # is a hardcoded literal that a release bump has to rewrite by hand. This is the only thing
+      # that notices when a bump reaches some of them and not the rest.
+      - name: Nitro image tags match the pin
+        run: pnpm nitro:image-check
+
       # Fumadocs has no `onBrokenLinks: 'throw'`, and `pnpm build` does not check links,
       # so this step is the only thing standing between a broken link and main.
       # Caveat: check-links does not validate anchors — a live page with a dead #anchor passes.

@@ -36,7 +36,7 @@ This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (chil
 ### Configuration process:
 
 - **Prepare the sequencer node**: When running your Arbitrum chain's sequencer (e.g., via Docker or local build from Nitro source), add the flags to the startup command. Example for a Dockerized sequencer:
-  `docker run --rm -it -p 8547:8547 offchainlabs/nitro-node:v3.7.2 --chain.id=12345 --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1`
+  `docker run --rm -it -p 8547:8547 offchainlabs/nitro-node:v3.11.4-7d5ac27 --chain.id=12345 --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1`
 - Replace with your chain's parameters (e.g., parent chain URL).
 - **Test and deploy**: Verify in a devnet by submitting a Delayed Inbox transaction (e.g., via a token <Term id="bridge">bridge</Term>) and monitoring release timing in logs. For production, ensure validators are updated to match the new behavior.
 - **Monitor**: Use tools like chain explorers or sequencer logs to track finality times and re-org incidents.

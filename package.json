@@ -29,6 +29,7 @@
     "glossary:migrate": "node scripts/migrate-glossary.mjs",
     "quicklooks:migrate": "node scripts/migrate-quicklooks.mjs",
     "nitro:check-release": "node scripts/check-nitro-release.mjs",
+    "nitro:image-check": "node scripts/pinned-image-check.mjs",
     "precompiles:generate": "node scripts/generate-precompile-tables.mjs",
     "precompiles:check": "node scripts/generate-precompile-tables.mjs --check",
     "references:check": "node scripts/references-check.mjs",

@@ -52,7 +52,7 @@ Start the validation node with the JWT secret:
 docker run --rm -it \
   --entrypoint nitro-val \
   -p 0.0.0.0:5200:5200 \
-  offchainlabs/nitro-node:v3.11.3-beb2108 \
+  offchainlabs/nitro-node:v3.11.4-7d5ac27 \
   --auth.addr 127.0.0.1 \
   --auth.origins 0.0.0.0 \
   --auth.jwtsecret /tmp/nitro-val.jwt \
@@ -77,7 +77,7 @@ Start the bonder node with the following command, connecting it to your validati
 ```bash
 docker run --rm -it \
   -v /some/local/dir/arbitrum:/home/user/.arbitrum \
-  offchainlabs/nitro-node:v3.11.3-beb2108 \
+  offchainlabs/nitro-node:v3.11.4-7d5ac27 \
   --parent-chain.connection.url=<parent-chain-endpoint> \
   --node.staker.enable=true \
   --node.staker.strategy=MakeNodes \
@@ -159,7 +159,7 @@ helm install nitro-validator offchainlabs/nitro --values validation_values.yaml
 To get a full list of parameters for the validation node, you can run the following command:
 
 ```bash
-docker run --rm -it --entrypoint nitro-val  offchainlabs/nitro-node:v3.11.3-beb2108  --help
+docker run --rm -it --entrypoint nitro-val  offchainlabs/nitro-node:v3.11.4-7d5ac27  --help
 ```
 
 ### Additional configurations for helm charts
