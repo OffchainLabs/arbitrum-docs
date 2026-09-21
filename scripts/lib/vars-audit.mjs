@@ -46,6 +46,36 @@ export function parseVarUsages(source) {
   return out;
 }
 
+/**
+ * Every `@@name@@` token inside a Markdown **link destination**, with 1-indexed line numbers.
+ *
+ * `lib/remark-var-urls` resolves these against `vars` at build time — the one place a variable
+ * can appear in a URL, because `<Var>` is a React component and a link destination admits
+ * neither JSX nor spaces (a `<Var>` there makes the link fail to parse entirely; see
+ * INTERNALS.md §Global variables).
+ *
+ * Scope deliberately matches the plugin's: destinations only. A token in prose is left alone by
+ * the plugin, so counting it here would report a usage that never resolves.
+ *
+ * The plugin throws on an unknown name, but only while rendering MDX — that is `pnpm build`, the
+ * non-blocking CI job. Scanning here puts the same failure in the blocking `vars:check` tier.
+ */
+export function parseVarUrlUsages(source) {
+  const out = [];
+  for (const [i, line] of source.split('\n').entries()) {
+    // Inline `](…)` destinations and `[label]: …` reference definitions. A destination cannot
+    // contain whitespace or an unbalanced `)`, which bounds both matches.
+    for (const dest of line.matchAll(/\]\(([^\s)]*)\)|^\s*\[[^\]]+\]:\s*(\S+)/g)) {
+      const url = dest[1] ?? dest[2];
+      // `@@name=value@@` is the upstream Docusaurus marker; keep the name half.
+      for (const m of url.matchAll(/@@([A-Za-z0-9_]+)(?:=[^@]*)?@@/g)) {
+        out.push({ line: i + 1, name: m[1] });
+      }
+    }
+  }
+  return out;
+}
+
 export function auditVars(repoRoot) {
   const schemaSource = readFileSync(path.join(repoRoot, VARS_TS), 'utf8');
   const schemaKeys = parseSchemaKeys(schemaSource);
@@ -63,11 +93,17 @@ export function auditVars(repoRoot) {
   const dynamic = [];
   for (const abs of walk(path.join(repoRoot, CONTENT_DIR), isMdx)) {
     const rel = toPosix(path.relative(repoRoot, abs));
-    for (const u of parseVarUsages(readFileSync(abs, 'utf8'))) {
+    const source = readFileSync(abs, 'utf8');
+    for (const u of parseVarUsages(source)) {
       if (u.name === null) {
         dynamic.push({ rel, line: u.line, raw: u.raw });
         continue;
       }
+      if (!usages.has(u.name)) usages.set(u.name, []);
+      usages.get(u.name).push({ rel, line: u.line });
+    }
+    // `@@name@@` in a link destination is the other way a variable reaches a page.
+    for (const u of parseVarUrlUsages(source)) {
       if (!usages.has(u.name)) usages.set(u.name, []);
       usages.get(u.name).push({ rel, line: u.line });
     }

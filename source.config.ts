@@ -7,6 +7,7 @@ import remarkMath from 'remark-math';
 import { z } from 'zod';
 
 import { referenceSchema } from './lib/reference-schema';
+import { remarkVarUrls } from './lib/remark-var-urls';
 
 /**
  * Per PRD §4.1, every doc page requires:
@@ -100,7 +101,11 @@ export default defineConfig({
     // remark-math + rehype-katex render the LaTeX math ($…$ / $$…$$) used across
     // the ported docs (mirrors the Docusaurus setup). KaTeX CSS is imported in
     // app/layout.tsx.
-    remarkPlugins: [remarkMath],
+    //
+    // remarkVarUrls resolves `@@varName@@` inside link destinations, the one place `<Var>` cannot
+    // reach (a destination admits neither JSX nor whitespace). Order against remarkMath is
+    // irrelevant — they touch disjoint node types.
+    remarkPlugins: [remarkMath, remarkVarUrls],
     rehypePlugins: (v) => [rehypeKatex, ...v],
     //
     // twoslash only activates on ```ts twoslash blocks (TypeScript). Other

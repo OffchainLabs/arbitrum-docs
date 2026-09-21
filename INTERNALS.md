@@ -80,16 +80,16 @@ route with no wiring; there is no per-page React file.
 Most of the team is arriving from `OffchainLabs/arbitrum-docs`. The differences that actually cause
 mistakes:
 
-| Docusaurus                                          | Here                                                                |
-| --------------------------------------------------- | ------------------------------------------------------------------- |
-| `docusaurus.config.js`, presets, plugins            | `next.config.mjs` + `source.config.ts`; no plugin system            |
-| `sidebars.js` — one global file                     | A `meta.json` per directory                                         |
-| Swizzling to override a theme component             | Edit the component; it is your code                                 |
-| `onBrokenLinks: 'throw'`                            | Nothing built in — hence `check-links`, see [The gates](#the-gates) |
-| `02-foo/bar` → `/foo/bar` (numeric prefix stripped) | **Prefix kept verbatim** in the slug                                |
-| `@@varName@@` preprocessing                         | `<Var name="…" />`, see [Global variables](#global-variables)       |
-| Client-redirects plugin + synced `vercel.json`      | Next `redirects()` only, see [Redirects](#redirects)                |
-| `docs:move` style tooling                           | None official — `pnpm move-doc` is ours                             |
+| Docusaurus                                          | Here                                                                                                                    |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `docusaurus.config.js`, presets, plugins            | `next.config.mjs` + `source.config.ts`; no plugin system                                                                |
+| `sidebars.js` — one global file                     | A `meta.json` per directory                                                                                             |
+| Swizzling to override a theme component             | Edit the component; it is your code                                                                                     |
+| `onBrokenLinks: 'throw'`                            | Nothing built in — hence `check-links`, see [The gates](#the-gates)                                                     |
+| `02-foo/bar` → `/foo/bar` (numeric prefix stripped) | **Prefix kept verbatim** in the slug                                                                                    |
+| `@@varName@@` preprocessing                         | `<Var name="…" />` — except in a link destination, which keeps `@@varName@@`, see [Global variables](#global-variables) |
+| Client-redirects plugin + synced `vercel.json`      | Next `redirects()` only, see [Redirects](#redirects)                                                                    |
+| `docs:move` style tooling                           | None official — `pnpm move-doc` is ours                                                                                 |
 
 The numeric-prefix rule is the sharpest edge when porting URLs: a path that Docusaurus served at
 `/foo/bar` will serve at `/02-foo/bar` here unless the directory is renamed or a redirect is added.
@@ -191,6 +191,40 @@ catches a `<Var name>` with no matching key.**
 
 Values mirror upstream `arbitrum-docs/src/resources/globalVars.js`. Keep them in sync while that
 site is still live.
+
+### Variables in link destinations: `@@varName@@`
+
+**Never put `<Var>` inside a Markdown link destination.** A destination admits neither JSX nor
+whitespace, so this does not render a link at all:
+
+```mdx
+[Interface](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/…)
+```
+
+MDX leaves `[Interface](` as literal text and GFM autolinks the bare `https://github.com/OffchainLabs/`
+prefix, so the reader sees a link followed by a raw URL in parentheses. Use the token form instead:
+
+```mdx
+[Interface](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/@@nitroVersionTag@@/ArbSys.sol)
+```
+
+`lib/remark-var-urls.ts`, wired into `remarkPlugins` in `source.config.ts`, resolves these against
+the same `vars` object at build time. A token is plain text, so the link parses normally and the
+substitution happens on the parsed URL — a value can never change how the document is parsed.
+
+**Which form to use:** `@@varName@@` in a link destination, `<Var name="…" />` everywhere else.
+The plugin only walks `link` and `definition` nodes, so a token left in prose renders literally.
+
+This is the one piece of Docusaurus's `markdown-preprocessor.js` that had to come back. The rest of
+the `@@varName@@` dialect became `<Var>` in the migration (see
+[Coming from Docusaurus](#coming-from-docusaurus)); link destinations are the case a React component
+cannot serve. The migration missed it, and 73 links
+across 5 pages rendered broken from then until 2026-09-21 — `vars:check` saw a resolvable `<Var>`
+name and `check-links` only walks internal links, so neither gate could see it.
+
+Both layers now catch a bad name. `vars:check` scans tokens in destinations (blocking CI tier), and
+the plugin throws during render with the file and the name — the stronger check, but it only runs in
+`pnpm build`, which is the non-blocking `Build` job.
 
 ## Redirects
 
