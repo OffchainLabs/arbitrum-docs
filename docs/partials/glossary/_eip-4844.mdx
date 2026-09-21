@@ -1,0 +1,7 @@
+---
+title: EIP-4844
+key: eip-4844
+titleforSort: EIP-4844
+---
+
+An Ethereum Improvement Proposal, also called Proto-Danksharding, live since Ethereum's Dencun upgrade in March 2024. It adds [blobs](/intro/glossary#blob), a data format priced in a fee market of its own: each block measures blob usage against a target, then moves the blob base fee along an exponential curve, up when usage runs above the target and down when it runs below. Arbitrum uses EIP-4844 in two separate ways. [Batches](/intro/glossary#batch) post as blobs from [ArbOS](/intro/glossary#arbos) 20 "Atlas" onward, and the [Fast Feed](/intro/glossary#fast-feed) borrows the pricing curve, rather than blobs themselves, to price subscription tickets. Read the proposal at [EIP-4844](https://eips.ethereum.org/EIPS/eip-4844).

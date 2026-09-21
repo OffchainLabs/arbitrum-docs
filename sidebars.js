@@ -389,6 +389,11 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/chain-config/sequencer/timeboost',
                   label: `Timeboost`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/sequencer/pga',
+                  label: `PGA`,
+                },
               ],
             },
             {
@@ -452,6 +457,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/custom-genesis-state',
+              label: `Custom genesis state`,
+            },
+            {
+              type: 'doc',
               id: 'launch-arbitrum-chain/deploy/configure-node',
               label: `Node configuration`,
             },
@@ -464,6 +474,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/deploy/token-bridge',
               label: `Token bridge`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/deploy/token-bridge-troubleshooting',
+              label: `Token bridge troubleshooting`,
             },
           ],
         },
@@ -1050,8 +1065,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'STF inputs',
-              id: 'how-arbitrum-works/reference/stf-inputs',
+              label: 'STF',
+              id: 'how-arbitrum-works/deep-dives/stf',
             },
           ],
         },
@@ -1073,6 +1088,11 @@ const sidebars = {
               type: 'doc',
               label: 'Finality and reorgs',
               id: 'how-arbitrum-works/reference/finality-and-reorgs',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/reference/stf-inputs',
             },
           ],
         },
@@ -1109,6 +1129,16 @@ const sidebars = {
               type: 'link',
               href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
               label: 'Deploy a validator on testnet',
+            },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2404.10491',
+              label: 'BoLD Whitepaper',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/bold',
+              label: 'Specification on GitHub',
             },
           ],
         },
@@ -1150,6 +1180,22 @@ const sidebars = {
               type: 'link',
               href: 'https://arxiv.org/abs/2306.02179',
               label: 'White paper: Timeboost',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'PGA and Fast Feed',
+          items: [
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/pga',
+              label: 'How PGA works',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/fast-feed',
+              label: 'Introduction to the Fast Feed',
             },
           ],
         },
