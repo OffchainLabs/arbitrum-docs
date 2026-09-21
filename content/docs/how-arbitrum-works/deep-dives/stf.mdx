@@ -7,7 +7,7 @@ author: petevielhaber
 sme: Mehdi
 ---
 
-An Arbitrum node is a deterministic machine: feed it the same ordered inputs, and it will always produce the same outputs. The job of everything before the STF is to agree on exactly which inputs those are and in what order they should be.
+An Arbitrum node is a deterministic machine: feed it the same ordered inputs, and it will always produce the same outputs. The job of everything before the <Term id="state-transition-function">State Transition Function</Term> (STF) is to agree on exactly which inputs those are and in what order they should be.
 
 ## How it works
 
@@ -17,11 +17,11 @@ Inputs reach a node through two doors. The fast door is the [Sequencer feed](/do
 
 #### 2. The envelope (`L1IncomingMessage`)
 
-Whatever the door, every input lands as one `L1IncomingMessage`: a header plus an opaque L2msg payload. The header is the input surface the STF reads—what kind of message, who put it there, `BlockNumber` and `Timestamp`, the ordering/identity handle, and `L1BaseFee` (parent-chain gas price used). Determinism comes from this: the STF never asks the outside world for the time or the gas price—it only reads what is in the header.
+Whatever the door, every input lands as one `L1IncomingMessage`: a header plus an opaque L2msg payload. The header is the input surface the STF reads: message type, sender, `BlockNumber` and `Timestamp`, the ordering/identity handle, and `L1BaseFee` (the parent-chain gas price used). Determinism comes from this: the STF never asks the outside world for the time or the gas price; it only reads what is in the header.
 
 #### 3. One byte decides the path
 
-The header’s `Kind` routes the message. A handful of kinds are system messages minted by the protocol: `Initialize` (the genesis message that sets the chain ID and base fee), `EthDeposit` (native-token bridging), `SubmitRetryable` (the <Term id="retryable-ticket">retryable-ticket</Term> mechanism behind robust L1→L2 messaging), and `BatchPostingReport` (which lets the STF charge the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) for the L1 data it consumes). The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity.
+The header’s `Kind` routes the message. A handful of kinds are system messages that the protocol mints: `Initialize` (kind 11) is the genesis message that sets the chain ID and base fee, `EthDeposit` (kind 12) bridges the native token, `SubmitRetryable` (kind 9) carries the <Term id="retryable-ticket">retryable-ticket</Term> mechanism behind robust parent-to-child chain messaging, and `BatchPostingReport` (kind 13) lets the STF charge the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) for the parent-chain data it consumes. The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity. For every kind, its value, and the name the bridge contracts use for it, see the [message type reference](/docs/how-arbitrum-works/reference/stf-inputs#message-types).
 
 #### 4. The envelope inside the envelope
 
@@ -29,11 +29,11 @@ Open an `L2Message`, and you’ll find a second type byte—the `L2MessageKind`.
 
 #### 5. From batch to messages
 
-A batch posted to L1 isn’t a list of transactions; it’s a Brotli-compressed blob, or calldata. The inbox multiplexer inspects the leading header byte, decompresses, and pops out individual `L1IncomingMessage`s one at a time—the same shape the feed delivers. By the time anything reaches the STF, both doors have converged on the identical stream of envelopes.
+A batch posted to L1 isn’t a list of transactions; it can be either a Brotli-compressed blob or some calldata. The inbox multiplexer inspects the leading header byte, decompresses, and pops out individual `L1IncomingMessage`s one at a time—the same shape the feed delivers. By the time anything reaches the STF, both doors have converged on the identical stream of envelopes.
 
 #### 6. The unwrap
 
-Finally, `ParseL2Transactions` turns each envelope into the EVM transactions <Term id="geth">Geth</Term> will run: deposits become `ArbitrumDepositTx`, retryables become their submission transaction, batches recurse, and bookkeeping kinds like `RollupEvent` are acknowledged and skipped. What flows out is an ordered list of transactions—and that ordered list, derived deterministically from headers no node can fabricate, is the true input to Arbitrum’s <Term id="state-transition-function">State Transition Function</Term>.
+Finally, `ParseL2Transactions` turns each envelope into the EVM transactions <Term id="geth">Geth</Term> will run: deposits become `ArbitrumDepositTx`, retryables become their submission transaction, batches recurse, and bookkeeping kinds like `RollupEvent` are acknowledged and skipped. What flows out is an ordered list of transactions. That ordered list is derived deterministically from headers that no node can fabricate; it is the true input to Arbitrum’s State Transition Function.
 
 ## Stylus-specific transaction processing
 
