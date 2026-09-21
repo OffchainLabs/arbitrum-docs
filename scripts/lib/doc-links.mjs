@@ -14,11 +14,12 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
-import { isPartial } from './partials.mjs';
+import { PARTIALS_DIR, isPartial } from './partials.mjs';
 
 const posix = path.posix;
 
 export const CONTENT_DIR = path.join('content', 'docs');
+export { PARTIALS_DIR };
 
 /** Convert an OS path to posix separators. */
 export function toPosix(p) {
@@ -90,17 +91,31 @@ export function computeFileMeta(docsRoot, abs) {
   return { slug, url: partial ? null : buildUrl(slug), partial };
 }
 
+/** Every `.md(x)` file under `root`, absolute. Empty when the directory does not exist. */
+function listContentFiles(root) {
+  if (!existsSync(root)) return [];
+  return readdirSync(root, { recursive: true })
+    .map((r) => toPosix(r))
+    .filter((r) => /\.mdx?$/i.test(r))
+    .map((r) => path.join(root, r));
+}
+
 /**
  * Build the docs index for a repo.
+ *
+ * Covers `content/docs` **and** `content/partials`. Partials are not routed, but `<include>` splices
+ * them into real pages, so a link written in a partial ships as a link on every page that includes
+ * it: leaving them out made `check-links` blind to those links and `move-doc` unable to rewrite
+ * them. They are indexed with no slug and no URL, which is what marks them unroutable to every
+ * consumer below.
  *
  * @param {string} repoRoot Absolute repo root.
  * @returns index with `files[]`, `byAbs`, `slugByAbs`, `urlByAbs`, `byUrl`.
  */
 export function buildIndex(repoRoot) {
   const docsRoot = path.join(repoRoot, CONTENT_DIR);
-  const rels = readdirSync(docsRoot, { recursive: true })
-    .map((r) => toPosix(r))
-    .filter((r) => /\.mdx?$/i.test(r));
+  const partialsRoot = path.join(repoRoot, PARTIALS_DIR);
+  const absPaths = [...listContentFiles(docsRoot), ...listContentFiles(partialsRoot)];
 
   const files = [];
   const byAbs = new Set();
@@ -108,10 +123,11 @@ export function buildIndex(repoRoot) {
   const urlByAbs = new Map();
   const byUrl = new Map();
 
-  for (const relFromDocs of rels) {
-    const abs = path.join(docsRoot, relFromDocs);
-    const { slug, url } = computeFileMeta(docsRoot, abs);
-    const partial = url === null;
+  for (const abs of absPaths) {
+    // Everything under content/partials is unroutable regardless of its basename, so the URL is
+    // withheld by location, not only by the `_` prefix `isPartial` looks for.
+    const partial = abs.startsWith(partialsRoot + path.sep) || isPartial(abs);
+    const { slug, url } = partial ? { slug: null, url: null } : computeFileMeta(docsRoot, abs);
     const content = readFileSync(abs, 'utf8');
 
     byAbs.add(abs);
@@ -395,7 +411,7 @@ export function findBrokenLinks(index) {
       // Static assets live outside the docs index: `/audit-reports/x.pdf` is served from
       // `public/audit-reports/x.pdf`. Without this the checker reports every asset link as broken.
       if (resolvesToPublicAsset(pathPart, index.repoRoot)) continue;
-      if (isPartial(file.abs) && !pathPart.startsWith('/') && !/\.mdx?$/i.test(pathPart)) continue;
+      if (file.partial && !pathPart.startsWith('/') && !/\.mdx?$/i.test(pathPart)) continue;
       broken.push({
         file: file.abs,
         rel: file.rel,
