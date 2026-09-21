@@ -150,7 +150,7 @@ The <Term id="parent-chain">parent chain</Term> connection settings (`parent-cha
 | Key                    | Default | Description                                       |
 | ---------------------- | ------- | ------------------------------------------------- |
 | `enable-chunked-store` | `true`  | Send data to DAS in chunks instead of all at once |
-| `server-url`           | —       | DAS server URL                                    |
+| `rpc.url`              | `self-auth` | DAS server URL; overridden at runtime by each `backends[].url` entry |
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client.data-stream`
 
@@ -185,7 +185,7 @@ The <Term id="parent-chain">parent chain</Term> connection settings (`parent-cha
 | `delay-buffer-always-updatable`            | `true`     | Always treat delay buffer as updatable                              |
 | `delay-buffer-threshold-margin`            | `25`       | Blocks before delay buffer threshold to post batch                  |
 
-### `node.da.external-provider` (Newer DAProvider interface)
+### `node.da.external-provider` (newer DAProvider interface)
 
 | Key                  | Default            | Description                                                  |
 | -------------------- | ------------------ | ------------------------------------------------------------ |
