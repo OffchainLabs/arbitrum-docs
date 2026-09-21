@@ -99,7 +99,7 @@ The queue is deliberately a short buffer, not a mempool: with default settings i
 
 As soon as a block is created, the transaction streamer hands the new message to the broadcaster, which publishes it over WebSocket on the sequencer feed ([`transaction_streamer.go#L1307`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbnode/transaction_streamer.go#L1307)). Full nodes and [feed relays](/docs/run-a-node/run-feed-relay) consume the feed to give sub-second <Term id="soft-confirmation">soft confirmations</Term>; see [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed).
 
-Independently, the batch poster compresses the sequenced transactions and posts them to the sequencer inbox on the parent chain, at which point they inherit the parent chain's finality. Validators then re-execute the posted sequence and assert the resulting state. [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer#sequencing-and-broadcasting) covers the feed, batch posting, and the finality trade-offs in detail, and [Assertions](/docs/how-arbitrum-works/deep-dives/assertions) covers validation.
+Independently, the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) compresses the sequenced transactions and posts them to the sequencer inbox on the parent chain, at which point they inherit the parent chain's finality. Validators then re-execute the posted sequence and assert the resulting state. [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer#sequencing-and-broadcasting) covers the feed, batch posting, and the finality trade-offs in detail, and [Assertions](/docs/how-arbitrum-works/deep-dives/assertions) covers validation.
 
 ## Tuning guidance for chain operators
 
@@ -118,6 +118,8 @@ This pattern complements rather than replaces queue tuning: `queue-size` and `qu
 ## Related resources
 
 - [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer): feed, batch posting, finality, and the delayed inbox escape hatch
+- [Finality](/docs/how-arbitrum-works/deep-dives/finality): what soft and hard finality guarantee, and which one to wait for
+- [The batch poster](/docs/how-arbitrum-works/deep-dives/batchposter): what happens after sequencing, from segment building to the parent chain transaction
 - [Transaction lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle): all submission pathways, including bypassing the Sequencer
 - [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers): public endpoint behavior, retries, and fallback patterns
 - [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs): redundant Sequencers with Redis-based coordination
