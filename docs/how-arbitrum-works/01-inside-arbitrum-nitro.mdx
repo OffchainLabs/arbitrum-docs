@@ -420,7 +420,7 @@ This would introduce a serious problem for certain types of L1-to-L2 interaction
 
 ### L1-to-L2 ticket-based transactions
 
-Fortunately, we have another method for L1-to-L2 calls that is more robust against gas-related failures and uses a ticket-based system. The idea is that an L1 contract can submit a "retryable" transaction. The Nitro chain will try to run that transaction. If the transaction succeeds, nothing else needs to happen. But if the transaction fails, Nitro will create a "ticketID" that identifies that failed transaction. Later, anyone can call a special <a data-quicklook-from="precompile">precompiled contract</a> at L2, passing in the `ticketID`, to try redeeming the ticket and re-executing the transaction.
+Fortunately, we have another method for L1-to-L2 calls that is more robust against gas-related failures and uses a ticket-based system. The idea is that an L1 contract can submit a "retryable" transaction and generate a `ticketID`. The Nitro chain will try to run that transaction. If the transaction succeeds, nothing else needs to happen. But if the transaction fails, anyone can call a special <a data-quicklook-from="precompile">precompiled contract</a> at L2 later, passing in the `ticketID`, to try redeeming the ticket and re-executing the transaction.
 
 When saving a transaction for retry, Nitro records the sender's address, destination address, callvalue, and calldata. All of this is saved, and the callvalue is deducted from the sender's account and (logically) attached to the saved transaction.
 
