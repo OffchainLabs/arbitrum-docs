@@ -28,6 +28,28 @@ const { rewrite: rewriteSuffix } = rewritePath(
   `${docsContentRoute}{/*path}/content.md`,
 );
 
+/**
+ * Mark a response as varying by `Accept`.
+ *
+ * Steps 1 and 2 serve two representations of one URL — the HTML page and the markdown route they
+ * rewrite to — so a shared cache keying on the URL alone can hand an agent's markdown to a browser.
+ * The Docusaurus deployment set this header in `vercel.json`; that file is gone, so it is set here
+ * and in `next.config.mjs` (which covers the routes the bypass list above returns early for).
+ *
+ * `append`, not `set`: Next puts its own RSC tokens in `Vary` on app router responses, and
+ * overwriting them would break router-cache correctness.
+ *
+ * Known limit: this survives on the rewritten markdown responses (route handlers) but NOT on the
+ * HTML page render — `base-server`'s `setVaryHeader` replaces `Vary` on the app-page path, and
+ * neither middleware nor `headers()` can get ahead of it. That direction is currently harmless
+ * because the docs page renders dynamically (`no-cache`), so no shared cache stores it. If the page
+ * is ever made statically cacheable, re-check this.
+ */
+function varyOnAccept(response: NextResponse): NextResponse {
+  response.headers.append('Vary', 'Accept');
+  return response;
+}
+
 export default function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   // Routes served verbatim — skip markdown content-negotiation entirely.
@@ -60,16 +82,16 @@ export default function proxy(request: NextRequest) {
   // 1. Explicit `.md` suffix: rewrite to the markdown route.
   const suffixResult = rewriteSuffix(request.nextUrl.pathname);
   if (suffixResult) {
-    return NextResponse.rewrite(new URL(suffixResult, request.nextUrl));
+    return varyOnAccept(NextResponse.rewrite(new URL(suffixResult, request.nextUrl)));
   }
 
   // 2. Content negotiation: `Accept: text/markdown` rewrites to the .md route.
   if (isMarkdownPreferred(request)) {
     const negResult = rewriteDocs(request.nextUrl.pathname);
     if (negResult) {
-      return NextResponse.rewrite(new URL(negResult, request.nextUrl));
+      return varyOnAccept(NextResponse.rewrite(new URL(negResult, request.nextUrl)));
     }
   }
 
-  return NextResponse.next();
+  return varyOnAccept(NextResponse.next());
 }
