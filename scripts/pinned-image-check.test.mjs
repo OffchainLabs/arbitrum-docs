@@ -49,6 +49,19 @@ test('pages describing a past release are exempt', () => {
   assert.equal(staleTags(source, PIN, 'content/docs/run-a-node/run-full-node.mdx').length, 1);
 });
 
+test('the frozen archive is exempt but live partials are not', () => {
+  const source = 'docker run offchainlabs/nitro-node:v3.11.3-beb2108';
+  const archived = 'content/_versions/v1/run-a-node/nitro/build-nitro-locally.mdx';
+  const partial = 'content/partials/run-a-node/_orbit-chains-parameters.mdx';
+
+  assert.ok(isHistorical(archived));
+  assert.deepEqual(staleTags(source, PIN, archived), []);
+
+  // A partial is live content, so the same tag still counts against the pin there.
+  assert.equal(isHistorical(partial), false);
+  assert.equal(staleTags(source, PIN, partial).length, 1);
+});
+
 test('a listed exception is exempt and an unlisted page is not', () => {
   const rel = 'content/docs/launch-arbitrum-chain/operate/arbos-upgrade.mdx';
   assert.ok(isHistorical(rel));

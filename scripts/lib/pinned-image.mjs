@@ -30,6 +30,23 @@ const TAG_ALLOWLIST = new Set(['latest', '...']);
 const HISTORICAL_DIRS = ['content/docs/run-a-node/arbos-releases/', 'content/docs/notices/'];
 
 /**
+ * The frozen archive.
+ *
+ * Every page under `content/_versions/` is a snapshot of how the docs read at one point in time,
+ * which is the entire reason it is a separate non-routed collection. A snapshot naming the image
+ * that was current when it was taken is correct by construction, so holding it to today's pin would
+ * ask a reader to accept a version that did not exist on the date the page describes.
+ *
+ * Nothing under it carries a tag today, so this changes no current result. It is here because the
+ * archive grows by hand-registration: the first page archived while carrying a hardcoded tag would
+ * redden this gate, and the only ways out would be to falsify the snapshot or to file a permanent
+ * EXCEPTIONS entry for something that is exempt as a category.
+ *
+ * Partials are live content and stay covered.
+ */
+const ARCHIVE_DIR = 'content/_versions/';
+
+/**
  * Individual lines that name an older release on purpose. Keyed by file, valued with the reason,
  * so an entry has to be justified rather than silently added.
  */
@@ -52,9 +69,16 @@ export function pinnedImage(repoRoot = process.cwd()) {
   return { image, tag: image.slice(IMAGE_REPO.length + 1) };
 }
 
-/** True when `rel` is a page whose image tags are pinned to a past release by design. */
+/**
+ * True when `rel` is a page whose image tags name a past release by design — either because the
+ * page describes that release, or because it is a snapshot taken while that release was current.
+ */
 export function isHistorical(rel) {
-  return HISTORICAL_DIRS.some((dir) => rel.startsWith(dir)) || EXCEPTIONS.has(rel);
+  return (
+    rel.startsWith(ARCHIVE_DIR) ||
+    HISTORICAL_DIRS.some((dir) => rel.startsWith(dir)) ||
+    EXCEPTIONS.has(rel)
+  );
 }
 
 /**
@@ -78,4 +102,4 @@ export function staleTags(source, pinnedTag, rel = '') {
   return found;
 }
 
-export { EXCEPTIONS, HISTORICAL_DIRS, IMAGE_REPO, TAG_ALLOWLIST };
+export { ARCHIVE_DIR, EXCEPTIONS, HISTORICAL_DIRS, IMAGE_REPO, TAG_ALLOWLIST };
