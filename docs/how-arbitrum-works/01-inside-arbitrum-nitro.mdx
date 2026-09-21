@@ -430,7 +430,7 @@ Normally, the original submitter tries to ensure their transaction succeeds imme
 
 Submitting a transaction in this way incurs a fee in **ETH**, which the submitter must pay and varies based on the transaction's calldata size. Once submitted, the ticket is valid for about a week. If the ticket is not redeemed within that period, it is deleted.
 
-When the ticket is redeemed, the pre-packaged transaction runs with sender and origin set to the original submitter, and with destination, callvalue, and calldata set to the values the submitter provided at the time of submission.
+When the ticket is redeemed, the pre-packaged transaction runs with sender and origin set to the <a data-quicklook-from="address-alias">L2 alias</a> of the original submitter's L1 address, and with destination, callvalue, and calldata set to the values the submitter provided at the time of submission.
 
 This mechanism is a bit more cumbersome than ordinary L1-to-L2 transactions, but it has the advantage that the submission cost is predictable and the ticket will always be available for redemption if the submission cost is paid. As long as there is a user willing to redeem the ticket, the L2 transaction will eventually be executed and will not be silently dropped.
 
