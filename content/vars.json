@@ -12,7 +12,7 @@
   "nitroPathToStorage": "arbos/storage",
   "nitroPrecompilesRepositorySlug": "nitro-precompile-interfaces",
   "nitroPrecompilesCommit": "e7e6566ae5b0efa0ad4d779138f64ead11928c66",
-  "goEthereumCommit": "0f618f330b8d78457524839997f0041d86f3cd1a",
+  "goEthereumCommit": "dff2aadcd2e75e33923b13acce6468d847477e79",
   "portalApplicationForm": "https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform",
   "arbOneNitroArchiveSnapshot": "https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar",
   "arbOneClassicArchiveSnapshot": "https://snapshot.arbitrum.foundation/arb1/classic-archive.tar",
