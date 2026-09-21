@@ -154,7 +154,11 @@ export function buildIndex(repoRoot) {
  * original source for splicing.
  */
 function maskRegions(source) {
-  const chars = [...source];
+  // `split('')` (UTF-16 code units), never `[...source]` (code points): every offset below comes
+  // from `String.prototype` APIs, which count code units. Splitting by code point makes an astral
+  // character one array slot, so blanking it replaces two units with one and shifts every
+  // subsequent range — `check-links` reports the wrong line and `move-doc` splices mid-link.
+  const chars = source.split('');
   const blank = (s, e) => {
     for (let i = s; i < e; i++) if (chars[i] !== '\n') chars[i] = ' ';
   };
