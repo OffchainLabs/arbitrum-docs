@@ -298,7 +298,7 @@ Besides the parameters described in this guide, there are some more options that
 ### Local badger db parameters
 
 - `<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-badger-db-parameters.mdx</include>`
-- used in 2 pages — tags: `launch-arbitrum-chain`, `configuration`, `data-availability`, `data-availability-committees`, `parameters`, `local`, `badger`, `db`
+- ⚠️ unused — tags: `launch-arbitrum-chain`, `configuration`, `data-availability`, `data-availability-committees`, `parameters`, `local`, `badger`, `db`
 
 ### Create the local directory before launching your DAS
 

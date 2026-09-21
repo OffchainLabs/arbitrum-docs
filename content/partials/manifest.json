@@ -586,7 +586,7 @@
       "badger",
       "db"
     ],
-    "usedIn": 2,
+    "usedIn": 0,
     "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-badger-db-parameters.mdx</include>"
   },
   {
