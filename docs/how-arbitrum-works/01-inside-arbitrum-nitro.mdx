@@ -436,7 +436,7 @@ This mechanism is a bit more cumbersome than ordinary L1-to-L2 transactions, but
 
 ### L2-to-L1 message-based calls
 
-Calls from L2-to-L1 operate similarly, using a message-based system. An L2 contract can call a method of the precompiled ArbSys contract to [send a transaction to L1](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). When the execution of the L2 transaction containing the submission is confirmed at L1 (some days later), a message is created in the L1 <a data-quicklook-from="outbox">outbox</a> contract. That message can be triggered by anyone who calls a certain L1 outbox method and submits the `ticketID`. The message is only marked as redeemed if the L1 transaction does not revert.
+Calls from L2-to-L1 operate similarly, using a message-based system. An L2 contract can call a method of the precompiled ArbSys contract to [send a transaction to L1](/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx). When the execution of the L2 transaction containing the submission is confirmed at L1 (some days later), a message is created in the L1 <a data-quicklook-from="outbox">outbox</a> contract. That message can be triggered by anyone who calls a certain L1 outbox method and submits the `L2-to-L1 message proof`. The message is only marked as redeemed if the L1 transaction does not revert.
 
 These L2-to-L1 messages have an unlimited lifetime, until they're successfully redeemed. No rent is required, as the messages (actually a Merkle hash of the messages) are stored on the Ethereum blockchain, which does not require rent. (The cost of allocating storage for the message Merkle roots is covered by L2 transaction fees.)
 
