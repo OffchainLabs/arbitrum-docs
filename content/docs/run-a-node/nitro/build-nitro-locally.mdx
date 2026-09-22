@@ -16,9 +16,13 @@ This how-to assumes that you're running one of the following operating systems:
 
 ## Build a Docker image
 
-### Step 1. Configure [Docker](https://docs.docker.com/engine/install)
+### Step 1. Configure Docker
 
-#### For [Debian](https://docs.docker.com/engine/install/debian)/[Ubuntu](https://docs.docker.com/engine/install/ubuntu)
+Install [Docker](https://docs.docker.com/engine/install) for your operating system.
+
+#### For Debian/Ubuntu
+
+Docker publishes install guides for [Debian](https://docs.docker.com/engine/install/debian) and [Ubuntu](https://docs.docker.com/engine/install/ubuntu). To install it from the command line, run:
 
 ```shell
 for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
@@ -44,7 +48,7 @@ sudo service docker start
 If you are running Ubuntu 22.04, you might get an `Unable to locate package docker-buildx-plugin` error. Try `sudo apt install docker-buildx` instead.
 
 </VanillaAdmonition>
-#### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
+#### For MacOS
 
 Depending on whether your Mac has an Intel processor or Apple silicon, download the corresponding disk image from [Docker](https://docs.docker.com/desktop/install/mac-install/), and move it into your Applications folder.
 
@@ -113,7 +117,9 @@ sudo mkdir -p /usr/local/bin
 echo "export PATH=/opt/homebrew/opt/llvm/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 ```
 
-### Step 5. Configure node [24](https://github.com/nvm-sh/nvm)
+### Step 5. Configure node 24
+
+Install Node.js 24 with [nvm](https://github.com/nvm-sh/nvm).
 
 #### For Debian/Ubuntu
 
@@ -134,7 +140,9 @@ nvm install 24
 nvm use 24
 ```
 
-### Step 6. Configure [Rust](https://www.rust-lang.org/tools/install)
+### Step 6. Configure Rust
+
+Install Rust with [rustup](https://www.rust-lang.org/tools/install).
 
 #### Note that you may also need to use `rustup toolchain remove nightly...` to remove other Rust nightly toolchains that are installed
 
@@ -148,7 +156,9 @@ rustup target add wasm32-wasip1 --toolchain 1.93.0
 cargo install cbindgen
 ```
 
-### Step 7. Install Bison [3.8.2](https://savannah.gnu.org/projects/bison/)
+### Step 7. Install Bison 3.8.2
+
+Install Bison 3.8.2 from the [GNU Bison project](https://savannah.gnu.org/projects/bison/).
 
 #### For Debian/Ubuntu
 
@@ -162,7 +172,9 @@ sudo apt-get install bison
 brew install bison
 ```
 
-### Step 8. Configure Go [1.25](https://github.com/moovweb/gvm)
+### Step 8. Configure Go 1.25
+
+Install Go 1.25 with [gvm](https://github.com/moovweb/gvm).
 
 #### Install and configure Go
 

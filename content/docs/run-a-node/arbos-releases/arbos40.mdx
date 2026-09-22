@@ -38,11 +38,11 @@ ArbOS 40 Callisto is an upgrade to enable Arbitrum's support for the parent chai
 
 Please see below for the list of all changes included in ArbOS 40 Callisto:
 
-### [EIP-7702: Set EOA Account code](https://eips.ethereum.org/EIPS/eip-7702)
+### EIP-7702: Set EOA Account code
 
-EIP-7702 introduces a new transaction type that allows Externally Owned Accounts (EOAs) to set executable code, adding account-abstraction functionality to EOAs such as delegation, batching, sponsorship, and privilege de-escalation. In terms of batching, multiple operations can be combined (i.e., token approval and token spend) in an atomic transaction. Transaction sponsorship or paymaster support is extendable to EOAs. Discrete permissioning is configurable using sub-keys.
+[EIP-7702](https://eips.ethereum.org/EIPS/eip-7702) introduces a new transaction type that allows Externally Owned Accounts (EOAs) to set executable code, adding account-abstraction functionality to EOAs such as delegation, batching, sponsorship, and privilege de-escalation. In terms of batching, multiple operations can be combined (i.e., token approval and token spend) in an atomic transaction. Transaction sponsorship or paymaster support is extendable to EOAs. Discrete permissioning is configurable using sub-keys.
 
-### [EIP-2537: Precompile for BLS12-381 curve operations](https://eips.ethereum.org/EIPS/eip-2537)
+### EIP-2537: Precompile for BLS12-381 curve operations
 
 <VanillaAdmonition type="warning">
 
@@ -51,13 +51,13 @@ This EIP and its specified precompiles are part of ArbOS 40 Callisto but are _no
 </VanillaAdmonition>
 This EIP introduces precompiles for performing cryptographic operations on the BLS12-381 curve, focusing on enhancing the efficiency and security of these operations. This cryptographic primitive provides 120+ bits of security for operations over pairing-friendly curves, compared to the existing BN254 precompile, which offers only 80 bits of security. BLS signature verification is the primary use case for this EIP, although many other applications that rely on point additions, multiplications, and pairing operations stand to benefit from this proposal; examples include zkSNARKS, cross-chain interactions, randomness beacons, and vector commitments.
 
-### [EIP-2935: Serve historical block hashes from state](https://eips.ethereum.org/EIPS/eip-2935)
+### EIP-2935: Serve historical block hashes from state
 
-This EIP proposes storing a wider window of block hashes in the storage of a dedicated system contract. Bundling historical block hashes within the state enables efficient data retrieval for applications that require extended access to historical block hashes, like stateless clients. If approved, ArbOS 40 will adapt this EIP to the L2 and store the same number of L2 block hashes that are generated in the time it takes for 8192 L1 blocks to build—this is approximately 27 hours' worth of L2 block hashes.
+[EIP-2935](https://eips.ethereum.org/EIPS/eip-2935) proposes storing a wider window of block hashes in the storage of a dedicated system contract. Bundling historical block hashes within the state enables efficient data retrieval for applications that require extended access to historical block hashes, like stateless clients. If approved, ArbOS 40 will adapt this EIP to the L2 and store the same number of L2 block hashes that are generated in the time it takes for 8192 L1 blocks to build—this is approximately 27 hours' worth of L2 block hashes.
 
-### Minor Stylus fix to correct caching behavior for contracts that do not exist ([#2998](https://github.com/OffchainLabs/nitro/pull/2998))
+### Minor Stylus fix to correct caching behavior for contracts that do not exist
 
-Currently, Stylus will cache results from calling account_code and account_code_size for a contract that does not exist. We would like to propose a fix to address this so that the call returns the correct information that properly reflects the latest state of the contract’s code or code size. This change will not increment the Stylus version, so re-activation of already deployed Stylus contracts is not required.
+Currently, Stylus will cache results from calling account_code and account_code_size for a contract that does not exist. [Nitro pull request #2998](https://github.com/OffchainLabs/nitro/pull/2998) addresses this so that the call returns the correct information that properly reflects the latest state of the contract’s code or code size. This change will not increment the Stylus version, so re-activation of already deployed Stylus contracts is not required.
 
 ## Pectra changes that are not included in the proposed ArbOS 40 Callisto Upgrade
 
