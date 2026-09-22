@@ -17,8 +17,6 @@ import {
 } from '@floating-ui/react';
 import { type ReactNode, useState } from 'react';
 
-import './styles.css';
-
 /**
  * Generic hover/focus popover built on `@floating-ui/react`. The interaction primitive behind
  * `<Reference>`/`<Term>`: inline, opens on hover/focus, closes on leave/blur. Owns open state,

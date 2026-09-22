@@ -427,3 +427,108 @@ html > body[data-scroll-locked] {
   padding: 0.5rem 0.75rem;
   vertical-align: top;
 }
+
+/* ---------------------------------------------------------------------------
+   Folded-in component stylesheets.
+
+   These rules used to live beside their components, as plain `.css` imports in
+   components/HoverPopover/index.tsx and components/mdx/ReferenceList.tsx. Both
+   components are reachable from components/mdx.tsx, which is a server module,
+   and Next cannot code-split a client component that a server component
+   imports — so Turbopack grouped those imports into one render-blocking chunk
+   on every docs page.
+
+   Folding only one of the two does not help: the chunk still carries the other
+   and the round trip survives. Both plain imports had to go for the chunk to
+   disappear, at which point the CSS modules left behind (VanillaAdmonition,
+   ImageZoom, PdfModal) merge into a chunk that is already being fetched. The
+   modules cannot be folded the same way, because their class names are hashed
+   at build time.
+
+   So: do not add a plain `.css` import to a component in the MDX registry. It
+   reinstates the request for all 350 docs pages. Put the rules here instead.
+   --------------------------------------------------------------------------- */
+
+/* From components/HoverPopover/styles.css. Not behind next/dynamic, because the
+   trigger is a <button> styled to read as inline prose — late CSS would flash a
+   real button mid-sentence on every page citing a glossary term. */
+.hover-popover__trigger {
+  border-bottom: 1px dotted var(--color-fd-primary);
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  /* Match docs.arbitrum.io: the term reads as inline prose, not a help affordance. */
+  cursor: text;
+}
+
+.hover-popover__content {
+  background: var(--color-fd-popover);
+  color: var(--color-fd-popover-foreground, var(--color-fd-foreground));
+  border: 1px solid var(--color-fd-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hover-popover__content--tooltip {
+  max-width: 380px;
+  max-height: 60vh;
+}
+
+.hover-popover__body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+  line-height: 1.6;
+}
+
+.hover-popover__title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--color-fd-foreground);
+}
+
+.hover-popover__body > :last-child {
+  margin-bottom: 0;
+}
+
+/* FloatingPortal mounts the popover on <body>, outside `.prose`, so the global
+   link treatment never reaches these. Restated to match prose links — without it
+   a glossary cross-reference is indistinguishable from body text. */
+.hover-popover__body a {
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: var(--color-fd-primary);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition:
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+
+.hover-popover__body a:hover {
+  color: var(--color-fd-primary);
+  text-decoration-color: currentColor;
+}
+
+/* From components/mdx/reference-list.css. Two rules styling a list that exactly
+   one page renders (content/docs/glossary.mdx), which made it the cheapest of
+   the two plain imports to move. */
+.reference-list__item {
+  scroll-margin-top: 6rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-fd-border);
+  margin-bottom: 1.5rem;
+}
+
+.reference-list__term {
+  margin-bottom: 0.5rem;
+}

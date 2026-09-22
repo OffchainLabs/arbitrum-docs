@@ -1,8 +1,6 @@
 import { getMDXComponents } from '@/components/mdx';
 import { type ReferenceCollectionName, listReferences } from '@/lib/references';
 
-import './reference-list.css';
-
 /**
  * Renders an entire reference collection as a definition list, sorted by `sortAs`, each entry with an
  * `#id` anchor. Backs index pages like the glossary. Server component — definitions render as MDX.
