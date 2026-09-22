@@ -122,9 +122,19 @@ export default defineConfig({
     // That happened on 2026-09-17 when the 7 googleusercontent images in third-party-docs/TheGraph
     // started returning 404.
     //
-    // 'ignore' keeps the <img> and skips the dimensions, so a dead partner URL degrades to a broken
-    // image on one page instead of taking down all 335. The cost is that it degrades silently — no
-    // gate reports a dead image, so this must be watched by hand rather than trusted.
-    remarkImageOptions: { onError: 'ignore' },
+    // `external: false` addresses the cause rather than the symptom: the plugin stops probing
+    // remote images altogether, so compilation makes no network request and is deterministic and
+    // offline. A third-party host going down can no longer affect a build, rather than affecting it
+    // and having the failure swallowed.
+    //
+    // `onError` therefore returns to its default `error`. That is a smaller change than it sounds:
+    // a missing *local* image is already caught twice over, by `check-links` and by module
+    // resolution ("Can't resolve ../../public/img/…"), neither of which `onError` governs. The
+    // default is restored because nothing needs it relaxed, not because it catches something new.
+    //
+    // Safe because no page uses markdown image syntax with a remote src. A markdown remote image
+    // would reach `next/image` without a width and render as a 500; `<ImageZoom src="https://…" />`
+    // and plain `<img>` are unaffected, and that is how every remote image here is written.
+    remarkImageOptions: { external: false },
   },
 });
