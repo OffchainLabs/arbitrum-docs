@@ -222,7 +222,7 @@ impl MyContract {
 }
 ```
 
-<VanillaAdmonition type="caution" title="Mutating calls require &mut self">
+<VanillaAdmonition type="warning" title="Mutating calls require &mut self">
   When using `Call::new_mutating(self)`, your method must take `&mut self` as its first parameter. This ensures the Stylus runtime properly handles state changes and reentrancy protection.
 </VanillaAdmonition>
 
