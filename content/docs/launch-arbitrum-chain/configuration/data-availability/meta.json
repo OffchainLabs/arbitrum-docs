@@ -4,7 +4,6 @@
     "config-data-availability",
     "data-availability-committees",
     "das-docker-deployment",
-    "enable-post-4844-blobs",
     "..."
   ]
 }

@@ -58,7 +58,7 @@ The first two components are straightforward: <Term id="arbos">ArbOS</Term> cred
 Payouts to the fee collector and reward recipient are triggered **by batch posting reports**. In practice this means:
 
 - Funds move shortly after each batch is posted once the report has transited the <Term id="delayed-inbox">delayed inbox</Term> and been processed on the child chain.
-- Batch posting frequency depends on your chain's traffic and batch poster configuration (size, frequency), so payout frequency varies with it. Information about the batch poster configuration is described in [Batch Poster](/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control).
+- Batch posting frequency depends on your chain's traffic and batch poster configuration (size, frequency), so payout frequency varies with it. Information about the batch poster configuration is described in [Batch Poster](/docs/launch-arbitrum-chain/configuration/batch-poster/config-batch-poster).
 - Every report will cover as much of the funds as it can.
 
 ## Estimated versus actual fees
@@ -134,5 +134,5 @@ For structured daily reporting across all fee streams, see [AEP fee reporting](/
 - [How to manage the fee parameters of your Arbitrum chain](/docs/launch-arbitrum-chain/configuration/costs/fee-management) — configuring every parameter and collector mentioned here
 - [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing) — the parent chain pricing mechanism and adaptive algorithm in depth
 - [How to set up an AEP fee router](/docs/launch-arbitrum-chain/configuration/costs/set-up-aep-fee-router) — routing revenue to the parent chain automatically
-- [Configure your chain's batch poster](/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control) — the operational side of the component this revenue reimburses
+- [Configure your chain's batch poster](/docs/launch-arbitrum-chain/configuration/batch-poster/config-batch-poster) — the operational side of the component this revenue reimburses
 - [Batch poster: External signing (KMS)](/docs/launch-arbitrum-chain/integrations/bp-kms-signing-services) — securing the parent chain wallet that this revenue stream reimburses
