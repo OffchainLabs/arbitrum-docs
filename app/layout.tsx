@@ -83,7 +83,13 @@ export default function Layout({ children }: { children: ReactNode }) {
     >
       <body className="flex flex-col min-h-screen font-sans" suppressHydrationWarning>
         <RootProvider
-          theme={{ attribute: 'class', defaultTheme: 'light' }}
+          // `hotKey: false` disables Fumadocs' built-in theme shortcut, which
+          // defaults to a bare `d` (fumadocs-ui provider/base.js) and fires on
+          // every page whenever focus is not in a text field. A single
+          // unmodified letter is too easy to hit by accident — readers land in
+          // dark mode from a stray keystroke with nothing on screen explaining
+          // why. There is a visible theme toggle; that is the intended path.
+          theme={{ attribute: 'class', defaultTheme: 'light', hotKey: false }}
           search={{ SearchDialog: InkeepSearchDialog }}
         >
           {children}
