@@ -23,6 +23,7 @@ canonical for humans, and the one to edit first.**
 - [Custom MDX components](#custom-mdx-components)
 - [The gates](#the-gates)
 - [What nothing catches](#what-nothing-catches)
+- [Page weight and what loads late](#page-weight-and-what-loads-late)
 - [Known trade-off: no static prerendering](#known-trade-off-no-static-prerendering)
 - [Design specs](#design-specs)
 
@@ -392,6 +393,56 @@ Every gate has a blind spot. These are the ones that have bitten:
 
 **Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken.
+
+## Page weight and what loads late
+
+Several things are deliberately kept off the critical path. Each is the kind of change someone
+undoes by accident, so the reason lives here rather than only in a commit message.
+
+**The Inkeep chat widget loads after `load`, on idle.** `@inkeep/cxkit-react` is by a wide margin
+the heaviest thing this site ships — roughly 321 KiB transferred, most of it unused on a page where
+nobody has asked a question. It used to be requested during hydration on every route, putting a
+third of a megabyte in contention with the Largest Contentful Paint for a floating button that is
+worth nothing until clicked. `components/inkeep/inkeep-chat-button.tsx` now waits for the `load`
+event and then a `requestIdleCallback` before rendering it. **Both halves matter**: gating on idle
+alone is not enough, because hydration finishes early and the main thread goes quiet while images
+and fonts are still in flight, so the callback fires back inside the window it was meant to avoid.
+This is not the search path — Cmd-K goes through `components/inkeep/inkeep-search.tsx`, whose own
+dynamic import fires when Fumadocs opens the dialog, and is untouched.
+
+**Only the two upright Aeonik faces are preloaded.** A preload is a promise that the file is needed
+for the initial render. Aeonik Fono (inline code) and JetBrains Mono (fenced blocks) are not: no
+measured page has an LCP element set in either, so both are `preload: false` in `app/layout.tsx`.
+Dropping the preload does not stop the fetch; the browser still requests the file at high priority
+the moment the CSS asks. **A page dense with code pays a little more, so this is a trade, not a free
+win** — the face is discovered by CSS rather than by a link in the head, so it starts later.
+
+**Do not add a plain `.css` import to a component in the MDX registry.** `components/mdx.tsx` is a
+server module, and Next cannot code-split a client component that a server component imports, so
+Turbopack groups those imports into one chunk that blocks every docs page. The two that existed —
+`components/HoverPopover/styles.css` and `components/mdx/reference-list.css` — are folded into
+`app/global.css`, which took docs pages from four blocking stylesheets to three. **Removing one of
+the two would have achieved nothing**: the chunk survives as long as any plain import feeds it.
+The three CSS modules that remain (VanillaAdmonition, ImageZoom, PdfModal) cannot be folded the
+same way, because their class names are hashed at build.
+
+**Keep `lucide-react` on the version `fumadocs-ui` resolves.** `fumadocs-ui` pins a floor that moves
+every few releases; when the direct dependency here falls below it, pnpm installs two copies and
+`fumadocs-core`'s `*` peer resolves onto the older one, so every shared icon ships twice. Nothing in
+the gate suite counts bundle copies, so this failure is silent. Run `pnpm why lucide-react` after
+any Fumadocs bump and confirm one version.
+
+**How this was measured, and what was not.** The stylesheet counts above come from counting
+`<link rel="stylesheet">` in the HTML served by `next start`, and the font-preload counts from
+`link[rel=preload][as=font]` in a headless Chrome page. Both were confirmed against before-and-after
+production builds, along with computed styles on 165 `.reference-list__item` elements and the
+popover trigger to prove nothing moved on screen. **Lighthouse was not re-run for this branch**, so
+there is no score delta to quote here — the upstream change this was ported from measured its own
+tree, not ours. If you need a number, measure it yourself with Lighthouse in mobile form factor
+against `next start`, take the median of at least three interleaved runs, and remember that a local
+server is a floor rather than the number: with no CDN in front of it every request pays a full round
+trip, which is why a 1.3 KB stylesheet can be charged hundreds of milliseconds here and almost
+nothing in production. A loaded machine moves a single score by ten points.
 
 ## Known trade-off: no static prerendering
 
