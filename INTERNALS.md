@@ -39,12 +39,16 @@ monolith would have supplied.** Most of this document describes those pieces.
 
 Four packages are installed here:
 
-| Package             | Version | Responsible for                                                                 |
-| ------------------- | ------- | ------------------------------------------------------------------------------- |
-| `fumadocs-core`     | 16.15.1 | Headless engine: the Loader API, page tree, search, TOC, MDX plugins            |
-| `fumadocs-mdx`      | 15.3.1  | The content source: compiles MDX into typed **collections**                     |
-| `fumadocs-ui`       | 16.15.1 | The default theme: `DocsPage`/`DocsBody` layouts, tabs, accordions, code blocks |
-| `fumadocs-twoslash` | 3.3.0   | Type-checked TypeScript code samples (` ```ts twoslash `)                       |
+| Package             | Version  | Responsible for                                                                 |
+| ------------------- | -------- | ------------------------------------------------------------------------------- |
+| `fumadocs-core`     | 16.15.12 | Headless engine: the Loader API, page tree, search, TOC, MDX plugins            |
+| `fumadocs-mdx`      | 15.4.3   | The content source: compiles MDX into typed **collections**                     |
+| `fumadocs-ui`       | 16.15.12 | The default theme: `DocsPage`/`DocsBody` layouts, tabs, accordions, code blocks |
+| `fumadocs-twoslash` | 3.3.0    | Type-checked TypeScript code samples (` ```ts twoslash `)                       |
+
+`fumadocs-ui` peer-pins `fumadocs-core` to an exact version, and `fumadocs-mdx` requires
+`fumadocs-core ^16.15.3` — so those three move together or not at all. `fumadocs-twoslash` is held
+at 3.3.0 because 4.x depends on `typescript ~7.0.2` and this repo is on TypeScript 6.
 
 `fumadocs-ui` is a theme, not a requirement — the headless core would work without it. We use it,
 and override its tokens rather than forking it.
