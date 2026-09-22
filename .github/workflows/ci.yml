@@ -68,27 +68,27 @@ jobs:
       - name: Internal links
         run: pnpm check-links
 
+      # Reached zero on 2026-09-21 and moved up from `content-debt`. A1 and A4 were cleared in
+      # 0e5a64a, A2 and A5 in 297730a, and A6 shipped at zero with the defect it names.
+      - name: MDX structural lint
+        run: pnpm content:lint
+
   content-debt:
-    # These two gates fail on pre-existing debt, so they report without blocking.
-    # Counts verified against main on 2026-08-31:
+    # This gate fails on pre-existing debt, so it reports without blocking.
+    # Count verified on 2026-09-21:
     #   format:check      49 files unformatted  → fix with `pnpm format`
-    #   content:lint      13 findings across 7 files (breakdown below)
-    #
-    # content:lint by rule:
-    #   A2  invalid admonition type                 7 in  4 files
-    #   A5  internal link keeps a .md/.mdx suffix   6 in  3 files
-    #
-    # A1 (empty admonition body, was 98) and A4 (markdown/entities inside title=, was 68)
-    # are now zero. They were one defect, not 166: the Docusaurus→Fumadocs admonition
-    # codemod stranded body prose inside `title=`. Recovering it in 0e5a64a took this
-    # job from 181 findings to 15.
     #
     # Read the count from the script's own summary line, not by counting printed lines:
-    # content:lint groups by rule and truncates each group, which is how this comment
-    # previously came to claim 39 findings.
+    # a checker that groups by rule and truncates each group is how this comment once
+    # came to claim 39 findings.
     #
     # references:check reached zero and moved into `gates` on 2026-08-20.
     # check-links reached zero and moved into `gates` on 2026-08-31.
+    # content:lint reached zero and moved into `gates` on 2026-09-21. Its history: A1
+    # (empty admonition body, was 98) and A4 (markdown/entities inside title=, was 68)
+    # were one defect, not 166 — the Docusaurus→Fumadocs admonition codemod stranded body
+    # prose inside `title=`, and recovering it in 0e5a64a took this job from 181 to 15.
+    # A2 and A5 went from 9 to 0 in 297730a.
     # Move a step into the `gates` job above once its count reaches zero.
     name: Content debt (non-blocking)
     runs-on: ubuntu-latest
@@ -108,10 +108,6 @@ jobs:
 
       - name: Formatting
         run: pnpm format:check
-        continue-on-error: true
-
-      - name: MDX structural lint
-        run: pnpm content:lint
         continue-on-error: true
 
   build:
