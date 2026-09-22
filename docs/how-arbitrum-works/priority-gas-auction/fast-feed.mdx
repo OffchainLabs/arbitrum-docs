@@ -79,6 +79,8 @@ Access runs on tickets sold by the Fast Feed Payment Contract, an audited contra
 
 Your access starts at the end of the round in which you buy the ticket. You can rotate your credential only when you buy a ticket for a new round.
 
+For the contract calls, the reference purchase bot, and the revert errors you can hit, see [how to buy Fast Feed tickets](/how-arbitrum-works/priority-gas-auction/buy-fast-feed-tickets).
+
 ### Rounds and pricing
 
 The contract sells tickets in fixed rounds and prices them with the mechanism defined in <a data-quicklook-from="eip-4844">EIP-4844</a>. Every ticket in a round costs the same. Demand in one round sets the price for the next: sales above the target push the price up, sales below it push the price down, and the price never falls below the floor.
@@ -104,13 +106,13 @@ The <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a> controls these parame
 
 ## Where the revenue goes
 
-The contract accepts payment in an ERC-20, USD-backed stablecoin. It sends proceeds to a dedicated RewardDistributor contract, which routes 97% to the Arbitrum DAO Treasury and 3% to the Arbitrum Developer Guild. Every subscription payment and every distribution emits an onchain event, so anyone can audit the flow.
+The contract accepts payment in USDG, an ERC-20, USD-backed stablecoin. It sends proceeds to a dedicated RewardDistributor contract, which routes 97% to the Arbitrum DAO Treasury and 3% to the Arbitrum Developer Guild. Every subscription payment and every distribution emits an onchain event, so anyone can audit the flow.
 
 This split follows the framework that Timeboost established, which keeps Arbitrum's ordering-related revenue products aligned.
 
 <VanillaAdmonition type="info">
 
-The Arbitrum Treasury Management (ATM) Council and OAT select the stablecoin. Contract deployment follows that choice, and all contract addresses appear in the Arbitrum One developer documentation once the contracts are live.
+The Arbitrum Treasury Management (ATM) Council and OAT selected USDG as the stablecoin. All contract addresses appear on the [contract addresses page](/arbitrum-essentials/reference/contract-addresses) once the contracts are live.
 
 </VanillaAdmonition>
 
