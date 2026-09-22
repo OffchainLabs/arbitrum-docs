@@ -2,7 +2,7 @@
   {
     "path": "content/partials/_additional-config-params.mdx",
     "title": "Additional Configuration Parameters",
-    "summary": "",
+    "summary": "Amount of time to wait before a challenge period expires.",
     "scope": "neutral",
     "tags": [
       "additional",

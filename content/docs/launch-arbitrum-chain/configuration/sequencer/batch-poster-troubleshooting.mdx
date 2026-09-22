@@ -54,7 +54,7 @@ This error indicates that the parent chain node's mempool has rejected a transac
 ### Resolution
 
 1. **Check the parent chain's current gas prices** and compare them to your data poster's fee cap configuration. If gas prices are above your `--node.batch-poster.data-poster.target-price-gwei`, the data poster can't bid high enough to cover the fee. See [Batch poster fee tuning](/docs/launch-arbitrum-chain/configuration/batch-poster/fee-tuning) for guidance on adjustments.
-2. **Review your queued transaction storage configuration**: If you're using DB or Redis storage, pending transactions accumulate and rely on RBF for inclusion. Consider whether your RBF schedule (`--node.batch-poster.data-poster.replacement-times` for non-blob batch poster, `--node.batch-poster.data-poster.blob-tx-replacement-times` for blob batch poster) is escalating fees quickly enough.
+2. **Review your queued transaction storage configuration**: If you're using DB or Redis storage, pending transactions accumulate and rely on RBF for inclusion. Consider whether your RBF schedule (`--node.batch-poster.data-poster.replacement-times` for non-blob batch poster, `--node.batch-poster.data-poster.blob-tx-replacement-times` for blob batch poster) is escalating fees quickly enough. See [Queued transaction database selection](/docs/run-a-node/run-batch-poster#queued-transaction-database-selection) for storage option details.
 3. **Consider Noop storage for parent chains without mempools**: If your parent chain is an Arbitrum chain or another chain without a traditional mempool, Noop storage avoids this issue entirely by waiting for each transaction receipt before submitting the next one.
 
 <VanillaAdmonition type="info" title="Mempool size limits">
@@ -147,7 +147,6 @@ The exact phrasing and context of retry errors can vary across Nitro versions. T
 2. **Review the queued transaction storage**: If using DB or Redis, the stored transaction state may be stale. A node restart typically resolves transient storage inconsistencies.
 3. **Check parent chain connectivity**: Ensure the batch poster can reliably reach the parent chain RPC. Intermittent connectivity causes retry failures.
 4. **Inspect RBF fee escalation**: If the error mentions "replacement transaction underpriced", the fee increase between attempts may be insufficient. The parent chain typically requires at least a 10% fee increase for RBF. Review the `blob-tx-replacement-times` schedule—shorter intervals may not allow enough price movement between attempts.
-5. **Consider clearing storage as a last resort**: The `--node.batch-poster.data-poster.dangerous.clear-dbstorage` flag clears the queued transaction database on startup. Use this only when necessary, as it discards any tracked pending transactions. See the [Node key rotation guide](/docs/launch-arbitrum-chain/operate/key-rotation) for context on when this flag is used.
 
 ## Reverts and halting
 

@@ -15,7 +15,7 @@ The specific upgrade requirements for each ArbOS release are located under each 
 
 #### Step 1: Update Nitro on nodes and validators
 
-Refer to the [requirements for the targeted ArbOS release](/docs/launch-arbitrum-chain/overview) to identify the specific [Nitro release](https://github.com/OffchainLabs/nitro/releases/) that supports the ArbOS version that you're upgrading to. For example, if your upgrade targets ArbOS 51, you'd use Nitro `v3.9.6` (Docker image: `offchainlabs/nitro-node:v3.9.6-91bf578`) or higher. This is the version of the Nitro stack that needs to be running on each of your Arbitrum chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
+Refer to the [requirements for the targeted ArbOS release](/docs/run-a-node/arbos-releases/overview) to identify the specific [Nitro release](https://github.com/OffchainLabs/nitro/releases/) that supports the ArbOS version that you're upgrading to. For example, if your upgrade targets ArbOS 51, you'd use Nitro `v3.9.6` (Docker image: `offchainlabs/nitro-node:v3.9.6-91bf578`) or higher. This is the version of the Nitro stack that needs to be running on each of your Arbitrum chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
 
 Begin by upgrading your <Term id="validator">validator</Term> node(s) to the specified Nitro version, then update each remaining Arbitrum chain node to match this version.
 
@@ -27,7 +27,7 @@ While every ArbOS upgrade will require an update to the <Term id="wasm-module-ro
 
 If necessary, as defined in the release notes for each ArbOS release ([example of ArbOS 51](/docs/run-a-node/arbos-releases/arbos51)), you may need to deploy new versions of some (or all) of the Nitro contracts to the <Term id="parent-chain">parent chain</Term> of your Arbitrum chain. These contracts include the rollup logic, bridging logic, fraud-proof contracts, and interfaces for interacting with Nitro precompiles. To verify the current version of your Nitro contracts, follow [these instructions](https://github.com/OffchainLabs/chain-actions/blob/main/README.md#check-version-and-upgrade-path) while replacing the inbox contract address and network name with that of your Arbitrum chain. This information will allow you to find the correct upgrade path for your Nitro contracts.
 
-To update the WASM module root and deploy your chain's Nitro contracts to the parent chain for the most recent ArbOS release, you will need the following inputs (obtained from the [requirements for the targeted ArbOS release](/docs/launch-arbitrum-chain/overview)):
+To update the WASM module root and deploy your chain's Nitro contracts to the parent chain for the most recent ArbOS release, you will need the following inputs (obtained from the [requirements for the targeted ArbOS release](/docs/run-a-node/arbos-releases/overview)):
 
 - The WASM module root, and if necessary,
 - The required `nitro-contracts` version

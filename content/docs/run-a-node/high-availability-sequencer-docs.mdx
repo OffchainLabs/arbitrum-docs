@@ -8,14 +8,14 @@ sme: Jason Wan
 
 <VanillaAdmonition type="note">
 
-This documentation is for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, please refer to [How to run a testnet sequencer node](/docs/run-a-node/sequencer/run-sequencer-node).
+This documentation is for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, see [How to run a testnet sequencer node](/docs/run-a-node/sequencer/run-sequencer-node).
 
 </VanillaAdmonition>
 ## Introduction
 
 The sequencer is a critical component of your Arbitrum chain and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from full nodes, queuing them, and returning feed messages to those full nodes. It subsequently sends queued transactions to batch posters for data posting.
 
-If your sequencer goes offline, the network cannot process new transactions arriving at the child chain's RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
+If your sequencer goes offline, the network cannot process new transactions arriving at the child chain's RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
 
 ## Prerequisites
 
@@ -33,10 +33,10 @@ Before you begin, ensure you have:
 A high-availability sequencer deployment consists of seven key components:
 
 1. **CDN/Load Balancer**: Manages traffic routing and bot detection
-2. **Nitro Fullnodes**: Process read requests and forward write transactions
+2. **Nitro full nodes**: Process read requests and forward write transactions
 3. **External Relays**: Handle public feed traffic
 4. **Sequencer Relays**: Combine feeds from all sequencers
-5. **Sequencers**: Multiple redundant transaction queueing machines
+5. **Sequencers**: Multiple redundant transaction queuing machines
 6. **Redis**: Coordinates active sequencer selection and sequencer-related information sharing
 7. **Batch Poster**: Posts transaction batches to the parent chain
 
@@ -56,7 +56,7 @@ In this configuration, full nodes forward transactions to a predefined endpoint 
 
 <ImageZoom src="/img/ha-sequencer-send-to-nonactive.png" alt="send to active disable" className="img-900px" />
 
-## Using helm charts for deployment
+## Using Helm charts for deployment
 
 We recommend using the [Offchain Labs community Helm charts](https://github.com/OffchainLabs/community-helm-charts) to deploy your high-availability sequencer setup. These charts provide pre-configured templates for all the necessary components and make it easier to maintain your deployment. Base configuration values are provided in the examples below. However, you should adjust them to fit your needs and use values files for production deployments.
 
@@ -75,7 +75,7 @@ We strongly recommend using a CDN for managing traffic and security concerns:
 
 ### 2. Relays setup
 
-The requirement is for two types of relays in the architecture:
+The architecture requires two types of relays:
 
 #### Sequencer relays
 
@@ -84,7 +84,7 @@ The requirement is for two types of relays in the architecture:
 - All other components connect to these relays instead of directly to the sequencers
 - Minimize direct load on sequencer nodes
 
-Deploy sequencer relays using the relay helm chart:
+Deploy sequencer relays using the relay Helm chart:
 
 ```shell
 helm install sequencer-relay offchainlabs/relay \
@@ -104,7 +104,7 @@ Key configuration parameters:
 - Connect to Sequencer Relays (not directly to sequencers)
 - Handle all public feed requests
 - Provide an additional layer of isolation for production sequencers
-- Since these are public facing, ensure they scale appropriately based on your traffic needs:
+- Since these are public-facing, ensure they scale appropriately based on your traffic needs:
 
 ```shell
 helm install external-relay offchainlabs/relay \
@@ -117,7 +117,7 @@ You can check [run a feed relay](/docs/run-a-node/run-feed-relay) to see how to 
 
 ### 3. Nitro full node setup
 
-```console
+```shell
 helm install fullnode offchainlabs/nitro \
   --set replicaCount=2 \
   --set configmap.data.parent-chain.id=<parent-chain-id> \
@@ -130,7 +130,7 @@ helm install fullnode offchainlabs/nitro \
 
 To enable Redis-based active sequencer discovery:
 
-- Monitor Redis to identify the active Sequencer
+- Monitor Redis to identify the active sequencer
 - Enable with: `-execution.forwarder.redis-url=redis://<redis-url>:6379`
 - Ensure connectivity to individual sequencer services and Redis
 - Test failover scenarios before production deployment
@@ -146,7 +146,7 @@ helm install fullnode offchainlabs/nitro \
 
 #### Mutating-only endpoint (optional)
 
-For high availability, it is recommended to route mutating transactions to a fleet of `precheckers`, which will forward them to the sequencer. This configuration can be done by setting up a separate endpoint for mutating transactions and only allowing calls such as `eth_sendRawTransaction` to be routed to the `precheckers`, which then route to the sequencer. This insulates the sequencer from unnecessary load and enables it to focus on transaction ordering. However, , this configuration requires custom load-balancing logic and is out of the scope of this guide.
+For high availability, we recommend routing mutating transactions to a fleet of `precheckers`, which forward them to the sequencer. To do this, set up a separate endpoint for mutating transactions and allow only calls such as `eth_sendRawTransaction` to route to the `precheckers`, which then route to the sequencer. This insulates the sequencer from unnecessary load and enables it to focus on transaction ordering. However, this configuration requires custom load-balancing logic and is out of scope for this guide.
 
 ### 4. Redis setup
 
@@ -164,13 +164,13 @@ Set up a highly available Redis cluster for sequencer coordination:
 - Backups enabled
 
 - **Configuration**:
-  - Use a Redis cluster or Redis Sentinel for high-availability
+  - Use a Redis cluster or Redis Sentinel for high availability
   - Secure the endpoint with proper network policies
   - Monitor Redis health as part of your overall monitoring strategy
 
 ### 5. Sequencer setup
 
-Deploy multiple sequencer replicas with availability zone spread using the nitro helm chart (availability zone spread is not demonstrated in the example below):
+Deploy multiple sequencer replicas with availability zone spread using the Nitro Helm chart (availability zone spread is not demonstrated in the example below):
 
 ```shell
 helm install sequencer offchainlabs/nitro \
@@ -178,7 +178,7 @@ helm install sequencer offchainlabs/nitro \
   --set configmap.data.parent-chain.id=<parent-chain-id> \
   --set configmap.data.parent-chain.connection.url=<parent-node-url> \
   --set configmap.data.chain.id=<child-chain-id> \
-  --set configmap.data.node.sequencer.enable=true \
+  --set configmap.data.node.sequencer=true \
   --set configmap.data.node.delayed-sequencer.enable=true \
   --set configmap.data.node.seq-coordinator.enable=true \
   --set configmap.data.node.seq-coordinator.redis-url=<redis-url> \
@@ -198,7 +198,7 @@ The sequencer coordinator is the key component for high availability. These para
 | `node.seq-coordinator.redis-url` | Redis URL for coordination   | Your Redis URL       |
 | `node.seq-coordinator.my-url`    | URL for this sequencer       | Unique per sequencer |
 
-For the full set of coordinator flags and their defaults, see the [sequencer configuration reference](/docs/run-a-node/nitro/cli-flags-reference#node).
+For the full set of coordinator flags and their defaults, see [Sequencer configuration reference](/docs/launch-arbitrum-chain/configuration/sequencer/sequencer-config-reference#sequencer-coordinator-flags).
 
 #### Redis priority registration
 
@@ -206,7 +206,7 @@ Configuring `redis-url` and `my-url` is not enough to make a sequencer eligible.
 
 Nitro treats this key as **read-only**. No sequencer can write itself into it. You populate it with the [Sequencer Coordination Manager (SQM)](/docs/run-a-node/sequencer/run-sequencer-coordination-manager), which is the only component that writes the key.
 
-A sequencer that is not in the list starts cleanly, syncs, serves RPC, and broadcasts to the feed, but never becomes the active sequencer.
+A sequencer that is not in the list starts cleanly, syncs, serves RPC, and broadcasts to the feed—but never becomes the active sequencer.
 
 How the coordinator picks the active sequencer:
 
@@ -244,10 +244,10 @@ A sequencer that appears in `coordinator.priorities` but has no matching `coordi
 
 Two log messages tell you the priority list is the problem:
 
-- `sequencer priorities unset`, the key does not exist. This is expected on a new Redis instance and means no sequencer can ever be chosen until you populate it.
-- `no sequencer appears to want the lockout on redis`, the key exists, but nothing on it is eligible. The log includes the `priorities` value, so compare it against your running sequencers. This starts at `DEBUG`, escalates to `WARN` after 10 seconds and `ERROR` after 20.
+- `sequencer priorities unset` — the key does not exist. This is expected on a new Redis instance and means no sequencer can ever be chosen until you populate it.
+- `no sequencer appears to want the lockout on redis` — the key exists, but nothing on it is eligible. The log includes the `priorities` value, so compare it against your running sequencers. This starts at `DEBUG`, escalates to `WARN` after 10 seconds and `ERROR` after 20.
 
-For a full diagnostic path, see the sequencer troubleshooting guide.
+For a full diagnostic path, see [Sequencer troubleshooting](/docs/launch-arbitrum-chain/operate/sequencer-troubleshooting#1-no-sequencer-is-chosen).
 
 <VanillaAdmonition type="warning" title="Redis persistence">
 
@@ -279,24 +279,24 @@ Adjust the domain name (`<NAMESPACE>.svc.cluster.local`) to match your Kubernete
 
 #### Individual sequencer services
 
-You can enable the automatic creation of headless services for each sequencer replica by setting the `perReplicaHeadlessService.enabled=true` parameter in the Helm chart (as shown in the installation command above). This configuration will create individual services named `<release-name>-nitro-<index>` that allow direct access to each sequencer replica.
+You can enable the automatic creation of headless services for each sequencer replica by setting the `perReplicaHeadlessService.enabled=true` parameter in the Helm chart (as shown in the installation command above). This configuration creates individual services named `<release-name>-nitro-<index>` that allow direct access to each sequencer replica.
 
 These individual services are critical for a proper high-availability setup because they allow components like sequencer relays to connect directly to specific sequencer instances. This direct connection is essential for:
 
 - **Proper failover**: When the active sequencer changes, other components can address the new active sequencer directly
 - **Feed aggregation**: Sequencer relays need to collect feeds from all sequencer instances to ensure no messages get lost during transitions
 
-### 6. Sequencer coordinator manager
+### 6. Sequencer Coordination Manager
 
 To manage active sequencer selection, use the built-in sequencer coordinator UI:
 
-- Follow detailed instructions at: [Running a Sequencer Coordinator Manager](https://docs.arbitrum.io/docs/run-a-node/how-tos/running-a-sequencer-coordinator-manager)
-- Use this interface to switch between sequencer replicas when needed manually
+- Follow detailed instructions at: [How to run a Sequencer Coordination Manager (SQM)](/docs/run-a-node/sequencer/run-sequencer-coordination-manager)
+- Use this interface to manually switch between sequencer replicas when needed
 - Configure permissions and access controls appropriately
 
-### 7. `Batchposter` setup
+### 7. Batch poster setup
 
-Deploy the batch poster using the Nitro helm chart:
+Deploy the batch poster using the Nitro Helm chart:
 
 ```shell
 helm install batchposter offchainlabs/nitro \
@@ -312,7 +312,7 @@ helm install batchposter offchainlabs/nitro \
 
 <VanillaAdmonition type="warning" title="Important">
 
-Do not add the batch poster to the sequencer priority list in the Sequencer Coordinator Manager (SQM) to prevent it from becoming the active sequencer unintentionally.
+Do not add the batch poster to the sequencer priority list in the Sequencer Coordination Manager (SQM) to prevent it from becoming the active sequencer unintentionally.
 
 </VanillaAdmonition>
 ## Monitoring and maintenance
@@ -332,7 +332,7 @@ If you run into any issues, visit the [node-running troubleshooting guide](/docs
 
 ## References
 
-- [How to Run a Fullnode](https://docs.arbitrum.io/docs/run-a-node/how-tos/running-a-node)
-- [Running a Sequencer Coordinator Manager](https://docs.arbitrum.io/docs/run-a-node/how-tos/running-a-sequencer-coordinator-manager)
+- [How to run a full node](https://docs.arbitrum.io/node-running/how-tos/running-a-node)
+- [How to run a Sequencer Coordination Manager (SQM)](/docs/run-a-node/sequencer/run-sequencer-coordination-manager)
 - [Kubernetes Documentation](https://kubernetes.io/docs/)
 - [Offchain Labs Community Helm Charts](https://github.com/OffchainLabs/community-helm-charts)

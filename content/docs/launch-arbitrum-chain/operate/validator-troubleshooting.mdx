@@ -19,9 +19,9 @@ The [validator setup guide](/docs/run-a-node/more-types/run-validator-node#valid
 | Strategy       | Operational notes                                                                                                                                                                                                                                        |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Watchtower`   | Default. Takes no onchain action and needs no <Term id="wallet">wallet</Term> or bond. Logs: `found incorrect assertion in watchtower mode` (legacy) or `Detected invalid assertion, but not configured to post a rival stake` (BoLD) on disagreement. |
-| `Defensive`    | Bonds and challenges only when it finds a bad <Term id="assertion">assertion</Term>. Idle in normal operation, so an absence of onchain activity is not a fault signal.                                                                                |
+| `Defensive`    | Acts only when it finds a bad <Term id="assertion">assertion</Term>: it bonds and posts the correct rival assertion. On a BoLD chain it does not open the challenge itself — that requires `ResolveNodes` or `MakeNodes`. Idle in normal operation, so an absence of onchain activity is not a fault signal.                                                                                |
 | `StakeLatest`  | Pre-BoLD chains only. Not available on BoLD chains.                                                                                                                                                                                                     |
-| `ResolveNodes` | Bonds and resolves assertions **that already exist**. It never creates new ones, so a chain whose validators are all `ResolveNodes` will stop advancing. At least one `MakeNodes` validator is required to post new assertions.                         |
+| `ResolveNodes` | Resolves assertions **that already exist** — on legacy chains it bonds on them; on BoLD chains it confirms them and can open challenges. It does not create routine successor assertions (it still posts the correct rival when it detects a bad one), so a chain whose validators are all `ResolveNodes` will stop advancing. At least one `MakeNodes` validator is required to post new assertions.                         |
 | `MakeNodes`    | Creates assertions, resolves unconfirmed ones, and challenges bad ones.                                                                                                                                                                                 |
 
 <VanillaAdmonition type="note" title="Switching strategy does not re-bond">
@@ -32,7 +32,7 @@ A validator bonds once. Changing strategy—for example from `MakeNodes` to `Def
 
 <VanillaAdmonition type="warning" title="Multiple MakeNodes validators produce expected reverts">
 
-If more than one `MakeNodes` validator runs on the same chain, they may attempt to create the same assertion simultaneously. Only one succeeds; the others revert. These reverts are normal contention, not a malfunction. Do not alert on them individually—alert on assertions failing to appear at all. See `arb/validator/poster/error_posting_assertion` in [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the counter to watch, and expect a nonzero baseline when you run redundant <Term id="proposer">proposers</Term>.
+If more than one `MakeNodes` validator runs on the same chain, they may attempt to create the same assertion simultaneously. Only one succeeds; the others revert. These reverts are normal contention, not a malfunction. Do not alert on them individually—alert on assertions failing to appear at all. See [`arb/validator/poster/error_posting_assertion`](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the counter to watch, and expect a nonzero baseline when you run redundant <Term id="proposer">proposers</Term>.
 
 </VanillaAdmonition>
 
@@ -49,7 +49,7 @@ Four flags control assertion timing, and they are frequently confused with one a
 
 Two rules to check when tuning these:
 
-- **The posting interval must exceed the Rollup contract's `minimumAssertionPeriod`.** That is an onchain constraint measured in <Term id="parent-chain">parent chain</Term> blocks; posting faster than it results in reverted transactions. Read `minimumAssertionPeriod` from your Rollup contract rather than assuming the default.
+- **The posting interval must exceed the Rollup contract's `minimumAssertionPeriod`.** That is an onchain constraint measured in <Term id="parent-chain">parent-chain</Term> blocks (`block.number` units — on an Arbitrum parent these track the underlying L1 block number, not the Arbitrum block height). The validator checks it before posting and waits until enough blocks have passed, so a shorter posting interval silently caps you at the onchain floor rather than causing reverted transactions. Read `minimumAssertionPeriod` from your Rollup contract rather than assuming the default.
 - **Do not tune the confirming interval to make confirmations happen sooner.** Confirmation timing is governed onchain by `confirmPeriodBlocks` and, where a challenge occurred, `challengeGracePeriodBlocks`. Lowering `--node.bold.assertion-confirming-interval` only increases how often the validator checks, which adds parent-chain RPC load without advancing anything.
 
 For the full flag list, see the [Nitro CLI flags reference](/docs/run-a-node/nitro/cli-flags-reference). For the onchain parameters, see the parameter table in [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#table-of-arbitrum-bold-parameters).
@@ -94,9 +94,9 @@ In other words, the validator referenced an assertion hash that the Rollup contr
 
 **Resolution:** confirm the node is fully synced, verify the parent-chain endpoint returns consistent results, and confirm the Rollup address in `--chain.info-json` is correct. Move to `finalized` if you are running `latest`.
 
-### `Detected invalid assertion, but not configured to post a rival stake`
+### `found incorrect assertion in watchtower mode`
 
-The node's locally computed state disagrees with an assertion posted onchain. On a healthy chain this warrants immediate investigation—it is the signal watchtower mode exists to produce.
+The node's locally computed state disagrees with an assertion posted onchain. The legacy staker logs `found incorrect assertion in watchtower mode`; on a BoLD chain the same condition is logged as `Detected invalid assertion, but not configured to post a rival stake`. On a healthy chain this warrants immediate investigation—it is the signal watchtower mode exists to produce.
 
 Before escalating, rule out local causes: an unsynced or partially synced node, a mismatched Nitro version, or a wrong `--chain.info-json` will all produce local state that legitimately disagrees with a correct onchain assertion. Confirm the disagreement against a second, independently operated node before treating it as a real dispute.
 
@@ -113,7 +113,7 @@ If a validator transaction has been pending for more than roughly 10 minutes, it
 Work through these in order:
 
 1. **Raise the queue depth.** Increase `--node.staker.data-poster.max-mempool-transactions` so that one pending transaction does not stall the whole validator. Increase it deliberately rather than setting `0` (unlimited), which removes the backpressure that prevents runaway submission.
-2. **Check the fee cap against current parent-chain gas prices.** If parent-chain gas has risen above what the data poster will bid, the transaction cannot be included. Raise the relevant fee cap.
+2. **Check the fee cap against current parent-chain gas prices.** If parent-chain gas has risen above what the data poster will bid, the network will not include the transaction. Raise the relevant fee cap.
 3. **Accelerate the transaction manually.** Resubmit at a higher gas price from the same account and nonce to replace it. Keep the nonce identical—submitting a new nonce leaves the original stuck and creates a gap.
 4. **Confirm the wallet is funded.** The validator needs parent-chain native currency for gas, separately from its ERC-20 bond token. Watch `arb/staker/balance`.
 
@@ -136,7 +136,7 @@ Treat this as a recovery tool, not a routine operation. A healthy validator conf
 
 Before attempting it, note the constraints:
 
-- **It is not permissionless.** `onlyValidator` restricts the caller to the allowlist on a permissioned chain. If your allowlist has been misconfigured, fixing the allowlist comes first.
+- **It is not permissionless.** `onlyValidator` restricts the caller to the allowlist on a permissioned chain. If you misconfigured the allowlist, fix it first.
 - **`prevAssertionHash` must be the current latest confirmed assertion.** Assertions confirm in order; you cannot skip ahead.
 - **`confirmPeriodBlocks` must have elapsed** since the assertion was created.
 - **If the parent assertion has more than one child**, a <Term id="challenge">challenge</Term> occurred. The winning <Term id="edge">edge</Term> must be confirmed, and `challengeGracePeriodBlocks` must have elapsed since that edge was confirmed. The grace period exists to give the <Term id="chain-owner">chain owner</Term> or security council a window to intervene—do not attempt to route around it.

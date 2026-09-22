@@ -42,9 +42,13 @@ We recommend that any Fast Withdrawals-enabled chain have at least three DAC mem
 
 Once fast withdrawals is enabled, the committee will confirm transactions at the configured frequency. However, a higher network load can cause the fast withdrawals committee to experience slight delays from the configured rate.
 
-- For low-to-medium activity chains (< 1 Mgas/s), 15 seconds is considered to be the sustained lower bound for Fast Withdrawals.
-- For chains with higher throughput (>1 Mgas/s), the practical lower bound for fast withdrawals is between 1-2 minutes.
-- For all L3s utilizing BoLD, the practical lower bound for fast withdrawals is **two rounds of parent chain finality** — roughly **30–40 minutes** for chains settling to Ethereum. BoLD validators by default only act on finalized parent chain state, so a validator waits for parent chain finality twice: once for the assertion it is confirming, and again for its own `approveHash` signature on the fast confirmation multisig. Each round is ~15 minutes for chains settling to Ethereum.
+- **Pre-BoLD chains**
+
+  - For low-to-medium activity chains (< 1 Mgas/s), 15 seconds is considered to be the sustained lower bound for Fast Withdrawals.
+  - For chains with higher throughput (>1 Mgas/s), the practical lower bound for fast withdrawals is between 1-2 minutes.
+
+- **BoLD enabled chains**
+  - For all L3s utilizing BoLD, the practical lower bound for fast withdrawals is **two rounds of parent chain finality** — roughly **30–40 minutes** for chains settling to Ethereum. BoLD validators by default only act on finalized parent chain state, so a validator waits for parent chain finality twice: once for the assertion it is confirming, and again for its own `approveHash` signature on the fast confirmation multisig. Each round is ~15 minutes for chains settling to Ethereum.
 
 Chain owners and operators should be aware that the fast withdrawals committee may take longer to confirm new assertions under conditions with greater network load. This behavior is to be expected and does not interfere with the security or trust model of the fast withdrawals committee.
 
@@ -58,7 +62,7 @@ For an <Term id="arbitrum-one">Arbitrum One</Term>-based Layer-3, there are thre
 
 1. Soft finality from the <Term id="sequencer">Sequencer</Term>'s confirmation of <Term id="transaction">transaction</Term> inclusion (~<Var name="l2BlockTimeMs" />ms)
 2. Safe finality from <Term id="batch">batch</Term> inclusion after Arbitrum One's <Term id="assertion">assertion</Term> is included in an Ethereum block.
-3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes)
+3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes). For BoLD-enabled chains, this finality is a mandatory threshold for fast withdrawals.
 
 ## Adoption instructions (example script)
 

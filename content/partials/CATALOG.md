@@ -22,6 +22,8 @@ If you want your token to be compatible out of the box with all the tooling avai
 
 ### Additional Configuration Parameters
 
+Amount of time to wait before a challenge period expires.
+
 - `<include cwd>content/partials/_additional-config-params.mdx</include>`
 - used in 1 page — tags: `additional`, `config`, `params`
 

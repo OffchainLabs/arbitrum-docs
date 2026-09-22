@@ -17,7 +17,7 @@ Split validators separate the validation work to a stateless validation node, wh
 
 This guide explains how to set up a split validator configuration for Arbitrum chains by running a Nitro node (bonder) and a validation node separately.
 
-Before you read this doc, please ensure you have already walked through [run a validator](/docs/run-a-node/more-types/run-validator-node) docs to understand the basics of a validator node.
+Before you read this doc, please ensure you have already walked through [run a validator](/docs/run-a-node/more-types/run-validator-node) docs to understand the basics of a validator node. For an overview of how split validation fits among the other Nitro node roles, see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles).
 
 ### What is AUTH-RPC and the validation API
 
@@ -179,6 +179,7 @@ You can also check where this log (`validation node started`) appears:
 - If this log appears on the bond node, it means your bond node is still validating itself. It indicates that your bond node is not connecting to the validation node correctly; you need to double-check your configuration.
 
 ### Reference: the `validation_*` API
+
 When AUTH-RPC is enabled, the validation node registers the `validation` namespace, exposing the following methods (all prefixed `validation_` in RPC requests):
 
 | Method                                    | Purpose                                                              |
@@ -204,7 +205,7 @@ These methods are internal protocol calls between the bond and the validation no
 
 `--auth.api` accepts a list of namespaces, not just `validation`. You can add others—for example, `eth` or `net` — if you want to grant a trusted client read access to those APIs without exposing them on the public RPC:
 
-```
+```text
 --auth.api validation,eth,net
 ```
 

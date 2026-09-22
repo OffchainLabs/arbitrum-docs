@@ -58,7 +58,7 @@ To modify the State Transition Function, you'll need to build a modified Arbitru
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch v3.9.9 https://github.com/OffchainLabs/nitro.git
+git clone --branch v3.11.4 https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -68,9 +68,9 @@ git submodule update --init --recursive --force
 Next, make your changes to the State Transition Function. For example, you could [add a custom precompile](./customize-precompile).
 
 After this step, you should visit [Customize ArbOS version](./customize-arbos) to see if your changes need to upgrade the ArbOS version. If so, please continue
-follow that document to add an ArbOS upgrade logic to your code.
+to follow that document to add an ArbOS upgrade logic to your code.
 
-### Step 3. Run the node without fraud proofs
+### Step 3. Run the node
 
 To build the Arbitrum Nitro node image, you'll first need to install Docker.
 You can confirm if it's already setup by running `docker version` in a terminal.
@@ -79,23 +79,13 @@ install Docker from your distribution's package manager and start the Docker ser
 
 Once you have Docker installed, you can simply run `docker build . --tag custom-nitro-node` in the `nitro` folder to build your custom node.
 
-Once you've built your new Nitro node image, you have to modify the configuration file of your node to add a new parameter, `--node.staker.dangerous.without-block-validator`, which disables fraud proof verification.
+<VanillaAdmonition type="note">
 
-To do that, open your `nodeConfig.json` file (stored by default in the `config` folder) and add the new parameter inside the `staker` element:
+A chain running a customized State Transition Function will produce blocks that don't match the verified Nitro WASM module root on the parent chain. Coordinate with Offchain Labs before operating a customized STF against a production chain, as the validator configuration required is not covered in this guide.
 
-```json
-...
-"staker": {
-  ...
-  "dangerous": {
-    "without-block-validator": true
-  }
-  ...
-},
-...
-```
+</VanillaAdmonition>
 
-With that, you have now two ways of running your node.
+You have two ways of running your node.
 
 #### 1. Using the docker-compose file
 
@@ -133,10 +123,10 @@ To enable fraud proofs, you'll need to build the "replay binary", which defines 
 It has three forms:
 
 - The `replay.wasm` binary is the Go replay binary compiled to WASM. It's used by the JIT validator to verify blocks against the fraud prover.
-- The `machine.wavm.br` binary is a compressed binary containing the Go replay binary and all its dependencies, compiled to WASM, then translated to the Arbitrum fraud proving variant WAVM.
+- The `machine.v2.wavm.br` binary is a compressed binary containing the Go replay binary and all its dependencies, compiled to WASM, then translated to the Arbitrum fraud proving variant WAVM.
   - It's used by Arbitrator when actually entering a challenge and performing the fraud proofs,
     and has identical behavior to `replay.wasm`.
-- The <Term id="wasm-module-root">WASM module root</Term> (stored in `module-root.txt`) is a 32 byte hash usually expressed in hexadecimal which is a merkelization of `machine.wavm.br`.
+- The <Term id="wasm-module-root">WASM module root</Term> (stored in `module-root.txt`) is a 32 byte hash usually expressed in hexadecimal which is a merkelization of `machine.v2.wavm.br`.
   - The replay binary is much too large to post onchain, so this hash is set in the L1 Rollup contract to determine the correct replay binary during fraud proofs.
 
 To run a validator node with fraud proofs enabled, the validator node's Docker image will need to contain all three of these versions of the replay binary.
@@ -160,11 +150,9 @@ Once you have the WASM module root, you can put it onchain by calling `setWasmMo
 The `upgradeExecutor` contract address and Rollup contract address can be found in the chain deployment info JSON.
 You can confirm that the WASM module root was updated by calling `wasmModuleRoot()` on the Rollup contract.
 
-Once you have set the new WASM module root onchain, you can re-enable fraud proofs and run your node.
+Once you have set the new WASM module root onchain, the validator will recognize blocks produced by your customized STF. You can now run your node with fraud proof verification enabled.
 
-To re-enable fraud proofs, open your `nodeConfig.json` file again, and remove the `"dangerous"` section (containing the `without-block-validator` property) that you previously added.
-
-After that, you'll have, again, two ways of running your node.
+You have two ways of running your node.
 
 #### 1. Using the docker-compose file
 
@@ -207,14 +195,14 @@ mv extracted-replay-binary "target/machines/$(cat extracted-replay-binary/module
 
 These commands will output the new WASM module root, and create the directory `target/machines/<wasm module root>`.
 There you'll find the three versions of the replay binary mentioned earlier:
-`replay.wasm`, `machine.wavm.br`, and `module-root.txt`, along with some other optional files.
+`replay.wasm`, `machine.v2.wavm.br`, and `module-root.txt`, along with some other optional files.
 Now that you've extracted the replay binary, there are two ways to add it to future Docker images,
 including non-dev image builds. You can either keep it locally and copy it in, or host it on the web.
 
 ##### Option 1: Store the extracted replay binary locally
 
 Now that we've extracted the replay binary, we can modify the Docker file to copy it into new Docker builds.
-Edit the `Dockerfile` file in the root of the nitro folder, and after all the `RUN ./download-machines.sh ...` lines, add:
+Edit the `Dockerfile` file in the root of the nitro folder, and after all the `RUN ./download-machine.sh ...` lines, add:
 
 ```dockerfile
 COPY target/machines/<wasm module root> <wasm module root>
@@ -228,25 +216,25 @@ Replace each `<wasm module root>` with the WASM module root you got earlier.
 To support building the Docker image on other computers without this local machine directory,
 you'll need to either commit the machine to git, or preferably, host the replay binary on the web.
 
-To host the replay binary on the web, you'll need to host the `replay.wasm` and `machine.wavm.br` files somewhere.
+To host the replay binary on the web, you'll need to host the `replay.wasm` and `machine.v2.wavm.br` files somewhere.
 One good option is GitHub releases, but any hosting service works.
 
 Once you have those two files hosted, instead of the `COPY` and `RUN` command mentioned in option 1,
 you'll need to add these new lines to the `Dockerfile` file in the root of the nitro folder,
-after all the `RUN ./download-machines.sh ...` lines:
+after all the `RUN ./download-machine.sh ...` lines:
 
 ```dockerfile
 RUN wasm_module_root="<wasm module root>" && \
     mkdir "$wasm_module_root" && \
     wget <url of replay.wasm> -O "$wasm_module_root/replay.wasm" && \
-    wget <url of machine.wavm.br> -O "$wasm_module_root/machine.wavm.br" && \
+    wget <url of machine.v2.wavm.br> -O "$wasm_module_root/machine.v2.wavm.br" && \
     echo "$wasm_module_root" > "$wasm_module_root/module-root.txt" && \
     ln -sfT "$wasm_module_root" latest
 ```
 
 Replace the `<wasm module root>` with the WASM module root you got earlier,
 the `<url of replay.wasm>` with the direct link to the `replay.wasm` file (it must be a direct link to the file and not just a download site),
-and the `<url of machine.wavm.br>` with the direct link to the `machine.wavm.br` file.
+and the `<url of machine.v2.wavm.br>` with the direct link to the `machine.v2.wavm.br` file.
 
 ### Step 5. Verify the fraud proofs
 

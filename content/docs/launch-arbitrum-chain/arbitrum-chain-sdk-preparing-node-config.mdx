@@ -57,23 +57,26 @@ The following table briefly describes the type of parameters that can be configu
 
 ### Additional configuration for Arbitrum AnyTrust chains:
 
-For <Term id="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</Term>, the Nitro node configuration object has an additional segment under the `node` field to configure the AnyTrust specific properties:
+For <Term id="arbitrum-anytrust-chain">Arbitrum AnyTrust chains</Term>, the Nitro node configuration object has an additional `da.anytrust` segment under the `node` field to configure the AnyTrust-specific properties (prior to Nitro v3.10.0, this segment was named `data-availability` and also held the `sequencer-inbox-address` and `parent-chain-node-url` keys, which current versions no longer accept):
 
 ```typescript
 {
   ...
   "node": {
     ...
-    "sequencer-inbox-address": "0xSequencerInbox",
-    "parent-chain-node-url": "http://parentChainRpcUrl",
-    "rest-aggregator": {
-      "enable": true,
-      "urls": "http://localhost:9876",
-    },
-    "rpc-aggregator": {
-      "enable": true,
-      "assumed-honest": 3,
-      "backends": "[...]",
+    "da": {
+      "anytrust": {
+        "enable": true,
+        "rest-aggregator": {
+          "enable": true,
+          "urls": "http://localhost:9877",
+        },
+        "rpc-aggregator": {
+          "enable": true,
+          "assumed-honest": 3,
+          "backends": "[...]",
+        },
+      },
     },
   }
   ...
@@ -146,6 +149,8 @@ const nodeConfig = prepareNodeConfig({
 `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
 
 After generating the node configuration object, it can be saved to a file for later use by the Nitro node.
+
+If the chain uses a custom genesis, also give the node the generated `genesis.json` on its first startup by setting `--init.genesis-json-file`. Follow [Generate a custom genesis file with the Chain SDK](/docs/launch-arbitrum-chain/deploy/custom-genesis-state#initialize-every-nitro-node) to keep the node's file consistent with the genesis assertion committed during deployment.
 
 ### 3. Next step
 

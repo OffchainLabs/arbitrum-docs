@@ -9,6 +9,12 @@ sme: jasonwan
 
 <include cwd>content/partials/launch-arbitrum-chain/_arbitrum-chain-customize-caution-banner-partial.mdx</include>
 
+Customizing the [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos) version involves modifying the Nitro codebase to introduce a new, version-controlled iteration of ArbOS (Arbitrum's operating system-like layer). This lets you activate custom behaviors, features, or state changes while maintaining backward compatibility and determinism for fraud proofs.
+
+This is an advanced customization primarily for live chains, allowing developers to extend or alter the State Transition Function (STF)—the core logic for block production and state updates—while ensuring safe, non-disruptive upgrades. Unlike standard upgrades (e.g., to canonical versions like ArbOS 20 "Atlas"), customization involves creating intermediate or project-specific versions (e.g., ArbOS 32, a fork of 31). This lets you incorporate bespoke elements such as new precompiles, EVM opcodes, or state variables without conflicting with official releases.
+
+This customization is recommended for teams with expertise or partners (e.g., Rollup-as-a-Service providers), as it requires audits, maintenance, and careful handling to avoid issues like chain re-orgs or failed fraud proofs.
+
 ## Cases where you may want to consider customizing your own ArbOS upgrade
 
 1. When you want to make changes to your Nitro code that affect the State Transition Function, or STF (you may refer to the [Customize STF docs](./customize-stf#introduction)), and
@@ -23,10 +29,10 @@ Also, if you made changes to a live and operational chain and want to upgrade th
 
 Below, you will find four examples of ArbOS-related code changes and, generally, how to make them:
 
-### 1. Add a new method to existing precompile on a specific ArbOS version:
+### 1. Add a new method to existing precompile on a specific ArbOS version
 
 After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile Option 1](./customize-precompile#option-1-add-new-methods-to-an-existing-precompile),
-you need continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/@@nitroVersionTag@@/@@nitroPathToPrecompiles@@/precompile.go).
+you need to continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/@@nitroVersionTag@@/@@nitroPathToPrecompiles@@/precompile.go).
 
 For example, the original code is:
 
@@ -103,7 +109,7 @@ Here, we will ensure that the initial value of $(a random number) after ArbOS is
 It should be noted that when you initialize the state (initial code is in [customize precompile Option 5](./customize-precompile#option-5-call-and-modify-state)), you need to initialize it to `0` or `null` value first to avoid a potential re-org on your chain.
 
 </VanillaAdmonition>
-Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions may change the value of `myNumber` before ArbOS v21.
+Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions that may change the value of `myNumber` before ArbOS v21.
 To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](./customize-arbos#1-add-a-new-method-to-existing-precompile-on-a-specific-arbos-version) or
 [point 2](./customize-arbos#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
 If your nitro code needs to call this method to change the state, you can continue reading [Step 4](./customize-arbos#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result-arbos-version-control).
@@ -140,7 +146,7 @@ Wasm module roots are backward compatible, so upgrading them before an ArbOS ver
 ## Upgrade WASM Module Root on the parent chain
 
 After you have made your custom ArbOS changes, you will need to update the WASM Module root recorded on the parent chain. This is because an Arbitrum chain may execute the validation and fraud proofs on the parent chain.
-Please continue reading [Customize STF](./customize-stf#step-3-run-the-node-without-fraud-proofs) for follow-up operations.
+Please continue reading [Customize STF](./customize-stf#step-3-run-the-node) for follow-up operations.
 
 ## Schedule ArbOS upgrade
 
