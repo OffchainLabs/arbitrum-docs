@@ -50,6 +50,11 @@ const sans = localFont({
 const mono = localFont({
   variable: '--font-mono',
   display: 'swap',
+  // No measured page has an LCP element set in Aeonik Fono, so a preload — which
+  // promises the browser the file is needed for the initial render — is a false
+  // promise on all 350 routes. Dropping it does not stop the fetch; the browser
+  // still requests it at high priority the moment the CSS asks.
+  preload: false,
   fallback: [
     'ui-monospace',
     'SF Mono',
@@ -72,6 +77,9 @@ const code = JetBrains_Mono({
   variable: '--font-code',
   subsets: ['latin'],
   display: 'swap',
+  // Same reasoning as `mono`: fenced code is never the LCP element, so this face
+  // does not belong in the initial high-priority queue on every route.
+  preload: false,
 });
 
 export default function Layout({ children }: { children: ReactNode }) {
