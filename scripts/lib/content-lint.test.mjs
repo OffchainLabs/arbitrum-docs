@@ -140,3 +140,37 @@ test('findings carry 1-indexed line numbers', () => {
   const found = lintSource('line1\nline2\n:::note\n');
   assert.equal(found[0].line, 3);
 });
+
+test('A6 does not fire on a Var in prose', () => {
+  assert.deepEqual(rules('The current release is <Var name="nitroVersionTag" />.'), []);
+});
+
+test('A6 fires on a Var in a fenced code block', () => {
+  const found = lintSource('```shell\ndocker run <Var name="latestNitroNodeImage" /> keygen\n```');
+  assert.deepEqual(
+    found.map((f) => f.rule),
+    ['A6'],
+  );
+  assert.match(found[0].message, /fenced code block/);
+});
+
+test('A6 fires on a Var in an inline code span', () => {
+  const found = lintSource('The image: `<Var name="latestNitroNodeImage" />`');
+  assert.deepEqual(
+    found.map((f) => f.rule),
+    ['A6'],
+  );
+  assert.match(found[0].message, /inline code span/);
+});
+
+test('A6 does not mistake a fence delimiter for an inline span', () => {
+  // Backticks opening and closing a fence must not pair up as an inline span around prose between
+  // two fences, which would double-report the Var inside each one.
+  const found = lintSource(
+    '```shell\n<Var name="a" />\n```\n\nprose\n\n```shell\n<Var name="b" />\n```',
+  );
+  assert.deepEqual(
+    found.map((f) => f.rule),
+    ['A6', 'A6'],
+  );
+});

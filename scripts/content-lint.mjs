@@ -18,6 +18,7 @@ const RULE_TITLES = {
   A3: 'unconverted Docusaurus ::: directive',
   A4: 'markdown/entity syntax inside a title= attribute',
   A5: 'internal link keeps a .md/.mdx suffix',
+  A6: '<Var> inside code renders as a literal tag',
 };
 
 function main() {

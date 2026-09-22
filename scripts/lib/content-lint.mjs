@@ -15,6 +15,8 @@
  *       `[text](/docs/x)` renders literally and the link is unclickable. HTML entities are not
  *       flagged: JSX decodes those in attribute values, so they render as intended.
  *   A5  Internal link target keeping a `.md`/`.mdx` suffix — 404s at runtime.
+ *   A6  `<Var>` inside a fenced code block or inline code span. MDX does not evaluate components
+ *       inside code, so the reader sees the literal `<Var name="…" />` tag instead of its value.
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -101,6 +103,27 @@ export function lintSource(source) {
   for (const m of text.matchAll(/\b(?:href|to)\s*=\s*["']([^"']+)["']/g)) {
     if (internal(m[1]) && /\.mdx?(?:#[^"']*)?$/i.test(m[1])) {
       add('A5', m.index, `link target keeps a .md/.mdx suffix: ${m[1]}`);
+    }
+  }
+
+  // A6 — `<Var>` used inside code. MDX does not evaluate components inside a fenced block or an
+  // inline code span, so the reader sees the literal `<Var name="…" />` tag, not its value.
+  //
+  // This is the one rule that looks *inside* code, so it walks `source` rather than the
+  // code-stripped `text`, reusing `stripCode`'s own regexes so a fence's backticks are never
+  // mistaken for an inline-code delimiter.
+  const varRe = /<Var\b[^>]*\/?>/g;
+  for (const m of source.matchAll(/^([ \t]*)(`{3,}|~{3,})[\s\S]*?^\1?\2[^\n]*$/gm)) {
+    for (const vm of m[0].matchAll(varRe)) {
+      add('A6', m.index + vm.index, '<Var> inside a fenced code block renders as a literal tag');
+    }
+  }
+  const withoutFences = source.replace(/^([ \t]*)(`{3,}|~{3,})[\s\S]*?^\1?\2[^\n]*$/gm, (m) =>
+    m.replace(/[^\n]/g, ' '),
+  );
+  for (const m of withoutFences.matchAll(/`[^`\n]*`/g)) {
+    for (const vm of source.slice(m.index, m.index + m[0].length).matchAll(varRe)) {
+      add('A6', m.index + vm.index, '<Var> inside an inline code span renders as a literal tag');
     }
   }
 
