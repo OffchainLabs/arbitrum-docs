@@ -203,7 +203,7 @@ For more details on how gas targets affect chain security and validator assumpti
 
 ### Child chain tips
 
-Whether a tip does anything depends on the chain's <a data-quicklook-from="transaction-ordering-policy">transaction ordering policy</a> and on whether the chain collects tips at all. Two settings control this, and a chain needs both before a tip changes anything:
+Whether a tip does anything depends on the chain's <a data-quicklook-from="transaction-ordering-policy">transaction ordering policy</a> and on whether the chain collects tips at all. Today, the only ordering policy that uses tips to define order is PGA. Two settings control this, and a chain needs both before a tip changes anything:
 
 1. **Tip collection.** ArbOS 61 added `setCollectTips` on the [`ArbOwner` precompile](/arbitrum-essentials/precompiles/reference.mdx#arbowner). It ships disabled. Until a chain owner enables it, the chain ignores the tip and the sender pays the basefee alone.
 2. **Ordering that reads the tip.** The sequencer must run an ordering policy that sorts on the `PriorityFee` field.
