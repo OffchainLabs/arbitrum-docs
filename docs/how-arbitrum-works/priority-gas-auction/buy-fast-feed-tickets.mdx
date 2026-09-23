@@ -8,20 +8,35 @@ user_story: As a developer who runs a latency-sensitive strategy on Arbitrum One
 content_type: how-to
 ---
 
-The <a data-quicklook-from="fast-feed">Fast Feed</a> admits one WebSocket connection per ticket, and a ticket is valid for one round. To keep a connection open, you buy a new ticket every round from the `Tickets` contract on <a data-quicklook-from="arbitrum-one">Arbitrum One</a>. This guide shows you how to buy tickets by hand, then how to run the reference bot that buys them for you.
+This guide is for searchers, propAMM operators, and market makers who want to subscribe to the <a data-quicklook-from="fast-feed">Fast Feed</a> on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and keep that subscription active.
 
-To learn what the Fast Feed publishes and how rounds and prices work, read the [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) first. The Fast Feed publishes within Priority Gas Auction (PGA) rounds, which the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) explains.
+It explains how to buy a Fast Feed ticket each round: hash your API key, deposit USDG, read the round state, call `purchaseTickets`, and automate the purchase with the reference bot.
 
-<VanillaAdmonition type="info">
+The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> orders it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
 
-The `Tickets` contract address on Arbitrum One appears on the [contract addresses page](/arbitrum-essentials/reference/contract-addresses) once the contract is live. The examples below use `$TICKETS` as a placeholder for that address and `$USDG` for the payment token address.
+The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid for one round. To keep a connection open, you buy a new ticket every round from the `Tickets` contract on Arbitrum One. Rounds follow the Priority Gas Auction (PGA) cadence, which the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) explains.
 
-</VanillaAdmonition>
+## Contract addresses
+
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
+
+| Contract           | Arbitrum One                                                                 |
+| ------------------ | ---------------------------------------------------------------------------- |
+| `Tickets` (proxy)  | <AEL address="0xf7aC1f3Ea621519D8629ccC1E4Be3ef5Cd6130d2" chainID={42161} /> |
+| USDG payment token | <AEL address="0x004B506865409877C9fA29bfb1ebA929984B9bbC" chainID={42161} /> |
+
+USDG has 6 decimals, so the 17 USD minimum price is `17000000` in the token's smallest unit. The first round starts on September 23, 2026 at 17:00 UTC.
+
+The examples below use `$TICKETS` and `$USDG` for these two addresses:
+
+```shell
+export TICKETS=0xf7aC1f3Ea621519D8629ccC1E4Be3ef5Cd6130d2
+export USDG=0x004B506865409877C9fA29bfb1ebA929984B9bbC
+```
 
 ## Prerequisites
 
 - An account on Arbitrum One that holds USDG to pay for tickets and ETH to pay for gas.
-- The `Tickets` contract address and the USDG token address.
 - [Foundry's `cast`](https://getfoundry.sh/), or any EVM client, to send transactions. The examples use `cast` with `--rpc-url $RPC_URL --private-key $PRIVATE_KEY`. The examples leave those flags out to stay short.
 
 ## Step 1: Generate an API key and its hash
@@ -89,7 +104,7 @@ cast call $TICKETS "grandfatherCount(address)(uint256)" <your-address>
 | `grandfatherCount`     | How many tickets you can still buy during the grandfather period. It equals the tickets you held last round, minus those bought this round. |
 | `ticketsSoldThisRound` | Tickets sold so far. Compare it with `maxTicketsPerRound` to see how much room is left.                                                     |
 
-Round state updates lazily: the first state-changing call in a new round rolls it forward. View functions compute the rolled-forward values on the fly, so the values you read are current.
+Round state updates lazily: the first state-changing call in a new round rolls it forward. View functions compute the rolled-forward values on the fly, so the values you read are current. Before the first round starts, these views revert with `BeforeFirstRoundStart()`.
 
 ## Step 4: Buy tickets
 
