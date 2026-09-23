@@ -12,7 +12,11 @@ This guide is for searchers, propAMM operators, and market makers who want to su
 
 It explains how to buy a Fast Feed ticket each round: hash your API key, deposit USDG, read the round state, call `purchaseTickets`, and automate the purchase with the reference bot.
 
+<VanillaAdmonition type="note" title="If you don't know what the Fast Feed is">
+
 The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> orders it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
+
+</VanillaAdmonition>
 
 The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid for one round. To keep a connection open, you buy a new ticket every round from the `Tickets` contract on Arbitrum One. Rounds follow the Priority Gas Auction (PGA) cadence, which the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) explains.
 
@@ -104,7 +108,7 @@ cast call $TICKETS "grandfatherCount(address)(uint256)" <your-address>
 | `grandfatherCount`     | How many tickets you can still buy during the grandfather period. It equals the tickets you held last round, minus those bought this round. |
 | `ticketsSoldThisRound` | Tickets sold so far. Compare it with `maxTicketsPerRound` to see how much room is left.                                                     |
 
-Round state updates lazily: the first state-changing call in a new round rolls it forward. View functions compute the rolled-forward values on the fly, so the values you read are current. Before the first round starts, these views revert with `BeforeFirstRoundStart()`.
+Round state updates lazily: the first state-changing call in a new round <a data-quicklook-from="roll-forward">rolls it forward</a>. View functions compute the rolled-forward values on the fly, so the values you read are current. Before the first round starts, these views revert with `BeforeFirstRoundStart()`.
 
 ## Step 4: Buy tickets
 
