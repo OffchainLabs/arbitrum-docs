@@ -34,6 +34,12 @@ The following table summarizes the approximate latency and guarantee at each sta
 | Parent-chain data finality (batch posted and finalized on <a data-quicklook-from="L1">L1</a>) | Transaction data is durably recorded and inherits the parent chain's consensus security     | ~2 epochs, roughly 12–15 minutes (the <a data-quicklook-from="batch-poster">batch poster</a> defaults to referencing the L1 `safe` block)              |
 | Full settlement (<a data-quicklook-from="assertion">assertion</a> confirmed)                  | <a data-quicklook-from="L2">L2</a> state is finalized and L2→L1 withdrawals can be executed | A bounded <a data-quicklook-from="challenge-period">challenge period</a> under <a data-quicklook-from="bold">BoLD</a>, on the order of days on mainnet |
 
+<VanillaAdmonition type="note" title="The Fast Feed publishes all transactions in a PGA round">
+
+On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, the [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed.mdx) publishes all transactions within a the Priority Gas Auction (PGA) round, before the block closes and before the Sequencer feed carries it. It is faster than soft finality and guarantees less: the block number it reports is tentative, it carries no block hash, and inclusion is not guaranteed. It is not a finality stage. Read it as an early signal, then confirm against the Sequencer feed or a node.
+
+</VanillaAdmonition>
+
 ## Soft finality
 
 Soft finality refers to the preliminary confirmation of transactions based on the [Sequencer’s](/how-arbitrum-works/deep-dives/sequencer.mdx) real-time feed. Key characteristics include:
