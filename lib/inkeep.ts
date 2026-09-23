@@ -71,6 +71,17 @@ export const inkeepBaseSettings: InkeepBaseSettings = {
   primaryBrandColor: '#213147',
   organizationDisplayName: 'Arbitrum',
   onEvent: handleInkeepEvent,
+  // Inkeep sets no cookies. Both flags are needed because the SDK checks them
+  // in two different layers (cxkit-primitives 0.5.119):
+  //   - optOutAnalyticalCookies stops user-provider writing the 365-day
+  //     `inkeepUsagePreferences_userId` returning-visitor id;
+  //   - optOutFunctionalCookies routes everything else the widget persists
+  //     (chat session id, last-used tab) to sessionStorage instead of cookies.
+  // Chat and search are unaffected; the visitor id is regenerated in memory per
+  // page load, and a chat thread survives a reload but not a new tab. Analytics
+  // still reach Inkeep (as ANONYMOUS) and onEvent above still fires — this is
+  // not an analytics opt-out, only a persistence one.
+  privacyPreferences: { optOutAnalyticalCookies: true, optOutFunctionalCookies: true },
 };
 
 export const inkeepAiChatSettings: InkeepAIChatSettings = {
