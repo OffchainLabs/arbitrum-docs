@@ -33,15 +33,21 @@ import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorer
 
 | Contract           | Arbitrum One                                                                 |
 | ------------------ | ---------------------------------------------------------------------------- |
-| `Tickets` (proxy)  | <AEL address="0xf7aC1f3Ea621519D8629ccC1E4Be3ef5Cd6130d2" chainID={42161} /> |
+| `Tickets` (proxy)  | <AEL address="0x451DD62C26b753d07d6104aaC6865AaE73a6A598" chainID={42161} /> |
 | USDG payment token | <AEL address="0x004B506865409877C9fA29bfb1ebA929984B9bbC" chainID={42161} /> |
 
-USDG has 6 decimals, so the 17 USD minimum price is `17000000` in the token's smallest unit. The first round starts on September 23, 2026 at 17:00 UTC.
+USDG has 6 decimals, so the 17 USD minimum price is `17000000` in the token's smallest unit. The first round started on September 23, 2026 at 17:00 UTC.
+
+<VanillaAdmonition type="caution">
+
+An earlier deployment at `0xf7aC1f3Ea621519D8629ccC1E4Be3ef5Cd6130d2` was abandoned before launch. Do not deposit funds there. Use only the `Tickets` address in the table above.
+
+</VanillaAdmonition>
 
 The examples below use `$TICKETS` and `$USDG` for these two addresses:
 
 ```shell
-export TICKETS=0xf7aC1f3Ea621519D8629ccC1E4Be3ef5Cd6130d2
+export TICKETS=0x451DD62C26b753d07d6104aaC6865AaE73a6A598
 export USDG=0x004B506865409877C9fA29bfb1ebA929984B9bbC
 ```
 
@@ -110,7 +116,7 @@ cast call $TICKETS "grandfatherCount(address)(uint256)" <your-address>
 | `grandfatherCount`     | How many tickets you can still buy during the grandfather period. It equals the tickets you held last round, minus those bought this round. |
 | `ticketsSoldThisRound` | Tickets sold so far. Compare it with `maxTicketsPerRound` to see how much room is left.                                                     |
 
-Round state updates lazily: the first state-changing call in a new round <a data-quicklook-from="roll-forward">rolls it forward</a>. View functions compute the rolled-forward values on the fly, so the values you read are current. Before the first round starts, these views revert with `BeforeFirstRoundStart()`.
+Round state updates lazily: the first state-changing call in a new round <a data-quicklook-from="roll-forward">rolls it forward</a>. View functions compute the rolled-forward values on the fly, so the values you read are current.
 
 ## Step 4: Buy tickets
 
