@@ -36,7 +36,7 @@ The following table summarizes the approximate latency and guarantee at each sta
 
 <VanillaAdmonition type="note" title="The Fast Feed publishes all transactions in a PGA round">
 
-On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, the [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed.mdx) publishes a transaction inside its Priority Gas Auction (PGA) round, before the block closes and before the Sequencer feed carries it. It is faster than soft finality and guarantees less: the block number it reports is tentative, it carries no block hash, and inclusion is not guaranteed. It is not a finality stage. Read it as an early signal, then confirm against the Sequencer feed or a node.
+On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, the [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed.mdx) publishes all transactions within a the Priority Gas Auction (PGA) round, before the block closes and before the Sequencer feed carries it. It is faster than soft finality and guarantees less: the block number it reports is tentative, it carries no block hash, and inclusion is not guaranteed. It is not a finality stage. Read it as an early signal, then confirm against the Sequencer feed or a node.
 
 </VanillaAdmonition>
 
