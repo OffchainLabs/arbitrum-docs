@@ -32,7 +32,7 @@ An Arbitrum block is only as final as the parent-chain block that carries its ba
 
 ### The Fast Feed is not a fourth level
 
-On Arbitrum One, the [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed.mdx) publishes a transaction as soon as the Sequencer orders and executes it, inside a Priority Gas Auction (PGA) round and before the block closes. That is earlier than `latest`, so it is tempting to treat it as the first confirmation level. Do not index against it.
+On Arbitrum One, the [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed.mdx) publishes all transaction within the PGA round, as soon as they are ordered and executed, and before the block closes. That is earlier than `latest`, so it is tempting to treat it as the first confirmation level. Do not index against it.
 
 A Fast Feed message carries weaker guarantees than a soft confirmation:
 
