@@ -67,7 +67,7 @@ Arriving transactions land in an unordered waiting list. Intake runs continuousl
 
 Ties break on the arrival timestamp the Sequencer recorded when the transaction first reached it, not on when it entered the queue. Because the priority fee depends on the base fee, the Sequencer re-keys the queue against the new base fee at the start of every block.
 
-The mempool stays private. PGA gives nobody the right to see or reorder another user’s transactions, so Arbitrum’s protections against harmful MEV are unchanged.
+The mempool stays private. PGA does not give anyone the right to see or reorder another user’s transactions, so Arbitrum’s protections against harmful MEV are unchanged.
 
 ### Ordering rounds
 
