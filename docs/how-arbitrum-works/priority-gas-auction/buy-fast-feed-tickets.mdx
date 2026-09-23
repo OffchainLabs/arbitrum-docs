@@ -18,7 +18,14 @@ The Fast Feed is a paid WebSocket stream that publishes each transaction as soon
 
 </VanillaAdmonition>
 
-The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid for one round. To keep a connection open, you buy a new ticket every round from the `Tickets` contract on Arbitrum One. Rounds follow the Priority Gas Auction (PGA) cadence, which the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) explains.
+The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid for one round. To keep a connection open, you buy a new ticket every round from the `Tickets` contract on Arbitrum One.
+
+## Prerequisites
+
+- You know how Fast Feed rounds and prices work. If not, read the [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) and the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga), which sets the round cadence.
+- An account on Arbitrum One that holds USDG to pay for tickets and ETH to pay for gas.
+- An Arbitrum One JSON-RPC endpoint.
+- [Foundry's `cast`](https://getfoundry.sh/), or any EVM client, to send transactions. The examples use `cast` and leave out `--rpc-url $RPC_URL --private-key $PRIVATE_KEY` to stay short.
 
 ## Contract addresses
 
@@ -37,11 +44,6 @@ The examples below use `$TICKETS` and `$USDG` for these two addresses:
 export TICKETS=0xf7aC1f3Ea621519D8629ccC1E4Be3ef5Cd6130d2
 export USDG=0x004B506865409877C9fA29bfb1ebA929984B9bbC
 ```
-
-## Prerequisites
-
-- An account on Arbitrum One that holds USDG to pay for tickets and ETH to pay for gas.
-- [Foundry's `cast`](https://getfoundry.sh/), or any EVM client, to send transactions. The examples use `cast` with `--rpc-url $RPC_URL --private-key $PRIVATE_KEY`. The examples leave those flags out to stay short.
 
 ## Step 1: Generate an API key and its hash
 
