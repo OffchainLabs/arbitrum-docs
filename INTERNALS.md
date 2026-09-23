@@ -24,6 +24,7 @@ canonical for humans, and the one to edit first.**
 - [The gates](#the-gates)
 - [What nothing catches](#what-nothing-catches)
 - [Page weight and what loads late](#page-weight-and-what-loads-late)
+- [Cookies and client-side storage](#cookies-and-client-side-storage)
 - [Known trade-off: no static prerendering](#known-trade-off-no-static-prerendering)
 - [Design specs](#design-specs)
 
@@ -443,6 +444,44 @@ against `next start`, take the median of at least three interleaved runs, and re
 server is a floor rather than the number: with no CDN in front of it every request pays a full round
 trip, which is why a 1.3 KB stylesheet can be charged hundreds of milliseconds here and almost
 nothing in production. A loaded machine moves a single score by ten points.
+
+## Cookies and client-side storage
+
+**A docs page sets no cookies.** Measured on a production build in a fresh headless-Chrome profile:
+none after the page loads and the Inkeep widget mounts, none after opening the chat. That is a
+deliberate state, not an accident, and one line holds it up.
+
+The only thing that used to set one was Inkeep. `@inkeep/cxkit-react` wrote
+`inkeepUsagePreferences_userId` on every page before any interaction — a 21-character random id,
+365-day expiry, `path=/`, and no `Secure` flag even over HTTPS. Its job was to let Inkeep's analytics
+recognise a returning anonymous visitor: `user-provider.js` reads it back as `userProperties.id` with
+`identificationType: "COOKIED"`, and `base-events-provider.js` attaches that to every event it POSTs
+to `api.io.inkeep.com/events`. A second cookie, `inkeepChatSessionId-<apiKey>-<componentType>`, would
+have appeared after a reader's first chat message, to resume the thread across reloads and tabs.
+Nothing the widget does for a reader depends on either: with no stored id it mints one in memory per
+page load and proceeds as `ANONYMOUS`, and the bot check at `/v1/challenge` is cookie-free.
+
+`lib/inkeep.ts` therefore sets `privacyPreferences: { optOutAnalyticalCookies: true,
+optOutFunctionalCookies: true }`. **Both flags are load-bearing, because cxkit-primitives 0.5.119
+checks them in two different layers.** `use-browser-storage.js` picks cookie-versus-`sessionStorage`
+on `optOutAllAnalytics || optOutFunctionalCookies`; `user-provider.js` decides whether to write a
+`userId` at all on `optOutAllAnalytics || optOutAnalyticalCookies`. Measured one flag at a time:
+`optOutAnalyticalCookies` alone removes the visitor id but leaves the chat-session cookie to appear
+later; `optOutFunctionalCookies` alone moves the visitor id into `sessionStorage`. Together they leave
+the widget with no cookie to set. The one residue is an empty `sessionStorage` key of the same name,
+which the SDK writes as `""` on its clear path and the tab discards on close.
+
+What this costs: Inkeep's dashboard loses returning-visitor continuity and counts each page load as a
+new anonymous user; per-conversation metrics are unaffected, since those key on `conversationId`. A
+reader's chat thread survives a reload but not a new tab. **This is a persistence opt-out, not an
+analytics one** — events still reach Inkeep, and the `onEvent` bridge to PostHog fires regardless of
+these flags. Turning collection itself off is `optOutAllAnalytics`, a separate decision.
+
+No gate checks any of this. To confirm the state after touching `lib/inkeep.ts` or bumping
+`@inkeep/cxkit-react`: production build, open a docs page in a fresh browser profile, wait for the
+"Ask AI" button, open it, and read the Application → Cookies panel. Anything that adds a cookie to
+the site — PostHog will, by default, once it is wired in — reopens the consent question this section
+currently answers with "none".
 
 ## Known trade-off: no static prerendering
 
