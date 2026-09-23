@@ -8,13 +8,13 @@ user_story: As a developer who runs a latency-sensitive strategy on Arbitrum One
 content_type: how-to
 ---
 
-This guide is for searchers, propAMM operators, and market makers who want to subscribe to the <a data-quicklook-from="fast-feed">Fast Feed</a> on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and keep that subscription active.
+This guide is for searchers, propAMM operators, market makers, and anyone else who wants to read onchain data faster. It shows you how to subscribe to the <a data-quicklook-from="fast-feed">Fast Feed</a> on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and keep that subscription active.
 
 It explains how to buy a Fast Feed ticket each round: hash your API key, deposit USDG, read the round state, call `purchaseTickets`, and automate the purchase with the reference bot.
 
 <VanillaAdmonition type="note" title="If you don't know what the Fast Feed is">
 
-The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> orders it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
+The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> executes it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
 
 </VanillaAdmonition>
 
