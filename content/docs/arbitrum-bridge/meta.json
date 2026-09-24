@@ -1,6 +1,7 @@
 {
   "title": "Arbitrum bridge",
   "icon": "ArrowLeftRight",
+  "root": true,
   "description": "Move ETH and ERC-20 tokens between Ethereum and Arbitrum.",
   "pages": [
     "quickstart",
