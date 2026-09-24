@@ -276,11 +276,11 @@ How each check maps to the lifecycle:
 - **`OutBoxTransactionExecuted`** and **`isSpent(position)`** (Outbox, parent chain): terminal state. The event's `transactionIndex` field equals the withdrawal's `position`.
 - **`constructOutboxProof(size, leaf)`** (`NodeInterface`, child chain): builds the Merkle proof for a manual claim, where `size` is the confirmed block's `sendCount` and `leaf` is the withdrawal's `position`. The `NodeInterface` is a node-provided virtual contract—call it with `eth_call` against a child chain node; it doesn't exist onchain.
 
-<VanillaAdmonition type="note" title="Chains on the legacy (pre-BoLD) protocol">
+<Callout type="info" title="Chains on the legacy (pre-BoLD) protocol">
 
 On chains that haven't upgraded to BoLD, the Rollup contract identifies assertions by sequential node number instead of hash, and the corresponding events are `NodeCreated` and `NodeConfirmed(nodeNum, blockHash, sendRoot)`. The `ArbSys`, `Outbox`, and `NodeInterface` surfaces are unchanged, and the SDK abstracts the difference entirely.
 
-</VanillaAdmonition>
+</Callout>
 
 If the parent chain is itself an Arbitrum chain (the L3 case), use the Rollup contract's `getAssertionCreationBlockForLogLookup(assertionHash)` getter to obtain block numbers suitable for event queries on the parent chain.
 
@@ -296,11 +296,11 @@ Work through the stages in order—each row's check assumes the previous rows pa
 | `CONFIRMED`, but the claim transaction reverts                                            | Execution (phase 3)                  | `Outbox.isSpent(position)`—`true` means it was already claimed (find the claim via the `OutBoxTransactionExecuted` event with `transactionIndex == position`); for an L3 withdrawal, confirm you're claiming the correct leg on the correct chain; re-derive the proof with `constructOutboxProof` | If the proof root isn't in `Outbox.roots` despite `CONFIRMED` status, something is inconsistent—collect the position, child chain transaction hash, and chain ID, and contact the chain operator |
 | "Withdrawal is claimable, but funds never arrived"                                        | Execution (phase 3)                  | Nobody executed the claim—execution is manual. Check `isSpent(position)`; if `false`, execute via the SDK or the bridge UI's **Claim** button. For token withdrawals, funds are released by the parent chain gateway to the destination address once executed                                      | End-user cases: [bridge troubleshooting](/docs/arbitrum-bridge/troubleshooting)                                                                                                                |
 
-<VanillaAdmonition type="warning" title="Historical data availability">
+<Callout type="warn" title="Historical data availability">
 
 Ethereum consensus nodes are required to serve blob data for only 4,096 epochs (≈18 days). Monitors that reconstruct old withdrawal history need archive access: an [archive beacon endpoint for historical blobs](/docs/run-a-node/beacon-nodes-historical-blobs) to re-derive the chain from batch data, and an archive child chain node for the event logs that `constructOutboxProof` reads. On AnyTrust chains, the equivalent concern is the <Term id="data-availability-committee-dac">Data Availability Committee</Term>'s retention window. Claiming a confirmed withdrawal itself is unaffected—proofs are built from child chain logs, not blobs.
 
-</VanillaAdmonition>
+</Callout>
 
 ## See also
 
