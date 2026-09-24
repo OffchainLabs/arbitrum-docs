@@ -7,11 +7,12 @@ author: pete-vielhaber
 sme: Mehdi Salehi
 ---
 
-<VanillaAdmonition type="tip" title="Looking for implementation guides?">
+<Callout type="idea" title="Looking for implementation guides?">
 
 This document explains the protocol-level concepts of parent-to-child messaging. For practical, step-by-step instructions on implementing bridging and messaging, see [How to bridge from parent chain to child chain](/docs/arbitrum-essentials/bridging/deposit/eth-and-messages).
 
-</VanillaAdmonition>
+</Callout>
+
 In the [Bypassing the Sequencer](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <Term id="child-chain">child chain</Term> by going through the <Term id="parent-chain">parent chain</Term>'s <Term id="delayed-inbox">Delayed Inbox</Term> contract instead of sending them directly to the [<Term id="sequencer">Sequencer</Term>](/docs/how-arbitrum-works/deep-dives/sequencer). This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
 - Submit a child chain bound <Term id="transaction">transaction</Term> from a parent chain
@@ -37,7 +38,7 @@ We generally categorize these parent-to-child chain messaging methods as follows
 
 This section will explore these categories in detail and explain how they work. The diagram below illustrates the various paths available for parent-to-child chain communication and asset transfers.
 
-<ImageZoom src="/img/haw-l1-to-l2.svg" alt="Parent to child messaging" className="img-800px" />
+<ImageZoom src="/img/haw-l1-to-l2.svg" alt="Parent to child messaging" className="img-600px" />
 
 ## Native token bridging
 
@@ -68,7 +69,7 @@ Note on caller type and aliasing:
 - **If the caller is a `7702-enabled account` (EOA with temporary contract code)**:
   - The **ETH** goes to the aliased address, similar to contracts. This is due to the presence of runtime code during execution, and ensures consistent aliasing behavior post-EIP-7702.
 
-<ImageZoom src="/img/haw-aliasing.svg" alt="Address aliasing" className="img-800px" />
+<ImageZoom src="/img/haw-aliasing.svg" alt="Address aliasing" className="img-600px" />
 
 ### Address aliasing
 
@@ -137,13 +138,14 @@ The Delayed Inbox provides methods for unsigned messages from both EOAs and cont
 
 [<Term id="arbitrum-nitro">Arbitrum Nitro</Term>](/docs/how-arbitrum-works/inside-arbitrum-nitro) defines various **message types** to distinguish between the categories described above (signed vs. unsigned, EOAs vs. contracts, etc.). These message types help the protocol route and process each incoming message securely.
 
-For the full list of message-type identifiers used by <Term id="arbos">ArbOS</Term>, see [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) and the [ArbOS messages section](/docs/how-arbitrum-works/deep-dives/arbos#messages-and-blocks).
+For the full list of message-type identifiers used by ArbOS, see [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) and the [ArbOS messages section](/docs/how-arbitrum-works/deep-dives/arbos#messages-and-blocks).
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Refer to the [Address aliasing](#address-aliasing) discussion for more background. This mechanism ensures that a parent chain contract can't impersonate a child chain address unless it provides a valid signature as an EOA.
 
-</VanillaAdmonition>
+</Callout>
+
 ## Retryable tickets
 
 Retryable tickets are Arbitrum's canonical method for creating parent-to-child chain messages—parent-chain transactions that initiate a message to be executed on a child chain. A retryable is submittable for a fixed cost (dependent only on its calldata size) paid at the parent chain. Critically, the ticket's _submission_ on the parent chain is separable and asynchronous from its _execution_ on the child chain. This design provides atomicity for cross-chain operations: if the parent chain transaction to request submission succeeds (doesn't revert), then the execution of the retryable on the child chain has a strong guarantee to eventually succeed.

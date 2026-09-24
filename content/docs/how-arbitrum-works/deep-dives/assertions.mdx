@@ -9,9 +9,9 @@ sme: Mehdi
 
 ## The Rollup chain assertions vs. child chain blocks
 
-The Rollup chain consists of assertions, which serve as checkpoints summarizing multiple child chain blocks. Assertions are what give Arbitrum its <Term id="hard-finality">hard finality</Term> guarantee — for the broader soft- vs. hard-finality picture, see [Finality](/docs/how-arbitrum-works/deep-dives/finality).
+The Rollup chain consists of <Term id="assertion">assertions</Term>, which serve as checkpoints summarizing multiple child chain blocks. Assertions are what give Arbitrum its hard finality guarantee — for the broader soft- vs. hard-finality picture, see [Finality](/docs/how-arbitrum-works/deep-dives/finality).
 
-- Child chain blocks contain individual transaction data
+- Child chain blocks contain individual <Term id="transaction">transaction</Term> data
 - Assertions provide state summaries recorded on Ethereum
 - Each assertion may represent multiple child chain blocks, optimizing gas costs and reducing Ethereum storage usage.
 
@@ -38,11 +38,12 @@ Arbitrum ensures assertions are automatically confirmed or rejected based on pro
 
 For more details on how the Rollup chain works under <Term id="bold">BoLD</Term>, the [gentle introduction](/docs/how-arbitrum-works/bold/gentle-introduction) provides an overview that touches on the Rollup chain.
 
-<VanillaAdmonition type="note" title="Validators and proposers serve different roles">
+<Callout type="info" title="Validators and proposers serve different roles">
 
-Validators validate transactions by computing the next <Term id="chain-state">chain state</Term> using the chain's [STF](/docs/how-arbitrum-works/deep-dives/stf), whereas proposers can also assert and challenge the chain state on the <Term id="parent-chain">parent chain</Term>.
+Validators validate transactions by computing the next <Term id="chain-state">chain state</Term> using the chain's [STF](/docs/how-arbitrum-works/deep-dives/stf), whereas proposers can also assert and challenge the chain state on the parent chain.
 
-</VanillaAdmonition>
+</Callout>
+
 Except for the assertion number, the assertion's contents are merely claims by its proposer. Arbitrum doesn't know at first whether any of these fields are correct. The protocol should eventually confirm the assertion if all of these fields are correct. The protocol should eventually reject the assertion if any of these fields are incorrect.
 
 An assertion implicitly claims that its predecessor is correct, meaning it also asserts the correctness of the entire chain's history: a sequence of ancestor assertions that reaches back to the chain's genesis.
@@ -77,11 +78,12 @@ The protocol design requires only one honest validator to secure the system, mak
 
 Some validators will act as bonders at any given time, while others remain passive. Bonders deposit **ETH** bonds into Arbitrum's smart contracts, which are forfeited if they lose a challenge.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Arbitrum Nitro chains accept **ETH** as the only collateral for staking.
 
-</VanillaAdmonition>
+</Callout>
+
 A single bond can secure a sequence of assertions, meaning a validator's bond applies to multiple checkpoints of the chain's history. This checkpoint allows efficient resource use while maintaining security.
 
 A validator must be bonded to its predecessor to create a new assertion. The bond ensures that validators have economic risk in any assertion they make.
@@ -92,7 +94,7 @@ Multiple disputes may be active simultaneously if conflicting assertions arise i
 
 - **Honest validators can continue asserting**, building on the last correct assertion.
 - **Users can keep transacting** on the child chain without disruption.
-- **Child-to-parent chain withdrawals** may experience delays; typically, withdrawals experience a single challenge period (6.4 days). A key property of BoLD is that, in the common case, withdrawals (messages) will experience only a one-challenge-period delay. In the event of a dispute, withdrawals will be delayed by no more than two challenge periods, regardless of the adversaries' behavior during the challenge.
+- **Child-to-parent chain withdrawals** may experience delays; typically, withdrawals experience a single challenge period (<Var name="arbOneDisputeWindowDays" /> days). A key property of BoLD is that, in the common case, withdrawals (messages) will experience only a one-challenge-period delay. In the event of a dispute, withdrawals will be delayed by no more than two challenge periods, regardless of the adversaries' behavior during the challenge.
 
 Despite these delays, Arbitrum guarantees that honest assertions always succeed, maintaining Ethereum-level security.
 

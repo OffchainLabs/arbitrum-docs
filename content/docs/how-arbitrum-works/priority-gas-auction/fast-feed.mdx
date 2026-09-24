@@ -1,11 +1,11 @@
 ---
 title: 'Introduction to the Fast Feed'
-sidebar_label: 'Introduction to the Fast Feed'
 description: 'Learn what the Fast Feed publishes, who it serves, and how paid subscription access works.'
-author: anegg0
-sme: gligneul
+sidebar_label: 'Introduction to the Fast Feed'
 user_story: As a latency-sensitive participant on Arbitrum One, I want to understand what the Fast Feed publishes and how to subscribe to it.
 content_type: 'concept'
+author: anegg0
+sme: gligneul
 ---
 
 The Fast Feed is a paid, authenticated WebSocket stream that publishes each transaction as soon as the <Term id="sequencer">Sequencer</Term> has ordered and executed it, before the block that contains it reaches the standard <Term id="sequencer-feed">sequencer feed</Term>.
@@ -63,11 +63,11 @@ The Fast Feed trades guarantees for speed. Three consequences shape how you writ
 
 **There is no replay.** The Fast Feed caches nothing. You subscribe at the head and receive only the messages sent from that point onward. If your connection drops, the messages sent while you were away are gone.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Treat the Fast Feed as an early signal, not as a record. Confirm final state against a node or the standard sequencer feed.
 
-</VanillaAdmonition>
+</Callout>
 
 ## How subscription access works
 
@@ -96,11 +96,11 @@ A price update fraction of 144 means the next round can cost at most about twice
 
 Each round opens with a grandfather period that covers about half its length. During that period, only subscribers from the previous round can buy, up to the number of tickets they held. Sales then open to everyone until the round hits its maximum.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 The <Term id="arbitrum-dao">Arbitrum DAO</Term> controls these parameters and can change any of them. A change takes effect at the next round, so it can wait up to 24 hours.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Where the revenue goes
 
@@ -108,11 +108,11 @@ The contract accepts payment in an ERC-20, USD-backed stablecoin. It sends proce
 
 This split follows the framework that Timeboost established, which keeps Arbitrum's ordering-related revenue products aligned.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 The Arbitrum Treasury Management (ATM) Council and OAT select the stablecoin. Contract deployment follows that choice, and all contract addresses appear in the Arbitrum One developer documentation once the contracts are live.
 
-</VanillaAdmonition>
+</Callout>
 
 Trail of Bits audited both contracts before deployment. The Fast Feed Payment Contract is audited under the name "Sequencer Feed Ticketing", so read the [Sequencer Feed Ticketing report](/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf) for that contract, and the [Reward Distributor Fixes report](/audit-reports/2026_06_16_trail_of_bits_security_audit_reward_distributor_fixes_summary_report.pdf) for the RewardDistributor. The [security audit reports page](/docs/audit-reports) lists every Arbitrum audit.
 

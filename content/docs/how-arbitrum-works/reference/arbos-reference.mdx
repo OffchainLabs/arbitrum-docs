@@ -32,24 +32,18 @@ ArbOS upgrades are scheduled to happen [when finalizing the first block](https:/
 
 Most of ArbOS's state exists to facilitate its [precompiles](/docs/arbitrum-essentials/precompiles/reference). The remaining parts are detailed below.
 
-### `blockhashes`
-
-Source: [nitro/arbos/blockhash/blockhash.go#L15](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/blockhash/blockhash.go#L15)
+### [`blockhashes`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/blockhash/blockhash.go#L15)
 
 This component maintains the last 256 parent chain block hashes in a circular buffer. This component allows the [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38) to implement the `BLOCKHASH` and `NUMBER` opcodes and supports the precompile methods that involve the [<Term id="outbox">Outbox</Term>](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging). To avoid changing the ArbOS state outside of a transaction, blocks made from messages with a new parent chain block number update this info during an [`InternalTxUpdateL1BlockNumber`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/internal_tx.go#L24) [`ArbitrumInternalTx`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/internal_tx.go) included as the first transaction of the block.
 
-### `l1PricingState`
-
-Source: [nitro/arbos/l1pricing/l1pricing.go#L16](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l1pricing/l1pricing.go#L16)
+### [`l1PricingState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l1pricing/l1pricing.go#L16)
 
 In addition to supporting the [`ArbAggregator precompile`](/docs/arbitrum-essentials/precompiles/reference#arbaggregator), the parent chain pricing state provides tools for determining the parent chain component of a transaction's gas costs. This part of the state tracks the total amount of funds collected from transactions in parent chain gas fees and the funds spent by batch posters to post data batches on the parent chain.
 
 Based on this information, ArbOS maintains a parent chain data fee, which is also tracked in this state and determines how much the parent chain fee will cost. ArbOS dynamically adjusts this value so that fees collected are approximately equal to batch posting costs.
 For more details about parent chain pricing, see [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing).
 
-### `l2PricingState`
-
-Source: [nitro/arbos/l2pricing/l2pricing.go#L14](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l2pricing/l2pricing.go#L14)
+### [`l2PricingState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l2pricing/l2pricing.go#L14)
 
 The child chain pricing state tracks child chain resource usage to determine a reasonable child chain gas price. This process considers various factors, including user demand, the state of Geth, and the computational gas target. The primary mechanism for doing so consists of a pair of pools, one larger than the other, that drain as child chain-specific resources are consumed and filled as time passes. Parent chain-specific resources, such as parent chain `calldata`, aren't accounted for in the pools since they don't directly impact the computational workload of network actors. Instead, the design of the gas target mechanism regulates execution resources to ensure consistent system performance and synchronization.
 

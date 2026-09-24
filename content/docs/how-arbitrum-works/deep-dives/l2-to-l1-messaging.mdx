@@ -7,16 +7,17 @@ author: pete-vielhaber
 sme: TucksonDev
 ---
 
-<VanillaAdmonition type="tip" title="Looking for implementation guides?">
+<Callout type="idea" title="Looking for implementation guides?">
 
 This document explains the protocol-level concepts of child-to-parent messaging. For practical, step-by-step instructions on implementing withdrawals and messaging, see [How to bridge to parent chain from child chain](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages).
 
-</VanillaAdmonition>
+</Callout>
+
 <Term id="arbitrum">Arbitrum</Term>'s <Term id="outbox">outbox</Term> system allows arbitrary child-to-parent chain contract calls, i.e., messages initiated from the child chain that will eventually resolve through execution on the parent chain.
 
 Child-to-parent chain messages (i.e., outgoing messages) bear some things in common with Arbitrum’s [parent chain to child chain messages](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging), which are “in reverse” with differences, which we’ll explore in this section.
 
-Executing one of these messages on the parent chain requires the containing assertion to be confirmed, which is a stronger guarantee than a batch reaching the parent chain. [Finality](/docs/how-arbitrum-works/deep-dives/finality) explains why posting a batch does not make funds withdrawable.
+Executing one of these messages on the parent chain requires the containing <Term id="assertion">assertion</Term> to be confirmed, which is a stronger guarantee than a batch reaching the parent chain. [Finality](/docs/how-arbitrum-works/deep-dives/finality) explains why posting a batch does not make funds withdrawable.
 
 ## Protocol flow
 
@@ -26,7 +27,7 @@ Messages from child to parent chains are included in Arbitrum’s Rollup state a
    - To initiate a child-to-parent chain message, a user or contract calls the `sendTxToL1` method on the [`ArbSys`](/docs/arbitrum-essentials/precompiles/reference#arbsys) precompile.
 2. **Message inclusion in an <Term id="assertion">assertion</Term>**:
    - The message is batched with other transactions and included in a [Rollup assertion](/docs/how-arbitrum-works/deep-dives/assertions).
-   - Assertions are submitted to the Rollup contract on the parent chain and enter the [dispute window](/docs/how-arbitrum-works/deep-dives/assertions) (6.4 days).
+   - Assertions are submitted to the Rollup contract on the parent chain and enter the [dispute window](/docs/how-arbitrum-works/deep-dives/assertions) (<Var name="arbOneDisputeWindowDays" /> days).
 3. **Assertion confirmation**:
    - If the assertion remains unchallenged after the dispute window, the Rollup contract finalizes the assertion.
    - The assertion's Merkle root gets posted to the outbox contract on the parent chain.
@@ -63,7 +64,7 @@ Each message progresses through three primary states:
 | Stage | Description |
 | ------------------------ | ----------- |
 | Posted on child chain | The message is sent via `ArbSys.sendTxToL1`. |
-| Waiting for finalization | The assertion containing the message is in the [<Term id="challenge-period">challenge period</Term>](/docs/how-arbitrum-works/deep-dives/assertions) (~6.4 days) |
+| Waiting for finalization | The assertion containing the message is in the [<Term id="challenge-period">challenge period</Term>](/docs/how-arbitrum-works/deep-dives/assertions) (~<Var name="arbOneDisputeWindowDays" /> days) |
 | Confirmed and executable on the parent chain | If no [<Term id="fraud-proof">fraud proof</Term>](/docs/how-arbitrum-works/bold/gentle-introduction) is submitted, the assertion is confirmed, and the message is available for execution in the outbox. |
 
 ## Asset withdrawals

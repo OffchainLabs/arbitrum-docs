@@ -12,25 +12,26 @@ In this how-to, you'll learn how to bid for the right to use the express lane an
 
 This how-to assumes that you're familiar with [How Timeboost works](/docs/how-arbitrum-works/timeboost/gentle-introduction)
 
-<VanillaAdmonition type="note" title="Note about transferring express lane rights">
+<Callout type="info" title="Note about transferring express lane rights">
 
 A round's express lane controller, at their choice, can send transactions signed by others on a per-transaction basis, as explained later in this guide.
 
-</VanillaAdmonition>
+</Callout>
 
 ## How to submit bids for the right to be the express lane controller
 
 To use the express lane for faster transaction inclusion, you must win an auction for the right to be the express lane controller for a specific round.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Remember that, by default, each round lasts <Var name="timeboostRoundSeconds" /> seconds, and the auction for a specific round closes <Var name="timeboostAuctionClosingSeconds" /> seconds before the start of the round. These default values can be configured on a chain using the `roundDurationSeconds` and `auctionClosingSeconds` parameters.
 
-</VanillaAdmonition>
+</Callout>
 
 An auction contract facilitates auctions, and bids get submitted to an autonomous auctioneer that interacts with the contract. Let's examine the process of submitting bids and determining the winner of an auction.
 
 ### Prerequisites: Gather the required information
+
 
 Before we begin, make sure you have:
 
@@ -78,11 +79,11 @@ const biddingTokenContractAddress = await publicClient.readContract({
 console.log(`biddingToken: ${biddingTokenContractAddress}`);
 ```
 
-<VanillaAdmonition type="note"  title="Bidding token in Arbitrum chains">
+<Callout type="info" title="Bidding token in Arbitrum chains">
 
 On Arbitrum One and Arbitrum Nova, the default bidding token is **WETH**.
 
-</VanillaAdmonition>
+</Callout>
 
 Once we know what the bidding token is, we can deposit funds to the auction contract by calling the function `deposit` of the contract after having it approved as spender of the amount we want to deposit:
 
@@ -169,14 +170,19 @@ let currentAuctionRoundIsClosed = await publicClient.readContract({
 });
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Remember that, by default, auctions for a given round open <Var name="timeboostRoundSeconds" /> seconds before that round starts and close <Var name="timeboostAuctionClosingSeconds" /> seconds before the round starts, so there might be no auctions opened at certain times.
 
-</VanillaAdmonition>
+</Callout>
+
 Once we know the current round, we can bid for (`currentRound + 1`) and verify that the auction is still open (`!currentAuctionRoundIsClosed`), then we can submit a bid.
 
+<Callout type="idea" title="Fetching the minimum bid amount">
+
 Before submitting a bid, query the reserve pricer API to retrieve the minimum acceptable bid amount for the round you're bidding on.
+
+</Callout>
 
 When bids get submitted to the autonomous auctioneer endpoint, we need to send an `auctioneer_submitBid` request with the following information:
 
@@ -256,11 +262,11 @@ const signature = await account.sign({
 });
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 You can also call the function `getBidHash` in the auction contract to obtain the `signatureData`, specifying the `round`, `userAddress`, and `amountToBid`.
 
-</VanillaAdmonition>
+</Callout>
 
 When sending the request, the autonomous auctioneer will return an empty result with an HTTP status `200` if received correctly. If the result returned contains an error message, something went wrong. Following are some of the error messages that can help us understand what's happening:
 
@@ -313,7 +319,7 @@ If you won the auction, congratulations! You are the express lane controller for
 
 ## How to submit transactions to the express lane
 
-The sequencer immediately sequences transactions sent to the express lane, while regular transactions are delayed 200ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction as the express lane controller for a given round. For background on default sequencer ordering and the feed, see [Sequencing and broadcasting](/docs/how-arbitrum-works/deep-dives/sequencer#4-persistence-and-broadcast).
+The sequencer immediately sequences transactions sent to the express lane, while regular transactions are delayed <Var name="timeboostNonExpressDelayMs" />ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction as the express lane controller for a given round. For background on default sequencer ordering and the feed, see [Sequencing and broadcasting](/docs/how-arbitrum-works/deep-dives/sequencer#persistence-and-broadcast).
 
 The sequencer handles the express lane. When sending transactions to the Sequencer endpoint, we need to send a `timeboost_sendExpressLaneTransaction` request with the following information:
 
@@ -325,16 +331,18 @@ The sequencer handles the express lane. When sending transactions to the Sequenc
 - conditional options for Arbitrum transactions ([more information](https://github.com/OffchainLabs/go-ethereum/blob/48de2030c7a6fa8689bc0a0212ebca2a0c73e3ad/arbitrum_types/txoptions.go#L71))
 - signature (explained below)
 
-<VanillaAdmonition type="info" title="Timeboost-ing third party transactions">
+<Callout type="info" title="Timeboost-ing third party transactions">
 
 Notice that while the express lane controller must sign the `timeboost_sendExpressLaneTransaction` request, any party can sign the transaction for execution. In other words, the express lane controller can receive transactions signed by other parties and sign them to apply the time advantage offered by the express lane to those transactions.
 
-</VanillaAdmonition>
-<VanillaAdmonition type="info" title="Support for eth_sendRawTransactionConditional">
+</Callout>
+
+<Callout type="info" title="Support for `eth_sendRawTransactionConditional`">
 
 Timeboost doesn't currently support the `eth_sendRawTransactionConditional` method.
 
-</VanillaAdmonition>
+</Callout>
+
 Let's see an example of a call to this RPC method:
 
 ```tsx
@@ -413,14 +421,15 @@ Note that if you get any of the errors below, then the sequence number used in y
 | `NOT_EXPRESS_LANE_CONTROLLER` | the sender is not the express lane controller |
 | `NO_ONCHAIN_CONTROLLER` | there is no defined, onchain express lane controller for the round |
 | `SEQUENCE_NUMBER_ALREADY_SEEN` | the sequence number used for the given transaction was already consumed, try resubmitting with a new sequence number |
-| `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number |
+| `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number
 | `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached. Read more about this on our [Troubleshoot Timeboost page](/docs/how-arbitrum-works/timeboost/troubleshoot-timeboost#the-block-based-timeout-for-express-lane-transactions) |
 
-<VanillaAdmonition type="info" title="What happens if you're not the express lane controller?">
+<Callout type="info" title="What happens if you're not the express lane controller?">
 
 If you are not the express lane controller and you try to submit a transaction to the express lane, the sequencer will respond with the error `NOT_EXPRESS_LANE_CONTROLLER` or `NO_ONCHAIN_CONTROLLER`.
 
-</VanillaAdmonition>
+</Callout>
+
 ## How to withdraw funds deposited in the auction contract
 
 Funds are deposited in the auction contract to have the right to bid in auctions. Withdrawing funds is possible through a two-step process: initiate the withdrawal, wait for two rounds, and then finalize the withdrawal.
@@ -467,7 +476,7 @@ console.log(`Finalize withdrawal transaction sent: ${finalizeWithdrawalTransacti
 
 ## How to identify timeboosted transactions
 
-Transactions sent to the express lane by the express lane controller and that have been executed (regardless of whether they were successful or reverted) can be identified by examining their receipts or the message broadcast by the [Sequencer feed](/docs/how-arbitrum-works/deep-dives/sequencer#4-persistence-and-broadcast).
+Transactions sent to the express lane by the express lane controller and that have been executed (regardless of whether they were successful or reverted) can be identified by examining their receipts or the message broadcast by the [Sequencer feed](/docs/how-arbitrum-works/deep-dives/sequencer#persistence-and-broadcast).
 
 Transaction receipts now include a new field, `timeboosted`, which will be `true` for timeboosted transactions and `false` for regular non-timeboosted transactions. For example:
 
@@ -502,21 +511,23 @@ In the current implementation, information about the winning bid for a resolved 
 
 #### S3 URLs for historical bid data
 
-<VanillaAdmonition type="info" title="URL updates for historical bid data">
+<Callout type="info" title="URL updates for historical bid data">
 On June 9 2025, at around 17:27 ET (UTC−05:00), the region in which the Amazon S3 bucket for historical bid data on Arbitrum One was _changed_ from `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/` to `s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/`. The below table has been updated for the new, correct URL to access bid data after June 9, 2025 17:27 ET, but if you require data from before June 9, 2025 17:27 ET, then please use `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/`.
 
-</VanillaAdmonition>
+</Callout>
+
 | Chain            | S3 bucket URL                                                   |
 | ---------------- | --------------------------------------------------------------- |
 | Arbitrum Sepolia | s3://timeboost-auctioneer-sepolia/ue2/validated-timeboost-bids/ |
 | Arbitrum One     | s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/    |
 | Arbitrum Nova    | s3://timeboost-auctioneer-nova/ue2/validated-timeboost-bids/    |
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Make sure you use `--no-sign-request` with the [AWS S3 CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/).
 
-</VanillaAdmonition>
+</Callout>
+
 Here is an example query on how to look up and download historical bid data:
 
 ```shell
@@ -536,15 +547,15 @@ download: s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/2025/06/09
 
 Below are a few of the default Timeboost parameters mentioned earlier. All these parameters and more are configurable by the chain owner.
 
-| Parameter name          | Description                                                                                                                                                                                                                      | Recommended default value                  |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                               | <Var name="timeboostRoundSeconds" /> seconds                                 |
-| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                               | <Var name="timeboostAuctionClosingSeconds" /> seconds                                 |
-| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                              | An address controlled by the chain's owner |
-| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any **ERC-20** token (assuming the token chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard **ERC-20** logic). | **WETH**                                   |
-| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                                 | 0.2 seconds, or 200 milliseconds           |
-| `reservePrice`          | The minimum bid amount accepted by the auction contract for the current Timeboost auction, denominated in `_biddingToken`.                                                                                                       | None                                       |
-| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                      | 0.001 **WETH**                             |
+| Parameter name          | Description                                                                                                                                                                                                                      | Recommended default value                                       |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                               | <Var name="timeboostRoundSeconds" /> seconds                            |
+| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                               | <Var name="timeboostAuctionClosingSeconds" /> seconds                   |
+| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                              | An address controlled by the chain's owner                      |
+| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any **ERC-20** token (assuming the token chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard **ERC-20** logic). | **WETH**                                                        |
+| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                                 | 0.2 seconds, or <Var name="timeboostNonExpressDelayMs" /> milliseconds |
+| `reservePrice`          | The minimum bid amount accepted by the auction contract for the current Timeboost auction, denominated in `_biddingToken`.                                                                                                       | None                                                            |
+| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                      | 0.001 **WETH**                                                  |
 
 ## Troubleshooting and best practices
 

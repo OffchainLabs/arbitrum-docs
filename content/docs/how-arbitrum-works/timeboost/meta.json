@@ -1,5 +1,6 @@
 {
   "title": "Timeboost",
+  "root": true,
   "pages": [
     "gentle-introduction",
     "how-to-use-timeboost",

@@ -13,11 +13,12 @@ We store ArbOS's state at an address within a Geth `statedb` (state database). I
 
 `0xA4B05FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF` is a fictional account representing ArbOS.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 Any links on this page may point to older versions of Nitro or our fork of Geth. While we try to keep this up to date, most of this should be stable. Check the latest releases of [Nitro](https://github.com/OffchainLabs/nitro/releases) and [Geth](https://github.com/OffchainLabs/go-ethereum/releases) for the most recent changes.
 
-</VanillaAdmonition>
+</Callout>
+
 ## Hooks
 
 <Term id="arbitrum">Arbitrum</Term> uses various hooks to modify Geth’s behavior during transaction processing. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152) function.
@@ -44,15 +45,11 @@ Below is `ApplyTransaction`'s callgraph, with additional info on where the vario
 
 What follows is an overview of each hook in chronological order.
 
-### `ReadyEVMForL2`
-
-Source: [nitro/arbstate/geth-hook.go#L47](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbstate/geth-hook.go#L47)
+### [`ReadyEVMForL2`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbstate/geth-hook.go#L47)
 
 A call to `ReadyEVMForL2` installs the other transaction-specific hooks into each Geth `EVM` right before it performs a state transition. Without this call, the state transition will instead use the default `DefaultTxProcessor` and get the same results as vanilla Geth. A `TxProcessor` object carries these hooks and the associated Arbitrum-specific state during the transaction's lifetime.
 
-### `StartTxHook`
-
-Source: [nitro/arbos/tx_processor.go#L100](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L100)
+### [`StartTxHook`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L100)
 
 Geth calls the `StartTxHook` before a transaction executes, which allows ArbOS to handle two Arbitrum-specific transaction types.
 
@@ -62,73 +59,51 @@ If the transaction is an `ArbitrumSubmitRetryableTx`, ArbOS creates a [retryable
 
 The hook returns `true` for both transaction types, signifying that the state transition is complete.
 
-### `GasChargingHook`
-
-Source: [nitro/arbos/tx_processor.go#L354](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L354)
+### [`GasChargingHook`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L354)
 
 This fallible hook ensures the user has enough funds to pay their poster’s parent chain calldata costs. If not, the transaction is reverted, and the EVM does not start. In the common case where the user can pay, the amount paid for calldata is set aside for later reimbursement to the poster. All other fees go to the network account, as they represent the transaction’s burden on validators and nodes more generally.
 
 Suppose the user attempts to purchase compute gas over ArbOS's per-block gas limit. In that case, the difference is [set aside](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L407) and [refunded later](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_transition.go#L419) via `ForceRefundGas`, so only the gas limit is used. Note that the limit observed may not be the same as that seen [at the start of the block](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/block_processor.go#L176) if ArbOS's larger gas pool falls below the [`MaxPerBlockGasLimit`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/l2pricing/l2pricing.go#L86) while processing the block's previous transactions.
 
-### `PushCaller`
-
-Source: [nitro/arbos/tx_processor.go#L76](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L76)
+### [`PushCaller`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L76)
 
 These hooks track callers on the EVM call stack, pushing and popping as calls are made and completed. This hook provides [`ArbSys`](/docs/arbitrum-essentials/precompiles/reference#arbsys) with info about the call stack, which is used to implement the methods `WasMyCallersAddressAliased` and `MyCallersAddressWithoutAliasing`.
 
-### `L1BlockHash`
-
-Source: [nitro/arbos/tx_processor.go#L617](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L617)
+### [`L1BlockHash`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L617)
 
 In Arbitrum, the `BlockHash` and `Number` operations return data that relies on the underlying parent chain blocks rather than child chain blocks to accommodate the normal use case of these opcodes, which often assume Ethereum-like time passing between blocks. The `L1BlockHash` and `L1BlockNumber` hooks have the required data for these operations.
 
-### `ForceRefundGas`
-
-Source: [nitro/arbos/tx_processor.go#L425](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L425)
+### [`ForceRefundGas`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L425)
 
 This hook allows ArbOS to add additional refunds to the user's transaction. The only usage of this hook is to refund any compute gas purchased in excess of ArbOS's per-block gas limit during the `GasChargingHook`.
 
-### `NonRefundableGas`
-
-Source: [nitro/arbos/tx_processor.go#L418](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L418)
+### [`NonRefundableGas`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L418)
 
 Because poster costs are borne by the parent chain aggregators, not the network, payments toward parent chain calldata should not be refunded. This hook provides Geth access to the equivalent amount of child chain gas that the poster's cost equals, ensuring that this amount isn't reimbursed for network-incentivized behaviors like freeing storage slots.
 
-### `EndTxHook`
-
-Source: [nitro/arbos/tx_processor.go#L429](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L429)
+### [`EndTxHook`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L429)
 
 The `EndTxHook` is called after the `EVM` returns a transaction's result, providing one last opportunity for ArbOS to intervene before state transition finalization. Final gas amounts are known, enabling ArbOS to credit the network and poster share of the user's gas expenditures and adjust the pools. The hook returns from the [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38) for the final time, discarding its state as the system moves on to the next transaction, where its contents will be renewed.
 
-### `RevertedTxHook`
-
-Source: [nitro/arbos/tx_processor.go#L960](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbos/tx_processor.go#L960)
+### [`RevertedTxHook`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbos/tx_processor.go#L960)
 
 The `RevertedTxHook` is called during Nitro's state transition. It checks whether the transaction has been previously reverted or is part of the transaction filter. If either is true, it will not execute the transaction and will use up a predetermined amount of gas. If it was a previously reverted transaction, the sender's nonce will be increased.
 
 ## Interfaces and components
 
-### `APIBackend`
-
-Source: [go-ethereum/arbitrum/apibackend.go#L34](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/apibackend.go#L34)
+### [`APIBackend`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/apibackend.go#L34)
 
 `APIBackend` implements the `ethapi.Backend` interface, which allows a simple integration of the <Term id="arbitrum-chain">Arbitrum chain</Term> to the existing Geth API. The `Backend` member answers most calls.
 
-### `Backend`
-
-Source: [go-ethereum/arbitrum/backend.go#L15](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/backend.go#L15)
+### [`Backend`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/backend.go#L15)
 
 This struct is an Arbitrum equivalent to the [`Ethereum`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/eth/backend.go#L68) struct. It is mostly glue logic, including a pointer to the `ArbInterface` interface.
 
-### `ArbInterface`
-
-Source: [go-ethereum/arbitrum/arbos_interface.go#L10](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/arbos_interface.go#L10)
+### [`ArbInterface`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/arbos_interface.go#L10)
 
 This interface serves as the primary interface between the geth-standard APIs and the Arbitrum chain. Geth APIs either check the status by working on the `Blockchain` struct retrieved from the `Blockchain` call or send transactions to Arbitrum using the [`PublishTransactions`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/arbos_interface.go#L11) call.
 
-### `RecordingKV`
-
-Source: [go-ethereum/arbitrum/recordingdb.go#L22](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/recordingdb.go#L22)
+### [`RecordingKV`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/recordingdb.go#L22)
 
 `RecordingKV` is a read-only key-value store that retrieves values from an internal trie database. All values accessed by a `RecordingKV` get recorded internally. This value records all preimages accessed during block creation, which will be needed to prove the execution of this particular block. A [`RecordingChainContext`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/recordingdb.go#L123) should also be used to record which block headers the block execution reads (another option is always to assume that the last 256 block headers have been accessed). The process is simplified using two functions: [`PrepareRecording`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/recordingdb.go#L152) creates a stateDB and chain context objects, running block creation process using these objects records the required preimages, and [`PreimagesFromRecording`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/recordingdb.go#L174) function extracts the preimages recorded.
 
@@ -147,45 +122,31 @@ Nitro Geth includes a few child chain-specific transaction types. Click any to j
 
 The following reference documents each type.
 
-### `ArbitrumUnsignedTx`
-
-Source: [go-ethereum/core/types/arb_types.go#L43](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L43)
+### [`ArbitrumUnsignedTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L43)
 
 It provides a mechanism for a user on a parent chain to message a contract on a child chain. This mechanism uses the bridge for authentication rather than requiring the user's signature. Address remapping of the user's address will occur on the child chain to distinguish them from a normal child chain caller.
 
-### `ArbitrumContractTx`
-
-Source: [go-ethereum/core/types/arb_types.go#L104](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L104)
+### [`ArbitrumContractTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L104)
 
 These are like [`ArbitrumUnsignedTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L43)'s but intended for smart contracts. These use the bridge's unique, sequential nonce rather than requiring the caller to specify their own. A parent chain contract may still use an `ArbitrumUnsignedTx`, but doing so may necessitate tracking the nonce in the parent <Term id="chain-state">chain state</Term>.
 
-### `ArbitrumDepositTx`
-
-Source: [go-ethereum/core/types/arb_types.go#L338](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L338)
+### [`ArbitrumDepositTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L338)
 
 It represents a user deposit from a parent chain to a child chain. This representation increases the user's balance by the amount deposited on the parent chain.
 
-### `ArbitrumSubmitRetryableTx`
-
-Source: [go-ethereum/core/types/arb_types.go#L232](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L232)
+### [`ArbitrumSubmitRetryableTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L232)
 
 It represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#arbitrumretrytx) if enough gas is available. For more info, see the [retryables documentation](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets).
 
-### `ArbitrumRetryTx`
-
-Source: [go-ethereum/core/types/arb_types.go#L161](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L161)
+### [`ArbitrumRetryTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L161)
 
 These calls are scheduled using the `redeem` method of the [`ArbRetryableTx`](/docs/arbitrum-essentials/precompiles/reference#arbretryabletx) precompile and via retryable auto-redemption. For more info, see the [retryables documentation](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets).
 
-### `ArbitrumInternalTx`
-
-Source: [nitro/arbos/internal_tx.go](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/internal_tx.go)
+### [`ArbitrumInternalTx`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/internal_tx.go)
 
 Because tracing support requires state changes to occur within a transaction, ArbOS may create a transaction of this type to update its state between user-generated transactions. Such a transaction has a [`Type`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L387) indicating the state it will update, though currently this is just future-proofing, as there's only one value it may have. Below are the internal transaction types.
 
-### `InternalTxStartBlock`
-
-Source: [nitro/arbos/internal_tx.go#L22](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/internal_tx.go#L22)
+### [`InternalTxStartBlock`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/internal_tx.go#L22)
 
 It updates the parent chain block number and the parent chain base fee. This transaction [is generated](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/block_processor.go#L181) whenever a new block gets created. They are [guaranteed to be the first](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/block_processor.go#L182) in their child block chain.
 

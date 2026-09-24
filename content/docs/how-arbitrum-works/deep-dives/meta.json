@@ -1,5 +1,6 @@
 {
   "title": "Deep dives",
+  "root": true,
   "pages": [
     "transaction-lifecycle",
     "sequencer",

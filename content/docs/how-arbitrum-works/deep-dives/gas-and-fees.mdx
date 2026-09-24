@@ -14,7 +14,7 @@ There are two parties a user pays when submitting a transaction:
 - **Poster**: If reimbursable, covers the parent chain resources such as the parent chain calldata needed to post the transaction.
 - **Network fee account**: Covers the child chain's resources, including computation, storage, and other burdens that child chain nodes must bear to service transactions.
 
-The parent chain component is the product of the <Term id="transaction">transaction</Term>'s estimated contribution to its <Term id="batch">batch</Term>'s size—computed using [Brotli](/docs/how-arbitrum-works/deep-dives/batchposter#3-messages-become-a-compressed-batch) on the transaction alone—and the child chain's view of the parent chain data price. This value dynamically adjusts over time to ensure the <Term id="batch-poster">batch poster</Term> is ultimately fairly compensated.
+The parent chain component is the product of the <Term id="transaction">transaction</Term>'s estimated contribution to its <Term id="batch">batch</Term>'s size—computed using [Brotli](/docs/how-arbitrum-works/deep-dives/batchposter) on the transaction alone—and the child chain's view of the parent chain data price. This value dynamically adjusts over time to ensure the batch poster is ultimately fairly compensated.
 
 The child chain component consists of the traditional fees <Term id="geth">Geth</Term> would pay to bonders in a vanilla parent chain, such as the computation and storage charges that apply to the [<Term id="state-transition-function">State Transition Function</Term> (STF)](/docs/how-arbitrum-works/deep-dives/stf). [<Term id="arbos">ArbOS</Term>](/docs/how-arbitrum-works/deep-dives/arbos) charges additional fees for executing its child-chain-specific [precompiles](/docs/arbitrum-essentials/precompiles/overview), whose fees are dynamically priced based on the resources used during execution.
 
@@ -30,7 +30,7 @@ There are two main challenges in accurately pricing parent chain resources:
 
 #### 1. Apportioning batch costs among transactions
 
-- **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm ([Brotli](/docs/how-arbitrum-works/deep-dives/batchposter#3-messages-become-a-compressed-batch)). The effectiveness of compression depends on shared patterns among transactions in a batch.
+- **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm ([Brotli](/docs/how-arbitrum-works/deep-dives/batchposter)). The effectiveness of compression depends on shared patterns among transactions in a batch.
 - **Contribution estimation**: It's difficult to determine how much a specific transaction contributes to the batch's overall compressibility.
 - **Ideal vs. practical**: Ideally, transactions that enhance compressibility would get charged less, but there's no efficient way to calculate this precisely within the constraints of the STF.
 
@@ -51,7 +51,7 @@ To overcome these challenges, Arbitrum Nitro implements a two-fold strategy:
 
 There are two types of parent chain costs: batch posting costs and rewards.
 
-Batch posting costs reflect the actual cost a [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) pays to post batch data on the parent chain. Whenever a batch is posted, the parent chain contract that records it will send a special "batch posting report" message to the child chain ArbOS, reporting who paid for the batch and the parent chain basefee at the time. This message is placed in the chain's [<Term id="delayed-inbox">delayed inbox</Term>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) so that it will be delivered to the child chain ArbOS after some delay.
+Batch posting costs reflect the actual cost a [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) pays to post batch data on the parent chain. Whenever a batch is posted, the parent chain contract that records it will send a special "batch posting report" message to the child chain <Term id="arbos">ArbOS</Term>, reporting who paid for the batch and the parent chain basefee at the time. This message is placed in the chain's [<Term id="delayed-inbox">delayed inbox</Term>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) so that it will be delivered to the child chain ArbOS after some delay.
 
 When a batch posting report message arrives at the child chain, ArbOS computes the cost of the referenced batch by multiplying the reported basefee by the batch's data cost. (ArbOS retrieves the batch's data from its inbox state and computes the parent chain gas the batch would have used by counting the number of zero bytes and non-zero bytes in the batch.) The pricer records the resulting cost as funds due to the party who is reported to have submitted the batch.
 
@@ -149,7 +149,7 @@ When the Sequencer posts a batch to the parent chain inbox:
 
 #### Compression levels
 
-For an operational overview of how the Sequencer applies these levels, see [Compression](/docs/how-arbitrum-works/deep-dives/batchposter#3-messages-become-a-compressed-batch). Dynamic adjustments of compression levels are based on backlog size ($B$):
+For an operational overview of how the Sequencer applies these levels, see [Compression](/docs/how-arbitrum-works/deep-dives/batchposter). Dynamic adjustments of compression levels are based on backlog size ($B$):
 
 - **Compression level ($CL$)** (where $UC$ is the user-configured compression level):
 
@@ -203,7 +203,21 @@ For more details on how gas targets affect chain security and validator assumpti
 
 ### Child chain tips
 
-The sequencer prioritizes transactions on a first-come, first-served basis (chains running [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction) modify this for express-lane transactions). Because tips do not make sense in this model, they are ignored. Arbitrum users always pay the basefee regardless of the tip they choose.
+Whether a tip does anything depends on the chain's <Term id="transaction-ordering-policy">transaction ordering policy</Term> and on whether the chain collects tips at all. Today, the only ordering policy that uses tips to define order is PGA. Two settings control this, and a chain needs both before a tip changes anything:
+
+1. **Tip collection.** ArbOS 61 added `setCollectTips` on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner). It ships disabled. Until a chain owner enables it, the chain ignores the tip and the sender pays the basefee alone.
+2. **Ordering that reads the tip.** The sequencer must run an ordering policy that sorts on the `PriorityFee` field.
+
+That gives three outcomes:
+
+| Chain configuration                                                               | What a tip does                                                        |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| <Term id="first-come-first-serve-fcfs">FCFS</Term>, tips not collected | Nothing. Arrival time sets the order, and the sender pays the basefee. |
+| [PGA](/docs/how-arbitrum-works/priority-gas-auction/pga), tips collected            | The tip sets the ordering position and the chain collects it.          |
+
+Under PGA, the sequencer keys its priority queue on the <Term id="priority-fee">priority fee</Term>, computed per <Term id="eip-1559">EIP-1559</Term> as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`. Paying more moves a transaction up the queue; it never lowers the basefee the transaction owes. A transaction that pays no tip still gets included, because the anti-starvation boost raises its position each round.
+
+<Term id="arbitrum-one">Arbitrum One</Term> runs PGA and collects tips, sending 97% of the proceeds to the <Term id="arbitrum-dao">Arbitrum DAO</Term> treasury and 3% to the Arbitrum Developer Guild. To turn either setting on for your own chain, see [Priority fees collection](/docs/launch-arbitrum-chain/configuration/costs/priority-fees) and [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/pga).
 
 ### Gas estimating retryables
 
@@ -227,7 +241,7 @@ Setting the gas target accurately depends on estimating the time required to val
 
 The total fee charged to a transaction is the child chain basefee multiplied by the sum of the child chain gas used and the parent chain calldata charge.
 
-As on Ethereum, a transaction will fail if it does not supply enough gas or specifies a basefee limit below the current basefee. Ethereum also allows a "tip," but Nitro ignores this field and never collects any tips.
+As on Ethereum, a transaction fails if it does not supply enough gas or specifies a basefee limit below the current basefee. Ethereum also allows a "tip." A Nitro chain ignores that field unless the chain owner enables tip collection, and the tip changes the ordering only under PGA. See [Child chain tips](#child-chain-tips).
 
 ### Allocating funds and paying what is owed
 
@@ -263,17 +277,28 @@ Post-Fusaka, the block gas limit and transaction filtering have changed. Instead
 
 ArbOS 51 also introduces a `MaxTxGasLimit`. The State Transition Function (STF) will be relaxed to allow the final transaction in a block to use up to the `MaxTxGasLimit` even if it would cause the block to exceed the `MaxBlockGasLimit`.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The `MaxTxGasLimit` is set by implementing [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) from the Fusaka hard fork.
 
-</VanillaAdmonition>
+</Callout>
+
 This means that the "Effective Block Gas Limit" is really `MaxBlockGasLimit` + `MaxTxGasLimit` (64M for Arbitrum One). In previous versions of ArbOS, the STF would skip transactions from the sequencer feed if the transaction's `GasLimit` (set by the user) minus the L1 data posting gas exceeded the gas remaining in the block (without executing the transaction to see how much L2 gas it actually used).
 
 The new algorithm is more efficient because the STF doesn't need to continually search the transaction queue for one that fits in the remaining block gas, and can just keep adding transactions until the unused block gas is `0`.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 This change does not affect the `GasTarget`, and therefore does not affect how much overall gas per second the chain will use—only how transactions using that gas could be divided between different blocks.
 
-</VanillaAdmonition>
+</Callout>
+
+### How a block closes under PGA
+
+On a chain running PGA, the gas limits above are one of three conditions that close a block. The sequencer seals a block when it reaches the first of:
+
+- The 32 Mgas gas target, with the 64 Mgas effective limit described above and a 32 Mgas cap on any single transaction.
+- A calldata limit of 95,000 bytes.
+- The end of the block's last ordering round.
+
+A block that fills before its last round is finalized right away rather than idling, so a chain under load produces blocks faster than its nominal block time. On Arbitrum One that means 4 to 8 blocks per second. This changes how gas is divided between blocks, not how much gas per second the chain spends: the gas target still governs that. [Block creation under PGA](/docs/how-arbitrum-works/deep-dives/sequencer-transaction-flow#block-creation-under-pga) covers the round mechanics.

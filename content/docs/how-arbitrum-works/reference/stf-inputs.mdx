@@ -9,10 +9,12 @@ sme: Mehdi
 
 <Term id="arbitrum">Arbitrum</Term> nodes receive transaction inputs through two channels:
 
-- Nodes subscribe to the <Term id="sequencer-feed">Sequencer feed</Term> and receive upcoming ordered <Term id="transaction">transactions</Term> published in real time. To learn more, refer to the [real-time sequencer feed documentation](/docs/how-arbitrum-works/deep-dives/sequencer#4-persistence-and-broadcast).
-- Nodes also subscribe to the `SequencerBatchDelivered` event on the <Term id="parent-chain">parent chain</Term>. This event occurs whenever a <Term id="batch">batch</Term> of transactions gets delivered to the parent chain via the [<Term id="batch-poster">batch poster</Term>](/docs/how-arbitrum-works/deep-dives/batchposter). Upon receiving this event, nodes verify that the transactions recorded on the parent chain match those from the [Sequencer feed](/docs/how-arbitrum-works/deep-dives/sequencer#4-persistence-and-broadcast). If discrepancies arise, nodes reorganize to adopt the transactions confirmed on the parent chain, treating it as the definitive source of truth.
+- Nodes subscribe to the <Term id="sequencer">Sequencer</Term> feed and receive upcoming ordered <Term id="transaction">transactions</Term> published in real time. To learn more, refer to the [real-time sequencer feed documentation](/docs/how-arbitrum-works/deep-dives/sequencer#persistence-and-broadcast).
+- Nodes also subscribe to the `SequencerBatchDelivered` event on the <Term id="parent-chain">parent chain</Term>. This event occurs whenever a <Term id="batch">batch</Term> of transactions gets delivered to the parent chain via the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter). Upon receiving this event, nodes verify that the transactions recorded on the parent chain match those from the [Sequencer feed](/docs/how-arbitrum-works/deep-dives/sequencer#persistence-and-broadcast). If discrepancies arise, nodes reorganize to adopt the transactions confirmed on the parent chain, treating it as the definitive source of truth.
 
 These two channels suit different applications. To choose between them, see [when to rely on soft finality versus hard finality](/docs/how-arbitrum-works/deep-dives/finality#application-implications).
+
+The [Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed) on <Term id="arbitrum-one">Arbitrum One</Term> is not a third channel. It is a read-only stream for latency-sensitive subscribers, and a Nitro node cannot consume it or follow the chain with it. It delivers no input to the STF.
 
 These transactions serve as inputs for the [<Term id="state-transition-function">State Transition Function</Term> (STF)](/docs/how-arbitrum-works/deep-dives/stf).
 

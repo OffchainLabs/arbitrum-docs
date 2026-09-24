@@ -2,12 +2,12 @@
 title: 'State Transition Function'
 description: 'Learn the fundamentals of the State Transition Function within Arbitrum Nitro.'
 user_story: As a current or prospective Arbitrum user, I need to learn more about Nitro's design.
-content_type: 'concept'
+content_type: 'reference'
 author: petevielhaber
 sme: Mehdi
 ---
 
-An Arbitrum node is a deterministic machine: feed it the same ordered inputs, and it will always produce the same outputs. The job of everything before the <Term id="state-transition-function">State Transition Function</Term> (STF) is to agree on exactly which inputs those are and in what order they should be.
+An Arbitrum node is a deterministic machine: feed it the same ordered inputs, and it will always produce the same outputs. The job of everything before the State Transition Function (STF) is to agree on exactly which inputs those are and in what order they should be.
 
 ## How it works
 
@@ -21,7 +21,7 @@ Whatever the door, every input lands as one `L1IncomingMessage`: a header plus a
 
 #### 3. One byte decides the path
 
-The header’s `Kind` routes the message. A handful of kinds are system messages that the protocol mints: `Initialize` (kind 11) is the genesis message that sets the chain ID and base fee, `EthDeposit` (kind 12) bridges the native token, `SubmitRetryable` (kind 9) carries the <Term id="retryable-ticket">retryable-ticket</Term> mechanism behind robust parent-to-child chain messaging, and `BatchPostingReport` (kind 13) lets the STF charge the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) for the parent-chain data it consumes. The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity. For every kind, its value, and the name the bridge contracts use for it, see the [message type reference](/docs/how-arbitrum-works/reference/stf-inputs#message-types).
+The header’s `Kind` routes the message. A handful of kinds are system messages that the protocol mints: `Initialize` (kind 11) is the genesis message that sets the chain ID and base fee, `EthDeposit` (kind 12) bridges the native token, `SubmitRetryable` (kind 9) carries the <Term id="retryable-ticket">retryable-ticket</Term> mechanism behind robust parent-to-child chain messaging, and `BatchPostingReport` (kind 13) lets the STF charge the <Term id="batch-poster">batch poster</Term> for the parent-chain data it consumes. The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity. For every kind, its value, and the name the bridge contracts use for it, see the [message type reference](/docs/how-arbitrum-works/reference/stf-inputs#message-types).
 
 #### 4. The envelope inside the envelope
 
@@ -33,7 +33,7 @@ A batch posted to L1 isn’t a list of transactions; it can be either a Brotli-c
 
 #### 6. The unwrap
 
-Finally, `ParseL2Transactions` turns each envelope into the EVM transactions <Term id="geth">Geth</Term> will run: deposits become `ArbitrumDepositTx`, retryables become their submission transaction, batches recurse, and bookkeeping kinds like `RollupEvent` are acknowledged and skipped. What flows out is an ordered list of transactions. That ordered list is derived deterministically from headers that no node can fabricate; it is the true input to Arbitrum’s State Transition Function.
+Finally, `ParseL2Transactions` turns each envelope into the EVM transactions <Term id="geth">Geth</Term> will run: deposits become `ArbitrumDepositTx`, retryables become their submission transaction, batches recurse, and bookkeeping kinds like `RollupEvent` are acknowledged and skipped. What flows out is an ordered list of transactions. That ordered list is derived deterministically from headers that no node can fabricate; it is the true input to Arbitrum’s <Term id="state-transition-function">State Transition Function</Term>.
 
 ## Stylus-specific transaction processing
 

@@ -1,5 +1,6 @@
 {
   "title": "Reference",
+  "root": true,
   "pages": [
     "arbos-reference",
     "finality-and-reorgs",

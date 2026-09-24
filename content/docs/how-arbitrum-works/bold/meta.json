@@ -1,5 +1,6 @@
 {
   "title": "The BoLD dispute protocol",
+  "root": true,
   "pages": [
     "gentle-introduction",
     "how-bold-bisection-works",

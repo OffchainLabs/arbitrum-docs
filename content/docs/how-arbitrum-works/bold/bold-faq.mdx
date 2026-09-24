@@ -1,9 +1,9 @@
 ---
 title: 'BoLD FAQ'
-sidebar_label: 'FAQ'
 description: 'Frequently asked questions about the BoLD protocol.'
+sidebar_label: 'FAQ'
 user_story: 'As a user or researcher of the Arbitrum product suite, I want to learn about BoLD, a next-generation dispute protocol that enables permissionless validation.'
-content_type: 'faq'
+content_type: 'concept'
 author: leeederek
 sme: leeederek
 ---
@@ -131,7 +131,7 @@ Arbitrum state transitions are entirely deterministic. An honest party bonded to
 
 If a malicious entity wanted to attack Arbitrum, they would need to deposit 3,600 **ETH** to propose an invalid state assertion.
 
-<VanillaAdmonition type="info" title="Node Running Info">
+<Callout type="info" title="Node Running Info">
 
 - Anyone can run an Arbitrum node (today and post-BoLD)
 - The default mode is `watchtower`, which observes the chain. It will alert you if it detects something wrong on the chain, but it takes no action. It requires **no** funds and **doesn't** take any onchain action.
@@ -141,7 +141,7 @@ If a malicious entity wanted to attack Arbitrum, they would need to deposit 3,60
 - Proposers are in a special role; they strictly run in `makeNodes` mode. This role means a proposer is someone running an Arbitrum node in `makeNodes` mode, also making them a validator.
 - For more information about see [Running a Node](/docs/run-a-node/overview) and [Validation strategies](/docs/run-a-node/more-types/run-validator-node#validation-strategies).
 
-</VanillaAdmonition>
+</Callout>
 
 #### Q: How do BoLD-based L3s' challenge periods operate, considering the worst-case scenario?
 
@@ -157,11 +157,11 @@ Recommended parameter defaults for L3 Arbitrum chains that wish to use BoLD are 
 
 #### Q: What is the user flow for using the assertion bonding pool contract?
 
-<VanillaAdmonition type="warning">
+<Callout type="warning">
 
 The autopooling feature is not available on <Term id="arbitrum-nitro">Arbitrum Nitro</Term> yet.
 
-</VanillaAdmonition>
+</Callout>
 
 Anyone can deploy an assertion bonding pool using [`AssertionStakingPoolCreator.sol`](https://github.com/OffchainLabs/BoLD/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) as a means to crowdsource funds to put up a bond for an assertion. To defend Arbitrum using a bonding pool, an entity would first deploy this pool with the assertion they believe is correct and wish to put up a bond to challenge an adversary's assertion. Then, anyone can verify that the claim is correct by running the inputs through their node's State Transition Function (STF). If other parties agree that the assertion is correct, then they can deposit their funds into the contract. When enough funds are available, anyone can permissionlessly trigger the creation of the assertion onchain to initiate the challenge. Finally, once the dispute protocol confirms the honest parties' assertion, all involved entities can receive reimbursement for their funds and withdraw. The Arbitrum Nitro node validation software also features an optional "auto pooling" option that automates the entire workflow for assertion bonding pool deployment and depositing funds into the pool. If "auto pooling" is activated and the private key controlling the validator has enough funds, a trustless pool will get deployed alongside an assertion of the available funds. If a validator with the "auto pooling" feature enabled sees an assertion onchain that it agrees with _and_ a bonding pool already exists for that assertion, the validator will automatically deposit funds into the bonding pool to "join" others backing that onchain assertion in a trustless manner.
 
