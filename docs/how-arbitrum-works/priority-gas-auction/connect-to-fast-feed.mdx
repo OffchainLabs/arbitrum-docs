@@ -76,7 +76,7 @@ You can bind several tickets to one key, in the same round or across rounds. The
 
 The contract debits ticket purchases from an internal balance, not from your wallet. Fund that balance before you buy.
 
-1. Approve the contract to pull USDG. `amount` is in the token's smallest unit:
+1. Approve the contract to pull USDG. `amount` is in the token's smallest unit, so 100 USDG is `100000000`, enough for five tickets at the 17 USDG minimum price:
 
    ```shell
    cast send $USDG "approve(address,uint256)" $TICKETS <amount>
