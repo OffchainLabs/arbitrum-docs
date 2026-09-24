@@ -1,16 +1,20 @@
 ---
-title: 'How to buy Fast Feed tickets'
-sidebar_label: 'Buy Fast Feed tickets'
-description: 'Deposit USDG, buy a ticket each round from the Tickets contract, bind it to your API key, and automate the purchase with the reference bot.'
+title: 'How to connect to the Fast Feed'
+sidebar_label: 'Connect to the Fast Feed'
+description: 'Generate an API key, deposit USDG, buy a ticket each round from the Tickets contract, and open an authenticated WebSocket to the Fast Feed on Arbitrum One.'
 author: anegg0
 sme: gligneul
-user_story: As a developer who runs a latency-sensitive strategy on Arbitrum One, I want to buy Fast Feed tickets every round so my client keeps its connection.
+user_story: As a developer who runs a latency-sensitive strategy on Arbitrum One, I want to connect my client to the Fast Feed and keep it connected across rounds.
 content_type: how-to
 ---
 
-This guide is for searchers, propAMM operators, market makers, and anyone else who wants to read onchain data faster. It shows you how to subscribe to the <a data-quicklook-from="fast-feed">Fast Feed</a> on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and keep that subscription active.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
 
-It explains how to buy a Fast Feed ticket each round: hash your API key, deposit USDG, read the round state, call `purchaseTickets`, and automate the purchase with the reference bot.
+This guide is for searchers, propAMM operators, market makers, and anyone else who wants to read onchain data faster. It shows you how to subscribe to the <a data-quicklook-from="fast-feed">Fast Feed</a> on <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, open a connection to it, and keep that connection across rounds.
+
+It covers the full path: hash your API key, deposit USDG, read the round state, call `purchaseTickets`, open an authenticated WebSocket, and automate the purchase with the reference bot.
 
 <VanillaAdmonition type="note" title="If you don't know what the Fast Feed is">
 
@@ -26,13 +30,13 @@ The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid 
 - An account on Arbitrum One that holds USDG to pay for tickets and ETH to pay for gas.
 - An Arbitrum One JSON-RPC endpoint.
 - [Foundry's `cast`](https://getfoundry.sh/), or any EVM client, to send transactions. The examples use `cast` and leave out `--rpc-url $RPC_URL --private-key $PRIVATE_KEY` to stay short.
+- A WebSocket client. The examples use [`wscat`](https://github.com/websockets/wscat) or [`websocat`](https://github.com/vi/websocat) on the command line, the `ws` package for Node.js, and the `websockets` package for Python.
 
-## Contract addresses
+## Addresses and endpoints
 
-import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
-
-| Contract           | Arbitrum One                                                                 |
+| Item               | Arbitrum One                                                                 |
 | ------------------ | ---------------------------------------------------------------------------- |
+| Fast Feed endpoint | `wss://arb1-txfeed.arbitrum.io/`                                             |
 | `Tickets` (proxy)  | <AEL address="0x451DD62C26b753d07d6104aaC6865AaE73a6A598" chainID={42161} /> |
 | USDG payment token | <AEL address="0x004B506865409877C9fA29bfb1ebA929984B9bbC" chainID={42161} /> |
 
@@ -44,16 +48,17 @@ An earlier deployment at `0xf7aC1f3Ea621519D8629ccC1E4Be3ef5Cd6130d2` was abando
 
 </VanillaAdmonition>
 
-The examples below use `$TICKETS` and `$USDG` for these two addresses:
+The examples below use `$FEED_URL`, `$TICKETS`, and `$USDG` for these values:
 
 ```shell
+export FEED_URL=wss://arb1-txfeed.arbitrum.io/
 export TICKETS=0x451DD62C26b753d07d6104aaC6865AaE73a6A598
 export USDG=0x004B506865409877C9fA29bfb1ebA929984B9bbC
 ```
 
 ## Step 1: Generate an API key and its hash
 
-Your API key never goes onchain. You register its Keccak-256 hash with the ticket purchase, and you present the raw key when you connect to the Fast Feed.
+Your API key never goes onchain. You register its Keccak-256 hash with the ticket purchase, and you present the raw key when you connect to the Fast Feed. Anyone who holds the key can use your tickets, so treat it like a password.
 
 1. Generate a random key and keep it private:
 
@@ -68,6 +73,8 @@ Your API key never goes onchain. You register its Keccak-256 hash with the ticke
    ```
 
    Save the 32-byte output. You pass it as `apiKeyHash` in every purchase.
+
+The hash covers the UTF-8 bytes of the key string exactly as you send it in the `Authorization` header in [step 5](#step-5-connect). Hash the exact string you send, with no `0x` prefix and no surrounding whitespace.
 
 You can bind several tickets to one key, in the same round or across rounds. The Fast Feed allows as many open connections per key as that key has active tickets.
 
@@ -134,11 +141,101 @@ Each purchase emits a `TicketsPurchased(buyer, round, apiKeyHash, price, numTick
 
 Your tickets become active when the round ends. Until then, tickets from the previous round stay active. If you hold tickets in both rounds under the same key, your connection stays open across the round boundary.
 
-## Step 5: Connect to the Fast Feed
+## Step 5: Connect
 
-Open a WebSocket connection to the Fast Feed endpoint and present your raw API key. The endpoint hashes the key with Keccak-256 and admits the connection if the hash matches an active ticket. The [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed#how-subscription-access-works) describes the access model, and its [limits to design for](/how-arbitrum-works/priority-gas-auction/fast-feed#limits-to-design-for) section lists the guarantees your client must not rely on.
+Once the round in which you bought has ended, open a WebSocket to the Fast Feed endpoint and send your raw API key, not its hash, as a bearer token in the `Authorization` header of the upgrade request:
 
-When a round ends, the Fast Feed closes every connection whose key has no ticket in the new round. Buy the next round's ticket before `roundEnd` to avoid a gap.
+```text
+Authorization: Bearer <your-api-key>
+```
+
+The endpoint hashes the key with Keccak-256, compares it against the active tickets, and only then completes the upgrade. Messages start flowing at once. You open one connection per ticket, and each connection receives the full feed. Three rules apply to every client:
+
+- Complete the upgrade within 5 seconds, or the endpoint drops the socket.
+- Send only ping and pong frames. The endpoint closes the connection with code `1003` on any other inbound message.
+- Read as fast as the feed arrives. The endpoint closes a client that falls more than 2048 messages behind with code `1013`, so parse and process off the read loop.
+
+Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](/how-arbitrum-works/priority-gas-auction/fast-feed#what-the-fast-feed-publishes) section lists every field.
+
+<Tabs groupId="ws-client">
+<TabItem value="cli" label="Command line">
+
+```shell
+wscat -c "$FEED_URL" -H "Authorization: Bearer $API_KEY"
+# or
+websocat -H "Authorization: Bearer $API_KEY" "$FEED_URL"
+```
+
+Both tools print each frame as a line. To check a key without a ticket, run either command with a random key: the endpoint answers `HTTP 401`.
+
+</TabItem>
+<TabItem value="node" label="Node.js">
+
+```typescript
+import WebSocket from 'ws';
+
+const ws = new WebSocket(process.env.FEED_URL, {
+  headers: { Authorization: `Bearer ${process.env.API_KEY}` },
+});
+
+ws.on('unexpected-response', (req, res) => {
+  // 401: unknown key or no active ticket. 429: every ticket already has a connection.
+  console.error(`Rejected: HTTP ${res.statusCode}`);
+  req.destroy(); // with a listener attached, ws leaves the request open
+});
+
+ws.on('message', (data) => {
+  const msg = JSON.parse(data.toString());
+  // msg.pga_round, msg.transaction.tx_hash, msg.transaction.receipt, ...
+});
+
+ws.on('close', (code, reason) => {
+  console.log('closed', code, reason.toString());
+});
+```
+
+</TabItem>
+<TabItem value="python" label="Python">
+
+```python
+import asyncio
+import json
+import os
+
+import websockets
+
+
+async def main():
+    headers = {"Authorization": f"Bearer {os.environ['API_KEY']}"}
+    try:
+        async with websockets.connect(os.environ["FEED_URL"], additional_headers=headers) as ws:
+            async for frame in ws:
+                msg = json.loads(frame)
+                # msg["pga_round"], msg["transaction"]["tx_hash"], msg["transaction"]["receipt"], ...
+    except websockets.InvalidStatus as e:
+        # 401: unknown key or no active ticket. 429: every ticket already has a connection.
+        print(f"Rejected: HTTP {e.response.status_code}")
+    except websockets.ConnectionClosed as e:
+        print(f"closed {e.rcvd.code} {e.rcvd.reason}")
+
+
+asyncio.run(main())
+```
+
+This example needs `websockets` 14 or later. Older versions use `extra_headers=` instead of `additional_headers=`.
+
+</TabItem>
+</Tabs>
+
+## Step 6: Keep the connection across rounds
+
+Tickets bought in round N are active for round N+1 only, so an uninterrupted connection needs a purchase in every round:
+
+1. Buy the next round's ticket before `roundEnd`, with the same `apiKeyHash`. During the grandfather period you can renew up to the number of tickets you held.
+2. Shortly after a round ends, the endpoint closes every connection whose key holds no ticket in the new round, with close code `1008` and reason `authentication expired`. A key with a ticket in both rounds keeps its connection.
+3. If your connection closes, reconnect and continue from the current head. The Fast Feed keeps no history, so the messages sent while you were away are gone.
+
+To make the purchase step automatic, run the reference bot described in the next section.
 
 ## Automate the purchase with the reference bot
 
@@ -189,7 +286,9 @@ Two behaviors to plan for:
 - **The bot does not deposit funds.** Keep the internal balance topped up with `depositToken`, as in step 2. A purchase that finds an empty balance reverts, and the bot skips that round.
 - **The bot exits on RPC or network errors.** It treats a contract revert as a skipped round and continues, but any transport failure ends the process. Run it under a supervisor that restarts it, such as Docker `--restart=always`, Kubernetes, or systemd.
 
-## Troubleshoot purchase reverts
+## Troubleshoot
+
+### Purchase reverts
 
 | Revert                                           | Cause                                                                                 | Fix                                                                                                              |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -201,13 +300,22 @@ Two behaviors to plan for:
 | `BeforeFirstRoundStart()`                        | The first round has not started.                                                      | Wait for the configured first round start.                                                                       |
 | `ZeroTicketsRequested()`                         | `numTicketsDesired` was `0`.                                                          | Request at least one ticket.                                                                                     |
 
+### Connection rejected or closed
+
+| Response                                  | Cause                                                                          | Fix                                                                                     |
+| ----------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `HTTP 401 Unauthorized`                   | The `Authorization` header is missing, or the key's hash has no active ticket. | Check the raw key and its hash. Tickets bought this round activate at `roundEnd`.       |
+| `HTTP 429 Too Many Requests`              | The key already has as many open connections as it has active tickets.         | Close a connection, or buy more tickets for the next round.                             |
+| `HTTP 426 Upgrade Required`               | The request was not a WebSocket upgrade, for example a plain HTTPS `GET`.      | Use a WebSocket client.                                                                 |
+| Close `1008`, `authentication expired`    | The round ended and your key holds no ticket in the new round.                 | Buy before `roundEnd` each round, then reconnect.                                       |
+| Close `1013`, `client lagged`             | Your client fell more than 2048 messages behind.                               | Drain the socket faster. Move parsing and processing off the read loop, then reconnect. |
+| Close `1003`, `unexpected client message` | Your client sent a data frame.                                                 | Send only ping and pong frames.                                                         |
+| Close `1011`, `server shutting down`      | The endpoint restarted.                                                        | Reconnect with a short backoff.                                                         |
+
 ## FAQ
 
 **Which token pays for tickets?**
 USDG on Arbitrum One. The token is fixed when the contract is deployed and cannot change. On Arbitrum Sepolia, a test token is available on request.
-
-**Can I use one API key for several tickets?**
-Yes. The same key can back several tickets in one round and across rounds. The Fast Feed allows as many connections for a key as that key has active tickets.
 
 **When does my ticket start working?**
 At the end of the round in which you buy it. It stays active until the end of the next round.

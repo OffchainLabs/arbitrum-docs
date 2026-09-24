@@ -297,7 +297,7 @@
   },
   "fast-feed": {
     "title": "Fast Feed",
-    "text": "<p>A paid, authenticated data stream on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> that publishes individual transactions, their relative ordering, and related metadata after the <a href=\"/intro/glossary#sequencer\">Sequencer</a> orders and executes them, and before the block that contains them is published on the <a href=\"/intro/glossary#sequencer-feed\">Sequencer Feed</a>. Subscribers buy timed access through the Fast Feed Payment Contract.</p>\n"
+    "text": "<p>A paid, authenticated data stream on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> that publishes individual transactions, their relative ordering, and related metadata after the <a href=\"/intro/glossary#sequencer\">Sequencer</a> orders and executes them, and before the block that contains them is published on the <a href=\"/intro/glossary#sequencer-feed\">Sequencer Feed</a>. Subscribers buy timed access through the <code>Tickets</code> contract, also called the Fast Feed Payment Contract.</p>\n"
   },
   "fast-withdrawals": {
     "title": "Fast withdrawals",
