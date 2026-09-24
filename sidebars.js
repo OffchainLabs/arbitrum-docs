@@ -1199,8 +1199,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'how-arbitrum-works/priority-gas-auction/connect-to-fast-feed',
-              label: 'Connect to the Fast Feed',
+              id: 'how-arbitrum-works/priority-gas-auction/use-fast-feed',
+              label: 'Use the Fast Feed',
             },
             {
               type: 'link',
