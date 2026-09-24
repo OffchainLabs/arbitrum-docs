@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "source": "/docs/launch-arbitrum-chain/chain-config/validation/challenge-period",
+    "legacyDestination": "/launch-arbitrum-chain/chain-config/validation/challenge-period",
+    "reason": "source-is-live-url"
+  },
+  {
+    "source": "/launch-arbitrum-chain/features/common/configure-aep/configure-aep/fees",
+    "legacyDestination": "/https://docs.arbitrum.foundation/calculate-aep-fees",
+    "reason": "malformed-destination"
+  },
+  {
+    "source": "/launch-arbitrum-chain/features/common/gas-and-fees/choose-custom-gas-token",
+    "legacyDestination": "/launch-arbitrum-chain/chain-config/costs/custom-gas-token",
+    "reason": "destination-not-in-tree"
+  },
+  {
+    "source": "/launch-arbitrum-chain/features/common/gas-and-fees/choose-native-eth",
+    "legacyDestination": "//launch-arbitrum-chain/chain-config/costs/custom-gas-token",
+    "reason": "malformed-destination"
+  }
+]

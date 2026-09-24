@@ -82,7 +82,7 @@
       "hardware",
       "requirements"
     ],
-    "usedIn": 5,
+    "usedIn": 4,
     "snippet": "<include cwd>content/partials/_hardware-requirements.mdx</include>"
   },
   {
@@ -149,7 +149,7 @@
       "preview",
       "banner"
     ],
-    "usedIn": 1,
+    "usedIn": 0,
     "snippet": "<include cwd>content/partials/_public-preview-banner-partial.mdx</include>"
   },
   {
@@ -338,151 +338,8 @@
     "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_arbitrum-chain-customize-caution-banner-partial.mdx</include>"
   },
   {
-    "path": "content/partials/launch-arbitrum-chain/_config-account-abstraction.mdx",
-    "title": "Config account abstraction",
-    "summary": "Arbitrum chains support account abstraction (AA) primarily through ERC-4337, a standard that enables smart contract wallets without requiring changes to the…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "account",
-      "abstraction"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-account-abstraction.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-challenge-period-l1.mdx",
-    "title": "Config challenge period l1",
-    "summary": "General pros/cons of enforcing the challenge period on L1. Distinct from _config-l1-challenge-period.mdx (which covers confirmPeriodBlocks configuration plus an L1-vs-L2 comparison table) — reviewed and kept separately, not a duplicate.",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "challenge",
-      "period",
-      "l1"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-challenge-period-l1.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-customizable-governance.mdx",
-    "title": "Config customizable governance",
-    "summary": "Arbitrum chains (as L2 or L3 solutions settling on Ethereum or Arbitrum), feature customizable governance, which refers to the ability for chain creators to…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "customizable",
-      "governance"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-customizable-governance.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-data-posting-costs.mdx",
-    "title": "Config data posting costs",
-    "summary": "In Arbitrum chains, data posting costs refer to the fees incurred for submitting compressed batches of L2 transaction data to Ethereum (L1) as calldata, ensu…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "data",
-      "posting",
-      "costs"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-data-posting-costs.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-dedicated-throughput.mdx",
-    "title": "Config dedicated throughput",
-    "summary": "You may need dedicated throughput if your chain requires high performance or consistent resource availability.",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "dedicated",
-      "throughput"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-dedicated-throughput.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-evm-compatibility.mdx",
-    "title": "Config evm compatibility",
-    "summary": "EVM compatibility refers to the ability of Layer-2 scaling solutions to fully support and execute smart contracts and transactions designed for the Ethereum…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "evm",
-      "compatibility"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-evm-compatibility.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-force-inclusion.mdx",
-    "title": "Config force inclusion",
-    "summary": "Force inclusion in Arbitrum refers to a mechanism that allows users to bypass the Sequencer by submitting transactions directly to the Delayed Inbox contract…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "force",
-      "inclusion"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-force-inclusion.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-hardware.mdx",
-    "title": "Hardware requirements for Arbitrum chains",
-    "summary": "Arbitrum chains, including Arbitrum One, Nova, and customizable Arbitrum L2/L3 chains, have varying hardware needs depending on the node type.",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "hardware"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-hardware.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-l1-challenge-period.mdx",
-    "title": "Config l1 challenge period",
-    "summary": "How to configure the L1 challenge period (confirmPeriodBlocks) plus an L1-vs-L2 tradeoff table. Distinct from _config-challenge-period-l1.mdx (a general pros/cons prose explainer) — reviewed and kept separately, not a duplicate.",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "l1",
-      "challenge",
-      "period"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-l1-challenge-period.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/_config-other-language-support.mdx",
-    "title": "Config other language support",
-    "summary": "Arbitrum Stylus represents the mechanism through which Arbitrum chains support programming languages beyond those native to the Ethereum Virtual Machine (EVM…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "config",
-      "other",
-      "language",
-      "support"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_config-other-language-support.mdx</include>"
-  },
-  {
     "path": "content/partials/launch-arbitrum-chain/_custom-gas-token-note.mdx",
-    "title": "Native Mint/Burn for Custom Gas Tokens",
+    "title": "Custom gas token note",
     "summary": "Starting with ArbOS 51 Dia, Arbitrum chains have the option to use a native interop token with mint/burn as their custom gas tokens via third-party interoper…",
     "scope": "neutral",
     "tags": [
@@ -492,12 +349,12 @@
       "token",
       "note"
     ],
-    "usedIn": 3,
+    "usedIn": 2,
     "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_custom-gas-token-note.mdx</include>"
   },
   {
     "path": "content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx",
-    "title": "RaaS providers",
+    "title": "Raas providers notice",
     "summary": "It is highly recommended that you work with a Rollup-as-a-Service (RaaS) provider to deploy a production chain.",
     "scope": "neutral",
     "tags": [
@@ -523,227 +380,76 @@
     "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_size-limit.mdx</include>"
   },
   {
-    "path": "content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/_das-metrics.mdx",
+    "path": "content/partials/launch-arbitrum-chain/config-snippets/_das-metrics.mdx",
     "title": "Das metrics",
     "summary": "The DAS comes with the option of producing Prometheus metrics.",
     "scope": "neutral",
     "tags": [
       "launch-arbitrum-chain",
-      "configuration",
-      "data-availability",
-      "data-availability-committees",
+      "config-snippets",
       "das",
       "metrics"
     ],
     "usedIn": 3,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/_das-metrics.mdx</include>"
+    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/config-snippets/_das-metrics.mdx</include>"
   },
   {
-    "path": "content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/_das-optional-parameters.mdx",
+    "path": "content/partials/launch-arbitrum-chain/config-snippets/_das-optional-parameters.mdx",
     "title": "Das optional parameters",
     "summary": "Besides the parameters described in this guide, there are some more options that can be useful when running the DAS.",
     "scope": "neutral",
     "tags": [
       "launch-arbitrum-chain",
-      "configuration",
-      "data-availability",
-      "data-availability-committees",
+      "config-snippets",
       "das",
       "optional",
       "parameters"
     ],
     "usedIn": 3,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/_das-optional-parameters.mdx</include>"
+    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/config-snippets/_das-optional-parameters.mdx</include>"
   },
   {
-    "path": "content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_gcs-parameters.mdx",
+    "path": "content/partials/launch-arbitrum-chain/config-snippets/_gcs-parameters.mdx",
     "title": "Gcs parameters",
     "summary": "",
     "scope": "neutral",
     "tags": [
       "launch-arbitrum-chain",
-      "configuration",
-      "data-availability",
-      "data-availability-committees",
-      "parameters",
-      "gcs"
+      "config-snippets",
+      "gcs",
+      "parameters"
     ],
     "usedIn": 2,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_gcs-parameters.mdx</include>"
+    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/config-snippets/_gcs-parameters.mdx</include>"
   },
   {
-    "path": "content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-badger-db-parameters.mdx",
-    "title": "Local badger db parameters",
-    "summary": "",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "configuration",
-      "data-availability",
-      "data-availability-committees",
-      "parameters",
-      "local",
-      "badger",
-      "db"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-badger-db-parameters.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-files-parameters.mdx",
-    "title": "Create the local directory before launching your DAS",
+    "path": "content/partials/launch-arbitrum-chain/config-snippets/_local-files-parameters.mdx",
+    "title": "Local files parameters",
     "summary": "Make sure you create the directory specified in local-file-storage.data-dir before launching your DAS to avoid potential permission issues with Docker or Kub…",
     "scope": "neutral",
     "tags": [
       "launch-arbitrum-chain",
-      "configuration",
-      "data-availability",
-      "data-availability-committees",
-      "parameters",
+      "config-snippets",
       "local",
-      "files"
+      "files",
+      "parameters"
     ],
     "usedIn": 2,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-files-parameters.mdx</include>"
+    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/config-snippets/_local-files-parameters.mdx</include>"
   },
   {
-    "path": "content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_s3-parameters.mdx",
+    "path": "content/partials/launch-arbitrum-chain/config-snippets/_s3-parameters.mdx",
     "title": "S3 parameters",
     "summary": "",
     "scope": "neutral",
     "tags": [
       "launch-arbitrum-chain",
-      "configuration",
-      "data-availability",
-      "data-availability-committees",
-      "parameters",
-      "s3"
+      "config-snippets",
+      "s3",
+      "parameters"
     ],
     "usedIn": 2,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_s3-parameters.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_alt-da-pc.mdx",
-    "title": "Pros",
-    "summary": "- Significant cost savings: Using an Alt-DA can reduce DA fees by 75-95% compared to posting data directly to Ethereum, making it an ideal solution for high-…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "alt",
-      "da"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_alt-da-pc.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_anytrust-pc.mdx",
-    "title": "Pros",
-    "summary": "- Ultra-low transaction fees: By offloading data availability to a Data Availability Committee (DAC) instead of posting all transaction data directly to Ethe…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "anytrust"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_anytrust-pc.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_bold-pc.mdx",
-    "title": "Pros",
-    "summary": "- Improved Security: Mitigates delay attacks and ensures only valid states are confirmed, with high bonds (e.g., millions in USD equivalent) deterring malice…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "bold"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_bold-pc.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_custom-gas-token-pc.mdx",
-    "title": "Pros",
-    "summary": "- Enhanced token utility and demand: Using a custom ERC-20 token for gas fees creates inherent utility and constant demand for the project's native token, dr…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "custom",
-      "gas",
-      "token"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_custom-gas-token-pc.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_fast-withdrawals-pc.mdx",
-    "title": "Pros",
-    "summary": "- Significantly faster withdrawals and finality: Reduces withdrawal times from days to minutes, improving user experience and enabling quicker asset movement…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "fast",
-      "withdrawals"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_fast-withdrawals-pc.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_native-eth-pc.mdx",
-    "title": "Pros of using native **ETH**",
-    "summary": "- Simplicity and familiarity for users: Native ETH is the default gas token, making it easier for users already in the Ethereum ecosystem to interact with th…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "native",
-      "eth"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_native-eth-pc.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_permissioned-validators-pc.mdx",
-    "title": "Pros",
-    "summary": "- Enhanced control and security in trusted environments: Permissioned validators allow the chain owner to select and vet participants, reducing risks from un…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "permissioned",
-      "validators"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_permissioned-validators-pc.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_rollup-pc.mdx",
-    "title": "Pros",
-    "summary": "- Security: Provides maximum security and decentralization by inheriting full Ethereum-grade security without additional trust assumptions beyond the base la…",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "rollup"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_rollup-pc.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/features/_timeboost-pc.mdx",
-    "title": "Pros",
-    "summary": "- Revenue generation for chain owners.",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "features",
-      "timeboost"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/features/_timeboost-pc.mdx</include>"
+    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/config-snippets/_s3-parameters.mdx</include>"
   },
   {
     "path": "content/partials/precompile-tables/_ArbAddressTable.mdx",

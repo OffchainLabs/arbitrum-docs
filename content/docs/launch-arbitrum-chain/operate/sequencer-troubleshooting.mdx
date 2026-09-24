@@ -5,16 +5,16 @@ description: 'Diagnose and resolve sequencer feed problems, broadcast backlog er
 author: pete-vielhaber
 sme: jasonw-123
 user_story: As an Arbitrum chain operator, I need to diagnose why my sequencer stopped producing blocks or why its feed stalled, so I can restore normal operation.
-content_type: 'how-to'
+content_type: how-to
 ---
 
-This guide covers sequencer feed and block production problems. For setup, see [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs). For metric names and alert thresholds, see [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations). For batch posting problems, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting).
+This guide covers sequencer feed and block production problems. For setup, see [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer). For metric names and alert thresholds, see [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring). For batch posting problems, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/operate/batch-poster-troubleshooting).
 
-<VanillaAdmonition type="info" title="Defaults in this guide">
+<Callout type="info" title="Defaults in this guide">
 
 Every default value and log string on this page comes from the [Nitro source](https://github.com/OffchainLabs/nitro). Defaults change between releases. Confirm them against the version you run with `--help`.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Feed relay architecture
 
@@ -45,7 +45,7 @@ In a high-availability deployment, feeds flow in one direction through two relay
 sequencers  →  sequencer relays  →  external relays  →  public subscribers
 ```
 
-Sequencer relays subscribe to _every_ sequencer replica, not just the active one. Non-chosen sequencers still broadcast, so aggregating all of them means no messages are lost when the chosen sequencer changes. This is why the Helm setup needs per-replica headless services—a single load-balanced address would connect to only one replica. See [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs#2-relays-setup).
+Sequencer relays subscribe to _every_ sequencer replica, not just the active one. Non-chosen sequencers still broadcast, so aggregating all of them means no messages are lost when the chosen sequencer changes. This is why the Helm setup needs per-replica headless services—a single load-balanced address would connect to only one replica. See [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer#2-relays-setup).
 
 For installation steps, see [How to run a feed relay](/docs/run-a-node/run-feed-relay). For the message format, see [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed).
 
@@ -104,11 +104,11 @@ A "stalled feed" describes three different failures. They need different fixes, 
 | `arb/feed/backlog/messages` grows steadily | Batches are not landing on the parent chain | <Term id="batch-poster">Batch poster</Term> |
 | Your node lags but the feed is live        | Your node cannot keep up executing          | Your node's resources                                  |
 
-<VanillaAdmonition type="warning" title="A growing feed backlog is not a lagging follower">
+<Callout type="warning" title="A growing feed backlog is not a lagging follower">
 
-`arb/feed/backlog/messages` counts messages the broadcast server retains until it sees them covered by batches on the parent chain. Growth means batches are not landing. It does not mean a subscriber is behind. See [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations#sequencer) for the full metric list.
+`arb/feed/backlog/messages` counts messages the broadcast server retains until it sees them covered by batches on the parent chain. Growth means batches are not landing. It does not mean a subscriber is behind. See [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring#sequencer) for the full metric list.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Detecting a stall
 
@@ -125,11 +125,11 @@ The feed carries no _heartbeat_ at the application level, so silence is ambiguou
 3. **Check for rate limiting.** Public feed endpoints may throttle excessive connections. If you added redundant connections, remove them and reconnect.
 4. **Fall back to the parent chain.** A node with a working parent chain connection still syncs from batches without any feed. Sync is slower but correct, so a feed outage degrades latency rather than halting your node.
 
-<VanillaAdmonition type="warning" title="Redundant feed connections">
+<Callout type="warning" title="Redundant feed connections">
 
 You can point a relay at the same endpoint twice to survive a reset without waiting for a reconnect. This doubles bandwidth and risks rate limiting. Configure it at the relay, never at individual nodes, and never use more than one redundant connection. See [How to run a feed relay](/docs/run-a-node/run-feed-relay).
 
-</VanillaAdmonition>
+</Callout>
 
 ## Block production halt conditions
 
@@ -143,7 +143,7 @@ With the coordinator enabled, exactly one sequencer holds the lockout in Redis. 
 
 - [ERROR]—The `coordinator.priorities` key does not exist in Redis.
 - [CAUSE]—A new or wiped Redis instance, or one that was never populated.
-- [ACTION]—Register your sequencers. See [Redis priority registration](/docs/run-a-node/high-availability-sequencer-docs#redis-priority-registration).
+- [ACTION]—Register your sequencers. See [Redis priority registration](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer#redis-priority-registration).
 
 #### `no sequencer appears to want the lockout on redis`
 
@@ -172,11 +172,11 @@ With the coordinator enabled, exactly one sequencer holds the lockout in Redis. 
 - [MEANING]—Two very different faults share this message: a parent chain connection that is down or lagging, and a local clock that has drifted.
 - [ACTION]—Check parent chain RPC reachability and freshness first, then verify NTP on the sequencer host. Raising the delta hides the symptom without fixing either cause.
 
-<VanillaAdmonition type="warning" title="This check only runs with a parent chain reader">
+<Callout type="warning" title="This check only runs with a parent chain reader">
 
 The timestamp check applies only when the sequencer has a parent chain reader configured. A sequencer without one never halts for this reason, which is why local dev nodes do not reproduce it.
 
-</VanillaAdmonition>
+</Callout>
 
 #### `sequencer block creation panicked`
 
@@ -194,7 +194,7 @@ The sequencer keeps running here, but the block it builds is empty because the s
 | `transaction sender is not on the whitelist`                                         | `sender-whitelist` is set and the sender is absent                                                                   |
 | `sequencer temporarily not available`                                                | This node is forwarding rather than sequencing, and its <Term id="forwarder">forwarder</Term> is disabled |
 
-For the surplus flags, see [Sequencer configuration reference](/docs/launch-arbitrum-chain/configuration/sequencer/sequencer-config-reference#expected-surplus-flags).
+For the surplus flags, see [Sequencer configuration reference](/docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference#expected-surplus-flags).
 
 `sequencer temporarily not available` comes from the forwarder, not the sequencer. A node returns it when it is not the chosen sequencer and has no enabled target to forward to. Brief occurrences during a lockout handoff are normal. Sustained occurrences across every node mean no sequencer is chosen—see [No sequencer is chosen](#1-no-sequencer-is-chosen).
 
@@ -211,7 +211,7 @@ For the surplus flags, see [Sequencer configuration reference](/docs/launch-arbi
 
 Ruling these out saves time:
 
-- **A batch posting backlog.** The sequencer keeps producing blocks while unposted batches accumulate. See [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting).
+- **A batch posting backlog.** The sequencer keeps producing blocks while unposted batches accumulate. See [Batch poster troubleshooting](/docs/launch-arbitrum-chain/operate/batch-poster-troubleshooting).
 - **A feed outage.** The feed is an output. Losing it affects subscribers, not block production.
 - **A <Term id="validator">validator</Term> or <Term id="proposer">proposer</Term> failure.** Validation runs behind block production and does not gate it.
 - **An unfunded batch poster.** Posting stops; sequencing does not.

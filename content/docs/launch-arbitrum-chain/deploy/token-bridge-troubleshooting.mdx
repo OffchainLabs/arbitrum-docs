@@ -5,10 +5,10 @@ description: 'Diagnose and resolve common token bridge problems including ENS er
 author: pete-vielhaber
 sme: jose-franco
 user_story: As an Arbitrum chain operator, I need to diagnose and resolve common token bridge deployment and registration problems so that tokens bridge through the gateways I intended.
-content_type: 'troubleshooting'
+content_type: troubleshooting
 ---
 
-This guide covers problems that operators encounter when deploying, verifying, and registering contracts for the canonical <Term id="arb-token-bridge">token bridge</Term>. For the deployment procedure itself, see [Deploy a token bridge using the Chain SDK](/docs/launch-arbitrum-chain/deploy/deploying-token-bridge). To learn how the bridge is designed, see [Token bridging](/docs/how-arbitrum-works/deep-dives/token-bridging).
+This guide covers problems that operators encounter when deploying, verifying, and registering contracts for the canonical <Term id="arb-token-bridge">token bridge</Term>. For the deployment procedure itself, see [Deploy a token bridge using the Chain SDK](/docs/launch-arbitrum-chain/deploy/token-bridge). To learn how the bridge is designed, see [Token bridging](/docs/how-arbitrum-works/deep-dives/token-bridging).
 
 Most routing problems in this guide trace back to a single behavior: the <Term id="gateway-router">gateway router</Term> falls back to a default gateway instead of failing when a token has no registration. We’ll first cover issues related to how a gateway router chooses a specific gateway for a given token.
 
@@ -22,15 +22,15 @@ The mapping isn't a list of every bridgeable token. It holds only the tokens tha
 2. If it has no entry, fall back to `defaultGateway`—the <Term id="standarderc20-gateway">standard **ERC-20** gateway</Term>.
 3. If the resolved gateway is explicitly disabled, return the zero address.
 
-<VanillaAdmonition type="warning" title="Unregistered tokens fail silently, not loudly">
+<Callout type="warning" title="Unregistered tokens fail silently, not loudly">
 
 Step 2 is the reason misrouting is so hard to spot. A token you believe is registered to a custom gateway—but isn't—still bridges successfully through the standard gateway, minting a _different_ child chain token than the one you deployed. Nothing reverts and no event signals the mistake. If a bridge transfer succeeds but the tokens land at an unexpected address, suspect a missing registration before you suspect a bug.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Bridged USDC routes to the standard gateway
 
-You deployed a bridged **USDC** gateway following [the bridged USDC standard](/docs/launch-arbitrum-chain/integrations/bridged-usdc-standard), but the SDK and bridge UI keep sending **USDC** through the standard **ERC-20** gateway, producing the default bridged token rather than the Circle-standard one.
+You deployed a bridged **USDC** gateway following [the bridged USDC standard](/docs/launch-arbitrum-chain/integrations/bridged-usdc), but the SDK and bridge UI keep sending **USDC** through the standard **ERC-20** gateway, producing the default bridged token rather than the Circle-standard one.
 
 ### What causes this problem
 

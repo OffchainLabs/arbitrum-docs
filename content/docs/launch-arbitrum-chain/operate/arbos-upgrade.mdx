@@ -1,15 +1,15 @@
 ---
 title: 'How to upgrade ArbOS on your Arbitrum chain'
+sidebar_label: 'ArbOS upgrade'
 description: 'Learn how to upgrade ArbOS on your Arbitrum chain.'
-sidebar_label: 'Upgrade ArbOS'
-sidebar_position: 3
-content_type: 'how-to'
+content_type: how-to
 author: greatsoshiant
 sme: greatsoshiant
 target_audience: 'Developers maintaining Arbitrum chains.'
+sidebar_position: 3
 ---
 
-This how-to provides step-by-step instructions for <Term id="arbitrum-chain">Arbitrum chain</Term> operators who want to upgrade ArbOS on their Arbitrum chain(s). Familiarity with <Term id="arbos">ArbOS</Term>, Arbitrum chains, and [chain ownership](/docs/launch-arbitrum-chain/operate/ownership-access-control) is expected. Note that Arbitrum chain owners have full discretion over when and whether to upgrade their ArbOS version.
+This how-to provides step-by-step instructions for <Term id="arbitrum-chain">Arbitrum chain</Term> operators who want to upgrade ArbOS on their Arbitrum chain(s). Familiarity with [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos), Arbitrum chains, and [chain ownership](/docs/launch-arbitrum-chain/operate/ownership-and-access) is expected. Note that Arbitrum chain owners have full discretion over when and whether to upgrade their ArbOS version.
 
 The specific upgrade requirements for each ArbOS release are located under each reference page for that specific [ArbOS release](/docs/run-a-node/arbos-releases/overview#list-of-available-arbos-releases).
 
@@ -36,13 +36,18 @@ Once you have the WASM module root and have identified the required `nitro-contr
 
 The `WASM module root` is a 32-byte hash created from the Merkelized Go replay binary and its dependencies. When ArbOS is upgraded, a new WASM module root is generated due to modifications in the <Term id="state-transition-function">State Transition Function</Term> (STF). This new WASM module root must be set in the rollup contract on the parent chain. For example, the WASM module root for ArbOS 51 Dia is `0xc2c02df561d4afaf9a1d6785f70098ec3874765c638e3cb6dbe8d3c83333e14c` (consensus-v51.1).
 
+{/* Note: ArbOS 51 has two valid consensus tags with different WASM module roots:
+     consensus-v51 (0x8a7513bf...) and consensus-v51.1 (0xc2c02df5...).
+     This page and arbos51.mdx both cite v51.1. Keep them in sync if the
+     recommended tag changes. */}
+
 To set the WASM module root manually (i.e., not using the above guide), use the `Rollup proxy` contract's [`setWasmModuleRoot`](https://github.com/OffchainLabs/nitro-contracts/blob/38a70a5e14f8b52478eb5db08e7551a82ced14fe/src/rollup/RollupAdminLogic.sol#L321) method. Note that the `upgrade executor` contract on the parent chain is the designated owner of the Rollup contract, so the **<Term id="chain-owner">chain owner</Term> account** needs to initiate a call to the `upgrade executor` contract in order to perform the upgrade. This call should include the correct calldata for setting the new WASM module root.
 
-<VanillaAdmonition type="tip" title="Backward compatibility">
+<Callout type="idea" title="Backward compatibility">
 
 WASM module roots are backward compatible, so upgrading them before an ArbOS version upgrade will not disrupt your chain's functionality.
 
-</VanillaAdmonition>
+</Callout>
 
 #### Step 3: Schedule the ArbOS version upgrade
 
@@ -51,21 +56,21 @@ To schedule an ArbOS version upgrade for your Arbitrum chain, [follow this guide
 1. **`newVersion`**: Specify the ArbOS version you wish to upgrade to (e.g., `51`).
 2. **`timestamp`**: Set the exact UNIX timestamp at which you want your Arbitrum chain (Orbit) to transition to the new ArbOS version.
 
-If you would prefer to do this manually, simply call the [`scheduleArbOSUpgrade`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbOwner.sol#L116) function on the `ArbOwner` <Term id="precompile">precompile</Term> of the Arbitrum chain(s) you're upgrading. Because this is an administrative action (similar to upgrading your Wasm module root), the **chain owner account** must call the target chain's `upgrade executor` contract with the appropriate calldata in order to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile. This will schedule the ArbOS upgrade using the specified version and timestamp.
+If you would prefer to do this manually, simply call the [`scheduleArbOSUpgrade`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/fe4121240ca1ee2cbf07d67d0e6c38015d94e704/ArbOwner.sol#L116) function on the `ArbOwner` [precompile](/docs/arbitrum-essentials/precompiles/reference) of the Arbitrum chain(s) you're upgrading. Because this is an administrative action (similar to upgrading your Wasm module root), the **chain owner account** must call the target chain's `upgrade executor` contract with the appropriate calldata in order to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile. This will schedule the ArbOS upgrade using the specified version and timestamp.
 
-<VanillaAdmonition type="tip" title="Immediate upgrades">
+<Callout type="idea" title="Immediate upgrades">
 
 To upgrade immediately (without scheduling), set the timestamp to `0`.
 
-</VanillaAdmonition>
+</Callout>
 
-<VanillaAdmonition type="info" title="Obtaining the current ArbOS version">
+<Callout type="info" title="Obtaining the current ArbOS version">
 
 You can obtain the current ArbOS version of your chain by calling `ArbSys.ArbOSVersion()`. Keep in mind that this function adds `55` to the current ArbOS version. For example, if your chain is running on ArbOS 10, calling this function will return `65`.
 
 When scheduling the ArbOS upgrade through `ArbOwner.scheduleArbOSUpgrade` you must use the actual ArbOS version you're upgrading to. For example, if you're upgrading to ArbOS 51, you will pass `51` when calling this function.
 
-</VanillaAdmonition>
+</Callout>
 
 #### Step 4: Enable ArbOS specific configurations or feature flags (not always required)
 

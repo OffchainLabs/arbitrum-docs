@@ -52,9 +52,11 @@ const SECTION_RENAMES = [
  *
  * Two situations land here. The basename fallback matches on basename, so when a how-to was
  * renamed on the way over it can only see a same-named concept page and sends the reader there
- * instead. And upstream has since restructured `launch-arbitrum-chain` into a `chain-config/…`
- * shape this site never adopted, so its redirect chains terminate at paths that exist upstream
- * and nowhere here — no prefix rule describes that, because the sections were re-cut, not renamed.
+ * instead. And upstream has restructured `launch-arbitrum-chain` more than once. This site now
+ * mirrors upstream's current `chain-config/…` shape (2026-09-24), so most entries below map a path
+ * to the same path here. The explicit entries still matter: they stop the basename fallback from
+ * picking a same-named page in another section, and they catch old-shape paths that no prefix rule
+ * describes, because the sections were re-cut, not renamed.
  *
  * Every entry was confirmed by comparing the upstream page's frontmatter title against this
  * site's candidates; where the titles are verbatim-identical that is noted as `=`. A value may
@@ -64,202 +66,270 @@ const MANUAL_DESTINATIONS = new Map([
   ['/get-started/overview', '/docs/get-started'],
   [
     '/launch-arbitrum-chain/extend-the-protocol/stf',
-    '/docs/launch-arbitrum-chain/configuration/core/customize-stf',
+    '/docs/launch-arbitrum-chain/extend-the-protocol/stf',
   ],
   [
     '/launch-arbitrum-chain/extend-the-protocol/precompiles',
-    '/docs/launch-arbitrum-chain/features/advanced/choose-chain-precompiles',
+    '/docs/launch-arbitrum-chain/extend-the-protocol/precompiles',
   ],
-  ['/launch-arbitrum-chain/run-a-node/batch-poster', '/docs/run-a-node/run-batch-poster'],
+  [
+    '/launch-arbitrum-chain/run-a-node/batch-poster',
+    '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
+  ],
 
-  // --- upstream `launch-arbitrum-chain/chain-config/*` -> this site's `configuration/*` ---
-  // Upstream re-cut these sections; the leaf pages kept their content but not their path.
+  // --- upstream `launch-arbitrum-chain/chain-config/*`, mirrored here at the same paths ---
   [
     '/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
-    '/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs',
+    '/docs/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
   ],
   [
     '/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning',
-    '/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-fee-tuning',
+    '/docs/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning',
   ],
   [
     '/launch-arbitrum-chain/chain-config/costs/aep-overview',
-    '/docs/launch-arbitrum-chain/configuration/costs/aep-fee-router-introduction',
+    '/docs/launch-arbitrum-chain/chain-config/costs/aep-overview',
   ],
   [
     '/launch-arbitrum-chain/chain-config/costs/aep-router-contracts',
-    '/docs/launch-arbitrum-chain/configuration/costs/set-up-aep-fee-router',
+    '/docs/launch-arbitrum-chain/chain-config/costs/aep-router-contracts',
   ],
   [
     '/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
-    '/docs/launch-arbitrum-chain/configuration/costs/configure-native-mint-burn-gas-token',
+    '/docs/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
   ],
   [
     '/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
-    '/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-anytrust',
+    '/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
   ],
   [
     '/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
-    '/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup',
+    '/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
   ],
   [
     '/launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
-    '/docs/launch-arbitrum-chain/configuration/costs/dynamic-pricing-for-arbitrum-chains',
+    '/docs/launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
   ],
   // Without this the basename sends chain gas-optimization to stylus/best-practices/gas-optimization.
   [
     '/launch-arbitrum-chain/chain-config/costs/gas-optimization',
-    '/docs/launch-arbitrum-chain/configuration/costs/gas-optimization-tools',
+    '/docs/launch-arbitrum-chain/chain-config/costs/gas-optimization',
   ],
   [
     '/launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
-    '/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started',
+    '/docs/launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
   ],
   [
     '/launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit',
-    '/docs/launch-arbitrum-chain/configuration/core/config-smart-contract-size-limit',
+    '/docs/launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit',
   ],
   [
     '/launch-arbitrum-chain/chain-config/sequencer/chain-finality',
-    '/docs/launch-arbitrum-chain/configuration/validation/arbitrum-chain-finality',
+    '/docs/launch-arbitrum-chain/chain-config/sequencer/chain-finality',
   ],
   [
     '//launch-arbitrum-chain/chain-config/sequencer/timeboost',
-    '/docs/launch-arbitrum-chain/configuration/sequencer/timeboost-for-arbitrum-chains',
+    '/docs/launch-arbitrum-chain/chain-config/sequencer/timeboost',
   ],
   [
     '/launch-arbitrum-chain/chain-config/validation/assertion-control',
-    '/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control',
+    '/docs/launch-arbitrum-chain/chain-config/validation/assertion-control',
   ],
   [
     '/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
-    '/docs/launch-arbitrum-chain/configuration/validation/stake-and-validator-configurations',
+    '/docs/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
   ],
   [
     '/launch-arbitrum-chain/chain-config/validation/challenge-period',
-    '/docs/launch-arbitrum-chain/configuration/validation/customizable-challenge-period',
+    '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
   ],
   // `arbos` = "How to customize ArbOS on your Arbitrum chain", a how-to. Without this the basename
   // sends it to how-arbitrum-works/deep-dives/arbos, which is the ArbOS concept page.
   [
     '/launch-arbitrum-chain/extend-the-protocol/arbos',
-    '/docs/launch-arbitrum-chain/configuration/core/customize-arbos',
+    '/docs/launch-arbitrum-chain/extend-the-protocol/arbos',
   ],
   [
     '/launch-arbitrum-chain/extend-the-protocol/da-api-guide',
-    '/docs/launch-arbitrum-chain/integrations/da-api-integration-guide',
+    '/docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide',
   ],
 
   // --- upstream `configure-your-chain/*` (an earlier shape) still referenced by old entries ---
   [
     '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-a-das',
-    '/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das',
+    '/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-das',
   ],
   [
     '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-a-mirror-das',
-    '/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das',
+    '/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
   ],
 
   // --- deploy / quickstart / operate. Titles are verbatim-identical across both sites. ---
   [
     '/launch-arbitrum-chain/deploy-an-arbitrum-chain/customize-deployment-configuration',
-    '/docs/launch-arbitrum-chain/deploy/deploying-an-arbitrum-chain',
+    '/docs/launch-arbitrum-chain/deploy/deploy-chain',
   ],
   // Upstream typo, kept verbatim so the lookup matches: "arbiturm".
   [
     '/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbiturm-chain',
-    '/docs/launch-arbitrum-chain/deploy/deploying-an-arbitrum-chain',
+    '/docs/launch-arbitrum-chain/deploy/deploy-chain',
   ],
   // = "How to configure your Arbitrum chain's node using the Chain SDK"
   [
     '/launch-arbitrum-chain/deploy/configure-node',
-    '/docs/launch-arbitrum-chain/arbitrum-chain-sdk-preparing-node-config',
+    '/docs/launch-arbitrum-chain/deploy/configure-node',
   ],
   // = "How to deploy an Arbitrum chain using the Chain SDK"
-  [
-    '/launch-arbitrum-chain/deploy/deploy-chain',
-    '/docs/launch-arbitrum-chain/deploy/deploying-an-arbitrum-chain',
-  ],
-  [
-    '/launch-arbitrum-chain/deploy/token-bridge',
-    '/docs/launch-arbitrum-chain/deploy/deploying-token-bridge',
-  ],
+  ['/launch-arbitrum-chain/deploy/deploy-chain', '/docs/launch-arbitrum-chain/deploy/deploy-chain'],
+  ['/launch-arbitrum-chain/deploy/token-bridge', '/docs/launch-arbitrum-chain/deploy/token-bridge'],
   // = "Run an L3 rollup from scratch"
   [
     '/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch',
-    '/docs/launch-arbitrum-chain/quickstart/deploy-your-first-rollup',
+    '/docs/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch',
   ],
   // = "Run testnet infrastructure on your first rollup (product-level testnet)"
   [
     '/launch-arbitrum-chain/quickstart/l3-rollup-testnet',
-    '/docs/launch-arbitrum-chain/quickstart/run-testnet-infrastructure-first-rollup',
+    '/docs/launch-arbitrum-chain/quickstart/l3-rollup-testnet',
   ],
   [
     '/launch-arbitrum-chain/quickstart/sdk-introduction',
-    '/docs/launch-arbitrum-chain/overview/arbitrum-chain-sdk-introduction',
+    '/docs/launch-arbitrum-chain/quickstart/sdk-introduction',
   ],
-  [
-    '/launch-arbitrum-chain/operate/monitoring',
-    '/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations',
-  ],
+  ['/launch-arbitrum-chain/operate/monitoring', '/docs/launch-arbitrum-chain/operate/monitoring'],
   // = "Ownership structure and access control"
   [
     '/launch-arbitrum-chain/operate/ownership-and-access',
-    '/docs/launch-arbitrum-chain/operate/ownership-access-control',
+    '/docs/launch-arbitrum-chain/operate/ownership-and-access',
   ],
   [
     '/launch-arbitrum-chain/operate/post-launch-deployments',
-    '/docs/launch-arbitrum-chain/operate/post-launch-contract-deployments',
+    '/docs/launch-arbitrum-chain/operate/post-launch-deployments',
   ],
   [
     '/launch-arbitrum-chain/migrate/between-raases',
-    '/docs/launch-arbitrum-chain/migrate/migrate-between-raases',
+    '/docs/launch-arbitrum-chain/migrate/between-raases',
   ],
   [
     '/launch-arbitrum-chain/migrate/from-another-stack',
-    '/docs/launch-arbitrum-chain/migrate/migrate-from-another-stack',
+    '/docs/launch-arbitrum-chain/migrate/from-another-stack',
   ],
   [
     '/launch-arbitrum-chain/integrations/bridged-usdc',
-    '/docs/launch-arbitrum-chain/integrations/bridged-usdc-standard',
+    '/docs/launch-arbitrum-chain/integrations/bridged-usdc',
   ],
   [
     '/launch-arbitrum-chain/integrations/infrastructure-providers',
-    '/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers',
+    '/docs/launch-arbitrum-chain/integrations/infrastructure-providers',
   ],
   // = "Overview of Arbitrum chains". overview/index.mdx is a different page, titled "Concepts".
   [
     '/launch-arbitrum-chain/overview/introduction',
-    '/docs/launch-arbitrum-chain/overview/a-gentle-introduction',
+    '/docs/launch-arbitrum-chain/overview/introduction',
   ],
-  ['/launch-arbitrum-chain/overview/license', '/docs/launch-arbitrum-chain/overview/aep-license'],
+  ['/launch-arbitrum-chain/overview/license', '/docs/launch-arbitrum-chain/overview/license'],
   [
     '/launch-arbitrum-chain/overview/public-preview',
-    '/docs/launch-arbitrum-chain/overview/public-preview-expectations',
+    '/docs/launch-arbitrum-chain/overview/public-preview',
   ],
-  [
-    '/launch-arbitrum-chain/overview/faq',
-    '/docs/launch-arbitrum-chain/troubleshooting-building-arbitrum-chain',
-  ],
+  ['/launch-arbitrum-chain/overview/faq', '/docs/launch-arbitrum-chain/overview/faq'],
   // The node how-tos live under run-a-node here, not under launch-arbitrum-chain.
   [
     '/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
-    '/docs/run-a-node/high-availability-sequencer-docs',
+    '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
   ],
   [
     '/launch-arbitrum-chain/run-a-node/split-validator-node',
-    '/docs/run-a-node/run-split-validator-node',
+    '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
   ],
   [
     '/run-arbitrum-node/data-availability-committees/get-started',
-    '/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started',
+    '/docs/launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
   ],
-  // Upstream records this as a path but wrote an absolute URL with a stray leading slash. The page
-  // it names exists here, so serve ours rather than sending readers off-site.
+  // --- older upstream shapes (`configure-your-chain/common/*`, `…/advanced/*`) ---
+  // Each maps to the page that replaced it upstream, now mirrored here.
   [
-    '/https://docs.arbitrum.foundation/calculate-aep-fees',
-    '/docs/launch-arbitrum-chain/configuration/costs/calculate-aep-fees',
+    '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/aep-fee-router-introduction',
+    '/docs/launch-arbitrum-chain/chain-config/costs/aep-overview',
   ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/reporting-on-fees',
+    '/docs/launch-arbitrum-chain/chain-config/costs/reporting-on-fees',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/aep-fees/set-up-aep-fee-router',
+    '/docs/launch-arbitrum-chain/chain-config/costs/aep-router-contracts',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
+    '/docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/ux/fast-withdrawals',
+    '/docs/launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-anytrust',
+    '/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/gas/use-a-custom-gas-token-rollup',
+    '/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/additional-configuration-parameters',
+    '/docs/launch-arbitrum-chain/chain-config/additional-configuration-parameters',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/configure-dac',
+    '/docs/launch-arbitrum-chain/chain-config/data-availability/configure-dac',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-das',
+    '/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-das',
+  ],
+  [
+    '/launch-arbitrum-chain/configure-your-chain/common/data-availability/data-availability-committees/deploy-mirror-das',
+    '/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
+  ],
+  [
+    '/launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node',
+    '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
+  ],
+  [
+    '/launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
+    '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
+  ],
+
+  // --- upstream wrote these with a stray leading slash (`//launch-…`); keyed verbatim ---
+  [
+    '//launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
+    '/docs/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
+  ],
+  [
+    '//launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
+    '/docs/launch-arbitrum-chain/chain-config/validation/fast-withdrawals',
+  ],
+  [
+    '//launch-arbitrum-chain/chain-config/validation/bold',
+    '/docs/launch-arbitrum-chain/chain-config/validation/bold',
+  ],
+  [
+    '//launch-arbitrum-chain/chain-config/validation/challenge-period',
+    '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
+  ],
+  [
+    '//launch-arbitrum-chain/chain-config/validation/bond-and-validator',
+    '/docs/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
+  ],
+
+  // --- upstream moved these; the page here is unchanged. `=` titles confirmed 2026-09-24. ---
+  // = "Oracles"
+  ['/arbitrum-essentials/oracles/overview-oracles', '/docs/oracles/overview-oracles'],
+  // = "Arbitrum chain information"
+  ['/for-devs/dev-tools-and-resources/chain-info', '/docs/chain-info'],
+  // = "How to debug Stylus transactions"
+  ['/stylus/how-tos/debugging-tx', '/docs/stylus/cli-tools/debugging-tx'],
 
   // --- outside launch-arbitrum-chain ---
   [
