@@ -1,6 +1,5 @@
 ---
 title: 'How to deploy a Data Availability Server (DAS) with Docker'
-sidebar_label: 'Deploy DAS with Docker'
 description: 'Deploy a Data Availability Server (DAS) for your AnyTrust chain using Docker and Docker Compose, without Kubernetes: generate BLS keys in a container, run the server, and verify it.'
 user_story: 'As a Data Availability Committee member, I want to deploy a DAS with Docker and Docker Compose so that I can run a committee member server without a Kubernetes cluster.'
 content_type: 'how-to'
@@ -64,7 +63,12 @@ The DAS container runs as a non-root user with UID and GID `1000` (the first reg
 
 We'll generate a BLS keypair. The private key will be used to sign the <Term id="data-availability-certificate">Data Availability Certificates (DACert)</Term> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
 
-The keypair is generated with the `anytrusttool keygen` utility, which ships in the same Docker image as the DAS, so you can run it with `docker run` and a volume mount to have the keys land on your host:
+The keypair is generated with the `anytrusttool keygen` utility, which ships in the same Docker image as the DAS (currently <Var name="latestNitroNodeImage" />), so you can run it with `docker run` and a volume mount to have the keys land on your host:
+
+{/* sync-with-var: latestNitroNodeImage */}
+{/* The docker run commands below hardcode the image tag, because variables do not evaluate inside a
+code fence. The marker above lets `pnpm nitro:check-release` rewrite them when it bumps the
+variable. Do not add it to a page that states a Nitro version as a historical fact. */}
 
 ```shell
 docker run --rm -v $(pwd)/bls_keys:/home/user/bls_keys --entrypoint anytrusttool \
@@ -147,8 +151,8 @@ docker compose logs -f das-server
 You should see the hex-encoded BLS public key logged at startup (in the line `AnyTrust public key used for signing`), followed by lines similar to:
 
 ```shell
-INFO [...] Starting HTTP-RPC server    addr=0.0.0.0 port=9876 revision=v3.11.1-8512b8c
-INFO [...] Starting REST server        addr=0.0.0.0 port=9877 revision=v3.11.1-8512b8c
+INFO [...] Starting HTTP-RPC server    addr=0.0.0.0 port=9876 revision=v3.11.4-7d5ac27
+INFO [...] Starting REST server        addr=0.0.0.0 port=9877 revision=v3.11.4-7d5ac27
 ```
 
 ## Volumes and persistence
@@ -203,7 +207,7 @@ A healthy DAS answers `{"jsonrpc":"2.0","id":0,"result":null}`.
 
 By default, the DAS only accepts store requests signed by the sequencer's key (identified via the `SequencerInbox` contract). To send a test store request yourself, configure the DAS to also accept requests signed with an ECDSA key of your choosing.
 
-First, generate an ECDSA keypair (again, no local Nitro build needed):
+First, generate an ECDSA keypair using the same <Var name="latestNitroNodeImage" /> image (again, no local Nitro build needed):
 
 ```shell
 mkdir -p ecdsa_keys

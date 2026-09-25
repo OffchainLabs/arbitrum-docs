@@ -1,16 +1,12 @@
 {
-  "title": "Launch arbitrum chain",
+  "title": "Launch Arbitrum chain",
   "icon": "Network",
-  "root": true,
   "description": "Configure, deploy, and operate your own Arbitrum chain.",
   "pages": [
     "quickstart",
     "third-party-integrations",
     "features",
     "migrate",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
+    "..."
   ]
 }

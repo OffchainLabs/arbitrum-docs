@@ -1,6 +1,6 @@
 ---
 title: 'How to deploy an Arbitrum chain using the Chain SDK'
-description: 'How to deploy an Arbitrum chain using the Chain SDK '
+description: 'How to deploy an Arbitrum chain using the Chain SDK'
 user_story: As a current or prospective Arbitrum chain deployer, I need to configure and deploy an Arbitrum chain.
 content_type: 'how-to'
 author: GreatSoshiant, jose-franco
@@ -18,7 +18,7 @@ Creating a new Arbitrum chain involves deploying a set of contracts on your chai
 
 You can explore the code of these contracts in the [nitro-contracts repository](https://github.com/OffchainLabs/nitro-contracts).
 
-Upon deployment, an Arbitrum chain can be configured as a <Term id="arbitrum-rollup-chain">Rollup</Term> or <Term id="arbitrum-anytrust-chain">AnyTrust</Term> chain, and use **ETH** or any standard **ERC-20** token as its gas token.
+Upon deployment, an Arbitrum chain can be configured as a <Term id="arbitrum-rollup-chain">Rollup</Term> or <Term id="arbitrum-anytrust-chain">AnyTrust</Term> chain, and use **ETH** or any standard `ERC-20 `token as its gas token.
 
 This page explains how to deploy an <Term id="arbitrum-chain">Arbitrum chain</Term> using the Arbitrum Chain SDK. See the [Overview](/docs/launch-arbitrum-chain/overview/arbitrum-chain-sdk-introduction) for an introduction to the process of creating and configuring an Arbitrum chain.
 
@@ -29,7 +29,6 @@ If you want to launch with predeployed contracts, balances, or storage, first [g
 Custom gas token Arbitrum chains let participants pay transaction fees in an **ERC-20** token instead of **ETH**. Standard **ERC-20** tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup#requirements-of-the-custom-gas-token) to be used as gas tokens. Remember that the **ERC-20** token to be used must be deployed on your chain's parent chain.
 
 </VanillaAdmonition>
-
 ## Parameters used when deploying a new chain
 
 Before we describe the process of creating a chain using the Chain SDK, let's see what configuration options we have available when creating a chain.
@@ -57,7 +56,7 @@ The following table describes `RollupDeploymentParams`'s parameters:
 | :-------------------------- | :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `config`                    | Config    | The chain's configuration, explained below.                                                                                                                                                                                                                                                                     |
 | `validators`                | address[] | Initial set of <Term id="validator">validator</Term> addresses. Validators are responsible for validating the chain state and posting assertions (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty assertions submitted by other validators. |
-| `maxDataSize`               | uint256   | Maximum message size for the Inbox contract (<code><Var name="maxDataSizeL2" /></code> for L2 chains, and <code><Var name="maxDataSizeL3" /></code> for L3 chains).                                                                                                                                             |
+| `maxDataSize`               | uint256   | Maximum message size for the Inbox contract (`117964` for L2 chains, and `104857` for L3 chains).                                                                                                                                                                                                               |
 | `nativeToken`               | address   | Address of the token contract in the parent chain, used for paying gas fees on the Arbitrum chain. It can be set to **ETH** for regular chains or to any **ERC-20** token for custom gas token Arbitrum chains.                                                                                                 |
 | `deployFactoriesToL2`       | bool      | Whether or not to deploy several deterministic factory contracts to the Arbitrum chain.                                                                                                                                                                                                                         |
 | `maxFeePerGasForRetryables` | uint256   | Gas price bid to use when sending the retryable tickets.                                                                                                                                                                                                                                                        |
@@ -222,7 +221,6 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
 The above defaults to Arbitrum Sepolia. We've added the import `viem/chains` and the chain info to demonstrate from a popular library (`viem`) how to import the chain information already available in the Arbitrum Chain SDK.
 
 </VanillaAdmonition>
-
 ### 2. Deploy the Arbitrum chain
 
 With the new crafted configuration, we can call the `createRollup` method which will send the transaction to the `RollupCreator` contract and wait until it is executed.
@@ -279,7 +277,7 @@ type CreateRollupResults = {
 
 ### 4. Set the DAC keyset in the `SequencerInbox` (for AnyTrust chains)
 
-If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS keys. See [How to configure a DAC](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started) to learn more about setting up a DAC.
+If you're creating an AnyTrust chain, the next step is to set up the keyset of your Data Availability Committee (DAC) on the `SequencerInbox` contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started) to learn more about setting up a DAC.
 
 <VanillaAdmonition type="info">
 

@@ -9,7 +9,7 @@ import { type ReferenceCollectionName, getReference } from '@/lib/references';
  * the registry and renders its definition (real MDX) on the server, handing that node to the client
  * `HoverPopover`. So each page bundles only the definitions it cites — no global index.
  *
- * A missing id renders the text plainly (and warns in dev); `scripts/references-check.mjs` fails the
+ * A missing id renders the text plainly (and warns in dev); `scripts/references-check.ts` fails the
  * build on any unresolved reference, so this is only a dev/runtime safety net.
  */
 export function Reference({

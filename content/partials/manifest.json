@@ -2,7 +2,7 @@
   {
     "path": "content/partials/_additional-config-params.mdx",
     "title": "Additional Configuration Parameters",
-    "summary": "Amount of time to wait before a challenge period expires.",
+    "summary": "",
     "scope": "neutral",
     "tags": [
       "additional",
@@ -506,7 +506,7 @@
       "providers",
       "notice"
     ],
-    "usedIn": 6,
+    "usedIn": 7,
     "snippet": "<include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>"
   },
   {
@@ -570,24 +570,6 @@
     ],
     "usedIn": 2,
     "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_gcs-parameters.mdx</include>"
-  },
-  {
-    "path": "content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-badger-db-parameters.mdx",
-    "title": "Local badger db parameters",
-    "summary": "",
-    "scope": "neutral",
-    "tags": [
-      "launch-arbitrum-chain",
-      "configuration",
-      "data-availability",
-      "data-availability-committees",
-      "parameters",
-      "local",
-      "badger",
-      "db"
-    ],
-    "usedIn": 0,
-    "snippet": "<include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-badger-db-parameters.mdx</include>"
   },
   {
     "path": "content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_local-files-parameters.mdx",
@@ -1025,7 +1007,7 @@
   {
     "path": "content/partials/run-a-node/_path-node-parameters.mdx",
     "title": "Path node parameters",
-    "summary": "These flags apply only when you set --execution.caching.state-scheme=path.",
+    "summary": "- execution.caching.state-scheme=path - sets state scheme → chooses TrieDB implementation",
     "scope": "neutral",
     "tags": [
       "run-a-node",
@@ -1035,20 +1017,6 @@
     ],
     "usedIn": 1,
     "snippet": "<include cwd>content/partials/run-a-node/_path-node-parameters.mdx</include>"
-  },
-  {
-    "path": "content/partials/run-a-node/_state-history-defaults.mdx",
-    "title": "State history defaults",
-    "summary": "When you leave --execution.caching.state-history unset, Nitro chooses the default at startup:",
-    "scope": "neutral",
-    "tags": [
-      "run-a-node",
-      "state",
-      "history",
-      "defaults"
-    ],
-    "usedIn": 1,
-    "snippet": "<include cwd>content/partials/run-a-node/_state-history-defaults.mdx</include>"
   },
   {
     "path": "content/partials/run-a-node/_tx-prechecker-parameters.mdx",

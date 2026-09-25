@@ -5,11 +5,12 @@ import type { MDXComponents } from 'mdx/types';
 import type { ComponentPropsWithoutRef, ElementType } from 'react';
 
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
+import { FlowChart } from '@/components/mdx/CentralizedAuction';
 import { CustomDetails } from '@/components/mdx/CustomDetails';
+import { EdgeChallengeFlow } from '@/components/mdx/EdgeChallengeFlow';
 import FAQStructuredData from '@/components/mdx/FAQStructuredData';
 import { ImageZoom } from '@/components/mdx/ImageZoom';
 import { PdfModal } from '@/components/mdx/PdfModal';
-import { PendingWidget } from '@/components/mdx/PendingWidget';
 import { Reference } from '@/components/mdx/Reference';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
@@ -20,8 +21,10 @@ import {
   TroubleshootingConfig,
   TroubleshootingReport,
 } from '@/components/mdx/Troubleshooting';
+import { Popup, PopupContent, PopupTrigger } from '@/components/mdx/Twoslash';
 import { VanillaAdmonition } from '@/components/mdx/VanillaAdmonition';
 import { Var } from '@/components/mdx/Var';
+import { VendingMachine } from '@/components/mdx/VendingMachine';
 
 /**
  * Route internal PDF links through `<PdfModal>` so they open in an overlay instead of navigating away.
@@ -66,13 +69,26 @@ function withPdfModal(Base: NonNullable<MDXComponents['a']>) {
 export function getMDXComponents(components?: MDXComponents) {
   const merged = {
     ...defaultMdxComponents,
+    // `transformerTwoslash` (wired in source.config.ts) compiles a ```ts twoslash block into markup
+    // that references `Popup` / `PopupTrigger` / `PopupContent` by name. Those names have to be in
+    // this map or the page throws "Expected component `Popup` to be defined" at render time. That is
+    // a 500, not a build failure, because the frontmatter schema is all `types:check` sees. The
+    // registration has been missing since twoslash was first wired up (twoslash 3.3.1 emitted the
+    // same three tag names and 500s on the same page), and it went unnoticed only because no page
+    // uses a twoslash block yet. `components/mdx/Twoslash` keeps the popover code out of every docs
+    // page's eager bundle; see the comment there.
+    Popup,
+    PopupContent,
+    PopupTrigger,
     Accordion,
     Accordions,
     AddressExplorerLink,
     AEL: AddressExplorerLink,
     CustomDetails,
+    EdgeChallengeFlow,
     FAQStructuredData,
     FAQStructuredDataJsonLd: FAQStructuredData,
+    FlowChart,
     ImageZoom,
     ImageWithCaption: ImageZoom,
     Reference,
@@ -89,10 +105,7 @@ export function getMDXComponents(components?: MDXComponents) {
     TroubleshootingReport,
     VanillaAdmonition,
     Var,
-    // Placeholders for not-yet-ported interactive widgets (see PendingWidget).
-    VendingMachine: () => <PendingWidget name="VendingMachine" />,
-    EdgeChallengeFlow: () => <PendingWidget name="EdgeChallengeFlow" />,
-    FlowChart: () => <PendingWidget name="FlowChart" />,
+    VendingMachine,
     ...components,
   };
 

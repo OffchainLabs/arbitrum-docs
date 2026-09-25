@@ -6,6 +6,8 @@ author: Jason Wan
 sme: Jason Wan
 ---
 
+{/* sync-with-var: latestNitroNodeImage */}
+
 <VanillaAdmonition type="warning">
 
 The following instructions are meant for Arbitrum chains only. This article only applies to test environments. If you need support spinning up a production Arbitrum chain, we recommend contacting a [provider](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
@@ -145,7 +147,7 @@ Enable your node to send batches to DAS and get DACerts from them.
         "finalize-distance": 1
       },
       "batch-poster": {
-        "max-size": 90000,
+        "max-calldata-batch-size": 90000,
         "enable": true,
         "parent-chain-wallet": {
           "private-key": "<batch post key>"
@@ -158,18 +160,19 @@ Enable your node to send batches to DAS and get DACerts from them.
           "port": "<Sequencer feed port>"
         }
       },
-      "data-availability": {
-        "enable": true,
-        "sequencer-inbox-address": "<Sequencer inbox address>",
-        "parent-chain-node-url": "https://sepolia-rollup.arbitrum.io/rpc",
-        "rest-aggregator": {
+      "da": {
+        "anytrust": {
           "enable": true,
-          "urls": ["http://das-server:9877"]
-        },
-        "rpc-aggregator": {
-          "enable": true,
-          "assumed-honest": 1,
-          "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"}]"
+          "max-batch-size": 90000,
+          "rest-aggregator": {
+            "enable": true,
+            "urls": ["http://das-server:9877"]
+          },
+          "rpc-aggregator": {
+            "enable": true,
+            "assumed-honest": 1,
+            "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"}]"
+          }
         }
       }
     },

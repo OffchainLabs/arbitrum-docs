@@ -1,35 +1,40 @@
 'use client';
 
 import { History } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useId } from 'react';
 
 import { cn } from '@/lib/cn';
 // Imported from `lib/versions-constants` rather than `lib/versions`: the latter imports the
 // generated `collections/server` index, which would pull every compiled MDX page into this client
 // component's bundle.
-import { LATEST_ID, VERSION_PARAM, type VersionOption } from '@/lib/versions-constants';
+import { LATEST_ID, type VersionOption } from '@/lib/versions-constants';
 
 /**
  * Per-page version selector, rendered only on versioned pages (see
- * .claude/docs/superpowers/specs/2026-07-17-partial-versioning-design.md). Selecting a version navigates to
- * a shareable URL: the bare path for Latest, or `?v=<id>` for an archived version. Server-rendered
- * on navigation, so the choice is bookmarkable.
+ * .claude/docs/superpowers/specs/2026-07-17-partial-versioning-design.md). Selecting a version
+ * navigates to a shareable URL: `basePath` for Latest, or `basePath/<id>` for an archived version.
+ * Server-rendered on navigation, so the choice is bookmarkable.
+ *
+ * `basePath` is the live page's URL, handed down by the server rather than derived from
+ * `usePathname()`: on an archive the pathname already carries a version segment, and stripping it
+ * here would mean this client component knowing which trailing segments are version ids — exactly
+ * the registry knowledge it must not import (see `lib/versions-constants.ts`).
  */
 export function VersionSwitcher({
   options,
   current,
+  basePath,
 }: {
   options: VersionOption[];
   current: string;
+  basePath: string;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
   const selectId = useId();
 
   function onSelect(id: string) {
-    const url = id === LATEST_ID ? pathname : `${pathname}?${VERSION_PARAM}=${id}`;
-    router.push(url);
+    router.push(id === LATEST_ID ? basePath : `${basePath}/${id}`);
   }
 
   return (

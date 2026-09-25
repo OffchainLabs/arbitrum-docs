@@ -4,17 +4,14 @@
   "description": "Integrate oracle price feeds and VRF into your Arbitrum apps.",
   "pages": [
     "index",
+    "overview-oracles",
     "api3",
     "chainlink",
     "chronicle",
     "DIA",
     "ora",
-    "overview-oracles",
     "supra",
     "trellor",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
+    "..."
   ]
 }

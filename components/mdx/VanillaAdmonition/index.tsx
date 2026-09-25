@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 import { DangerIcon, InfoIcon, NoteIcon, TipIcon, WarningIcon } from './Icons';
 import styles from './styles.module.css';

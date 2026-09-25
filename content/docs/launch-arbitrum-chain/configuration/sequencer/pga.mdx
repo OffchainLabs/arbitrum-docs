@@ -8,9 +8,9 @@ author: anegg0
 sme: gligneul
 ---
 
-Priority Gas Auctions (PGA) is an optional <Term id="transaction-ordering-policy">transaction-ordering policy</Term> that you can enable on any <Term id="arbitrum-chains">Arbitrum chain</Term>. Under PGA, the <Term id="sequencer">Sequencer</Term> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the Sequencer transfers the priority queue into the block it is building.
+Priority Gas Auctions (PGA) is an optional <Term id="transaction-ordering-policy">transaction-ordering policy</Term> that you can enable on a supported <Term id="arbitrum-chains">Arbitrum chain</Term>. Under PGA, the <Term id="sequencer">Sequencer</Term> orders transactions by the priority fee attached to each one. During short ordering rounds that run several times per block, the Sequencer transfers the priority queue into the block it is building.
 
-Activating PGA requires enabling tip collection on your chain. Once your chain collects tips, the Sequencer switches to PGA ordering automatically. PGA adds no operational overhead, which makes it viable for a much wider range of chains than <Term id="timeboost">Timeboost</Term>.
+PGA requires both priority fee collection and a Sequencer build configured for PGA ordering. Configure the Sequencer before enabling collection. PGA adds no separate auction infrastructure, which makes it viable for a wider range of chains than <Term id="timeboost">Timeboost</Term>.
 
 Your chain must collect priority fees, which <Term id="arbos">ArbOS</Term> 61 supports. PGA orders transactions by tips.
 
@@ -85,7 +85,7 @@ Add the following to your Sequencer's node configuration file:
 
 <VanillaAdmonition type="warning">
 
-Complete Step 1 before you start Step 2. Enabling tip collection activates PGA immediately, with a default of one round per block.
+Complete Step 1 before you start Step 2. Tip collection alone does not change transaction ordering; the Sequencer must also run the PGA logic configured above.
 
 </VanillaAdmonition>
 

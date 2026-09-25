@@ -1,11 +1,13 @@
 ---
 title: 'Customize genesis state'
 description: 'How to configure your Arbitrum chain with a custom genesis state'
+user_story: 'As an Arbitrum chain operator, I want to create a chain with a custom genesis state.'
+content_type: 'how-to'
 author: gmetha2
 sme: Jason-W123
-content_type: 'how-to'
-user_story: 'As an Arbitrum chain operator, I want to create a chain with a custom genesis state.'
 ---
+
+<include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>
 
 Arbitrum chain operators increasingly want to deploy chains with pre-existing state by loading an initial state from a file such as `genesis.json`. Specifically, chain operators want to predeploy smart contracts (like Gnosis Safe) to an <Term id="arbitrum-chain">Arbitrum chain</Term> so they exist from genesis, before any user interaction or post-launch governance.
 
@@ -21,14 +23,14 @@ Initializing from a genesis state helps in the following scenarios:
 A custom genesis lets you start your Arbitrum chain with a customized genesis state and network configuration:
 
 - **Predeployed contracts**: standard chains start without any smart contracts. This feature lets you preload contract bytecode in the first block, so infrastructure is available at launch.
-- **Initial account state (allocations)**: you can pre-configure the ledger—including account balances and contract storage—before the network opens for transactions.
+- **Initial account state (allocations)**: you can pre-configure the ledger, including account balances and contract storage, before the network opens for transactions.
 - **Enable advanced features**: chain operators can use this feature to launch a chain with advanced customizations, such as [minting/burning gas tokens via third-party bridges](/docs/launch-arbitrum-chain/configuration/costs/configure-native-mint-burn-gas-token) and compliance-focused transaction filtering.
 
 <VanillaAdmonition type="danger" title="Preallocated balances are not backed by the parent chain">
 
 Preallocating account balances in the genesis state credits **ETH** (or your <Term id="custom-gas-token">custom gas token</Term>) on your Arbitrum chain **without** depositing anything into the <Term id="parent-chain">parent-chain</Term> bridge. The protocol does **not** require the bridge to hold ETH equal to the balances you preallocate, and there is no deploy-time check.
 
-If your chain will accept user deposits, a chain whose total preallocated balances exceed the bridge's backing is **insolvent from genesis**: withdrawals can fail once the bridge is drained. Only preallocate non-zero balances if you accept responsibility for backing them—for example, a private or test chain, or one where you deposit the equivalent amount into the bridge before opening it to users.
+If your chain will accept user deposits, a chain whose total preallocated balances exceed the bridge's backing is **insolvent from genesis**: withdrawals can fail once the bridge is drained. Only preallocate non-zero balances if you accept responsibility for backing them. For example, a private or test chain, or one where you deposit the equivalent amount into the bridge before opening it to users.
 
 </VanillaAdmonition>
 
@@ -53,8 +55,6 @@ Choose **one** of these two tools:
 </VanillaAdmonition>
 
 ### Use the Chain SDK
-
-The Chain SDK provides a [custom genesis example](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/generate-genesis) that shows how to configure account allocations, generate a genesis file, and use the output to deploy your chain.
 
 The Chain SDK ships a `generateGenesis` command that you run through its Docker image. The command:
 
@@ -125,15 +125,15 @@ The generator accepts these fields:
 
 | Field                        | Type      | Required | Default | Description                                                                                                                                                                                         |
 | ---------------------------- | --------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                    | `string`  | Yes      | —       | The unique numeric identifier for your chain.                                                                                                                                                       |
-| `arbosVersion`               | `string`  | Yes      | —       | The version of ArbOS to use for the genesis block.                                                                                                                                                  |
-| `chainOwner`                 | `string`  | Yes      | —       | The address that has admin ownership of the deployed chain.                                                                                                                                         |
-| `l1BaseFee`                  | `string`  | Yes      | —       | The initial L1 gas price (in wei) used to calibrate the chain creation. Use a nonzero value.                                                                                                        |
+| `chainId`                    | `string`  | Yes      | --      | The unique numeric identifier for your chain.                                                                                                                                                       |
+| `arbosVersion`               | `string`  | Yes      | --      | The version of ArbOS to use for the genesis block.                                                                                                                                                  |
+| `chainOwner`                 | `string`  | Yes      | --      | The address that has admin ownership of the deployed chain.                                                                                                                                         |
+| `l1BaseFee`                  | `string`  | Yes      | --      | The initial L1 gas price (in wei) used to calibrate the chain creation. Use a nonzero value.                                                                                                        |
 | `isAnyTrust`                 | `boolean` | No       | `false` | Whether the chain is an AnyTrust chain (`true`) or a Rollup chain (`false`).                                                                                                                        |
 | `loadDefaultPredeploys`      | `boolean` | No       | `false` | Include the default contracts supplied by the genesis file generator.                                                                                                                               |
 | `enableNativeTokenSupply`    | `boolean` | No       | `false` | Flag to launch your chain with native interop tokens as [minting/burning gas tokens via third-party bridges](/docs/launch-arbitrum-chain/configuration/costs/configure-native-mint-burn-gas-token). |
 | `enableTransactionFiltering` | `boolean` | No       | `false` | Flag to launch your chain with protocol-level transaction filtering for regulatory or compliance purposes. <br /> _**Note:** This feature requires ArbOS60 and Nitro node v3.10.0._                 |
-| `customAllocAccountFile`     | `string`  | No       | —       | Path to the custom allocation file, relative to the container's working directory.                                                                                                                  |
+| `customAllocAccountFile`     | `string`  | No       | --      | Path to the custom allocation file, relative to the container's working directory.                                                                                                                  |
 | `maxCodeSize`                | `string`  | No       | `24576` | Maximum deployed contract bytecode size in bytes.                                                                                                                                                   |
 | `maxInitCodeSize`            | `string`  | No       | `49152` | Maximum contract initialization bytecode size in bytes.                                                                                                                                             |
 
@@ -180,7 +180,7 @@ The Rollup contract commits to the genesis state during deployment. If you chang
 
 ##### 4. Deploy the Rollup
 
-You now have `genesis.json`, its `blockHash`, and its `sendRoot` in `genesis-result.json`. Follow the [Deploy the Rollup](#deploy-the-rollup) steps to register your chain’s core contracts on the parent chain.
+You now have `genesis.json`, its `blockHash`, and its `sendRoot` in `genesis-result.json`. Follow the [Deploy the Rollup](#deploy-the-rollup) steps to register your chain's core contracts on the parent chain.
 
 ##### 5. Initialize your nodes
 
@@ -207,7 +207,7 @@ These parameters define your chain's identity.
 
 #### `genesis-file-generator` execution steps
 
-##### 1. Prepare the genesis state:
+##### 1. Prepare the genesis state
 
 - Set up the `.env` file with the required parameters.
 - Run the [`genesis-file-generator`](https://hub.docker.com/r/offchainlabs/genesis-file-generator/tags) Docker image to generate a `genesis.json` file with the required predeployed contracts and more configurations.
@@ -223,7 +223,7 @@ offchainlabs/genesis-file-generator:v0.0.5-4d999ea
 
 - You can also generate your own `genesis.json` file, but carefully read [this notice about the chain configuration property](https://github.com/OffchainLabs/genesis-file-generator#exclamation-important-note-about-the-chain-config-property) before proceeding with the next steps.
 
-- To preallocate your own accounts—balances, contract bytecode, or storage slots—create a `custom-alloc.json` file (standard Geth `alloc` format) next to your `.env`, set `CUSTOM_ALLOC_ACCOUNT_FILE=custom-alloc.json` in the `.env`, and add a read-only bind mount for it to the `docker run` command:
+- To preallocate your own accounts (balances, contract bytecode, or storage slots), create a `custom-alloc.json` file (standard Geth `alloc` format) next to your `.env`, set `CUSTOM_ALLOC_ACCOUNT_FILE=custom-alloc.json` in the `.env`, and add a read-only bind mount for it to the `docker run` command:
 
 ```shell
 docker run --rm \
@@ -233,7 +233,7 @@ docker run --rm \
 offchainlabs/genesis-file-generator:v0.0.5-4d999ea
 ```
 
-Example `custom-alloc.json` (preallocates 1 ETH—review the solvency warning above before setting non-zero balances):
+Example `custom-alloc.json`, which preallocates 1 ETH. Review the solvency warning above before setting non-zero balances:
 
 ```json
 {
@@ -330,7 +330,7 @@ Your chain now starts with the correct preloaded state.
 
 ### Predeployed contracts registry
 
-The following contracts are included by default in the standard `genesis.json` file. For the authoritative, maintained list—and details on how each contract is deployed—see the [`genesis-file-generator` README](https://github.com/OffchainLabs/genesis-file-generator#pre-deployed-contracts).
+The following contracts are included by default in the standard `genesis.json` file. For the authoritative, maintained list, and details on how each contract is deployed, see the [`genesis-file-generator` README](https://github.com/OffchainLabs/genesis-file-generator#pre-deployed-contracts).
 
 | Category            | Contract name                        | Address                                      | Note                                    |
 | :------------------ | :----------------------------------- | :------------------------------------------- | :-------------------------------------- |

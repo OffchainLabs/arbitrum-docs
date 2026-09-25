@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,6 +11,16 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // The three options below are what let Node run a `.ts` file in `scripts/` or `lib/` directly,
+    // with its own type stripping (Node 22.18+) and no build step. Node strips types and compiles
+    // nothing else, so `erasableSyntaxOnly` rejects enums, namespaces and parameter properties
+    // here rather than at runtime; `verbatimModuleSyntax` makes a type-only import say `import
+    // type`, because Node would otherwise keep the import and throw on a missing runtime export;
+    // and `allowImportingTsExtensions` permits the `./x.ts` specifiers Node requires (legal only
+    // with `noEmit`, which is set). Turbopack resolves the same specifiers in app code.
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
@@ -22,12 +31,15 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "allowJs": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    // A `**/*.ts` include never matches a dotfile, so the lint-staged config is named on its own.
+    ".lintstagedrc.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],

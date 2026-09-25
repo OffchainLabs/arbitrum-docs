@@ -1,7 +1,6 @@
 ---
 title: 'How Timeboost works'
 description: 'Learn how Timeboost works and how it can benefit your Arbitrum-based project.'
-sidebar_label: 'How Timeboost works'
 user_story: As a current or prospective Arbitrum user, I want to understand how Timeboost works and how to use it.
 content_type: 'concept'
 author: leeederek
@@ -50,7 +49,7 @@ Timeboost uses three separate components that work together:
 - **An offchain auction** to determine the controller of the express lane for a given round. This auction gets managed by an <Term id="autonomous-auctioneer">autonomous auctioneer</Term>.
 - **An <Term id="auction-contract">auction contract</Term>** deployed on the target chain to serve as the canonical source of truth for the auction results and handling of auction proceeds.
 
-To start, the default duration of a round is <Var name="timeboostRoundSeconds" /> seconds. Transactions not in the express lane will be subject to a default 200-millisecond artificial delay in their arrival timestamp before being sequenced, which means that some non-express lane transactions may be delayed to the next block. It’s important to note that the default Arbitrum block time will remain at 250 milliseconds (which can be adjusted to 100 milliseconds if desired). Let’s dive into how each of these components works.
+To start, the default duration of a round is 60 seconds. Transactions not in the express lane will be subject to a default 200-millisecond artificial delay in their arrival timestamp before being sequenced, which means that some non-express lane transactions may be delayed to the next block. It’s important to note that the default Arbitrum block time will remain at 250 milliseconds (which can be adjusted to 100 milliseconds if desired). Let’s dive into how each of these components works.
 
 ### The express lane
 
@@ -68,11 +67,11 @@ The value of the express lane will be the sum of how much MEV the express lane c
 
 ### The Timeboost auction
 
-Determining control of the express lane in each round (default: <Var name="timeboostRoundSeconds" /> seconds) happens by a per-round auction, which is a sealed-bid, second-price auction. This auction occurs to determine the express lane controller for the next round. In other words, determining the express lane controller can happen at any point in time in the previous auction round. Bids for the auction can be made with any **ERC-20** token, in any amount, and can be collected by any address—at the full discretion of the chain owner.
+Determining control of the express lane in each round (default: 60 seconds) happens by a per-round auction, which is a sealed-bid, second-price auction. This auction occurs to determine the express lane controller for the next round. In other words, determining the express lane controller can happen at any point in time in the previous auction round. Bids for the auction can be made with any **ERC-20** token, in any amount, and can be collected by any address—at the full discretion of the chain owner.
 
 <FlowChart />
 
-The auction for a round has a closing time that is `auctionClosingSeconds` (default: <Var name="timeboostAuctionClosingSeconds" />) seconds before the beginning of the round. This closing time means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the <Var name="timeboostAuctionClosingSeconds" /> seconds between when bidding is over and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the onchain auction contract to formally resolve the auction.
+The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This closing time means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bidding is over and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the onchain auction contract to formally resolve the auction.
 
 <VanillaAdmonition type="info" title="Bid behavior">
 

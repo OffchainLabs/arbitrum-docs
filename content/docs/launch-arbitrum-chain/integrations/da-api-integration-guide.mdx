@@ -788,13 +788,12 @@ Proof format: [element_value, opening_proof, auxiliary_data]
 ```
 
 **Comparison**:
-
-| Approach               | Proof Size (5MB batch) | Pros                     | Cons                                            |
-| ---------------------- | ---------------------- | ------------------------ | ----------------------------------------------- |
-| **Full Preimage**      | 5MB                    | Simple to implement      | Huge proofs, expensive L1 verification          |
-| **KZG Commitments**    | ~128 bytes             | Constant size, efficient | Requires trusted setup, pairing-friendly curves |
-| **Merkle Trees**       | ~512 bytes             | No trusted setup, simple | Logarithmic size, multiple hashes to verify     |
-| **Vector Commitments** | ~64 bytes              | Constant size, flexible  | More complex cryptography                       |
+| Approach | Proof Size (5MB batch) | Pros | Cons |
+|----------|----------------------|------|------|
+| **Full Preimage** | 5MB | Simple to implement | Huge proofs, expensive L1 verification |
+| **KZG Commitments** | ~128 bytes | Constant size, efficient | Requires trusted setup, pairing-friendly curves |
+| **Merkle Trees** | ~512 bytes | No trusted setup, simple | Logarithmic size, multiple hashes to verify |
+| **Vector Commitments** | ~64 bytes | Constant size, flexible | More complex cryptography |
 
 **What happens next**:
 
@@ -924,7 +923,7 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
     "proof": "0x0101" // claimedValid=1, version=1
   }
 }
-    ```
+```
   </Tab>
   <Tab value="invalid certificate - still success!">
 ```json
@@ -1964,7 +1963,5 @@ return nil, err
 // do the actual full data store and generate DA certificate
 return s.Store(ctx, message, hexutil.Uint64(timeout))
 }
-
-```
 
 ```

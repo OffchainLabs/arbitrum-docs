@@ -1,14 +1,14 @@
 ---
 title: 'BoLD FAQ'
-sidebar_label: 'FAQ'
 description: 'Frequently asked questions about the BoLD protocol.'
+sidebar_label: 'FAQ'
 user_story: 'As a user or researcher of the Arbitrum product suite, I want to learn about BoLD, a next-generation dispute protocol that enables permissionless validation.'
 content_type: 'faq'
 author: leeederek
 sme: leeederek
 ---
 
-## Frequently asked questions about BoLD (FAQ)
+Frequently asked questions about <Term id="bold">BoLD</Term>, the dispute protocol that enables <Term id="permissionless-validation">permissionless validation</Term> for <Term id="arbitrum">Arbitrum</Term> chains. For a high-level introduction, see the [BoLD overview](/docs/how-arbitrum-works/bold/gentle-introduction).
 
 #### Q: How does bonding work?
 
@@ -89,7 +89,7 @@ Yes. The asset a validator uses to become a proposer in BoLD can be configured t
 
 #### Q: How are honest parties reimbursed for bonding their capital to help secure Arbitrum One?
 
-The Arbitrum DAO reimburses “active” proposers with a fair interest rate, as a way of removing the disincentive to participate, by reimbursing honest parties who bond their capital and propose assertions for Arbitrum One. The interest rate should be denominated in **ETH** and should be equal to the annualized yield that Ethereum mainnet validators receive, which at the time of writing, is an APR between 3% to 4% (based on [CoinDesk Indices Composite Ether Staking Rate (CESR)](https://www.coindesk.com/indices/ether/cesr) benchmark and [_Rated.Network_](https://explorer.rated.network/network?network=mainnet&timeWindow=all&rewardsMetric=average&geoDistType=all&hostDistType=all&soloProDist=stake)). This interest is considered a reimbursement because this payment reimburses the honest party for the opportunity cost of locking up their capital and should not be perceived as a “reward”—for the same [reasons why the protocol does not reward honest parties with the funds confiscated from a malicious actor](#q-why-are-honest-parties-not-automatically-rewarded-with-confiscated-funds-from-a-malicious-actor)). These reimbursement payments can be paid out upon an active proposer’s honest assertion being confirmed on Ethereum and will be calculated and handled offchain by the Arbitrum Foundation.
+The Arbitrum DAO reimburses “active” proposers with a fair interest rate, as a way of removing the disincentive to participate, by reimbursing honest parties who bond their capital and propose assertions for Arbitrum One. The interest rate should be denominated in **ETH** and should be equal to the annualized yield that Ethereum mainnet validators receive, which at the time of writing, is an APR between 3% to 4% (based on [CoinDesk Indices Composite Ether Staking Rate (CESR)](https://www.coindesk.com/indices/ether/cesr) benchmark and [_Rated.Network_](https://explorer.rated.network/network?network=mainnet&timeWindow=all&rewardsMetric=average&geoDistType=all&hostDistType=all&soloProDist=stake)). This interest is considered a reimbursement because this payment reimburses the honest party for the opportunity cost of locking up their capital and should not be perceived as a “reward”, for the same [reasons why the protocol does not reward honest parties with the funds confiscated from a malicious actor](#q-why-are-honest-parties-not-automatically-rewarded-with-confiscated-funds-from-a-malicious-actor). These reimbursement payments can be paid out upon an active proposer’s honest assertion being confirmed on Ethereum and will be calculated and handled offchain by the Arbitrum Foundation.
 
 BoLD makes it permissionless for any validator to become a proposer and introduces a way to pay service fees to honest parties for locking up capital to do so. Validators are not considered as active proposers until they successfully propose an assertion _with_ a bond. To become an active proposer for Arbitrum One post-BoLD, a validator must propose a child chain state assertion to Ethereum. If they do not have an active bond on the parent chain, they need to attach a bond to their assertion to post it successfully. Subsequent assertions posted by the same address will move the already-supplied bond to their latest proposed assertion.
 Meanwhile, if an entity, say Bob, has posted a successor assertion to one previously made by another entity, Alice, then Bob would be considered the current active proposer by the protocol. Alice will no longer be considered the active proposer by the protocol, and once her assertion is confirmed, she will receive a refund of her assertion bond. There can only be one “active” proposer at any point in time.
@@ -112,7 +112,7 @@ Our testing has demonstrated that the cost of running a sub-challenge in BoLD, t
 
 #### Q: How will BoLD impact Arbitrum Nova?
 
-Although this AIP proposes that both Arbitrum One and Nova upgrade to use BoLD, we recommend the removal of the [allowlist of validators for Arbitrum One while keeping Nova permissioned with a DAO-controlled allowlist of entities](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators) - unchanged from today.
+Although this AIP proposes that both Arbitrum One and Nova upgrade to use BoLD, we recommend the removal of the [allowlist of validators for Arbitrum One while keeping Nova permissioned with a DAO-controlled allowlist of entities](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators), unchanged from today.
 
 This decision comes from two reasons:
 
@@ -151,7 +151,7 @@ But you might now be wondering: what about L3 Arbitrum chains that don't settle 
 
 To mitigate the risk of this issue manifesting on Arbitrum chains, Offchain Labs has included a feature called [_Delay Buffer_](/docs/how-arbitrum-works/deep-dives/sequencer#censorship-timeout) (also called _Censorship Timeout_) in BoLD’s 1.0.0 release. The _Delay Buffer_ feature aims to limit the negative effects of: prolonged parent chain censorship, prolonged sequencer censorship, and/or unexpected sequencer outages. This buffer is configurable by setting a time threshold that decrements when unexpected delays occur. Once that time threshold is reached, the force inclusion window is reduced, effectively allowing entities to make moves without the 24-hour delay per move.
 
-Under reasonable parameterization, the sequencer could be offline/censoring for <Var name="arbOneForceIncludePeriodHours" /> hours twice, before the force inclusion window drops from <Var name="arbOneForceIncludePeriodHours" /> hours to a minimum inclusion time. The force inclusion window gradually (over weeks) replenishes to its original value over time as long as the sequencer is on "good behavior"—regularly sequencing messages without unexpected delays. We believe that the Delay Buffer feature provides stronger guarantees of censorship resistance for Arbitrum chains.
+Under reasonable parameterization, the sequencer could be offline/censoring for <Var name="arbOneForceIncludePeriodHours" /> hours twice, before the force inclusion window drops from <Var name="arbOneForceIncludePeriodHours" /> hours to a minimum inclusion time. The force inclusion window gradually (over weeks) replenishes to its original value over time as long as the sequencer is on "good behavior", regularly sequencing messages without unexpected delays. We believe that the Delay Buffer feature provides stronger guarantees of censorship resistance for Arbitrum chains.
 
 Recommended parameter defaults for L3 Arbitrum chains that wish to use BoLD are available in the [BoLD configuration parameters table](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#table-of-arbitrum-bold-parameters).
 

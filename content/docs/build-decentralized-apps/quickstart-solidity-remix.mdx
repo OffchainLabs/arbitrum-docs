@@ -12,7 +12,6 @@ sme: symbolpunk
 Head over to [the Stylus quickstart](/docs/stylus/quickstart) if you'd like to use Rust instead of Solidity.
 
 </VanillaAdmonition>
-
 This quickstart is for web developers who want to start building **decentralized applications** using <Term id="arbitrum">Arbitrum</Term>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 ## What we'll learn
@@ -300,9 +299,7 @@ To use the Vending Machine (web2), copy and paste the HTML code below into a tex
       padding-left: 0.75rem;
     }
   </style>
-
 </head>
-
 <body>
 
   <h1>Cupcake Vending Machine</h1>
@@ -451,7 +448,6 @@ function truncateAddress(text) {
 </script>
 
 </body>
-
 </html>
 
 ```
@@ -459,7 +455,6 @@ function truncateAddress(text) {
 </CustomDetails>
 
 </VanillaAdmonition>
-
 Now, let's decentralize our vending machine's business logic and data by porting the above JavaScript implementation into a Solidity smart contract.
 
 ## Review the Solidity vending machine
@@ -534,7 +529,9 @@ Remix is a browser-based IDE for EVM development. There are other IDEs to choose
 
 Let's first add our smart contract to Remix following these steps:
 
-### 1. Load Remix: https://remix.ethereum.org
+### 1. Load Remix
+
+Open [remix.ethereum.org](https://remix.ethereum.org).
 
 ### 2. Create a blank workspace in Remix:
 
@@ -666,7 +663,6 @@ Your wallet won't have a balance on your local testnet's node, but you can impor
 Your Ethereum Mainnet wallet's private key is the password to all of your tokens. Never share it with anyone; avoid copying it to your clipboard.
 
 </VanillaAdmonition>
-
 Note that in the context of this quickstart, "account" refers to an EOA (externally owned account), and its associated private key[^5].
 
 You should see a balance of 10,000 **ETH**. Keep your private key handy; we'll use it again shortly.
@@ -762,7 +758,7 @@ Select **Arbitrum Sepolia** from Metamask's dropdown, paste your contract addres
 
 The final step is deploying our Cupcake machine to a production network, such as Ethereum, Arbitrum One, or Arbitrum Nitro.
 The good news is: deploying a smart contract in production is exactly the same as for Sepolia Testnet.
-The harder news: it will cost real money, this time. If you deploy on Ethereum, the fees can be significant and the transaction confirmation time <Var name="l1SlotTimeSeconds" /> seconds on average.
+The harder news: it will cost real money, this time. If you deploy on Ethereum, the fees can be significant and the transaction confirmation time 12 seconds on average.
 Arbitrum, a child chain, reduces these costs about 10X and a confirmation time in the same order while maintaining a similar level of security and decentralization. For an in-depth look at how fees are calculated and estimated, see [How to estimate gas](/docs/arbitrum-essentials/how-to-estimate-gas).
 
 ## Summary

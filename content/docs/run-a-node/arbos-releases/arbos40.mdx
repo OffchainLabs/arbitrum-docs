@@ -1,7 +1,6 @@
 ---
 title: 'ArbOS 40 Callisto'
 description: 'Release notes for ArbOS 40 Callisto, shipped via Nitro v3.6.5, building upon ArbOS 32 Bianca with new features and requirements.'
-sidebar_label: 'ArbOS 40 Callisto'
 content_type: 'reference'
 author: dlee
 sme: dlee
@@ -49,7 +48,7 @@ Please see below for the list of all changes included in ArbOS 40 Callisto:
 This EIP and its specified precompiles are part of ArbOS 40 Callisto but are _not_ enabled. However, these precompiles will be proposed for inclusion in the next ArbOS release.
 
 </VanillaAdmonition>
-This EIP introduces precompiles for performing cryptographic operations on the BLS12-381 curve, focusing on enhancing the efficiency and security of these operations. This cryptographic primitive provides 120+ bits of security for operations over pairing-friendly curves, compared to the existing BN254 precompile, which offers only 80 bits of security. BLS signature verification is the primary use case for this EIP, although many other applications that rely on point additions, multiplications, and pairing operations stand to benefit from this proposal; examples include zkSNARKS, cross-chain interactions, randomness beacons, and vector commitments.
+[EIP-2537](https://eips.ethereum.org/EIPS/eip-2537) introduces precompiles for performing cryptographic operations on the BLS12-381 curve, focusing on enhancing the efficiency and security of these operations. This cryptographic primitive provides 120+ bits of security for operations over pairing-friendly curves, compared to the existing BN254 precompile, which offers only 80 bits of security. BLS signature verification is the primary use case for this EIP, although many other applications that rely on point additions, multiplications, and pairing operations stand to benefit from this proposal; examples include zkSNARKS, cross-chain interactions, randomness beacons, and vector commitments.
 
 ### EIP-2935: Serve historical block hashes from state
 

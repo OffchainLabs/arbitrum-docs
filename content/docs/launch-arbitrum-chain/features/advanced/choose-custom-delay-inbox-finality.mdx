@@ -6,6 +6,8 @@ author: pete-vielhaber
 sme: jason-w123
 ---
 
+{/* sync-with-var: latestNitroNodeImage */}
+
 Configuring the <Term id="delayed-inbox">Delayed Inbox</Term> finality refers to adjusting <Term id="sequencer">Sequencer</Term> node flags to control the timing and dependencies for when transactions (e.g., cross-chain messages or deposits) sent through the Delayed Inbox achieve finality on the <Term id="child-chain">child chain</Term>. The Delayed Inbox is a fallback mechanism for parent-to-child communications that bypasses the sequencer for direct inclusion, ensuring censorship resistance.
 
 By default, finality for these transactions relies on Layer-1 (<Term id="layer-1-l1">L1</Term>) Ethereum block confirmations (typically tens of minutes). Configuration allows shifting to faster <Term id="layer-2-l2">L2</Term>-based finality or reducing <Term id="confirmation">confirmation</Term> waits, trading speed for potential re-org risks. This reduction is an advanced sequencer-level setting, not a deployment-time parameter, and is primarily used to optimize bridging speed for use cases like high-frequency DeFi or gaming.

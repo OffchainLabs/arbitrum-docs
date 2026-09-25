@@ -1,0 +1,6 @@
+{
+  "title": "Resources",
+  "icon": "LibraryBig",
+  "description": "Chain data, audit reports, the glossary, and how to contribute.",
+  "pages": ["../chain-info", "../audit-reports", "../glossary", "../contribute"]
+}

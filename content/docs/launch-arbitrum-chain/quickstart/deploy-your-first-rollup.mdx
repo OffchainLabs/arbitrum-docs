@@ -24,12 +24,12 @@ This how-to is where you should start if you have not deployed a chain on Arbitr
 
 ### Before you start
 
-| Requirement                 | What you need                                                                                                                                                |
-| :-------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Node.js**                 | v20 or later. [Install Node.js](https://nodejs.org/)                                                                                                         |
-| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                                        |
-| **ETH on Arbitrum Sepolia** | Your deployer wallet needs at least ~0.1 **ETH** for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
-| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                                                 |
+| Requirement                 | What you need                                                                                                                                  |
+| :-------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Node.js**                 | v20 or later. [Install Node.js](https://nodejs.org/)                                                                                           |
+| **Docker**                  | [Install Docker](https://docs.docker.com/get-docker/)                                                                                          |
+| **ETH on Arbitrum Sepolia** | Your deployer wallet needs **ETH** for gas. Use a [faucet](https://arbitrum.faucet.dev/) or [bridge from Sepolia](https://bridge.arbitrum.io/) |
+| **A wallet private key**    | From MetaMask or any wallet. Export it (it starts with `0x`)                                                                                   |
 
 ## Step 1: Set up the project
 
@@ -43,12 +43,11 @@ npm install @arbitrum/chain-sdk viem dotenv
 
 - Create a file named `.env` in that folder. Start with this line (replace with your real private key):
 
-```text
+```
 DEPLOYER_PRIVATE_KEY=0xYourPrivateKeyHere
 ```
 
-- If you fail to add this key, or do not enter it correctly, it will fail with: `Error: private key must be 32 bytes, hex or bigint, not string`
-- You **will need this file** in future steps.
+- You will need this file in future steps.
 
 ### Environment variables reference
 
@@ -76,12 +75,13 @@ In this step you will deploy your chain's contracts to Arbitrum Sepolia. It will
 <Accordion title="deploy.mjs">
 
 ```javascript
+import { createRollup, createRollupPrepareDeploymentParamsConfig, prepareChainConfig } from '@arbitrum/chain-sdk';
+import { generateChainId, sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
+import { config } from 'dotenv';
 import { createPublicClient, http } from 'viem';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { arbitrumSepolia } from 'viem/chains';
-import { prepareChainConfig, createRollupPrepareDeploymentParamsConfig, createRollup } from '@arbitrum/chain-sdk';
-import { sanitizePrivateKey, generateChainId } from '@arbitrum/chain-sdk/utils';
-import { config } from 'dotenv';
+
 config();
 
 const batchPosterPrivateKey = process.env.BATCH_POSTER_PRIVATE_KEY || generatePrivateKey();
@@ -160,11 +160,12 @@ In this step you will create the `node-config.json`—the file your node needs t
 <Accordion title="prepare-node-config.mjs">
 
 ```javascript
+import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, prepareNodeConfig } from '@arbitrum/chain-sdk';
+import { config } from 'dotenv';
 import { writeFile } from 'fs/promises';
 import { createPublicClient, http } from 'viem';
 import { arbitrumSepolia } from 'viem/chains';
-import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, prepareNodeConfig } from '@arbitrum/chain-sdk';
-import { config } from 'dotenv';
+
 config();
 
 const parentChain = arbitrumSepolia;
@@ -195,11 +196,6 @@ async function main() {
     parentChainRpcUrl: process.env.PARENT_CHAIN_RPC || parentChain.rpcUrls.default.http[0],
   });
 
-  // This quickstart doesn't require stake; if you leave it as true it will crash the node
-  if (nodeConfig.node?.staker) {
-    nodeConfig.node.staker.enable = false;
-  }
-
   await writeFile('node-config.json', JSON.stringify(nodeConfig, null, 2));
   console.log('Node config written to node-config.json');
 }
@@ -220,7 +216,7 @@ node prepare-node-config.mjs
 
 ## Step 4: Fund the batch poster and validator
 
-The batch poster and validator need **ETH** on Arbitrum Sepolia to pay for gas when posting [batches and assertions](/docs/how-arbitrum-works/deep-dives/assertions). Send **ETH** to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
+The batch poster and validator need **ETH** on Arbitrum Sepolia to pay for gas when posting batches and assertions. Send **ETH** to both addresses from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
 
 - Get the addresses from your Step 2 output (the lines starting with `BATCH_POSTER_ADDRESS=` and `VALIDATOR_ADDRESS=`).
 - Send at least 0.01 **ETH** to each address from your deployer wallet or a [faucet](https://arbitrum.faucet.dev/).
@@ -231,19 +227,18 @@ Without this, the node will not produce blocks or finalize.
 
 In this step you will start your chain. One node runs everything: it sequences blocks, posts them to Arbitrum Sepolia, and validates. Keep this terminal open—the node runs in the foreground.
 
-- Run these two commands:
+- Run these two commands. The generated config enables the staker because you supplied a validator key. The [Nitro release notes](https://github.com/OffchainLabs/nitro/releases/tag/v3.11.4) recommend the `-validator` image for a validator without a separate validation server:
 
 ```bash
 mkdir -p ./arbitrum-data
-
-cp node-config.json ./arbitrum-data/node-config.json
 ```
 
 ```bash
 docker run --rm -it \
   -v $(pwd)/arbitrum-data:/home/user/.arbitrum \
+  -v $(pwd)/node-config.json:/home/user/.arbitrum/node-config.json \
   -p 8547:8547 -p 8548:8548 \
-  offchainlabs/nitro-node:v3.11.4-7d5ac27 \
+  offchainlabs/nitro-node:v3.11.4-7d5ac27-validator \
   --conf.file /home/user/.arbitrum/node-config.json
 ```
 
@@ -260,12 +255,13 @@ In this step you'll enable the bridging tokens between your chain and Arbitrum S
 <Accordion title="deploy-token-bridge.mjs">
 
 ```javascript
-import { createPublicClient, http, defineChain } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
-import { arbitrumSepolia } from 'viem/chains';
-import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, createTokenBridgePrepareTransactionRequest, createTokenBridgePrepareTransactionReceipt, createTokenBridgePrepareSetWethGatewayTransactionRequest, createTokenBridgePrepareSetWethGatewayTransactionReceipt } from '@arbitrum/chain-sdk';
+import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, createTokenBridgePrepareSetWethGatewayTransactionReceipt, createTokenBridgePrepareSetWethGatewayTransactionRequest, createTokenBridgePrepareTransactionReceipt, createTokenBridgePrepareTransactionRequest } from '@arbitrum/chain-sdk';
 import { sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
 import { config } from 'dotenv';
+import { createPublicClient, defineChain, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { arbitrumSepolia } from 'viem/chains';
+
 config();
 
 const parentChain = arbitrumSepolia;
@@ -335,15 +331,25 @@ async function main() {
     const wethRetryableReceipts = await setWethTxReceipt.waitForRetryables({
       orbitPublicClient: chainPublicClient,
     });
-    if (wethRetryableReceipts[0].status !== 'success') throw new Error('WETH gateway retryable failed');
+    if (wethRetryableReceipts[0].status !== 'success') {
+      throw new Error('WETH gateway retryable failed');
+    }
     console.log('WETH gateway configured. Token bridge ready.');
-  } catch (e) {
-    console.warn('WETH gateway retryable was not auto-redeemed:', e.message);
-    console.warn('Redeem it manually with redeem-ticket.mjs using the ticket id above (TICKET).');
+  } catch (error) {
+    console.error('WETH gateway retryable was not redeemed:', error);
+    if (/Unexpected status for retryable ticket: 0x[0-9a-fA-F]{64}/.test(String(error))) {
+      console.error('Copy the ticket ID from the error and use the recovery step below.');
+    } else {
+      console.error('Check that your node is synced and the chain RPC is reachable, then rerun this step.');
+    }
+    process.exitCode = 1;
   }
 }
 
-main().catch(console.error);
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
 ```
 
 </Accordion>
@@ -357,54 +363,101 @@ node deploy-token-bridge.mjs
 
 - It will take a minute or two. When you see `Token bridge ready.`, the process is complete.
 
-- This is an optional that will redeem a retryable:
+### If the WETH gateway retryable was not redeemed
+
+The error from `waitForRetryables` includes the retryable ticket ID after `Unexpected status for retryable ticket:`. If this happens, set `WETH_TICKET_ID` to that ID in your `.env` file. Create `redeem-ticket.mjs` in your project folder with the following script and run it after the chain is synced. The deployer wallet needs **ETH on your L3** to pay for gas. Retryable tickets expire, so redeem it before its timeout.
 
 <Accordions>
-<Accordion title="Optional: redeem-ticket.mjs">
+<Accordion title="redeem-ticket.mjs">
 
 ```javascript
-import { createPublicClient, createWalletClient, http } from 'viem';
-import { privateKeyToAccount } from 'viem/accounts';
 import { sanitizePrivateKey } from '@arbitrum/chain-sdk/utils';
 import { config } from 'dotenv';
+import { createPublicClient, createWalletClient, decodeEventLog, defineChain, encodeEventTopics, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+
 config();
 
-// The ticket id printed by deploy-token-bridge.mjs ("Unexpected status for retryable ticket: 0x...")
-const TICKET = process.env.WETH_TICKET_ID;
-const ARB_RETRYABLE_TX = '0x000000000000000000000000000000000000006E';
-const L3_RPC = process.env.CHAIN_RPC || 'http://localhost:8547';
-const L3_CHAIN_ID = Number(process.env.CHAIN_ID); // your chain id, e.g. 36173670529
+const ticketId = process.env.WETH_TICKET_ID;
+if (!/^0x[0-9a-fA-F]{64}$/.test(ticketId || '')) {
+  throw new Error('Set WETH_TICKET_ID in .env to the 0x-prefixed ticket ID from the error');
+}
 
-const abi = [
-  { type: 'function', name: 'getTimeout', stateMutability: 'view', inputs: [{ name: 'ticketId', type: 'bytes32' }], outputs: [{ type: 'uint256' }] },
-  { type: 'function', name: 'redeem', stateMutability: 'nonpayable', inputs: [{ name: 'ticketId', type: 'bytes32' }], outputs: [{ type: 'bytes32' }] },
+const chainRpc = process.env.CHAIN_RPC || 'http://localhost:8547';
+const publicClient = createPublicClient({ transport: http(chainRpc) });
+const chainId = await publicClient.getChainId();
+const chain = defineChain({
+  id: chainId,
+  name: 'My L3 Rollup',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: { default: { http: [chainRpc] } },
+});
+const account = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
+const walletClient = createWalletClient({ account, chain, transport: http(chainRpc) });
+const retryableAddress = '0x000000000000000000000000000000000000006E';
+const retryableAbi = [
+  {
+    type: 'function',
+    name: 'redeem',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'ticketId', type: 'bytes32' }],
+    outputs: [{ type: 'bytes32' }],
+  },
+  {
+    type: 'event',
+    name: 'RedeemScheduled',
+    inputs: [
+      { name: 'ticketId', type: 'bytes32', indexed: true },
+      { name: 'retryTxHash', type: 'bytes32', indexed: true },
+      { name: 'sequenceNum', type: 'uint64', indexed: true },
+      { name: 'donatedGas', type: 'uint64', indexed: false },
+      { name: 'gasDonor', type: 'address', indexed: false },
+      { name: 'maxRefund', type: 'uint256', indexed: false },
+      { name: 'submissionFeeRefund', type: 'uint256', indexed: false },
+    ],
+  },
 ];
 
-const acct = privateKeyToAccount(sanitizePrivateKey(process.env.DEPLOYER_PRIVATE_KEY));
-const chain = { id: L3_CHAIN_ID, name: 'l3', nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 }, rpcUrls: { default: { http: [L3_RPC] } } };
-const pub = createPublicClient({ chain, transport: http() });
-const wallet = createWalletClient({ account: acct, chain, transport: http() });
+const hash = await walletClient.writeContract({
+  address: retryableAddress,
+  abi: retryableAbi,
+  functionName: 'redeem',
+  args: [ticketId],
+});
+const receipt = await publicClient.waitForTransactionReceipt({ hash });
+if (receipt.status !== 'success') throw new Error(`Redeem transaction failed: ${hash}`);
+const eventTopic = encodeEventTopics({ abi: retryableAbi, eventName: 'RedeemScheduled' })[0];
+const scheduled = receipt.logs
+  .filter((log) => log.address.toLowerCase() === retryableAddress.toLowerCase() && log.topics[0] === eventTopic)
+  .map((log) => decodeEventLog({ abi: retryableAbi, data: log.data, topics: log.topics }))
+  .find((event) => event.args.ticketId.toLowerCase() === ticketId.toLowerCase());
+if (!scheduled) throw new Error(`Redeem transaction did not schedule the retryable: ${hash}`);
 
-const hash = await wallet.writeContract({ address: ARB_RETRYABLE_TX, abi, functionName: 'redeem', args: [TICKET] });
-const rec = await pub.waitForTransactionReceipt({ hash });
-console.log('redeem tx', hash, 'status', rec.status);
-// getTimeout reverts with NoTicketWithID once the ticket is consumed -> success
+const retryHash = scheduled.args.retryTxHash;
+console.log('Redeem scheduled. Checking execution transaction:', retryHash);
+let retryReceipt;
+try {
+  retryReceipt = await publicClient.waitForTransactionReceipt({
+    hash: retryHash,
+    timeout: 120_000,
+  });
+} catch (error) {
+  throw new Error(`No execution receipt yet for ${retryHash}. Check that hash on your L3 before retrying the ticket.`, { cause: error });
+}
+if (retryReceipt.status !== 'success') {
+  throw new Error(`WETH gateway retryable execution failed: ${retryHash}. Retry before the ticket expires.`);
+}
+console.log('WETH gateway retryable redeemed:', retryHash);
 ```
 
 </Accordion>
 </Accordions>
 
+- Run `node redeem-ticket.mjs`. If it succeeds, the WETH gateway retryable has been redeemed and the token bridge setup is complete.
+
 ## A running chain
 
 Congratulations! You now have a fully running L3 chain that settles to Arbitrum Sepolia, with a sequencer, validator, and token bridge. Your chain's RPC is at `http://localhost:8547`.
-
-#### What "done/success" looks like:
-
-```text
-L3 router.getGateway(parentWETH) == L3 wethGateway   -> WETH gateway registered
-eth_chainId  -> 0x86c1e6881 (your chain id)
-eth_blockNumber advances; RPC reachable at http://localhost:8547
-```
 
 ### If something failed
 

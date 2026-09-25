@@ -1,0 +1,1407 @@
+{
+  "reference": "https://github.com/OffchainLabs/arbitrum-docs/blob/1023c40f157f09a2bf72ebe2de71239b470c6e3d/sidebars.js",
+  "sections": [
+    {
+      "id": "get-started",
+      "name": "Get started",
+      "sourceFolders": ["get-started", "resources", "oracles", "third-party-docs"],
+      "children": [
+        {
+          "name": "Get started",
+          "href": "/docs/get-started"
+        },
+        {
+          "name": "Arbitrum: introduction",
+          "page": "/docs/get-started/arbitrum-introduction"
+        },
+        {
+          "name": "Build apps",
+          "children": [
+            {
+              "name": "Build apps with Solidity",
+              "href": "/docs/build-decentralized-apps/quickstart-solidity-remix"
+            },
+            {
+              "name": "Build apps with Stylus",
+              "href": "/docs/stylus/quickstart"
+            },
+            {
+              "name": "Machine Payments Protocol (MPP)",
+              "page": "/docs/build-decentralized-apps/machine-payments-protocol"
+            }
+          ]
+        },
+        {
+          "name": "Arbitrum essentials",
+          "href": "/docs/arbitrum-essentials"
+        },
+        {
+          "name": "Run an Arbitrum chain",
+          "href": "/docs/launch-arbitrum-chain/overview/a-gentle-introduction"
+        },
+        {
+          "name": "Run an Arbitrum node",
+          "href": "/docs/run-a-node/overview"
+        },
+        {
+          "name": "Arbitrum bridge",
+          "href": "/docs/arbitrum-bridge/quickstart"
+        },
+        {
+          "name": "How Arbitrum works",
+          "href": "/docs/how-arbitrum-works/inside-arbitrum-nitro"
+        },
+        {
+          "name": "Chain info",
+          "page": "/docs/chain-info"
+        },
+        {
+          "name": "Glossary",
+          "page": "/docs/glossary"
+        },
+        {
+          "name": "Contribute",
+          "page": "/docs/contribute"
+        },
+        {
+          "name": "FAQ",
+          "page": "/docs/get-started/faq"
+        },
+        {
+          "name": "Notices",
+          "href": "/docs/notices/arbos51-upgrade-notice"
+        },
+        {
+          "name": "Audit reports",
+          "page": "/docs/audit-reports"
+        },
+        {
+          "name": "Third-party docs",
+          "children": [
+            {
+              "name": "Oracles",
+              "children": [
+                {
+                  "page": "/docs/oracles/api3/api3"
+                },
+                {
+                  "page": "/docs/oracles/chainlink/chainlink"
+                },
+                {
+                  "page": "/docs/oracles/chronicle/chronicle"
+                },
+                {
+                  "page": "/docs/oracles/DIA/dia"
+                },
+                {
+                  "page": "/docs/oracles/ora/ora"
+                },
+                {
+                  "page": "/docs/oracles/supra/use-supras-price-feed-oracle"
+                },
+                {
+                  "page": "/docs/oracles/supra/use-supras-vrf"
+                },
+                {
+                  "page": "/docs/oracles/trellor/trellor"
+                }
+              ]
+            },
+            {
+              "folder": "third-party-docs",
+              "flatten": true
+            }
+          ]
+        },
+        {
+          "name": "DAO docs",
+          "href": "https://docs.arbitrum.foundation/gentle-intro-dao-governance"
+        },
+        {
+          "name": "Prysm docs",
+          "href": "https://www.offchainlabs.com/prysm/docs"
+        }
+      ]
+    },
+    {
+      "id": "build-decentralized-apps",
+      "name": "Build apps with Solidity",
+      "sourceFolders": ["build-decentralized-apps"],
+      "children": [
+        {
+          "name": "Quickstart",
+          "page": "/docs/build-decentralized-apps/quickstart-solidity-remix"
+        },
+        {
+          "name": "Create a token",
+          "page": "/docs/build-decentralized-apps/quickstart-create-a-token"
+        },
+        {
+          "name": "Solidity support",
+          "href": "/docs/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support"
+        },
+        {
+          "name": "Troubleshooting",
+          "page": "/docs/build-decentralized-apps/troubleshooting-building"
+        },
+        {
+          "name": "Arbitrum essentials",
+          "children": [
+            {
+              "name": "Bridging",
+              "href": "/docs/arbitrum-essentials/bridging/overview"
+            },
+            {
+              "name": "Oracles",
+              "href": "/docs/oracles/overview-oracles"
+            },
+            {
+              "name": "Precompiles",
+              "href": "/docs/arbitrum-essentials/precompiles/overview"
+            },
+            {
+              "name": "Estimate gas",
+              "href": "/docs/arbitrum-essentials/how-to-estimate-gas"
+            },
+            {
+              "name": "See all Arbitrum essentials →",
+              "href": "/docs/arbitrum-essentials"
+            }
+          ]
+        },
+        {
+          "name": "Arbitrum SDK",
+          "href": "https://github.com/OffchainLabs/arbitrum-sdk"
+        },
+        {
+          "name": "Example code repository",
+          "href": "https://github.com/OffchainLabs/arbitrum-tutorials"
+        }
+      ]
+    },
+    {
+      "id": "stylus",
+      "name": "Build apps with Stylus",
+      "sourceFolders": ["stylus"],
+      "children": [
+        {
+          "name": "A gentle introduction",
+          "page": "/docs/stylus/gentle-introduction"
+        },
+        {
+          "name": "Quickstart",
+          "page": "/docs/stylus/quickstart"
+        },
+        {
+          "name": "Fundamentals",
+          "children": [
+            {
+              "name": "Choose your path",
+              "page": "/docs/stylus/fundamentals/choose-your-path"
+            },
+            {
+              "name": "Prerequisites",
+              "page": "/docs/stylus/fundamentals/prerequisites"
+            },
+            {
+              "name": "Project structure",
+              "page": "/docs/stylus/fundamentals/project-structure"
+            },
+            {
+              "name": "Contract structure",
+              "page": "/docs/stylus/fundamentals/contracts"
+            },
+            {
+              "name": "Global variables and functions",
+              "page": "/docs/stylus/fundamentals/global-variables-and-functions"
+            },
+            {
+              "name": "Data types",
+              "children": [
+                {
+                  "name": "Primitives",
+                  "page": "/docs/stylus/fundamentals/data-types/primitives"
+                },
+                {
+                  "name": "Compound types",
+                  "page": "/docs/stylus/fundamentals/data-types/compound-types"
+                },
+                {
+                  "name": "Storage",
+                  "page": "/docs/stylus/fundamentals/data-types/storage"
+                },
+                {
+                  "name": "Conversions between types",
+                  "page": "/docs/stylus/fundamentals/data-types/conversions-between-types"
+                }
+              ]
+            },
+            {
+              "name": "Testing contracts",
+              "page": "/docs/stylus/fundamentals/testing-contracts"
+            }
+          ]
+        },
+        {
+          "name": "Guides",
+          "children": [
+            {
+              "name": "Using constructors",
+              "page": "/docs/stylus/how-tos/using-constructors"
+            },
+            {
+              "name": "Composition, trait-based routing",
+              "page": "/docs/stylus/how-tos/trait-based-composition"
+            },
+            {
+              "name": "Importing interfaces",
+              "page": "/docs/stylus/how-tos/importing-interfaces"
+            },
+            {
+              "name": "Exporting ABI",
+              "page": "/docs/stylus/how-tos/exporting-abi"
+            },
+            {
+              "name": "Optimizing binaries",
+              "page": "/docs/stylus/how-tos/optimizing-binaries"
+            },
+            {
+              "name": "Caching contracts",
+              "page": "/docs/stylus/how-tos/caching-contracts"
+            },
+            {
+              "name": "Verify contracts with Arbiscan",
+              "page": "/docs/stylus/how-tos/verifying-contracts-arbiscan"
+            },
+            {
+              "name": "Deploy non-Rust contracts",
+              "page": "/docs/stylus/how-tos/deploying-non-rust-wasm-contracts"
+            }
+          ]
+        },
+        {
+          "name": "CLI tools",
+          "children": [
+            {
+              "name": "Overview",
+              "page": "/docs/stylus/cli-tools/overview"
+            },
+            {
+              "name": "Check and deploy",
+              "page": "/docs/stylus/cli-tools/check-and-deploy"
+            },
+            {
+              "name": "Verify contracts",
+              "page": "/docs/stylus/cli-tools/verify-contracts"
+            },
+            {
+              "name": "Debugging transactions",
+              "page": "/docs/stylus/cli-tools/debugging-tx"
+            },
+            {
+              "name": "Commands reference",
+              "page": "/docs/stylus/cli-tools/commands-reference"
+            }
+          ]
+        },
+        {
+          "name": "Best Practices",
+          "children": [
+            {
+              "name": "Security",
+              "page": "/docs/stylus/best-practices/security"
+            },
+            {
+              "name": "Gas optimization",
+              "page": "/docs/stylus/best-practices/gas-optimization"
+            }
+          ]
+        },
+        {
+          "name": "Troubleshooting",
+          "children": [
+            {
+              "name": "Common issues",
+              "page": "/docs/stylus/troubleshooting/common-issues"
+            }
+          ]
+        },
+        {
+          "name": "Concepts",
+          "children": [
+            {
+              "name": "WebAssembly",
+              "page": "/docs/stylus/concepts/webassembly"
+            },
+            {
+              "name": "Activation",
+              "page": "/docs/stylus/concepts/activation"
+            },
+            {
+              "name": "Gas metering",
+              "page": "/docs/stylus/concepts/gas-metering"
+            },
+            {
+              "name": "VM differences",
+              "page": "/docs/stylus/concepts/vm-differences"
+            }
+          ]
+        },
+        {
+          "name": "Advanced",
+          "children": [
+            {
+              "name": "Rust to Solidity",
+              "page": "/docs/stylus/advanced/rust-to-solidity-differences"
+            },
+            {
+              "name": "Minimal entrypoint contracts",
+              "page": "/docs/stylus/advanced/minimal-entrypoint-contracts"
+            },
+            {
+              "name": "Hostio exports",
+              "page": "/docs/stylus/advanced/hostio-exports"
+            },
+            {
+              "name": "Recommended libraries",
+              "page": "/docs/stylus/advanced/recommended-libraries"
+            }
+          ]
+        },
+        {
+          "name": "Reference",
+          "children": [
+            {
+              "name": "Overview",
+              "page": "/docs/stylus/reference/overview"
+            },
+            {
+              "name": "Opcode and hostio pricing",
+              "page": "/docs/stylus/reference/opcode-hostio-pricing"
+            },
+            {
+              "name": "Configuration reference",
+              "page": "/docs/stylus/reference/stylus-toml-reference"
+            },
+            {
+              "folder": "stylus/stylus-by-example"
+            },
+            {
+              "name": "Cargo Stylus CLI GitHub",
+              "href": "https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus"
+            },
+            {
+              "name": "Rust SDK Crate",
+              "href": "https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html"
+            },
+            {
+              "name": "Source Code Repository",
+              "href": "https://github.com/OffchainLabs/stylus-sdk-rs"
+            }
+          ]
+        },
+        {
+          "name": "Arbitrum essentials",
+          "children": [
+            {
+              "name": "Bridging",
+              "href": "/docs/arbitrum-essentials/bridging/overview"
+            },
+            {
+              "name": "Oracles",
+              "href": "/docs/oracles/overview-oracles"
+            },
+            {
+              "name": "Precompiles",
+              "href": "/docs/arbitrum-essentials/precompiles/overview"
+            },
+            {
+              "name": "Estimate gas",
+              "href": "/docs/arbitrum-essentials/how-to-estimate-gas"
+            },
+            {
+              "name": "See all Arbitrum essentials →",
+              "href": "/docs/arbitrum-essentials"
+            }
+          ]
+        },
+        {
+          "name": "FAQ",
+          "page": "/docs/stylus/troubleshooting-building-stylus"
+        }
+      ]
+    },
+    {
+      "id": "arbitrum-essentials",
+      "name": "Arbitrum essentials",
+      "sourceFolders": ["arbitrum-essentials"],
+      "children": [
+        {
+          "name": "Estimate gas",
+          "page": "/docs/arbitrum-essentials/how-to-estimate-gas"
+        },
+        {
+          "name": "Chains and testnets",
+          "page": "/docs/arbitrum-essentials/public-chains"
+        },
+        {
+          "name": "Bridging",
+          "children": [
+            {
+              "name": "Overview",
+              "page": "/docs/arbitrum-essentials/bridging/overview"
+            },
+            {
+              "name": "Cross-chain messaging",
+              "page": "/docs/arbitrum-essentials/bridging/cross-chain-messaging"
+            },
+            {
+              "name": "Verify child chain state",
+              "page": "/docs/arbitrum-essentials/how-to-get-l2block-on-l1"
+            },
+            {
+              "name": "L1-to-L3 teleportation",
+              "page": "/docs/arbitrum-essentials/bridging/l1-l3-teleportation"
+            },
+            {
+              "name": "Custom gas token chains",
+              "page": "/docs/arbitrum-essentials/bridging/custom-gas-token-chains"
+            },
+            {
+              "name": "Deposit (parent → child)",
+              "children": [
+                {
+                  "name": "ETH and messages",
+                  "page": "/docs/arbitrum-essentials/bridging/deposit/eth-and-messages"
+                },
+                {
+                  "name": "Tokens",
+                  "page": "/docs/arbitrum-essentials/bridging/deposit/tokens"
+                }
+              ]
+            },
+            {
+              "name": "Withdraw (child → parent)",
+              "children": [
+                {
+                  "name": "ETH and messages",
+                  "page": "/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages"
+                },
+                {
+                  "name": "Tokens",
+                  "page": "/docs/arbitrum-essentials/bridging/withdraw/tokens"
+                }
+              ]
+            },
+            {
+              "name": "Configure token gateway",
+              "children": [
+                {
+                  "name": "Standard gateway",
+                  "page": "/docs/arbitrum-essentials/bridging/configure-token-gateway/standard"
+                },
+                {
+                  "name": "Generic-custom gateway",
+                  "page": "/docs/arbitrum-essentials/bridging/configure-token-gateway/generic-custom"
+                },
+                {
+                  "name": "Custom gateway",
+                  "page": "/docs/arbitrum-essentials/bridging/configure-token-gateway/custom"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Arbitrum vs Ethereum",
+          "children": [
+            {
+              "name": "Comparison overview",
+              "page": "/docs/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview"
+            },
+            {
+              "name": "Block gas limit, numbers and time",
+              "page": "/docs/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time"
+            },
+            {
+              "name": "RPC methods",
+              "page": "/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods"
+            },
+            {
+              "name": "Solidity support",
+              "page": "/docs/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support"
+            },
+            {
+              "name": "Nonce management",
+              "page": "/docs/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management"
+            }
+          ]
+        },
+        {
+          "name": "Oracles",
+          "page": "/docs/oracles/overview-oracles"
+        },
+        {
+          "name": "Precompiles",
+          "children": [
+            {
+              "name": "Overview",
+              "page": "/docs/arbitrum-essentials/precompiles/overview"
+            },
+            {
+              "name": "Reference",
+              "page": "/docs/arbitrum-essentials/precompiles/reference"
+            }
+          ]
+        },
+        {
+          "name": "NodeInterface",
+          "children": [
+            {
+              "name": "Overview",
+              "page": "/docs/arbitrum-essentials/nodeinterface/overview"
+            },
+            {
+              "name": "Reference",
+              "page": "/docs/arbitrum-essentials/nodeinterface/reference"
+            }
+          ]
+        },
+        {
+          "name": "Reference",
+          "children": [
+            {
+              "name": "Chain parameters",
+              "page": "/docs/arbitrum-essentials/reference/chain-params"
+            },
+            {
+              "name": "Contract addresses",
+              "page": "/docs/arbitrum-essentials/reference/contract-addresses"
+            },
+            {
+              "name": "Debugging tools",
+              "page": "/docs/arbitrum-essentials/reference/debugging-tools"
+            },
+            {
+              "name": "Development frameworks",
+              "page": "/docs/arbitrum-essentials/reference/development-frameworks"
+            },
+            {
+              "name": "Mainnet risks",
+              "page": "/docs/arbitrum-essentials/reference/mainnet-risks"
+            },
+            {
+              "name": "Monitoring tools and block explorers",
+              "page": "/docs/arbitrum-essentials/reference/monitoring-tools-block-explorers"
+            },
+            {
+              "name": "RPC endpoints and providers",
+              "page": "/docs/arbitrum-essentials/reference/node-providers"
+            },
+            {
+              "name": "Solidity references",
+              "page": "/docs/arbitrum-essentials/reference/solidity-references"
+            },
+            {
+              "name": "Web3 libraries and tools",
+              "page": "/docs/arbitrum-essentials/reference/web3-libraries-tools"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "launch-arbitrum-chain",
+      "name": "Run an Arbitrum chain",
+      "sourceFolders": ["launch-arbitrum-chain"],
+      "children": [
+        {
+          "name": "Overview",
+          "page": "/docs/launch-arbitrum-chain/overview/a-gentle-introduction"
+        },
+        {
+          "name": "Licensing",
+          "page": "/docs/launch-arbitrum-chain/overview/aep-license"
+        },
+        {
+          "name": "FAQ",
+          "page": "/docs/launch-arbitrum-chain/troubleshooting-building-arbitrum-chain"
+        },
+        {
+          "name": "Quickstart",
+          "children": [
+            {
+              "name": "L3 rollup from scratch",
+              "page": "/docs/launch-arbitrum-chain/quickstart/deploy-your-first-rollup"
+            },
+            {
+              "name": "L3 rollup infrastructure",
+              "page": "/docs/launch-arbitrum-chain/quickstart/run-testnet-infrastructure-first-rollup"
+            },
+            {
+              "name": "Chain SDK overview",
+              "page": "/docs/launch-arbitrum-chain/overview/arbitrum-chain-sdk-introduction"
+            }
+          ]
+        },
+        {
+          "name": "Chain configuration",
+          "children": [
+            {
+              "name": "Batch poster",
+              "children": [
+                {
+                  "name": "Batch poster fee tuning",
+                  "page": "/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-fee-tuning"
+                },
+                {
+                  "name": "Enable EIP-4844 blobs",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs"
+                }
+              ]
+            },
+            {
+              "name": "Costs",
+              "children": [
+                {
+                  "name": "AEP overview",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/aep-fee-router-introduction"
+                },
+                {
+                  "name": "AEP router contracts",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/set-up-aep-fee-router"
+                },
+                {
+                  "name": "AEP reporting",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/reporting-on-fees"
+                },
+                {
+                  "name": "Native mint and burn",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/configure-native-mint-burn-gas-token"
+                },
+                {
+                  "name": "Custom gas token (AnyTrust)",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-anytrust"
+                },
+                {
+                  "name": "Custom gas token (Rollup)",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup"
+                },
+                {
+                  "name": "Dynamic pricing",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/dynamic-pricing-for-arbitrum-chains"
+                },
+                {
+                  "name": "Fee management",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/fee-management"
+                },
+                {
+                  "name": "Revenue routing",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/revenue-routing"
+                },
+                {
+                  "name": "Gas optimization",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/gas-optimization-tools"
+                },
+                {
+                  "name": "Gas target",
+                  "page": "/docs/launch-arbitrum-chain/operate/gas-target"
+                },
+                {
+                  "name": "Parent chain data fee pricing",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/parent-chain-data-fee-pricing"
+                },
+                {
+                  "name": "Priority fees",
+                  "page": "/docs/launch-arbitrum-chain/configuration/costs/priority-fees"
+                }
+              ]
+            },
+            {
+              "name": "Data availability",
+              "children": [
+                {
+                  "name": "Data availability options",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/config-data-availability"
+                },
+                {
+                  "name": "DAC overview",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/get-started"
+                },
+                {
+                  "name": "DAC defaults",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-configuration-defaults"
+                },
+                {
+                  "name": "DAC how-to",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/configure-dac"
+                },
+                {
+                  "name": "DAC/DAS operations",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/dac-das-operations"
+                },
+                {
+                  "name": "DAS RPC method reference",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/das-rpc-method-reference"
+                },
+                {
+                  "name": "Deploy DAS",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das"
+                },
+                {
+                  "name": "Deploy DAS with Docker",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/das-docker-deployment"
+                },
+                {
+                  "name": "Deploy mirror DAS",
+                  "page": "/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das"
+                }
+              ]
+            },
+            {
+              "name": "Execution",
+              "children": [
+                {
+                  "name": "Smart contract size",
+                  "page": "/docs/launch-arbitrum-chain/configuration/core/config-smart-contract-size-limit"
+                }
+              ]
+            },
+            {
+              "name": "Sequencing",
+              "children": [
+                {
+                  "name": "Chain finality",
+                  "page": "/docs/launch-arbitrum-chain/configuration/validation/arbitrum-chain-finality"
+                },
+                {
+                  "name": "Compliance filtering",
+                  "page": "/docs/launch-arbitrum-chain/configuration/sequencer/compliance-filtering"
+                },
+                {
+                  "name": "Sequencer configuration reference",
+                  "page": "/docs/launch-arbitrum-chain/configuration/sequencer/sequencer-config-reference"
+                },
+                {
+                  "name": "Sequencer timing adjustments",
+                  "page": "/docs/launch-arbitrum-chain/configuration/sequencer/config-sequencer-timing-adjustments"
+                },
+                {
+                  "name": "Timeboost",
+                  "page": "/docs/launch-arbitrum-chain/configuration/sequencer/timeboost-for-arbitrum-chains"
+                },
+                {
+                  "name": "PGA",
+                  "page": "/docs/launch-arbitrum-chain/configuration/sequencer/pga"
+                }
+              ]
+            },
+            {
+              "name": "Validation",
+              "children": [
+                {
+                  "name": "Assertion control",
+                  "page": "/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control"
+                },
+                {
+                  "name": "BoLD",
+                  "page": "/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains"
+                },
+                {
+                  "name": "Bond and validator",
+                  "page": "/docs/launch-arbitrum-chain/configuration/validation/stake-and-validator-configurations"
+                },
+                {
+                  "name": "Challenge period",
+                  "page": "/docs/launch-arbitrum-chain/configuration/validation/customizable-challenge-period"
+                },
+                {
+                  "name": "Fast withdrawals",
+                  "page": "/docs/launch-arbitrum-chain/configuration/validation/fast-withdrawals"
+                },
+                {
+                  "name": "Test chain configuration",
+                  "page": "/docs/launch-arbitrum-chain/configuration/validation"
+                }
+              ]
+            },
+            {
+              "name": "Additional configuration parameters",
+              "page": "/docs/launch-arbitrum-chain/configuration/core/additional-configuration-parameters"
+            },
+            {
+              "name": "chainConfig reference",
+              "page": "/docs/launch-arbitrum-chain/configuration/chain-config-reference"
+            }
+          ]
+        },
+        {
+          "name": "Deployment",
+          "children": [
+            {
+              "name": "Canonical factory contracts",
+              "page": "/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts"
+            },
+            {
+              "name": "Custom genesis state",
+              "page": "/docs/launch-arbitrum-chain/deploy/custom-genesis-state"
+            },
+            {
+              "name": "Node configuration",
+              "page": "/docs/launch-arbitrum-chain/arbitrum-chain-sdk-preparing-node-config"
+            },
+            {
+              "name": "Deploy",
+              "page": "/docs/launch-arbitrum-chain/deploy/deploying-an-arbitrum-chain"
+            },
+            {
+              "name": "Token bridge",
+              "page": "/docs/launch-arbitrum-chain/deploy/deploying-token-bridge"
+            },
+            {
+              "name": "Token bridge troubleshooting",
+              "page": "/docs/launch-arbitrum-chain/deploy"
+            }
+          ]
+        },
+        {
+          "name": "Integrations",
+          "children": [
+            {
+              "name": "Bridge UI",
+              "page": "/docs/launch-arbitrum-chain/integrations/bridge-ui"
+            },
+            {
+              "name": "Bridged USDC",
+              "page": "/docs/launch-arbitrum-chain/integrations/bridged-usdc-standard"
+            },
+            {
+              "name": "Infrastructure providers",
+              "page": "/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers"
+            },
+            {
+              "name": "KMS signing services",
+              "page": "/docs/launch-arbitrum-chain/integrations/bp-kms-signing-services"
+            },
+            {
+              "name": "Exchange integration checklist",
+              "page": "/docs/launch-arbitrum-chain/integrations/exchange-integration-checklist"
+            }
+          ]
+        },
+        {
+          "name": "Migrate",
+          "children": [
+            {
+              "name": "Between RaaSes",
+              "page": "/docs/launch-arbitrum-chain/migrate/migrate-between-raases"
+            },
+            {
+              "name": "From another stack",
+              "page": "/docs/launch-arbitrum-chain/migrate/migrate-from-another-stack"
+            }
+          ]
+        },
+        {
+          "name": "Operate",
+          "children": [
+            {
+              "name": "ArbOS upgrade",
+              "page": "/docs/launch-arbitrum-chain/operate/arbos-upgrade"
+            },
+            {
+              "name": "Batch poster recovery",
+              "page": "/docs/launch-arbitrum-chain/operate/bp-recovery"
+            },
+            {
+              "name": "Batch poster troubleshooting",
+              "page": "/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting"
+            },
+            {
+              "name": "BoLD upgrade playbook",
+              "page": "/docs/launch-arbitrum-chain/operate/bold-upgrade-playbook"
+            },
+            {
+              "name": "Error index",
+              "page": "/docs/launch-arbitrum-chain/operate/error-index"
+            },
+            {
+              "name": "Key rotation",
+              "page": "/docs/launch-arbitrum-chain/operate/key-rotation"
+            },
+            {
+              "name": "Monitoring",
+              "page": "/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations"
+            },
+            {
+              "name": "Ownership and access",
+              "page": "/docs/launch-arbitrum-chain/operate/ownership-access-control"
+            },
+            {
+              "name": "Post-launch deployments",
+              "page": "/docs/launch-arbitrum-chain/operate/post-launch-contract-deployments"
+            },
+            {
+              "name": "Sequencer troubleshooting",
+              "page": "/docs/launch-arbitrum-chain/operate/sequencer-troubleshooting"
+            },
+            {
+              "name": "State growth",
+              "page": "/docs/launch-arbitrum-chain/operate/state-growth"
+            },
+            {
+              "name": "Upgrade runbook",
+              "page": "/docs/launch-arbitrum-chain/operate/upgrade-runbook"
+            },
+            {
+              "name": "Validator troubleshooting",
+              "page": "/docs/launch-arbitrum-chain/operate/validator-troubleshooting"
+            }
+          ]
+        },
+        {
+          "name": "Extend the protocol",
+          "children": [
+            {
+              "name": "ArbOS",
+              "page": "/docs/launch-arbitrum-chain/configuration/core/customize-arbos"
+            },
+            {
+              "name": "DA API guide",
+              "page": "/docs/launch-arbitrum-chain/integrations/da-api-integration-guide"
+            },
+            {
+              "name": "Precompiles",
+              "page": "/docs/launch-arbitrum-chain/configuration/core/customize-precompile"
+            },
+            {
+              "name": "State Transition Function",
+              "page": "/docs/launch-arbitrum-chain/configuration/core/customize-stf"
+            }
+          ]
+        },
+        {
+          "name": "Run a node for an Arbitrum chain",
+          "children": [
+            {
+              "name": "Run a full node ",
+              "href": "/docs/run-a-node/run-full-node"
+            },
+            {
+              "name": "Run a full node (Helm/Kubernetes)",
+              "page": "/docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm"
+            },
+            {
+              "name": "Run a validator ",
+              "href": "/docs/run-a-node/more-types/run-validator-node"
+            },
+            {
+              "name": "Run a sequencer node ",
+              "href": "/docs/run-a-node/sequencer/run-sequencer-node"
+            },
+            {
+              "name": "Batch poster",
+              "page": "/docs/run-a-node/run-batch-poster"
+            },
+            {
+              "name": "Split validator node",
+              "page": "/docs/run-a-node/run-split-validator-node"
+            },
+            {
+              "name": "High availability sequencer",
+              "page": "/docs/run-a-node/high-availability-sequencer-docs"
+            }
+          ]
+        },
+        {
+          "name": "Chain playbook",
+          "href": "https://github.com/OffchainLabs/arbitrum-chain-playbook"
+        }
+      ]
+    },
+    {
+      "id": "run-a-node",
+      "name": "Run an Arbitrum node",
+      "sourceFolders": ["run-a-node"],
+      "children": [
+        {
+          "name": "Overview",
+          "page": "/docs/run-a-node/overview"
+        },
+        {
+          "name": "Nitro support policy",
+          "page": "/docs/run-a-node/nitro-support-policy"
+        },
+        {
+          "name": "Start here",
+          "page": "/docs/run-a-node/start-here"
+        },
+        {
+          "name": "Run a full node",
+          "page": "/docs/run-a-node/run-full-node"
+        },
+        {
+          "name": "Assign node roles",
+          "page": "/docs/run-a-node/assign-node-roles"
+        },
+        {
+          "name": "Run a local full chain simulation",
+          "page": "/docs/run-a-node/run-local-full-chain-simulation"
+        },
+        {
+          "name": "Run a full node with helm",
+          "href": "/docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm"
+        },
+        {
+          "name": "Run a local dev node",
+          "page": "/docs/run-a-node/run-nitro-dev-node"
+        },
+        {
+          "name": "L1 Ethereum RPC providers",
+          "page": "/docs/run-a-node/l1-ethereum-beacon-chain-rpc-providers"
+        },
+        {
+          "name": "Data Availability",
+          "page": "/docs/run-a-node/data-availability"
+        },
+        {
+          "name": "Run a feed relay",
+          "page": "/docs/run-a-node/run-feed-relay"
+        },
+        {
+          "name": "Historical blobs",
+          "page": "/docs/run-a-node/beacon-nodes-historical-blobs"
+        },
+        {
+          "name": "ArbOS software releases",
+          "children": [
+            {
+              "name": "Overview",
+              "page": "/docs/run-a-node/arbos-releases/overview"
+            },
+            {
+              "name": "Elara (ArbOS 61)",
+              "page": "/docs/run-a-node/arbos-releases/arbos61"
+            },
+            {
+              "name": "Dia (ArbOS 51)",
+              "page": "/docs/run-a-node/arbos-releases/arbos51"
+            },
+            {
+              "name": "Callisto (ArbOS 40)",
+              "page": "/docs/run-a-node/arbos-releases/arbos40"
+            },
+            {
+              "name": "Bianca (ArbOS 32)",
+              "page": "/docs/run-a-node/arbos-releases/arbos32"
+            },
+            {
+              "name": "Atlas (ArbOS 20)",
+              "page": "/docs/run-a-node/arbos-releases/arbos20"
+            },
+            {
+              "name": "ArbOS 11",
+              "page": "/docs/run-a-node/arbos-releases/arbos11"
+            }
+          ]
+        },
+        {
+          "name": "More node types",
+          "children": [
+            {
+              "name": "Run an archive node",
+              "page": "/docs/run-a-node/more-types/run-archive-node"
+            },
+            {
+              "name": "Run a validator",
+              "page": "/docs/run-a-node/more-types/run-validator-node"
+            },
+            {
+              "name": "Run a Classic node",
+              "page": "/docs/run-a-node/more-types/run-classic-node"
+            }
+          ]
+        },
+        {
+          "name": "Sequencer",
+          "children": [
+            {
+              "name": "Run a sequencer node",
+              "page": "/docs/run-a-node/sequencer/run-sequencer-node"
+            },
+            {
+              "name": "Read the sequencer feed",
+              "page": "/docs/run-a-node/sequencer/read-sequencer-feed"
+            },
+            {
+              "name": "Run a Sequencer Coordination Manager (SQM)",
+              "page": "/docs/run-a-node/sequencer/run-sequencer-coordination-manager"
+            }
+          ]
+        },
+        {
+          "name": "Build Nitro locally",
+          "page": "/docs/run-a-node/nitro/build-nitro-locally"
+        },
+        {
+          "name": "Migrate to Nitro from Classic",
+          "page": "/docs/run-a-node/nitro/migrate-state-and-history-from-classic"
+        },
+        {
+          "name": "Database snapshots",
+          "page": "/docs/run-a-node/nitro/nitro-database-snapshots"
+        },
+        {
+          "name": "Convert databases from LevelDB to Pebble",
+          "page": "/docs/run-a-node/nitro/how-to-convert-databases-from-leveldb-to-pebble"
+        },
+        {
+          "name": "Node tuning and monitoring",
+          "page": "/docs/run-a-node/nitro/node-tuning-and-monitoring"
+        },
+        {
+          "name": "Configuration system",
+          "page": "/docs/run-a-node/nitro/configuration-system"
+        },
+        {
+          "name": "DA tools reference",
+          "page": "/docs/run-a-node/nitro/da-tools-reference"
+        },
+        {
+          "name": "CLI flags reference",
+          "page": "/docs/run-a-node/nitro/cli-flags-reference"
+        },
+        {
+          "name": "Troubleshooting",
+          "page": "/docs/run-a-node/troubleshooting"
+        },
+        {
+          "name": "FAQ",
+          "page": "/docs/run-a-node/faq"
+        }
+      ]
+    },
+    {
+      "id": "arbitrum-bridge",
+      "name": "Arbitrum bridge",
+      "sourceFolders": ["arbitrum-bridge"],
+      "children": [
+        {
+          "name": "Quickstart",
+          "page": "/docs/arbitrum-bridge/quickstart"
+        },
+        {
+          "name": "USDC on Arbitrum One",
+          "page": "/docs/arbitrum-bridge/usdc-arbitrum-one"
+        },
+        {
+          "name": "Embedded bridge widget",
+          "page": "/docs/arbitrum-bridge/embedded-bridge-widget"
+        },
+        {
+          "name": "Tracing bridge transactions",
+          "page": "/docs/arbitrum-bridge/bridge-transaction-traceability"
+        },
+        {
+          "name": "Monitoring withdrawals",
+          "page": "/docs/arbitrum-bridge/withdrawal-monitoring"
+        },
+        {
+          "name": "Troubleshooting",
+          "page": "/docs/arbitrum-bridge/troubleshooting"
+        }
+      ]
+    },
+    {
+      "id": "how-arbitrum-works",
+      "name": "How Arbitrum works",
+      "sourceFolders": ["how-arbitrum-works"],
+      "children": [
+        {
+          "name": "Inside Arbitrum Nitro",
+          "page": "/docs/how-arbitrum-works/inside-arbitrum-nitro"
+        },
+        {
+          "name": "Nitro whitepaper",
+          "href": "/nitro-whitepaper.pdf"
+        },
+        {
+          "name": "Deep dives",
+          "children": [
+            {
+              "name": "AnyTrust",
+              "page": "/docs/how-arbitrum-works/deep-dives/anytrust-protocol"
+            },
+            {
+              "name": "ArbOS",
+              "page": "/docs/how-arbitrum-works/deep-dives/arbos"
+            },
+            {
+              "name": "Assertions",
+              "page": "/docs/how-arbitrum-works/deep-dives/assertions"
+            },
+            {
+              "name": "Finality",
+              "page": "/docs/how-arbitrum-works/deep-dives/finality"
+            },
+            {
+              "name": "Batch poster",
+              "page": "/docs/how-arbitrum-works/deep-dives/batchposter"
+            },
+            {
+              "name": "Parent to Child chain Messaging",
+              "page": "/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging"
+            },
+            {
+              "name": "Child to Parent chain Messaging",
+              "page": "/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging"
+            },
+            {
+              "name": "Transaction lifecycle",
+              "page": "/docs/how-arbitrum-works/deep-dives/transaction-lifecycle"
+            },
+            {
+              "name": "Sequencer transaction flow",
+              "page": "/docs/how-arbitrum-works/deep-dives/sequencer-transaction-flow"
+            },
+            {
+              "name": "Token bridging",
+              "page": "/docs/how-arbitrum-works/deep-dives/token-bridging"
+            },
+            {
+              "name": "Gas and fees",
+              "page": "/docs/how-arbitrum-works/deep-dives/gas-and-fees"
+            },
+            {
+              "name": "STF",
+              "page": "/docs/how-arbitrum-works/deep-dives/stf"
+            }
+          ]
+        },
+        {
+          "name": "Reference",
+          "children": [
+            {
+              "name": "Sequencer",
+              "page": "/docs/how-arbitrum-works/deep-dives/sequencer"
+            },
+            {
+              "name": "Geth",
+              "page": "/docs/how-arbitrum-works/reference/geth"
+            },
+            {
+              "name": "Finality and reorgs",
+              "page": "/docs/how-arbitrum-works/reference/finality-and-reorgs"
+            },
+            {
+              "name": "STF inputs",
+              "page": "/docs/how-arbitrum-works/reference/stf-inputs"
+            }
+          ]
+        },
+        {
+          "name": "The BoLD dispute protocol",
+          "children": [
+            {
+              "name": "BoLD overview",
+              "page": "/docs/how-arbitrum-works/bold/gentle-introduction"
+            },
+            {
+              "name": "FAQ",
+              "page": "/docs/how-arbitrum-works/bold"
+            },
+            {
+              "name": "Technical deep dive",
+              "page": "/docs/how-arbitrum-works/bold/bold-technical-deep-dive"
+            },
+            {
+              "name": "How BoLD bisection works",
+              "page": "/docs/how-arbitrum-works/bold/how-bold-bisection-works"
+            },
+            {
+              "name": "Economics of disputes",
+              "page": "/docs/how-arbitrum-works/bold/bold-economics-of-disputes"
+            },
+            {
+              "name": "Deploy a validator on testnet",
+              "href": "https://github.com/offchainlabs/bold-validator-starter-kit"
+            },
+            {
+              "name": "BoLD Whitepaper",
+              "href": "https://arxiv.org/abs/2404.10491"
+            },
+            {
+              "name": "Specification on GitHub",
+              "href": "https://github.com/OffchainLabs/bold"
+            }
+          ]
+        },
+        {
+          "name": "Timeboost",
+          "children": [
+            {
+              "name": "How Timeboost works",
+              "page": "/docs/how-arbitrum-works/timeboost/gentle-introduction"
+            },
+            {
+              "name": "Use Timeboost",
+              "page": "/docs/how-arbitrum-works/timeboost/how-to-use-timeboost"
+            },
+            {
+              "name": "Troubleshoot Timeboost",
+              "page": "/docs/how-arbitrum-works/timeboost/troubleshoot-timeboost"
+            },
+            {
+              "name": "Timeboost FAQ",
+              "page": "/docs/how-arbitrum-works/timeboost/timeboost-faq"
+            },
+            {
+              "name": "Specification: Timeboost",
+              "href": "https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md"
+            },
+            {
+              "name": "Specification: Timeboost with decentralized sequencing",
+              "href": "https://github.com/OffchainLabs/decentralized-timeboost-spec"
+            },
+            {
+              "name": "White paper: Timeboost",
+              "href": "https://arxiv.org/abs/2306.02179"
+            }
+          ]
+        },
+        {
+          "name": "PGA and Fast Feed",
+          "children": [
+            {
+              "name": "How PGA works",
+              "page": "/docs/how-arbitrum-works/priority-gas-auction/pga"
+            },
+            {
+              "name": "Introduction to the Fast Feed",
+              "page": "/docs/how-arbitrum-works/priority-gas-auction/fast-feed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "notices",
+      "name": "Notices",
+      "sourceFolders": ["notices"],
+      "children": [
+        {
+          "name": "Upgrade notice for ArbOS 61",
+          "page": "/docs/notices/arbos61-upgrade-notice"
+        },
+        {
+          "name": "Upgrade notice for ArbOS 51",
+          "page": "/docs/notices/arbos51-upgrade-notice"
+        },
+        {
+          "name": "Upgrade for the Fusaka transition",
+          "page": "/docs/notices/fusaka-upgrade-notice"
+        }
+      ]
+    }
+  ]
+}

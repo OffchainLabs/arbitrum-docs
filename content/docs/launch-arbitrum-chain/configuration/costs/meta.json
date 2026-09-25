@@ -8,12 +8,12 @@
     "use-a-custom-gas-token-anytrust",
     "dynamic-pricing-for-arbitrum-chains",
     "gas-optimization-tools",
+    "parent-chain-data-fee-pricing",
+    "priority-fees",
     "aep-fee-router-introduction",
     "calculate-aep-fees",
     "set-up-aep-fee-router",
     "reporting-on-fees",
-    "parent-chain-data-fee-pricing",
-    "priority-fees",
     "..."
   ]
 }

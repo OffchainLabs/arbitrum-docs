@@ -1,7 +1,6 @@
 {
   "title": "Arbitrum essentials",
   "icon": "BookOpen",
-  "root": true,
   "description": "Language-agnostic guidance for building on Arbitrum.",
   "pages": [
     "index",
@@ -10,9 +9,6 @@
     "precompiles",
     "nodeinterface",
     "reference",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
+    "..."
   ]
 }

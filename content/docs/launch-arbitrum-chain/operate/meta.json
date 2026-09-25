@@ -4,7 +4,6 @@
     "arbos-upgrade",
     "upgrade-runbook",
     "bold-upgrade-playbook",
-    "error-index",
     "monitoring-tools-and-considerations",
     "ownership-access-control",
     "key-rotation",
@@ -12,8 +11,9 @@
     "state-growth",
     "post-launch-contract-deployments",
     "bp-recovery",
-    "validator-troubleshooting",
     "sequencer-troubleshooting",
+    "validator-troubleshooting",
+    "error-index",
     "..."
   ]
 }

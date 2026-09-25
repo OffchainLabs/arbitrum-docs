@@ -1,3 +1,5 @@
+{/* sync-with-var: latestNitroNodeImage */}
+
 ```shell
 docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v3.11.4-7d5ac27 --parent-chain.connection.url=<Parent chain RPC URL>  --chain.info-json=<Orbit chain's info> --chain.name=<Orbit chain name> --node.feed.input.url=<Sequencer feed url> --execution.forwarding-target=<Sequencer node endpoint url> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```

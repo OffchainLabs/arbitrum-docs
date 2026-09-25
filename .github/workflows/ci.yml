@@ -1,14 +1,12 @@
 name: CI
 
-# `master` is listed alongside `main` for the landing: this tree is developed here on `main` but
-# lands on OffchainLabs/arbitrum-docs, whose default branch is `master`. Without it the migration
-# PR runs none of the gates below and reads as green while validating nothing. Drop `master` once
-# the cutover has promoted the branch and there is only one default branch left.
+# Run the gates for the migration's `fumadocs` review base as well as the production/default
+# branches. A PR targeting `fumadocs` otherwise gets no CI checks.
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, fumadocs]
   pull_request:
-    branches: [main, master]
+    branches: [main, master, fumadocs]
 
 permissions:
   contents: read
@@ -56,16 +54,19 @@ jobs:
         run: pnpm partials:check
 
       - name: Archived page registry
-        run: node scripts/versioned-docs-check.mjs
+        run: node scripts/versioned-docs-check.ts
 
       - name: Glossary references resolve
         run: pnpm references:check
 
-      # `<Var>` cannot render inside a code fence, so every `docker run offchainlabs/nitro-node:…`
-      # is a hardcoded literal that a release bump has to rewrite by hand. This is the only thing
-      # that notices when a bump reaches some of them and not the rest.
-      - name: Nitro image tags match the pin
-        run: pnpm nitro:image-check
+      - name: FAQ data is current
+        run: pnpm faq:check
+
+      - name: Contract address reference is current
+        run: pnpm contracts:check
+
+      - name: Remote Markdown images are absent
+        run: pnpm images:presence
 
       # Fumadocs has no `onBrokenLinks: 'throw'`, and `pnpm build` does not check links,
       # so this step is the only thing standing between a broken link and main.
@@ -78,29 +79,16 @@ jobs:
       - name: MDX structural lint
         run: pnpm content:lint
 
-      # Reached zero on 2026-09-24. 801 of the 814 findings were MD060 table alignment, cleared by
-      # the Prettier reformat; the rest were headings and footnotes on the line directly after a
-      # closing JSX tag, which CommonMark folds into the HTML block.
-      - name: Markdown lint
-        run: pnpm lint:markdown
-
-      # Offline mode takes the page set from the content tree instead of /llms.txt. The online
-      # mode against a preview stays the authority; run it by hand.
-      - name: Redirect audit (offline)
-        run: pnpm redirects:check:offline
-
       # Reached zero on 2026-09-24: MDX joined Prettier's scope, and the files the tooling writes
       # (meta.json, redirects.*.mjs) moved to .prettierignore instead of being formatted once.
       - name: Formatting
         run: pnpm format:check
 
   build:
-    # Non-blocking: the MDX image pipeline fetches remote images at build time, so a
-    # dead third-party URL turns this red for reasons unrelated to the change under
-    # review. It still catches MDX compile errors that types:check cannot see.
-    name: Build (non-blocking)
+    # The HTTP checks exercise the built routes and response headers. They need a
+    # production build and must fail the PR if routing or cache behavior regresses.
+    name: Build and HTTP smoke tests
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -116,3 +104,23 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm build
+
+      - name: Built docs HTTP smoke tests
+        run: |
+          pnpm start --hostname 127.0.0.1 --port 3000 > /tmp/arbitrum-docs-next-start.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          for attempt in {1..60}; do
+            if curl --silent --fail http://127.0.0.1:3000/llms.txt > /dev/null; then
+              break
+            fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              cat /tmp/arbitrum-docs-next-start.log
+              exit 1
+            fi
+            sleep 1
+          done
+
+          curl --silent --show-error --fail http://127.0.0.1:3000/llms.txt > /dev/null
+          STATIC_DOCS_TEST_URL=http://127.0.0.1:3000 node --test scripts/static-docs-http.test.ts

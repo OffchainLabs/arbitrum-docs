@@ -3,57 +3,195 @@
 @import 'fumadocs-ui/css/preset.css';
 @import 'fumadocs-twoslash/twoslash.css';
 
-/* Arbitrum brand palette, ported from arbitrum-docs `src/css/partials/_variables.scss` (:root).
-   Values kept in hsl() notation so each line is directly comparable against the source. */
-@theme {
-  --color-fd-background: hsl(0 0% 100%);
-  --color-fd-foreground: hsl(222 47% 11%);
-  --color-fd-muted: hsl(210 40% 96%);
-  --color-fd-muted-foreground: hsl(215 16% 47%);
-  --color-fd-popover: hsl(0 0% 100%);
-  --color-fd-popover-foreground: hsl(222 47% 11%);
-  --color-fd-card: hsl(0 0% 100%);
-  --color-fd-card-foreground: hsl(222 47% 11%);
-  --color-fd-border: hsl(214 32% 91%);
-  --color-fd-primary: hsl(211 99% 45%);
-  --color-fd-primary-foreground: hsl(0 0% 100%);
-  --color-fd-secondary: hsl(210 40% 96%);
-  --color-fd-secondary-foreground: hsl(222 47% 11%);
-  --color-fd-accent: hsl(210 40% 96%);
-  --color-fd-accent-foreground: hsl(222 47% 11%);
-  --color-fd-ring: hsl(211 99% 45%);
-  --color-fd-overlay: hsl(222 47% 11% / 0.5);
+/* Arbitrum brand palette, ported from the arbitrum.io marketing site (arbitrum-website
+   `tailwind.config.js` `theme.extend.colors`, the "REVAMP" block, plus `app/globals.scss` :root).
+   Hex values are copied verbatim so each line is directly comparable against the source.
 
-  /* Hero gradient: a darkened variant of the brand blue->teal gradient. The
-     source gradient (hsl(211 99% 45%) -> hsl(188 100% 53%)) fails WCAG AA with
-     white text at the teal end (1.61:1), so the hero runs logo navy -> brand
-     blue instead: 13.35:1 and 4.78:1 against white. */
-  --color-arbitrum-gradient-from: hsl(215 37% 20%);
-  --color-arbitrum-gradient-to: hsl(211 99% 45%);
+   Two layers, on purpose:
+   - `--color-arbitrum-*` is the raw brand palette. Use `bg-arbitrum-cyan` when a surface must be
+     *that colour* in both themes (a glow, the footer, the hero).
+   - `--color-fd-*` is the Fumadocs theme, defined on top of the raw palette and remapped in `.dark`.
+     Use `bg-fd-primary` when you mean "the theme's primary", whatever that is today.
+   Design rationale: .claude/docs/superpowers/specs/2026-09-15-arbitrum-website-styles-port.md */
+@theme {
+  --color-arbitrum-navy: #05163d; /* primary-blue-1 */
+  --color-arbitrum-blue: #016be5; /* primary-blue-2 */
+  --color-arbitrum-cyan: #10e1ff; /* primary-blue-3 */
+  --color-arbitrum-green: #00e340;
+  --color-arbitrum-yellow: #ffe103;
+  --color-arbitrum-orange: #ff4400;
+  --color-arbitrum-stone: #f2f2f2; /* stone-white */
+  --color-arbitrum-gray: #333333; /* gray, also white-20-on-black-rgb */
+  --color-arbitrum-dark-gray: #344054;
+  --color-arbitrum-grey: #d6d6d6; /* globals.scss --grey */
+
+  /* Light: black type on white, stone surfaces, brand blue as the primary. The site itself is
+     light-only, so this is a straight transcription of what it renders. */
+  --color-fd-background: #ffffff;
+  --color-fd-foreground: #000000;
+  --color-fd-muted: var(--color-arbitrum-stone);
+  --color-fd-muted-foreground: var(--color-arbitrum-dark-gray);
+  --color-fd-popover: #ffffff;
+  --color-fd-popover-foreground: #000000;
+  --color-fd-card: #ffffff;
+  --color-fd-card-foreground: #000000;
+  --color-fd-border: var(--color-arbitrum-grey);
+  --color-fd-primary: var(--color-arbitrum-blue);
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-secondary: var(--color-arbitrum-stone);
+  --color-fd-secondary-foreground: #000000;
+  /* Card hover on the site is `bg-black/10`; #e6e6e6 is that over white. */
+  --color-fd-accent: #e6e6e6;
+  --color-fd-accent-foreground: #000000;
+  /* Focus ring stays brand blue in light (5.0:1 on white). The site's cyan is 1.6:1 there, under
+     the 3:1 non-text minimum, and Fumadocs paints `focus-visible:ring-fd-ring` on every button,
+     code block and the sidebar. `.dark` switches it to cyan, 13:1 on black. */
+  --color-fd-ring: var(--color-arbitrum-blue);
+  --color-fd-overlay: rgb(5 22 61 / 0.5);
+
+  /* Success/failure states. Fumadocs' preset ships no status colors, and interactive widgets need
+     a pair, so they sit with the rest of the palette instead of as raw Tailwind shades inside one
+     component. Both clear 4.5:1 against --color-fd-card in their own theme, so they are safe on
+     text and not only on decoration. Danger is the site's `error` colour (rgb(205,0,0), 5.9:1 on
+     white). The site's green (#00e340, 1.6:1) is decoration-only there and never text, so success
+     keeps a darkened green with no source line to compare against. */
+  --color-fd-success: hsl(142 72% 29%);
+  --color-fd-danger: #cd0000;
+
+  /* Hero gradient: the site's `blue-dark-blue` (`#016BE5 -> #05163D`), run navy-first so the
+     headline sits on the dark end. White text clears AA at both ends: 16.3:1 on navy, 4.9:1 on
+     blue. The site's other brand gradients end in cyan, which fails with white text (1.6:1). */
+  --color-arbitrum-gradient-from: var(--color-arbitrum-navy);
+  --color-arbitrum-gradient-to: var(--color-arbitrum-blue);
+
+  /* Glows and shadows, from `boxShadow` / `dropShadow` in the site's tailwind config. */
+  --shadow-button-glow: 0 0 14px 0 rgb(16 225 255 / 0.5);
+  --shadow-card-hover: 0 0 20px 0 rgb(0 0 0 / 0.05);
+  --shadow-card-glow: 0 0 34px 0 rgb(16 225 255 / 0.5);
+  --shadow-glass-effect: 0 0 30px rgb(0 0 0 / 0.08);
+  --drop-shadow-hex-glow: 0 0 3px rgb(16 225 255);
+
+  /* FK Screamer, the site's display face, for the home hero heading only (see app/layout.tsx). */
+  --font-display: var(--font-fk-screamer), var(--font-sans);
 
   --spacing-page: 1436px;
 }
 
-/* Dark: navy-tinted surfaces, teal primary. Ported from arbitrum-docs
-   `src/css/partials/_darkmode.scss` ([data-theme='dark']). */
+/* Dark: the marketing site ships light-only (its ThemeProvider is commented out), so this is
+   built from the dark variants left in its class lists: a black page (`lg:bg-black`, the footer
+   gradient ends at #000), `white/10` cards, `#333333` borders (`white-20-on-black-rgb`), navy for
+   raised surfaces, cyan as the primary (11.2:1 against navy, 13:1 against black). */
 .dark {
-  --color-fd-background: hsl(222 47% 6%);
-  --color-fd-foreground: hsl(210 40% 98%);
-  --color-fd-muted: hsl(217 33% 12%);
-  --color-fd-muted-foreground: hsl(215 20% 65%);
-  --color-fd-popover: hsl(222 47% 8%);
-  --color-fd-popover-foreground: hsl(210 40% 98%);
-  --color-fd-card: hsl(222 47% 8%);
-  --color-fd-card-foreground: hsl(210 40% 98%);
-  --color-fd-border: hsl(217 33% 17%);
-  --color-fd-primary: hsl(188 100% 53%);
-  --color-fd-primary-foreground: hsl(222 47% 6%);
-  --color-fd-secondary: hsl(217 33% 17%);
-  --color-fd-secondary-foreground: hsl(210 40% 98%);
-  --color-fd-accent: hsl(217 33% 17%);
-  --color-fd-accent-foreground: hsl(210 40% 98%);
-  --color-fd-ring: hsl(188 100% 53%);
-  --color-fd-overlay: hsl(222 47% 4% / 0.8);
+  --color-fd-background: #000000;
+  --color-fd-foreground: #ffffff;
+  --color-fd-muted: #1a1a1a; /* white/10 over black */
+  --color-fd-muted-foreground: #999999; /* white/60 over black, 5.9:1 */
+  --color-fd-popover: var(--color-arbitrum-navy);
+  --color-fd-popover-foreground: #ffffff;
+  --color-fd-card: #1a1a1a;
+  --color-fd-card-foreground: #ffffff;
+  --color-fd-border: var(--color-arbitrum-gray);
+  --color-fd-primary: var(--color-arbitrum-cyan);
+  --color-fd-primary-foreground: var(--color-arbitrum-navy);
+  --color-fd-secondary: var(--color-arbitrum-navy);
+  --color-fd-secondary-foreground: #ffffff;
+  --color-fd-accent: #262626; /* white/15 over black, the site's dark card hover */
+  --color-fd-accent-foreground: #ffffff;
+  --color-fd-ring: var(--color-arbitrum-cyan);
+  --color-fd-overlay: rgb(0 0 0 / 0.8);
+  --color-fd-success: hsl(142 69% 58%);
+  --color-fd-danger: hsl(0 91% 71%);
+}
+
+/* Rendering, from arbitrum-website `app/globals.scss` `html` and `app/layout.tsx` `body`.
+   `font-synthesis: none` matters more here than there: Aeonik ships 400 and 500 only, so any
+   `font-weight: 600/700` that slips through (Fumadocs' `font-semibold` nav title, a `<b>` in
+   content) now falls back to the real 500 face instead of a synthesised fake bold. */
+/* Anchor jumps only: app/layout.tsx sets `data-scroll-behavior="smooth"` so Next scrolls new pages
+   instantly, and readers who asked for less motion get an instant jump everywhere. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Italic text uses the Aeonik italic face, which `app/layout.tsx` declares as its own `next/font`
+   family so it can skip preloading (FS-2715). Naming the family here is what re-attaches it: the
+   uprights on `--font-sans` no longer carry an italic `src`, so without this rule `font-style:
+   italic` plus `font-synthesis: none` below would render `<em>` upright. Kept to the elements the
+   browser italicises by default, plus Tailwind's `italic` utility, which sets `font-style` and
+   would otherwise hit the same wall. */
+em,
+i,
+cite,
+dfn,
+var,
+address,
+.italic {
+  font-family: var(--font-sans-italic), var(--font-sans);
+}
+
+body {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-arbitrum-cyan);
+  color: var(--color-arbitrum-navy);
+}
+
+/* The site's signature background: 1px hairlines every sixth of the width
+   (`backgroundImage['repeating-lines']`). Colours go through theme tokens so the same utility
+   reads in dark. Landing chrome only (home, 404): under running prose, tables and code it fights
+   the content, so docs pages never get it. */
+@utility bg-repeating-lines {
+  background-image: repeating-linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-fd-foreground) 8%, transparent) 0px,
+    color-mix(in srgb, var(--color-fd-foreground) 8%, transparent) 1px,
+    transparent 1px,
+    transparent 16.67%
+  );
+}
+
+/* The site's hexagon bullet (`.hex-clip-path` + `aspect-hex`). Used by the nav labels, the footer
+   links and the brand button. */
+@utility hex-clip {
+  clip-path: polygon(-50% 50%, 50% 100%, 150% 50%, 50% 0);
+  aspect-ratio: cos(30deg);
+}
+
+/* Fumadocs `Card`, restyled to the site's card language (`CardBase` / `SubmenuCard`): 10px radius,
+   stone surface, transparent border that turns `black/40` on hover, `white/10` -> `white/15` in
+   dark. Attribute selector because forking the component to change four declarations would lose
+   upstream fixes. Unlayered, so it beats the component's `rounded-xl`, `bg-fd-card` and
+   `hover:bg-fd-accent/80` utilities.
+
+   Fumadocs also puts `data-card` on the anchor link inside every prose heading (that is what the
+   `.prose a:not([data-card])` exclusion above keys on), so the heading child is carved out here or
+   every h2 grows a stone pill. */
+[data-card]:not(:is(h1, h2, h3, h4, h5, h6) > *) {
+  border-radius: 10px;
+  border-color: transparent;
+  background: var(--color-fd-muted);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:is(a):hover {
+    border-color: rgb(0 0 0 / 0.4);
+    background: var(--color-fd-muted);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .dark &:is(a):hover {
+    border-color: rgb(255 255 255 / 0.4);
+    background: var(--color-fd-accent);
+  }
 }
 
 /* Arbitrum prose treatment, ported from arbitrum-docs `_typography.scss` (which
@@ -77,7 +215,8 @@
 
   :where(h1, h2, h3, h4, h5, h6) {
     font-weight: 500;
-    scroll-margin-top: 80px;
+    /* Include the announcement, header, and mobile TOC so anchor targets stay visible. */
+    scroll-margin-top: calc(var(--fd-docs-row-3, 56px) + 24px);
     text-wrap: balance;
   }
 
@@ -285,7 +424,7 @@ h3:has(> button[data-state]) {
 }
 
 /* Fenced code blocks use a true monospace; inline code keeps brand Aeonik Fono.
-   See the --font-code comment in app/[lang]/layout.tsx. */
+   See the --font-code comment in app/layout.tsx. */
 pre,
 pre code {
   font-family: var(--font-code), ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
@@ -326,11 +465,11 @@ pre code {
   line-height: 1.5;
 }
 
-/* Top navbar (notebook layout, nav mode "top"): mirror the legacy Docusaurus
-   navbar — logo, nav links on a single line, search pushed to the far right.
+/* Top navbar (notebook layout, nav mode "top", and the home header that copies its shape): mirror
+   the legacy Docusaurus navbar — logo, nav links on a single line, search pushed to the far right.
    Overrides the default row (title flex-1 | search | links flex-1), which
    squeezes the links into half the row and wraps their labels. */
-#nd-subnav [data-header-body] {
+:is(#nd-subnav, #nd-nav) [data-header-body] {
   /* Title group: natural width instead of half the row */
   & > div:first-child {
     flex: 0 0 auto;
@@ -383,6 +522,49 @@ pre code {
   }
 }
 
+/* Top-level navbar labels take the marketing site's menu treatment (`menuButton.tsx`): uppercase
+   Aeonik Fono at 14px, full foreground colour, and a hexagon bullet that turns cyan with a glow on
+   hover or while the menu is open. `#nd-subnav` is the notebook header on docs pages; `#nd-nav` is
+   components/home-header.tsx on the landing and 404 pages, which copies the notebook header's DOM
+   shape so one selector serves both. The direct-child selector stops at the top level, so items
+   inside the menu popover keep Fumadocs' sentence-case list style. */
+:is(#nd-subnav, #nd-nav) [data-header-body] > div:last-child > div:first-child > :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-fd-foreground);
+  transition:
+    color 0.3s ease,
+    filter 0.3s ease;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 9px;
+    flex: none;
+    clip-path: polygon(-50% 50%, 50% 100%, 150% 50%, 50% 0);
+    aspect-ratio: cos(30deg);
+    background: currentColor;
+    transition: background-color 0.3s ease;
+  }
+
+  &:hover,
+  &[data-state='open'],
+  &[data-active='true'],
+  &:has([data-active='true']) {
+    color: var(--color-fd-foreground);
+
+    &::before {
+      background: var(--color-arbitrum-cyan);
+      filter: drop-shadow(var(--drop-shadow-hex-glow));
+    }
+  }
+}
+
 html {
   scrollbar-gutter: stable;
 }
@@ -428,30 +610,17 @@ html > body[data-scroll-locked] {
   vertical-align: top;
 }
 
-/* ---------------------------------------------------------------------------
-   Folded-in component stylesheets.
+/* Glossary hover popover (`components/HoverPopover`, behind `<Term>` and `<Reference>`).
+   These rules lived in `components/HoverPopover/styles.css` until FS-2715. That import fed a
+   Turbopack stylesheet chunk which, because the component is reachable from `components/mdx.tsx`
+   (a server module, so Next cannot code-split it), the browser treats as render-blocking on every
+   docs page. Moving the rules here takes them off that chunk and changes nothing on screen.
+   **Moving one was not enough.** Turbopack groups the registry's plain `.css` imports into one
+   chunk, so with `components/mdx/reference-list.css` still importing, the chunk survived at a
+   smaller size and `/docs/stylus` still blocked on four stylesheets. Folding that one as well
+   (below) took it to three. See INTERNALS.md "Page weight and what loads late". */
 
-   These rules used to live beside their components, as plain `.css` imports in
-   components/HoverPopover/index.tsx and components/mdx/ReferenceList.tsx. Both
-   components are reachable from components/mdx.tsx, which is a server module,
-   and Next cannot code-split a client component that a server component
-   imports — so Turbopack grouped those imports into one render-blocking chunk
-   on every docs page.
-
-   Folding only one of the two does not help: the chunk still carries the other
-   and the round trip survives. Both plain imports had to go for the chunk to
-   disappear, at which point the CSS modules left behind (VanillaAdmonition,
-   ImageZoom, PdfModal) merge into a chunk that is already being fetched. The
-   modules cannot be folded the same way, because their class names are hashed
-   at build time.
-
-   So: do not add a plain `.css` import to a component in the MDX registry. It
-   reinstates the request for all 350 docs pages. Put the rules here instead.
-   --------------------------------------------------------------------------- */
-
-/* From components/HoverPopover/styles.css. Not behind next/dynamic, because the
-   trigger is a <button> styled to read as inline prose — late CSS would flash a
-   real button mid-sentence on every page citing a glossary term. */
+/* Trigger */
 .hover-popover__trigger {
   border-bottom: 1px dotted var(--color-fd-primary);
   background: none;
@@ -465,6 +634,7 @@ html > body[data-scroll-locked] {
   cursor: text;
 }
 
+/* Popover container */
 .hover-popover__content {
   background: var(--color-fd-popover);
   color: var(--color-fd-popover-foreground, var(--color-fd-foreground));
@@ -482,6 +652,7 @@ html > body[data-scroll-locked] {
   max-height: 60vh;
 }
 
+/* Body */
 .hover-popover__body {
   padding: 16px 20px;
   overflow-y: auto;
@@ -496,12 +667,13 @@ html > body[data-scroll-locked] {
   color: var(--color-fd-foreground);
 }
 
+/* Content spacing (definitions render as real MDX) */
 .hover-popover__body > :last-child {
   margin-bottom: 0;
 }
 
-/* FloatingPortal mounts the popover on <body>, outside `.prose`, so the global
-   link treatment never reaches these. Restated to match prose links — without it
+/* Links inside the popover. FloatingPortal mounts the popover on <body>, outside `.prose`, so the
+   global link treatment above never reaches these. Restated here to match prose links, because without it
    a glossary cross-reference is indistinguishable from body text. */
 .hover-popover__body a {
   font-weight: 500;
@@ -519,9 +691,15 @@ html > body[data-scroll-locked] {
   text-decoration-color: currentColor;
 }
 
-/* From components/mdx/reference-list.css. Two rules styling a list that exactly
-   one page renders (content/docs/glossary.mdx), which made it the cheapest of
-   the two plain imports to move. */
+/* Glossary and reference index pages (`components/mdx/ReferenceList`, behind `<ReferenceList>`).
+   Here for the same reason as the popover rules above: `ReferenceList` is a server component in the
+   `components/mdx.tsx` registry, so its `./reference-list.css` import put these two rules on a
+   render-blocking chunk shared by all 349 docs pages, to style a list that one of them renders
+   (`content/docs/glossary.mdx`). Folding it was what finally deleted that chunk: with both plain
+   `.css` imports gone, the CSS modules left behind (`VanillaAdmonition`, `ImageZoom`, `PdfModal`)
+   merged into the chunk that already carried the image-zoom vendor CSS, and `/docs/stylus` went
+   from four render-blocking stylesheets to three. Total CSS bytes are unchanged; what went is the
+   round trip. The class names are component-scoped, so nothing outside `ReferenceList` matches. */
 .reference-list__item {
   scroll-margin-top: 6rem;
   padding-bottom: 1rem;

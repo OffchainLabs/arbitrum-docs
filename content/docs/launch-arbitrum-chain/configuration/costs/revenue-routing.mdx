@@ -1,6 +1,5 @@
 ---
 title: 'Understand network revenue routing on your Arbitrum chain'
-sidebar_label: 'Revenue routing'
 description: 'Learn how transaction fees flow through an Arbitrum chain: which addresses collect each fee component, when funds actually move, and how to withdraw revenue to the parent chain'
 author: emredincoglu
 sme: emredincoglu
@@ -58,7 +57,7 @@ The first two components are straightforward: <Term id="arbos">ArbOS</Term> cred
 Payouts to the fee collector and reward recipient are triggered **by batch posting reports**. In practice this means:
 
 - Funds move shortly after each batch is posted once the report has transited the <Term id="delayed-inbox">delayed inbox</Term> and been processed on the child chain.
-- Batch posting frequency depends on your chain's traffic and batch poster configuration (size, frequency), so payout frequency varies with it. Information about the batch poster configuration is described in [Batch Poster](/docs/launch-arbitrum-chain/configuration/batch-poster/config-batch-poster).
+- Batch posting frequency depends on your chain's traffic and batch poster configuration (size, frequency), so payout frequency varies with it. Information about the batch poster configuration is described in [Run a batch poster](/docs/run-a-node/run-batch-poster).
 - Every report will cover as much of the funds as it can.
 
 ## Estimated versus actual fees
@@ -89,7 +88,7 @@ The protocol's pricing loop makes the second balance grow in proportion to what 
 There are two options to move revenue from the child chain to the parent chain:
 
 1. **Withdraw manually through the bridge.** If a collector is an EOA or multisig you control, initiate a standard child to parent withdrawal and execute it on the parent chain after the <Term id="challenge">challenge</Term> period.
-2. **Use the AEP fee router contracts.** Set your collector addresses to `ChildToParentRouter` contracts, which route received funds to a configurable parent chain address and can be triggered permissionlessly. This is the recommended setup for chains with [<Term id="arbitrum-expansion-program">Arbitrum Expansion Program</Term>](/docs/launch-arbitrum-chain/configuration/costs/aep-fee-router-introduction) obligations (see [How to set up an AEP fee router](/docs/launch-arbitrum-chain/configuration/costs/set-up-aep-fee-router)).
+2. **Use the AEP fee router contracts.** Set your collector addresses to `ChildToParentRouter` contracts, which route received funds to a configurable parent chain address and can be triggered permissionlessly. This is the recommended setup for chains with <Term id="arbitrum-expansion-program">Arbitrum Expansion Program</Term> obligations (see [How to set up an AEP fee router](/docs/launch-arbitrum-chain/configuration/costs/set-up-aep-fee-router)).
 
 <VanillaAdmonition type="warning" title="Custom gas token chains">
 
@@ -134,5 +133,5 @@ For structured daily reporting across all fee streams, see [AEP fee reporting](/
 - [How to manage the fee parameters of your Arbitrum chain](/docs/launch-arbitrum-chain/configuration/costs/fee-management) — configuring every parameter and collector mentioned here
 - [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing) — the parent chain pricing mechanism and adaptive algorithm in depth
 - [How to set up an AEP fee router](/docs/launch-arbitrum-chain/configuration/costs/set-up-aep-fee-router) — routing revenue to the parent chain automatically
-- [Configure your chain's batch poster](/docs/launch-arbitrum-chain/configuration/batch-poster/config-batch-poster) — the operational side of the component this revenue reimburses
+- [Run a batch poster](/docs/run-a-node/run-batch-poster) — the operational side of the component this revenue reimburses
 - [Batch poster: External signing (KMS)](/docs/launch-arbitrum-chain/integrations/bp-kms-signing-services) — securing the parent chain wallet that this revenue stream reimburses
