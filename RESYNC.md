@@ -159,7 +159,7 @@ timing pages, carrying `feed-relay-reference-architecture.svg`); the Trail of Bi
 
 ### 1a. Decide first: three PGA pages merged the day of measurement
 
-#3559, #3563 and #3564 all landed 2026-09-16 and carry a whole new section that has no home here.
+PR #3559, #3563 and #3564 all landed 2026-09-16 and carry a whole new section that has no home here.
 
 | Upstream                                                     | Notes                                   |
 | ------------------------------------------------------------ | --------------------------------------- |
@@ -316,7 +316,7 @@ re-run `pr:gap` rather than adding these up.
 Two of these postdate the first draft of this document: **#3533** (`tw-1009-stf-deep-dive`) and
 **#3583** (`restore-pga`), both merged 2026-09-17 alongside the revert fix.
 
-#3532 (43 stale files) is deliberately absent from this table: it is a whole-section rewrite of
+PR #3532 (43 stale files) is deliberately absent from this table: it is a whole-section rewrite of
 `run-arbitrum-node`, which maps to `run-a-node` here. Treat it as its own task, not as a diff to
 apply — and pair it with the 11 node glossary terms in 1d, which it introduced.
 
@@ -330,7 +330,7 @@ favicon and which is a different file from the `public/favicon.ico` the app serv
 
 Original assessment below.
 
-#3540 deleted 41 orphaned images upstream (0 additions, 1,351 deletions). **All 41 are still present
+PR #3540 deleted 41 orphaned images upstream (0 additions, 1,351 deletions). **All 41 are still present
 in `public/img/`.** They report `unverifiable` rather than stale because a deletion adds no prose to
 search for.
 
@@ -343,8 +343,8 @@ they are scaffold leftovers of a framework this repo no longer uses.
 
 ### 2d. Two nav entries dropped by the revert — RESOLVED, no action
 
-#3536 removed `how-arbitrum-works/deep-dives/finality` and `.../batchposter` from `sidebars.js`;
-#3585 put both back. `pr:gap` reports 0 config gaps. Nothing here was ever changed in response, which
+PR #3536 removed `how-arbitrum-works/deep-dives/finality` and `.../batchposter` from `sidebars.js`;
+PR #3585 put both back. `pr:gap` reports 0 config gaps. Nothing here was ever changed in response, which
 was the right call.
 
 Worth keeping for the technique: only the `sidebars.js` check surfaced these. Both pages existed on

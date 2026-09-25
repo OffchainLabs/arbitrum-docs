@@ -29,6 +29,7 @@ If you want to launch with predeployed contracts, balances, or storage, first [g
 Custom gas token Arbitrum chains let participants pay transaction fees in an **ERC-20** token instead of **ETH**. Standard **ERC-20** tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup#requirements-of-the-custom-gas-token) to be used as gas tokens. Remember that the **ERC-20** token to be used must be deployed on your chain's parent chain.
 
 </VanillaAdmonition>
+
 ## Parameters used when deploying a new chain
 
 Before we describe the process of creating a chain using the Chain SDK, let's see what configuration options we have available when creating a chain.
@@ -221,6 +222,7 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
 The above defaults to Arbitrum Sepolia. We've added the import `viem/chains` and the chain info to demonstrate from a popular library (`viem`) how to import the chain information already available in the Arbitrum Chain SDK.
 
 </VanillaAdmonition>
+
 ### 2. Deploy the Arbitrum chain
 
 With the new crafted configuration, we can call the `createRollup` method which will send the transaction to the `RollupCreator` contract and wait until it is executed.

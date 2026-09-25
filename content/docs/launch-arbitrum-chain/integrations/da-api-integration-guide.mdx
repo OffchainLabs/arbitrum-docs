@@ -788,12 +788,13 @@ Proof format: [element_value, opening_proof, auxiliary_data]
 ```
 
 **Comparison**:
-| Approach | Proof Size (5MB batch) | Pros | Cons |
-|----------|----------------------|------|------|
-| **Full Preimage** | 5MB | Simple to implement | Huge proofs, expensive L1 verification |
-| **KZG Commitments** | ~128 bytes | Constant size, efficient | Requires trusted setup, pairing-friendly curves |
-| **Merkle Trees** | ~512 bytes | No trusted setup, simple | Logarithmic size, multiple hashes to verify |
-| **Vector Commitments** | ~64 bytes | Constant size, flexible | More complex cryptography |
+
+| Approach               | Proof Size (5MB batch) | Pros                     | Cons                                            |
+| ---------------------- | ---------------------- | ------------------------ | ----------------------------------------------- |
+| **Full Preimage**      | 5MB                    | Simple to implement      | Huge proofs, expensive L1 verification          |
+| **KZG Commitments**    | ~128 bytes             | Constant size, efficient | Requires trusted setup, pairing-friendly curves |
+| **Merkle Trees**       | ~512 bytes             | No trusted setup, simple | Logarithmic size, multiple hashes to verify     |
+| **Vector Commitments** | ~64 bytes              | Constant size, flexible  | More complex cryptography                       |
 
 **What happens next**:
 
