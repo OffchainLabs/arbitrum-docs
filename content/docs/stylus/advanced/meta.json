@@ -1,0 +1,9 @@
+{
+  "title": "Advanced",
+  "pages": [
+    "hostio-exports",
+    "minimal-entrypoint-contracts",
+    "rust-to-solidity-differences",
+    "recommended-libraries"
+  ]
+}

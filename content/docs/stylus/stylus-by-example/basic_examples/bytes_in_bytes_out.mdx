@@ -1,0 +1,55 @@
+---
+title: 'Bytes In, Bytes Out • Stylus by Example'
+description: 'A simple bytes in, bytes out Arbitrum Stylus Rust contract that shows a minimal `entrypoint` function.'
+content_type: 'concept'
+author: gblanchemain
+sme: gblanchemain
+---
+
+{/* Begin Content */}
+
+# Bytes In, Bytes Out
+
+This is a simple bytes in, bytes out contract that shows a minimal `entrypoint` function (denoted by the `#[entrypoint]` proc macro). If your smart contract just has one primary function, like computing a cryptographic hash, this can be a great model because it strips out the SDK and acts like a pure function or Unix-style app.
+
+### src/main.rs
+
+<include cwd>content/partials/_not-for-production-banner-partial.mdx</include>
+
+```rust
+#![cfg_attr(not(feature = "export-abi"), no_main)]
+
+extern crate alloc;
+use alloc::vec::Vec;
+
+use stylus_sdk::stylus_proc::entrypoint;
+
+#[entrypoint]
+fn user_main(input: Vec<u8>) -> Result<Vec<u8>, Vec<u8>> {
+    Ok(input)
+}
+```
+
+### Cargo.toml
+
+```toml
+[package]
+name = "bytes_in_bytes_out"
+version = "0.1.7"
+edition = "2021"
+
+[dependencies]
+stylus-sdk = "0.6.0"
+
+[features]
+export-abi = ["stylus-sdk/export-abi"]
+
+[profile.release]
+codegen-units = 1
+strip = true
+lto = true
+panic = "abort"
+opt-level = "s"
+
+[workspace]
+```

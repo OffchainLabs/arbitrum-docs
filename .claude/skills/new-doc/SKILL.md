@@ -12,13 +12,13 @@ Scaffold a new MDX documentation page following all project conventions.
 
 Ask for these before creating the file:
 
-| Field            | Example                     | Notes                                                                                 |
-| ---------------- | --------------------------- | ------------------------------------------------------------------------------------- |
-| **Title**        | "Bridge tokens to Arbitrum" | Sentence case, appears as H1                                                          |
-| **Section**      | `build-decentralized-apps`  | Must match an existing `docs/` subdirectory                                           |
-| **Content type** | `how-to`                    | One of: `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting` |
-| **Author**       | `github-username`           | GitHub username                                                                       |
-| **SME**          | `github-username`           | Subject matter expert (can be same as author)                                         |
+| Field            | Example                     | Notes                                                                                        |
+| ---------------- | --------------------------- | -------------------------------------------------------------------------------------------- |
+| **Title**        | "Bridge tokens to Arbitrum" | Sentence case, appears as H1                                                                 |
+| **Section**      | `build-decentralized-apps`  | Must match an existing `content/docs/` subdirectory                                          |
+| **Content type** | `how-to`                    | One of: `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
+| **Author**       | `github-username`           | GitHub username                                                                              |
+| **SME**          | `github-username`           | Subject matter expert (can be same as author)                                                |
 
 Optional (will generate defaults if not provided):
 
@@ -31,10 +31,11 @@ Optional (will generate defaults if not provided):
 ### 1. Determine file path
 
 ```
-docs/{section}/{slug}.mdx
+content/docs/{section}/{slug}.mdx
 ```
 
-Slug: lowercase title, spaces to hyphens, no special chars. For ordered sections, check existing files for numeric prefixes (e.g., `01-`, `02-`) and use the next number.
+Slug: lowercase title, spaces to hyphens, no special chars. File names carry no ordering — the
+sidebar order comes from `meta.json` in the same directory (step 4).
 
 ### 2. Write frontmatter + skeleton
 
@@ -140,15 +141,22 @@ This quickstart will get you {outcome} in under {time}.
 **Solution:** {fix}
 ```
 
-### 4. Register in sidebar
+### 4. Register in the sidebar
 
-Open `sidebars.js` and find the correct sidebar array for the section. Add the new doc ID (path relative to `docs/` without extension):
+Sidebar order is controlled per directory by `meta.json`, not by file names. Open
+`content/docs/{section}/meta.json` and add the slug (file name, no extension) to `pages`:
 
-```js
-'{section}/{slug}',
+```json
+{
+  "title": "Get started",
+  "pages": ["index", "arbitrum-introduction", "{slug}"]
+}
 ```
 
-Place it in logical order within the existing items.
+Place it in logical order within the existing entries. A `"..."` entry means "everything else, in
+file order", so a new page appears automatically wherever `"..."` sits — add it explicitly only when
+it needs a specific position. Cross-directory links use the
+`"[Label](/docs/path)"` form.
 
 ## Terminology enforcement
 
@@ -171,7 +179,14 @@ Before writing any content, apply these substitutions:
 
 After creating the file:
 
-1. Verify sidebar entry renders: `yarn start --no-open` and check navigation
-2. Run `yarn lint:markdown` on the new file
-3. Confirm no broken links: all `[text](link)` targets exist
-4. If referencing globalVars, use `@@variableName=value@@` syntax
+1. Verify the sidebar entry and the page render: `pnpm dev`, then browse
+   `http://localhost:3000/docs/{section}/{slug}`. Use `localhost`, not `127.0.0.1` — on
+   `127.0.0.1` React does not hydrate and every component looks broken.
+2. Run `pnpm content:lint` and `pnpm types:check`. `types:check` is what enforces the frontmatter
+   contract: a missing `title`, `description`, `content_type`, `author` or `sme` fails the build.
+3. Confirm no broken links: `pnpm check-links`. It does not validate `#anchor` fragments — check
+   those in the browser.
+4. To reference a global variable, use `<Var name="variableName" />`; the value must exist in
+   `content/vars.json`. Verify with `pnpm vars:check`.
+5. Before writing a banner, note or config table, search `content/partials/CATALOG.md` and reuse the
+   partial instead of duplicating prose.

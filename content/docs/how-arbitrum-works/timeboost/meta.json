@@ -1,0 +1,13 @@
+{
+  "title": "Timeboost",
+  "pages": [
+    "gentle-introduction",
+    "how-to-use-timeboost",
+    "timeboost-faq",
+    "troubleshoot-timeboost",
+    "[Timeboost specification](https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md)",
+    "[Timeboost with decentralization sequencing specification](https://github.com/OffchainLabs/decentralized-timeboost-spec)",
+    "[Timeboost whitepaper](https://arxiv.org/abs/2306.02179)",
+    "..."
+  ]
+}

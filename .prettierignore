@@ -1,13 +1,36 @@
-# Generated files from notion tables
-../arbitrum-docs/partials/_glossary-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-bridging-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-building-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-nodes-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-orbit-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-stylus-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-users-partial.mdx
-../arbitrum-docs/CODEOWNERS.md
+# Dependencies
+node_modules
 
-# SDK documentation landing pages (manually maintained, skip formatting)
-docs/sdk/index.mdx
-docs/sdk/migrate.mdx
+# Build / generated output
+.next
+.source
+.vercel
+out
+next-env.d.ts
+
+# Tooling state
+.serena
+.remember
+
+# Machine-generated
+pnpm-lock.yaml
+
+# Generated content — format is owned by the generators, not Prettier
+# (formatting these would break `partials:check` catalog-freshness)
+content/partials/CATALOG.md
+content/partials/manifest.json
+# Written by move-doc and the redirect generators as JSON.stringify / one entry per line;
+# Prettier would reflow them and the next tool run would undo it.
+content/**/meta.json
+redirects.config.mjs
+redirects.legacy.mjs
+redirects.current.mjs
+
+# Assistant guidance; parts of CLAUDE.md are rewritten by `next dev`
+CLAUDE.md
+
+# Local agent config, untracked
+.agents
+.codex
+.superpowers
+AGENTS.md

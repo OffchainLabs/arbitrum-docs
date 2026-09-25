@@ -1,0 +1,12 @@
+{
+  "title": "Fundamentals",
+  "pages": [
+    "choose-your-path",
+    "data-types",
+    "prerequisites",
+    "project-structure",
+    "contracts",
+    "global-variables-and-functions",
+    "testing-contracts"
+  ]
+}

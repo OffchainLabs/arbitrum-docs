@@ -1,0 +1,110 @@
+/* Admonition colours ported from arbitrum-docs: light from `_variables.scss`
+   (--ifm-color-{info,success,warning,danger}*), dark from `_darkmode.scss`
+   (.theme-admonition .alert--*). Variant names map:
+     note -> alert--secondary   tip -> alert--success   info -> alert--info
+   Left border is 4px, matching --ifm-alert-border-left-width. Radius stays
+   rounded per the reskin's geometry decision. Title/content colours now come
+   from tokens, so no dark-mode text overrides are needed. */
+
+.admonition {
+  margin-bottom: 16px;
+  padding: 10px 12px 6px 12px;
+  border-radius: 4px;
+  border-left: 4px solid var(--vadm-color);
+  background: var(--vadm-bg);
+}
+
+.admonitionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  color: var(--vadm-color);
+}
+
+.admonitionIcon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.admonitionTitle {
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 1.3;
+  color: var(--vadm-title, var(--color-fd-foreground));
+}
+
+.admonitionContent {
+  font-size: 14px;
+  color: color-mix(in oklab, var(--color-fd-foreground) 85%, transparent);
+  line-height: 1.5;
+  padding: 0px;
+}
+
+.note {
+  --vadm-color: hsl(215 16% 47%);
+  --vadm-bg: hsl(215 16% 47% / 0.1);
+  --vadm-title: hsl(215 16% 35%);
+}
+
+.tip {
+  --vadm-color: hsl(147 72% 35%);
+  --vadm-bg: hsl(147 72% 35% / 0.08);
+  --vadm-title: hsl(147 72% 25%);
+}
+
+.info {
+  --vadm-color: hsl(211 99% 45%);
+  --vadm-bg: hsl(211 99% 45% / 0.08);
+  --vadm-title: hsl(211 99% 30%);
+}
+
+.warning {
+  --vadm-color: hsl(38 92% 50%);
+  --vadm-bg: hsl(38 92% 50% / 0.1);
+  --vadm-title: hsl(32 81% 29%);
+}
+
+.danger {
+  --vadm-color: hsl(0 72% 51%);
+  --vadm-bg: hsl(0 72% 51% / 0.08);
+  --vadm-title: hsl(0 72% 35%);
+}
+
+:global(.dark) .note {
+  --vadm-color: hsl(215 20% 65%);
+  --vadm-bg: hsl(215 20% 65% / 0.1);
+  --vadm-title: hsl(215 20% 80%);
+}
+
+:global(.dark) .tip {
+  --vadm-color: hsl(142 71% 45%);
+  --vadm-bg: hsl(142 71% 45% / 0.1);
+  --vadm-title: hsl(142 71% 65%);
+}
+
+:global(.dark) .info {
+  --vadm-color: hsl(188 100% 53%);
+  --vadm-bg: hsl(188 100% 53% / 0.1);
+  --vadm-title: hsl(188 100% 75%);
+}
+
+:global(.dark) .warning {
+  --vadm-color: hsl(45 93% 47%);
+  --vadm-bg: hsl(45 93% 47% / 0.12);
+  --vadm-title: hsl(48 96% 70%);
+}
+
+:global(.dark) .danger {
+  --vadm-color: hsl(0 62% 55%);
+  --vadm-bg: hsl(0 62% 55% / 0.12);
+  --vadm-title: hsl(0 62% 75%);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  display: block;
+}

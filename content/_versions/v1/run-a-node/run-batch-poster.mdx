@@ -1,0 +1,66 @@
+---
+title: 'Run a batch poster'
+description: 'Learn how to run and configure a batch poster.'
+sidebar_label: 'Run a batch poster'
+user_story: As a current Arbitrum chain owner, I need to understand how to configure and run a batch poster.
+content_type: 'how-to'
+author: emredincoglu
+sme: jason-w123
+version: 'v1 (pre-EIP-4844)'
+---
+
+<VanillaAdmonition type="warning">
+
+You are viewing an archived version of this page. This version predates EIP-4844 blob posting. For current guidance, switch back to the latest version.
+
+</VanillaAdmonition>
+
+The batch poster uses the following default configuration flags and values:
+
+| Flag                                                  | Default value | Description                                                                  |
+| ----------------------------------------------------- | ------------- | ---------------------------------------------------------------------------- |
+| `--node.batch-poster.enable`                          | false         | Enables posting batches to L1                                                |
+| `--node.batch-poster.max-size`                        | 100000        | Default value is overwritten if it's an L3 (90000, for AnyTrust: 1,000,000)  |
+| `--node.batch-poster.poll-interval`                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again |
+| `--node.batch-poster.compression-level`               | 11            | Batch compression level (Brotli, levels 1-11)                                |
+| `--node.batch-poster.parent-chain-wallet.private-key` | none          | Sets the private key of the parent chains wallet                             |
+
+If you created an L3 Arbitrum chain and generated your node config file for a full node, the only values for the batch poster that will be set are:
+
+- `--node.batch-poster.enable = true`
+- `--node.batch-poster.max-size = 90000`
+- `--node.batch-poster.parent-chain-wallet.private-key = YOUR_PRIVATE_KEY`
+
+To add a new batch poster, call the `setIsBatchPoster(address,bool)` method of the `SequencerInbox` contract on the parent chain:
+
+```shell
+cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCER_INBOX_ADDRESS "setIsBatchPoster(address,bool)()" $NEW_BATCH_POSTER_ADDRESS true
+```
+
+## Queued transaction database selection
+
+`queuedTxs` are transactions that the sequencer has ordered and are ready to be posted:
+
+- **Noop**: `--node.batch-poster.data-poster.use-noop-storage`
+- **Redis**: `--node.batch-poster.redis-url`
+- **DB**: `--node.batch-poster.data-poster.use-db-storage`
+
+You can use only one database at a time, so you can't have both a Redis server and a DB in use simultaneously.
+
+### Noop
+
+Noop storage does not store any `queuedTxs`. This is beneficial when the parent chain is an Arbitrum chain or one without a mempool.
+
+### DB
+
+DB will store data locally on the node and support persistent `queuedTxs`. Only a single batch poster can use the DB.
+
+### Redis
+
+Redis is a fast local/external database that runs separately from the Nitro software so that node restarts preserve `queuedTxs`.
+
+## Batch poster interval config
+
+The batch poster has a max delay, primarily set by `--node.batch-poster.max-delay` parameter in the Nitro node configuration. The default value is one hour (3600 seconds).
+
+The batch poster also has `--node.batch-poster.max-size` parameter represented in bytes. The default value is 100000 bytes.

@@ -1,0 +1,118 @@
+name: CI
+
+# `master` is listed alongside `main` for the landing: this tree is developed here on `main` but
+# lands on OffchainLabs/arbitrum-docs, whose default branch is `master`. Without it the migration
+# PR runs none of the gates below and reads as green while validating nothing. Drop `master` once
+# the cutover has promoted the branch and there is only one default branch left.
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+# The pre-commit hook is for working copies; here the same checks run as gates. HUSKY=0 also
+# stops `pnpm install` from writing .husky/_ into the runner's checkout.
+env:
+  HUSKY: 0
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    name: Gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Type check (regenerates .source/, then tsc)
+        run: pnpm types:check
+
+      - name: Script test suites
+        run: pnpm test
+
+      - name: Global variables resolve
+        run: pnpm vars:check
+
+      - name: Navigation integrity
+        run: pnpm nav:check
+
+      - name: Partials resolve and stay unrouted
+        run: pnpm partials:check
+
+      - name: Archived page registry
+        run: node scripts/versioned-docs-check.mjs
+
+      - name: Glossary references resolve
+        run: pnpm references:check
+
+      # `<Var>` cannot render inside a code fence, so every `docker run offchainlabs/nitro-node:…`
+      # is a hardcoded literal that a release bump has to rewrite by hand. This is the only thing
+      # that notices when a bump reaches some of them and not the rest.
+      - name: Nitro image tags match the pin
+        run: pnpm nitro:image-check
+
+      # Fumadocs has no `onBrokenLinks: 'throw'`, and `pnpm build` does not check links,
+      # so this step is the only thing standing between a broken link and main.
+      # Caveat: check-links does not validate anchors — a live page with a dead #anchor passes.
+      - name: Internal links
+        run: pnpm check-links
+
+      # Reached zero on 2026-09-21 and moved up from `content-debt`. A1 and A4 were cleared in
+      # 0e5a64a, A2 and A5 in 297730a, and A6 shipped at zero with the defect it names.
+      - name: MDX structural lint
+        run: pnpm content:lint
+
+      # Reached zero on 2026-09-24. 801 of the 814 findings were MD060 table alignment, cleared by
+      # the Prettier reformat; the rest were headings and footnotes on the line directly after a
+      # closing JSX tag, which CommonMark folds into the HTML block.
+      - name: Markdown lint
+        run: pnpm lint:markdown
+
+      # Offline mode takes the page set from the content tree instead of /llms.txt. The online
+      # mode against a preview stays the authority; run it by hand.
+      - name: Redirect audit (offline)
+        run: pnpm redirects:check:offline
+
+      # Reached zero on 2026-09-24: MDX joined Prettier's scope, and the files the tooling writes
+      # (meta.json, redirects.*.mjs) moved to .prettierignore instead of being formatted once.
+      - name: Formatting
+        run: pnpm format:check
+
+  build:
+    # Non-blocking: the MDX image pipeline fetches remote images at build time, so a
+    # dead third-party URL turns this red for reasons unrelated to the change under
+    # review. It still catches MDX compile errors that types:check cannot see.
+    name: Build (non-blocking)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build

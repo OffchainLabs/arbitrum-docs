@@ -9,11 +9,11 @@ input=$(cat)
 path=$(printf '%s' "$input" | python3 -c "import json,sys; print(json.load(sys.stdin).get('tool_input',{}).get('file_path',''))" 2>/dev/null || true)
 session=$(printf '%s' "$input" | python3 -c "import json,sys; print(json.load(sys.stdin).get('session_id','unknown'))" 2>/dev/null || true)
 
-guide="${CLAUDE_PROJECT_DIR:-.}/docs/Offchain-pattern-guide.md"
+guide="${CLAUDE_PROJECT_DIR:-.}/content/docs/Offchain-pattern-guide.mdx"
 
 # Generated trees and the guide itself are exempt.
 case "$path" in
-  */docs/sdk/* | */docs/stylus-by-example/* | */docs/Offchain-pattern-guide.md) exit 0 ;;
+  */docs/sdk/* | */docs/stylus-by-example/* | */docs/Offchain-pattern-guide.mdx) exit 0 ;;
 esac
 
 # Prose docs only.
@@ -41,7 +41,7 @@ with open(os.environ['GUIDE_PATH'], encoding='utf-8') as fh:
 reason = (
     'Offchain editorial standards apply to this file and have not been read in '
     'this session. Revise your content against the guide below, then retry the '
-    'write. Source: docs/Offchain-pattern-guide.md\n\n' + guide
+    'write. Source: content/docs/Offchain-pattern-guide.mdx\n\n' + guide
 )
 
 json.dump(
