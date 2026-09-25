@@ -15,7 +15,7 @@ cover the differences that cause the most mistakes.
 ## Setup
 
 ```bash
-pnpm install      # runs a postinstall that generates .source/
+pnpm install      # generates .source/ and installs the git pre-commit hook (husky)
 pnpm dev          # http://localhost:3000
 ```
 
@@ -41,8 +41,10 @@ pnpm types:check   # the main verification gate
 pnpm check-links   # broken internal links
 ```
 
-CI runs eight blocking checks. `pnpm build` runs the same link check, so a broken link fails the
-Vercel deploy too. See [The gates](INTERNALS.md#the-gates) for the full list.
+The pre-commit hook already ran the redirect audit, Prettier and markdownlint on your staged
+Markdown, and `types:check`. CI runs twelve blocking checks. `pnpm build` runs the same link check,
+so a broken link fails the Vercel deploy too. See [The gates](INTERNALS.md#the-gates) for the full
+list and [The pre-commit hook](INTERNALS.md#the-pre-commit-hook) for what runs on commit.
 
 `types:check` proves the schema, not the render — it passes on a page that serves literal `:::` or
 `undefined`. **Always confirm content changes in a browser.**

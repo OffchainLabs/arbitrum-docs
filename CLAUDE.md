@@ -18,7 +18,7 @@ Arbitrum documentation portal — a Next.js 16 / Fumadocs migration of [`Offchai
 ## Commands
 
 ```bash
-pnpm install        # runs `fumadocs-mdx` postinstall → regenerates .source/
+pnpm install        # runs `fumadocs-mdx` postinstall → regenerates .source/; installs the husky pre-commit hook
 pnpm dev            # http://localhost:3000
 pnpm types:check    # fumadocs-mdx && next typegen && tsc --noEmit — the verification gate
 pnpm build          # next build --experimental-build-mode=compile
@@ -36,17 +36,20 @@ pnpm tree:map          # injective legacy-path -> current-path map; fails on a d
 pnpm redirects:legacy  # regenerate the legacy docs.arbitrum.io redirect map
 pnpm redirects:current # regenerate the live docs.arbitrum.io -> /docs redirect map
 pnpm redirects:check   # every redirect destination is a real page (needs `pnpm dev` running)
+pnpm redirects:check:offline  # same audit from the content tree; what the hook and CI run
 pnpm format:check      # prettier
+pnpm lint:markdown     # markdownlint over every .md/.mdx (`lint:markdown:fix` autofixes)
 pnpm precompiles:check # precompile tables match the pinned Nitro refs (--check = no writes)
 pnpm nitro:check-release  # bump the pinned Nitro release in content/vars.json
 pnpm nitro:image-check    # hardcoded nitro-node image tags match the pin (blocking gate)
 ```
 
-- **CI runs on push and PR to `main` ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) in three jobs — only the first one blocks.** A green PR does not mean the content is clean: ten checks block, two report and pass anyway.
-  - **`Gates` (blocking):** `types:check`, `test`, `vars:check`, `nav:check`, `partials:check`, `node scripts/versioned-docs-check.mjs`, `references:check`, `nitro:image-check`, `check-links`, `content:lint`. Fumadocs has no `onBrokenLinks: 'throw'`, so `check-links` supplies it — `pnpm build` now chains it ahead of `next build`, which fails the Vercel deploy on a broken link as well. It does **not** validate anchors, so a live page with a dead `#anchor` still passes; verify those in a browser.
-  - **`Content debt` (non-blocking):** `format:check` alone now, marked `continue-on-error`; it still fails on pre-existing debt (49 files as of 2026-09-21). `content:lint` reached zero and moved into `Gates` on 2026-09-21, after `references:check` (2026-08-20) and `check-links` (2026-08-31). The job comment records the count as of the last update; **promote a step into `Gates` once its count reaches zero.** That promotion is the point of the split — the tier is a backlog, not a policy.
+- **CI runs on push and PR to `main` ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) in two jobs — only the first one blocks.**
+  - **`Gates` (blocking):** `types:check`, `test`, `vars:check`, `nav:check`, `partials:check`, `node scripts/versioned-docs-check.mjs`, `references:check`, `nitro:image-check`, `check-links`, `content:lint`, `lint:markdown`, `redirects:check:offline`, `format:check`. Fumadocs has no `onBrokenLinks: 'throw'`, so `check-links` supplies it — `pnpm build` chains it ahead of `next build`, which fails the Vercel deploy on a broken link as well. It does **not** validate anchors, so a live page with a dead `#anchor` still passes; verify those in a browser.
+  - The non-blocking `Content debt` job is gone: every check it held reached zero and moved into `Gates` (the last three on 2026-09-24). A new check that starts with debt goes into a `continue-on-error` job and is promoted at zero.
   - **`Build` (non-blocking):** `pnpm build`, deliberately not blocking — the MDX image pipeline fetches remote images at build time, so a dead third-party URL turns it red for reasons unrelated to the change under review. It still catches MDX compile errors that `types:check` cannot see.
-- **`drift`, `precompiles:check`, `redirects:legacy` and `redirects:check` run nowhere automatically** — invoke them by hand. `redirects:check` cannot run in CI as-is: it reads `/llms.txt` off a running site, because no plain-node script can import `lib/source` (neither the `collections/*` alias nor TypeScript resolves — the same wall `versioned-docs-check` hits, which is why that one text-parses `lib/versions.ts`). Point it at a Vercel preview with `--base-url` to check a PR. `types:check` regenerates the collection, generates Next types, then type-checks. `build` runs `versioned-docs-check` then `check-links` first.
+- **Pre-commit hook (`.husky/pre-commit`, installed by `pnpm install`):** `redirects:check:offline`, `prettier --check` and `markdownlint` on staged `.md`/`.mdx`, then `types:check`. Check-only; a failure names the fixing script. `HUSKY=0 git commit` skips it. **Keep `{/* … */}` MDX comments on one line** — Prettier corrupts multi-line ones and only `pnpm build` notices. `content/**/meta.json` and `redirects.*.mjs` are in `.prettierignore` because tooling writes them. See [INTERNALS](INTERNALS.md#the-pre-commit-hook).
+- **`drift`, `precompiles:check`, `redirects:legacy` and `redirects:check` run nowhere automatically** — invoke them by hand. `redirects:check` (online) reads `/llms.txt` off a running site and is the authority on what is routable; `redirects:check:offline` re-derives the page set from the content tree for the hook and CI. The online mode cannot run in CI as-is, because no plain-node script can import `lib/source` (neither the `collections/*` alias nor TypeScript resolves — the same wall `versioned-docs-check` hits, which is why that one text-parses `lib/versions.ts`). Point it at a Vercel preview with `--base-url` to check a PR. `types:check` regenerates the collection, generates Next types, then type-checks. `build` runs `versioned-docs-check` then `check-links` first.
 - **`upstream-refresh.yml`** runs Mondays 08:00 UTC (and on `workflow_dispatch`): `nitro:check-release`, then `precompiles:generate`, then opens `automated/upstream-refresh` as a PR if anything changed. It never writes to `main`, and no-ops when the tree is clean.
 - **`types:check` proves the schema, not the render.** It exits 0 on pages that serve literal `:::`, `undefined`, or HTTP 500. Confirm content changes in a browser on `http://localhost:3000` — on `127.0.0.1` React does not hydrate and every component looks broken.
 - **Node 22 only** (`>=22 <23`), pnpm 10. Other Node majors are rejected by `engines`.
