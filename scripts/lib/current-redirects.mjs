@@ -110,7 +110,10 @@ export const MANUAL_DESTINATIONS = new Map([
     '/docs/launch-arbitrum-chain/configuration/core/customize-stf',
   ],
   // "Run a batch poster" (how-to), not "The batch poster" (concept).
-  ['/launch-arbitrum-chain/run-a-node/batch-poster', '/docs/run-a-node/run-batch-poster'],
+  [
+    '/launch-arbitrum-chain/run-a-node/batch-poster',
+    '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
+  ],
   // Folded into the STF page here; see the GUTTED entry in `pnpm drift`.
   ['/how-arbitrum-works/deep-dives/stf-gentle-intro', '/docs/how-arbitrum-works/deep-dives/stf'],
 ]);

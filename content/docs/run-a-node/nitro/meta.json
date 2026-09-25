@@ -1,16 +1,16 @@
 {
   "title": "Nitro",
   "pages": [
-    "how-to-convert-databases-from-leveldb-to-pebble",
-    "nitro-memory-management",
+    "index",
     "build-nitro-locally",
     "migrate-state-and-history-from-classic",
     "nitro-database-snapshots",
-    "cli-flags-reference",
+    "how-to-convert-databases-from-leveldb-to-pebble",
+    "node-tuning-and-monitoring",
     "configuration-system",
     "da-tools-reference",
+    "cli-flags-reference",
     "docker-and-cli-binaries",
-    "node-tuning-and-monitoring",
     "..."
   ]
 }

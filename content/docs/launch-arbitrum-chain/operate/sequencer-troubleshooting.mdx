@@ -8,7 +8,7 @@ user_story: As an Arbitrum chain operator, I need to diagnose why my sequencer s
 content_type: 'how-to'
 ---
 
-This guide covers sequencer feed and block production problems. For setup, see [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs). For metric names and alert thresholds, see [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations). For batch posting problems, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting).
+This guide covers sequencer feed and block production problems. For setup, see [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer). For metric names and alert thresholds, see [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations). For batch posting problems, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting).
 
 <VanillaAdmonition type="info" title="Defaults in this guide">
 
@@ -45,7 +45,7 @@ In a high-availability deployment, feeds flow in one direction through two relay
 sequencers  →  sequencer relays  →  external relays  →  public subscribers
 ```
 
-Sequencer relays subscribe to _every_ sequencer replica, not just the active one. Non-chosen sequencers still broadcast, so aggregating all of them means no messages are lost when the chosen sequencer changes. This is why the Helm setup needs per-replica headless services—a single load-balanced address would connect to only one replica. See [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs#2-relays-setup).
+Sequencer relays subscribe to _every_ sequencer replica, not just the active one. Non-chosen sequencers still broadcast, so aggregating all of them means no messages are lost when the chosen sequencer changes. This is why the Helm setup needs per-replica headless services—a single load-balanced address would connect to only one replica. See [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer#2-relays-setup).
 
 For installation steps, see [How to run a feed relay](/docs/run-a-node/run-feed-relay). For the message format, see [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed).
 
@@ -143,7 +143,7 @@ With the coordinator enabled, exactly one sequencer holds the lockout in Redis. 
 
 - [ERROR]—The `coordinator.priorities` key does not exist in Redis.
 - [CAUSE]—A new or wiped Redis instance, or one that was never populated.
-- [ACTION]—Register your sequencers. See [Redis priority registration](/docs/run-a-node/high-availability-sequencer-docs#redis-priority-registration).
+- [ACTION]—Register your sequencers. See [Redis priority registration](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer#redis-priority-registration).
 
 #### `no sequencer appears to want the lockout on redis`
 

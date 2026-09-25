@@ -10,7 +10,7 @@ sme: jason-w123
 
 The [<Term id="batch-poster">Batch Poster</Term>](/docs/how-arbitrum-works/deep-dives/batchposter) relies on an internal component, the data poster, to manage gas pricing for transactions submitted to the <Term id="parent-chain">parent chain</Term>. When posting batches—whether as traditional calldata or [`EIP-4844`](https://eips.ethereum.org/EIPS/eip-4844) blob transactions—the data poster estimates fees, sets gas price caps, and handles Replace-by-Fee (RBF) escalation when transactions aren't included promptly.
 
-This guide covers how to tune fee-related parameters to balance cost efficiency against batch posting reliability. For initial setup of blob posting, see [Enabling blob transactions](/docs/launch-arbitrum-chain/configuration/batch-poster/enable-4844-blobs). For general batch poster configuration, see [Run a batch poster](/docs/run-a-node/run-batch-poster).
+This guide covers how to tune fee-related parameters to balance cost efficiency against batch posting reliability. For initial setup of blob posting, see [Enabling blob transactions](/docs/launch-arbitrum-chain/configuration/batch-poster/enable-4844-blobs). For general batch poster configuration, see [Run a batch poster](/docs/launch-arbitrum-chain/run-a-node/batch-poster).
 
 ## Blob transaction fee configuration
 

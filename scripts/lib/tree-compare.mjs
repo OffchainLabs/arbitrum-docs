@@ -97,10 +97,6 @@ export const RENAME_MAP = {
     'launch-arbitrum-chain/quickstart/run-testnet-infrastructure-first-rollup.mdx',
   'launch-arbitrum-chain/quickstart/sdk-introduction.mdx':
     'launch-arbitrum-chain/overview/arbitrum-chain-sdk-introduction.mdx',
-  'launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx':
-    'run-a-node/high-availability-sequencer-docs.mdx',
-  'launch-arbitrum-chain/run-a-node/split-validator-node.mdx':
-    'run-a-node/run-split-validator-node.mdx',
   'learn-more/faq.mdx': 'get-started/faq.mdx',
   'node-running/faq.mdx': 'run-a-node/faq.mdx',
   // The three below were added to break map collisions: each used to pair on its bare slug with an
@@ -115,7 +111,6 @@ export const RENAME_MAP = {
     'launch-arbitrum-chain/configuration/core/customize-precompile.mdx',
   'launch-arbitrum-chain/extend-the-protocol/stf.mdx':
     'launch-arbitrum-chain/configuration/core/customize-stf.mdx',
-  'launch-arbitrum-chain/run-a-node/batch-poster.mdx': 'run-a-node/run-batch-poster.mdx',
 };
 
 /** Reduce a path to a comparable slug: basename, no extension, no ordering prefix, alphanumeric only. */

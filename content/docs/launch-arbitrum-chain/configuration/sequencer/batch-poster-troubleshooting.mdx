@@ -8,7 +8,7 @@ author: pete-vielhaber
 sme: jason-w123
 ---
 
-This guide covers common operational issues that batch poster operators encounter, with guidance on diagnosing root causes and resolving them. For initial setup, see [Run a batch poster](/docs/run-a-node/run-batch-poster). For fee-related tuning, see [Batch poster fee tuning](/docs/launch-arbitrum-chain/configuration/batch-poster/fee-tuning).
+This guide covers common operational issues that batch poster operators encounter, with guidance on diagnosing root causes and resolving them. For initial setup, see [Run a batch poster](/docs/launch-arbitrum-chain/run-a-node/batch-poster). For fee-related tuning, see [Batch poster fee tuning](/docs/launch-arbitrum-chain/configuration/batch-poster/fee-tuning).
 
 ## Batch poster balance management
 
@@ -54,7 +54,7 @@ This error indicates that the parent chain node's mempool has rejected a transac
 ### Resolution
 
 1. **Check the parent chain's current gas prices** and compare them to your data poster's fee cap configuration. If gas prices are above your `--node.batch-poster.data-poster.target-price-gwei`, the data poster can't bid high enough to cover the fee. See [Batch poster fee tuning](/docs/launch-arbitrum-chain/configuration/batch-poster/fee-tuning) for guidance on adjustments.
-2. **Review your queued transaction storage configuration**: If you're using DB or Redis storage, pending transactions accumulate and rely on RBF for inclusion. Consider whether your RBF schedule (`--node.batch-poster.data-poster.replacement-times` for non-blob batch poster, `--node.batch-poster.data-poster.blob-tx-replacement-times` for blob batch poster) is escalating fees quickly enough. See [Queued transaction database selection](/docs/run-a-node/run-batch-poster#queued-transaction-database-selection) for storage option details.
+2. **Review your queued transaction storage configuration**: If you're using DB or Redis storage, pending transactions accumulate and rely on RBF for inclusion. Consider whether your RBF schedule (`--node.batch-poster.data-poster.replacement-times` for non-blob batch poster, `--node.batch-poster.data-poster.blob-tx-replacement-times` for blob batch poster) is escalating fees quickly enough. See [Queued transaction database selection](/docs/launch-arbitrum-chain/run-a-node/batch-poster#queued-transaction-database-selection) for storage option details.
 3. **Consider Noop storage for parent chains without mempools**: If your parent chain is an Arbitrum chain or another chain without a traditional mempool, Noop storage avoids this issue entirely by waiting for each transaction receipt before submitting the next one.
 
 <VanillaAdmonition type="info" title="Mempool size limits">

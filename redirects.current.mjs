@@ -569,19 +569,17 @@ export const currentRedirects = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control',
+    destination: '/docs/launch-arbitrum-chain/configuration/batch-poster/config-batch-poster',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs',
+    destination: '/docs/launch-arbitrum-chain/configuration/batch-poster/enable-4844-blobs',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning',
-    destination: '/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-fee-tuning',
+    destination: '/docs/launch-arbitrum-chain/configuration/batch-poster/fee-tuning',
     permanent: true,
   },
   {
@@ -749,8 +747,7 @@ export const currentRedirects = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/validation/assertion-control',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control',
+    destination: '/docs/launch-arbitrum-chain/configuration/validation/assertion-control',
     permanent: true,
   },
   {
@@ -968,12 +965,12 @@ export const currentRedirects = [
   },
   {
     source: '/launch-arbitrum-chain/run-a-node/batch-poster',
-    destination: '/docs/run-a-node/run-batch-poster',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
-    destination: '/docs/run-a-node/high-availability-sequencer-docs',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
     permanent: true,
   },
   {
@@ -983,7 +980,7 @@ export const currentRedirects = [
   },
   {
     source: '/launch-arbitrum-chain/run-a-node/split-validator-node',
-    destination: '/docs/run-a-node/run-split-validator-node',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
     permanent: true,
   },
   {
@@ -994,6 +991,11 @@ export const currentRedirects = [
   {
     source: '/node-running/faq',
     destination: '/docs/run-a-node/faq',
+    permanent: true,
+  },
+  {
+    source: '/node-running/sequencer-content-map',
+    destination: '/docs/run-a-node/sequencer',
     permanent: true,
   },
   {

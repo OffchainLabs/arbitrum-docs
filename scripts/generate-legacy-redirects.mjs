@@ -70,17 +70,20 @@ const MANUAL_DESTINATIONS = new Map([
     '/launch-arbitrum-chain/extend-the-protocol/precompiles',
     '/docs/launch-arbitrum-chain/features/advanced/choose-chain-precompiles',
   ],
-  ['/launch-arbitrum-chain/run-a-node/batch-poster', '/docs/run-a-node/run-batch-poster'],
+  [
+    '/launch-arbitrum-chain/run-a-node/batch-poster',
+    '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
+  ],
 
   // --- upstream `launch-arbitrum-chain/chain-config/*` -> this site's `configuration/*` ---
   // Upstream re-cut these sections; the leaf pages kept their content but not their path.
   [
     '/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
-    '/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs',
+    '/docs/launch-arbitrum-chain/configuration/batch-poster/enable-4844-blobs',
   ],
   [
     '/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning',
-    '/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-fee-tuning',
+    '/docs/launch-arbitrum-chain/configuration/batch-poster/fee-tuning',
   ],
   [
     '/launch-arbitrum-chain/chain-config/costs/aep-overview',
@@ -129,7 +132,7 @@ const MANUAL_DESTINATIONS = new Map([
   ],
   [
     '/launch-arbitrum-chain/chain-config/validation/assertion-control',
-    '/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control',
+    '/docs/launch-arbitrum-chain/configuration/validation/assertion-control',
   ],
   [
     '/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
@@ -241,14 +244,22 @@ const MANUAL_DESTINATIONS = new Map([
     '/launch-arbitrum-chain/overview/faq',
     '/docs/launch-arbitrum-chain/troubleshooting-building-arbitrum-chain',
   ],
-  // The node how-tos live under run-a-node here, not under launch-arbitrum-chain.
   [
     '/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
-    '/docs/run-a-node/high-availability-sequencer-docs',
+    '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
   ],
   [
     '/launch-arbitrum-chain/run-a-node/split-validator-node',
-    '/docs/run-a-node/run-split-validator-node',
+    '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
+  ],
+  // Upstream's pre-restructure names for the two pages above; their basenames no longer match. `=`
+  [
+    '/launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
+    '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
+  ],
+  [
+    '/launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node',
+    '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
   ],
   [
     '/run-arbitrum-node/data-availability-committees/get-started',

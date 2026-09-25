@@ -96,7 +96,7 @@ There is no default worth copying, because the right value depends on your posti
 
 ## Sequencer coordinator flags
 
-These apply when you run more than one sequencer with `--node.seq-coordinator.enable=true`. For the deployment, see the [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs) page.
+These apply when you run more than one sequencer with `--node.seq-coordinator.enable=true`. For the deployment, see the [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer) page.
 
 | Flag                      | Default | What it controls                                                        |
 | ------------------------- | ------- | ----------------------------------------------------------------------- |
@@ -118,6 +118,6 @@ These apply when you run more than one sequencer with `--node.seq-coordinator.en
 
 Three notes on tuning these:
 
-- **`my-url` must match the priority list exactly.** The coordinator compares strings. A trailing slash or a different hostname form means the sequencer never matches and never becomes chosen. See [Redis priority registration](/docs/run-a-node/high-availability-sequencer-docs#redis-priority-registration).
+- **`my-url` must match the priority list exactly.** The coordinator compares strings. A trailing slash or a different hostname form means the sequencer never matches and never becomes chosen. See [Redis priority registration](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer#redis-priority-registration).
 - **`lockout-spare` must stay well below `lockout-duration`.** The holder renews after `lockout-duration` minus `lockout-spare`. Narrowing that margin risks the lockout expiring during a slow Redis round trip, which triggers an unnecessary failover.
 - **`chosen-healthcheck-addr` is the cleanest failover signal.** Point your load balancer at it rather than inferring the active sequencer from logs or metrics.
