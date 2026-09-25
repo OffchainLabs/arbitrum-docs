@@ -9,13 +9,74 @@ sme: Mehdi
 
 The Sequencer’s job is to receive, admit, and order transactions and then publish and post the resulting blocks. The moment ordered transactions are handed to the execution engine, responsibility shifts to the <Term id="state-transition-function">State Transition Function (STF)</Term> and <Term id="arbos">ArbOS</Term>, where transactions are executed against the chain state, gas is metered, and the new state root is computed. Throughout this section, we flag those handoff points and point to the relevant pages rather than duplicating them.
 
+<ImageZoom src="/img/haw-sequencer-operations.svg" alt="Sequencer operations" className="img-600px" />
+
+This page covers:
+
+- [Sequencing and broadcasting](#sequencing-and-broadcasting): the real-time transaction feed, which lets nodes receive instant updates on the transaction sequence.
+- [A transaction's path through the Sequencer](#a-transactions-path-through-the-sequencer): the five stages a transaction passes through, from JSON-RPC receipt to the parent chain.
+- [Batch posting](#batch-posting), [Batching and compression](#batching-and-compression), and [Submitting to the Sequencer Inbox contract](#submitting-to-the-sequencer-inbox-contract): how the Sequencer groups transactions into batches, compresses them, and sends them to the parent chain.
+- [Finality](#finality): a summary of the soft and hard finality levels, with a pointer to the full [Finality](/docs/how-arbitrum-works/deep-dives/finality) page.
+- [Censorship Timeout](#censorship-timeout): a feature that limits the negative effects of prolonged Sequencer censorship or unexpected Sequencer outages.
+
+## Sequencing and broadcasting
+
+The Sequencer feed is a critical component of the Nitro architecture. It enables real-time dissemination of transaction data as transactions are accepted and ordered by the Sequencer. It allows users and nodes to receive immediate updates on transaction sequencing, facilitating rapid transaction confirmations and enhancing the network’s overall responsiveness.
+
+### How the Sequencer publishes the sequence
+
+The Sequencer communicates the transaction sequence it has ordered through two primary channels:
+
+1. **Real-time Sequencer feed**: a live broadcast that publishes transactions instantly as they are sequenced. Nodes and clients subscribed to this feed receive immediate notifications, allowing them to process transactions without delay.
+2. **Batches posted on the parent chain**: at regular intervals, the Sequencer aggregates transactions and posts them to the parent chain for finality. See [Batch posting](#batch-posting) for the detail.
+
+<ImageZoom src="/img/haw-sequencer-feed.svg" alt="Sequencer feed" className="img-600px" />
+
+### Real-time Sequencer feed
+
+The real-time feed represents the Sequencer’s commitment to process transactions in a specific order. By subscribing to this feed, nodes and clients can:
+
+- **Receive immediate notifications**: get instant updates on newly sequenced transactions and their ordering.
+- **Process transactions promptly**: use the sequenced transactions to update the state locally, enabling rapid application responses and user interactions.
+- **Benefit from soft finality**: gain provisional assurance about transaction acceptance and ordering before the parent chain reaches finality.
+
+This mechanism is particularly valuable for applications requiring low latency and high throughput, such as decentralized exchanges or real-time gaming platforms.
+
+### Soft finality and trust model
+
+“Soft finality” refers to the preliminary confirmation of transactions based on the Sequencer’s real-time feed. Key aspects include:
+
+- **Dependence on Sequencer integrity**: the feed’s accuracy and reliability depend on the Sequencer operating honestly and without significant downtime.
+- **Immediate user feedback**: users can act on transaction confirmations swiftly, improving the user experience.
+- **Eventual consistency with the parent chain**: while the real-time feed provides quick updates, ultimate security and finality are established once transactions are posted to and finalized on the parent chain. See [Finality](#finality) for an in-depth discussion.
+
+Understanding this trust model is essential. While we expect the Sequencer to behave correctly, users and developers should know that soft finality depends on this assumption. In scenarios where absolute certainty is required, parties may wait for transactions to achieve finality on the parent chain.
+
+### Role of the Sequencer feed in the network
+
+The Sequencer feed serves several vital functions within the Arbitrum ecosystem:
+
+- **State synchronization**: nodes use the feed to keep their state up to date with the latest network state, ensuring consistency across the decentralized platform.
+- **Application development**: developers can build applications that respond instantly to network events, enabling features such as live updates, instant notifications, and real-time analytics.
+- **Ecosystem transparency**: the feed promotes transparency and trust within the community by providing visibility into transaction sequencing and network activity.
+
+### Considerations and limitations
+
+While the Sequencer feed offers significant advantages, consider the following:
+
+- **Reliance on Sequencer availability**: the effectiveness of the real-time feed depends on the Sequencer’s uptime and responsiveness. Network issues or Sequencer downtime can delay transaction visibility.
+- **Provisional nature of soft finality**: until transactions reach finality on the parent chain, there is a small risk that the provisional ordering provided by the feed could change in exceptional circumstances.
+- **Security implications**: for high-stakes transactions where security is paramount (for example, deposits and withdrawals on centralized exchanges), users may prefer to wait for confirmation on the parent chain, even with the longer latency.
+
+Developers and users should design their applications and interactions with these factors in mind, choosing the appropriate balance between speed and certainty based on their requirements.
+
 ## A transaction’s path through the Sequencer
 
-<ImageZoom src="/img/haw-sequencer-transaction-flow.svg" alt="A transaction's path from a user through an RPC node into the Sequencer's bounded queue, through block creation, then out to the Sequencer feed and, via the batch poster, to the Sequencer Inbox on the parent chain" className="img-600px" />
+<ImageZoom src="/img/sequencer-path.png" alt="Sequencer path" className="img-600px" />
 
 #### 1. Receipt and admission
 
-A user transaction arrives over JSON-RPC. Before it is allowed anywhere near a block, it passes a series of admission checks: if this node is not the active Sequencer, the transaction is forwarded to the active one; optional sender allowlists and parent chain fee-surplus thresholds can reject it; and internal Arbitrum transaction types and blob transactions are filtered out. When <Term id="timeboost">Timeboost</Term> is active, and the current round has an <Term id="express-lane-controller">express-lane controller</Term>, ordinary transactions are held back by a small advantage delay (200ms by default) so that express-lane transactions can go first. Admitted transactions are placed into a bounded queue.
+A user transaction arrives over JSON-RPC. Before it is allowed anywhere near a block, it passes a series of admission checks: if this node is not the active Sequencer, the transaction is forwarded to the active one; optional sender allowlists and parent-chain fee-surplus thresholds can reject it; and internal Arbitrum transaction types and blob transactions are filtered out. When <Term id="timeboost">Timeboost</Term> is active, and the current round has an <Term id="express-lane-controller">express-lane controller</Term>, ordinary transactions are held back by a small advantage delay (200ms by default) so that express-lane transactions can go first. Admitted transactions are placed into a bounded queue.
 
 #### 2. Block creation loop
 
@@ -30,13 +91,128 @@ Once the Sequencer has a finalized ordering, it calls the ExecutionEngine, which
 Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/docs/how-arbitrum-works/deep-dives/stf) and [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
 
 </VanillaAdmonition>
+
 #### 4. Persistence and broadcast
 
-The produced block comes back to the Sequencer as a sequenced message. The TransactionStreamer persists it to the local database and, if a coordinator is configured, replicates it to Redis for high availability. It then hands the message to the Broadcaster, which pushes it to subscribers over the real-time feed. This is the moment users get [soft finality](/docs/how-arbitrum-works/reference/finality-and-reorgs#the-three-confirmation-levels): a sub-second provisional confirmation that depends on the Sequencer behaving honestly.
+The produced block comes back to the Sequencer as a sequenced message. The TransactionStreamer persists it to the local database and, if a coordinator is configured, replicates it to Redis for high availability. It then hands the message to the Broadcaster, which pushes it to subscribers over the real-time feed. This is the moment users get [soft finality](/docs/how-arbitrum-works/deep-dives/finality): a sub-second provisional confirmation that depends on the Sequencer behaving honestly.
 
 #### 5. Posting to the parent chain
 
-Independent of the loop above, the batch poster reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive [compression levels](/docs/how-arbitrum-works/deep-dives/gas-and-fees#compression-levels), and posts them to the Sequencer Inbox using either calldata or EIP-4844 blobs. Once those batches are finalized on the parent chain, the transactions reach [hard finality](/docs/how-arbitrum-works/reference/finality-and-reorgs#the-three-confirmation-levels).
+Independent of the loop above, the BatchPoster reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive compression levels, and posts them to the SequencerInbox using either calldata or EIP-4844 blobs, as described in the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) documentation. Once those batches are finalized on the parent chain, the transactions reach [hard finality](/docs/how-arbitrum-works/deep-dives/finality).
+
+## Batch posting
+
+Batch posting is a fundamental process for the Sequencer's operation in Arbitrum. It involves collecting multiple child chain transactions, organizing them into batches, compressing the data to reduce size, and sending these batches to the Sequencer Inbox contract on the parent chain. This is what turns the feed's soft finality into the parent chain's [hard finality](/docs/how-arbitrum-works/deep-dives/finality).
+
+The sections below cover the batch posting process in three parts:
+
+- **[Batching and compression](#batching-and-compression)**: how the Sequencer groups incoming transactions into batches, and the methods used to compress the transaction data so that less of it has to be posted on the parent chain.
+- **[Submitting to the Sequencer Inbox contract](#submitting-to-the-sequencer-inbox-contract)**: the procedure for submitting compressed batches to the Sequencer Inbox contract on the parent chain.
+- **[Finality](#finality)**: what the resulting parent chain record does and does not guarantee.
+
+This section covers batch posting from the Sequencer's side. For the <Term id="batch-poster">batch poster</Term>'s internals, see [The batch poster](/docs/how-arbitrum-works/deep-dives/batchposter). That page traces one batch from the transaction streamer to the parent chain transaction.
+
+## Batching and compression
+
+The Sequencer in Arbitrum is critical in collecting and organizing child chain transactions before posting them to the parent chain. The batching process is designed to optimize for both cost efficiency and timely transaction inclusion.
+
+<ImageZoom src="/img/haw-batching.svg" alt="Batching" className="img-600px" />
+
+#### Transaction collection and ordering
+
+- **Continuous reception**: the Sequencer continuously receives transactions submitted by users.
+- **Ordering**: transactions are ordered by the order in which they are received, ensuring deterministic transaction order. Chains can override this default first-come-first-served policy with [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction), which auctions an "express lane" for faster inclusion.
+- **Buffering**: received transactions are temporarily stored in a buffer awaiting batch formation.
+
+#### Batch formation criteria
+
+- **Size thresholds**: batch formation occurs when accumulated transactions reach a predefined size limit. This limit ensures that the fixed costs of posting data to the parent chain are amortized over more transactions, improving cost efficiency.
+- **Time constraints**: the Sequencer also monitors the elapsed time since the last batch update to prevent undue delays. Upon reaching the maximum time threshold, the Sequencer will create a batch with the transactions collected so far, even if the batch doesn’t meet the size threshold.
+
+#### Batch creation process
+
+- **Aggregation**: once the batch-formation criteria (size or time threshold) are satisfied, the Sequencer aggregates buffered transactions into a single batch.
+- **Metadata inclusion**: the batch includes all necessary metadata for all transactions.
+- **Preparation for compression**: batch preparation for the compression stage begins, with techniques that minimize data size before posting to the parent chain.
+
+The batching mechanism allows the Sequencer to efficiently manage transactions by balancing the need for cost-effective parent chain posting with the requirement for prompt transaction processing. By strategically grouping transactions into batches based on size and time criteria, the Sequencer reduces per-transaction costs and enhances the overall scalability of the Arbitrum network.
+
+### Compression
+
+The Sequencer employs compression when forming transaction batches to optimize the data and cost of batches posted to the parent chain. Arbitrum uses the Brotli compression algorithm due to its high compression ratio and efficiency, crucial for reducing parent chain posting costs.
+
+<ImageZoom src="/img/haw-compression.svg" alt="Compression" className="img-600px" />
+
+### Compression level in the Brotli algorithm
+
+Brotli’s compression algorithm includes a parameter: **compression level**, which ranges from **0 to 11**. This parameter allows you to balance two key factors:
+
+- **Compression efficiency**: higher levels result in greater size reduction.
+- **Computational cost**: higher levels require more processing power and time.
+
+As the compression level increases, you can achieve better compression ratios at the expense of longer compression times.
+
+### Dynamic compression level setting
+
+The compression level on Arbitrum is dynamically adjusted based on the current backlog of batches waiting to be posted to the parent chain by the Sequencer. In scenarios where multiple batches are queued in the buffer, it is possible to adjust the compression level to improve throughput dynamically. When the buffer becomes overloaded with overdue batches, the compression level decreases. For the exact backlog thresholds and how compression interacts with parent chain pricing, see [Compression levels](/docs/how-arbitrum-works/deep-dives/gas-and-fees#compression-levels).
+
+This trade-off prioritizes speed over compression efficiency, enabling faster processing and transmission of pending batches. Doing so clears the buffer more quickly, ensuring smoother overall system performance.
+
+Now that transactions are batched and compressed, they pass to the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) to transmit them to the parent chain.
+
+## Submitting to the Sequencer Inbox contract
+
+After batching and compressing transactions, the Sequencer posts these batches to the parent chain to ensure security and finality. This process involves the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter), an Externally Owned Account (EOA) controlled by the Sequencer. The batch poster is responsible for submitting the compressed transaction batches to the Sequencer Inbox contract on the parent chain. Batch posting costs are reimbursed through ArbOS's parent-chain pricer—see [Parent chain gas pricing](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing) and [ArbOS state](/docs/how-arbitrum-works/deep-dives/arbos#arbos-state).
+
+The Sequencer uses two primary methods to send batches to the parent chain, depending on whether the chain supports [EIP-4844 (Proto-Danksharding)](https://eips.ethereum.org/EIPS/eip-4844) and the current network conditions. For how the batch poster encodes a batch for each method and self-checks it before sending, see [The batch is wrapped for the parent chain and self-checked](/docs/how-arbitrum-works/deep-dives/batchposter#5-the-batch-is-wrapped-for-the-parent-chain-and-self-checked).
+
+<ImageZoom src="/img/haw-submit-to-sequencer-inbox.svg" alt="Submit to Sequencer inbox" className="img-600px" />
+
+### 1. Using blobs with `addSequencerL2BatchFromBlobs`
+
+- **Default approach**: when the parent chain supports EIP-4844, the Sequencer utilizes blob transactions to post batches efficiently.
+- **Method**: the batch poster calls the `addSequencerL2BatchFromBlobs` function of the Sequencer Inbox contract.
+- **Process**:
+  - Batch data gets included as blobs, large binary data structures optimized for scalability.
+  - The transaction includes metadata about the batch but does not include the batch data itself in the calldata.
+- **Benefits**:
+  - **Cost efficiency**: blobs allow cheaper data inclusion than calldata, reducing gas costs.
+  - **Scalability**: leveraging blobs enhances the network's ability to handle large volumes of transactions.
+
+### 2. Using calldata with `addSequencerL2Batch`
+
+- **Alternative approach**: if the **Blob Base Fee** is significantly high or the blob space is constrained during batch posting, the Sequencer may opt to use calldata.
+- **Method**: the batch poster calls the `addSequencerL2Batch` function of the Sequencer Inbox contract.
+- **Process**:
+  - The compressed batch transactions are included directly in the transaction's calldata.
+- **Considerations**:
+  - **Cost evaluation**: the Sequencer dynamically assesses whether using calldata is more cost-effective than blobs based on current gas prices and blob fees.
+  - **Compatibility**: if the parent chain does not support EIP-4844, this method is the default and only option for batch posting.
+
+<VanillaAdmonition type="note">
+
+The Sequencer continuously monitors network conditions to select the most cost-effective batch posting method, ensuring optimal operation under varying conditions.
+
+</VanillaAdmonition>
+
+### Authority and finality
+
+- **Exclusive access**: only authorized batch posters can call these methods on the Sequencer Inbox contract. The contract gates access through its `isBatchPoster` mapping, a role distinct from the Sequencer, though the same party typically operates both. This exclusivity ensures that no other party can include messages directly.
+- **Soft-confirmation receipts**: the Sequencer’s unique ability to immediately process and include transactions allows it to provide users with instant, “soft-confirmation” receipts.
+- **Parent chain finality**: once batches post, the transactions achieve parent-chain-level finality, secured by the parent chain’s consensus mechanism.
+
+By efficiently sending compressed transaction batches to the Sequencer Inbox contract using the most cost-effective method available, the Sequencer ensures transactions are securely recorded on the parent chain. This process maintains the integrity and reliability of the network, enabling users to perform fast, secure transactions.
+
+## Finality
+
+Arbitrum offers two levels of finality:
+
+1. **Soft finality**: the Sequencer’s real-time feed confirms transactions almost instantly, but those confirmations are provisional. They rely on the Sequencer sequencing honestly and staying available.
+2. **Hard finality**: the Sequencer's batches are posted to and finalized on the parent chain, and the batch's transactions inherit the parent chain's security. Final settlement happens when the Rollup protocol confirms the containing [assertion](/docs/how-arbitrum-works/deep-dives/assertions), after the [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) challenge period.
+
+Posting a batch is not itself final settlement. The transaction data becomes available and inherits the parent chain’s data-layer security, but the resulting child <Term id="chain-state">chain state</Term> settles only once an assertion is confirmed.
+
+For the full treatment—latency at each stage, the trust model behind each level, force inclusion, AnyTrust data availability, and guidance on which level your application should wait for—see [Finality](/docs/how-arbitrum-works/deep-dives/finality) and [Finality and reorgs](/docs/how-arbitrum-works/reference/finality-and-reorgs).
 
 ## High availability: the Sequencer coordinator
 
@@ -44,30 +220,34 @@ In production, several Sequencer nodes run under a single logical Sequencer, wit
 
 ## Delayed messages from the parent chain
 
-Not every transaction originates with a direct RPC submission. Deposits and <Term id="retryable-ticket">retryable tickets</Term> enter through the parent chain’s <Term id="delayed-inbox">delayed inbox</Term>. The DelayedSequencer watches for these messages to finalize on the parent chain, then sequences them into the child chain so they appear in the ordering and on the feed alongside ordinary transactions. As with execution generally, the act of applying a delayed message is ArbOS/STF territory; the DelayedSequencer’s role is to decide when it enters the order.
+Not every transaction originates with a direct RPC submission. As the Sequencer feed diagram above shows, the feed carries both child chain transactions posted directly to the Sequencer and child chain transactions submitted on the parent chain. The latter include [child chain messages submitted on the parent chain](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) and [retryable transactions](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets). Deposits and <Term id="retryable-ticket">retryable tickets</Term> enter through the parent chain’s <Term id="delayed-inbox">delayed inbox</Term>. The DelayedSequencer watches for these messages to finalize on the parent chain, then sequences them into the child chain so they appear in the ordering and on the feed alongside ordinary transactions. As with execution generally, the act of applying a delayed message is ArbOS/STF territory; the DelayedSequencer’s role is to decide when it enters the order.
+
+The Nitro node can instead be configured to add delayed inbox transactions immediately after they are submitted to the parent chain, before they finalize there. This lowers latency but introduces the risk of a child-chain reorg if the transaction fails to finalize on the parent chain. To avoid that risk, on Arbitrum One and Nova the DelayedSequencer includes these transactions in the feed only after they are finalized on the parent chain.
+
+You can also see how the feed sends incoming messages over WebSocket and how to extract message data from it in [Read Sequencer Feed](/docs/run-a-node/sequencer/read-sequencer-feed).
 
 ## Timeboost express lane
 
-Timeboost layers a priority auction on top of the default first-come, first-serve (FCFS) ordering. Time is divided into fixed rounds (at least 10 seconds), and an offchain auction assigns each round an express-lane controller. That controller’s transactions take a dedicated express lane: they are validated (correct sender, round, and chain ID), placed into a per-round ordering queue, and delivered in sequence with no advantage delay, while ordinary transactions wait out the 200ms delay before queuing.
+Timeboost layers a priority auction on top of the default first-come-first-served ordering. Time is divided into fixed rounds (at least 10 seconds), and an offchain auction assigns each round an express-lane controller. That controller’s transactions take a dedicated path: they are validated (correct sender, round, and chain ID), placed into a per-round ordering queue, and delivered in sequence with no advantage delay, while ordinary transactions wait out the 200ms delay before queuing.
 
 ## Censorship Timeout
 
-As mentioned in the original [Arbitrum <Term id="bold">BoLD</Term> forum post](https://forum.arbitrum.foundation/t/aip-bold-permissionless-validation-for-arbitrum/23232/70?), the initial release of [Arbitrum BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) includes a feature called Censorship Timeout (formerly known as Delay Buffer).
+As mentioned in the original [Arbitrum BoLD forum post](https://forum.arbitrum.foundation/t/aip-bold-permissionless-validation-for-arbitrum/23232/70?), the initial release of [Arbitrum BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) includes a feature called Censorship Timeout (formerly known as Delay Buffer). For Arbitrum One and Nova, this feature is enabled by default alongside BoLD.
 
 Censorship Timeout aims to limit the negative effects of:
 
 - Prolonged Sequencer censorship, or
 - Unexpected Sequencer outages
 
-## How the Censorship Timeout works
+### How the Censorship Timeout works
 
-To explain how this feature improves the security of chains settling to Arbitrum One, consider a scenario where an L3’s parent chain Sequencer (the L2 Sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge move would need to wait 24 hours before bypassing the L2 Sequencer (using the Sequencer Inbox’s `forceInclusion` method). In this scenario, a challenge resolution would be delayed by a time t where t = (24 hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
+To explain how this feature improves the security of chains settling to Arbitrum One and Nova, consider a scenario where an L3’s parent chain Sequencer (the L2 Sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge move would need to wait <Var name="arbOneForceIncludePeriodHours" /> hours before bypassing the L2 Sequencer (using the `SequencerInbox`'s [`forceInclusion`](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle#force-inclusion-after-delays) method). In this scenario, a challenge resolution would be delayed by a time `t` where `t = (24 hours) * number of moves for a challenge`. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
 
 The Censorship Timeout feature mitigates this by lowering the force inclusion threshold when unexpected delays in message inclusion occur due to one (or all) of the above-mentioned cases of censorship or a sequencer outage, enabling entities to make moves without the 24-hour delay-per-move.
 
-The force inclusion window is the lesser of `delayBuffer` and `delayBlocks`, where `delayBlocks` is a constant currently set to 24 hours, and `delayBuffer` ranges from 30 minutes to 48 hours.
+The force inclusion window is the lesser of `delayBuffer` and `delayBlocks`, where `delayBlocks` is a constant currently set to <Var name="arbOneForceIncludePeriodHours" /> hours, and `delayBuffer` ranges from 30 minutes to 48 hours.
 
-The `delayBuffer` value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message’s delay beyond the `threshold` and how long it has been delayed (that is, when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the `threshold` is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
+The `delayBuffer` value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message’s delay beyond the `threshold` and how long it has been delayed (i.e., when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the `threshold` is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
 
 The `delayBuffer` replenishes at a linear rate when the Sequencer is operating correctly at a nominal rate of one minute for every 20 minutes in which no messages are delayed beyond the `threshold`.
 
@@ -77,8 +257,8 @@ Below are the initial, proposed parameter values for the Censorship Timeout feat
 - `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 parent chain (Ethereum) blocks (one hour) for Arbitrum Nova
 - `replenish rate` = 5% (meaning one day is replenished every 20 days or roughly a 95% uptime)
 
-We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains—especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to use this feature for their chain and can also change the default parameters as they see fit for their use case.
+We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains—especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to utilize this feature for their chain and can also change the default parameters as they see fit for their use case.
 
-## Decentralized fair sequencing
+### Decentralized fair sequencing
 
 Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or validators) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with broader blockchain principles of enhanced security, transparency, and decentralization. The [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction) ordering policy is designed to be compatible with decentralized sequencing.

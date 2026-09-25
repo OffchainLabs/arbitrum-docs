@@ -34,3 +34,18 @@ CLAUDE.md
 .codex
 .superpowers
 AGENTS.md
+
+# Prettier's MDX parser corrupts comments or adds a stray closing fence in these pages.
+# Keep their valid MDX intact; content:lint and the production build validate them.
+content/docs/launch-arbitrum-chain/arbitrum-chain-sdk-preparing-node-config.mdx
+content/docs/launch-arbitrum-chain/integrations/da-api-integration-guide.mdx
+content/docs/stylus/how-tos/trait-based-composition.mdx
+content/partials/run-a-node/_dao-chains-parameters.mdx
+content/partials/run-a-node/_orbit-chains-parameters.mdx
+content/docs/launch-arbitrum-chain/configuration/validation/test-chain-configuration.mdx
+content/docs/launch-arbitrum-chain/configuration/data-availability/das-docker-deployment.mdx
+content/docs/run-a-node/troubleshooting.mdx
+content/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das.mdx
+content/docs/stylus/concepts/gas-metering.mdx
+content/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das.mdx
+content/docs/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx

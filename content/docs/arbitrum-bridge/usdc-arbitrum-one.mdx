@@ -14,12 +14,41 @@ sme: amarrazza
 
 ## Differences between USDC and USDC.e
 
-|               | Native **USDC**                                                                                                    | Bridged **USDC**                                                                                                   |
-| ------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| Token Name    | **USDC**                                                                                                           | Bridged **USDC**                                                                                                   |
-| Token Symbol  | **USDC**                                                                                                           | **USDC.e**                                                                                                         |
-| Token Address | [0xaf88d065e77c8cC2239327C5EDb3A432268e5831](https://arbiscan.io/token/0xaf88d065e77c8cC2239327C5EDb3A432268e5831) | [0xff970a61a04b1ca14834a43f5de4533ebddb5cc8](https://arbiscan.io/token/0xff970a61a04b1ca14834a43f5de4533ebddb5cc8) |
-| Benefits      | CEX Support, directly redeemable 1:1 for U.S. dollars                                                              |                                                                                                                    |
+<table className="small-table">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Native **USDC**</th>
+      <th>Bridged **USDC**</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Token Name</td>
+      <td>**USDC**</td>
+      <td>Bridged **USDC**</td>
+    </tr>
+    <tr>
+      <td>Token Symbol</td>
+      <td>**USDC**</td>
+      <td>**USDC.e**</td>
+    </tr>
+    <tr>
+      <td>Token Address</td>
+      <td>
+        <a href="https://arbiscan.io/token/0xaf88d065e77c8cC2239327C5EDb3A432268e5831">0xaf88d065e77c8cC2239327C5EDb3A432268e5831</a>
+      </td>
+      <td>
+        <a href="https://arbiscan.io/token/0xff970a61a04b1ca14834a43f5de4533ebddb5cc8">0xff970a61a04b1ca14834a43f5de4533ebddb5cc8</a>
+      </td>
+    </tr>
+    <tr>
+      <td>Benefits</td>
+      <td>CEX Support, directly redeemable 1:1 for U.S. dollars</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
 
 The Arbitrum <Term id="bridge">Bridge</Term> will continue to facilitate transfers of all **USDC** tokens. When depositing Ethereum-native **USDC**, the option exists to receive Bridged **USDC** using Arbitrum's bridge (the canonical lock-and-mint flow described in the [token bridging deep dive](/docs/how-arbitrum-works/deep-dives/token-bridging)) or Arbitrum-native **USDC** using Circle's [Cross-Chain Transfer Protocol](https://www.circle.com/en/cross-chain-transfer-protocol).
 

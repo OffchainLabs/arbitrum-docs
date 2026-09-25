@@ -3,7 +3,7 @@
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search';
 import dynamic from 'next/dynamic';
 
-import { inkeepAiChatSettings, inkeepBaseSettings, inkeepSearchSettings } from '@/lib/inkeep';
+import { inkeepAiChatSettings, inkeepSearchSettings, useInkeepBaseSettings } from '@/lib/inkeep';
 
 // The Inkeep widget bundle is large; load it only in the browser and only once
 // the dialog is first opened by Fumadocs.
@@ -18,9 +18,11 @@ const InkeepModalSearchAndChat = dynamic(
  * open state (and the Cmd/Ctrl+K hotkey), so Inkeep's own shortcut is disabled.
  */
 export default function InkeepSearchDialog({ open, onOpenChange }: SharedProps) {
+  const baseSettings = useInkeepBaseSettings();
+
   return (
     <InkeepModalSearchAndChat
-      baseSettings={inkeepBaseSettings}
+      baseSettings={baseSettings}
       aiChatSettings={inkeepAiChatSettings}
       searchSettings={inkeepSearchSettings}
       modalSettings={{ isOpen: open, onOpenChange, shortcutKey: null }}

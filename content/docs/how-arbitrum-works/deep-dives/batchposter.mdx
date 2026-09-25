@@ -7,7 +7,7 @@ author: pete-vielhaber
 sme: Mehdi
 ---
 
-Batch posting is a fundamental process for the <Term id="sequencer">Sequencer's</Term> operation in Arbitrum. It involves collecting multiple <Term id="child-chain">child chain</Term> transactions, organizing them into batches, compressing the data to reduce size, and sending these batches to the <Term id="sequencer-inbox">Sequencer Inbox</Term> contract on the <Term id="parent-chain">parent chain</Term>. This mechanism securely records transactions on the parent chain while optimizing for costs and performance.
+Batch posting is a fundamental process for the <Term id="sequencer">Sequencer's</Term> operation in Arbitrum. It involves collecting multiple <Term id="child-chain">child chain</Term> <Term id="transaction">transactions</Term>, organizing them into <Term id="batch">batches</Term>, compressing the data to reduce size, and sending these batches to the <Term id="sequencer-inbox">Sequencer Inbox</Term> contract on the <Term id="parent-chain">parent chain</Term>. This mechanism securely records transactions on the parent chain while optimizing for costs and performance.
 
 ## How it works
 
@@ -15,19 +15,19 @@ Batch posting is a fundamental process for the <Term id="sequencer">Sequencer's<
 
 #### 1. Messages arrive (upstream handoff)
 
-A transaction’s journey into the batch poster begins after it’s already been [sequenced](/docs/how-arbitrum-works/deep-dives/sequencer). The poster pulls ordered child chain messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/docs/how-arbitrum-works/deep-dives/stf), and [soft finality](/docs/how-arbitrum-works/deep-dives/finality) all happened before this point and live outside of the batch poster.
+A transaction’s journey into the <Term id="batch-poster">batch poster</Term> begins after it’s already been [sequenced](/docs/how-arbitrum-works/deep-dives/sequencer). The poster pulls ordered child chain messages from the `TransactionStreamer`—that’s a handoff into the batch poster; sequencing, [execution](/docs/how-arbitrum-works/deep-dives/stf), and [soft finality](/docs/how-arbitrum-works/deep-dives/finality) all happened before this point and live outside of the batch poster.
 
 #### 2. The poster decides where it stands
 
-The main loop (`MaybePostSequencerBatch`) first does a safety check (refuse to post if a prior batch reverted), then asks “what batch number and the parent chain nonce am I on?” and establishes the parent chain time/block window the batch will use. That window comes from reading the parent chain SequencerInbox contract’s `MaxTimeVariation`—a read-only handoff out to the parent chain.
+The main loop (`MaybePostSequencerBatch`) first does a safety check (refuse to post if a prior batch reverted), then asks “what batch number and parent chain nonce am I on?” and establishes the parent chain time/block window the batch will use. That window comes from reading the parent chain SequencerInbox contract’s `MaxTimeVariation`—a read-only handoff out to the parent chain.
 
 #### 3. Messages become a compressed batch
 
-The poster receives messages in order, turning each into typed segments (the transaction itself, plus small bookkeeping notes for delayed-message markers and time/block advances) and streaming them through Brotli. It watches size and segment-count caps, and adapts compression effort to how far behind it is—more compression when calm, less when backlogged. When it decides the batch is ready (full enough, old enough, or a delayed message is about to expire), it seals and recompresses it. This is the core work done inside the batch poster.
+The poster receives messages in order, turning each into typed segments (the transaction itself, plus small bookkeeping notes for <Term id="delayed-inbox">delayed-message</Term> markers and time/block advances) and streaming them through Brotli. It watches size and segment-count caps, and adapts compression effort to how far behind it is—more compression when calm, less when backlogged. When it decides the batch is ready (full enough, old enough, or a delayed message is about to expire), it seals and recompresses it. This is the core work done inside the batch poster.
 
 #### 4. The data is routed to storage (DA handoff)
 
-The sealed bytes are handed to a data availability (DA) provider—an offchain <Term id="data-availability-committee-dac">AnyTrust/DAS committee</Term> or a custom backend—via the small Writer.Store interface, with a fallback to putting data directly on Ethereum (calldata or blobs). What comes back is either a <Term id="data-availability-certificate">certificate</Term> (offchain) or the raw data (EthDA). The committee aggregation, BLS signing, and blob KZG cryptography all happen behind that interface—handoffs that the batch poster isn’t involved in.
+The sealed bytes are handed to a data availability (DA) provider—an offchain <Term id="data-availability-committee-dac">AnyTrust</Term>/DAS committee or a custom backend—via the small Writer.Store interface, with a fallback to putting data directly on Ethereum (calldata or blobs). What comes back is either a <Term id="data-availability-certificate">certificate</Term> (offchain) or the raw data (EthDA). The committee aggregation, <Term id="bls-signature">BLS signing</Term>, and blob KZG cryptography all happen behind that interface—handoffs that the batch poster isn’t involved in.
 
 #### 5. The batch is wrapped for the parent chain and self-checked
 
@@ -43,7 +43,7 @@ Once the parent chain transaction confirms, the transactions cross from the Sequ
 
 ## Related resources
 
-- [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer#5-posting-to-the-parent-chain): batching, compression, and the Sequencer Inbox methods.
+- [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer#batch-posting): batching, compression, and the Sequencer Inbox methods.
 - [Sequencer transaction flow](/docs/how-arbitrum-works/deep-dives/sequencer-transaction-flow): what happens before the handoff, from the queue to block creation.
 - [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing): how the parent chain pricer reimburses batch posting costs.
 - [Finality and reorgs](/docs/how-arbitrum-works/reference/finality-and-reorgs): what parent chain finality guarantees, and the failure modes around posting.

@@ -3,7 +3,7 @@ title: 'Configure a test Arbitrum chain'
 sidebar_label: 'Test chain configuration'
 description: 'Configure a non-production Arbitrum chain so that assertions post and confirm in seconds rather than days, and understand which parameters differ on testnets.'
 user_story: As an Arbitrum chain developer, I want assertions to confirm quickly on my test chain so that integration tests do not wait out a production challenge period.
-content_type: 'how-to'
+content_type: how-to
 author: pete-vielhaber
 sme: TBD
 ---
@@ -63,7 +63,11 @@ The interaction between `minimumAssertionPeriod` and the posting interval is the
 
 These are Nitro flags, set per validator. Lower them so your validator acts promptly inside the onchain floor you configured above.
 
-{/* SME REVIEW: defaults below read from OffchainLabs/nitro at a618155 (staker/bold/bold_staker.go:138-158 for BoLD, staker/legacy/staker.go:171-191 for legacy). Confirm they still match the Nitro release this page targets. */}
+{/*
+SME REVIEW: defaults below read from OffchainLabs/nitro at a618155
+(staker/bold/bold_staker.go:138-158 for BoLD, staker/legacy/staker.go:171-191
+for legacy). Confirm they still match the Nitro release this page targets.
+*/}
 
 | Flag                                          | Default  | Applies to    | For a test chain                                                                |
 | --------------------------------------------- | -------- | ------------- | ------------------------------------------------------------------------------- |

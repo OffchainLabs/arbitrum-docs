@@ -17,28 +17,27 @@ Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration c
 </VanillaAdmonition>
 ## Gas target
 
-This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). [<Term id="arbos">ArbOS</Term>](/docs/how-arbitrum-works/deep-dives/arbos) uses this to update gas pools and enforce dynamic per-block gas limits.
+This is the target gas consumption rate per second that the chain can sustainably handle. It influences the congestion mechanism: if gas usage exceeds this limit, the base fee rises to throttle demand; if below the limit, the cost decreases (down to the floor). <Term id="arbos">ArbOS</Term> uses this to update gas pools and enforce dynamic per-block gas limits.
 
 <Term id="arbitrum-chains">Arbitrum Chains</Term> support two configuration modes -
 
 - **[RECOMMENDED] Multiple Gas Targets (supported starting [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51))**
 
   - **Description**: Provides smoother price transitions. It uses multiple gas targets to reduce the frequency and severity of <Term id="child-chain">child chain</Term> gas price spikes.
-  - **Configuration**: Call the `setGasPricingConstraints(uint64[3][] calldata constraints)` method on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `constraints` is an array of `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]` triples. \
+  - **Configuration**: Call the `setGasPricingConstraints(uint64[3][] calldata newConstraints)` method on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `newConstraints` is an array of `[gasTargetPerSecond, adjustmentWindowSeconds, startingBacklogValue]` tuples. \
     Detailed information on how to set these parameters can be found in [how to configure dynamic pricing for your chain](/docs/launch-arbitrum-chain/configuration/costs/dynamic-pricing-for-arbitrum-chains). \
     Example using cast:
     ```shell
-    cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setGasPricingConstraints(uint64[3][])" $NEW_CONSTRAINTS
+    cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setGasPricingConstraints((uint64,uint64,uint64)[])" $NEW_CONSTRAINTS
     ```
 
 - **Single Gas Target**
   - **Description**: Uses a single <Term id="gas-target">gas target</Term> as the reference for price adjustments. If gas usage exceeds this limit, the base fee rises to throttle demand; if usage is below, the price moves towards the floor.
-  - **Configuration**: Call the `setSpeedLimit(uint64 limit)` method on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `limit` is the desired gas per second. \
+  - **Configuration**: Call the `setSpeedLimit(uint256 newSpeedLimit)` method on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `newSpeedLimit` is the desired gas per second. \
     Example using cast:
     ```shell
-    cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setSpeedLimit(uint64)" $NEW_SPEED_LIMIT
+    cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setSpeedLimit(uint256)" $NEW_SPEED_LIMIT
     ```
-  - **Scope**: From [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) onward, `setSpeedLimit` writes only the single gas target value. It does not change a multiple gas target configuration. If your chain has gas pricing constraints configured, `setSpeedLimit` has no effect on pricing until you clear them. Refer to [how to set the gas target](/docs/launch-arbitrum-chain/operate/gas-target#how-to-set-the-gas-target).
 
 This setting is adjustable post-deployment. Any modifications should align with your node's capabilities to prevent issues with the congestion mechanism activating.
 
@@ -47,13 +46,13 @@ Refer to the [Chain parameters](/docs/arbitrum-essentials/reference/chain-params
 ## Block gas limit
 
 - **Description**: This limits the maximum amount consumable by all <Term id="transaction">transactions</Term> in a single <Term id="layer-2-l2">L2</Term> block—for execution, not for the parent chain data availability (DA) fee charge. It helps control block size and processing time. In practice, ArbOS enforces a dynamic limit based on the gas target and gas pools, but this sets a hard cap.
-- **Default**: <Var name="arbOneBlockGasLimit" /> gas per block.
-- **Configuration**: Call the [`setMaxTxGasLimit(uint64 limit)`](/docs/arbitrum-essentials/precompiles/reference#arbowner) method on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `limit` is the desired max gas. Despite its name, on chains running ArbOS versions earlier than [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) this method caps total block gas usage. From ArbOS 51 onward, it caps individual transactions instead: the block limit is set separately with `setMaxBlockGasLimit(uint64 limit)`, and the final transaction in a block may exceed it by up to the transaction limit (the effective block gas limit is `MaxBlockGasLimit + MaxTxGasLimit`).
+- **Default**: 32,000,000 gas per block.
+- **Configuration**: Call the [`setMaxTxGasLimit(uint256 newLimit)`](/docs/arbitrum-essentials/precompiles/reference#arbowner) method on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner), where `newLimit` is the desired max gas. This method is described as setting the block limit, although technically it may focus on per-transaction limits; in practice, it caps block usage.
 
 Example using `cast`:
 
 ```shell
-cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setMaxTxGasLimit(uint64)" $NEW_LIMIT
+cast send --rpc-url $ORBIT_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setMaxTxGasLimit(uint256)" $NEW_LIMIT
 ```
 
 This setting is adjustable post-deployment. Setting it too high can harm user experience due to longer block times.

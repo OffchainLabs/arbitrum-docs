@@ -10,14 +10,14 @@ Thank you for considering to contribute to the Arbitrum documentation! We're exc
 
 The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
 
-This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Fumadocs](https://fumadocs.dev/docs) is expected.
+This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax and Github is expected.
 
 ### Add a new core document
 
 If a document isn't in a `Third-party content` sidebar node, it's a **core document**. To contribute a new core doc:
 
-1.  Begin by creating a branch (internal) or fork (external) of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs).
-2.  Issue a `Draft` pull request into `master`. Pull requests into `master` generate a preview of your changes via a PR-specific Vercel deployment; this preview will update as you push commits to your remote.
+1.  Begin by creating a branch (internal) or fork (external) of the [Arbitrum docs repo]({var:docsRepositoryUrl}).
+2.  Issue a `Draft` pull request into `main`. A pull request from a branch in that repository gets a Vercel preview deployment of your changes, and the preview updates as you push commits. A pull request from a fork gets one once a maintainer authorizes the deployment.
 3.  Include answers to the following questions in your PR description:
     - Audience: Who am I writing for?
     - Problem: What specific problem are they trying to solve?
@@ -39,19 +39,19 @@ If you'd like to request an update or share a suggestion related to an **existin
 
 ### Document type conventions
 
-Every document should be a specific _type_ of document. Each type of document has its own purpose:
+Every document should be a specific _type_ of document, set in its frontmatter as `content_type`. Each type has its own purpose:
 
-| Document type       | Purpose                                                                            |
-| ------------------- | ---------------------------------------------------------------------------------- |
-| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             |
-| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions |
-| How-to              | Provide task-oriented procedural guidance                                          |
-| Concept             | Explain what things are and how they work                                          |
-| FAQ                 | Address frequently asked questions                                                 |
-| Troubleshooting     | List common troubleshooting scenarios and solutions                                |
-| Reference           | Lists and tables of things, such as API endpoints and developer resources          |
+| Document type   | Frontmatter value | Purpose                                                                             |
+| --------------- | ----------------- | ----------------------------------------------------------------------------------- |
+| How-to          | `how-to`          | Provide task-oriented procedural guidance                                           |
+| Concept         | `concept`         | Explain what things are and how they work                                           |
+| Quickstart      | `quickstart`      | Onboard a specific reader audience with step-by-step "learn by doing" instructions  |
+| Tutorial        | `tutorial`        | Walk a specific reader audience through a comprehensive, guided learning experience |
+| Reference       | `reference`       | Lists and tables of things, such as API endpoints and developer resources           |
+| Troubleshooting | `troubleshooting` | List common troubleshooting scenarios and solutions                                 |
+| FAQ             | `faq`             | Address frequently asked questions                                                  |
 
-This isn't an exhaustive list, but it includes most of the document types that we use.
+`content_type` must be exactly one of the seven frontmatter values above, spelled in lowercase, or the build fails. See [Document type conventions]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/CONTRIBUTE.md#document-type-conventions) in CONTRIBUTE.md for more on what each type owes the reader.
 
 <VanillaAdmonition type="info" title="About Promotional Content">
 
@@ -59,7 +59,6 @@ While it is acceptable to include conceptual and how-to content that links to pr
 Feature pieces that are primarily promotional and do not provide actionable guidance to readers are not accepted as third-party docs, either.
 
 </VanillaAdmonition>
-
 ### Style conventions
 
 The following style guidelines provide a number of loose recommendations that help us deliver **a consistent content experience** across our docs:
@@ -116,13 +115,25 @@ Don't stress too much about checking off all of these boxes; we periodically rev
 Some important disclaimers:
 
 - This isn't an exhaustive list. These are just the min-bar guidelines that will be applied to all new content moving forward.
-- Many of our docs don't yet follow this guidance. Our team is working on it! If you notice an obvious content bug, feel free to submit an [issue](https://github.com/OffchainLabs/arbitrum-docs/issues) or [PR](https://github.com/OffchainLabs/arbitrum-docs/pulls).
+- Many of our docs don't yet follow this guidance. Our team is working on it! If you notice an obvious content bug, feel free to submit an [issue]({var:docsRepositoryUrl}/issues) or [PR]({var:docsRepositoryUrl}/pulls).
 
 ### Banner conventions
 
-You can use banners (also called "admonitions") to set expectations for your readers and to emphasize important callouts. Use these conservatively, as they interrupt the flow of the document.
+Use banners to set expectations for your readers or emphasize an important callout, but use them conservatively, since they interrupt the flow of the document. This site renders a banner with the `<VanillaAdmonition>` component; the same callout-syntax rule appears in [STYLE-GUIDE.md]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/STYLE-GUIDE.md#what-is-not-here). Docusaurus `:::` directives do not render here and fail the `content:lint` A3 gate, so never write one. The `type` prop is one of `note`, `tip`, `info`, `warning`, or `danger`; pick the type that matches the message, not the page's subject. `title` is optional and defaults to the capitalized type name (`note` becomes "Note", and so on).
+
+**Before writing a new banner, search [`content/partials/CATALOG.md`]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/content/partials/CATALOG.md) for one that already says what you need**, and reuse it instead of duplicating the prose. Every catalog entry ends with the directive to paste into your page:
+
+```mdx
+<include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>
+```
+
+The `cwd` flag anchors the path at the repo root, so moving your page later never breaks the include. Inside another partial, drop the flag and write the path relative to the file you are editing. CONTRIBUTE.md's [partial-reuse guide]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/CONTRIBUTE.md#reuse-a-partial-before-you-write-new-prose) covers both forms and how to add a partial of your own.
+
+Two banners come up often enough to be worth naming directly.
 
 #### Under construction banner
+
+Use `type="warning"` when a page's steps are incomplete or likely to change soon, so readers know to expect gaps.
 
 Example:
 
@@ -131,40 +142,44 @@ Example:
 The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an update** at the top of this document if you have any feedback along the way.
 
 </VanillaAdmonition>
+
 Usage:
 
-```markdown
-:::caution UNDER CONSTRUCTION
+```mdx
+<VanillaAdmonition type="warning" title="UNDER CONSTRUCTION">
 
 The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an update** at the top of this document if you have any feedback along the way.
 
-:::
+</VanillaAdmonition>
 ```
 
 #### Community member contribution banner
+
+Use `type="info"` at the top of a third-party or community-submitted document to credit the author.
 
 Example:
 
 <VanillaAdmonition type="info" title="Community member contribution">
 
-The following document was contributed by @todo-twitter-handle. Give them a shoutout if you find it useful!
+Shoutout to [@handle](https://github.com/handle) for contributing the following [third-party document](/docs/third-party-docs/contribute)!
 
 </VanillaAdmonition>
+
 Usage:
 
-```markdown
-:::info Community member contribution
+```mdx
+<VanillaAdmonition type="info" title="Community member contribution">
 
-The following document was contributed by @todo-twitter-handle. Give them a shoutout if you find it useful!
+Shoutout to [@handle](https://github.com/handle) for contributing the following [third-party document](/docs/third-party-docs/contribute)!
 
-:::
+</VanillaAdmonition>
 ```
 
 ### Frequently asked questions
 
-#### Can I point to my product from core docs? For example—if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers) page?
+#### Can I point to my product from core docs? For example—if my product hosts a public RPC endpoint, can I add it to your RPC endpoints and providers page?
 
-These types of contributions are generally **not merged** unless they're submitted by employees of Offchain Labs.
+These types of contributions, such as adding an endpoint to the [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers) page, are generally **not merged** unless they're submitted by employees of Offchain Labs.
 
 Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable scrutiny.
 

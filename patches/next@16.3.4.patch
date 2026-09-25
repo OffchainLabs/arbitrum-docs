@@ -1,0 +1,28 @@
+diff --git a/dist/build/templates/app-page-runtime.js b/dist/build/templates/app-page-runtime.js
+index f1ab03f292340fe08b563990110ac0835d3415fb..e6ff68d3be7b46c5ccf12afa29a506727dc82ff3 100644
+--- a/dist/build/templates/app-page-runtime.js
++++ b/dist/build/templates/app-page-runtime.js
+@@ -456,7 +456,8 @@ function createAppPageEntrypoint({ tree, page, pathname, require: __next_app_req
+         };
+         try {
+             const varyHeader = routeModule.getVaryHeader(resolvedPathname, interceptionRoutePatterns);
+-            res.setHeader('Vary', varyHeader);
++            // Preserve content-negotiation headers supplied by proxy.ts.
++            res.appendHeader('Vary', varyHeader);
+             let parentSpan;
+             const invokeRouteModule = async (span, context)=>{
+                 const nextReq = new _node.NodeNextRequest(req);
+diff --git a/dist/esm/build/templates/app-page-runtime.js b/dist/esm/build/templates/app-page-runtime.js
+index 1970588724b6e4880f27a8be60ca32ae6437bc28..238c3c5075a4da99d5d7d6aab87addcb957edd83 100644
+--- a/dist/esm/build/templates/app-page-runtime.js
++++ b/dist/esm/build/templates/app-page-runtime.js
+@@ -471,7 +471,8 @@ export function createAppPageEntrypoint({ tree, page, pathname, require: __next_
+         };
+         try {
+             const varyHeader = routeModule.getVaryHeader(resolvedPathname, interceptionRoutePatterns);
+-            res.setHeader('Vary', varyHeader);
++            // Preserve content-negotiation headers supplied by proxy.ts.
++            res.appendHeader('Vary', varyHeader);
+             let parentSpan;
+             const invokeRouteModule = async (span, context)=>{
+                 const nextReq = new NodeNextRequest(req);

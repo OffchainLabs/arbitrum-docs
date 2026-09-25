@@ -1,16 +1,32 @@
+import bridgingFaqs from './data/bridging-faqs.json';
+import buildingFaqs from './data/building-faqs.json';
 import buildingOrbitFaqs from './data/building-orbit-faqs.json';
+import buildingStylusFaqs from './data/building-stylus-faqs.json';
+import getStartedFaqs from './data/get-started-faqs.json';
+import nodeRunningFaqs from './data/node-running-faqs.json';
 import { FAQHashScroll } from './hash-scroll';
-import type { FAQ, FAQStructuredDataProps } from './types';
+import type { FAQ, FAQStructuredDataProps, FaqsId } from './types';
 
-const FAQ_MAP: Record<string, FAQ[]> = {
+// Explicit id-to-import map, not a dynamic `require`/`import` by template string: every entry is
+// statically analyzable, so the bundler can tree-shake and TypeScript can enforce `FaqsId`
+// exhaustiveness (see `Record<FaqsId, FAQ[]>` below).
+const FAQ_MAP: Record<FaqsId, FAQ[]> = {
+  'bridging': bridgingFaqs,
+  'building': buildingFaqs,
   'building-orbit': buildingOrbitFaqs,
+  'building-stylus': buildingStylusFaqs,
+  'get-started': getStartedFaqs,
+  'node-running': nodeRunningFaqs,
 };
 
 export default function FAQStructuredData({ faqsId, renderFaqs }: FAQStructuredDataProps) {
   const faqs = FAQ_MAP[faqsId];
   if (!faqs) {
-    console.warn(`FAQStructuredData: unknown faqsId="${faqsId}"`);
-    return null;
+    // MDX content is not type-checked against `FaqsId`, so a bad id can still reach here at
+    // runtime. Fail loudly instead of silently rendering nothing (and no JSON-LD block).
+    throw new Error(
+      `FAQStructuredData: unknown faqsId="${faqsId}". Known ids: ${Object.keys(FAQ_MAP).join(', ')}.`,
+    );
   }
 
   const faqStructuredData = {

@@ -20,7 +20,7 @@ This section provides extra information about how the Stylus Rust SDK handles st
 
 Rust smart contracts may use state that persists across transactions. There’s two primary ways to define storage, depending on if you want to use Rust or Solidity definitions. Both are equivalent, and are up to the developer depending on their needs.
 
-### [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html)
+### `#[storage]`
 
 The [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html) macro allows a Rust struct to be used in persistent storage.
 
@@ -184,7 +184,7 @@ fn nested_map(map: &mut StorageMap<u32, StorageVec<U8>>) {
 }
 ```
 
-### `Erase` and [`#[derive(Erase)]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/derive.Erase.html)
+### `Erase` and `#[derive(Erase)]`
 
 Some [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) values implement [`Erase`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html), which provides an [`erase()`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html#tymethod.erase) method for clearing state. We’ve implemented [`Erase`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html) for all primitives, and for vectors of primitives, but not maps. This is because a solidity [`mapping`](https://docs.soliditylang.org/en/latest/types.html#mapping-types) does not provide iteration, and so it’s generally impossible to know which slots to set to zero.
 
@@ -242,7 +242,7 @@ This section provides extra information about how the Stylus Rust SDK handles fu
 
 For non-payable methods the [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) macro can figure state mutability out for you based on the types of the arguments. Functions with `&self` will be considered `view`, those with `&mut self` will be considered `write`, and those with neither will be considered `pure`. Please note that `pure` and `view` functions may change the state of other contracts by calling into them.
 
-### [`#[entrypoint]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html)
+### `#[entrypoint]`
 
 This macro allows you to define the entrypoint, which is where Stylus execution begins. Without it, the contract will fail to pass `cargo stylus check`. Most commonly, the macro is used to annotate the top level storage struct.
 
@@ -373,7 +373,7 @@ You can call contracts in any programming language with the Stylus SDK.
 
 ### `sol_interface!`
 
-This macro defines a `struct` for each of the Solidity interfaces provided.
+The [`sol_interface!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html) macro defines a `struct` for each of the Solidity interfaces provided.
 
 ```rust
 sol_interface! {

@@ -18,41 +18,79 @@ import {
   Settings,
   ShieldCheck,
 } from 'lucide-react';
-import Link from 'next/link';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
-import { docsRoute } from '@/lib/shared';
+import { HomeHero } from '@/components/home-hero';
+import {
+  appName,
+  docsRoute,
+  getSiteUrl,
+  siteDescription,
+  siteTitle,
+  socialHandle,
+} from '@/lib/shared';
+
+/**
+ * The site root shipped with no title, description, canonical or social tags at all: everything
+ * below is what `app/docs/[[...slug]]/page.tsx` emits per page, stated once for the one route that
+ * is not a docs page (FS-2713).
+ *
+ * `og:image` is not listed. Next fills it, with its width, height, type and alt, from
+ * `opengraph-image.tsx` beside this file.
+ */
+export const metadata: Metadata = {
+  title: siteTitle,
+  description: siteDescription,
+  // Absolute, built from `getSiteUrl()` rather than left relative for `metadataBase` to resolve,
+  // for the reason the docs page gives: the value a wrong canonical would depend on is then read
+  // through the one helper that refuses to guess it in a production build.
+  alternates: {
+    canonical: new URL('/', getSiteUrl()).toString(),
+  },
+  openGraph: {
+    type: 'website',
+    siteName: appName,
+    title: siteTitle,
+    description: siteDescription,
+    url: new URL('/', getSiteUrl()).toString(),
+  },
+  // Next fills twitter:title/description/image from openGraph when they are absent, but the card
+  // type and the site handle have no such default and are what X needs to render a large card.
+  twitter: {
+    card: 'summary_large_image',
+    site: socialHandle,
+  },
+};
+
+/**
+ * The site's section eyebrow (`GradientFromTopSection`, `Dot`): a 9px dot with a soft shadow
+ * beside the title. `currentColor` keeps it readable in both themes without a second class list.
+ */
+function SectionHeading({ children }: { children: ReactNode }) {
+  return (
+    <h2 className="flex items-center gap-4 text-2xl font-medium tracking-tight">
+      <span
+        aria-hidden
+        className="size-[9px] shrink-0 rounded-full bg-current shadow-[0_0_4px_currentColor]"
+      />
+      {children}
+    </h2>
+  );
+}
 
 export default function HomePage() {
   const docs = (path: string) => `${docsRoute}${path}`;
 
   return (
-    <main className="flex flex-col flex-1">
-      <section className="flex flex-col items-center justify-center text-center px-4 py-10 gap-2 bg-linear-[135deg] from-arbitrum-gradient-from to-arbitrum-gradient-to text-white">
-        <h1 className="text-4xl font-medium tracking-tight">Get started with Arbitrum</h1>
-        <p className="max-w-2xl">
-          Arbitrum is the finance-native platform providing infrastructure for applications,
-          tokenization, and dedicated chains. These docs explain the protocols, chains, services,
-          and SDKs developers use to build on the Arbitrum platform.
-        </p>
-        <div className="flex gap-3">
-          <Link
-            href={docs('/build-decentralized-apps/quickstart-solidity-remix')}
-            className="rounded-md bg-fd-primary text-fd-primary-foreground px-5 py-2 font-medium"
-          >
-            Solidity quickstart
-          </Link>
-          <Link
-            href={docs('/stylus/quickstart')}
-            className="rounded-md border border-white/30 px-5 py-2 font-medium"
-          >
-            Stylus quickstart
-          </Link>
-        </div>
-      </section>
+    <main className="flex flex-1 flex-col bg-repeating-lines">
+      {/* The site's hero panel, static. Inset rather than full-bleed so the hairline background
+          shows around it, as it does on arbitrum.io. See components/home-hero.tsx. */}
+      <HomeHero />
 
-      <div className="mx-auto w-full max-w-5xl px-4 py-16 flex flex-col gap-12">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-4 py-16">
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Understand Arbitrum</h2>
+          <SectionHeading>Understand Arbitrum</SectionHeading>
           <Cards>
             <Card
               icon={<BookOpen />}
@@ -88,7 +126,7 @@ export default function HomePage() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Build decentralized apps</h2>
+          <SectionHeading>Build decentralized apps</SectionHeading>
           <Cards>
             <Card
               icon={<Code />}
@@ -118,7 +156,7 @@ export default function HomePage() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Launch your own chain</h2>
+          <SectionHeading>Launch your own chain</SectionHeading>
           <Cards>
             <Card
               icon={<BookOpen />}
@@ -150,7 +188,7 @@ export default function HomePage() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Run a node</h2>
+          <SectionHeading>Run a node</SectionHeading>
           <Cards>
             <Card
               icon={<Server />}
@@ -180,7 +218,7 @@ export default function HomePage() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Bridge tokens</h2>
+          <SectionHeading>Bridge tokens</SectionHeading>
           <Cards>
             <Card
               icon={<ArrowRightLeft />}

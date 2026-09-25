@@ -1,7 +1,6 @@
 {
   "title": "Third-party docs",
   "icon": "Boxes",
-  "root": true,
   "description": "Guides for tools and services in the Arbitrum ecosystem.",
   "pages": [
     "index",
@@ -27,9 +26,6 @@
     "Webacy",
     "Zerion",
     "ZeroDev",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
+    "..."
   ]
 }

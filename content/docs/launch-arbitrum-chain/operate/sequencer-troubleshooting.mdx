@@ -1,11 +1,10 @@
 ---
 title: 'Sequencer troubleshooting'
-sidebar_label: 'Sequencer troubleshooting'
 description: 'Diagnose and resolve sequencer feed problems, broadcast backlog errors, feed stalls, and the conditions that stop block production.'
 author: pete-vielhaber
 sme: jasonw-123
 user_story: As an Arbitrum chain operator, I need to diagnose why my sequencer stopped producing blocks or why its feed stalled, so I can restore normal operation.
-content_type: 'how-to'
+content_type: how-to
 ---
 
 This guide covers sequencer feed and block production problems. For setup, see [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs). For metric names and alert thresholds, see [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations). For batch posting problems, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting).
@@ -143,7 +142,7 @@ With the coordinator enabled, exactly one sequencer holds the lockout in Redis. 
 
 - [ERROR]—The `coordinator.priorities` key does not exist in Redis.
 - [CAUSE]—A new or wiped Redis instance, or one that was never populated.
-- [ACTION]—Register your sequencers. See [Redis priority registration](/docs/run-a-node/high-availability-sequencer-docs#redis-priority-registration).
+- [ACTION]—Register your sequencers. See [Redis priority registration](/docs/run-a-node/high-availability-sequencer-docs).
 
 #### `no sequencer appears to want the lockout on redis`
 

@@ -28,7 +28,7 @@ Here's a step by step walkthrough:
 
 Go to the [Subgraph Studio](https://thegraph.com/studio/) and connect your wallet. Once your wallet is connected, you can begin by clicking "Create a Subgraph". Please choose a good name for the subgraph: this name can't be edited later. It is recommended to use Title Case: "Subgraph Name Chain Name."
 
-You will then land on your subgraph's page. All the CLI commands you need will be visible on the right side of the page:
+You will then land on your subgraph's page. All the CLI commands you need are visible on the right side of the page.
 
 ### Install the Graph CLI
 
@@ -46,7 +46,7 @@ You can copy this directly from your subgraph page to include your specific subg
 graph init --studio <SUBGRAPH_SLUG>
 ```
 
-You'll be prompted to provide some info on your subgraph.
+You'll be prompted to provide some information about your subgraph.
 
 Simply have your contract verified on the block explorer, and the CLI will automatically obtain the ABI and set up your subgraph. The default settings will generate an entity for each event.
 
@@ -78,6 +78,8 @@ You can test your subgraph by making a sample query in the playground section. T
 
 Once your subgraph is ready for production, you can publish it to the decentralized network. On your subgraph's page in Subgraph Studio, click on the Publish button:
 
+![The Publish button on a subgraph page in Subgraph Studio](/img/third-party-thegraph-publish-button.png)
+
 Before you can query your subgraph, Indexers need to begin serving queries on it. In order to streamline this process, you can curate your own subgraph using `$GRT`.
 
 When publishing, you'll see the option to curate your subgraph. As of May 2024, it is recommended that you curate your own subgraph with at least 3,000 `GRT` to ensure that it is indexed and available for querying as soon as possible.
@@ -88,7 +90,7 @@ Congratulations! You can now query your subgraph on the decentralized network!
 
 You can start querying any subgraph on the decentralized network by passing a `GraphQL` query into the subgraph's query URL, which can be found at the top of its Explorer page.
 
-Here's an example from the [CryptoPunks Ethereum subgraph](https://thegraph.com/explorer/subgraphs/HdVdERFUe8h61vm2fDyycHgxjsde5PbB832NHgJfZNqK) by Messari:
+Here's an example from the [CryptoPunks Ethereum subgraph](https://thegraph.com/explorer/subgraphs/HdVdERFUe8h61vm2fDyycHgxjsde5PbB832NHgJfZNqK) by Messari.
 
 The query URL for this subgraph is:
 

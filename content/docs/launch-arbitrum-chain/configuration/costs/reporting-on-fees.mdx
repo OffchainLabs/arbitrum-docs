@@ -1,7 +1,6 @@
 ---
 title: 'Reporting on Fees'
 description: 'Learn how to setup an AEP fee router.'
-sidebar_label: 'Report your fees'
 user_story: As a current Arbitrum chain owner, I need to learn how to report on fees.
 content_type: 'how-to'
 author: gmehta2
@@ -20,7 +19,7 @@ As a <Term id="raas">RaaS</Term> or <Term id="chain-owner">Chain Owner</Term>, i
 
 There are two main <Term id="layer-1-l1">L1</Term> fee collector addresses:
 
-1. **L1 Base Fee**: Refunds [<Term id="batch-poster">Batch Poster</Term>](/docs/how-arbitrum-works/deep-dives/batchposter) for <Term id="parent-chain">parent chain</Term> posting costs
+1. **L1 Base Fee**: Refunds <Term id="batch-poster">Batch Poster</Term> for <Term id="parent-chain">parent chain</Term> posting costs
 2. **L1 Surplus**: Collects profit on <Term id="batch">Batch</Term> posting fees
 
 #### Important distinction:
@@ -42,7 +41,7 @@ There are two main <Term id="layer-1-l1">L1</Term> fee collector addresses:
 
 #### Fee recovery mechanism:
 
-1. [<Term id="arbos">ArbOS</Term>](/docs/how-arbitrum-works/deep-dives/arbos) consumes batch posting reports
+1. <Term id="arbos">ArbOS</Term> consumes batch posting reports
 2. Creates gas price view of parent chain on child chain
 3. Uses this view for pricing future transactions
 4. Implements balancing mechanism to ensure:

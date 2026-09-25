@@ -1,0 +1,560 @@
+/*
+ * Edge challenge flow visualisation.
+ *
+ * Ported from arbitrum-docs `src/css/partials/_edge-challenge-flow.scss`. Every surface, border and
+ * text colour now reads a Fumadocs theme token, so the diagram follows the site theme instead of
+ * carrying its own light/dark palettes. Only the four status hues (active, bisected, rival, OSP
+ * confirmed) stay bespoke: they encode meaning the legend refers to, and they are the one thing a
+ * theme token cannot express. They are declared once here and flipped for dark mode, so no hex
+ * value appears in the SVG code.
+ *
+ * The Docusaurus column-width overrides are gone: Fumadocs pages take the width they are given, and
+ * `full: true` frontmatter is how a page opts out of the narrow column.
+ */
+.ecf-page {
+  --ecf-surface: var(--color-fd-card);
+  --ecf-inner-surface: var(--color-fd-muted);
+  --ecf-border: var(--color-fd-border);
+  --ecf-text: var(--color-fd-foreground);
+  --ecf-muted: var(--color-fd-muted-foreground);
+  --ecf-badge-bg: var(--color-fd-muted);
+
+  --ecf-active: #1d6bd8;
+  --ecf-bisected: #b45309;
+  --ecf-rival: #d92d20;
+  --ecf-osp: #047857;
+
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 0 40px;
+  color: var(--ecf-text);
+}
+
+.dark .ecf-page {
+  --ecf-active: #6aa7ff;
+  --ecf-bisected: #ffb347;
+  --ecf-rival: #ff6b6b;
+  --ecf-osp: #4cd5a7;
+}
+
+/* The widget is not a `not-prose` island, so app/global.css's prose heading rules reach these
+   labels. At h5 those rules add uppercase and letter-spacing, which the panels do not want, and a
+   plain `.ecf-page h5` ties with `.prose :where(h5, h6)` on specificity, leaving the winner to
+   stylesheet order. The doubled class settles it outright. */
+.ecf-page.ecf-page h4,
+.ecf-page.ecf-page h5 {
+  margin-top: 0;
+  padding-top: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  border-bottom: none;
+}
+
+.ecf-header-info {
+  margin-bottom: 16px;
+}
+
+.ecf-header-info p {
+  margin: 0;
+  color: var(--ecf-muted);
+  line-height: 1.5;
+}
+
+.ecf-error {
+  padding: 20px;
+  color: var(--ecf-rival);
+  text-align: center;
+}
+
+.ecf-loading {
+  padding: 40px;
+  text-align: center;
+  color: var(--ecf-muted);
+}
+
+/* ── Controls ──────────────────────────────────────────────── */
+
+.ecf-controls {
+  margin: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.ecf-btn,
+.ecf-select {
+  background: var(--color-fd-secondary);
+  color: var(--color-fd-secondary-foreground);
+  border: 1px solid var(--ecf-border);
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.ecf-btn:hover:not([disabled]),
+.ecf-select:hover {
+  background: var(--color-fd-accent);
+  color: var(--color-fd-accent-foreground);
+}
+
+.ecf-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ecf-btn--play,
+.ecf-btn--show-all {
+  background: var(--ecf-osp);
+  border-color: var(--ecf-osp);
+  color: var(--color-fd-background);
+}
+
+.ecf-btn--pause {
+  background: var(--ecf-bisected);
+  border-color: var(--ecf-bisected);
+  color: var(--color-fd-background);
+}
+
+.ecf-btn--play:hover:not([disabled]),
+.ecf-btn--show-all:hover:not([disabled]),
+.ecf-btn--pause:hover:not([disabled]) {
+  opacity: 0.85;
+  color: var(--color-fd-background);
+}
+
+.ecf-select {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.ecf-speed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.ecf-progress {
+  font-size: 14px;
+  color: var(--ecf-muted);
+}
+
+/* ── Flow steps ────────────────────────────────────────────── */
+
+.ecf-flow {
+  border: 1px solid var(--ecf-border);
+  background: var(--ecf-surface);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.ecf-flow-steps {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ecf-step {
+  border: 1px solid var(--ecf-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: var(--ecf-inner-surface);
+  transition: border-color 0.2s ease;
+  flex: 1 1 0;
+  min-width: 140px;
+}
+
+.ecf-step h5 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 2px;
+}
+
+.ecf-step p {
+  margin: 0;
+  font-size: 11px;
+  color: var(--ecf-muted);
+  line-height: 1.3;
+}
+
+.ecf-step--active {
+  border-color: var(--ecf-active);
+  background: color-mix(in srgb, var(--ecf-active) 10%, var(--ecf-inner-surface));
+}
+
+.ecf-step--done {
+  border-color: var(--ecf-osp);
+}
+
+/* ── Layout ────────────────────────────────────────────────── */
+
+.ecf-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.ecf-panel {
+  border: 1px solid var(--ecf-border);
+  border-radius: 10px;
+  background: var(--ecf-surface);
+  padding: 14px;
+}
+
+.ecf-panel h4 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ecf-tree {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.ecf-sidebar {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.ecf-log {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ecf-log h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ecf-log-split {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  height: 520px;
+  max-height: 60vh;
+  min-height: 320px;
+}
+
+/* ── Tree ──────────────────────────────────────────────────── */
+
+.ecf-tree-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ecf-tree-panel {
+  border: 1px solid var(--ecf-border);
+  border-radius: 10px;
+  background: var(--ecf-inner-surface);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+.ecf-tree-panel h5 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.ecf-tree-canvas {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.ecf-tree-canvas svg {
+  border: 1px solid var(--ecf-border);
+  border-radius: 8px;
+  background: var(--ecf-inner-surface);
+  display: block;
+  min-width: 100%;
+}
+
+.ecf-tree-empty {
+  font-size: 12px;
+  color: var(--ecf-muted);
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* ── D3 nodes ──────────────────────────────────────────────── */
+
+.ecf-node rect {
+  fill: var(--color-fd-background);
+  stroke: var(--ecf-border);
+  stroke-width: 1.8;
+  rx: 8;
+  ry: 8;
+}
+
+/* Nodes are focusable, so they need a focus ring. SVG honours `outline` unevenly across browsers,
+   so the ring is drawn on the node's own rect instead. The class is doubled to outrank the status
+   modifiers below (`.ecf-node--active rect` and friends), which set the same property and would
+   otherwise win on source order alone. */
+.ecf-node:focus {
+  outline: none;
+}
+
+.ecf-node.ecf-node:focus-visible rect {
+  stroke: var(--color-fd-ring);
+  stroke-width: 3.5;
+}
+
+.ecf-node text {
+  fill: var(--ecf-text);
+  font-size: 14px;
+}
+
+.ecf-node--active rect {
+  stroke: var(--ecf-active);
+}
+
+.ecf-node--bisected rect {
+  stroke: var(--ecf-bisected);
+}
+
+.ecf-node--hasRival rect {
+  stroke: var(--ecf-rival);
+  stroke-width: 2;
+}
+
+.ecf-node--osp rect {
+  stroke: var(--ecf-osp);
+}
+
+.ecf-link {
+  fill: none;
+  stroke: var(--ecf-border);
+  stroke-width: 1.2;
+}
+
+.ecf-node-label {
+  font-size: 13px;
+  fill: var(--ecf-muted);
+}
+
+/* ── Legend and hints ──────────────────────────────────────── */
+
+.ecf-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.ecf-legend span {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--ecf-badge-bg);
+  border: 1px solid var(--ecf-border);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ecf-legend span::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.ecf-legend-active {
+  color: var(--ecf-active);
+}
+
+.ecf-legend-bisected {
+  color: var(--ecf-bisected);
+}
+
+.ecf-legend-rival {
+  color: var(--ecf-rival);
+}
+
+.ecf-legend-osp {
+  color: var(--ecf-osp);
+}
+
+.ecf-hint {
+  font-size: 13px;
+  color: var(--ecf-muted);
+  margin-top: 8px;
+}
+
+/* ── Info sections ─────────────────────────────────────────── */
+
+.ecf-log-section {
+  border: 1px solid var(--ecf-border);
+  border-radius: 8px;
+  background: var(--ecf-inner-surface);
+  padding: 10px;
+  overflow: auto;
+  min-height: 0;
+}
+
+.ecf-log-section h5 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ecf-placeholder-text {
+  color: var(--ecf-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 8px 0;
+}
+
+/* ── Node details ──────────────────────────────────────────── */
+
+.ecf-node-details {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ecf-field {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.ecf-field-label {
+  color: var(--ecf-muted);
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.ecf-copy-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ecf-copy-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ecf-copy-text {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+  font-size: 12px;
+}
+
+.ecf-copy-btn {
+  margin-left: 4px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--ecf-border);
+  background: var(--color-fd-secondary);
+  color: var(--color-fd-secondary-foreground);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.ecf-copy-btn:hover {
+  background: var(--color-fd-accent);
+  color: var(--color-fd-accent-foreground);
+}
+
+.ecf-tx-link {
+  color: var(--ecf-active);
+  text-decoration: none;
+}
+
+.ecf-tx-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Edge items ────────────────────────────────────────────── */
+
+.ecf-edge-list {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ecf-border);
+}
+
+.ecf-edge-item {
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  border: 1px solid var(--ecf-border);
+  border-radius: 6px;
+  background: var(--ecf-surface);
+  font-size: 12px;
+}
+
+.ecf-edge-item-header {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.ecf-edge-item-detail {
+  color: var(--ecf-muted);
+  font-size: 11px;
+}
+
+/* ── Event timeline ────────────────────────────────────────── */
+
+.ecf-timeline h5 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ecf-event-log {
+  padding-left: 18px;
+  margin: 0;
+  list-style-position: inside;
+}
+
+.ecf-event-log li {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--ecf-muted);
+}
+
+.ecf-event-log .ecf-log-current {
+  color: var(--ecf-text);
+  font-weight: 600;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .ecf-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ecf-tree,
+  .ecf-sidebar {
+    grid-column: 1;
+  }
+
+  .ecf-log-split {
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    grid-template-rows: auto auto;
+  }
+
+  .ecf-flow-steps {
+    flex-direction: column;
+  }
+}

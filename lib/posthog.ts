@@ -12,9 +12,8 @@ import { type PageFeedback, pageFeedback } from '@/components/feedback/schema';
 // non-async export here fails the build rather than quietly making this importable from a client
 // component.
 //
-// Capture is server-side because the PostHog client SDK is not loaded in this app — the browser
-// bridge in lib/inkeep.ts no-ops on `window.posthog`, so a client-side `capture()` would discard
-// the submission silently.
+// Capture is server-side so feedback also works locally and on preview deployments, where the
+// browser SDK is not initialized.
 //
 // API: https://posthog.com/docs/api/capture
 

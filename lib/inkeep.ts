@@ -1,21 +1,17 @@
+'use client';
+
 import type {
   InkeepAIChatSettings,
   InkeepBaseSettings,
   InkeepCallbackEvent,
   InkeepSearchSettings,
 } from '@inkeep/cxkit-react';
+import type { PostHog } from 'posthog-js';
+import { usePostHog } from 'posthog-js/react';
+import { useMemo } from 'react';
 
 // Shared Inkeep configuration, ported from the Docusaurus instance
-// (arbitrum-docs/inkeep.js + inkeep.config.js). Consumed by the client
-// components in components/inkeep/. Type-only imports keep this module
-// safe to import from server components.
-
-// PostHog analytics bridge, mirroring inkeep.config.js. No-op until PostHog
-// is wired into this app (window.posthog is undefined), so it carries zero
-// runtime cost today while preserving parity with Docusaurus.
-type PostHogClient = {
-  capture: (event: string, properties?: Record<string, unknown>) => void;
-};
+// (arbitrum-docs/inkeep.js + inkeep.config.js).
 
 const trackedEvents = [
   // Chat events
@@ -31,10 +27,8 @@ const trackedEvents = [
   'search_query_response_received',
 ];
 
-function handleInkeepEvent(event: InkeepCallbackEvent): void {
-  if (typeof window === 'undefined') return;
-  const posthog = (window as unknown as { posthog?: PostHogClient }).posthog;
-  if (!posthog) return;
+function handleInkeepEvent(event: InkeepCallbackEvent, posthog: PostHog): void {
+  if (!posthog.__loaded) return;
 
   const { eventName } = event;
   if (!trackedEvents.includes(eventName)) return;
@@ -66,23 +60,23 @@ function handleInkeepEvent(event: InkeepCallbackEvent): void {
   posthog.capture(`inkeep_${eventName}`, eventProperties);
 }
 
-export const inkeepBaseSettings: InkeepBaseSettings = {
+const baseSettings = {
   apiKey: process.env.NEXT_PUBLIC_INKEEP_API_KEY,
   primaryBrandColor: '#213147',
   organizationDisplayName: 'Arbitrum',
-  onEvent: handleInkeepEvent,
-  // Inkeep sets no cookies. Both flags are needed because the SDK checks them
-  // in two different layers (cxkit-primitives 0.5.119):
-  //   - optOutAnalyticalCookies stops user-provider writing the 365-day
-  //     `inkeepUsagePreferences_userId` returning-visitor id;
-  //   - optOutFunctionalCookies routes everything else the widget persists
-  //     (chat session id, last-used tab) to sessionStorage instead of cookies.
-  // Chat and search are unaffected; the visitor id is regenerated in memory per
-  // page load, and a chat thread survives a reload but not a new tab. Analytics
-  // still reach Inkeep (as ANONYMOUS) and onEvent above still fires — this is
-  // not an analytics opt-out, only a persistence one.
+  // Keep Inkeep's visitor ID in memory and its functional state in sessionStorage.
+  // Both options are required by cxkit-primitives: they control separate storage paths.
   privacyPreferences: { optOutAnalyticalCookies: true, optOutFunctionalCookies: true },
 };
+
+export function useInkeepBaseSettings(): InkeepBaseSettings {
+  const posthog = usePostHog();
+
+  return useMemo(
+    () => ({ ...baseSettings, onEvent: (event) => handleInkeepEvent(event, posthog) }),
+    [posthog],
+  );
+}
 
 export const inkeepAiChatSettings: InkeepAIChatSettings = {
   aiAssistantName: 'Arbitrum Assistant',

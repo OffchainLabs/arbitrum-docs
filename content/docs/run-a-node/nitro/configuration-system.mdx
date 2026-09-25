@@ -1,12 +1,13 @@
 ---
 title: 'Nitro configuration system'
 description: 'How Nitro loads configuration from files, environment variables, CLI flags, and S3 — including precedence rules and how to dump running config'
-sidebar_label: 'Configuration system'
 user_story: 'As a node operator, I want to understand how Nitro configuration works so I can correctly set up and debug my node config'
 content_type: 'how-to'
 author: gzeoneth
 sme: gzeoneth
 ---
+
+{/* sync-with-var: latestNitroNodeImage */}
 
 Nitro nodes accept configuration from multiple sources. When the same setting appears in more than one source, Nitro applies a deterministic precedence order so you always know which value wins. This guide explains each configuration source, how they interact, and how to inspect the merged result.
 

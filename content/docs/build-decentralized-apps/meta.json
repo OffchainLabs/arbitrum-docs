@@ -1,17 +1,12 @@
 {
   "title": "Build apps with Solidity",
   "icon": "Code",
-  "root": true,
   "description": "Deploy Solidity smart contracts to Arbitrum chains.",
   "pages": [
     "quickstart-solidity-remix",
     "quickstart-create-a-token",
     "machine-payments-protocol",
-    "[Solidity references](/docs/arbitrum-essentials/reference/solidity-references)",
     "troubleshooting-building",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
+    "..."
   ]
 }

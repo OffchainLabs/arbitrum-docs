@@ -1,21 +1,21 @@
 {
   "title": "Basic_examples",
   "pages": [
-    "abi_decode",
-    "abi_encode",
-    "bytes_in_bytes_out",
+    "hello_world",
+    "primitive_data_types",
+    "variables",
     "constants",
+    "function",
     "errors",
     "events",
-    "function",
-    "function_selector",
-    "hashing",
-    "hello_world",
     "inheritance",
-    "primitive_data_types",
-    "sending_ether",
-    "variables",
     "vm_affordances",
+    "sending_ether",
+    "function_selector",
+    "abi_encode",
+    "abi_decode",
+    "hashing",
+    "bytes_in_bytes_out",
     "..."
   ]
 }

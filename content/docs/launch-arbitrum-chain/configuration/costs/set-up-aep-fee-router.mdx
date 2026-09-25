@@ -1,7 +1,6 @@
 ---
 title: 'How to set up an AEP fee router'
 description: 'Learn how to setup an AEP fee router.'
-sidebar_label: 'Set up an AEP fee router'
 user_story: As a current Arbitrum chain owner, I need to learn how to set up an AEP fee router.
 content_type: 'how-to'
 author: Midroni, TucksonDev
@@ -30,7 +29,7 @@ The **AEP fee router** system relies on configuring an escrow contract as the in
 
 The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the <Term id="chain-owner">chain owner</Term>. A `rewardDistributor` will be deployed in three instances to collect from `L2Surplus`, `L2BaseFee`, `L1surplus` addresses.
 
-The `RewardDistributor` can be _permissionlessly_ called to perform a withdrawal, which simultaneously transfers 90% of accrued fees to the chain’s fee collector and <Var name="aepRevenueSharePercent" />% of accrued fees to a target address on the <Term id="parent-chain">parent chain</Term>. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
+The `RewardDistributor` can be _permissionlessly_ called to perform a withdrawal, which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a target address on the <Term id="parent-chain">parent chain</Term>. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
 
 ### ChildToParentRouter
 
@@ -47,7 +46,7 @@ This includes:
 - Deploying a `ChildToParentRouter` on their <Term id="arbitrum-chain">Arbitrum chain</Term> configured for their gas token and configured to send funds to either:
   - An address controlled by the Arbitrum Foundation on Ethereum (assuming the network is a Layer-2)
   - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for a Layer-3 network or higher)
-- Deploying a `RewardDistributor` contract configured to forward <Var name="aepRevenueSharePercent" />% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
+- Deploying a `RewardDistributor` contract configured to forward 10% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
 
 In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route **ETH** have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can [see which networks have a router deployed](#canonical-contracts).
 
@@ -82,7 +81,7 @@ The script performs the following operations:
 
 3. Deploy the `ChildToParentRouter` contract, configured to send the amounts received to the appropriate target address on the parent chain.
 
-4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and <Var name="aepRevenueSharePercent" />% to the ChildToParentRouter contract deployed in the previous step.
+4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and 10% to the ChildToParentRouter contract deployed in the previous step.
 
 5. Set each of the fee collectors to the `RewardDistributor` contracts.
 
@@ -98,7 +97,7 @@ To configure the script, you need to specify the following [environment variable
 - `ORBIT_CHAIN_ID`: chain id of the Arbitrum chain
 - `ORBIT_CHAIN_RPC`: RPC of the Arbitrum chain
 - `PARENT_CHAIN_ID`: chain id of the parent chain, which shouldn't be an Arbitrum chain
-- `PARENT_CHAIN_TARGET_ADDRESS`: address on the parent chain where <Var name="aepRevenueSharePercent" />% of the revenue will be sent to. You can find the potential target addresses in this document's [canonical contracts](#canonical-contracts) section. If the parent chain is not on that list, or if your chain uses a gas token different than the one the router is configured for, contact the Arbitrum Foundation to obtain a specific target address for your chain.
+- `PARENT_CHAIN_TARGET_ADDRESS`: address on the parent chain where 10% of the revenue will be sent to. You can find the potential target addresses in this document's [canonical contracts](#canonical-contracts) section. If the parent chain is not on that list, or if your chain uses a gas token different than the one the router is configured for, contact the Arbitrum Foundation to obtain a specific target address for your chain.
 
 Finally, follow these steps to execute the script (from the `examples/setup-aep-fee-router` folder):
 

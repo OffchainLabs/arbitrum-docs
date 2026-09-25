@@ -1,10 +1,4 @@
 {
   "title": "Reference",
-  "pages": [
-    "arbos-reference",
-    "finality-and-reorgs",
-    "geth",
-    "stf-inputs",
-    "..."
-  ]
+  "pages": ["geth", "arbos-reference", "stf-inputs", "finality-and-reorgs", "..."]
 }

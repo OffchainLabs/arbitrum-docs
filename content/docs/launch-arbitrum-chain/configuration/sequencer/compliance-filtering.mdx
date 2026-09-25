@@ -1,6 +1,5 @@
 ---
 title: 'Compliance filtering'
-sidebar_label: 'Compliance filtering'
 description: 'How chain owners configure protocol-level transaction filtering to restrict sanctioned addresses on their Arbitrum chain.'
 user_story: 'As a chain owner, I want to configure compliance rules so that transactions involving restricted addresses are filtered before execution.'
 content_type: how-to
@@ -99,18 +98,12 @@ Nodes are expected to always have a valid list in memory. On startup or restart,
 
 ## Deployment considerations
 
-| Component                       | Notes                                           |
-| ------------------------------- | ----------------------------------------------- |
-| Sequencer-level filtering       | Opcode and event filtering                      |
-| Transaction Guardian Precompile | Required for Delayed Inbox enforcement          |
-| Delayed Inbox Sentinel (STF)    | Requires audit; must be activated at deployment |
-| Burn exception rules            | Covers Aave, Paxos, and similar protocols       |
-
-<VanillaAdmonition type="note">
-
-All the components above are available with ArbOS 61 (Elara).
-
-</VanillaAdmonition>
+| Component                       | Availability   | Notes                                           |
+| ------------------------------- | -------------- | ----------------------------------------------- |
+| Sequencer-level filtering       | ArbOS 61 Elara | Opcode and event filtering                      |
+| Transaction Guardian Precompile | ArbOS 61 Elara | Required for Delayed Inbox enforcement          |
+| Delayed Inbox Sentinel (STF)    | ArbOS 61 Elara | Requires audit; must be activated at deployment |
+| Burn exception rules            | ArbOS 61 Elara | Covers Aave, Paxos, and similar protocols       |
 
 Compliance Filtering is disabled by default. Chain owners must explicitly configure and enable each component. Activation after chain deployment may require an ArbOS upgrade.
 

@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
-import { inkeepAiChatSettings, inkeepBaseSettings } from '@/lib/inkeep';
+import { inkeepAiChatSettings, useInkeepBaseSettings } from '@/lib/inkeep';
 
 // Floating "Ask AI" button, mirroring the Docusaurus ChatButton. Browser-only
 // so the widget bundle stays out of the server render path.
@@ -45,6 +45,7 @@ const IDLE_TIMEOUT_MS = 2000;
  * The flag starts `false` on the server and on the first client render, so hydration still matches.
  */
 export function InkeepChatButton() {
+  const baseSettings = useInkeepBaseSettings();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -81,5 +82,5 @@ export function InkeepChatButton() {
 
   if (!ready) return null;
 
-  return <ChatButton baseSettings={inkeepBaseSettings} aiChatSettings={inkeepAiChatSettings} />;
+  return <ChatButton baseSettings={baseSettings} aiChatSettings={inkeepAiChatSettings} />;
 }

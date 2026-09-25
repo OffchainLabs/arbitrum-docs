@@ -10,7 +10,7 @@ import { docsRoute } from './shared';
  * Each reference collection is a `defineCollections` doc collection (schema `{ id, title, sortAs? }`,
  * body = the definition). To add a reference type: define the collection in `source.config.ts` and
  * add one entry here. `<Reference>`, `<ReferenceList>`, and the definitions all read this registry.
- * The build-time validator (`scripts/references-check.mjs`) reads the collection files directly, so
+ * The build-time validator (`scripts/references-check.ts`) reads the collection files directly, so
  * it does not depend on this module.
  */
 /**

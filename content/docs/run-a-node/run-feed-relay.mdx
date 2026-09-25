@@ -6,9 +6,11 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
+{/* sync-with-var: latestNitroNodeImage */}
+
 <VanillaAdmonition type="warning">
 
-If running a single node, there is no need to run a <Term id="feed-relay">feed relay</Term>. When running more than one node, it is strongly recommended to run a single feed relay per data center, which will reduce ingress fees and improve stability.
+If running a single node, there is no need to run a feed relay. When running more than one node, it is strongly recommended to run a single feed relay per data center, which will reduce ingress fees and improve stability.
 
 Feed endpoints will soon require compression with a custom dictionary, so if connecting to a feed with anything other than a standard node, it is strongly suggested to run a local feed relay, which will provide an uncompressed feed by default.
 
@@ -68,7 +70,7 @@ If you run a fleet of nodes on behalf of customers (RPC provider, explorer, inde
 
 If you follow 1-3, a disconnect on any single connection, relay, or region is invisible to your nodes. A single node run for your own use needs none of this: it will see periodic reconnects, briefly trail the chain head during them, and always converge via parent chain batches.
 
-<ImageZoom src="/img/feed-relay-reference-architecture.svg" alt="The upstream feed endpoint feeds two relays, relay A in region 1 and relay B in region 2. Each relay holds two primary upstream connections from a distinct egress IP. Nodes in each region connect to both relays as primary feeds: their local relay and the relay in the other region." className="img-600px" />
+<ImageZoom src="/img/feed-relay-reference-architecture.svg" alt="The upstream feed endpoint feeds two relays, relay A in region 1 and relay B in region 2. Each relay holds two primary upstream connections from a distinct egress IP. Nodes in each region connect to both relays as primary feeds: their local relay and the relay in the other region." />
 
 ### Layer 1: your relays
 

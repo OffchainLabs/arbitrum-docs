@@ -67,10 +67,9 @@ git submodule update --init --recursive --force
 
 Next, make your changes to the State Transition Function. For example, you could [add a custom precompile](./customize-precompile).
 
-After this step, you should visit [Customize ArbOS version](./customize-arbos) to see if your changes need to upgrade the ArbOS version. If so, please continue
-to follow that document to add an ArbOS upgrade logic to your code.
+After this step, visit [Customize ArbOS version](./customize-arbos) to see if your changes need to upgrade the ArbOS version. If so, follow that guide to add ArbOS upgrade logic to your code.
 
-### Step 3. Run the node
+### Step 3. Run a local node
 
 To build the Arbitrum Nitro node image, you'll first need to install Docker.
 You can confirm if it's already setup by running `docker version` in a terminal.
@@ -83,9 +82,11 @@ Once you have Docker installed, you can simply run `docker build . --tag custom-
 
 A chain running a customized State Transition Function will produce blocks that don't match the verified Nitro WASM module root on the parent chain. Coordinate with Offchain Labs before operating a customized STF against a production chain, as the validator configuration required is not covered in this guide.
 
+For local testing before the matching WASM module root is set, run a node with staking disabled (`--node.staker.enable=false`). Do not use `--node.staker.dangerous.without-block-validator` to operate a validator without block validation.
+
 </VanillaAdmonition>
 
-You have two ways of running your node.
+You have two ways of running your local node.
 
 #### 1. Using the docker-compose file
 
@@ -150,7 +151,7 @@ Once you have the WASM module root, you can put it onchain by calling `setWasmMo
 The `upgradeExecutor` contract address and Rollup contract address can be found in the chain deployment info JSON.
 You can confirm that the WASM module root was updated by calling `wasmModuleRoot()` on the Rollup contract.
 
-Once you have set the new WASM module root onchain, the validator will recognize blocks produced by your customized STF. You can now run your node with fraud proof verification enabled.
+Once you have set the new WASM module root onchain, the validator will recognize blocks produced by your customized STF. You can now run your node with block validation enabled.
 
 You have two ways of running your node.
 
