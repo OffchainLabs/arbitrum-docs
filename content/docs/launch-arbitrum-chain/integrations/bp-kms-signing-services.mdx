@@ -31,12 +31,12 @@ There is **no native AWS KMS integration** in the Nitro codebase. KMS support is
 The config struct is `ExternalSignerCfg`:
 
 | Field                | koanf key              | Purpose                                                                                      |
-| --------------------- | ------------------------ | ----------------------------------------------------------------------------------------------- |
+| -------------------- | ---------------------- | -------------------------------------------------------------------------------------------- |
 | `URL`                | `url`                  | RPC endpoint of the signer. **Setting this enables external signing** (overrides local key). |
 | `Address`            | `address`              | Hex Ethereum address the signer controls; used to verify returned signatures.                |
 | `Method`             | `method`               | RPC method name, e.g., `eth_signTransaction`.                                                |
 | `RootCA`             | `root-ca`              | (Optional) CA cert to trust — enables self-signed server certs.                              |
-| `ClientCert`         | `client-cert`          | (Optional) client cert for mTLS.                                                              |
+| `ClientCert`         | `client-cert`          | (Optional) client cert for mTLS.                                                             |
 | `ClientPrivateKey`   | `client-private-key`   | (Optional) client key for mTLS (required if `client-cert` set).                              |
 | `InsecureSkipVerify` | `insecure-skip-verify` | Skip server TLS verification (not recommended).                                              |
 

@@ -30,9 +30,7 @@ When you bring up any form, you can navigate within the form's options using the
 
 <ImageZoom src="/img/run-node-seq-coordinator-manager.png" alt="Sequencer coordinator manager" className="img-600px" />
 
-<VanillaAdmonition type="note">
-One of the sequencers is marked with a `chosen` indicator. This visual cue helps you identify the current chosen sequencer.
-</VanillaAdmonition>
+<VanillaAdmonition type="note">One of the sequencers is marked with a `chosen` indicator. This visual cue helps you identify the current chosen sequencer.</VanillaAdmonition>
 You can click/enter on any sequencer element in the priority list to bring up a form for updating its position. Within this form, you have the options to make changes via a dropdown menu and then either click `Update` to see the change locally, `Cancel` to cancel the operation, or `Remove` to remove the sequencer from the priority list.
 
 When a sequencer is removed, it is automatically added to the `--Not in priority list but online--` list if it is online. Please remember that all changes made using this method are local and need to be saved to the Redis server by pressing `s` from the keyboard shortcuts to make them permanent.

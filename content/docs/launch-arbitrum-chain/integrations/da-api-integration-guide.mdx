@@ -1950,17 +1950,20 @@ func (s *Server) StartChunkedStore(ctx context.Context, timestamp, nChunks, chun
   return s.dataReceiver.StartReceiving(ctx, uint64(timestamp), uint64(nChunks), uint64(chunkSize), uint64(totalSize), uint64(timeout), sig)
 }
 
-func (s *Server) SendChunk(ctx context.Context, messageId, chunkId hexutil.Uint64, chunk hexutil.Bytes, sig hexutil.Bytes) error {
-  return s.dataReceiver.ReceiveChunk(ctx, data_streaming.MessageId(messageId), uint64(chunkId), chunk, sig)
+func (s \*Server) SendChunk(ctx context.Context, messageId, chunkId hexutil.Uint64, chunk hexutil.Bytes, sig hexutil.Bytes) error {
+return s.dataReceiver.ReceiveChunk(ctx, data_streaming.MessageId(messageId), uint64(chunkId), chunk, sig)
 }
 
-func (s *Server) CommitChunkedStore(ctx context.Context, messageId hexutil.Uint64, sig hexutil.Bytes) (*server_api.StoreResult, error) {
-  message, timeout, _, err := s.dataReceiver.FinalizeReceiving(ctx, data_streaming.MessageId(messageId), sig)
-  if err != nil {
-    return nil, err
-  }
-
-  // do the actual full data store and generate DA certificate
-  return s.Store(ctx, message, hexutil.Uint64(timeout))
+func (s *Server) CommitChunkedStore(ctx context.Context, messageId hexutil.Uint64, sig hexutil.Bytes) (*server*api.StoreResult, error) {
+message, timeout, *, err := s.dataReceiver.FinalizeReceiving(ctx, data_streaming.MessageId(messageId), sig)
+if err != nil {
+return nil, err
 }
+
+// do the actual full data store and generate DA certificate
+return s.Store(ctx, message, hexutil.Uint64(timeout))
+}
+
+```
+
 ```

@@ -28,11 +28,11 @@ By efficiently sending compressed transaction batches to the Sequencer Inbox con
 
 The following table summarizes the approximate latency and guarantee at each stage. Figures are indicative for an Ethereum parent chain and depend on configuration and network conditions.
 
-| Stage                                                         | Guarantee                                                                               | Approximate latency                                                                                      |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Soft finality (Sequencer feed)                                | Provisional ordering by the Sequencer                                                   | Sub-second                                                                                               |
-| Parent-chain data finality (batch posted and finalized on <Term id="L1">L1</Term>) | Transaction data is durably recorded and inherits the parent chain's consensus security | ~2 epochs, roughly 12–15 minutes (the batch poster defaults to referencing the L1 `safe` block)          |
-| Full settlement (assertion confirmed)                         | <Term id="L2">L2</Term> state is finalized and L2→L1 withdrawals can be executed                             | A bounded <Term id="challenge-period">challenge period</Term> under <Term id="bold">BoLD</Term>, on the order of days on mainnet |
+| Stage                                                                              | Guarantee                                                                               | Approximate latency                                                                                                              |
+| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Soft finality (Sequencer feed)                                                     | Provisional ordering by the Sequencer                                                   | Sub-second                                                                                                                       |
+| Parent-chain data finality (batch posted and finalized on <Term id="L1">L1</Term>) | Transaction data is durably recorded and inherits the parent chain's consensus security | ~2 epochs, roughly 12–15 minutes (the batch poster defaults to referencing the L1 `safe` block)                                  |
+| Full settlement (assertion confirmed)                                              | <Term id="L2">L2</Term> state is finalized and L2→L1 withdrawals can be executed        | A bounded <Term id="challenge-period">challenge period</Term> under <Term id="bold">BoLD</Term>, on the order of days on mainnet |
 
 ## Soft finality
 

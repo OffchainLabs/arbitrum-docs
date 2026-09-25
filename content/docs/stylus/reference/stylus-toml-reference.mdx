@@ -163,12 +163,12 @@ panic = "abort"
 opt-level = 3
 ```
 
-| Key             | Default | Description                                                                                                                                              |
-| --------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `codegen-units` | `1`     | Compile the entire crate as a single unit for maximum optimization.                                                                                      |
-| `strip`         | `true`  | Remove debug symbols and metadata from the binary.                                                                                                       |
-| `lto`           | `true`  | Enable link-time optimization across all crates.                                                                                                         |
-| `panic`         | `abort` | Use immediate abort on panic instead of unwinding (smaller binary).                                                                                      |
+| Key             | Default | Description                                                                                                                                                   |
+| --------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `codegen-units` | `1`     | Compile the entire crate as a single unit for maximum optimization.                                                                                           |
+| `strip`         | `true`  | Remove debug symbols and metadata from the binary.                                                                                                            |
+| `lto`           | `true`  | Enable link-time optimization across all crates.                                                                                                              |
+| `panic`         | `abort` | Use immediate abort on panic instead of unwinding (smaller binary).                                                                                           |
 | `opt-level`     | `3`     | Optimize for speed. Use `"s"` or `"z"` to optimize for binary size instead. See [Optimizing binaries](/docs/stylus/how-tos/optimizing-binaries) for guidance. |
 
 <VanillaAdmonition type="tip">

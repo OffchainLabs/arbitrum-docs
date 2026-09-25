@@ -26,7 +26,7 @@ This page covers running a node with Docker. If you want to deploy on Kubernetes
 Nitro stores its state trie using one of two schemes: **HashDB** (the default) or **PathDB**. Choose before you initialize the database. You cannot switch an existing database — moving between schemes means re-initializing from a snapshot built with the scheme you want.
 
 | Property                      | HashDB (default)                         | PathDB                                     |
-| :----------------------------- | :----------------------------------------- | :-------------------------------------------- |
+| :---------------------------- | :--------------------------------------- | :----------------------------------------- |
 | Flag                          | None; Nitro uses HashDB by default       | `--execution.caching.state-scheme=path`    |
 | State trie pruning            | Manual and offline, via `--init.prune`   | Automatic and online                       |
 | Block validation              | Supported                                | Not supported                              |
@@ -86,7 +86,7 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
 - Here is an example of how to run `nitro-node`:
 
 <div className="dynamic-content-tabs">
-  <Tabs items={["Arbitrum One, Nova, Sepolia","Arbitrum chains"]} defaultValue={null}>
+  <Tabs items={['Arbitrum One, Nova, Sepolia', 'Arbitrum chains']} defaultValue={null}>
     <Tab value="Arbitrum One, Nova, Sepolia">
       <include cwd>content/partials/run-a-node/_dao-chains-example.mdx</include>
     </Tab>
@@ -143,10 +143,10 @@ On **PathDB**, pruning is automatic and runs online. Nitro discards state older 
 
 When you leave `--execution.caching.state-history` unset, Nitro chooses the default at startup:
 
-| Node type                                         | Default `state-history`                                      |
-| :--------------------------------------------------- | :--------------------------------------------------------------- |
+| Node type                                         | Default `state-history`                                     |
+| :------------------------------------------------ | :---------------------------------------------------------- |
 | Full node (`--execution.caching.archive=false`)   | 345,600 blocks — 24 hours at the default 250 ms block speed |
-| Archive node (`--execution.caching.archive=true`) | `0`, meaning the entire chain                                |
+| Archive node (`--execution.caching.archive=true`) | `0`, meaning the entire chain                               |
 
 From v3.10.0, Nitro derives this default from the archive flag. On earlier versions the default was always 24 hours' worth of blocks, so an archive node needs an explicit `--execution.caching.state-history=0`.
 

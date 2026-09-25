@@ -1,7 +1,7 @@
 The DAS comes with the option of producing Prometheus metrics. This option can be activated by using the following parameters:
 
-| Parameter                        | Description                                  |
-| -------------------------------- | -------------------------------------------- |
+| Parameter                          | Description                                  |
+| ---------------------------------- | -------------------------------------------- |
 | `--metrics`                        | Enables the metrics server                   |
 | `--metrics-server.addr`            | Metrics server address (default "127.0.0.1") |
 | `--metrics-server.port`            | Metrics server port (default 6070)           |
@@ -11,8 +11,8 @@ When metrics are enabled, several useful metrics are available at the configured
 
 ### RPC metrics
 
-| Metric                                                       | Description                          |
-| ------------------------------------------------------------ | ------------------------------------ |
+| Metric                                                         | Description                          |
+| -------------------------------------------------------------- | ------------------------------------ |
 | `arb_das_rpc_store_requests`                                   | Count of RPC Store calls             |
 | `arb_das_rpc_store_success`                                    | Successful RPC Store calls           |
 | `arb_das_rpc_store_failure`                                    | Failed RPC Store calls               |
@@ -21,8 +21,8 @@ When metrics are enabled, several useful metrics are available at the configured
 
 ### REST metrics
 
-| Metric                                                            | Description                               |
-| ----------------------------------------------------------------- | ----------------------------------------- |
+| Metric                                                              | Description                                 |
+| ------------------------------------------------------------------- | ------------------------------------------- |
 | `arb_das_rest_getbyhash_requests`                                   | Count of REST `GetByHash` calls             |
 | `arb_das_rest_getbyhash_success`                                    | Successful REST `GetByHash` calls           |
 | `arb_das_rest_getbyhash_failure`                                    | Failed REST `GetByHash` calls               |

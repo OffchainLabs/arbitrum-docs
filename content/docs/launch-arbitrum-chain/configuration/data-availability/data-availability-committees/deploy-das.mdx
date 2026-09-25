@@ -121,30 +121,30 @@ offchainlabs/nitro-node:v3.11.4-7d5ac27 keygen --dir /data/keys
 
 To run the DAS, we'll use the `anytrustserver` tool and we'll configure the following parameters:
 
-| Parameter                                   | Description                                                                                                     |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `--parent-chain.node-url`   | RPC endpoint of a parent chain node                                                                             |
+| Parameter                                | Description                                                                                                     |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `--parent-chain.node-url`                | RPC endpoint of a parent chain node                                                                             |
 | `--parent-chain.sequencer-inbox-address` | Address of the `SequencerInbox` in the parent chain                                                             |
-| `--data-availability.key.key-dir`             | The absolute path to the directory inside the volume to read the BLS keypair ('das_bls.pub' and 'das_bls') from |
-| `--enable-rpc`                                | Enables the HTTP-RPC server listening on `--rpc-addr` and `--rpc-port`                                              |
-| `--rpc-addr`                                  | HTTP-RPC server listening interface (default "localhost")                                                       |
-| `--rpc-port`                                  | (Optional) HTTP-RPC server listening port (default 9876)                                                        |
-| `--enable-rest`                               | Enables the REST server listening on `--rest-addr` and `--rest-port`                                                |
-| `--rest-addr`                                 | REST server listening interface (default "localhost")                                                           |
-| `--rest-port`                                 | (Optional) REST server listening port (default 9877)                                                            |
-| `--log-level`                                 | Log level: CRIT, ERROR, WARN, INFO, DEBUG, or TRACE (default INFO)                                              |
+| `--data-availability.key.key-dir`        | The absolute path to the directory inside the volume to read the BLS keypair ('das_bls.pub' and 'das_bls') from |
+| `--enable-rpc`                           | Enables the HTTP-RPC server listening on `--rpc-addr` and `--rpc-port`                                          |
+| `--rpc-addr`                             | HTTP-RPC server listening interface (default "localhost")                                                       |
+| `--rpc-port`                             | (Optional) HTTP-RPC server listening port (default 9876)                                                        |
+| `--enable-rest`                          | Enables the REST server listening on `--rest-addr` and `--rest-port`                                            |
+| `--rest-addr`                            | REST server listening interface (default "localhost")                                                           |
+| `--rest-port`                            | (Optional) REST server listening port (default 9877)                                                            |
+| `--log-level`                            | Log level: CRIT, ERROR, WARN, INFO, DEBUG, or TRACE (default INFO)                                              |
 
 To enable caching, you can use the following parameters:
 
-| Parameter                                | Description                                                                        |
-| ---------------------------------------- | ---------------------------------------------------------------------------------- |
+| Parameter                                  | Description                                                                        |
+| ------------------------------------------ | ---------------------------------------------------------------------------------- |
 | `--data-availability.local-cache.enable`   | Enables local in-memory caching of sequencer batch data                            |
 | `--data-availability.local-cache.capacity` | Maximum number of entries (up to 64KB each) to store in the cache. (default 20000) |
 
 To enable the REST aggregator, use the following parameters:
 
-| Parameter                                                                   | Description                                                                                                                                                                                 |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter                                                                     | Description                                                                                                                                                                                 |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--data-availability.rest-aggregator.enable`                                  | Enables retrieval of sequencer batch data from a list of remote REST endpoints                                                                                                              |
 | `--data-availability.rest-aggregator.online-url-list`                         | A URL to a list of URLs of REST DAS endpoints that is checked at startup. This option is additive with the urls option                                                                      |
 | `--data-availability.rest-aggregator.urls`                                    | List of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints. This option is additive with the online-url-list option                                     |
@@ -157,7 +157,7 @@ To enable the REST aggregator, use the following parameters:
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
 <div className="dynamic-content-tabs">
-  <Tabs items={["AWS S3 bucket","Local files","(Experimental) Google Cloud Storage"]}>
+  <Tabs items={['AWS S3 bucket', 'Local files', '(Experimental) Google Cloud Storage']}>
     <Tab value="AWS S3 bucket">
       <include cwd>content/partials/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/parameters/_s3-parameters.mdx</include>
     </Tab>

@@ -177,13 +177,13 @@ const isValid = await isValidKeysetHash(publicClient, {
 
 ### Failure modes
 
-| Failure                    | Impact                                       | Recovery                                                                             |
-| -------------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Failure                    | Impact                                       | Recovery                                                                  |
+| -------------------------- | -------------------------------------------- | ------------------------------------------------------------------------- |
 | < `K` members respond      | Cannot form valid DACert                     | <Term id="batch-poster">Batch Poster</Term> falls back to onchain posting |
-| Wrong BLS key              | Signature verification fails for that member | Other members still counted; if `K` met, cert valid                                  |
-| All DAS backends down      | No DACert possible                           | Immediate fallback to batch posting                                                  |
-| Keyset invalidated onchain | DACerts referencing that keyset rejected     | Must set a new valid keyset                                                          |
-| Network partition          | Subset of members unreachable                | Falls back if remaining < `K`                                                        |
+| Wrong BLS key              | Signature verification fails for that member | Other members still counted; if `K` met, cert valid                       |
+| All DAS backends down      | No DACert possible                           | Immediate fallback to batch posting                                       |
+| Keyset invalidated onchain | DACerts referencing that keyset rejected     | Must set a new valid keyset                                               |
+| Network partition          | Subset of members unreachable                | Falls back if remaining < `K`                                             |
 
 ### The fallback mechanism
 
