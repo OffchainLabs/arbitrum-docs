@@ -13,6 +13,11 @@ on:
 permissions:
   contents: read
 
+# The pre-commit hook is for working copies; here the same checks run as gates. HUSKY=0 also
+# stops `pnpm install` from writing .husky/_ into the runner's checkout.
+env:
+  HUSKY: 0
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -72,6 +77,17 @@ jobs:
       # 0e5a64a, A2 and A5 in 297730a, and A6 shipped at zero with the defect it names.
       - name: MDX structural lint
         run: pnpm content:lint
+
+      # Reached zero on 2026-09-24. 801 of the 814 findings were MD060 table alignment, cleared by
+      # the Prettier reformat; the rest were headings and footnotes on the line directly after a
+      # closing JSX tag, which CommonMark folds into the HTML block.
+      - name: Markdown lint
+        run: pnpm lint:markdown
+
+      # Offline mode takes the page set from the content tree instead of /llms.txt. The online
+      # mode against a preview stays the authority; run it by hand.
+      - name: Redirect audit (offline)
+        run: pnpm redirects:check:offline
 
   content-debt:
     # This gate fails on pre-existing debt, so it reports without blocking.
