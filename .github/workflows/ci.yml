@@ -89,42 +89,10 @@ jobs:
       - name: Redirect audit (offline)
         run: pnpm redirects:check:offline
 
-  content-debt:
-    # This gate fails on pre-existing debt, so it reports without blocking.
-    # Count verified on 2026-09-21:
-    #   format:check      49 files unformatted  → fix with `pnpm format`
-    #
-    # Read the count from the script's own summary line, not by counting printed lines:
-    # a checker that groups by rule and truncates each group is how this comment once
-    # came to claim 39 findings.
-    #
-    # references:check reached zero and moved into `gates` on 2026-08-20.
-    # check-links reached zero and moved into `gates` on 2026-08-31.
-    # content:lint reached zero and moved into `gates` on 2026-09-21. Its history: A1
-    # (empty admonition body, was 98) and A4 (markdown/entities inside title=, was 68)
-    # were one defect, not 166 — the Docusaurus→Fumadocs admonition codemod stranded body
-    # prose inside `title=`, and recovering it in 0e5a64a took this job from 181 to 15.
-    # A2 and A5 went from 9 to 0 in 297730a.
-    # Move a step into the `gates` job above once its count reaches zero.
-    name: Content debt (non-blocking)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
-
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
+      # Reached zero on 2026-09-24: MDX joined Prettier's scope, and the files the tooling writes
+      # (meta.json, redirects.*.mjs) moved to .prettierignore instead of being formatted once.
       - name: Formatting
         run: pnpm format:check
-        continue-on-error: true
 
   build:
     # Non-blocking: the MDX image pipeline fetches remote images at build time, so a

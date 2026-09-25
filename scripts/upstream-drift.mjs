@@ -51,9 +51,20 @@ function addedDate(treeA, relPath) {
   try {
     const out = execFileSync(
       'git',
-      ['-C', treeA, 'log', '--diff-filter=A', '--format=%ad', '--date=short', '--', path.join('docs', relPath)],
+      [
+        '-C',
+        treeA,
+        'log',
+        '--diff-filter=A',
+        '--format=%ad',
+        '--date=short',
+        '--',
+        path.join('docs', relPath),
+      ],
       { encoding: 'utf8' },
-    ).trim().split('\n');
+    )
+      .trim()
+      .split('\n');
     return out[out.length - 1] || null;
   } catch {
     return null;
@@ -96,14 +107,24 @@ function main() {
 
     if (!relB) {
       const added = addedDate(treeARepo, relA);
-      absent.push({ treeA: relA, added, kind: added && added > PORT_WINDOW_END ? 'DRIFT' : 'MISS' });
+      absent.push({
+        treeA: relA,
+        added,
+        kind: added && added > PORT_WINDOW_END ? 'DRIFT' : 'MISS',
+      });
       continue;
     }
 
     const aLines = bodyLineCount(readFileSync(path.join(treeA, relA), 'utf8'));
     const bLines = bodyLineCount(readFileSync(path.join(treeB, relB), 'utf8'));
     if (aLines > 20 && bLines / aLines < GUTTED_RATIO) {
-      gutted.push({ treeA: relA, treeB: relB, aLines, bLines, ratio: +(bLines / aLines).toFixed(2) });
+      gutted.push({
+        treeA: relA,
+        treeB: relB,
+        aLines,
+        bLines,
+        ratio: +(bLines / aLines).toFixed(2),
+      });
     }
   }
 

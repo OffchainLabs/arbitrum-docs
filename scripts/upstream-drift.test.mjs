@@ -94,7 +94,9 @@ test('resolveTreeBMatch refuses an ambiguous bare-slug fallback', () => {
 });
 
 test('resolveTreeBMatch still applies whole-file renames via mapSectionPath', () => {
-  const index = buildTreeIndex(['launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx']);
+  const index = buildTreeIndex([
+    'launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx',
+  ]);
   assert.equal(
     resolveTreeBMatch(index, 'launch-arbitrum-chain/operate/monitoring.mdx'),
     'launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx',

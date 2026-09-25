@@ -19,6 +19,12 @@ pnpm-lock.yaml
 # (formatting these would break `partials:check` catalog-freshness)
 content/partials/CATALOG.md
 content/partials/manifest.json
+# Written by move-doc and the redirect generators as JSON.stringify / one entry per line;
+# Prettier would reflow them and the next tool run would undo it.
+content/**/meta.json
+redirects.config.mjs
+redirects.legacy.mjs
+redirects.current.mjs
 
 # Assistant guidance; parts of CLAUDE.md are rewritten by `next dev`
 CLAUDE.md
