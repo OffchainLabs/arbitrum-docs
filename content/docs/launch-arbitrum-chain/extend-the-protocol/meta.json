@@ -1,9 +1,10 @@
 {
-  "title": "Quickstart",
+  "title": "Extend the protocol",
   "pages": [
-    "l3-rollup-from-scratch",
-    "l3-rollup-testnet",
-    "sdk-introduction",
+    "arbos",
+    "da-api-guide",
+    "precompiles",
+    "stf",
     "...",
     "[Chain info](/docs/chain-info)",
     "[Audit reports](/docs/audit-reports)",

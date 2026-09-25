@@ -1,12 +1,14 @@
 {
   "title": "Ecosystem support",
   "pages": [
-    "layer-leap",
-    "bridge-ui",
-    "da-api-integration-guide",
-    "bridged-usdc-standard",
-    "exchange-integration-checklist",
     "bp-kms-signing-services",
-    "..."
+    "bridge-ui",
+    "bridged-usdc",
+    "exchange-integration-checklist",
+    "infrastructure-providers",
+    "...",
+    "[Chain info](/docs/chain-info)",
+    "[Audit reports](/docs/audit-reports)",
+    "[Contribute](/docs/contribute)"
   ]
 }

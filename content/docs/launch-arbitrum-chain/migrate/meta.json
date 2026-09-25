@@ -1,5 +1,12 @@
 {
   "title": "Migrate",
   "icon": "ArrowRightLeft",
-  "pages": ["index", "migrate-from-another-stack", "migrate-between-raases"]
+  "pages": [
+    "between-raases",
+    "from-another-stack",
+    "...",
+    "[Chain info](/docs/chain-info)",
+    "[Audit reports](/docs/audit-reports)",
+    "[Contribute](/docs/contribute)"
+  ]
 }

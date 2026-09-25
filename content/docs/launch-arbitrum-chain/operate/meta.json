@@ -2,18 +2,21 @@
   "title": "Operate your chain",
   "pages": [
     "arbos-upgrade",
-    "upgrade-runbook",
+    "batch-poster-troubleshooting",
     "bold-upgrade-playbook",
-    "error-index",
-    "monitoring-tools-and-considerations",
-    "ownership-access-control",
-    "key-rotation",
-    "gas-target",
-    "state-growth",
-    "post-launch-contract-deployments",
     "bp-recovery",
-    "validator-troubleshooting",
+    "error-index",
+    "key-rotation",
+    "monitoring",
+    "ownership-and-access",
+    "post-launch-deployments",
     "sequencer-troubleshooting",
-    "..."
+    "state-growth",
+    "upgrade-runbook",
+    "validator-troubleshooting",
+    "...",
+    "[Chain info](/docs/chain-info)",
+    "[Audit reports](/docs/audit-reports)",
+    "[Contribute](/docs/contribute)"
   ]
 }

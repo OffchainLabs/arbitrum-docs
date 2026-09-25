@@ -1,4 +1,13 @@
 {
   "title": "Concepts",
-  "pages": ["a-gentle-introduction", "aep-license", "arbitrum-chain-sdk-introduction", "public-preview-expectations", "..."]
+  "pages": [
+    "introduction",
+    "faq",
+    "license",
+    "public-preview",
+    "...",
+    "[Chain info](/docs/chain-info)",
+    "[Audit reports](/docs/audit-reports)",
+    "[Contribute](/docs/contribute)"
+  ]
 }

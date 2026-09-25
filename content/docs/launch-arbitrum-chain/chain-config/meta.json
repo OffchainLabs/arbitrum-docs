@@ -1,0 +1,17 @@
+{
+  "title": "Extend the protocol",
+  "pages": [
+    "[Batch poster](/docs/launch-arbitrum-chain/chain-config/batch-poster)",
+    "[Costs](/docs/launch-arbitrum-chain/chain-config/costs)",
+    "[Data availability](/docs/launch-arbitrum-chain/chain-config/data-availability)",
+    "[Execution](/docs/launch-arbitrum-chain/chain-config/execution)",
+    "[Sequencer](/docs/launch-arbitrum-chain/chain-config/sequencer)",
+    "[Validation](/docs/launch-arbitrum-chain/chain-config/validation)",
+    "additional-configuration-parameters",
+    "chainConfig-reference",
+    "...",
+    "[Chain info](/docs/chain-info)",
+    "[Audit reports](/docs/audit-reports)",
+    "[Contribute](/docs/contribute)"
+  ]
+}
