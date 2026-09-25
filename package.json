@@ -44,6 +44,7 @@
     "format:check": "prettier --check .",
     "lint:markdown": "markdownlint \"**/*.{md,mdx}\" --ignore-path .markdownlintignore",
     "lint:markdown:fix": "markdownlint --fix \"**/*.{md,mdx}\" --ignore-path .markdownlintignore",
+    "prepare": "husky",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
@@ -75,6 +76,7 @@
     "@types/node": "^25.9.5",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
+    "husky": "9.1.7",
     "markdownlint-cli": "0.49.1",
     "postcss": "^8.5.26",
     "prettier": "3.9.6",
