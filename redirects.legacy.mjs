@@ -1094,23 +1094,22 @@ export const legacyRedirects = [
   },
   {
     source: '/launch-arbitrum-chain/arbitrum-node-runners/enale-post-4blobs',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs',
+    destination: '/docs/launch-arbitrum-chain/configuration/batch-poster/enable-4844-blobs',
     permanent: false,
   },
   {
     source: '/launch-arbitrum-chain/arbitrum-node-runners/high-availability-sequencer-docs',
-    destination: '/docs/run-a-node/high-availability-sequencer-docs',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
     permanent: false,
   },
   {
     source: '/launch-arbitrum-chain/arbitrum-node-runners/run-batch-poster',
-    destination: '/docs/run-a-node/run-batch-poster',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
     permanent: false,
   },
   {
     source: '/launch-arbitrum-chain/arbitrum-node-runners/run-split-validator-node',
-    destination: '/docs/run-a-node/run-split-validator-node',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
     permanent: false,
   },
   {
@@ -1273,8 +1272,7 @@ export const legacyRedirects = [
   {
     source:
       '/launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control',
+    destination: '/docs/launch-arbitrum-chain/configuration/validation/assertion-control',
     permanent: false,
   },
   {
@@ -1293,8 +1291,7 @@ export const legacyRedirects = [
   {
     source:
       '/launch-arbitrum-chain/configure-your-chain/common-configurations/enable-post-4844-blobs',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs',
+    destination: '/docs/launch-arbitrum-chain/configuration/batch-poster/enable-4844-blobs',
     permanent: false,
   },
   {
@@ -1477,14 +1474,13 @@ export const legacyRedirects = [
   {
     source:
       '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-poster-fee-tuning',
-    destination: '/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-fee-tuning',
+    destination: '/docs/launch-arbitrum-chain/configuration/batch-poster/fee-tuning',
     permanent: false,
   },
   {
     source:
       '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/batch-posting-assertion-control',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control',
+    destination: '/docs/launch-arbitrum-chain/configuration/validation/assertion-control',
     permanent: false,
   },
   {
@@ -1509,8 +1505,7 @@ export const legacyRedirects = [
   {
     source:
       '/launch-arbitrum-chain/configure-your-chain/common/validation-and-security/enable-post-4844-blobs',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/data-availability/enable-post-4844-blobs',
+    destination: '/docs/launch-arbitrum-chain/configuration/batch-poster/enable-4844-blobs',
     permanent: false,
   },
   {
@@ -1908,8 +1903,7 @@ export const legacyRedirects = [
   {
     source:
       '/launch-orbit-chain/configure-your-chain/common-configurations/batch-posting-assertion-control',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control',
+    destination: '/docs/launch-arbitrum-chain/configuration/validation/assertion-control',
     permanent: false,
   },
   {
@@ -2246,8 +2240,7 @@ export const legacyRedirects = [
   },
   {
     source: '/launch-orbit-chain/reference/orbit-batch-poster-configuration',
-    destination:
-      '/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control',
+    destination: '/docs/launch-arbitrum-chain/configuration/validation/assertion-control',
     permanent: false,
   },
   {
@@ -2642,12 +2635,12 @@ export const legacyRedirects = [
   },
   {
     source: '/run-arbitrum-node/more-types/run-split-validator-node',
-    destination: '/docs/run-a-node/run-split-validator-node',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
     permanent: false,
   },
   {
     source: '/run-arbitrum-node/more-types/split-validator-node',
-    destination: '/docs/run-a-node/run-split-validator-node',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
     permanent: false,
   },
   {
@@ -2667,7 +2660,7 @@ export const legacyRedirects = [
   },
   {
     source: '/run-arbitrum-node/sequencer/high-availability-sequencer-docs',
-    destination: '/docs/run-a-node/high-availability-sequencer-docs',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
     permanent: false,
   },
   {

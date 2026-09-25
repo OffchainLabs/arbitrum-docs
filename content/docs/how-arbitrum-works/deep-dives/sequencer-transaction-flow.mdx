@@ -16,7 +16,7 @@ Two companion pages cover the surrounding context, and this page assumes you hav
 
 <VanillaAdmonition type="note" title="Scope of this page">
 
-This page describes the internals of a single Sequencer instance. For the behavior of <Term id="arbitrum-one">Arbitrum One</Term>'s public sequencer endpoint (latency expectations, retries, and fallback patterns), see [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers). For running multiple redundant Sequencers with Redis-based coordination, see [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs) and [How to run a Sequencer Coordinator Manager](/docs/run-a-node/sequencer/run-sequencer-coordination-manager).
+This page describes the internals of a single Sequencer instance. For the behavior of <Term id="arbitrum-one">Arbitrum One</Term>'s public sequencer endpoint (latency expectations, retries, and fallback patterns), see [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers). For running multiple redundant Sequencers with Redis-based coordination, see [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer) and [How to run a Sequencer Coordinator Manager](/docs/run-a-node/sequencer/run-sequencer-coordination-manager).
 
 </VanillaAdmonition>
 
@@ -122,6 +122,6 @@ This pattern complements rather than replaces queue tuning: `queue-size` and `qu
 - [The batch poster](/docs/how-arbitrum-works/deep-dives/batchposter): what happens after sequencing, from segment building to the parent chain transaction
 - [Transaction lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle): all submission pathways, including bypassing the Sequencer
 - [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers): public endpoint behavior, retries, and fallback patterns
-- [How to set up a high-availability sequencer](/docs/run-a-node/high-availability-sequencer-docs): redundant Sequencers with Redis-based coordination
+- [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer): redundant Sequencers with Redis-based coordination
 - [How to run a Sequencer Coordinator Manager](/docs/run-a-node/sequencer/run-sequencer-coordination-manager): managing the sequencer priority list
 - [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed) and [How to run a feed relay](/docs/run-a-node/run-feed-relay)

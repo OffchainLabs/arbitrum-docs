@@ -1,21 +1,22 @@
 ---
 title: 'How to set up a high-availability sequencer'
-description: 'Learn how to set up a high-availabilty sequencer for your Arbitrum chain.'
+description: 'Learn how to set up a high-availability sequencer for your Arbitrum chain.'
 content_type: 'how-to'
 author: Jason Wan
 sme: Jason Wan
 ---
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 This documentation is for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, see [How to run a testnet sequencer node](/docs/run-a-node/sequencer/run-sequencer-node).
 
-</VanillaAdmonition>
+</Callout>
+
 ## Introduction
 
-The sequencer is a critical component of your Arbitrum chain and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from full nodes, queuing them, and returning feed messages to those full nodes. It subsequently sends queued transactions to batch posters for data posting.
+The [sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) is a critical component of your <Term id="arbitrum-chain">Arbitrum chain</Term> and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from <Term id="arbitrum-full-node">full nodes</Term>, queuing them, and returning <Term id="sequencer-feed">feed</Term> messages to those full nodes. It subsequently sends queued transactions to <Term id="batch-poster">batch posters</Term> for data posting.
 
-If your sequencer goes offline, the network cannot process new transactions arriving at the child chain's RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
+If your sequencer goes offline, the network cannot process new transactions arriving at the <Term id="child-chain">child chain</Term>'s RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
 
 ## Prerequisites
 
@@ -24,7 +25,7 @@ Before you begin, ensure you have:
 - Experience with Kubernetes and container orchestration
 - Access to a Kubernetes cluster with multiple availability zones
 - Understanding of Redis and cloud infrastructure
-- A properly configured parent chain node or RPC node endpoint
+- A properly configured <Term id="parent-chain">parent chain</Term> node or RPC node endpoint
 - Sequencer keys and permissions
 - Sufficient storage and compute resources
 
@@ -33,7 +34,7 @@ Before you begin, ensure you have:
 A high-availability sequencer deployment consists of seven key components:
 
 1. **CDN/Load Balancer**: Manages traffic routing and bot detection
-2. **Nitro full nodes**: Process read requests and forward write transactions
+2. **<Term id="arbitrum-nitro">Nitro</Term> full nodes**: Process read requests and forward write transactions
 3. **External Relays**: Handle public feed traffic
 4. **Sequencer Relays**: Combine feeds from all sequencers
 5. **Sequencers**: Multiple redundant transaction queuing machines
@@ -48,13 +49,13 @@ The architecture varies slightly depending on whether your full nodes use Redis 
 
 In this configuration, full nodes query Redis to determine the active sequencer and forward transactions directly to it:
 
-<ImageZoom src="/img/ha-sequencer-sendto-active.png" alt="send to active enable" className="img-900px" />
+<ImageZoom src="/img/ha-sequencer-sendto-active.png" alt="send to active enabled" className="img-900px" />
 
 #### Send to active disabled
 
 In this configuration, full nodes forward transactions to a predefined endpoint without checking which sequencer is active:
 
-<ImageZoom src="/img/ha-sequencer-send-to-nonactive.png" alt="send to active disable" className="img-900px" />
+<ImageZoom src="/img/ha-sequencer-send-to-nonactive.png" alt="send to active disabled" className="img-900px" />
 
 ## Using Helm charts for deployment
 
@@ -219,11 +220,11 @@ Two consequences follow from step 2:
 - **Order is priority.** The first entry that is healthy and synced wins. Put your preferred sequencer first.
 - **`my-url` must match its list entry exactly.** The comparison is a string match. A trailing slash, a different port form, or an IP address instead of a hostname all cause a silent mismatch.
 
-<VanillaAdmonition type="warning" title="Never register the batch poster">
+<Callout type="warning" title="Never register the batch poster">
 
 The batch poster runs with `node.seq-coordinator.enable=true` so it can follow coordination state, but it must stay out of `coordinator.priorities`. If it reaches the top of the list, it is selected as the active sequencer while having no sequencer to run, and the chain stops producing blocks. Nitro logs `myurl main sequencer, but no sequencer exists`.
 
-</VanillaAdmonition>
+</Callout>
 
 ##### Verifying registration
 
@@ -249,11 +250,11 @@ Two log messages tell you the priority list is the problem:
 
 For a full diagnostic path, see [Sequencer troubleshooting](/docs/launch-arbitrum-chain/operate/sequencer-troubleshooting#1-no-sequencer-is-chosen).
 
-<VanillaAdmonition type="warning" title="Redis persistence">
+<Callout type="warning" title="Redis persistence">
 
 The priority list lives only in Redis. If you replace the Redis instance or lose its data, the key is gone and no sequencer becomes active until you repopulate it. Include `coordinator.priorities` in your backup and disaster recovery plan, and re-register after any Redis migration.
 
-</VanillaAdmonition>
+</Callout>
 
 #### Setting the sequencer's self URL
 
@@ -310,11 +311,12 @@ helm install batchposter offchainlabs/nitro \
   --set "configmap.data.node.batch-poster.parent-chain-wallet.private-key=<your-private-key>"
 ```
 
-<VanillaAdmonition type="warning" title="Important">
+<Callout type="warning" title="Important">
 
 Do not add the batch poster to the sequencer priority list in the Sequencer Coordination Manager (SQM) to prevent it from becoming the active sequencer unintentionally.
 
-</VanillaAdmonition>
+</Callout>
+
 ## Monitoring and maintenance
 
 ### Health checks

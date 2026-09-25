@@ -1,9 +1,10 @@
 {
   "title": "More types",
   "pages": [
-    "run-classic-node",
+    "index",
     "run-archive-node",
     "run-validator-node",
+    "run-classic-node",
     "..."
   ]
 }

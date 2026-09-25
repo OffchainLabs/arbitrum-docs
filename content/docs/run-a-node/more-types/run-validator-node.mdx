@@ -76,7 +76,7 @@ On top of the configuration of a regular full node, you'll need to configure the
 | `--node.staker.strategy`                        | `Watchtower`, `Defensive`, `StakeLatest`, `ResolveNodes`, `MakeNodes` | Strategy that your node will use                                                                                                                                      |
 | `--node.staker.parent-chain-wallet.private-key` | 0xPrivateKey                                                          | Private key of the wallet used to perform the operations onchain. Use either `private-key` or `password` (below)                                                      |
 | `--node.staker.parent-chain-wallet.password`    | Password                                                              | Password of a wallet generated with nitro (see instructions [here](#use-nitro-to-create-a-wallet-for-your-validator)). Use either `private-key` (above) or `password` |
-| `--node.bold.enable`                            | true                                                                  | Enables validation with BoLD (not needed if BoLD is not activated, only needed before nitro v3.6.0)                                                                   |
+| `--node.bold.enable`                            | true                                                                  | Enables validation with BoLD (not needed if BoLD is not activated, only needed before Nitro v3.6.0)                                                                   |
 
 Here's an example of how to run a defensive validator for Arbitrum One:
 
@@ -84,7 +84,7 @@ Here's an example of how to run a defensive validator for Arbitrum One:
 docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v3.11.4-7d5ac27 --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.staker.strategy=Defensive
 ```
 
-### Step 2: verify that your node is running as a validator
+### Step 2: Verify that your node is running as a validator
 
 To verify that your node is acting as a validator, you can look for the following log line:
 
@@ -113,11 +113,12 @@ Additionally, keep in mind that some chains might not have BoLD activated yet, s
 
 ### Use Nitro to create a wallet for your validator
 
-<VanillaAdmonition type="warning" title="Clear passwords in the command line">
+<Callout type="warning" title="Clear passwords in the command line">
 
 This section shows how to manage a validator wallet using a password. Like any command that requires passing a password or private key, you should take extra precautions to secure your credentials. Failure to protect your password may compromise your validator wallet.
 
-</VanillaAdmonition>
+</Callout>
+
 Nitro includes a tool to create a validator wallet for a specific chain automatically. You can access it by using the option `--node.staker.parent-chain-wallet.only-create-key` and setting a password for the wallet with `--node.staker.parent-chain-wallet.password`.
 
 Here is an example of how to create a validator wallet for Arbitrum One and exit:
@@ -130,11 +131,12 @@ The wallet file will be created under the mounted directory inside the `<chain-n
 
 Once the wallet is created, you can instruct your validator to use it by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
 
-<VanillaAdmonition type="tip" title="Use environment variables">
+<Callout type="idea" title="Use environment variables">
 
 If you prefer not to include your password in the command line, you can use environment variables or a secure secrets management solution to supply the password at runtime.
 
-</VanillaAdmonition>
+</Callout>
+
 ### How to add new validators to the allowlist (Arbitrum chains)
 
 On permissioned validation setups, the set of validators that can act on a given chain is limited to the ones added to the allowlist of validators in the Rollup contract.

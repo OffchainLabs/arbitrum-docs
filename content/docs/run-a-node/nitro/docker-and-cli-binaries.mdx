@@ -4,11 +4,14 @@ description: 'Nitro Docker image variants, available CLI binaries, entrypoint us
 sidebar_label: 'Docker and CLI binaries'
 user_story: 'As a node operator, I want to know what binaries are available in the Nitro Docker image and how to use them'
 content_type: 'reference'
-author: gzeoneth
-sme: gzeoneth
+author: 'gzeoneth'
+sme: 'gzeoneth'
+# Content gap tracking:
+# - TW-692: Node operations runbook (partial — Docker setup)
+# - TW-695: Docker Compose examples
 ---
 
-The Nitro Docker images bundle multiple CLI binaries that serve different roles in the Arbitrum ecosystem. This page documents the image variants, the binaries they contain, and how to override entrypoints to run specific tools.
+The Nitro Docker images bundle multiple CLI binaries that serve different roles in the <Term id="arbitrum">Arbitrum</Term> ecosystem. This page documents the image variants, the binaries they contain, and how to override entrypoints to run specific tools.
 
 ## Docker image variants
 
@@ -36,11 +39,11 @@ The `--validation.wasm.allowed-wasm-module-roots` flag tells the node which WASM
 - `/home/user/nitro-legacy/machines` — WASM roots from earlier Nitro versions, needed to validate historical blocks.
 - `/home/user/target/machines` — Current WASM roots shipped with this image version.
 
-<VanillaAdmonition type="warning">
+<Callout type="warning">
 
 If you override the entrypoint (for example, `--entrypoint relay`), the default flags are **not** applied. You must pass `--validation.wasm.allowed-wasm-module-roots` manually if the binary you are running requires validation support.
 
-</VanillaAdmonition>
+</Callout>
 
 ### The split validator entrypoint
 
@@ -174,7 +177,7 @@ docker run --rm \
 
 ## Docker Compose example
 
-The following `docker-compose.yml` runs an Arbitrum One full node. Replace the placeholder URLs with your actual parent chain and beacon endpoints.
+The following `docker-compose.yml` runs an <Term id="arbitrum-one">Arbitrum One</Term> full node. Replace the placeholder URLs with your actual <Term id="parent-chain">parent chain</Term> and beacon endpoints.
 
 ```yaml
 # Arbitrum One full node — Docker Compose

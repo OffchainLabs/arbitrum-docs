@@ -229,7 +229,7 @@ test('buildCurrentRedirects throws rather than emitting a destination that is no
   ];
   assert.throws(
     () => buildCurrentRedirects({ pages, destPages }),
-    /destination does not exist: \/docs\/run-a-node\/run-batch-poster/,
+    /destination does not exist: \/docs\/launch-arbitrum-chain\/run-a-node\/batch-poster/,
   );
 });
 

@@ -17,7 +17,7 @@ import {
 /** A minimal destination tree: real paths from this repo, enough of them to exercise the fallbacks. */
 const DEST_FILES = [
   'content/docs/run-a-node/overview.mdx',
-  'content/docs/run-a-node/run-batch-poster.mdx',
+  'content/docs/launch-arbitrum-chain/run-a-node/batch-poster.mdx',
   'content/docs/how-arbitrum-works/deep-dives/batchposter.mdx',
   'content/docs/arbitrum-bridge/quickstart.mdx',
   'content/glossary/dapp.mdx',

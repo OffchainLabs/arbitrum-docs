@@ -1,4 +1,14 @@
 {
   "title": "Arbos releases",
-  "pages": ["overview", "arbos32", "arbos40", "arbos51", "arbos61", "arbos20", "arbos11", "..."]
+  "pages": [
+    "index",
+    "overview",
+    "arbos61",
+    "arbos51",
+    "arbos40",
+    "arbos32",
+    "arbos20",
+    "arbos11",
+    "..."
+  ]
 }

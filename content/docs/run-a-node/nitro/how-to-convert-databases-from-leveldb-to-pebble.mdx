@@ -8,17 +8,17 @@ author: joshuacolvin0
 sme: joshuacolvin0
 ---
 
-Switching from LevelDB to Pebble in Ethereum's Geth client provides several advantages, particularly in terms of resilience to data corruption during unexpected shutdowns, which helps maintain the integrity of your Ethereum node's database.
+Switching from LevelDB to <Term id="pebble">Pebble</Term> in Ethereum's <Term id="geth">Geth</Term> client provides several advantages, particularly in terms of resilience to data corruption during unexpected shutdowns, which helps maintain the integrity of your Ethereum node's database.
 
 While Pebble provides better resilience and potentially improved performance, deciding to switch should consider your specific needs and the possible effects of a full resync on your operations.
 
-For background on how the database backend interacts with Nitro's caches and memory usage, see [Nitro memory management](/docs/run-a-node/nitro/nitro-memory-management).
+For background on how the database backend interacts with Nitro's caches and memory usage, see [node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring).
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 It's important to understand that transitioning to Pebble may necessitate a complete resynchronization of your Ethereum node. This process can take many days/weeks and could lead to downtime. If you are not facing significant issues with LevelDB and do not need Pebble's specific advantages, there may not be a strong reason to make the switch at this time.
 
-</VanillaAdmonition>
+</Callout>
 
 ## convert-databases.bash script
 

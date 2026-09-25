@@ -6,13 +6,13 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-<VanillaAdmonition type="warning">
+<Callout type="warning">
 
 If running a single node, there is no need to run a <Term id="feed-relay">feed relay</Term>. When running more than one node, it is strongly recommended to run a single feed relay per data center, which will reduce ingress fees and improve stability.
 
 Feed endpoints will soon require compression with a custom dictionary, so if connecting to a feed with anything other than a standard node, it is strongly suggested to run a local feed relay, which will provide an uncompressed feed by default.
 
-</VanillaAdmonition>
+</Callout>
 
 For context on where the feed relay fits into Arbitrum's overall data flow, see [Data availability](/docs/run-a-node/data-availability#how-full-nodes-sync-the-data-from-the-sequencer-feed). For the wire format the feed delivers, see [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed). For how the feed relay compares to the other Nitro node roles, see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles).
 

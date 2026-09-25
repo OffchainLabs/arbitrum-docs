@@ -541,14 +541,14 @@ These flags apply only when you set --execution.caching.state-scheme=path.
 When you leave --execution.caching.state-history unset, Nitro chooses the default at startup:
 
 - `<include cwd>content/partials/run-a-node/_state-history-defaults.mdx</include>`
-- used in 1 page — tags: `run-a-node`, `state`, `history`, `defaults`
+- used in 2 pages — tags: `run-a-node`, `state`, `history`, `defaults`
 
 ### Tx prechecker parameters
 
 - `<include cwd>content/partials/run-a-node/_tx-prechecker-parameters.mdx</include>`
 - used in 1 page — tags: `run-a-node`, `tx`, `prechecker`, `parameters`
 
-### How often should I be upgrading my ArbOS version?
+### Upgrade cadence recommendations
 
 It is strongly recommended to keep your Nitro's node software up-to-date as best you can to ensure you are benefting from the latest improvements to the Arbi…
 
