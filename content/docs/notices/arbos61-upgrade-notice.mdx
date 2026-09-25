@@ -43,9 +43,9 @@ The following dates are relevant for Arbitrum chain operators.
 
 ArbOS 61 "Elara" builds upon [ArbOS 51 "Dia"](../run-a-node/arbos-releases/arbos51). It makes two changes to Arbitrum One and Nova: it raises the <Term id="stylus">Stylus</Term> contract code size limit to 96 KB, and it adds a `BaseFeeManager` contract that manages the minimum L2 base fee.
 
-ArbOS 61 also ships two features that stay disabled on Arbitrum One and Nova, for the convenience of other Arbitrum chains: an Alternative Data Availability (AltDA) Layer API, and optional [compliance transaction filtering](../launch-arbitrum-chain/configuration/sequencer/compliance-filtering). A <Term id="chain-owner">chain owner</Term> must enable each one explicitly.
+ArbOS 61 also ships two features that stay disabled on Arbitrum One and Nova, for the convenience of other Arbitrum chains: an Alternative Data Availability (AltDA) Layer API, and optional [compliance transaction filtering](../launch-arbitrum-chain/chain-config/sequencer/compliance-filtering). A <Term id="chain-owner">chain owner</Term> must enable each one explicitly.
 
-To learn how to build a custom DA provider against the new API, refer to [How to integrate with the DA API](../launch-arbitrum-chain/integrations/da-api-integration-guide).
+To learn how to build a custom DA provider against the new API, refer to [How to integrate with the DA API](../launch-arbitrum-chain/extend-the-protocol/da-api-guide).
 
 ArbOS 61 corrects two interacting bugs in the gas refund logic that were found while testing ArbOS 60 on Arbitrum Sepolia. The fixes change the State Transition Function (STF), so they required a new ArbOS version. ArbOS 60 never activated on Arbitrum One or Nova, so neither chain was affected.
 

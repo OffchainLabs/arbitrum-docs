@@ -93,7 +93,7 @@ Native token mint and burn is a feature that allows Arbitrum chains to use inter
 
 Native token mint and burn is included in ArbOS 51 Dia for the benefit of Arbitrum chains (reducing the need for forks) and to streamline development and testing into a single codebase. There are no plans to enable this feature on Arbitrum One or Arbitrum Nova, consequently this feature will be explicitly left disabled for Arbitrum One and Arbitrum Nova.
 
-To read more about this feature, see the [Native Token Mint/Burn enablement guide](/docs/launch-arbitrum-chain/configuration/costs/configure-native-mint-burn-gas-token).
+To read more about this feature, see the [Native Token Mint/Burn enablement guide](/docs/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn).
 
 <VanillaAdmonition type="warning">
 
@@ -132,7 +132,7 @@ ArbOS 51 introduces the `gasFloorPerToken` parameter for chains that post to [EI
 **Background on EIP-7623 support** EIP-7623 was part of the Ethereum Pectra upgrade and it was intentionally not enabled for Arbitrum chains in [ArbOS 40 Callisto](https://docs.arbitrum.io/docs/run-a-node/arbos-releases/arbos40#pectra-changes-that-are-not-included-in-the-proposed-arbos-40-callisto-upgrade). This is because block size variance is less of a concern on Arbitrum chains. \
 Hence, this setting does not apply to chains settling to Arbitrum One or Nova, but is required for chains settling to parent chains that have EIP-7623 enabled using calldata.
 
-Refer to [gas floor per token guide](/docs/launch-arbitrum-chain/configuration/costs/gas-optimization-tools#gas-floor-per-token) for detailed instructions on how to configure this value via the `ArbOwner` precompile.
+Refer to [gas floor per token guide](/docs/launch-arbitrum-chain/chain-config/costs/gas-optimization#gas-floor-per-token) for detailed instructions on how to configure this value via the `ArbOwner` precompile.
 
 ### Reference links for ArbOS 51 Dia
 

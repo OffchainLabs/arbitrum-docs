@@ -1,0 +1,11 @@
+{
+  "title": "Sequencer",
+  "pages": [
+    "chain-finality",
+    "compliance-filtering",
+    "sequencer-config-reference",
+    "sequencer-timing-adjustments",
+    "timeboost",
+    "pga"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "title": "Costs",
+  "pages": [
+    "aep-overview",
+    "aep-router-contracts",
+    "reporting-on-fees",
+    "configure-native-mint-burn",
+    "custom-gas-token-anytrust",
+    "custom-gas-token-rollup",
+    "dynamic-pricing",
+    "fee-management",
+    "revenue-routing",
+    "gas-optimization",
+    "gas-target",
+    "parent-chain-data-fee-pricing",
+    "priority-fees"
+  ]
+}

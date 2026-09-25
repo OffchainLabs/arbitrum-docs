@@ -1,13 +1,4 @@
 {
   "title": "Concepts",
-  "pages": [
-    "introduction",
-    "faq",
-    "license",
-    "public-preview",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
-  ]
+  "pages": ["introduction", "faq", "license", "public-preview", "..."]
 }

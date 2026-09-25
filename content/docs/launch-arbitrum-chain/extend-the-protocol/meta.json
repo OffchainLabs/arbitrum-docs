@@ -1,13 +1,4 @@
 {
   "title": "Extend the protocol",
-  "pages": [
-    "arbos",
-    "da-api-guide",
-    "precompiles",
-    "stf",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
-  ]
+  "pages": ["arbos", "da-api-guide", "precompiles", "stf", "..."]
 }

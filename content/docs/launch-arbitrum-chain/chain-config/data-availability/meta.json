@@ -1,0 +1,14 @@
+{
+  "title": "Data availability",
+  "pages": [
+    "config-data-availability",
+    "dac-get-started",
+    "dac-configuration-defaults",
+    "configure-dac",
+    "dac-das-operations",
+    "das-rpc-method-reference",
+    "deploy-das",
+    "das-docker-deployment",
+    "deploy-mirror-das"
+  ]
+}
