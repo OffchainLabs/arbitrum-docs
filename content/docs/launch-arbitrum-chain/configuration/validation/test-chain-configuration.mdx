@@ -63,20 +63,16 @@ The interaction between `minimumAssertionPeriod` and the posting interval is the
 
 These are Nitro flags, set per validator. Lower them so your validator acts promptly inside the onchain floor you configured above.
 
-{/*
-SME REVIEW: defaults below read from OffchainLabs/nitro at a618155
-(staker/bold/bold_staker.go:138-158 for BoLD, staker/legacy/staker.go:171-191
-for legacy). Confirm they still match the Nitro release this page targets.
-*/}
+{/* SME REVIEW: defaults below read from OffchainLabs/nitro at a618155 (staker/bold/bold_staker.go:138-158 for BoLD, staker/legacy/staker.go:171-191 for legacy). Confirm they still match the Nitro release this page targets. */}
 
-| Flag                                          | Default  | Applies to    | For a test chain                                                                           |
-| --------------------------------------------- | -------- | ------------- | ------------------------------------------------------------------------------------------ |
-| `--node.bold.assertion-posting-interval`      | `15m0s`  | BoLD staker   | Lower it, keeping it above `minimumAssertionPeriod`                                        |
-| `--node.bold.assertion-scanning-interval`     | `1m0s`   | BoLD staker   | Lower it to notice new assertions sooner                                                   |
-| `--node.bold.assertion-confirming-interval`   | `1m0s`   | BoLD staker   | Lower it to poll for confirmability more often                                             |
-| `--node.bold.minimum-gap-to-parent-assertion` | `1m0s`   | BoLD staker   | Lower it so consecutive assertions are not spaced out                                      |
-| `--node.staker.make-assertion-interval`       | `1h0m0s` | Legacy staker | Lower it; no effect on BoLD chains                                                         |
-| `--node.staker.staker-interval`               | `1m0s`   | Legacy staker | Lower it to check the Rollup status and act sooner                                         |
+| Flag                                          | Default  | Applies to    | For a test chain                                                                |
+| --------------------------------------------- | -------- | ------------- | ------------------------------------------------------------------------------- |
+| `--node.bold.assertion-posting-interval`      | `15m0s`  | BoLD staker   | Lower it, keeping it above `minimumAssertionPeriod`                             |
+| `--node.bold.assertion-scanning-interval`     | `1m0s`   | BoLD staker   | Lower it to notice new assertions sooner                                        |
+| `--node.bold.assertion-confirming-interval`   | `1m0s`   | BoLD staker   | Lower it to poll for confirmability more often                                  |
+| `--node.bold.minimum-gap-to-parent-assertion` | `1m0s`   | BoLD staker   | Lower it so consecutive assertions are not spaced out                           |
+| `--node.staker.make-assertion-interval`       | `1h0m0s` | Legacy staker | Lower it; no effect on BoLD chains                                              |
+| `--node.staker.staker-interval`               | `1m0s`   | Legacy staker | Lower it to check the Rollup status and act sooner                              |
 | `--node.staker.confirmation-blocks`           | `12`     | Legacy staker | Lower it, or `0` on a chain where you accept <Term id="reorg">reorg</Term> risk |
 
 Lowering the confirming interval makes the validator _check_ more often. It does not make confirmation permissible sooner — that is governed by `confirmPeriodBlocks`, plus `challengeGracePeriodBlocks` after a challenge. To learn more about that distinction, see [Assertion timing flags](/docs/launch-arbitrum-chain/operate/validator-troubleshooting#assertion-timing-flags).
