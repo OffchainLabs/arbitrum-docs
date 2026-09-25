@@ -1197,6 +1197,21 @@ const sidebars = {
               id: 'how-arbitrum-works/priority-gas-auction/fast-feed',
               label: 'Introduction to the Fast Feed',
             },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/priority-gas-auction/use-fast-feed',
+              label: 'Use the Fast Feed',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/feed-ticket-contracts',
+              label: 'Contracts and purchase bot: feed-ticket-contracts',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/transaction-feed-relay',
+              label: 'Relay source: transaction-feed-relay',
+            },
           ],
         },
       ],

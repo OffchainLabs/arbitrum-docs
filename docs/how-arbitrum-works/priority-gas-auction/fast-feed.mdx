@@ -71,19 +71,21 @@ Treat the Fast Feed as an early signal, not as a record. Confirm final state aga
 
 ## How subscription access works
 
-Access runs on tickets sold by the Fast Feed Payment Contract, an audited contract on Arbitrum One. You prove your subscription with an API key that never appears onchain.
+Access runs on tickets sold by the `Tickets` contract, an audited contract on Arbitrum One that the AIP and the audit call the Fast Feed Payment Contract. You prove your subscription with an API key that never appears onchain.
 
 1. **Generate an API key.** Keep the key itself private.
-2. **Buy a ticket.** Send a payment transaction to the Fast Feed Payment Contract that includes the Keccak-256 hash of your key. The contract records that hash as your Subscription Credential.
+2. **Buy a ticket.** Send a payment transaction to the `Tickets` contract that includes the Keccak-256 hash of your key. The contract records that hash as your Subscription Credential.
 3. **Connect.** Present your raw API key to the Fast Feed endpoint. The endpoint hashes it with Keccak-256 and compares the result against the recorded credential to admit or deny the connection.
 
 Your access starts at the end of the round in which you buy the ticket. You can rotate your credential only when you buy a ticket for a new round.
+
+For the contract calls, the WebSocket handshake, the reference purchase bot, and the errors you can hit, see [how to use the Fast Feed](/how-arbitrum-works/priority-gas-auction/use-fast-feed).
 
 ### Rounds and pricing
 
 The contract sells tickets in fixed rounds and prices them with the mechanism defined in <a data-quicklook-from="eip-4844">EIP-4844</a>. Every ticket in a round costs the same. Demand in one round sets the price for the next: sales above the target push the price up, sales below it push the price down, and the price never falls below the floor.
 
-| Parameter                   | Proposed default     |
+| Parameter                   | Value                |
 | --------------------------- | -------------------- |
 | Round duration              | 24 hours             |
 | Target tickets per round    | 100                  |
@@ -92,7 +94,7 @@ The contract sells tickets in fixed rounds and prices them with the mechanism de
 | Price update fraction       | 144                  |
 | Grandfather period fraction | About half the round |
 
-A price update fraction of 144 means the next round can cost at most about twice the current price, and at least about half of it.
+These are the values the `Tickets` contract on Arbitrum One returns at the time of writing. A price update fraction of 144 means the next round can cost at most about twice the current price, and at least about half of it.
 
 Each round opens with a grandfather period that covers about half its length. During that period, only subscribers from the previous round can buy, up to the number of tickets they held. Sales then open to everyone until the round hits its maximum.
 
@@ -104,17 +106,17 @@ The <a data-quicklook-from="arbitrum-dao">Arbitrum DAO</a> controls these parame
 
 ## Where the revenue goes
 
-The contract accepts payment in an ERC-20, USD-backed stablecoin. It sends proceeds to a dedicated RewardDistributor contract, which routes 97% to the Arbitrum DAO Treasury and 3% to the Arbitrum Developer Guild. Every subscription payment and every distribution emits an onchain event, so anyone can audit the flow.
+The contract accepts payment in USDG, an ERC-20, USD-backed stablecoin. It sends proceeds to a dedicated RewardDistributor contract, which routes 97% to the Arbitrum DAO Treasury and 3% to the Arbitrum Developer Guild. Every subscription payment and every distribution emits an onchain event, so anyone can audit the flow.
 
 This split follows the framework that Timeboost established, which keeps Arbitrum's ordering-related revenue products aligned.
 
 <VanillaAdmonition type="info">
 
-The Arbitrum Treasury Management (ATM) Council and OAT select the stablecoin. Contract deployment follows that choice, and all contract addresses appear in the Arbitrum One developer documentation once the contracts are live.
+The Arbitrum Treasury Management (ATM) Council and OAT selected USDG as the stablecoin. The `Tickets` and USDG addresses are listed in [how to use the Fast Feed](/how-arbitrum-works/priority-gas-auction/use-fast-feed#addresses-and-endpoints).
 
 </VanillaAdmonition>
 
-Trail of Bits audited both contracts before deployment. The Fast Feed Payment Contract is audited under the name "Sequencer Feed Ticketing", so read the [Sequencer Feed Ticketing report](../../hosted-pdfs/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf) for that contract, and the [Reward Distributor Fixes report](../../hosted-pdfs/audit-reports/2026_06_16_trail_of_bits_security_audit_reward_distributor_fixes_summary_report.pdf) for the RewardDistributor. The [security audit reports page](/audit-reports) lists every Arbitrum audit.
+Trail of Bits audited both contracts before deployment. The `Tickets` contract is audited under the name "Sequencer Feed Ticketing", so read the [Sequencer Feed Ticketing report](../../hosted-pdfs/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf) for that contract, and the [Reward Distributor Fixes report](../../hosted-pdfs/audit-reports/2026_06_16_trail_of_bits_security_audit_reward_distributor_fixes_summary_report.pdf) for the RewardDistributor. The [security audit reports page](/audit-reports) lists every Arbitrum audit.
 
 ## Fast Feed compared with the sequencer feed
 
