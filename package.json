@@ -36,6 +36,7 @@
     "redirects:legacy": "node scripts/generate-legacy-redirects.mjs",
     "redirects:current": "node scripts/generate-current-redirects.mjs",
     "redirects:check": "node scripts/redirects-check.mjs",
+    "redirects:check:offline": "node scripts/redirects-check.mjs --offline",
     "vars:check": "node scripts/vars-check.mjs",
     "content:lint": "node scripts/content-lint.mjs",
     "test": "node --test \"scripts/**/*.test.mjs\"",
