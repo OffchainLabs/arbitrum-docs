@@ -15,7 +15,9 @@ External PDFs (`https://…`) and relative paths are left to the normal link, so
 third-party document. It can also be used directly when a custom heading is wanted:
 
 ```mdx
-<PdfModal href="/audit-reports/report.pdf" title="ArbOS 60 & 61 — Trail of Bits">view</PdfModal>
+<PdfModal href="/audit-reports/report.pdf" title="ArbOS 60 & 61 — Trail of Bits">
+  view
+</PdfModal>
 ```
 
 ## Design notes

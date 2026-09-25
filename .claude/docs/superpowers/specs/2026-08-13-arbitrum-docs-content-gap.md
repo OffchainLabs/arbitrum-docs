@@ -35,11 +35,11 @@ Excluded pages remain reachable by direct URL; they are sidebar-invisible, not 4
 
 The `launch-arbitrum-chain` metas are copy-paste corrupted:
 
-| Directory | `meta.json` says | Reality |
-|---|---|---|
-| `launch-arbitrum-chain/configuration/` | title "Advanced", 3 pages: `layer-leap`, `config-sequencer-timing-adjustments`, `da-api-integration-guide` | **all 3 are ghosts**, no `"..."` → **34 pages sidebar-unreachable** |
-| `launch-arbitrum-chain/operate/` | title "Validation and security", 9 pages | 8 ghosts; only `arbos-upgrade` renders. 6 real pages hidden |
-| `launch-arbitrum-chain/configuration/validation/` | title "Advanced", 3 pages | all ghosts → zero children |
+| Directory                                         | `meta.json` says                                                                                           | Reality                                                             |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `launch-arbitrum-chain/configuration/`            | title "Advanced", 3 pages: `layer-leap`, `config-sequencer-timing-adjustments`, `da-api-integration-guide` | **all 3 are ghosts**, no `"..."` → **34 pages sidebar-unreachable** |
+| `launch-arbitrum-chain/operate/`                  | title "Validation and security", 9 pages                                                                   | 8 ghosts; only `arbos-upgrade` renders. 6 real pages hidden         |
+| `launch-arbitrum-chain/configuration/validation/` | title "Advanced", 3 pages                                                                                  | all ghosts → zero children                                          |
 
 Repo-wide, measured by running the checker logic against `content/docs`: **13 directories carry navigation defects, hiding 48 pages** from the sidebar. Affected: `content/docs/en` (chain-info, contribute, glossary), `launch-arbitrum-chain` and its `configuration/{core,costs,data-availability,sequencer,validation}`, `deploy`, `operate`, `overview`, `integrations`, `third-party-integrations`.
 
@@ -51,45 +51,45 @@ This must be fixed before porting content — a new page dropped into `configura
 
 ### Category 1 — Upstream drift (10 pages, added after 2026-07-10)
 
-| Tree A path | Added | Content |
-|---|---|---|
-| `launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx` | 2026-08-10 | fee lifecycle, collecting addresses, fund-movement timing, fee-pool monitoring |
-| `launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx` | 2026-08-05 | protocol-level tx filtering for sanctioned addresses |
-| `launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx` | 2026-07-29 | sequencing a BoLD upgrade around multi-day multisig signing |
-| `launch-arbitrum-chain/operate/validator-troubleshooting.mdx` | 2026-07-29 | assertion timing flags, stuck validator txs, manual assertion confirmation |
-| `launch-arbitrum-chain/operate/upgrade-runbook.mdx` | 2026-07-28 | end-to-end upgrade checklist, WASM-module-root troubleshooting, rollback |
-| `arbitrum-bridge/06-withdrawal-monitoring.mdx` | 2026-07-27 | per-chain timeline table, L3 two-leg math, stuck-withdrawal diagnosis, `getFirstExecutableBlock`/`isSpent` |
-| `how-arbitrum-works/reference/finality-and-reorgs.mdx` | 2026-07-24 | three finality levels, block-tag guidance, reorg-depth bound, indexer advice |
-| `how-arbitrum-works/deep-dives/sequencer-transaction-flow.mdx` | 2026-07-22 | three-zone queue model, 100k surge walkthrough, operator tuning, relayer cache |
-| `arbitrum-essentials/how-to-get-l2block-on-l1.mdx` | 2026-07-17 | `eth_getProof`, `Lib_MerkleTrie`, RLP/`accountProof` walkthrough |
-| `launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment.mdx` | 2026-07-15 | Docker/Compose DAS deployment without Kubernetes |
+| Tree A path                                                                      | Added      | Content                                                                                                    |
+| -------------------------------------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------- |
+| `launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx`                   | 2026-08-10 | fee lifecycle, collecting addresses, fund-movement timing, fee-pool monitoring                             |
+| `launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx`          | 2026-08-05 | protocol-level tx filtering for sanctioned addresses                                                       |
+| `launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx`                        | 2026-07-29 | sequencing a BoLD upgrade around multi-day multisig signing                                                |
+| `launch-arbitrum-chain/operate/validator-troubleshooting.mdx`                    | 2026-07-29 | assertion timing flags, stuck validator txs, manual assertion confirmation                                 |
+| `launch-arbitrum-chain/operate/upgrade-runbook.mdx`                              | 2026-07-28 | end-to-end upgrade checklist, WASM-module-root troubleshooting, rollback                                   |
+| `arbitrum-bridge/06-withdrawal-monitoring.mdx`                                   | 2026-07-27 | per-chain timeline table, L3 two-leg math, stuck-withdrawal diagnosis, `getFirstExecutableBlock`/`isSpent` |
+| `how-arbitrum-works/reference/finality-and-reorgs.mdx`                           | 2026-07-24 | three finality levels, block-tag guidance, reorg-depth bound, indexer advice                               |
+| `how-arbitrum-works/deep-dives/sequencer-transaction-flow.mdx`                   | 2026-07-22 | three-zone queue model, 100k surge walkthrough, operator tuning, relayer cache                             |
+| `arbitrum-essentials/how-to-get-l2block-on-l1.mdx`                               | 2026-07-17 | `eth_getProof`, `Lib_MerkleTrie`, RLP/`accountProof` walkthrough                                           |
+| `launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment.mdx` | 2026-07-15 | Docker/Compose DAS deployment without Kubernetes                                                           |
 
 ### Category 2a — Migration misses, fully absent (5 pages)
 
-| Tree A path | Added | Content |
-|---|---|---|
-| `launch-arbitrum-chain/run-a-node/run-full-node-with-helm.mdx` | 2026-07-02 | Helm/Kubernetes full-node guide. **A live link already points at it** |
-| `launch-arbitrum-chain/integrations/exchange-integration-checklist.mdx` | 2026-06-30 | CEX deposit-detection/withdrawal checklist with test vectors |
-| `launch-arbitrum-chain/integrations/bp-kms-signing-services.mdx` | 2026-06-26 | external/AWS KMS signing for batch poster, signer-service contract |
-| `launch-arbitrum-chain/operate/bp-recovery.mdx` | 2026-06-26 | batch-poster recovery state machine, 4 recovery mechanisms, reorg handling |
-| `launch-arbitrum-chain/chain-config/chainConfig-reference.mdx` | 2026-06-24 | chainConfig JSON field reference: customizable vs intentionally-non-customizable |
+| Tree A path                                                             | Added      | Content                                                                          |
+| ----------------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------- |
+| `launch-arbitrum-chain/run-a-node/run-full-node-with-helm.mdx`          | 2026-07-02 | Helm/Kubernetes full-node guide. **A live link already points at it**            |
+| `launch-arbitrum-chain/integrations/exchange-integration-checklist.mdx` | 2026-06-30 | CEX deposit-detection/withdrawal checklist with test vectors                     |
+| `launch-arbitrum-chain/integrations/bp-kms-signing-services.mdx`        | 2026-06-26 | external/AWS KMS signing for batch poster, signer-service contract               |
+| `launch-arbitrum-chain/operate/bp-recovery.mdx`                         | 2026-06-26 | batch-poster recovery state machine, 4 recovery mechanisms, reorg handling       |
+| `launch-arbitrum-chain/chain-config/chainConfig-reference.mdx`          | 2026-06-24 | chainConfig JSON field reference: customizable vs intentionally-non-customizable |
 
 ### Category 2b — Migration misses, page present but gutted (10 pages)
 
 Ratio = Tree B body lines ÷ Tree A body lines, frontmatter excluded.
 
-| Tree A → Tree B | Ratio | Absent from Tree B |
-|---|---|---|
-| `operate/monitoring.mdx` → `operate/monitoring-tools-and-considerations.mdx` | **167→33 (0.20)** | entire "what to monitor, by component" half: `arbitrum-monitoring` suite, enabling Nitro metrics, 4 metric tables, hardware appendix |
-| `how-arbitrum-works/deep-dives/sequencer.mdx` | 0.23 | Sequencing and broadcasting (6 subsections), Batching/compression (Brotli), Sequencer Inbox blobs-vs-calldata, Finality. Orphans 5 `haw-*.svg` diagrams |
-| `operate/ownership-and-access.mdx` → `ownership-access-control.mdx` | 0.26 | whole "Per-function permissions" block: SequencerInbox, Rollup/RollupAdminLogic (24-row), Bridge, Inbox tables |
-| `chain-config/sequencer/sequencer-timing-adjustments.mdx` | 0.37 | `maxTimeVariation` explanation, window enforcement, per-field guards, defaults table, `=0` risk admonition |
-| `operate/batch-poster-troubleshooting.mdx` | 0.39 | 9 error-taxonomy sections, ~35 named Nitro log messages |
-| `chain-config/costs/revenue-routing.mdx` | 0.45 | also Category 1 — treat as one item |
-| `notices/arbos61-upgrade-notice.mdx` | 0.67 | Tree B is a **pre-DAO-vote draft**: missing "Action required" Nitro v3.11 admonition, Arbitrum One/Nova section, 2026-08-20 date. **Also still claims Dynamic Pricing ships enabled — factually wrong** |
-| `overview/introduction.mdx` → `a-gentle-introduction.mdx` | 0.71 | `## Performance`, `## Compliance` (sanctioned-address screening) |
-| `run-arbitrum-node/02-run-full-node.mdx` → `run-a-node/run-full-node.mdx` | 0.72 | "Choose a state scheme" (HashDB vs PathDB table, block-validation caution) |
-| `nitro/03-nitro-database-snapshots.mdx`, `more-types/01-run-archive-node.mdx` | 0.77 / 0.84 | PathDB snapshots table, "Initialize a PathDB node" shell blocks |
+| Tree A → Tree B                                                               | Ratio             | Absent from Tree B                                                                                                                                                                                      |
+| ----------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `operate/monitoring.mdx` → `operate/monitoring-tools-and-considerations.mdx`  | **167→33 (0.20)** | entire "what to monitor, by component" half: `arbitrum-monitoring` suite, enabling Nitro metrics, 4 metric tables, hardware appendix                                                                    |
+| `how-arbitrum-works/deep-dives/sequencer.mdx`                                 | 0.23              | Sequencing and broadcasting (6 subsections), Batching/compression (Brotli), Sequencer Inbox blobs-vs-calldata, Finality. Orphans 5 `haw-*.svg` diagrams                                                 |
+| `operate/ownership-and-access.mdx` → `ownership-access-control.mdx`           | 0.26              | whole "Per-function permissions" block: SequencerInbox, Rollup/RollupAdminLogic (24-row), Bridge, Inbox tables                                                                                          |
+| `chain-config/sequencer/sequencer-timing-adjustments.mdx`                     | 0.37              | `maxTimeVariation` explanation, window enforcement, per-field guards, defaults table, `=0` risk admonition                                                                                              |
+| `operate/batch-poster-troubleshooting.mdx`                                    | 0.39              | 9 error-taxonomy sections, ~35 named Nitro log messages                                                                                                                                                 |
+| `chain-config/costs/revenue-routing.mdx`                                      | 0.45              | also Category 1 — treat as one item                                                                                                                                                                     |
+| `notices/arbos61-upgrade-notice.mdx`                                          | 0.67              | Tree B is a **pre-DAO-vote draft**: missing "Action required" Nitro v3.11 admonition, Arbitrum One/Nova section, 2026-08-20 date. **Also still claims Dynamic Pricing ships enabled — factually wrong** |
+| `overview/introduction.mdx` → `a-gentle-introduction.mdx`                     | 0.71              | `## Performance`, `## Compliance` (sanctioned-address screening)                                                                                                                                        |
+| `run-arbitrum-node/02-run-full-node.mdx` → `run-a-node/run-full-node.mdx`     | 0.72              | "Choose a state scheme" (HashDB vs PathDB table, block-validation caution)                                                                                                                              |
+| `nitro/03-nitro-database-snapshots.mdx`, `more-types/01-run-archive-node.mdx` | 0.77 / 0.84       | PathDB snapshots table, "Initialize a PathDB node" shell blocks                                                                                                                                         |
 
 ### Category 2c — Glossary (1 term)
 
@@ -102,21 +102,21 @@ Ratio = Tree B body lines ÷ Tree A body lines, frontmatter excluded.
 - `deep-dives/01-stf-gentle-intro.mdx` — absorbed into `deep-dives/stf.mdx`, all four Stylus sections verbatim.
 - **Partials: 67 non-glossary partials → 65 present, 1 inlined, 1 transformed, 0 missing.** 60 of 65 are ≥0.9 similar; the 5 outliers are Docusaurus→Fumadocs syntax ports.
 - **Glossary architecture** — Tree A had 137 per-term fragments + a generated monolith; Tree B has 136 files under `content/glossary/` rendered via `<ReferenceList collection="glossary" />`. Transformed, not lost.
-- `launch-arbitrum-chain` restructure — 32 of 45 unmatched files are renames, 2 merges. Tree B is *ahead*: 20 net-new pages including an 18-page `features/` decision-guide tree.
+- `launch-arbitrum-chain` restructure — 32 of 45 unmatched files are renames, 2 merges. Tree B is _ahead_: 20 net-new pages including an 18-page `features/` decision-guide tree.
 - `content/partials/CATALOG.md` is in sync — 84 paths, 84 manifest entries, 84 files on disk.
 
 ## Other defects found
 
-| Defect | Location | Severity |
-|---|---|---|
-| Dangling internal link — target does not exist in Tree B | `content/docs/en/run-a-node/run-full-node.mdx:20` → `/docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm` | High |
-| ArbOS 61 notice is a pre-vote draft, states Dynamic Pricing ships enabled | `content/docs/en/notices/arbos61-upgrade-notice.mdx` | High |
-| Oracle index missing Pyth, Quex, Supra VRF cards | `content/docs/en/oracles/index.mdx` | Medium |
-| `solidity-references` learning-resources table degraded; RareSkills row links to the Rust bootcamp; Metana row contains a leaked LLM placeholder | `content/docs/en/build-decentralized-apps/quickstart-solidity-remix.mdx#learning-resources` | Medium |
-| 5 `haw-*.svg` diagrams orphaned by the gutted sequencer page | `content/docs/en/how-arbitrum-works/deep-dives/` | Medium |
-| Unfinished stub, self-described as awaiting a stacked PR | `content/docs/en/run-a-node/nitro/nitro-memory-management.mdx` (15 lines) | Low |
-| Typo in partial filename `_config-evm-compatbility.mdx` | `content/partials/launch-arbitrum-chain/` | Low |
-| Possibly redundant `_config-challenge-period-l1.mdx` / `_config-l1-challenge-period.mdx` | `content/partials/launch-arbitrum-chain/` | Low |
+| Defect                                                                                                                                           | Location                                                                                                             | Severity |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- | -------- |
+| Dangling internal link — target does not exist in Tree B                                                                                         | `content/docs/en/run-a-node/run-full-node.mdx:20` → `/docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm` | High     |
+| ArbOS 61 notice is a pre-vote draft, states Dynamic Pricing ships enabled                                                                        | `content/docs/en/notices/arbos61-upgrade-notice.mdx`                                                                 | High     |
+| Oracle index missing Pyth, Quex, Supra VRF cards                                                                                                 | `content/docs/en/oracles/index.mdx`                                                                                  | Medium   |
+| `solidity-references` learning-resources table degraded; RareSkills row links to the Rust bootcamp; Metana row contains a leaked LLM placeholder | `content/docs/en/build-decentralized-apps/quickstart-solidity-remix.mdx#learning-resources`                          | Medium   |
+| 5 `haw-*.svg` diagrams orphaned by the gutted sequencer page                                                                                     | `content/docs/en/how-arbitrum-works/deep-dives/`                                                                     | Medium   |
+| Unfinished stub, self-described as awaiting a stacked PR                                                                                         | `content/docs/en/run-a-node/nitro/nitro-memory-management.mdx` (15 lines)                                            | Low      |
+| Typo in partial filename `_config-evm-compatbility.mdx`                                                                                          | `content/partials/launch-arbitrum-chain/`                                                                            | Low      |
+| Possibly redundant `_config-challenge-period-l1.mdx` / `_config-l1-challenge-period.mdx`                                                         | `content/partials/launch-arbitrum-chain/`                                                                            | Low      |
 
 ## Constraints any implementation must respect
 

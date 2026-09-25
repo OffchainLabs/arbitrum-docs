@@ -285,16 +285,7 @@ const sans = localFont({
 const mono = localFont({
   variable: '--font-mono',
   display: 'swap',
-  fallback: [
-    'ui-monospace',
-    'SF Mono',
-    'Cascadia Code',
-    'Segoe UI Mono',
-    'Menlo',
-    'Monaco',
-    'Consolas',
-    'monospace',
-  ],
+  fallback: ['ui-monospace', 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
   src: [{ path: '../../public/fonts/aeonik-fono-regular.woff2', weight: '400', style: 'normal' }],
 });
 ```
@@ -788,34 +779,31 @@ gradient stops are dark enough for white text.
 In `app/og/docs/[...slug]/route.tsx`, the `ImageResponse` call on lines 15–21 currently reads:
 
 ```tsx
-  return new ImageResponse(
-    <DefaultImage title={page.data.title} description={page.data.description} site={appName} />,
-    {
-      width: 1200,
-      height: 630,
-    },
-  );
+return new ImageResponse(<DefaultImage title={page.data.title} description={page.data.description} site={appName} />, {
+  width: 1200,
+  height: 630,
+});
 ```
 
 Replace with:
 
 ```tsx
-  return new ImageResponse(
-    <DefaultImage
-      title={page.data.title}
-      description={page.data.description}
-      site={appName}
-      // Arbitrum blue accent / teal site label. The generator hardcodes a
-      // #0c0c0c background internally; matching Arbitrum's navy exactly would
-      // require replacing DefaultImage with local JSX, which is out of scope.
-      primaryColor="hsl(211 99% 45%)"
-      primaryTextColor="hsl(188 100% 53%)"
-    />,
-    {
-      width: 1200,
-      height: 630,
-    },
-  );
+return new ImageResponse(
+  <DefaultImage
+    title={page.data.title}
+    description={page.data.description}
+    site={appName}
+    // Arbitrum blue accent / teal site label. The generator hardcodes a
+    // #0c0c0c background internally; matching Arbitrum's navy exactly would
+    // require replacing DefaultImage with local JSX, which is out of scope.
+    primaryColor="hsl(211 99% 45%)"
+    primaryTextColor="hsl(188 100% 53%)"
+  />,
+  {
+    width: 1200,
+    height: 630,
+  },
+);
 ```
 
 - [ ] **Step 3: Verify types**
@@ -871,8 +859,7 @@ If the utility did not generate, fall back to an explicit arbitrary value, which
 compile:
 
 ```tsx
-className =
-  '... bg-[linear-gradient(135deg,var(--color-arbitrum-gradient-from),var(--color-arbitrum-gradient-to))] text-white';
+className = '... bg-[linear-gradient(135deg,var(--color-arbitrum-gradient-from),var(--color-arbitrum-gradient-to))] text-white';
 ```
 
 Re-run the grep against `linear-gradient(135deg` to confirm.

@@ -24,10 +24,12 @@
 ### Task 1: Extract shared transform pipeline
 
 **Files:**
+
 - Create: `scripts/lib/port-pipeline.mjs`
 - Test: `scripts/lib/port-pipeline.test.mjs`
 
 **Interfaces:**
+
 - Produces: `runDocPipeline(content, srcFileAbs, relPath, ctx) → string`, and the individual pure
   transforms (`transformFrontmatter`, `transformVars`, `transformComponentImports`,
   `transformPartialImports`, `transformAdmonitions`, `transformDetails`, `transformHtmlComments`,
@@ -57,10 +59,7 @@ import is outside all known roots.
 // scripts/lib/port-pipeline.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import {
-  transformFrontmatter, transformAdmonitions, transformDetails,
-  transformHeadingAnchors, transformLinks,
-} from './port-pipeline.mjs';
+import { transformFrontmatter, transformAdmonitions, transformDetails, transformHeadingAnchors, transformLinks } from './port-pipeline.mjs';
 
 const stats = () => ({ warnings: [], manualReview: [], errors: [] });
 
@@ -119,9 +118,11 @@ git commit -m "Add shared MDX port pipeline extracted from port-stylus"
 ### Task 2: Config-driven porter
 
 **Files:**
+
 - Create: `scripts/codemods/port-remaining.mjs`
 
 **Interfaces:**
+
 - Consumes: everything exported by `scripts/lib/port-pipeline.mjs`.
 - CLI: `node scripts/codemods/port-remaining.mjs <sectionKey> [--dry-run]` where `<sectionKey>` selects
   one entry from an internal `SECTIONS` config array (or `all`).
@@ -143,7 +144,7 @@ const PARTIALS = '/Users/allup/OCL/Fumadocs-test/content/partials';
 
 // One entry per Wave-3/4/5 section. Waves 1/2 (oracles, third-party-docs,
 // pinned pages) are added in their own tasks below.
-const SECTIONS = [ /* filled per task */ ];
+const SECTIONS = [/* filled per task */];
 
 // walk / ensureDir / processDoc / copyPartials identical in spirit to port-stylus,
 // but paths come from the selected config entry and stats is local.
@@ -172,6 +173,7 @@ git commit -m "Add config-driven porter for remaining sections"
 ### Task 3: Wave 1 — oracles + third-party-docs (new top-level sections)
 
 **Files:**
+
 - Modify: `scripts/codemods/port-remaining.mjs` (add `oracles`, `third-party-docs` config entries)
 - Create (generated): `content/docs/en/oracles/**`, `content/docs/en/third-party-docs/**`
 - Modify: `content/docs/en/meta.json`, `lib/layout.shared.tsx`
@@ -197,6 +199,7 @@ pnpm quicklooks:migrate && pnpm partials:catalog && pnpm format
 pnpm types:check
 pnpm check-links
 ```
+
 Expected: `types:check` exit 0; `check-links` reports no NEW broken links originating in the new sections
 (pre-existing repo-wide breakages are recorded, not introduced here).
 
@@ -217,6 +220,7 @@ git commit -m "Port oracles and third-party-docs sections"
 ### Task 4: Wave 2 — pinned pages (chain-info, contribute)
 
 **Files:**
+
 - Modify: `scripts/codemods/port-remaining.mjs` (add `chain-info`, `contribute` pinned entries + a
   `pinSidebars(labels)` post-step)
 - Create (generated): `content/docs/en/chain-info.mdx`, `content/docs/en/contribute.mdx`, precompile-table
@@ -244,6 +248,7 @@ Expected: every top-level section meta.json updated idempotently.
 ```bash
 pnpm partials:catalog && pnpm format && pnpm types:check && pnpm check-links
 ```
+
 Expected: exit 0; no new broken links.
 
 - [ ] **Step 4: Render spot-check**
@@ -263,6 +268,7 @@ git commit -m "Add chain-info and contribute pinned pages linked in every sideba
 ### Task 5: Wave 3 — run-a-node merge
 
 **Files:**
+
 - Modify: `scripts/codemods/port-remaining.mjs` (`run-a-node` entry, `srcDir='run-arbitrum-node'`,
   `destDir='run-a-node'`, `extraSources=['node-running']`)
 - Create/modify (generated): `content/docs/en/run-a-node/**` (must not overwrite the 5 existing files)
@@ -286,6 +292,7 @@ pnpm partials:catalog && pnpm format && pnpm types:check && pnpm check-links
 rtk proxy curl -sS -o /dev/null -w "%{http_code}\n" http://localhost:3000/docs/run-a-node/run-full-node
 git add -A && git commit -m "Merge run-arbitrum-node and node-running into run-a-node"
 ```
+
 Expected: gates exit 0; `run-full-node` returns 200.
 
 ---
@@ -293,6 +300,7 @@ Expected: gates exit 0; `run-full-node` returns 200.
 ### Task 6: Wave 4 — how-arbitrum-works + arbitrum-essentials + stylus/stylus-by-example
 
 **Files:**
+
 - Modify: `scripts/codemods/port-remaining.mjs` (add three entries)
 - Create/modify (generated): `content/docs/en/how-arbitrum-works/**`, `arbitrum-essentials/**`,
   `stylus/**`, `stylus/stylus-by-example/**`
@@ -318,6 +326,7 @@ pnpm quicklooks:migrate && pnpm partials:catalog && pnpm format && pnpm types:ch
 rtk proxy curl -sS -o /dev/null -w "%{http_code}\n" http://localhost:3000/docs/how-arbitrum-works/deep-dives/anytrust-protocol
 git add -A && git commit -m "Port how-arbitrum-works deep pages, arbitrum-essentials, and stylus-by-example"
 ```
+
 Expected: gates exit 0; deep page returns 200.
 
 ---
@@ -325,6 +334,7 @@ Expected: gates exit 0; deep page returns 200.
 ### Task 7: Wave 5 — bridge + build-dapps + get-started/intro/learn-more/notices
 
 **Files:**
+
 - Modify: `scripts/codemods/port-remaining.mjs` (add entries)
 - Create/modify (generated): `content/docs/en/arbitrum-bridge/**`, `build-decentralized-apps/**`,
   `get-started/**`, `arbitrum-essentials/glossary` or `get-started` (glossary target), `notices/**`
@@ -345,6 +355,7 @@ pnpm quicklooks:migrate && pnpm partials:catalog && pnpm format && pnpm types:ch
 rtk proxy curl -sS -o /dev/null -w "%{http_code}\n" http://localhost:3000/docs/arbitrum-bridge/quickstart
 git add -A && git commit -m "Port bridge, build-dapps, get-started, and notices remaining pages"
 ```
+
 Expected: gates exit 0; bridge quickstart returns 200.
 
 ---
@@ -352,6 +363,7 @@ Expected: gates exit 0; bridge quickstart returns 200.
 ### Task 8: Wave 6 — global finalize (links, references, landing, verification)
 
 **Files:**
+
 - Modify: `app/[lang]/(home)/page.tsx` (repoint landing cards now that deep pages exist)
 - Modify: various (link fixes from `fix-links`)
 
@@ -372,6 +384,7 @@ pnpm fix-links   # apply only auto-resolvable fixes
 pnpm references:check
 pnpm partials:check
 ```
+
 Expected: `check-links` broken count strictly lower than before; `references:check` and `partials:check` clean.
 
 - [ ] **Step 3: Final gates**
@@ -379,6 +392,7 @@ Expected: `check-links` broken count strictly lower than before; `references:che
 ```bash
 pnpm format && pnpm types:check && pnpm check-links
 ```
+
 Expected: `types:check` exit 0; `check-links` shows no new broken links vs the pre-import baseline.
 
 - [ ] **Step 4: Section count sanity check**

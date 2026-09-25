@@ -12,16 +12,16 @@ format conversion**, not a copy.
 Source has ~322 non-partial doc files; Fumadocs currently has 165. Already ported (largely complete):
 `launch-arbitrum-chain`, `stylus` (core). Remaining to import:
 
-| Source section | Source files | In Fumadocs now |
-| --- | --- | --- |
-| `for-devs` | 52 | 0 (dissolved — see below) |
-| `run-arbitrum-node` (+ `node-running`) | 44 | 5 (as `run-a-node`, recomposed) |
-| `arbitrum-essentials` | 32 | 6 |
-| `how-arbitrum-works` | 22 | 5 (deep pages missing) |
-| `stylus-by-example` | 19 | 0 |
-| `arbitrum-bridge` | 5 | 1 |
-| `build-decentralized-apps` | 3 | 1 |
-| `get-started` / `intro` / `learn-more` / `notices` | ~8 | ~3 |
+| Source section                                     | Source files | In Fumadocs now                 |
+| -------------------------------------------------- | ------------ | ------------------------------- |
+| `for-devs`                                         | 52           | 0 (dissolved — see below)       |
+| `run-arbitrum-node` (+ `node-running`)             | 44           | 5 (as `run-a-node`, recomposed) |
+| `arbitrum-essentials`                              | 32           | 6                               |
+| `how-arbitrum-works`                               | 22           | 5 (deep pages missing)          |
+| `stylus-by-example`                                | 19           | 0                               |
+| `arbitrum-bridge`                                  | 5            | 1                               |
+| `build-decentralized-apps`                         | 3            | 1                               |
+| `get-started` / `intro` / `learn-more` / `notices` | ~8           | ~3                              |
 
 ## Target IA changes
 
@@ -34,21 +34,21 @@ Source has ~322 non-partial doc files; Fumadocs currently has 165. Already porte
 
 ## Section mapping (source → target)
 
-| Source | Target | Notes |
-| --- | --- | --- |
-| `for-devs/oracles/*` **+** `arbitrum-essentials/oracles/overview-oracles.mdx` | `/docs/oracles/` (new) | consolidate both oracle sources |
-| `for-devs/third-party-docs/*` (~22 providers) | `/docs/third-party-docs/` (new) | its `contribute.mdx` stays inside this section |
-| `for-devs/dev-tools-and-resources/chain-info.mdx` (+ precompile-table partials) | `/docs/chain-info` (pinned) | linked in every sidebar |
-| `for-devs/contribute.mdx` | `/docs/contribute` (pinned) | linked in every sidebar |
-| `for-devs/troubleshooting-building.mdx` | `/docs/build-decentralized-apps/` | assumption |
-| `run-arbitrum-node/*` **+** `node-running/*` | `/docs/run-a-node/` | merge; do not clobber the 5 existing files |
-| `how-arbitrum-works/*` (deep content) | `/docs/how-arbitrum-works/{deep-dives,reference,bold,timeboost}` | source subdirs already match target |
-| `arbitrum-essentials/*` (missing) | `/docs/arbitrum-essentials/` | mirror substructure |
-| `stylus-by-example/*` (19) | `/docs/stylus/stylus-by-example/` | nested under stylus |
-| `stylus/*` (missing) | `/docs/stylus/` | merge |
-| `arbitrum-bridge/*` | `/docs/arbitrum-bridge/` | merge |
-| `build-decentralized-apps/*` | `/docs/build-decentralized-apps/` | merge |
-| `get-started/*`, `intro/glossary`, `learn-more/faq`, `notices/*` | respective same-name targets | small |
+| Source                                                                          | Target                                                           | Notes                                          |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------- |
+| `for-devs/oracles/*` **+** `arbitrum-essentials/oracles/overview-oracles.mdx`   | `/docs/oracles/` (new)                                           | consolidate both oracle sources                |
+| `for-devs/third-party-docs/*` (~22 providers)                                   | `/docs/third-party-docs/` (new)                                  | its `contribute.mdx` stays inside this section |
+| `for-devs/dev-tools-and-resources/chain-info.mdx` (+ precompile-table partials) | `/docs/chain-info` (pinned)                                      | linked in every sidebar                        |
+| `for-devs/contribute.mdx`                                                       | `/docs/contribute` (pinned)                                      | linked in every sidebar                        |
+| `for-devs/troubleshooting-building.mdx`                                         | `/docs/build-decentralized-apps/`                                | assumption                                     |
+| `run-arbitrum-node/*` **+** `node-running/*`                                    | `/docs/run-a-node/`                                              | merge; do not clobber the 5 existing files     |
+| `how-arbitrum-works/*` (deep content)                                           | `/docs/how-arbitrum-works/{deep-dives,reference,bold,timeboost}` | source subdirs already match target            |
+| `arbitrum-essentials/*` (missing)                                               | `/docs/arbitrum-essentials/`                                     | mirror substructure                            |
+| `stylus-by-example/*` (19)                                                      | `/docs/stylus/stylus-by-example/`                                | nested under stylus                            |
+| `stylus/*` (missing)                                                            | `/docs/stylus/`                                                  | merge                                          |
+| `arbitrum-bridge/*`                                                             | `/docs/arbitrum-bridge/`                                         | merge                                          |
+| `build-decentralized-apps/*`                                                    | `/docs/build-decentralized-apps/`                                | merge                                          |
+| `get-started/*`, `intro/glossary`, `learn-more/faq`, `notices/*`                | respective same-name targets                                     | small                                          |
 
 ## Porting mechanism
 

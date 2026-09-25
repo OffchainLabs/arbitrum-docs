@@ -173,13 +173,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { baseOptions } from '@/lib/layout.shared';
 import { source } from '@/lib/source';
 
-export default async function Layout({
-  params,
-  children,
-}: {
-  params: Promise<{ lang: string }>;
-  children: ReactNode;
-}) {
+export default async function Layout({ params, children }: { params: Promise<{ lang: string }>; children: ReactNode }) {
   const { lang } = await params;
   const base = baseOptions(lang);
   return (
@@ -193,10 +187,7 @@ export default async function Layout({
           return {
             ...option,
             icon: (
-              <div
-                className="[&_svg]:size-full size-full rounded-md border p-1.5 text-fd-primary max-md:bg-fd-primary/10"
-                style={{ '--tab-color': 'var(--color-fd-primary)' } as CSSProperties}
-              >
+              <div className="[&_svg]:size-full size-full rounded-md border p-1.5 text-fd-primary max-md:bg-fd-primary/10" style={{ '--tab-color': 'var(--color-fd-primary)' } as CSSProperties}>
                 {node.icon}
               </div>
             ),
@@ -358,36 +349,13 @@ interface MarqueeProps extends ComponentProps<'div'> {
   repeat?: number;
 }
 
-export function Marquee({
-  className,
-  reverse = false,
-  pauseOnHover = false,
-  children,
-  vertical = false,
-  repeat = 4,
-  ...props
-}: MarqueeProps) {
+export function Marquee({ className, reverse = false, pauseOnHover = false, children, vertical = false, repeat = 4, ...props }: MarqueeProps) {
   return (
-    <div
-      {...props}
-      className={cn(
-        'group flex overflow-hidden p-2 [--duration:40s] [--gap:1rem] [gap:var(--gap)]',
-        vertical ? 'flex-col' : 'flex-row',
-        className,
-      )}
-    >
+    <div {...props} className={cn('group flex overflow-hidden p-2 [--duration:40s] [--gap:1rem] [gap:var(--gap)]', vertical ? 'flex-col' : 'flex-row', className)}>
       {Array(repeat)
         .fill(0)
         .map((_, i) => (
-          <div
-            key={i}
-            className={cn(
-              'flex shrink-0 justify-around [gap:var(--gap)]',
-              vertical ? 'animate-marquee-vertical flex-col' : 'animate-marquee flex-row',
-              pauseOnHover && 'group-hover:[animation-play-state:paused]',
-              reverse && '[animation-direction:reverse]',
-            )}
-          >
+          <div key={i} className={cn('flex shrink-0 justify-around [gap:var(--gap)]', vertical ? 'animate-marquee-vertical flex-col' : 'animate-marquee flex-row', pauseOnHover && 'group-hover:[animation-play-state:paused]', reverse && '[animation-direction:reverse]')}>
             {children}
           </div>
         ))}
@@ -454,22 +422,17 @@ import { docsRoute } from '@/lib/shared';
 import { HeroBackground } from './hero-bg';
 import { Marquee } from './marquee';
 
-const buttonVariants = cva(
-  'inline-flex justify-center px-5 py-3 rounded-full font-medium tracking-tight transition-colors',
-  {
-    variants: {
-      variant: {
-        primary: 'bg-fd-primary text-fd-primary-foreground hover:opacity-90',
-        secondary: 'border bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent',
-      },
+const buttonVariants = cva('inline-flex justify-center px-5 py-3 rounded-full font-medium tracking-tight transition-colors', {
+  variants: {
+    variant: {
+      primary: 'bg-fd-primary text-fd-primary-foreground hover:opacity-90',
+      secondary: 'border bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent',
     },
-    defaultVariants: { variant: 'primary' },
   },
-);
+  defaultVariants: { variant: 'primary' },
+});
 
-const cardVariants = cva(
-  'rounded-2xl text-sm p-6 border bg-fd-card text-fd-card-foreground shadow-lg',
-);
+const cardVariants = cva('rounded-2xl text-sm p-6 border bg-fd-card text-fd-card-foreground shadow-lg');
 
 const features = [
   {
@@ -510,11 +473,7 @@ const features = [
   },
 ];
 
-const marqueeLogos = [
-  '/brand/offchain-logo-horizontal-charcoal.svg',
-  '/brand/offchain-icon-charcoal.svg',
-  '/brand/offchain-logo-stacked-charcoal.svg',
-];
+const marqueeLogos = ['/brand/offchain-logo-horizontal-charcoal.svg', '/brand/offchain-icon-charcoal.svg', '/brand/offchain-logo-stacked-charcoal.svg'];
 
 export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
@@ -527,9 +486,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <div className="relative mx-auto flex min-h-[600px] h-[70vh] max-h-[900px] w-full max-w-[1400px] overflow-hidden rounded-2xl border">
         <HeroBackground />
         <div className="z-2 flex size-full flex-col px-4 max-md:items-center max-md:text-center md:p-12">
-          <p className="mt-12 w-fit rounded-full border border-fd-primary/50 p-2 text-xs font-medium text-fd-primary">
-            The finance-native platform for onchain apps.
-          </p>
+          <p className="mt-12 w-fit rounded-full border border-fd-primary/50 p-2 text-xs font-medium text-fd-primary">The finance-native platform for onchain apps.</p>
           <h1 className="my-8 text-4xl font-medium leading-tight xl:mb-12 xl:text-5xl">
             Build onchain,
             <br />
@@ -539,10 +496,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             <Link href={docs('/get-started')} className={cn(buttonVariants(), 'max-sm:text-sm')}>
               Get started
             </Link>
-            <Link
-              href={docs('/launch-arbitrum-chain')}
-              className={cn(buttonVariants({ variant: 'secondary' }), 'max-sm:text-sm')}
-            >
+            <Link href={docs('/launch-arbitrum-chain')} className={cn(buttonVariants({ variant: 'secondary' }), 'max-sm:text-sm')}>
               Launch a chain
             </Link>
           </div>
@@ -552,11 +506,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       {/* Intro band */}
       <div className="mx-auto mt-12 grid w-full max-w-[1400px] grid-cols-1 gap-10 px-6 md:px-12 lg:mt-20">
         <p className="col-span-full text-2xl font-light leading-snug tracking-tight md:text-3xl xl:text-4xl">
-          Arbitrum is the <span className="font-medium text-fd-primary">finance-native</span>{' '}
-          platform providing infrastructure for{' '}
-          <span className="font-medium text-fd-primary">apps</span>, tokenization, and{' '}
-          <span className="font-medium text-fd-primary">dedicated chains</span>. These docs explain
-          the protocols, chains, services, and SDKs developers use to build on Arbitrum.
+          Arbitrum is the <span className="font-medium text-fd-primary">finance-native</span> platform providing infrastructure for <span className="font-medium text-fd-primary">apps</span>, tokenization, and <span className="font-medium text-fd-primary">dedicated chains</span>. These docs explain the protocols, chains, services, and SDKs developers use to build on Arbitrum.
         </p>
       </div>
 
@@ -564,9 +514,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <div className="mx-auto mt-12 w-full max-w-[1400px] px-6 md:px-12">
         <div className="mx-auto w-full max-w-[800px] rounded-2xl border bg-fd-card p-2 text-fd-card-foreground shadow-lg">
           <div className="flex flex-row items-center gap-2">
-            <h2 className="content-center rounded-xl border-2 border-fd-primary/50 px-2 font-mono font-bold uppercase text-fd-primary">
-              Try it out
-            </h2>
+            <h2 className="content-center rounded-xl border-2 border-fd-primary/50 px-2 font-mono font-bold uppercase text-fd-primary">Try it out</h2>
             <div className="flex-1">
               <ServerCodeBlock code="cargo stylus new my-first-stylus-app" lang="bash" />
             </div>
@@ -577,13 +525,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       {/* Preview band (placeholder — swap for a real docs screenshot) */}
       <div className="mx-auto mt-12 w-full max-w-[1400px] px-6 md:px-12">
         <div className="relative flex aspect-[16/9] w-full items-center justify-center overflow-hidden rounded-2xl border bg-gradient-to-br from-fd-primary/10 to-fd-accent/20">
-          <Image
-            src="/brand/offchain-logo-stacked-charcoal.svg"
-            alt="Offchain"
-            width={160}
-            height={160}
-            className="opacity-40 dark:invert"
-          />
+          <Image src="/brand/offchain-logo-stacked-charcoal.svg" alt="Offchain" width={160} height={160} className="opacity-40 dark:invert" />
         </div>
       </div>
 
@@ -592,11 +534,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         {features.map((f) => {
           const Icon = f.icon;
           return (
-            <Link
-              key={f.href}
-              href={docs(f.href)}
-              className={cn(cardVariants(), 'transition-colors hover:bg-fd-accent')}
-            >
+            <Link key={f.href} href={docs(f.href)} className={cn(cardVariants(), 'transition-colors hover:bg-fd-accent')}>
               <Icon className="mb-3 size-8 rounded-md bg-fd-primary p-1.5 text-fd-primary-foreground" />
               <h3 className="mb-1 font-medium tracking-tight">{f.title}</h3>
               <p className="text-fd-muted-foreground">{f.desc}</p>
@@ -610,14 +548,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         <p className="mb-4 text-center text-sm text-fd-muted-foreground">Built by Offchain Labs</p>
         <Marquee pauseOnHover className="[--duration:30s]">
           {marqueeLogos.map((src, i) => (
-            <Image
-              key={i}
-              src={src}
-              alt=""
-              width={140}
-              height={40}
-              className="mx-6 h-8 w-auto opacity-60 dark:invert"
-            />
+            <Image key={i} src={src} alt="" width={140} height={40} className="mx-6 h-8 w-auto opacity-60 dark:invert" />
           ))}
         </Marquee>
       </div>
@@ -625,9 +556,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       {/* Footer CTA */}
       <div className="mx-auto mt-16 w-full max-w-[1400px] px-6 md:px-12">
         <div className="flex flex-col items-center gap-6 rounded-2xl border bg-fd-card p-12 text-center shadow-lg">
-          <h2 className="text-2xl font-medium tracking-tight md:text-3xl">
-            Start building on Arbitrum
-          </h2>
+          <h2 className="text-2xl font-medium tracking-tight md:text-3xl">Start building on Arbitrum</h2>
           <Link href={docs('/get-started')} className={cn(buttonVariants())}>
             Get started
           </Link>

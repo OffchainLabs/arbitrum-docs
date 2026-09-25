@@ -28,7 +28,7 @@ Squash-merging was investigated and **cleared**:
 
 - 516 renames are correctly detected inside this repo's own history.
 - `arbchain-restructure-pt1` records 19 renames vs 2 adds — restructures preserved lineage fine.
-- The one commit that shows 53 adds and 0 renames is Wave 3 (`2b4dab9`), the *import* commit. The
+- The one commit that shows 53 adds and 0 renames is Wave 3 (`2b4dab9`), the _import_ commit. The
   legacy files were never in the tree to be renamed from.
 
 The loss is structural and happens exactly once, at import.
@@ -41,14 +41,14 @@ with certainty and `diff.renameLimit` never applies to it. Tuning rename limits 
 
 The lever is commit structure:
 
-| | Commit | Why |
-|---|---|---|
-| S | Scaffold | Adds the Next.js/Fumadocs app files. Must not create anything under `content/`, so the move commit's diff is unambiguously rename-only. |
-| **M** | **Move** | `git mv` every legacy file to its new path, **byte-identical**. 591 renames, zero content change. This is the commit that does the work. |
-| D | Delete | Remove the Docusaurus scaffold. After M, so rename sources are not orphaned. |
-| T1–T5 | Transforms | One commit per mechanical transform class: frontmatter, links, `<Term>`, admonitions, includes/vars. |
-| E | Editorial delta | Everything else. Forces the tree to equal the target exactly. |
-| G | Blame ignore | Writes `.git-blame-ignore-revs` listing T1–T5. |
+|       | Commit          | Why                                                                                                                                      |
+| ----- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| S     | Scaffold        | Adds the Next.js/Fumadocs app files. Must not create anything under `content/`, so the move commit's diff is unambiguously rename-only.  |
+| **M** | **Move**        | `git mv` every legacy file to its new path, **byte-identical**. 591 renames, zero content change. This is the commit that does the work. |
+| D     | Delete          | Remove the Docusaurus scaffold. After M, so rename sources are not orphaned.                                                             |
+| T1–T5 | Transforms      | One commit per mechanical transform class: frontmatter, links, `<Term>`, admonitions, includes/vars.                                     |
+| E     | Editorial delta | Everything else. Forces the tree to equal the target exactly.                                                                            |
+| G     | Blame ignore    | Writes `.git-blame-ignore-revs` listing T1–T5.                                                                                           |
 
 Build M with plumbing, never through a checkout:
 
@@ -62,7 +62,7 @@ git commit-tree ...
 Round-tripping content through the worktree exposes it to `core.autocrlf`, `.gitattributes` and LFS
 smudge filters. Any of those mutates the blob, the OID changes, exact-rename matching fails, and the
 entire exercise silently produces nothing. Neither repo currently has a `.gitattributes`; this repo
-*does* have an active LFS filter in `.git/config` that matches no path. **Do not add a
+_does_ have an active LFS filter in `.git/config` that matches no path. **Do not add a
 `.gitattributes` before the move commit.**
 
 ### Gate the move commit before going further
@@ -98,10 +98,10 @@ commit instead. Two consequences observed in practice:
 
 Full population, all 61,416 lines across all 339 `content/docs/**/*.mdx` pages — not a sample:
 
-| Scope | Baseline (`main`) | Reconstructed | + ignore-revs |
-|---|---|---|---|
-| All 339 pages | 0.00% | **72.67%** | 75.12% |
-| The 273 with a legacy origin | 0.00% | **78.64%** | 81.29% |
+| Scope                        | Baseline (`main`) | Reconstructed | + ignore-revs |
+| ---------------------------- | ----------------- | ------------- | ------------- |
+| All 339 pages                | 0.00%             | **72.67%**    | 75.12%        |
+| The 273 with a legacy origin | 0.00%             | **78.64%**    | 81.29%        |
 
 The gap between rows is the 66 orphan pages that have no arbitrum-docs ancestor and score 0% by
 definition.
@@ -119,7 +119,7 @@ Other verified outcomes:
 
 - **GitHub's web blame does not follow renames.** Crossing the rename boundary on github.com is a
   click-through ("View blame prior to this change") per file. The CLI and editor integrations do
-  follow it. File *history* on GitHub does follow renames.
+  follow it. File _history_ on GitHub does follow renames.
 - **Repo size:** legacy pack 515 MiB + this repo 198 MiB ≈ 690–710 MiB after `gc`. There are zero
   shared md/mdx blobs, so dedup is minimal. Prefer `--filter=blob:none` in CI over `git filter-repo`,
   which would rewrite every SHA and destroy the correspondence to arbitrum-docs that makes the blame
@@ -146,11 +146,11 @@ synthesized destination must be human-reviewed.
 See `scripts/replay-prs.mjs` (`pnpm pr:replay`). Eleven upstream PRs were run end to end; six opened as
 drafts (this repo's #3–#8).
 
-| Wave | clean | partial | declined |
-|---|---|---|---|
-| 1 (#2644, #3536, #3500, #3561, #3563) | 2 | 2 | 1 |
-| 2 (#3538, #3564, #3533, #3472) | 0 | 2 | 2 |
-| 3 (#3569, #3573) | — | — | 2 — **the correct outcome** |
+| Wave                                  | clean | partial | declined                    |
+| ------------------------------------- | ----- | ------- | --------------------------- |
+| 1 (#2644, #3536, #3500, #3561, #3563) | 2     | 2       | 1                           |
+| 2 (#3538, #3564, #3533, #3472)        | 0     | 2       | 2                           |
+| 3 (#3569, #3573)                      | —     | —       | 2 — **the correct outcome** |
 
 **CI matched the local gates exactly** — same three failures, same three passes, same counts, PR for PR.
 
@@ -178,7 +178,7 @@ the only failure class nothing downstream catches.
 
 ### Pre-existing breakage this surfaced
 
-The non-blocking `Build` job fails on every branch *and* on `main` — a 404 on a Google-hosted image in
+The non-blocking `Build` job fails on every branch _and_ on `main` — a 404 on a Google-hosted image in
 `content/docs/third-party-docs/TheGraph/thegraph.mdx`. Exactly the third-party link rot that job is
 non-blocking for, but it currently masks any genuine build regression.
 
@@ -189,8 +189,8 @@ attempted. Hunk context lines are made of internal links, glossary anchors and `
 precisely the lines the migration rewrote — so patches reject on fuzz. Zero of the 114 files that
 share a path between the trees are byte-identical.
 
-What works instead: transform the *legacy* file into the new dialect at **both** the PR's merge-base
-and its head, then three-way merge with the current file as *ours*. Because base and theirs are both
+What works instead: transform the _legacy_ file into the new dialect at **both** the PR's merge-base
+and its head, then three-way merge with the current file as _ours_. Because base and theirs are both
 in the new dialect, the migration's rewrites cancel out of the base↔ours delta, leaving only the PR's
 real semantic change against the current file's real divergence. Collisions with post-migration edits
 then surface as explicit conflict hunks instead of silent overwrites.
@@ -207,10 +207,10 @@ plausible-looking wrong page is worse than no page.
 Replaying PRs turns out to double as a drift detector. Three items exist upstream and were never
 migrated here:
 
-| Missing from this repo | Exists upstream at |
-|---|---|
-| ArbOS 61 release notes | `docs/run-arbitrum-node/arbos-releases/arbos61.mdx` |
-| Priority fees page | `docs/launch-arbitrum-chain/chain-config/costs/priority-fees.mdx` |
+| Missing from this repo                      | Exists upstream at                                                                      |
+| ------------------------------------------- | --------------------------------------------------------------------------------------- |
+| ArbOS 61 release notes                      | `docs/run-arbitrum-node/arbos-releases/arbos61.mdx`                                     |
+| Priority fees page                          | `docs/launch-arbitrum-chain/chain-config/costs/priority-fees.mdx`                       |
 | Sequencer feed ticketing audit report (PDF) | `docs/hosted-pdfs/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf` |
 
 This repo has `arbos11/20/32/40/51` and no `61`. These are reported, not fixed — porting content is
