@@ -22,6 +22,7 @@ import {
 } from '@/components/mdx/Troubleshooting';
 import { VanillaAdmonition } from '@/components/mdx/VanillaAdmonition';
 import { Var } from '@/components/mdx/Var';
+import { VendingMachine } from '@/components/mdx/VendingMachine';
 
 /**
  * Route internal PDF links through `<PdfModal>` so they open in an overlay instead of navigating away.
@@ -89,8 +90,8 @@ export function getMDXComponents(components?: MDXComponents) {
     TroubleshootingReport,
     VanillaAdmonition,
     Var,
+    VendingMachine,
     // Placeholders for not-yet-ported interactive widgets (see PendingWidget).
-    VendingMachine: () => <PendingWidget name="VendingMachine" />,
     EdgeChallengeFlow: () => <PendingWidget name="EdgeChallengeFlow" />,
     FlowChart: () => <PendingWidget name="FlowChart" />,
     ...components,

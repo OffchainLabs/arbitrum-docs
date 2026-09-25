@@ -24,6 +24,13 @@
   --color-fd-ring: hsl(211 99% 45%);
   --color-fd-overlay: hsl(222 47% 11% / 0.5);
 
+  /* Success/failure states. Fumadocs' preset ships no status colors, and interactive widgets need
+     a pair, so they sit with the rest of the palette instead of as raw Tailwind shades inside one
+     component. Both clear 4.5:1 against --color-fd-card in their own theme, so they are safe on
+     text and not only on decoration. */
+  --color-fd-success: hsl(142 72% 29%);
+  --color-fd-danger: hsl(0 72% 42%);
+
   /* Hero gradient: a darkened variant of the brand blue->teal gradient. The
      source gradient (hsl(211 99% 45%) -> hsl(188 100% 53%)) fails WCAG AA with
      white text at the teal end (1.61:1), so the hero runs logo navy -> brand
@@ -54,6 +61,8 @@
   --color-fd-accent-foreground: hsl(210 40% 98%);
   --color-fd-ring: hsl(188 100% 53%);
   --color-fd-overlay: hsl(222 47% 4% / 0.8);
+  --color-fd-success: hsl(142 69% 58%);
+  --color-fd-danger: hsl(0 91% 71%);
 }
 
 /* Arbitrum prose treatment, ported from arbitrum-docs `_typography.scss` (which
