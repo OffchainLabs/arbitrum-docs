@@ -146,8 +146,8 @@ Authorization: Bearer <your-api-key>
 The endpoint hashes the key with Keccak-256, compares it against the active tickets, and only then completes the upgrade. Messages start flowing at once. You open one connection per ticket, and each connection receives the full feed. Three rules apply to every client:
 
 - Complete the upgrade within 5 seconds, or the endpoint drops the socket.
-- Send only ping and pong frames. The endpoint closes the connection with code `1003` on any other inbound message.
-- Read as fast as the feed arrives. The endpoint closes a client that falls more than 2048 messages behind with code `1013`, so parse and process off the read loop.
+- Send only ping and pong frames.
+- Read as fast as the feed arrives. The endpoint drops a client that lags behind, so parse and process off the read loop.
 
 Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](/how-arbitrum-works/priority-gas-auction/fast-feed#what-the-fast-feed-publishes) section lists every field.
 
@@ -159,8 +159,6 @@ wscat -c "$FEED_URL" -H "Authorization: Bearer $API_KEY"
 # or
 websocat -H "Authorization: Bearer $API_KEY" "$FEED_URL"
 ```
-
-Both tools print each frame as a line. To check a key without a ticket, run either command with a random key: the endpoint answers `HTTP 401`.
 
 </TabItem>
 <TabItem value="node" label="Node.js">
@@ -226,7 +224,7 @@ This example needs `websockets` 14 or later. Older versions use `extra_headers=`
 Tickets bought in round N are active for round N+1 only, so an uninterrupted connection needs a purchase in every round:
 
 1. Buy the next round's ticket before `roundEnd`, with the same `apiKeyHash`. During the grandfather period you can renew up to the number of tickets you held.
-2. Shortly after a round ends, the endpoint closes every connection whose key holds no ticket in the new round, with close code `1008` and reason `authentication expired`. A key with a ticket in both rounds keeps its connection.
+2. Shortly after a round ends, the endpoint closes every connection whose key holds no ticket in the new round. A key with a ticket in both rounds keeps its connection.
 3. If your connection closes, reconnect and continue from the current head. The Fast Feed keeps no history, so the messages sent while you were away are gone.
 
 To make the purchase step automatic, run the reference bot described in the next section.
