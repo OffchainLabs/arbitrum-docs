@@ -1,0 +1,38 @@
+#!/usr/bin/env sh
+# Pre-commit: offline redirect audit, prettier --check and markdownlint on staged .md/.mdx,
+# then types:check. Husky runs this with `sh -e`; keep it POSIX. Skip with HUSKY=0 or in CI.
+set -eu
+
+if [ "${HUSKY:-}" = "0" ] || [ "${CI:-}" = "true" ] || [ "${GITHUB_ACTIONS:-}" = "true" ]; then
+  echo "pre-commit: skipped (HUSKY=0 or CI)"
+  exit 0
+fi
+
+fail() {
+  echo "pre-commit: $1" >&2
+  echo "pre-commit: bypass once with 'git commit --no-verify'" >&2
+  exit 1
+}
+
+# Checks working-tree content of staged paths; partially staged hunks are not isolated.
+md_files=$(git diff --cached --name-only --diff-filter=ACMR -- '*.md' '*.mdx')
+
+echo "pre-commit: redirects (offline)"
+pnpm --silent redirects:check:offline || fail "redirect audit failed"
+
+if [ -n "$md_files" ]; then
+  # Pipeline status is xargs's (last command), so no pipefail is needed.
+  # prettier skips .prettierignore'd paths even when passed explicitly.
+  echo "pre-commit: prettier --check (staged markdown)"
+  printf '%s\n' "$md_files" | xargs prettier --check --log-level warn ||
+    fail "unformatted markdown: run 'pnpm format', then re-stage"
+
+  echo "pre-commit: markdownlint (staged markdown)"
+  printf '%s\n' "$md_files" | xargs markdownlint ||
+    fail "markdownlint failed: try 'pnpm lint:markdown:fix'"
+fi
+
+echo "pre-commit: types:check"
+pnpm --silent types:check || fail "types:check failed"
+
+echo "pre-commit: ok"

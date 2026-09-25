@@ -14,14 +14,14 @@
 Branch `fumadocs` = `b60b802c`, parented to `master` `6a2738fba`. 13,048 commits — the 13,038 of
 arbitrum-docs plus ten.
 
-| Gate | Result |
-|---|---|
-| `master` is a true ancestor | ✅ |
-| Move commit purity | ✅ 591 files, **0 insertions, 0 deletions**, every entry `R100` |
-| Blob identity (10 sampled pairs) | ✅ 10/10 identical OIDs |
+| Gate                                   | Result                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------ |
+| `master` is a true ancestor            | ✅                                                                             |
+| Move commit purity                     | ✅ 591 files, **0 insertions, 0 deletions**, every entry `R100`                |
+| Blob identity (10 sampled pairs)       | ✅ 10/10 identical OIDs                                                        |
 | Tree equality vs shipped Fumadocs tree | ✅ exact OID match (`900cf046`); tip differs by `.git-blame-ignore-revs` alone |
-| Blame traversal | ✅ 92 commits / oldest 2022-12-07 on `arbitrum-bridge/quickstart.mdx` |
-| **SRC authorship, full population** | **72.73%** plain, **75.28%** with ignore-revs (0% before) |
+| Blame traversal                        | ✅ 92 commits / oldest 2022-12-07 on `arbitrum-bridge/quickstart.mdx`          |
+| **SRC authorship, full population**    | **72.73%** plain, **75.28%** with ignore-revs (0% before)                      |
 
 The blame figure was produced twice, by two independent builds in two different repositories, agreeing
 to within 0.16 points (72.67/75.12 vs 72.73/75.28). The site content is provably byte-identical to the
@@ -57,10 +57,10 @@ form-only: prose bytes are identical either side of each diff.
 The obvious way to also preserve the Fumadocs repo's own 211 commits is to give commit `E` two
 parents — `[T5, fumadocs-main]` — with the same tree. **This was tested and it is actively harmful:**
 
-| E shape | SRC authorship |
-|---|---|
-| Linear, single parent | **72.73%** (75.28% with ignore-revs) |
-| Merge commit, two parents | **21.97%** (22.23%) |
+| E shape                   | SRC authorship                       |
+| ------------------------- | ------------------------------------ |
+| Linear, single parent     | **72.73%** (75.28% with ignore-revs) |
+| Merge commit, two parents | **21.97%** (22.23%)                  |
 
 Blame prefers the parent whose tree matches, the Fumadocs side matches exactly, so it never walks into
 the legacy history at all. A two-thirds loss. **Keep `E` linear.** If Fumadocs-side attribution

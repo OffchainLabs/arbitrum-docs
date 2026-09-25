@@ -26,7 +26,7 @@ ArbOS upgrades are Arbitrum's equivalent of a hard fork and can change trace out
 ## Before you start
 
 | Requirement                                                                                                                           | Why it matters                                                                                                           |
-| --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | A full node with the `debug` API enabled (`--http.api=eth,debug,net,web3`), or an RPC provider that exposes `debug_traceBlockByHash`. | Catching **ETH** delivered through internal calls requires call traces. The `eth` namespace alone is not sufficient.     |
 | A Nitro version greater than or equal to the release that ships the latest ArbOS used by your chain.                                  | Nitro is backward compatible, but trace output and gas accounting are tied to the active ArbOS version.                  |
 | The exact set of platform-controlled deposit addresses, plus supported token contract addresses with their decimals.                  | Every detection rule below keys off these two sets.                                                                      |
@@ -163,8 +163,8 @@ If the user withdraws to the parent chain (for example, from Arbitrum One to Eth
 
 Maintain at least one fixture per detection path so you can assert that your indexer credits the right amount and rejects everything else. Capture each fixture from a live node (Arbitrum Sepolia is preferred because it receives ArbOS upgrades first) and pin it to the stated Nitro and ArbOS versions.
 
-| TV # | Scenario                                                                  | Expected result                              |
-| ---- | -------------------------------------------------------------------------- | ----------------------------------------------- |
+| TV # | Scenario                                                                 | Expected result                              |
+| ---- | ------------------------------------------------------------------------ | -------------------------------------------- |
 | 1    | Native **ETH** transfer to a platform deposit address, `status` `0x1`    | Credit **ETH** equal to `value / 10^18`      |
 | 2    | **ERC-20** `transfer()` to a supported token with a valid `Transfer` log | Credit token equal to `amount / 10^decimals` |
 | 3    | **ERC-20** `transfer()` that reverts (`status` `0x0`)                    | No credit                                    |

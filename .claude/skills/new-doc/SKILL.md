@@ -12,13 +12,13 @@ Scaffold a new MDX documentation page following all project conventions.
 
 Ask for these before creating the file:
 
-| Field            | Example                     | Notes                                                                                 |
-| ---------------- | --------------------------- | ------------------------------------------------------------------------------------- |
-| **Title**        | "Bridge tokens to Arbitrum" | Sentence case, appears as H1                                                          |
-| **Section**      | `build-decentralized-apps`  | Must match an existing `content/docs/` subdirectory                                   |
+| Field            | Example                     | Notes                                                                                        |
+| ---------------- | --------------------------- | -------------------------------------------------------------------------------------------- |
+| **Title**        | "Bridge tokens to Arbitrum" | Sentence case, appears as H1                                                                 |
+| **Section**      | `build-decentralized-apps`  | Must match an existing `content/docs/` subdirectory                                          |
 | **Content type** | `how-to`                    | One of: `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
-| **Author**       | `github-username`           | GitHub username                                                                       |
-| **SME**          | `github-username`           | Subject matter expert (can be same as author)                                         |
+| **Author**       | `github-username`           | GitHub username                                                                              |
+| **SME**          | `github-username`           | Subject matter expert (can be same as author)                                                |
 
 Optional (will generate defaults if not provided):
 

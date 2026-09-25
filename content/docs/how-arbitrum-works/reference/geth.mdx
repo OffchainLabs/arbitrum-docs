@@ -136,14 +136,14 @@ Source: [go-ethereum/arbitrum/recordingdb.go#L22](https://github.com/OffchainLab
 
 Nitro Geth includes a few child chain-specific transaction types. Click any to jump to their section.
 
-| Transaction Type                                          | Represents                                                                                                                                          | Last Hook Reached             | Source      |
-| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ----------- |
-| [`ArbitrumUnsignedTx`](#arbitrumunsignedtx)               | A parent chain to child chain message                                                                                                               | [`EndTxHook`](#endtxhook)     | Bridge      |
-| [`ArbitrumContractTx`](#arbitrumcontracttx)               | A nonce-less parent chain to child chain message                                                                                                    | [`EndTxHook`](#endtxhook)     | Bridge      |
-| [`ArbitrumDepositTx`](#arbitrumdeposittx)                 | A user deposit                                                                                                                                      | [`StartTxHook`](#starttxhook) | Bridge      |
-| [`ArbitrumSubmitRetryableTx`](#arbitrumsubmitretryabletx) | Creating a retryable                                                                                                                                | [`StartTxHook`](#starttxhook) | Bridge      |
+| Transaction Type                                          | Represents                                                                                                                                | Last Hook Reached             | Source      |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ----------- |
+| [`ArbitrumUnsignedTx`](#arbitrumunsignedtx)               | A parent chain to child chain message                                                                                                     | [`EndTxHook`](#endtxhook)     | Bridge      |
+| [`ArbitrumContractTx`](#arbitrumcontracttx)               | A nonce-less parent chain to child chain message                                                                                          | [`EndTxHook`](#endtxhook)     | Bridge      |
+| [`ArbitrumDepositTx`](#arbitrumdeposittx)                 | A user deposit                                                                                                                            | [`StartTxHook`](#starttxhook) | Bridge      |
+| [`ArbitrumSubmitRetryableTx`](#arbitrumsubmitretryabletx) | Creating a retryable                                                                                                                      | [`StartTxHook`](#starttxhook) | Bridge      |
 | [`ArbitrumRetryTx`](#arbitrumretrytx)                     | A [<Term id="retryable-redeem">retryable redeem</Term>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets) attempt | [`EndTxHook`](#endtxhook)     | Child chain |
-| [`ArbitrumInternalTx`](#arbitruminternaltx)               | ArbOS state update                                                                                                                                  | [`StartTxHook`](#starttxhook) | ArbOS       |
+| [`ArbitrumInternalTx`](#arbitruminternaltx)               | ArbOS state update                                                                                                                        | [`StartTxHook`](#starttxhook) | ArbOS       |
 
 The following reference documents each type.
 
@@ -195,11 +195,11 @@ A [Geth message](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73
 
 A message [derived from a transaction](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L676) will carry that transaction in a field accessible via its [`UnderlyingTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L700) method. While this relates to how a given message is used, they are not one-to-one. The table below shows the various run modes and whether each could have an underlying transaction.
 
-| Run Mode                                                                                                                                               | Scope            | Carries an Underlying Transaction?                                                                     |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------ |
-| [`MessageCommitMode`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L654)        | state transition | Always                                                                                                 |
+| Run Mode                                                                                                                                               | Scope            | Carries an Underlying Transaction?                                                                      |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------- |
+| [`MessageCommitMode`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L654)        | state transition | Always                                                                                                  |
 | [`MessageGasEstimationMode`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L655) | gas estimation   | When created via [`NodeInterface`](/docs/arbitrum-essentials/nodeinterface/reference) or when scheduled |
-| [`MessageEthcallMode`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L656)       | eth_calls        | Never                                                                                                  |
+| [`MessageEthcallMode`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L656)       | eth_calls        | Never                                                                                                   |
 
 ## Arbitrum chain parameters
 

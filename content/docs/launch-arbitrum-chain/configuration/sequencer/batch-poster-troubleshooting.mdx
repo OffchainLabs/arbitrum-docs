@@ -96,7 +96,7 @@ A batch posting backlog occurs when the sequencer continues ordering transaction
 ### Common causes
 
 | Cause                             | Description                                                                                                                                                    |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Insufficient batch poster balance | The EOA does not have enough funds to pay parent chain gas fees                                                                                                |
 | Gas prices exceeding fee cap      | Parent chain gas prices are above `--node.batch-poster.data-poster.target-price-gwei`, causing the data poster to pause submissions                            |
 | Parent chain congestion           | Even with adequate fees, high parent chain congestion can delay transaction inclusion                                                                          |
@@ -327,7 +327,7 @@ Many of these (mempool size, storage race, gas estimation, nonce-too-high, accum
 ## Quick reference
 
 | Symptom                                 | Likely cause                                                          | Resolution                                                          |
-| ------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| --------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | Batch posting stopped, no error in logs | Batch poster balance depleted                                         | Fund the batch poster EOA on the parent chain                       |
 | "Mempool weight limit exceeded"         | Too many pending transactions in parent chain mempool                 | Review fee cap settings; check RBF escalation schedule              |
 | Batches not posting during gas spike    | Gas prices exceed `--node.batch-poster.data-poster.target-price-gwei` | Increase fee cap or wait for prices to normalize                    |

@@ -1,0 +1,13 @@
+node_modules
+.next
+.source
+out
+.vercel
+.serena
+.remember
+.pr-replay
+.agents
+.codex
+.superpowers
+AGENTS.md
+content/partials/CATALOG.md

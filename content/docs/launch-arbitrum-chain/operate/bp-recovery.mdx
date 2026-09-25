@@ -47,10 +47,10 @@ In short: _queue intact → resume in-flight; queue gone → rebuild cleanly fro
 ## Storage backends and what survives a restart
 
 | Backend          | Persists?                                     | Recovery behavior                                                                  |
-| ----------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| ---------------- | --------------------------------------------- | ---------------------------------------------------------------------------------- |
 | **dbstorage**    | Yes (consensus DB, `BatchPosterPrefix` table) | Queue rehydrated from keyed entries; `FetchContents`/`FetchLast` reload on startup |
 | **redisstorage** | Yes (shared)                                  | Sorted-set keyed by nonce; **HMAC-signed** entries; enables failover               |
-| **noop**         | No                                             | Stores nothing; post-and-forget; used when parent chain is Arbitrum (no mempool)   |
+| **noop**         | No                                            | Stores nothing; post-and-forget; used when parent chain is Arbitrum (no mempool)   |
 
 Notably, when the parent chain itself is an Arbitrum chain, the data poster **forces no-op storage**—there's no L1 mempool to RBF into, so there's nothing to persist or recover.
 

@@ -954,7 +954,7 @@
   {
     "path": "content/partials/run-a-node/_dao-chains-parameters.mdx",
     "title": "Dao chains parameters",
-    "summary": "Breaking the title ordering here (it should be h3 instead of h4) so these titles don't appear in the right-hand sidebar",
+    "summary": "The --parent-chain.connection.url parameter needs to provide a standard RPC endpoint for an Ethereum node, whether self-hosted or obtained from a node servic…",
     "scope": "neutral",
     "tags": [
       "run-a-node",
@@ -1011,7 +1011,7 @@
   {
     "path": "content/partials/run-a-node/_orbit-chains-parameters.mdx",
     "title": "Orbit chains parameters",
-    "summary": "Breaking the title ordering here (it should be h3 instead of h4) so these titles don't appear in the right-hand sidebar",
+    "summary": "The --parent-chain.connection.url parameter needs to provide a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service pro…",
     "scope": "neutral",
     "tags": [
       "run-a-node",

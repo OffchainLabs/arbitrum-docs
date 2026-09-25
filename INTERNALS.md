@@ -344,36 +344,64 @@ for that file. The native component then requires `width`/`height` or the build 
 
 ## The gates
 
-CI runs on push and PR to `main` (`.github/workflows/ci.yml`) in three jobs. **Only the first
-blocks.** A green PR does not mean the content is clean.
+CI runs on push and PR to `main` (`.github/workflows/ci.yml`) in two jobs. **Only the first
+blocks.**
 
-**`Gates` (blocking)** — eight steps:
+**`Gates` (blocking)** — twelve steps:
 
-| Step                       | Catches                                                                       |
-| -------------------------- | ----------------------------------------------------------------------------- |
-| `types:check`              | Frontmatter schema violations, TypeScript errors                              |
-| `test`                     | Regressions in the tooling scripts themselves                                 |
-| `vars:check`               | A `<Var name>` with no matching key in `vars.json`                            |
-| `nav:check`                | `meta.json` navigation integrity                                              |
-| `partials:check`           | Unresolved includes, routing leaks, stale catalog, `cwd` include in a partial |
-| `versioned-docs-check.mjs` | Archived-page registry drift                                                  |
-| `references:check`         | Glossary ids and `<Reference>` targets                                        |
-| `check-links`              | Broken internal doc links                                                     |
+| Step                       | Catches                                                                         |
+| -------------------------- | ------------------------------------------------------------------------------- |
+| `types:check`              | Frontmatter schema violations, TypeScript errors                                |
+| `test`                     | Regressions in the tooling scripts themselves                                   |
+| `vars:check`               | A `<Var name>` with no matching key in `vars.json`                              |
+| `nav:check`                | `meta.json` navigation integrity                                                |
+| `partials:check`           | Unresolved includes, routing leaks, stale catalog, `cwd` include in a partial   |
+| `versioned-docs-check.mjs` | Archived-page registry drift                                                    |
+| `references:check`         | Glossary ids and `<Reference>` targets                                          |
+| `check-links`              | Broken internal doc links                                                       |
+| `content:lint`             | MDX structural defects: stray `:::`, admonition shape, `<Var>` inside code      |
+| `lint:markdown`            | markdownlint over every `.md`/`.mdx` (`.markdownlint.json`, ported from master) |
+| `redirects:check:offline`  | Dead or shadowed redirects, duplicate sources, self-loops                       |
+| `format:check`             | Prettier drift in code, JSON, Markdown and MDX                                  |
 
 `check-links` exists because Fumadocs has no equivalent of Docusaurus's `onBrokenLinks: 'throw'`.
 `pnpm build` chains it ahead of `next build`, so a broken link also fails the Vercel deploy.
 
-**`Content debt` (non-blocking)** — `format:check` and `content:lint`, each marked
-`continue-on-error` because each still fails on pre-existing debt. The job comment records the
-counts. **Promote a step into `Gates` once its count reaches zero** — that promotion is the point
-of the split. This tier is a backlog, not a policy.
+There is no longer a non-blocking "content debt" job: `content:lint`, `lint:markdown`,
+`redirects:check:offline` and `format:check` all reached zero and moved into `Gates` (the last three
+on 2026-09-24). If a new check starts with debt, put it in a `continue-on-error` job and promote it
+once its count reaches zero.
 
 **`Build` (non-blocking)** — `pnpm build`, deliberately not blocking: the MDX image pipeline fetches
 remote images at build time, so a dead third-party URL turns it red for reasons unrelated to the
 change under review. It still catches MDX compile errors that `types:check` cannot see.
 
 **Run by hand only:** `drift`, `precompiles:check`, `redirects:legacy`, `redirects:check`.
-`redirects:check` cannot run in CI as-is because it reads `/llms.txt` off a running site.
+`redirects:check` reads `/llms.txt` off a running site, so it is the authority on what is routable;
+`redirects:check:offline` re-derives the page set from the content tree (the same guess
+`check-links` makes) and is what the hook and CI run.
+
+### The pre-commit hook
+
+`pnpm install` runs `husky` through the `prepare` script, which points `core.hooksPath` at
+`.husky/_` (git-ignored, written by husky). `.husky/pre-commit` then runs on every commit:
+
+1. `redirects:check:offline`
+2. `prettier --check` on the staged `.md`/`.mdx` files
+3. `markdownlint` on the same files
+4. `types:check`
+
+It only checks; a failure names the `pnpm` script that fixes it (`format`, `lint:markdown:fix`).
+Skip it once with `HUSKY=0 git commit …` or `--no-verify`; CI runs the same scripts as gates, so
+nothing skipped locally reaches `main` unnoticed. CI sets `HUSKY=0` so `pnpm install` on the runner
+does not write `.husky/_`. The hook checks the working-tree content of staged paths, so a partial
+`git add -p` can pass or fail on unstaged hunks.
+
+Prettier formats MDX under a `*.{md,mdx}` override (`prettier.config.mjs`: `printWidth: 9999`,
+`proseWrap: 'preserve'`, no import sorting inside code blocks). **Keep `{/* … */}` expression
+comments on one line**: Prettier escapes the delimiters of a multi-line one and the MDX parse fails
+at build time. Files written by tooling (`content/**/meta.json`, `redirects.*.mjs`, the partials
+catalog) are in `.prettierignore` because the generators emit a layout Prettier would reflow.
 
 `upstream-refresh.yml` runs Mondays at 08:00 UTC and on `workflow_dispatch`: `nitro:check-release`,
 then `precompiles:generate`, opening `automated/upstream-refresh` as a PR if anything changed. It
@@ -388,7 +416,9 @@ Every gate has a blind spot. These are the ones that have bitten:
 - **Client components importing `lib/source`.** Costs megabytes in the browser bundle. No gate sees
   it.
 - **Rendering.** `types:check` proves the schema, not the render. It exits 0 on pages that serve
-  literal `:::`, `undefined`, or HTTP 500. Confirm content changes in a browser.
+  literal `:::`, `undefined`, or HTTP 500. Confirm content changes in a browser. It also exits 0 on
+  an MDX file whose body does not compile (a corrupted `{/* … */}` comment, for example): only
+  `pnpm build` compiles bodies.
 - **A redirect to the wrong-but-existing page.** `redirects:check` only proves the destination
   resolves.
 

@@ -120,13 +120,13 @@ Trail of Bits audited both contracts before deployment. The Fast Feed Payment Co
 
 The two feeds serve different jobs. Running one does not replace the other.
 
-| Property        | Sequencer feed                                                | Fast Feed                             |
-| --------------- | ------------------------------------------------------------- | ------------------------------------- |
-| Cost            | Free                                                          | Paid subscription                     |
-| Authentication  | None                                                          | API key against an onchain credential |
-| Granularity     | Per block                                                     | Per transaction, within a PGA round   |
+| Property        | Sequencer feed                                              | Fast Feed                             |
+| --------------- | ----------------------------------------------------------- | ------------------------------------- |
+| Cost            | Free                                                        | Paid subscription                     |
+| Authentication  | None                                                        | API key against an onchain credential |
+| Granularity     | Per block                                                   | Per transaction, within a PGA round   |
 | Client          | Nitro node or [feed relay](/docs/run-a-node/run-feed-relay) | Your own client                       |
-| Follows a chain | Yes                                                           | No                                    |
-| Availability    | Every Arbitrum chain                                          | Arbitrum One                          |
+| Follows a chain | Yes                                                         | No                                    |
+| Availability    | Every Arbitrum chain                                        | Arbitrum One                          |
 
 To work with the standard feed, see [how to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed).

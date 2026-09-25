@@ -500,7 +500,7 @@ shell
 
 ### Dao chains parameters
 
-Breaking the title ordering here (it should be h3 instead of h4) so these titles don't appear in the right-hand sidebar
+The --parent-chain.connection.url parameter needs to provide a standard RPC endpoint for an Ethereum node, whether self-hosted or obtained from a node servic…
 
 - `<include cwd>content/partials/run-a-node/_dao-chains-parameters.mdx</include>`
 - used in 1 page — tags: `run-a-node`, `dao`, `chains`, `parameters`
@@ -524,7 +524,7 @@ shell
 
 ### Orbit chains parameters
 
-Breaking the title ordering here (it should be h3 instead of h4) so these titles don't appear in the right-hand sidebar
+The --parent-chain.connection.url parameter needs to provide a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service pro…
 
 - `<include cwd>content/partials/run-a-node/_orbit-chains-parameters.mdx</include>`
 - used in 1 page — tags: `run-a-node`, `orbit`, `chains`, `parameters`

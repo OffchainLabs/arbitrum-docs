@@ -92,6 +92,7 @@ helm install mychain-fullnode offchainlabs/nitro -f values-mychain.yaml
 If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-client.beacon-url`. AnyTrust chains additionally need a Data Availability configuration (`node.da.anytrust.*`, including a `rest-aggregator`); see [Data Availability](/docs/run-a-node/data-availability). The older `node.data-availability.*` flags still work but are deprecated in Nitro and will be removed in a future release.
 
     </Tab>
+
   </Tabs>
 </div>
 
@@ -170,7 +171,7 @@ The chart wires a built-in **startup probe** by default, but **liveness and read
 The chart sets `log-type=json`. The following INFO/WARN/ERROR strings distinguish a healthy node from a broken one on any Arbitrum chain (the sequencer hostnames in the examples below are Arbitrum One's; your chain's will differ):
 
 | Event                              | Healthy signal                                                                              | Broken / warning signal                                                                                                                               |
-| ----------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **New block created**              | `INFO created block` with `l2Block` / `l2BlockHash`, advancing continuously while producing | No advancing `created block` line → block production stalled                                                                                          |
 | **User tx forwarded to sequencer** | Success is not logged                                                                       | `WARN error forwarding transaction trying different target`; `ERROR Failed to publish transaction to any of the forwarding targets`                   |
 | **Sequencer feed message**         | `INFO Feed connected`; `DEBUG received batch item`                                          | `WARN failed connect to sequencer broadcast, waiting and retrying`; `ERROR Server connection timed out without receiving data`                        |
@@ -209,7 +210,7 @@ ERROR Error checking memory limit  err=...  checker=CgroupsMemoryLimitChecker   
 A full node reaches out to a fixed set of endpoints. If you run on a cloud provider, outbound traffic is often restricted by default, so you'll likely need to allow these destinations explicitly in your cloud security group or firewall rules (for example, AWS security groups, GCP firewall rules, or an egress `NetworkPolicy`). The specific hostnames depend on the chain: for DAO-governed networks, they come from the chain's built-in chain info, and for your own Arbitrum chain, they come from the `chain.info-json`, `execution.forwarding-target`, and feed URLs you configure. The categories are the same across chains:
 
 | Purpose                       | Where the endpoint comes from                                       | When                                        |
-| ------------------------------ | --------------------------------------------------------------------- | -------------------------------------------- |
+| ----------------------------- | ------------------------------------------------------------------- | ------------------------------------------- |
 | **Sequencer** (tx forwarding) | chain info `sequencer-url` / `execution.forwarding-target`          | Always—the node forwards user txs here      |
 | Sequencer fallbacks           | chain info `secondary-forwarding-target`                            | Failover                                    |
 | **Sequencer feed**            | chain info `feed-url` / `node.feed.input.url`                       | Always                                      |
@@ -222,7 +223,7 @@ A full node reaches out to a fixed set of endpoints. If you run on a cloud provi
 For **Arbitrum One**, those resolve to:
 
 | Purpose                   | Endpoint(s)                                                                                    |
-| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| ------------------------- | ---------------------------------------------------------------------------------------------- |
 | Sequencer (tx forwarding) | `https://arb1-sequencer.arbitrum.io/rpc`                                                       |
 | Sequencer fallbacks       | `https://arb1-sequencer-fallback-{1..5}.arbitrum.io/rpc`                                       |
 | Sequencer feed (primary)  | `wss://arb1-feed.arbitrum.io/feed`                                                             |

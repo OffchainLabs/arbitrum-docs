@@ -106,16 +106,16 @@ The <Term id="parent-chain">parent chain</Term> connection settings (`parent-cha
 
 ### `node.da.anytrust.rest-aggregator`
 
-| Key                              | Default                  | Description                                                            |
-| -------------------------------- | ------------------------ | ---------------------------------------------------------------------- |
+| Key                              | Default                  | Description                                                 |
+| -------------------------------- | ------------------------ | ----------------------------------------------------------- |
 | `enable`                         | `false`                  | Enable REST retrieval of <Term id="batch">batch</Term> data |
-| `max-per-endpoint-stats`         | `20`                     | Latency/success-rate stats entries per endpoint                        |
-| `online-url-list`                | —                        | URL to a remote list of REST DAS endpoint URLs                         |
-| `online-url-list-fetch-interval` | `1h0m0s`                 | How often to re-fetch the online URL list                              |
-| `strategy`                       | `simple-explore-exploit` | Endpoint selection strategy                                            |
-| `strategy-update-interval`       | `10s`                    | How often to refresh strategy with latency/error data                  |
-| `urls`                           | `[]`                     | Static list of REST DAS endpoint URLs                                  |
-| `wait-before-try-next`           | `2s`                     | Time before trying the next set of REST endpoints                      |
+| `max-per-endpoint-stats`         | `20`                     | Latency/success-rate stats entries per endpoint             |
+| `online-url-list`                | —                        | URL to a remote list of REST DAS endpoint URLs              |
+| `online-url-list-fetch-interval` | `1h0m0s`                 | How often to re-fetch the online URL list                   |
+| `strategy`                       | `simple-explore-exploit` | Endpoint selection strategy                                 |
+| `strategy-update-interval`       | `10s`                    | How often to refresh strategy with latency/error data       |
+| `urls`                           | `[]`                     | Static list of REST DAS endpoint URLs                       |
+| `wait-before-try-next`           | `2s`                     | Time before trying the next set of REST endpoints           |
 
 ### `node.da.anytrust.rest-aggregator.simple-explore-exploit-strategy`
 
@@ -126,16 +126,16 @@ The <Term id="parent-chain">parent chain</Term> connection settings (`parent-cha
 
 ### `node.da.anytrust.rest-aggregator.sync-to-storage`
 
-| Key                            | Default    | Description                                                                         |
-| ------------------------------ | ---------- | ----------------------------------------------------------------------------------- |
-| `delay-on-error`               | `1s`       | Wait time before retrying after sync error                                          |
+| Key                            | Default    | Description                                                                      |
+| ------------------------------ | ---------- | -------------------------------------------------------------------------------- |
+| `delay-on-error`               | `1s`       | Wait time before retrying after sync error                                       |
 | `eager`                        | `false`    | Eagerly sync batch data using <Term id="layer-1-l1">L1</Term> as index (vs lazy) |
-| `eager-lower-bound-block`      | —          | Starting L1 block for eager sync (only if no prior state)                           |
-| `ignore-write-errors`          | `true`     | Log-only on write failures during sync                                              |
-| `parent-chain-blocks-per-read` | `100`      | Max L1 blocks to read per eager sync poll                                           |
-| `retention-period`             | `360h0m0s` | How long to retain synced data                                                      |
-| `state-dir`                    | —          | Directory to persist sync progress                                                  |
-| `sync-expired-data`            | `true`     | Sync expired data (needed for mirror configs)                                       |
+| `eager-lower-bound-block`      | —          | Starting L1 block for eager sync (only if no prior state)                        |
+| `ignore-write-errors`          | `true`     | Log-only on write failures during sync                                           |
+| `parent-chain-blocks-per-read` | `100`      | Max L1 blocks to read per eager sync poll                                        |
+| `retention-period`             | `360h0m0s` | How long to retain synced data                                                   |
+| `state-dir`                    | —          | Directory to persist sync progress                                               |
+| `sync-expired-data`            | `true`     | Sync expired data (needed for mirror configs)                                    |
 
 ### `node.da.anytrust.rpc-aggregator`
 
@@ -143,19 +143,19 @@ The <Term id="parent-chain">parent chain</Term> connection settings (`parent-cha
 | ---------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `assumed-honest` | —       | `H` value; required signatures `K = N + 1 - H`                                                                                                                                                                            |
 | `backends`       | `null`  | JSON array of `{url, pubkey}` objects. The aggregator assigns each backend a `signersMask` of `1 << i` based on its index in the array, so member order must match the position of each public key in the onchain keyset. |
-| `enable`         | `false` | Enable RPC storage of batch data (<Term id="batch-poster">Batch Poster</Term> only)                                                                                                                            |
+| `enable`         | `false` | Enable RPC storage of batch data (<Term id="batch-poster">Batch Poster</Term> only)                                                                                                                                       |
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client`
 
-| Key                    | Default | Description                                       |
-| ---------------------- | ------- | ------------------------------------------------- |
-| `enable-chunked-store` | `true`  | Send data to DAS in chunks instead of all at once |
+| Key                    | Default     | Description                                                          |
+| ---------------------- | ----------- | -------------------------------------------------------------------- |
+| `enable-chunked-store` | `true`      | Send data to DAS in chunks instead of all at once                    |
 | `rpc.url`              | `self-auth` | DAS server URL; overridden at runtime by each `backends[].url` entry |
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client.data-stream`
 
-| Key                         | Default          | Description                      |
-| --------------------------- | ---------------- | -------------------------------- |
+| Key                         | Default                                                  | Description                      |
+| --------------------------- | -------------------------------------------------------- | -------------------------------- |
 | `max-store-chunk-body-size` | <code><Var name="dasMaxStoreChunkBytes" /></code> (5 MB) | Maximum HTTP body size per chunk |
 
 ### `node.da.anytrust.rpc-aggregator.rpc-client.data-stream.rpc-methods`
@@ -168,36 +168,36 @@ The <Term id="parent-chain">parent chain</Term> connection settings (`parent-cha
 
 ### `node.batch-poster` (DAC-relevant settings)
 
-| Key                                        | Default    | Description                                                         |
-| ------------------------------------------ | ---------- | ------------------------------------------------------------------- |
-| `anytrust-retention-period`                     | `360h0m0s` | Period DASes retain stored batches in AnyTrust mode                 |
-| `disable-dap-fallback-store-data-on-chain` | `false`    | If `true`, disables fallback to onchain batch posting when DA fails |
-| `enable`                                   | `false`    | Enable batch posting                                                |
+| Key                                        | Default    | Description                                                                                  |
+| ------------------------------------------ | ---------- | -------------------------------------------------------------------------------------------- |
+| `anytrust-retention-period`                | `360h0m0s` | Period DASes retain stored batches in AnyTrust mode                                          |
+| `disable-dap-fallback-store-data-on-chain` | `false`    | If `true`, disables fallback to onchain batch posting when DA fails                          |
+| `enable`                                   | `false`    | Enable batch posting                                                                         |
 | `max-calldata-batch-size`                  | `100000`   | Maximum estimated compressed calldata batch size (bytes); replaces the deprecated `max-size` |
-| `error-delay`                              | `10s`      | Delay after batch posting error before retry                        |
-| `extra-batch-gas`                          | `50000`    | Extra gas added to batch posting estimate                           |
-| `max-delay`                                | `1h0m0s`   | Maximum batch posting delay                                         |
-| `max-empty-batch-delay`                    | `72h0m0s`  | Maximum delay before posting an empty batch                         |
-| `poll-interval`                            | `10s`      | Interval to check for ready batches                                 |
-| `check-batch-correctness`                  | `true`     | Verify batch against inbox multiplexer                              |
-| `compression-level`                        | `11`       | Batch compression level                                             |
-| `l1-block-bound-bypass`                    | `1h0m0s`   | Post even if outside L1 bounds, within this margin                  |
-| `delay-buffer-always-updatable`            | `true`     | Always treat delay buffer as updatable                              |
-| `delay-buffer-threshold-margin`            | `25`       | Blocks before delay buffer threshold to post batch                  |
+| `error-delay`                              | `10s`      | Delay after batch posting error before retry                                                 |
+| `extra-batch-gas`                          | `50000`    | Extra gas added to batch posting estimate                                                    |
+| `max-delay`                                | `1h0m0s`   | Maximum batch posting delay                                                                  |
+| `max-empty-batch-delay`                    | `72h0m0s`  | Maximum delay before posting an empty batch                                                  |
+| `poll-interval`                            | `10s`      | Interval to check for ready batches                                                          |
+| `check-batch-correctness`                  | `true`     | Verify batch against inbox multiplexer                                                       |
+| `compression-level`                        | `11`       | Batch compression level                                                                      |
+| `l1-block-bound-bypass`                    | `1h0m0s`   | Post even if outside L1 bounds, within this margin                                           |
+| `delay-buffer-always-updatable`            | `true`     | Always treat delay buffer as updatable                                                       |
+| `delay-buffer-threshold-margin`            | `25`       | Blocks before delay buffer threshold to post batch                                           |
 
 ### `node.da.external-provider` (newer DAProvider interface)
 
-| Key                  | Default            | Description                                                  |
-| -------------------- | ------------------ | ------------------------------------------------------------ |
+| Key                  | Default            | Description                                       |
+| -------------------- | ------------------ | ------------------------------------------------- |
 | `enable`             | `false`            | Enable DAProvider <Term id="client">client</Term> |
-| `store-rpc-method`   | `daprovider_store` | Single-shot store RPC method name                            |
-| `use-data-streaming` | `false`            | Use chunked streaming protocol for large payloads            |
-| `with-writer`        | `false`            | DAProvider server supports writer interface                  |
+| `store-rpc-method`   | `daprovider_store` | Single-shot store RPC method name                 |
+| `use-data-streaming` | `false`            | Use chunked streaming protocol for large payloads |
+| `with-writer`        | `false`            | DAProvider server supports writer interface       |
 
 ### `node.da.external-provider.data-stream`
 
-| Key                         | Default          | Description                      |
-| --------------------------- | ---------------- | -------------------------------- |
+| Key                         | Default                                                  | Description                      |
+| --------------------------- | -------------------------------------------------------- | -------------------------------- |
 | `max-store-chunk-body-size` | <code><Var name="dasMaxStoreChunkBytes" /></code> (5 MB) | Maximum HTTP body size per chunk |
 
 ### `node.da.external-provider.data-stream.rpc-methods`

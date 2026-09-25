@@ -82,9 +82,7 @@ You can use the [`NodeInterface`](/docs/arbitrum-essentials/nodeinterface/refere
   - Call `NodeInterface.gasEstimateComponents()`, take the second element `gasEstimateForL1` (this is `B` in the formula), multiply by `P` and divide by `L1P`.
   - For <Term id="arbitrum-nova">Arbitrum Nova</Term> (AnyTrust), the data size is a fixed value since only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/docs/how-arbitrum-works/deep-dives/anytrust-protocol#data-availability-certificates-dacert).
 
-<VanillaAdmonition type="note">
-For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`.
-</VanillaAdmonition>
+<VanillaAdmonition type="note">For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`.</VanillaAdmonition>
 ## Code example
 
 Here's how to estimate gas using the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk) and `NodeInterface`:

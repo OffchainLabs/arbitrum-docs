@@ -98,11 +98,11 @@ One related message comes from the same code path.
 
 A "stalled feed" describes three different failures. They need different fixes, so identify which one you have before acting.
 
-| What you observe                           | What it means                               | Where to look                                          |
-| ------------------------------------------ | ------------------------------------------- | ------------------------------------------------------ |
-| No new messages arrive at your node        | Connection is dead or upstream stopped      | Your node and the relay chain                          |
+| What you observe                           | What it means                               | Where to look                               |
+| ------------------------------------------ | ------------------------------------------- | ------------------------------------------- |
+| No new messages arrive at your node        | Connection is dead or upstream stopped      | Your node and the relay chain               |
 | `arb/feed/backlog/messages` grows steadily | Batches are not landing on the parent chain | <Term id="batch-poster">Batch poster</Term> |
-| Your node lags but the feed is live        | Your node cannot keep up executing          | Your node's resources                                  |
+| Your node lags but the feed is live        | Your node cannot keep up executing          | Your node's resources                       |
 
 <VanillaAdmonition type="warning" title="A growing feed backlog is not a lagging follower">
 
@@ -188,10 +188,10 @@ The timestamp check applies only when the sequencer has a parent chain reader co
 
 The sequencer keeps running here, but the block it builds is empty because the sequencer rejects everything before queuing it.
 
-| Rejection message                                                                    | Trigger                                                                                                              |
-| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| `currently not accepting transactions due to expected surplus being below threshold` | Expected surplus fell below `expected-surplus-hard-threshold`                                                        |
-| `transaction sender is not on the whitelist`                                         | `sender-whitelist` is set and the sender is absent                                                                   |
+| Rejection message                                                                    | Trigger                                                                                                   |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `currently not accepting transactions due to expected surplus being below threshold` | Expected surplus fell below `expected-surplus-hard-threshold`                                             |
+| `transaction sender is not on the whitelist`                                         | `sender-whitelist` is set and the sender is absent                                                        |
 | `sequencer temporarily not available`                                                | This node is forwarding rather than sequencing, and its <Term id="forwarder">forwarder</Term> is disabled |
 
 For the surplus flags, see [Sequencer configuration reference](/docs/launch-arbitrum-chain/configuration/sequencer/sequencer-config-reference#expected-surplus-flags).

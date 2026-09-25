@@ -9,12 +9,7 @@ Registered globally in [`components/mdx.tsx`](../../mdx.tsx), so MDX pages use
 `<ImageZoom>` with no import:
 
 ```mdx
-<ImageZoom
-  src="/img/example.png"
-  alt="Example diagram"
-  caption="Optional caption text"
-  className="img-600px"
-/>
+<ImageZoom src="/img/example.png" alt="Example diagram" caption="Optional caption text" className="img-600px" />
 ```
 
 Behavior:

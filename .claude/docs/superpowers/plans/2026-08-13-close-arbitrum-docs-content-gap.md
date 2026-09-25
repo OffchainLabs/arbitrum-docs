@@ -26,21 +26,21 @@
 
 ## File Structure
 
-| File | Responsibility | Task |
-|---|---|---|
-| `scripts/lib/nav.mjs` | Parse `meta.json`, classify entries, compare against disk. Pure functions, no I/O side effects. | 1 |
-| `scripts/nav-check.mjs` | CLI wrapper over `lib/nav.mjs`; human + `--json` output; exit 1 on defects. | 1 |
-| `scripts/nav-check.test.mjs` | `node --test` unit tests for `lib/nav.mjs`. | 1 |
-| `content/docs/en/**/meta.json` | Repaired navigation (11 dirs with ghosts, 10 with hidden pages). | 1 |
-| `content/docs/en/run-a-node/run-full-node.mdx` | Dangling-link fix. | 2 |
-| `content/docs/en/notices/arbos61-upgrade-notice.mdx` | Corrected ArbOS 61 notice. | 2 |
-| `scripts/lib/tree-compare.mjs` | Normalization + pairing + body-size ratio. Pure functions. | 3 |
-| `scripts/upstream-drift.mjs` | CLI: report absent / gutted / drift vs miss. | 3 |
-| `scripts/upstream-drift.test.mjs` | `node --test` unit tests for `lib/tree-compare.mjs`. | 3 |
-| `content/glossary/forwarder.mdx` | Restored glossary term. | 4 |
-| 5 new pages under `content/docs/en/launch-arbitrum-chain/` | Ported absent pages. | 5 |
-| 10 existing pages | Restored gutted sections. | 6 |
-| 10 new pages | Forward-ported drift. | 7 |
+| File                                                       | Responsibility                                                                                  | Task |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---- |
+| `scripts/lib/nav.mjs`                                      | Parse `meta.json`, classify entries, compare against disk. Pure functions, no I/O side effects. | 1    |
+| `scripts/nav-check.mjs`                                    | CLI wrapper over `lib/nav.mjs`; human + `--json` output; exit 1 on defects.                     | 1    |
+| `scripts/nav-check.test.mjs`                               | `node --test` unit tests for `lib/nav.mjs`.                                                     | 1    |
+| `content/docs/en/**/meta.json`                             | Repaired navigation (11 dirs with ghosts, 10 with hidden pages).                                | 1    |
+| `content/docs/en/run-a-node/run-full-node.mdx`             | Dangling-link fix.                                                                              | 2    |
+| `content/docs/en/notices/arbos61-upgrade-notice.mdx`       | Corrected ArbOS 61 notice.                                                                      | 2    |
+| `scripts/lib/tree-compare.mjs`                             | Normalization + pairing + body-size ratio. Pure functions.                                      | 3    |
+| `scripts/upstream-drift.mjs`                               | CLI: report absent / gutted / drift vs miss.                                                    | 3    |
+| `scripts/upstream-drift.test.mjs`                          | `node --test` unit tests for `lib/tree-compare.mjs`.                                            | 3    |
+| `content/glossary/forwarder.mdx`                           | Restored glossary term.                                                                         | 4    |
+| 5 new pages under `content/docs/en/launch-arbitrum-chain/` | Ported absent pages.                                                                            | 5    |
+| 10 existing pages                                          | Restored gutted sections.                                                                       | 6    |
+| 10 new pages                                               | Forward-ported drift.                                                                           | 7    |
 
 ---
 
@@ -49,6 +49,7 @@
 Blocking. `meta.json` `pages` is an allowlist (`fumadocs-core` `packages/core/src/source/page-tree/builder.ts:397-428`); unlisted siblings are excluded unless `"..."` is present, and entries naming a non-existent page are silently ignored (`:330-338`). Today `launch-arbitrum-chain/configuration/meta.json` lists 3 ghost slugs with no `"..."`, so **34 pages are sidebar-unreachable**. Any page added in Tasks 5–7 would be invisible.
 
 **Files:**
+
 - Create: `scripts/lib/nav.mjs`
 - Create: `scripts/nav-check.mjs`
 - Create: `scripts/nav-check.test.mjs`
@@ -56,6 +57,7 @@ Blocking. `meta.json` `pages` is an allowlist (`fumadocs-core` `packages/core/sr
 - Modify: `content/docs/en/**/meta.json` (21 directories)
 
 **Interfaces:**
+
 - Produces: `classifyEntry(entry) -> {kind: 'page'|'rest'|'link'|'separator'|'exclude'}`, `checkDir({dir, meta, entries}) -> {ghosts: string[], hidden: string[], hasRest: boolean}`, `checkTree(contentDocsDir) -> Array<{dir, ghosts, hidden, hasRest}>`. Task 3 does not depend on these.
 
 - [ ] **Step 1: Write the failing test**
@@ -196,9 +198,7 @@ export function checkDir({ dir, meta, entries }) {
     }
   }
 
-  const listed = new Set(
-    classified.filter((c) => c.kind === 'page' || c.kind === 'exclude').map((c) => c.name),
-  );
+  const listed = new Set(classified.filter((c) => c.kind === 'page' || c.kind === 'exclude').map((c) => c.name));
 
   const ghosts = [...listed].filter((name) => !onDisk.has(name) && !name.includes('/'));
   const hidden = hasRest ? [] : [...hideable].filter((name) => !listed.has(name));
@@ -267,8 +267,7 @@ function main() {
   for (const r of results) {
     const rel = path.relative(process.cwd(), r.dir);
     if (r.ghosts.length) console.error(`  ${rel}\n    ghost entries (listed, not on disk): ${r.ghosts.join(', ')}`);
-    if (r.hidden.length)
-      console.error(`    hidden pages (on disk, not listed, no "..."): ${r.hidden.join(', ')}`);
+    if (r.hidden.length) console.error(`    hidden pages (on disk, not listed, no "..."): ${r.hidden.join(', ')}`);
   }
   process.exitCode = 1;
 }
@@ -324,16 +323,7 @@ Correct the section titles too — they were copy-pasted. `launch-arbitrum-chain
 ```json
 {
   "title": "Operate your chain",
-  "pages": [
-    "arbos-upgrade",
-    "monitoring-tools-and-considerations",
-    "ownership-access-control",
-    "key-rotation",
-    "gas-target",
-    "state-growth",
-    "post-launch-contract-deployments",
-    "..."
-  ]
+  "pages": ["arbos-upgrade", "monitoring-tools-and-considerations", "ownership-access-control", "key-rotation", "gas-target", "state-growth", "post-launch-contract-deployments", "..."]
 }
 ```
 
@@ -342,13 +332,7 @@ Correct the section titles too — they were copy-pasted. `launch-arbitrum-chain
 ```json
 {
   "title": "Validation and security",
-  "pages": [
-    "customizable-challenge-period",
-    "stake-and-validator-configurations",
-    "arbitrum-chain-finality",
-    "fast-withdrawals",
-    "..."
-  ]
+  "pages": ["customizable-challenge-period", "stake-and-validator-configurations", "arbitrum-chain-finality", "fast-withdrawals", "..."]
 }
 ```
 
@@ -399,11 +383,13 @@ git commit -m "Repair meta.json navigation: drop ghost entries, unhide 34+ pages
 Independent of everything else, both currently live.
 
 **Files:**
+
 - Modify: `content/docs/en/run-a-node/run-full-node.mdx:20`
 - Modify: `content/docs/en/notices/arbos61-upgrade-notice.mdx`
 - Reference: `/Users/allup/OCL/arbitrum-docs/docs/notices/arbos61-upgrade-notice.mdx`
 
 **Interfaces:**
+
 - Consumes: nothing. Produces: nothing consumed later. The Helm link is re-pointed at a real page in Task 5.
 
 - [ ] **Step 1: Reproduce the broken link**
@@ -460,12 +446,14 @@ git commit -m "Fix dangling Helm link and correct ArbOS 61 upgrade notice"
 Both trees stay live, so drift reappears weekly. This turns the manual audit into one command.
 
 **Files:**
+
 - Create: `scripts/lib/tree-compare.mjs`
 - Create: `scripts/upstream-drift.mjs`
 - Create: `scripts/upstream-drift.test.mjs`
 - Modify: `package.json`
 
 **Interfaces:**
+
 - Produces: `normalizeSlug(filePath) -> string`, `SECTION_MAP` (object), `RENAME_MAP` (object), `mapSectionPath(relPath) -> string`, `bodyLineCount(source) -> number`. Consumed by no later task; the CLI is used in Tasks 5–7 to confirm items drop off the report.
 
 - [ ] **Step 1: Write the failing test**
@@ -486,10 +474,7 @@ test('normalizeSlug strips numeric prefixes, extension and case', () => {
 
 test('mapSectionPath applies the Tree A -> Tree B section renames', () => {
   assert.equal(mapSectionPath('run-arbitrum-node/overview.mdx'), 'run-a-node/overview.mdx');
-  assert.equal(
-    mapSectionPath('launch-arbitrum-chain/chain-config/costs/x.mdx'),
-    'launch-arbitrum-chain/configuration/costs/x.mdx',
-  );
+  assert.equal(mapSectionPath('launch-arbitrum-chain/chain-config/costs/x.mdx'), 'launch-arbitrum-chain/configuration/costs/x.mdx');
   assert.equal(mapSectionPath('for-devs/oracles/api3/api3.mdx'), 'oracles/api3/api3.mdx');
   assert.equal(mapSectionPath('stylus-by-example/x.mdx'), 'stylus/x.mdx');
 });
@@ -499,15 +484,9 @@ test('mapSectionPath leaves unmapped sections untouched', () => {
 });
 
 test('mapSectionPath applies whole-file renames, and they beat section prefixes', () => {
-  assert.equal(
-    mapSectionPath('launch-arbitrum-chain/operate/monitoring.mdx'),
-    'launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx',
-  );
+  assert.equal(mapSectionPath('launch-arbitrum-chain/operate/monitoring.mdx'), 'launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx');
   // This one also matches the chain-config -> configuration section prefix; the rename must win.
-  assert.equal(
-    mapSectionPath('launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments.mdx'),
-    'launch-arbitrum-chain/configuration/sequencer/config-sequencer-timing-adjustments.mdx',
-  );
+  assert.equal(mapSectionPath('launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments.mdx'), 'launch-arbitrum-chain/configuration/sequencer/config-sequencer-timing-adjustments.mdx');
 });
 
 test('bodyLineCount excludes frontmatter', () => {
@@ -556,14 +535,10 @@ export const SECTION_MAP = {
  * wrong reason. Add an entry here whenever a port renames a file.
  */
 export const RENAME_MAP = {
-  'launch-arbitrum-chain/operate/monitoring.mdx':
-    'launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx',
-  'launch-arbitrum-chain/operate/ownership-and-access.mdx':
-    'launch-arbitrum-chain/operate/ownership-access-control.mdx',
-  'launch-arbitrum-chain/overview/introduction.mdx':
-    'launch-arbitrum-chain/overview/a-gentle-introduction.mdx',
-  'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments.mdx':
-    'launch-arbitrum-chain/configuration/sequencer/config-sequencer-timing-adjustments.mdx',
+  'launch-arbitrum-chain/operate/monitoring.mdx': 'launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx',
+  'launch-arbitrum-chain/operate/ownership-and-access.mdx': 'launch-arbitrum-chain/operate/ownership-access-control.mdx',
+  'launch-arbitrum-chain/overview/introduction.mdx': 'launch-arbitrum-chain/overview/a-gentle-introduction.mdx',
+  'launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments.mdx': 'launch-arbitrum-chain/configuration/sequencer/config-sequencer-timing-adjustments.mdx',
 };
 
 /** Reduce a path to a comparable slug: basename, no extension, no ordering prefix, alphanumeric only. */
@@ -650,11 +625,9 @@ function listDocs(root) {
 
 function addedDate(treeA, relPath) {
   try {
-    const out = execFileSync(
-      'git',
-      ['-C', treeA, 'log', '--diff-filter=A', '--format=%ad', '--date=short', '--', path.join('docs', relPath)],
-      { encoding: 'utf8' },
-    ).trim().split('\n');
+    const out = execFileSync('git', ['-C', treeA, 'log', '--diff-filter=A', '--format=%ad', '--date=short', '--', path.join('docs', relPath)], { encoding: 'utf8' })
+      .trim()
+      .split('\n');
     return out[out.length - 1] || null;
   } catch {
     return null;
@@ -731,6 +704,7 @@ In `package.json`, add after `"nav:check"`:
 
 Run: `pnpm drift`
 Expected: exit 1. The output must include, at minimum:
+
 - `ABSENT DRIFT added 2026-08-10 launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx`
 - `ABSENT MISS added 2026-06-24 launch-arbitrum-chain/chain-config/chainConfig-reference.mdx`
 - `GUTTED ratio 0.2 167->33 launch-arbitrum-chain/operate/monitoring.mdx -> launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx`
@@ -753,10 +727,12 @@ git commit -m "Add upstream-drift to detect content gaps against arbitrum-docs"
 Smallest content task. Do it first to prove the content loop end to end.
 
 **Files:**
+
 - Create: `content/glossary/forwarder.mdx`
 - Reference: `/Users/allup/OCL/arbitrum-docs/docs/partials/glossary/_forwarder.mdx`
 
 **Interfaces:**
+
 - Consumes: nothing. Produces: nothing.
 
 - [ ] **Step 1: Confirm the term is absent and unreferenced**
@@ -806,6 +782,7 @@ git commit -m "Restore forwarder glossary term"
 All five predate the port window — genuine migration misses.
 
 **Files:**
+
 - Create: `content/docs/en/launch-arbitrum-chain/run-a-node/run-full-node-with-helm.mdx`
 - Create: `content/docs/en/launch-arbitrum-chain/integrations/exchange-integration-checklist.mdx`
 - Create: `content/docs/en/launch-arbitrum-chain/integrations/bp-kms-signing-services.mdx`
@@ -815,6 +792,7 @@ All five predate the port window — genuine migration misses.
 - Modify: `content/docs/en/run-a-node/run-full-node.mdx` (restore the Helm link removed in Task 2)
 
 **Interfaces:**
+
 - Consumes: repaired `meta.json` files from Task 1 — without them these pages are invisible. Produces: the Helm page URL `/docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm`, re-linked from `run-full-node.mdx`.
 
 Port one page per commit. For each of the five, run this cycle:
@@ -891,6 +869,7 @@ git commit -m "Restore Helm link now that the target page exists"
 These pages exist here but lost body content. Per the spec decision, restore from Tree A but **read each one first** — a trim may have been deliberate.
 
 **Files (Tree B path ← Tree A source):**
+
 - `launch-arbitrum-chain/operate/monitoring-tools-and-considerations.mdx` ← `launch-arbitrum-chain/operate/monitoring.mdx`
 - `how-arbitrum-works/deep-dives/sequencer.mdx` ← same path
 - `launch-arbitrum-chain/operate/ownership-access-control.mdx` ← `launch-arbitrum-chain/operate/ownership-and-access.mdx`
@@ -903,6 +882,7 @@ These pages exist here but lost body content. Per the spec decision, restore fro
 - `notices/arbos61-upgrade-notice.mdx` — **already done in Task 2**, skip
 
 **Interfaces:**
+
 - Consumes: `pnpm drift` from Task 3 to confirm each page drops off the GUTTED list.
 
 Handle one page per commit, worst ratio first (`monitoring` at 0.20, then `sequencer` at 0.23, then `ownership-access-control` at 0.26).
@@ -917,6 +897,7 @@ diff -u /Users/allup/OCL/arbitrum-docs/docs/launch-arbitrum-chain/operate/monito
 - [ ] **Step 2: Decide, per absent section, whether the omission was deliberate**
 
 Read the absent sections. Restore unless one of these holds:
+
 - the content describes a Docusaurus-only mechanism that has no meaning here
 - the content is already present elsewhere in Tree B (search for a distinctive phrase before concluding it is missing)
 - the content was superseded by a Tree B page that covers it better
@@ -962,20 +943,21 @@ These postdate the port window. They are not migration defects — they are new 
 
 **Files:** 10 new pages. Tree A sources and target directories:
 
-| Tree A source | Tree B target directory |
-|---|---|
-| `launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx` | `launch-arbitrum-chain/configuration/costs/` |
-| `launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx` | `launch-arbitrum-chain/configuration/sequencer/` |
-| `launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx` | `launch-arbitrum-chain/operate/` |
-| `launch-arbitrum-chain/operate/validator-troubleshooting.mdx` | `launch-arbitrum-chain/operate/` |
-| `launch-arbitrum-chain/operate/upgrade-runbook.mdx` | `launch-arbitrum-chain/operate/` |
+| Tree A source                                                                    | Tree B target directory                                  |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx`                   | `launch-arbitrum-chain/configuration/costs/`             |
+| `launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx`          | `launch-arbitrum-chain/configuration/sequencer/`         |
+| `launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx`                        | `launch-arbitrum-chain/operate/`                         |
+| `launch-arbitrum-chain/operate/validator-troubleshooting.mdx`                    | `launch-arbitrum-chain/operate/`                         |
+| `launch-arbitrum-chain/operate/upgrade-runbook.mdx`                              | `launch-arbitrum-chain/operate/`                         |
 | `launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment.mdx` | `launch-arbitrum-chain/configuration/data-availability/` |
-| `arbitrum-bridge/06-withdrawal-monitoring.mdx` | `arbitrum-bridge/` (drop the `06-` prefix) |
-| `how-arbitrum-works/reference/finality-and-reorgs.mdx` | `how-arbitrum-works/reference/` |
-| `how-arbitrum-works/deep-dives/sequencer-transaction-flow.mdx` | `how-arbitrum-works/deep-dives/` |
-| `arbitrum-essentials/how-to-get-l2block-on-l1.mdx` | `arbitrum-essentials/` |
+| `arbitrum-bridge/06-withdrawal-monitoring.mdx`                                   | `arbitrum-bridge/` (drop the `06-` prefix)               |
+| `how-arbitrum-works/reference/finality-and-reorgs.mdx`                           | `how-arbitrum-works/reference/`                          |
+| `how-arbitrum-works/deep-dives/sequencer-transaction-flow.mdx`                   | `how-arbitrum-works/deep-dives/`                         |
+| `arbitrum-essentials/how-to-get-l2block-on-l1.mdx`                               | `arbitrum-essentials/`                                   |
 
 **Interfaces:**
+
 - Consumes: repaired `meta.json` from Task 1. Produces: nothing consumed later.
 
 Priority order by reader impact: `finality-and-reorgs` → `06-withdrawal-monitoring` → `sequencer-transaction-flow` → `revenue-routing` → the rest.
@@ -991,7 +973,8 @@ Both trees are live, so more drift may have landed since this plan was written. 
 Use the identical cycle from Task 5, Steps 1–5: read the source, create the page with a complete frontmatter block, apply syntax conversions, reuse partials from `CATALOG.md`, add to `meta.json`, verify, commit one page per commit.
 
 Two page-specific notes:
-- `finality-and-reorgs.mdx` — Tree B already has a *different, older* page at `how-arbitrum-works/deep-dives/finality.mdx` naming only two finality levels. Decide explicitly whether to replace that page or add alongside it. If replacing, use `pnpm move-doc` so links and redirects are rewritten; do not delete by hand.
+
+- `finality-and-reorgs.mdx` — Tree B already has a _different, older_ page at `how-arbitrum-works/deep-dives/finality.mdx` naming only two finality levels. Decide explicitly whether to replace that page or add alongside it. If replacing, use `pnpm move-doc` so links and redirects are rewritten; do not delete by hand.
 - `06-withdrawal-monitoring.mdx` — roughly 60% of its content is already scattered across `arbitrum-bridge/bridging/withdraw/*.mdx` and `bridge-transaction-traceability.mdx`. Read those first and port only what is genuinely absent, or the page will duplicate existing prose.
 
 - [ ] **Step 3: Confirm the report is clean**
@@ -1004,12 +987,14 @@ Expected: exit 0, no ABSENT and no GUTTED entries. If items remain, they are eit
 ### Task 8: Clear the remaining medium and low defects
 
 **Files:**
+
 - Modify: `content/docs/en/oracles/index.mdx`
 - Modify: `content/docs/en/build-decentralized-apps/quickstart-solidity-remix.mdx`
 - Rename: `content/partials/launch-arbitrum-chain/_config-evm-compatbility.mdx`
 - Review: `content/partials/launch-arbitrum-chain/_config-challenge-period-l1.mdx`, `_config-l1-challenge-period.mdx`
 
 **Interfaces:**
+
 - Consumes: nothing. Produces: nothing.
 
 - [ ] **Step 1: Add the missing oracle cards**
@@ -1026,6 +1011,7 @@ Add a card for each existing oracle page, matching the markup of the cards alrea
 - [ ] **Step 2: Fix the solidity learning-resources table**
 
 In `content/docs/en/build-decentralized-apps/quickstart-solidity-remix.mdx`, in the `#learning-resources` section:
+
 - the RareSkills row links to the Rust bootcamp — point it at the Solidity bootcamp
 - the Metana row contains a leaked LLM placeholder — replace it with the real description
 
@@ -1078,5 +1064,6 @@ Two spec items are deliberately not tasked here:
 Both trees stay live, so this is not finished when Task 8 lands. Run `pnpm drift` on a cadence — weekly matches the observed rate of upstream change (10 drift pages accumulated in roughly 5 weeks). Each run produces the ABSENT/GUTTED work list directly; port items using the Task 5 cycle.
 
 Two things will erode the signal if left alone:
+
 - **`PORT_WINDOW_END` is a historical constant.** It classifies DRIFT vs MISS. Once every MISS is cleared, the distinction stops mattering and the constant can be deleted.
 - **Deliberate omissions must be recorded** in the `SKIP` array in `scripts/upstream-drift.mjs` with a comment, or they resurface as noise every week and the report gets ignored.

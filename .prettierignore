@@ -15,16 +15,22 @@ next-env.d.ts
 # Machine-generated
 pnpm-lock.yaml
 
-# MDX content is excluded: Prettier's MDX formatter escapes `*` inside `{/* … */}`
-# expression comments (→ `{/\* … \*/}`), which breaks the MDX/acorn parse and the build.
-# @offchainlabs/prettier-config targets JS/TS style + import order, not doc prose, so MDX
-# is left to authors. (`.md` prose is still formatted.)
-**/*.mdx
-
 # Generated content — format is owned by the generators, not Prettier
 # (formatting these would break `partials:check` catalog-freshness)
 content/partials/CATALOG.md
 content/partials/manifest.json
+# Written by move-doc and the redirect generators as JSON.stringify / one entry per line;
+# Prettier would reflow them and the next tool run would undo it.
+content/**/meta.json
+redirects.config.mjs
+redirects.legacy.mjs
+redirects.current.mjs
 
-# Local, git-ignored assistant guidance
+# Assistant guidance; parts of CLAUDE.md are rewritten by `next dev`
 CLAUDE.md
+
+# Local agent config, untracked
+.agents
+.codex
+.superpowers
+AGENTS.md

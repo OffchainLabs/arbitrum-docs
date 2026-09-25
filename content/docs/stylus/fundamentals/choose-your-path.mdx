@@ -133,8 +133,8 @@ Not sure where to start with Stylus? This guide helps you find the optimal learn
 
 ### Common migration patterns
 
-| Solidity Pattern              | Stylus Equivalent           | Guide                                                                   |
-| ----------------------------- | --------------------------- | ----------------------------------------------------------------------- |
+| Solidity Pattern              | Stylus Equivalent           | Guide                                                                        |
+| ----------------------------- | --------------------------- | ---------------------------------------------------------------------------- |
 | `mapping(address => uint)`    | `StorageMap<Address, U256>` | [Storage types](/docs/stylus/fundamentals/data-types/storage)                |
 | `require(condition, "error")` | `Result<T, E>` + `?`        | [Error handling](/docs/stylus/fundamentals/contracts#error-handling)         |
 | `msg.sender`                  | `self.vm().msg_sender()`    | [Global functions](/docs/stylus/fundamentals/global-variables-and-functions) |

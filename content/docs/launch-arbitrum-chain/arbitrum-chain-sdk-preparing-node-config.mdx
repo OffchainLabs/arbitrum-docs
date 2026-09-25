@@ -119,8 +119,8 @@ import { createPublicClient, http } from 'viem';
 import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, ChainConfig, prepareNodeConfig } from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
-  chain: parentChain,
-  transport: http(),
+chain: parentChain,
+transport: http(),
 });
 
 // get the transaction
@@ -135,15 +135,16 @@ const chainConfig: ChainConfig = JSON.parse(config.chainConfig);
 const coreContracts = txReceipt.getCoreContracts();
 
 const nodeConfig = prepareNodeConfig({
-  chainName: 'MyArbitrumChain',
-  chainConfig,
-  coreContracts,
-  batchPosterPrivateKey,
-  validatorPrivateKey,
-  stakeToken: config.stakeToken,
-  parentChainId: parentChain.id,
-  parentChainRpcUrl: parentChain.rpcUrls.default.http[0],
+chainName: 'MyArbitrumChain',
+chainConfig,
+coreContracts,
+batchPosterPrivateKey,
+validatorPrivateKey,
+stakeToken: config.stakeToken,
+parentChainId: parentChain.id,
+parentChainRpcUrl: parentChain.rpcUrls.default.http[0],
 });
+
 ```
 
 `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
@@ -155,3 +156,4 @@ If the chain uses a custom genesis, also give the node the generated `genesis.js
 ### 3. Next step
 
 You can now run the Nitro node for your Arbitrum chain with the node configuration generated. You can find instructions for running a node in [How to run a full node](/docs/run-a-node/run-full-node).
+```
