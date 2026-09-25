@@ -577,11 +577,13 @@ the field typed while yielding no dates.
 The choice is made in `source.config.ts` at build time rather than at render time because pages
 render on demand in a serverless runtime that has neither git nor the repository.
 
-**Vercel builds fetch full history during `postinstall`.** `scripts/ensure-docs-history.ts` checks
-for a shallow checkout and fetches the public repository's history before `fumadocs-mdx` generates
-the pages. It fails the install if that fetch fails, so a deployment cannot silently omit the dates.
-A deep clone skips the fetch. Local shallow clones still omit dates until their history is filled in.
-The same applies to any CI job that wants the dates, since `actions/checkout` defaults to
+**Vercel clones at depth 10, so production shows no dates until `VERCEL_DEEP_CLONE=true` is set
+in the project's environment variables.** Nothing in the build fetches history itself: a
+`postinstall` step that ran `git fetch --unshallow` and failed the install when the checkout stayed
+shallow was tried and removed, because it coupled every deployment to a network fetch and to
+naming the right repository, and the first branch built from a differently named repository failed
+on it. Local shallow clones likewise omit dates until their history is filled in. The same applies
+to any CI job that wants the dates, since `actions/checkout` defaults to
 `fetch-depth: 1`. No gate depends on the dates, so `ci.yml` never asks for a deep clone. Its `Gates`
 and `Build` checkouts do set `fetch-depth: 2`, for `versioned-docs-check.ts`
 (see [The gates](#the-gates)), and that is deliberately the largest depth that changes nothing here:

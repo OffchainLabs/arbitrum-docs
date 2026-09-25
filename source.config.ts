@@ -18,8 +18,8 @@ import { referenceSchema } from './lib/reference-schema';
  *
  * A wrong "Last updated" date is worse than none, so no date is resolved unless the history is
  * complete (see `lastModified` below for how that is expressed without changing the collection's
- * type). On Vercel, `scripts/ensure-docs-history.ts` fills in the history before the postinstall
- * Fumadocs generation runs.
+ * type). Vercel clones at depth 10, so production shows no dates until `VERCEL_DEEP_CLONE=true` is
+ * set in the project's environment variables.
  *
  * `git` missing entirely, or a non-repo checkout, lands in the `catch` and also omits the date.
  */
