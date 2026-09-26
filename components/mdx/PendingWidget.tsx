@@ -2,7 +2,7 @@ import { VanillaAdmonition } from '@/components/mdx/VanillaAdmonition';
 
 /**
  * Placeholder for interactive widgets from the Docusaurus docs that have not yet
- * been ported to the Fumadocs app (VendingMachine, EdgeChallengeFlow, FlowChart,
+ * been ported to the Fumadocs app (EdgeChallengeFlow, FlowChart,
  * MultiDimensionalContentWidget, GenerateTroubleshootingReportWidget). Keeps
  * pages rendering and makes the gap explicit. Replace with the real component
  * when it is ported.

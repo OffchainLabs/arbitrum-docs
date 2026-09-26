@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" width="1040" height="470" role="img" aria-labelledby="t d">
+<title id="t">Web2 vending machine architecture</title>
+<desc id="d">Web2 architecture of the cupcake vending machine. A user talks to the vending machine app. The app runs across four layers: servers, network, device and browser. The servers layer holds three concerns: data (the cupcakes), business logic and presentation (the UI). Everything the app depends on lives on centralized servers.</desc>
+<defs>
+<linearGradient id="brandbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#152c4e"/><stop offset="0.55" stop-color="#1b4add"/><stop offset="1" stop-color="#12aaff"/></linearGradient>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9dcced"/></marker>
+<marker id="arrowsm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#9dcced"/></marker>
+</defs>
+<rect x="0" y="0" width="1040" height="470" fill="url(#brandbg)"/>
+<g font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<rect x="40" y="130" width="130" height="190" rx="10" fill="#9dcced"/>
+<circle cx="105.0" cy="188" r="24" fill="#0b1b2e"/>
+<path d="M61.0 268 A44 44 0 0 1 149.0 268 Z" fill="#0b1b2e"/>
+<text x="105.0" y="302" font-size="22" font-weight="600" fill="#0b1b2e" text-anchor="middle">User</text>
+<rect x="240" y="120" width="180" height="210" rx="10" fill="#12aaff"/>
+<text x="330.0" y="219.5" font-size="22" font-weight="600" fill="#0b1b2e" text-anchor="middle">Vending</text>
+<text x="330.0" y="245.9" font-size="22" font-weight="600" fill="#0b1b2e" text-anchor="middle">machine</text>
+<path d="M176 225.0 L232 225.0" fill="none" stroke="#9dcced" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="500" y="56" width="200" height="54" rx="10" fill="#213147"/>
+<text x="600.0" y="90.7" font-size="22" font-weight="600" fill="#ffffff" text-anchor="middle">Servers</text>
+<rect x="500" y="136" width="200" height="54" rx="10" fill="#213147"/>
+<text x="600.0" y="170.7" font-size="22" font-weight="600" fill="#ffffff" text-anchor="middle">Network</text>
+<rect x="500" y="216" width="200" height="54" rx="10" fill="#213147"/>
+<text x="600.0" y="250.7" font-size="22" font-weight="600" fill="#ffffff" text-anchor="middle">Device</text>
+<rect x="500" y="296" width="200" height="54" rx="10" fill="#213147"/>
+<text x="600.0" y="330.7" font-size="22" font-weight="600" fill="#ffffff" text-anchor="middle">Browser</text>
+<path d="M600.0 113 L600.0 133" fill="none" stroke="#9dcced" stroke-width="2" marker-start="url(#arrowsm)" marker-end="url(#arrowsm)"/>
+<path d="M600.0 193 L600.0 213" fill="none" stroke="#9dcced" stroke-width="2" marker-start="url(#arrowsm)" marker-end="url(#arrowsm)"/>
+<path d="M600.0 273 L600.0 293" fill="none" stroke="#9dcced" stroke-width="2" marker-start="url(#arrowsm)" marker-end="url(#arrowsm)"/>
+<path d="M420 120 L500 56" fill="none" stroke="#9dcced" stroke-width="2" stroke-dasharray="7 7" opacity="0.85"/>
+<path d="M420 330 L500 350" fill="none" stroke="#9dcced" stroke-width="2" stroke-dasharray="7 7" opacity="0.85"/>
+<rect x="750" y="40" width="250" height="320" rx="12" fill="#ffffff" fill-opacity="0.06" stroke="#9dcced" stroke-width="1.5" stroke-dasharray="7 7"/>
+<path d="M700 56 L750 40" fill="none" stroke="#9dcced" stroke-width="2" stroke-dasharray="7 7" opacity="0.85"/>
+<path d="M700 110 L750 360" fill="none" stroke="#9dcced" stroke-width="2" stroke-dasharray="7 7" opacity="0.85"/>
+<rect x="772.0" y="82" width="206" height="54" rx="10" fill="#e6007a"/>
+<text x="875.0" y="116.0" font-size="20" font-weight="600" fill="#ffffff" text-anchor="middle">Data (cupcakes)</text>
+<rect x="772.0" y="174" width="206" height="54" rx="10" fill="#213147"/>
+<text x="875.0" y="208.0" font-size="20" font-weight="600" fill="#ffffff" text-anchor="middle">Business logic</text>
+<rect x="772.0" y="266" width="206" height="54" rx="10" fill="#12aaff"/>
+<text x="875.0" y="300.0" font-size="20" font-weight="600" fill="#0b1b2e" text-anchor="middle">Presentation (UI)</text>
+<rect x="40" y="414" width="22" height="22" rx="5" fill="#9dcced"/>
+<text x="72" y="431" font-size="18" font-weight="600" fill="#0b1b2e">Person</text>
+<rect x="172" y="414" width="22" height="22" rx="5" fill="#12aaff"/>
+<text x="204" y="431" font-size="18" font-weight="600" fill="#0b1b2e">User-facing app</text>
+<rect x="388" y="414" width="22" height="22" rx="5" fill="#213147"/>
+<text x="420" y="431" font-size="18" font-weight="600" fill="#0b1b2e">Infrastructure layer</text>
+<rect x="651" y="414" width="22" height="22" rx="5" fill="#e6007a"/>
+<text x="683" y="431" font-size="18" font-weight="600" fill="#0b1b2e">Data store</text>
+</g>
+</svg>
