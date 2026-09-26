@@ -336,6 +336,17 @@ page using one is not broken, just incomplete.
 
 Adding a component here makes it available in all MDX with no import.
 
+**VendingMachine.** The Solidity quickstart's "free cupcakes" demo (`components/mdx/VendingMachine/`),
+ported from the Docusaurus component of the same name via `OffchainLabs/Fumadocs-test#61`. `type` is
+a closed union: `web2` keeps balances in tab memory, while `web3-localhost` and `web3-arb-sepolia`
+talk to a `VendingMachine.sol` the reader deploys themselves, through the injected EIP-1193 wallet
+using viem. Reads go through a public client and writes through a wallet client, with no chain or
+contract address hardcoded. Anything outside the union falls back to the web2 widget, because MDX
+call sites are not type-checked and a misspelling must not put a reader on a web2 page in front of a
+wallet prompt. The ABI is transcribed into `abi.ts` as a TypeScript `as const` (the compiled
+artifact's bytecode was never used) so viem can infer argument and return types. With no wallet
+installed the widget renders a notice instead of throwing.
+
 **Image zoom.** `<ImageZoom>` resolves to the wrapper in `components/mdx/ImageZoom/`: plain `<img>`
 child, supports `caption`, needs no dimensions, no Next image optimization. To use Fumadocs' native
 component instead — for `_next/image` optimization — import it per file, which shadows the wrapper
@@ -429,6 +440,13 @@ component looks broken.
 
 Several things are deliberately kept off the critical path. Each is the kind of change someone
 undoes by accident, so the reason lives here rather than only in a commit message.
+
+**Heavy widgets load lazily.** Every docs page imports `components/mdx.tsx`, so a static import
+there puts the component's library in every page's client bundle. A widget with a large dependency
+therefore sits behind a `'use client'` wrapper that `next/dynamic`s the implementation:
+`components/mdx/VendingMachine/index.tsx` is the pattern, and it keeps viem out of every page but
+the one that renders the demo. Server rendering stays on, so the markup is still in the HTML and
+only the JavaScript is deferred.
 
 **The Inkeep chat widget loads after `load`, on idle.** `@inkeep/cxkit-react` is by a wide margin
 the heaviest thing this site ships — roughly 321 KiB transferred, most of it unused on a page where
