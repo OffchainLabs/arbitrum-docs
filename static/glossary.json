@@ -297,7 +297,7 @@
   },
   "fast-feed": {
     "title": "Fast Feed",
-    "text": "<p>A paid, authenticated data stream on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> that publishes individual transactions, their relative ordering, and related metadata after the <a href=\"/intro/glossary#sequencer\">Sequencer</a> orders and executes them, and before the block that contains them is published on the <a href=\"/intro/glossary#sequencer-feed\">Sequencer Feed</a>. Subscribers buy timed access through the Fast Feed Payment Contract.</p>\n"
+    "text": "<p>A paid, authenticated data stream on <a href=\"/intro/glossary#arbitrum-one\">Arbitrum One</a> that publishes individual transactions, their relative ordering, and related metadata after the <a href=\"/intro/glossary#sequencer\">Sequencer</a> orders and executes them, and before the block that contains them is published on the <a href=\"/intro/glossary#sequencer-feed\">Sequencer Feed</a>. Subscribers buy timed access through the <code>Tickets</code> contract, also called the Fast Feed Payment Contract.</p>\n"
   },
   "fast-withdrawals": {
     "title": "Fast withdrawals",
@@ -514,6 +514,10 @@
   "rival": {
     "title": "Rival",
     "text": "<p>In the <a href=\"/intro/glossary#bold\">BoLD</a> <a href=\"/intro/glossary#challenge-protocol\">Challenge Protocol</a>, two <a href=\"/intro/glossary#edge\">edges</a> are <em>rivals</em> when they share a starting point but make incompatible claims about the same range of chain history. Rivaling an edge stops its unrivaled timer and unlocks <a href=\"/intro/glossary#bisection\">bisection</a> moves to resolve the disagreement.</p>\n"
+  },
+  "roll-forward": {
+    "title": "Roll forward",
+    "text": "<p>In the <a href=\"/intro/glossary#fast-feed\">Fast Feed</a> <code>Tickets</code> contract, the step that advances stored round state (round number, ticket price, tickets sold, and queued parameter changes) to the current round. The contract rolls state forward lazily: the first state-changing call in a new round performs it, and view functions compute the rolled-forward values on the fly without writing them.</p>\n"
   },
   "rollup-contract": {
     "title": "Rollup contract",
