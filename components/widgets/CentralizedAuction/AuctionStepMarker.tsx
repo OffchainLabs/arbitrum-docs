@@ -12,11 +12,9 @@ import styles from './styles.module.css';
 /**
  * One numbered marker on the auction diagram, and the step dialog behind it.
  *
- * Upstream split this across `NumberComponent`, `ButtonComponent` and `Modal`, and animated all
- * three with `@react-spring/web`. The animations are a pulsing ring, a hover grow, and a dialog
- * fade, and each one is expressible as a CSS transition or keyframe, so the spring dependency is
- * not carried over. Radix (already used by `PdfModal`) supplies the focus trap, `Esc` handling and scroll lock,
- * and its `data-state` attributes drive the open and close animations.
+ * The pulsing ring, hover grow and dialog fade are CSS transitions and keyframes in
+ * `styles.module.css`. Radix supplies the focus trap, `Esc` handling and scroll lock, and its
+ * `data-state` attributes drive the open and close animations.
  */
 export function AuctionStepMarker({ step, interactive }: { step: number; interactive?: boolean }) {
   const [open, setOpen] = useState(false);

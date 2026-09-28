@@ -15,11 +15,8 @@ import {
 
 /**
  * The OS / Network / Node type selector that drives the rest of the troubleshooting page.
- *
- * Replaces the Docusaurus "tab group with a label pseudo-tab" hack: the original repurposed a tab
- * widget and then unbound the click handler on the first tab so it could serve as a label. Here the
- * label is just a label and the options are radio buttons, which also makes the control reachable
- * by keyboard and announced correctly by screen readers.
+ * Each dimension is a labelled radio group, so the control is reachable by keyboard and announced
+ * correctly by screen readers.
  */
 
 function Row({
@@ -73,8 +70,7 @@ export function TroubleshootingConfig() {
       mounted.current = true;
       return;
     }
-    // Mirrors the legacy "Content updated!" animation, which existed so readers notice that
-    // guidance elsewhere on the page just changed under them.
+    // "Content updated!" tells readers that guidance elsewhere on the page just changed.
     setUpdated(true);
     const timer = setTimeout(() => setUpdated(false), 2000);
     return () => clearTimeout(timer);

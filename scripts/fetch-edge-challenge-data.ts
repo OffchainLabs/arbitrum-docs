@@ -1,5 +1,5 @@
 /**
- * fetch-edge-challenge-data — refresh public/data/edge-challenge-flow.json.
+ * fetch-edge-challenge-data: refresh public/data/edge-challenge-flow.json.
  *
  * Usage:
  *   pnpm edge-challenge:fetch
@@ -8,20 +8,18 @@
  * BoLD `ChallengeManager` contract has emitted on Arbitrum Sepolia, backfills the
  * `EdgeAdded` event for any edge only ever referenced (never directly logged) by a
  * later event, resolves the staker address behind each `EdgeAdded` transaction, and
- * writes the result as static JSON. `components/mdx/EdgeChallengeFlow` renders the
+ * writes the result as static JSON. `components/widgets/EdgeChallengeFlow` renders the
  * committed snapshot; nothing in the build calls this script.
  *
  * No `--check` mode: unlike `generate-contract-addresses.ts` or
  * `generate-cli-reference.ts`, this has no pinned, deterministic input to compare
  * against. Its source is live chain state that keeps changing as new challenges open
  * and existing ones bisect further, so a second run against the same contract
- * legitimately produces a different (superset) result from the first — there is no
+ * legitimately produces a different (superset) result from the first. There is no
  * "stale" to detect, only "older". A `--check` here could only ever fail once any
  * challenge activity happens on Sepolia after the snapshot was taken, which is not a
  * signal anyone should gate a build on. Re-run by hand when the rendered flow looks
  * out of date, review the diff, and commit it deliberately.
- *
- * Ported from arbitrum-docs `scripts/fetch-edge-challenge-data.mjs`.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -275,7 +273,7 @@ async function main(): Promise<void> {
   // Collect all referenced edge IDs and find missing EdgeAdded events. A bisection or
   // OSP-confirmation event references edges (children, the edge itself) that may have
   // been added before the fromBlock window this scan happened to cover, or whose
-  // EdgeAdded log this pass filtered out for an unrelated reason — so those need their
+  // EdgeAdded log this pass filtered out for an unrelated reason. Those need their
   // own direct lookup rather than being left absent from the map.
   const referenced = new Set<string>();
   events.forEach((ev) => {

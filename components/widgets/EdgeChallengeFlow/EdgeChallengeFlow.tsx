@@ -13,12 +13,10 @@ import type { EdgeChallengeData } from './types';
 import { useEdgeChallengeState } from './useEdgeChallengeState';
 
 /**
- * Replay of a real BoLD challenge, ported from the Docusaurus `InteractiveDiagrams/Bold/
- * EdgeChallengeFlow`.
+ * Replay of a real BoLD challenge.
  *
- * The event log is 236 KB of decoded Arbitrum Sepolia logs, so it stays a static file under
- * `public/data/` and is fetched on mount rather than bundled: the page downloads it only when a
- * reader reaches the diagram, and the JSON never passes through the JavaScript parser as source.
+ * The decoded Arbitrum Sepolia event log is a static file under `public/data/`, fetched on mount
+ * rather than bundled, so the page downloads it only when a reader reaches the diagram.
  */
 function EdgeChallengeFlowLoader() {
   const [data, setData] = useState<EdgeChallengeData | null>(null);

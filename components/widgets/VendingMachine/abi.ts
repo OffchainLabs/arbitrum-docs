@@ -1,10 +1,8 @@
 /**
- * ABI of the quickstart's `VendingMachine.sol`, transcribed from the compiled artifact that the
- * Docusaurus site imported as `VendingMachine.sol/VendingMachine.json`.
+ * ABI of the quickstart's `VendingMachine.sol`.
  *
- * Only the `abi` field was ever read; the artifact's bytecode is not used anywhere (readers deploy
- * the contract themselves from Remix). Declaring it as a TypeScript `as const` rather than a JSON
- * import is what lets viem infer argument and return types for each function.
+ * No bytecode is needed, because readers deploy the contract themselves from Remix. Declaring the
+ * ABI `as const` is what lets viem infer argument and return types for each function.
  */
 export const vendingMachineAbi = [
   {

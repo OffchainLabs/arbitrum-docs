@@ -5,26 +5,26 @@ import type { MDXComponents } from 'mdx/types';
 import type { ComponentPropsWithoutRef, ElementType } from 'react';
 
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
-import { FlowChart } from '@/components/mdx/CentralizedAuction';
 import { CustomDetails } from '@/components/mdx/CustomDetails';
-import { EdgeChallengeFlow } from '@/components/mdx/EdgeChallengeFlow';
 import FAQStructuredData from '@/components/mdx/FAQStructuredData';
 import { ImageZoom } from '@/components/mdx/ImageZoom';
 import { PdfModal } from '@/components/mdx/PdfModal';
 import { Reference } from '@/components/mdx/Reference';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
+import { Popup, PopupContent, PopupTrigger } from '@/components/mdx/Twoslash';
+import { VanillaAdmonition } from '@/components/mdx/VanillaAdmonition';
+import { Var } from '@/components/mdx/Var';
+import { FlowChart } from '@/components/widgets/CentralizedAuction';
+import { EdgeChallengeFlow } from '@/components/widgets/EdgeChallengeFlow';
 import {
   ChecklistItem,
   ConfigGuidance,
   TroubleshootingChecklist,
   TroubleshootingConfig,
   TroubleshootingReport,
-} from '@/components/mdx/Troubleshooting';
-import { Popup, PopupContent, PopupTrigger } from '@/components/mdx/Twoslash';
-import { VanillaAdmonition } from '@/components/mdx/VanillaAdmonition';
-import { Var } from '@/components/mdx/Var';
-import { VendingMachine } from '@/components/mdx/VendingMachine';
+} from '@/components/widgets/Troubleshooting';
+import { VendingMachine } from '@/components/widgets/VendingMachine';
 
 /**
  * Route internal PDF links through `<PdfModal>` so they open in an overlay instead of navigating away.
@@ -96,8 +96,6 @@ export function getMDXComponents(components?: MDXComponents) {
     Tab,
     Tabs,
     Term,
-    // Node troubleshooting page (ports the Docusaurus MultiDimensionalContentWidget +
-    // GenerateTroubleshootingReportWidget pair).
     ChecklistItem,
     ConfigGuidance,
     TroubleshootingChecklist,

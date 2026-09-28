@@ -1,15 +1,11 @@
 /*
  * Edge challenge flow visualisation.
  *
- * Ported from arbitrum-docs `src/css/partials/_edge-challenge-flow.scss`. Every surface, border and
- * text colour now reads a Fumadocs theme token, so the diagram follows the site theme instead of
- * carrying its own light/dark palettes. Only the four status hues (active, bisected, rival, OSP
+ * Every surface, border and text colour reads a Fumadocs theme token, so the diagram follows the
+ * site theme. Only the four status hues (active, bisected, rival, OSP
  * confirmed) stay bespoke: they encode meaning the legend refers to, and they are the one thing a
  * theme token cannot express. They are declared once here and flipped for dark mode, so no hex
  * value appears in the SVG code.
- *
- * The Docusaurus column-width overrides are gone: Fumadocs pages take the width they are given, and
- * `full: true` frontmatter is how a page opts out of the narrow column.
  */
 .ecf-page {
   --ecf-surface: var(--color-fd-card);
