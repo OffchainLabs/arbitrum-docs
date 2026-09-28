@@ -26,11 +26,11 @@ This how-to assumes that you're familiar with:
 - The DAC's role in the AnyTrust protocol. Refer to [Inside AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) for a refresher.
 - [Docker](https://docs.docker.com/) and Docker Compose.
 
-<VanillaAdmonition type="warning" title="Binary names changed in Nitro v3.10.0">
+<Callout type="warn" title="Binary names changed in Nitro v3.10.0">
 
 As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `anytrustserver` and `anytrusttool`, and the Docker image only ships the new names. The parent chain flags also moved: `--data-availability.parent-chain-node-url` is now `--parent-chain.node-url`, and `--data-availability.sequencer-inbox-address` is now `--parent-chain.sequencer-inbox-address`. If you're following older guides or scripts that use the legacy names with a recent image, the commands will fail. This guide uses the new names throughout.
 
-</VanillaAdmonition>
+</Callout>
 
 ## How to deploy the DAS
 
@@ -53,11 +53,11 @@ mkdir -p das-server/bls_keys das-server/das-data
 cd das-server
 ```
 
-<VanillaAdmonition type="warning" title="Create mounted directories before starting the container">
+<Callout type="warn" title="Create mounted directories before starting the container">
 
 The DAS container runs as a non-root user with UID and GID `1000` (the first regular user on the image's Debian base). If a bind-mounted directory doesn't exist when the container starts, Docker creates it owned by `root`, and the server will fail with permission errors when writing to it. Always create the directories on the host first. On Linux, if your user's UID isn't `1000`, also make them writable for the container user: `sudo chown -R 1000:1000 bls_keys das-data`. Docker Desktop on macOS and Windows maps file ownership automatically, so this step isn't needed there.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Step 1: Generate the BLS keypair
 
@@ -130,11 +130,11 @@ All the configuration options available for a Kubernetes deployment apply here t
 - --data-availability.rest-aggregator.online-url-list=<URL TO LIST OF REST ENDPOINTS>
 ```
 
-<VanillaAdmonition type="note" title="Running a mirror DAS with Docker">
+<Callout type="info" title="Running a mirror DAS with Docker">
 
 A [mirror DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das) uses the same image and a subset of this configuration: remove `--enable-rpc`, `--rpc-addr`, and the `9876` port mapping (mirrors don't store data for the sequencer, so they need no RPC interface and no BLS key), and enable the REST aggregator with the `--data-availability.rest-aggregator.sync-to-storage.*` options so that it syncs data from your main DAS and other public mirrors.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Step 3: Start the DAS
 
@@ -263,11 +263,11 @@ Remove the extra signer configuration when you're done testing, or keep it (with
 
 A DAS signs and returns a DACert immediately for each store request it receives from the batch poster; there is no waiting period on the DAS side. How often those certificates (or, in fallback, full batches) are posted to the parent chain is governed by the batch poster's own limits — its maximum batch size and maximum delay parameters (`--node.batch-poster.max-delay`, and `--node.da.anytrust.max-batch-size` for AnyTrust batches) — so DAS costs are dominated by steady infrastructure, not per-batch fees.
 
-<VanillaAdmonition type="info" title="Approximate costs (as of July 2026)">
+<Callout type="info" title="Approximate costs (as of July 2026)">
 
 Typical operational cost for running an AnyTrust DAS node is roughly \$200/month (a small VM, storage, and egress). For comparison, posting data to Celestia costs roughly \$0.08/MB. These are rough estimates that change over time; validate them against current provider pricing before making decisions.
 
-</VanillaAdmonition>
+</Callout>
 
 ## What to do next?
 

@@ -9,11 +9,11 @@ sme: offchainlabs
 
 Writing secure smart contracts is critical - vulnerabilities can lead to loss of funds and user trust. This guide covers essential security patterns for Stylus development.
 
-<VanillaAdmonition type="info" title="Compile-time determinism">
+<Callout type="info" title="Compile-time determinism">
 
 Compiling Rust to WebAssembly is not guaranteed to be deterministic on its own — non-determinism comes from OS-level features (system clock, file system, networking). The Stylus VM does not expose these features at runtime, so they cannot affect contract execution. To keep **builds** reproducible, avoid build scripts and dependencies that read from the system clock or query the network at compile time, and pin your toolchain via `rust-toolchain.toml`.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Core security principles
 
@@ -132,11 +132,11 @@ impl Ownable {
 
 Protect against reentrancy attacks using the checks-effects-interactions pattern.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 Don't rely on the old opt-in reentrancy guard. The `reentrant` feature flag and `deny_reentrant` entrypoint guard were deprecated in SDK 0.10.5: the high-level call functions automatically flush the storage cache before every external call, so any state you write before a call is observed by a reentrant call. That makes the guard redundant. Checks-effects-interactions — updating state before the external call — remains the correct way to write reentrancy-safe contracts.
 
-</VanillaAdmonition>
+</Callout>
 
 ```rust
 use stylus_sdk::{

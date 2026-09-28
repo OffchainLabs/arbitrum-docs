@@ -23,17 +23,17 @@ The [validator setup guide](/docs/run-a-node/more-types/run-validator-node#valid
 | `ResolveNodes` | Bonds and resolves assertions **that already exist**. It never creates new ones, so a chain whose validators are all `ResolveNodes` will stop advancing. At least one `MakeNodes` validator is required to post new assertions.                        |
 | `MakeNodes`    | Creates assertions, resolves unconfirmed ones, and challenges bad ones.                                                                                                                                                                                |
 
-<VanillaAdmonition type="note" title="Switching strategy does not re-bond">
+<Callout type="info" title="Switching strategy does not re-bond">
 
 A validator bonds once. Changing strategy—for example from `MakeNodes` to `Defensive`—does not place a new bond, and does not require one. If you are troubleshooting a validator that will not act after a strategy change, the bond is not the thing to check; look at <Term id="wallet">wallet</Term> gas balance, allowlist membership, and parent-chain connectivity instead.
 
-</VanillaAdmonition>
+</Callout>
 
-<VanillaAdmonition type="warning" title="Multiple MakeNodes validators produce expected reverts">
+<Callout type="warn" title="Multiple MakeNodes validators produce expected reverts">
 
 If more than one `MakeNodes` validator runs on the same chain, they may attempt to create the same assertion simultaneously. Only one succeeds; the others revert. These reverts are normal contention, not a malfunction. Do not alert on them individually—alert on assertions failing to appear at all. See `arb/validator/poster/error_posting_assertion` in [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the counter to watch, and expect a nonzero baseline when you run redundant <Term id="proposer">proposers</Term>.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Assertion timing flags
 
@@ -103,11 +103,11 @@ Before escalating, rule out local causes: an unsynced or partially synced node, 
 
 If a validator transaction has been pending for more than roughly 10 minutes, it is stuck rather than slow.
 
-<VanillaAdmonition type="warning" title="The staker queues only one transaction by default">
+<Callout type="warn" title="The staker queues only one transaction by default">
 
 `--node.staker.data-poster.max-mempool-transactions` defaults to **`1`**, compared to `18` for the <Term id="batch-poster">batch poster</Term>. A single stuck transaction therefore blocks every subsequent validator action until it clears. This is the first thing to check, and the difference from <Term id="batch">batch</Term> poster behavior surprises most operators.
 
-</VanillaAdmonition>
+</Callout>
 
 Work through these in order:
 

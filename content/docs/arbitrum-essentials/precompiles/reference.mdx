@@ -64,11 +64,11 @@ Precompile address: `0x000000000000000000000000000000000000006D`
 
 ### `ArbBLS`
 
-<VanillaAdmonition type="warning" title="Disabled">
+<Callout type="warn" title="Disabled">
 
 This precompile has been disabled. It previously provided a registry of BLS public keys for accounts.
 
-</VanillaAdmonition>
+</Callout>
 ### `ArbDebug`
 
 ArbDebug ([Interface](https://github.com/OffchainLabs/{var:nitroPrecompilesRepositorySlug}/blob/{var:nitroPrecompilesCommit}/ArbDebug.sol) | [Implementation](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/{var:nitroPathToPrecompiles}/ArbDebug.go)) provides mechanisms useful for testing. The methods of `ArbDebug` are only available for chains with the `AllowDebugPrecompiles` chain parameter set. Otherwise, calls to this precompile will revert.

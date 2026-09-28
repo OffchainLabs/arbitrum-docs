@@ -7,11 +7,11 @@ author: gmehta2
 sme: Jason-W123
 ---
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 As a <Term id="raas">RaaS</Term> or <Term id="chain-owner">Chain Owner</Term>, if you require internal daily reporting on fees, we have an [RPC script you can leverage for reporting purposes](https://github.com/yahgwai/aep-fee-tracker/).
 
-</VanillaAdmonition>
+</Callout>
 
 ## Fee collection system overview
 
@@ -93,11 +93,11 @@ Same as the same gas token scenario, but uses the gas price from the batch posti
 - **Process**: Track actual collected amounts
 - **Advantage**: More accurate - uses real collection data
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Method 1 and Method 2 should be roughly equivalent over the long term.
 
-</VanillaAdmonition>
+</Callout>
 #### Analysis criteria (both must be met):
 
 1. **Volume Threshold**
@@ -108,11 +108,11 @@ Method 1 and Method 2 should be roughly equivalent over the long term.
    - Use either Method 1 or Method 2 for revenue
    - Must exceed the deviation threshold
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 If both criteria are met → indicates misconfiguration
 
-</VanillaAdmonition>
+</Callout>
 #### Exchange rate sources:
 
 - Use third-party sources for "ideal" exchange rates (e.g., CoinGecko, CoinMarketCap, etc.)
@@ -122,8 +122,8 @@ If both criteria are met → indicates misconfiguration
 - The tool generates a simple report showing exchange rate deviations.
 - If both criteria are met, contact the chain owner to inform them that they need to use a better pricing mechanism
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 As a RaaS, if you want to dispute the fees, you can contact the Arbitrum Foundation to review your fees.
 
-</VanillaAdmonition>
+</Callout>

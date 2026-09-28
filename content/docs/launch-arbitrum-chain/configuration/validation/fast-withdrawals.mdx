@@ -81,11 +81,11 @@ Once the chain runs `nitro-contracts` v2.1.0 or above, the new fast withdrawal p
 
 Both the Arbitrum SDK and the Chain SDK actions repository provide configurable scripts to activate and configure fast withdrawals on an AnyTrust chain. You can use either of those to activate the feature. Both scripts perform the same actions.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 Even though two scripts are available to activate Fast Withdrawals, you only need to execute one of them. Both scripts perform the same actions.
 
-</VanillaAdmonition>
+</Callout>
 #### Arbitrum Chain SDK script
 
 The Chain SDK provides an [example script](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/main/examples/setup-fast-withdrawal) to set up a fast withdrawal committee by performing the following operations:
@@ -167,7 +167,7 @@ cp .env.example .env
 # use --account XXX / --private-key XXX / --interactive / --ledger to set the account to send the transaction from
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 If you have a multisig as executor, you can use the following command to create the payload for calling into the `PARENT_UPGRADE_EXECUTOR`:
 
@@ -175,7 +175,7 @@ If you have a multisig as executor, you can use the following command to create 
 (export $(cat .env | xargs) && cast calldata "execute(address, bytes)" $UPGRADE_ACTION_ADDRESS $(cast calldata "perform(address, address[])" $ROLLUP \[$FAST_CONFIRM_COMMITTEE\]))
 ```
 
-</VanillaAdmonition>
+</Callout>
 ### Configure fast withdrawals on nitro v3.1.2 or above
 
 To enable fast withdrawals on your chain, the batch poster and the validators of the chain need to be running [nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or above.
@@ -197,8 +197,8 @@ The following parameters need to be configured in those nodes.
 | `--node.staker.enable-fast-confirmation=true`    | [Pre-BoLD only] Enables fast withdrawals in the validator node                                                                                                                                                                                                           |
 | `--node.staker.make-assertion-interval=0h15m0s`  | [Pre-BoLD only] Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value. |
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Immediately after configuring fast withdrawals—your chain may not be operating fully at speed yet. This is because the validators have to work through the backlog of assertions which were not yet confirmed. You will see a series of `NodeCreated` and `NodeConfirmed` events. Once the backlog has been processed, your chain should operate fully at speed.
 
-</VanillaAdmonition>
+</Callout>

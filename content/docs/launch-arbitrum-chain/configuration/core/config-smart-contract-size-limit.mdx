@@ -26,12 +26,12 @@ The limit applies to both deployed contract code (`MaxCodeSize`) and initializat
 3. Deploy the chain contracts to the parent chain.
 4. Run the node with the generated config.
 
-<VanillaAdmonition type="warning" title="- This change is immutable after deployment—plan carefully.">
+<Callout type="warn" title="- This change is immutable after deployment—plan carefully.">
 - Higher limits increase risks like state bloat, slower node performance, and potential DoS vulnerabilities.
 - Test on a devnet or testnet first to ensure stability.
 - Ensure values are in bytes (not KB) when setting them in code.
 
-</VanillaAdmonition>
+</Callout>
 ## Code examples
 
 The example below assumes you've set up a project with the SDK installed and have environment variables for your private key and RPC URLs.

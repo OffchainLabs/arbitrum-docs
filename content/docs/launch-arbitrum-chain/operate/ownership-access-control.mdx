@@ -29,11 +29,11 @@ Calls to an Upgrade Executor can only be made by chain owners; e.g., entities gr
 
 With this architecture, the Upgrade Executor represents a single source of truth for affordances over critical upgradability of the chain.
 
-<VanillaAdmonition type="info" title="Precompile reference">
+<Callout type="info" title="Precompile reference">
 
 The [`ArbOwner` precompile reference](/docs/arbitrum-essentials/precompiles/reference#arbowner) can be found on the [Precompiles reference page](/docs/arbitrum-essentials/precompiles/reference).
 
-</VanillaAdmonition>
+</Callout>
 
 ## Upgrades
 
@@ -68,11 +68,11 @@ Access is enforced by the `onlyRollupOwner` and `onlyRollupOwnerOrBatchPosterMan
 | `setBufferConfig(BufferConfig)`         | Rollup owner — via Upgrade Executor                                        | `sequencerInboxPrepareTransactionRequest`                                           |
 | `updateRollupAddress()`                 | Rollup owner (inline check) — via Upgrade Executor                         | `sequencerInboxPrepareTransactionRequest`                                           |
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 `setAllowListEnabled` is **not** a `SequencerInbox` function, despite being commonly asked about in that context. It lives on the `Inbox` (the <Term id="delayed-inbox">delayed inbox</Term>/`AbsInbox`)—see the [Inbox](#inbox-delayed-inbox) row below.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Rollup/`RollupAdminLogic`
 
@@ -103,11 +103,11 @@ Every function on `RollupAdminLogic` is reachable only through the Rollup proxy'
 | `forceCreateAssertion(...)` (only `whenPaused`)    | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
 | `forceConfirmAssertion(...)` (only `whenPaused`)   | Rollup admin — via Upgrade Executor | `rollupAdminLogicPrepareTransactionRequest` |
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The function set above reflects the <Term id="bold">BoLD</Term>-era `RollupAdminLogic`. On pre-BoLD chains some names differ (for example, `setBaseStake` in place of `increaseBaseStake`/`decreaseBaseStake`, and `forceCreateNode`/`forceConfirmNode` in place of the `*Assertion` variants). Always confirm against the `nitro-contracts` version your chain runs.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Bridge
 
@@ -136,8 +136,8 @@ A chain owner is simply an address; it is set by the Arbitrum chain's deployer a
 
 The <Term id="arbitrum-dao">Arbitrum DAO</Term> governed chains, while not Arbitrum chains themselves, use a similar architecture and upgrade pattern as Arbitrum chains, with both a governance token and a Multisig (aka, the "Security Council") as chain owners. For more info and best practices on action contracts, see ["DAO Governance Action Contracts"](https://github.com/ArbitrumFoundation/governance/blob/main/src/gov-action-contracts/README.md).
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The DAO-governed chains' Upgrade Executor contracts don't have the `.executeCall` method; only the `.execute` method.
 
-</VanillaAdmonition>
+</Callout>

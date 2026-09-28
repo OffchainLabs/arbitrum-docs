@@ -11,11 +11,11 @@ This page indexes error and log messages emitted by Arbitrum chain infrastructur
 
 Messages are grouped by the component that emits them. If you do not know which component produced a message, use your browser's find-in-page to search for a distinctive fragment of it.
 
-<VanillaAdmonition type="note" title="This page is an index, not a guide">
+<Callout type="info" title="This page is an index, not a guide">
 
 Each entry links to the guide that explains the message in full. This page deliberately carries no resolution steps of its own, so that it cannot fall out of step with those guides.
 
-</VanillaAdmonition>
+</Callout>
 
 Log levels in the linked guides are worth reading closely. Many <Term id="batch-poster">batch poster</Term> messages are logged quietly at first. If they persist, they escalate to `WARN` or `ERROR`. A single `WARN` is usually noise. A sustained one that reaches `ERROR` is the real signal. To learn how that escalation works, see [The escalation rule to remember](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting#the-escalation-rule-to-remember).
 

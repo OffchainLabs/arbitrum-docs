@@ -63,11 +63,11 @@ Three consequences follow, and together they resolve the conflict:
 
 What `perform` actually requires is narrower than the [base guide](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains) implies. It is not that no assertion may be confirmed after Step 4. It is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Confirm this sequence with the Offchain Labs team before executing it on a production chain. The reasoning above is drawn from the contract source, but a mainnet BoLD upgrade is a high-consequence, one-way operation, and your chain may use customized contracts for which it does not hold.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Recommended sequence
 
@@ -92,11 +92,11 @@ Use the printed `execute(...)` calldata as the payload for your multisig transac
 
 Circulate the payload and simulation. Validators continue posting and confirming assertions normally during this period. Assertions confirmed now will not match the lookup entry from Step 2, which is expected and is corrected in the next step.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Distinguish two things that behave differently as the chain advances. A **signature** covers the transaction calldata, which is fixed, so it stays valid. A **simulation** reflects onchain state at the time it was produced, so it goes stale as new assertions confirm. If your signing process requires signers to review a fresh simulation, re-run the simulation against current state and re-populate the lookup beforehand—but you do not need to re-collect signatures that were already given for the same calldata.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Step 4: Re-populate the lookup immediately before execution
 
@@ -108,11 +108,11 @@ $ L1_PRIV_KEY=xxx yarn script:bold-populate-lookup --network {mainnet|arb1|nova|
 
 This writes an entry for the assertion that is latest-confirmed right now. Any key can send it.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 The script finds the last confirmed assertion by searching for its `NodeCreated` event in the most recent 100,000 parent-chain blocks. If your chain confirms assertions infrequently enough that the event falls outside that window, the script cannot find it. Take this into account before pausing assertion creation for any length of time.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Step 5: Execute the upgrade
 
@@ -151,11 +151,11 @@ To keep validation permissioned:
 - Set `validatorAfkBlocks` to `0`, which disables the escape hatch entirely. This is preferable to setting an artificially large value, which achieves the same intent less clearly and still leaves a finite window.
 - If you keep the escape hatch enabled, alert on assertion inactivity well before the window elapses. See the validator section of [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring-tools-and-considerations) for the metrics to watch.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Disabling the escape hatch with `validatorAfkBlocks: 0` is a deliberate trade-off. It removes the protection that lets a chain recover permissionlessly if every allowlisted validator becomes unavailable. Make this choice knowingly, and pair it with monitoring and an on-call rotation for your validator set.
 
-</VanillaAdmonition>
+</Callout>
 
 To weigh permissioned against <Term id="permissionless-validation">permissionless validation</Term>, see [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains#caveats-that-come-with-adopting-arbitrum-bold-for-permissionless-validation). It covers bond sizing and resource exhaustion risk.
 
@@ -184,11 +184,11 @@ Whether this is a migration for your chain depends on which pre-BoLD variant you
 
 Determine which one your chain runs before planning validator preparation. Do not assume the native-currency case, even though it is the more common one.
 
-<VanillaAdmonition type="info" title="Why operators think BoLD chains bond in ETH">
+<Callout type="info" title="Why operators think BoLD chains bond in ETH">
 
 On Arbitrum One and Arbitrum Nova the `stakeToken` is **WETH**, the **ERC-20** wrapper around **ETH**. Explorers and dashboards often display this as **ETH**, which makes it look as though BoLD supports native bonding. It does not—the contract holds **WETH**. If you are checking your own chain's configuration, read `stakeToken` from the Rollup contract rather than relying on a display label.
 
-</VanillaAdmonition>
+</Callout>
 
 Before you execute the upgrade:
 

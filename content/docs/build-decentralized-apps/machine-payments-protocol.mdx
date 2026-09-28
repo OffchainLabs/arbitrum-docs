@@ -31,11 +31,11 @@ It supports two settlement mechanisms:
 | authorization | EIP-3009 transferWithAuthorization (native to USDC) | ❌                                              | ❌                                                  |
 | permit2       | Uniswap's Permit2 permitWitnessTransferFrom         | ✅ (pay multiple recipients in one transaction) | ✅ payer must pre-approve Permit2 on the token once |
 
-<VanillaAdmonition type="warning" title="Other options">
+<Callout type="warn" title="Other options">
 
 `transaction` and `hash` credential types are stubbed but intentionally not implemented—these have weaker challenge-binding and carry fraud risk.
 
-</VanillaAdmonition>
+</Callout>
 <ImageZoom src="/img/mpp.png" className="img-600px" alt="MPP Flow">
   MPP Flow
 </ImageZoom>
@@ -50,9 +50,9 @@ It supports two settlement mechanisms:
 
 - **permit2** (or undefined): builds permitted/`transferDetails` arrays (handling splits, with the primary recipient pushed to the front), derives the nonce from a challenge hash, and signs the Permit2 witness typed-data.
 
-<VanillaAdmonition type="info" title="permit2 splits">
+<Callout type="info" title="permit2 splits">
   The sum of the amounts in the split must be strictly lower than the total amount for the transaction. So if the total transaction is 10,000 and splits have two recipients that will receive 2,000 and 3,000—the main recipient will receive 5,000.
-</VanillaAdmonition>
+</Callout>
 
 - **authorization**: derives nonce = `keccak256(challenge.id, challenge.realm)` for challenge-binding (anti-replay), looks up the token's EIP-712 domain from the local erc3009Tokens registry (not an onchain query), and signs the `TransferWithAuthorization` struct.
 

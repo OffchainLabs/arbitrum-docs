@@ -6,11 +6,11 @@ author: Jason Wan
 sme: Jason Wan
 ---
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 This documentation is for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, please refer to [How to run a testnet sequencer node](/docs/run-a-node/sequencer/run-sequencer-node).
 
-</VanillaAdmonition>
+</Callout>
 ## Introduction
 
 The sequencer is a critical component of your Arbitrum chain and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from full nodes, queuing them, and returning feed messages to those full nodes. It subsequently sends queued transactions to batch posters for data posting.
@@ -219,11 +219,11 @@ Two consequences follow from step 2:
 - **Order is priority.** The first entry that is healthy and synced wins. Put your preferred sequencer first.
 - **`my-url` must match its list entry exactly.** The comparison is a string match. A trailing slash, a different port form, or an IP address instead of a hostname all cause a silent mismatch.
 
-<VanillaAdmonition type="warning" title="Never register the batch poster">
+<Callout type="warn" title="Never register the batch poster">
 
 The batch poster runs with `node.seq-coordinator.enable=true` so it can follow coordination state, but it must stay out of `coordinator.priorities`. If it reaches the top of the list, it is selected as the active sequencer while having no sequencer to run, and the chain stops producing blocks. Nitro logs `myurl main sequencer, but no sequencer exists`.
 
-</VanillaAdmonition>
+</Callout>
 
 ##### Verifying registration
 
@@ -249,11 +249,11 @@ Two log messages tell you the priority list is the problem:
 
 For a full diagnostic path, see the sequencer troubleshooting guide.
 
-<VanillaAdmonition type="warning" title="Redis persistence">
+<Callout type="warn" title="Redis persistence">
 
 The priority list lives only in Redis. If you replace the Redis instance or lose its data, the key is gone and no sequencer becomes active until you repopulate it. Include `coordinator.priorities` in your backup and disaster recovery plan, and re-register after any Redis migration.
 
-</VanillaAdmonition>
+</Callout>
 
 #### Setting the sequencer's self URL
 
@@ -310,11 +310,11 @@ helm install batchposter offchainlabs/nitro \
   --set "configmap.data.node.batch-poster.parent-chain-wallet.private-key=<your-private-key>"
 ```
 
-<VanillaAdmonition type="warning" title="Important">
+<Callout type="warn" title="Important">
 
 Do not add the batch poster to the sequencer priority list in the Sequencer Coordinator Manager (SQM) to prevent it from becoming the active sequencer unintentionally.
 
-</VanillaAdmonition>
+</Callout>
 ## Monitoring and maintenance
 
 ### Health checks

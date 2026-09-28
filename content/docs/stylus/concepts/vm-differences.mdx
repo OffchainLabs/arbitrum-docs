@@ -79,11 +79,11 @@ pub struct MyContract {
 let large_vector = vec![0u8; 100_000]; // Efficient in WASM
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The Stylus SDK's `#[entrypoint]` attribute includes a no-op call to `pay_for_memory_grow` to ensure the function is referenced. Nitro then automatically inserts actual calls when memory allocation occurs.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Gas metering: Ink and gas
 

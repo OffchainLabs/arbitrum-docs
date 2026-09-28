@@ -54,11 +54,11 @@ docker run -v /path/to/nodeConfig.json:/config/nodeConfig.json \
   # Add other required flags (parent-chain URL, chain info-json, keys, etc.)
 ```
 
-<VanillaAdmonition type="info" title="Latest version of Nitro">
+<Callout type="info" title="Latest version of Nitro">
 
 You can find the latest recommended version of Nitro on the [Run a Node](/docs/run-a-node/start-here#recommended-nitro-version) page.
 
-</VanillaAdmonition>
+</Callout>
 
 - or override via CLI flags for testing
 
@@ -97,11 +97,11 @@ When a batch is posted, the Sequencer Inbox computes the window from the **curre
 
 The contract records these bounds (they are emitted in the `SequencerBatchDelivered` event and folded into the batch's data hash), but it **does not reject** a batch whose messages fall outside them. Enforcement happens later, off the parent chain, when the batch is replayed by the node's state-transition function: each message whose claimed block or timestamp is outside the recorded window is **clamped** to the nearest bound—pulled up to the minimum if it is too far in the past, or pulled down to the maximum if it is too far in the future.
 
-<VanillaAdmonition type="warning" title="Out-of-window messages are clamped, not rejected">
+<Callout type="warn" title="Out-of-window messages are clamped, not rejected">
 
 Because out-of-window messages are silently clamped rather than rejected, a message can be assigned a different parent-chain block or timestamp than the Sequencer originally computed locally. When the locally executed chain and the chain derived from onchain data disagree, the result is a child-chain reorg. `maxTimeVariation` therefore does not guard by blocking bad batches; it defines the window inside which the Sequencer and batch poster must keep every message to avoid such reorgs. The batch poster's own `reorg-resistance-margin` check (see [Configure Batch Poster and Assertion Control](/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control)) is a proactive, client-side guard against reaching this on-chain clamp — it stops the poster from submitting a batch in the first place, rather than reacting after the state-transition function has already clamped a message.
 
-</VanillaAdmonition>
+</Callout>
 
 ## What each field guards, with examples
 
@@ -131,11 +131,11 @@ The Arbitrum Chain SDK does not use fixed numbers for the four `MaxTimeVariation
 | Base / Base Sepolia | 2s                | 172800        | 1800           | 345600 (4 days) | 3600 (1 hour)   |
 | All other parents   | 12s               | 28800         | 300            | 345600 (4 days) | 3600 (1 hour)   |
 
-<VanillaAdmonition type="note" title="Why the default futureBlocks can be 300 or 1800">
+<Callout type="info" title="Why the default futureBlocks can be 300 or 1800">
 
 A default `futureBlocks` can appear to be either 300 or 1800: 1800 is the default for a Base or Base Sepolia parent (`3600 / 2`), while 300 is the default for every other parent, including Ethereum and Arbitrum (`3600 / 12`). A much smaller value such as 48 is not a current SDK default—it is a manual override or a value from an older deployment. Restoring `futureBlocks` to the parent-appropriate default widens the future headroom (on a two-second parent, from roughly 96 seconds to one hour), reducing how often messages near the future edge are clamped.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Relationship with the batch poster: `reorg-resistance-margin`
 
@@ -156,11 +156,11 @@ The default 10-minute margin keeps messages far enough from the past edge that o
 
 Setting `--node.batch-poster.reorg-resistance-margin=0` disables the past-edge check entirely. The batch poster will then post batches whose oldest messages sit arbitrarily close to the window's past edge.
 
-<VanillaAdmonition type="danger" title="reorg-resistance-margin=0 removes reorg protection">
+<Callout type="error" title="reorg-resistance-margin=0 removes reorg protection">
 
 With `reorg-resistance-margin=0`, a parent-chain reorg — or simply a batch landing later than expected — can move the minimum bound past messages that were near the edge. Those messages are then clamped forward by the state-transition function, diverging the onchain-derived chain from the chain the Sequencer executed locally: a child-chain reorg. Use `0` only in controlled situations, such as draining a backlog where you accept the reorg risk; it is not a safe steady-state setting.
 
-</VanillaAdmonition>
+</Callout>
 
 Note the interaction with `maxTimeVariation`: a wider past window (`delayBlocks` and `delaySeconds`) gives the batch poster more room before the margin is threatened, while a narrower window makes the margin bite sooner. See the [CLI flags reference](/docs/run-a-node/nitro/cli-flags-reference) for the full batch-poster flag set, and [Configure Batch Poster and Assertion Control](/docs/launch-arbitrum-chain/configuration/sequencer/batch-posting-assertion-control) for how these settings are tuned in practice.
 

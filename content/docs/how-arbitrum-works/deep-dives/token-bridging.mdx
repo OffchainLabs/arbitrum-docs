@@ -74,11 +74,11 @@ To help illustrate what this all looks like in practice, let's go through the st
 
 ❗️ _[1] Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented, and `L1GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use the function `L1GatewayRouter.outboundTransfer`._
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 `arbSomeERC20Token` is an instance of [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
 
-</VanillaAdmonition>
+</Callout>
 #### Withdrawals
 
 1. On Arbitrum, a user calls `L2GatewayRouter.outBoundTransfer`, which in turn calls `outBoundTransfer` on arbSomeERC20Token's gateway (i.e., `L2ERC20Gateway`).
@@ -119,11 +119,11 @@ Have your parent chain token's contract make an external call to `L1CustomGatewa
 
 After your token's registration to the generic-custom gateway is complete, have your parent chain token's contract make an external call to `L1GatewayRouter.setGateway`; performing the registration can also be completed as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation) proposal.
 
-<VanillaAdmonition type="info" title="We are here to help">
+<Callout type="info" title="We are here to help">
 
 If you have questions about your custom token needs, please feel free to reach out to us on our [Discord server](https://discord.gg/arbitrum).
 
-</VanillaAdmonition>
+</Callout>
 ## Other flavors of gateways
 
 Note that in the system described above, one pair of gateway contracts handles the bridging of many **ERC-20**'s; i.e., many **ERC-20**'s on the parent chain are each paired with their own **ERC-20**'s on Arbitrum via a single gateway contract pairing. Other gateways may have different relationships with the contracts that they bridge.

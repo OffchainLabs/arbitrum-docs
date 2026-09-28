@@ -23,11 +23,11 @@ An Arbitrum node exposes three levels of confirmation, surfaced as the standard 
 | Parent-chain safe                                     | `safe`      | The <Term id="batch">batch</Term> containing the block has been posted to the <Term id="parent-chain">parent chain</Term> and reached the parent chain's `safe` block. | Only by a deep parent-chain reorg.                                                                |
 | Parent-chain final                                    | `finalized` | The batch containing the block has been posted to the parent chain and reached the parent chain's `finalized` block.                                                   | Only if the parent chain itself reverts a finalized block (on Ethereum, economically infeasible). |
 
-<VanillaAdmonition type="tip" title="The load-bearing rule">
+<Callout type="idea" title="The load-bearing rule">
 
 An Arbitrum block is only as final as the parent-chain block that carries its batch. <Term id="soft-confirmation">Soft confirmation</Term> is fast (sub-second) but reversible. <Term id="hard-finality">Hard finality</Term>—the `safe` and `finalized` tags—is inherited from the parent chain and is what makes a block reorg-proof.
 
-</VanillaAdmonition>
+</Callout>
 
 ### What "seconds to finality" really means
 
@@ -49,11 +49,11 @@ A Nitro node is split into a consensus side (reads the parent chain) and an exec
 
 In other words, a child-chain block is `finalized` when the parent-chain block that carries its batch is itself `finalized`. Optionally, a chain can be configured to further hold `safe`/`finalized` back until a local <Term id="validator">validator</Term> has validated the block.
 
-<VanillaAdmonition type="note" title="Block-tag availability on Dedicated Blockchains">
+<Callout type="info" title="Block-tag availability on Dedicated Blockchains">
 
 The `safe` and `finalized` tags are always available on Arbitrum One and Nova. On a self-managed chain, they are available only when your parent chain exposes finality data and your node is configured to track it. Confirm the behavior on your own chain before relying on `finalized`, and document the expected confirmation latency for your integrators.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Per-chain-type guarantees
 
@@ -92,11 +92,11 @@ When a parent-chain reorg does change the Sequencer Inbox or <Term id="delayed-i
 3. It rolls the chain back to that block. **State reverts to the state root at the common ancestor, and every transaction after that point is discarded.** Block explorers and RPC no longer return the discarded transactions.
 4. It re-derives the chain forward from the parent chain. Messages that were reorged out (within the re-sequencing window) may be re-sequenced, but block hashes, block numbers, and transaction ordering after the common ancestor can all differ from before.
 
-<VanillaAdmonition type="warning" title="Never key an index on block number alone across a reorg">
+<Callout type="warn" title="Never key an index on block number alone across a reorg">
 
 After a reorg, the same block _number_ can hold different transactions with a different block _hash_. Always store and compare block hashes and `parentHash` continuity, and rewind to the common ancestor rather than patching individual records. See [Reorg detection patterns](#reorg-detection-patterns).
 
-</VanillaAdmonition>
+</Callout>
 
 ## How deep can a reorg go?
 
@@ -155,11 +155,11 @@ The [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/ex
 
 You may encounter the node flag `--node.bold.rpc-block-number`. It is a **validator-side** setting: it selects which parent-chain block tag the <Term id="bold">BoLD</Term> validator reads onchain Rollup and assertion state from. It accepts `latest`, `safe`, or `finalized`, and defaults to `finalized`.
 
-<VanillaAdmonition type="warning" title="Not the tag your indexer reads">
+<Callout type="warn" title="Not the tag your indexer reads">
 
 `--node.bold.rpc-block-number` controls how the <Term id="bold">BoLD</Term> validator reads the _parent chain_ during dispute-protocol operations. It does **not** configure the `latest`/`safe`/`finalized` tags your indexer requests from the child-chain RPC. Do not set it expecting to change indexer-facing finality; use the block tags on your RPC queries instead.
 
-</VanillaAdmonition>
+</Callout>
 
 The `latest` / `safe` / `finalized` names come from Ethereum's proof-of-stake finality: `finalized` is roughly two epochs (~64 slots, ~13 minutes) behind the head and `safe` roughly one epoch (~32 slots) behind. Nitro does not hard-code those distances — it reads the parent chain's own `safe`/`finalized` tags — but that is the origin of the "latest-64 / latest-32" shorthand you may have seen.
 
