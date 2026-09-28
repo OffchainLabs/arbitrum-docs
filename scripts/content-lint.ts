@@ -2,7 +2,7 @@
  * content-lint: fail on MDX that builds but renders wrong. Rules are in scripts/lib/content-lint.ts.
  *
  *   pnpm content:lint                             # every file under content/
- *   node scripts/content-lint.ts a.mdx [b.mdx …]  # only these files (the pre-commit hook)
+ *   node scripts/content-lint.ts a.mdx [b.mdx …]  # only these files
  */
 import { RULES, lintContent } from './lib/content-lint.ts';
 

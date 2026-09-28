@@ -15,10 +15,6 @@ next-env.d.ts
 # Machine-generated
 pnpm-lock.yaml
 
-# Generated content — format is owned by the generators, not Prettier
-# (formatting these would break `partials:check` catalog-freshness)
-content/partials/CATALOG.md
-content/partials/manifest.json
 # Written by move-doc as JSON.stringify; Prettier would reflow them and the next run would undo it.
 content/**/meta.json
 
