@@ -2,8 +2,6 @@ import { docs } from 'collections/server';
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 
-import { docsNavigationTransformer } from './docs-navigation';
-import navigation from './docs-navigation.json';
 import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
 import { archiveParams, resolveArchiveSlug } from './versions';
 import type { ResolvedArchive } from './versions';
@@ -14,7 +12,17 @@ export const source = loader({
   source: docs.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
   pageTree: {
-    transformers: [docsNavigationTransformer(navigation.sections)],
+    // The sidebar comes from the `meta.json` files under content/docs. This only lets a page's
+    // `sidebar_label` frontmatter replace its title as the sidebar name.
+    transformers: [
+      {
+        file(node, filePath) {
+          const file = filePath ? this.storage.read(filePath) : undefined;
+          const label = file?.format === 'page' ? file.data.sidebar_label : undefined;
+          return label ? { ...node, name: label } : node;
+        },
+      },
+    ],
   },
 });
 

@@ -2,7 +2,6 @@ import { DocsLayout } from 'fumadocs-ui/layouts/notebook';
 import type { ReactNode } from 'react';
 
 import { SidebarCollapseButton } from '@/components/sidebar-collapse-button';
-import { SidebarNavigationReference } from '@/components/sidebar-navigation-reference';
 import { SidebarResourceLinks } from '@/components/sidebar-resource-links';
 import { baseOptions } from '@/lib/layout.shared';
 import { source } from '@/lib/source';
@@ -20,24 +19,17 @@ export default function Layout({ children }: { children: ReactNode }) {
       // once resolved, so a real key is what satisfies it. No gate opens
       // a browser, so nothing catches its removal.
       nav={{ ...base.nav, mode: 'top', children: <SidebarCollapseButton key="sidebar-collapse" /> }}
-      // Suppresses the built-in collapse triggers only — the sidebar still
+      // Suppresses the built-in collapse triggers only. The sidebar still
       // collapses. Collapse state lives in SidebarProvider and the edge-peek in
       // SidebarContent, neither of which reads this flag. SidebarCollapseButton
       // above replaces the trigger this removes from the navbar's right cluster.
       // `footer` pins Chain info, Glossary and Contribute under every
       // section tree. Keep shared links outside the page tree so they cannot
       // claim their destination's sidebar root.
-      sidebar={{
-        collapsible: false,
-        footer: SidebarResourceLinks,
-        components: { Separator: SidebarNavigationReference },
-      }}
+      sidebar={{ collapsible: false, footer: SidebarResourceLinks }}
       tree={source.pageTree}
-      // No root switcher. Fumadocs would otherwise render a dropdown above the tree listing every
-      // manifest section, a second copy of the navbar's section list that let a reader hop between
-      // main-menu sections from inside the sidebar. The navbar chooses the section; the sidebar
-      // shows that section's tree, as the Docusaurus site did. Section roots still decide which
-      // tree a page gets whether or not a switcher renders.
+      // No root switcher: the navbar chooses the section, and the sidebar shows the tree of the
+      // `root: true` folder the current page sits in.
       tabs={false}
     >
       {children}

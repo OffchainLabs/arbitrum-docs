@@ -47,9 +47,6 @@ jobs:
       - name: Global variables resolve
         run: pnpm vars:check
 
-      - name: Navigation integrity
-        run: pnpm nav:check
-
       - name: Partials resolve and stay unrouted
         run: pnpm partials:check
 
