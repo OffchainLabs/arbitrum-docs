@@ -4,7 +4,7 @@
 
 ## Document type
 
-<!-- Select the type used in the frontmatter of new or substantially revised pages. -->
+<!-- Select the type of new or substantially revised pages. The `content_type` frontmatter field is optional; if you set it, use the same value. -->
 
 - [ ] How-to
 - [ ] Concept
@@ -18,7 +18,7 @@
 ## Checklist
 
 - [ ] I followed the [contribution guide](https://github.com/OffchainLabs/arbitrum-docs/blob/master/CONTRIBUTE.md) and [style guide](https://github.com/OffchainLabs/arbitrum-docs/blob/master/STYLE-GUIDE.md).
-- [ ] New pages have the appropriate `content_type` frontmatter, and titles use sentence case.
+- [ ] New pages have a `title` and `description` in their frontmatter, and titles use sentence case.
 - [ ] Links have descriptive text and I checked changed links with `pnpm check-links`.
 - [ ] I ran the relevant [local checks](https://github.com/OffchainLabs/arbitrum-docs/blob/master/CONTRIBUTE.md#gates-to-run-before-you-push) and reviewed the rendered pages in a browser when I changed MDX.
 - [ ] For third-party content, I followed the [third-party content policy](https://github.com/OffchainLabs/arbitrum-docs/blob/master/CONTRIBUTE.md#third-party-content), or this item does not apply.

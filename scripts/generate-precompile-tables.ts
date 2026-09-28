@@ -59,9 +59,8 @@ const NODE_INTERFACE_PINS: NodeInterfacePins = {
 };
 
 /**
- * Read the five pins {@link buildSourceUrls} needs out of the parsed `content/vars.json`. The
- * schema in `content/vars.ts` already requires each to be a string; this only narrows the
- * `JSON.parse` result, and throws naming the key rather than rendering `undefined` into a URL.
+ * Read the five pins {@link buildSourceUrls} needs out of the parsed `content/vars.json`,
+ * throwing naming the key rather than rendering `undefined` into a URL.
  */
 function readSourceVars(parsed: unknown): PrecompileSourceVars {
   const isRecord = (value: unknown): value is Record<string, unknown> =>

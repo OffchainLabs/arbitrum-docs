@@ -1,11 +1,9 @@
 /**
  * Render the Nitro CLI flags reference page and splice it into the file on disk.
  *
- * The page is generated between two markers rather than written whole. Its frontmatter carries
- * the five fields `source.config.ts` requires plus `user_story`, all of them editorial, and a
- * writer may want a paragraph of their own above or below the tables. Anything outside the markers
- * survives a regeneration untouched; anything inside is replaced. The scaffold sets no
- * `sidebar_label`: the field is optional, and one identical to the title has no effect (FS-2745).
+ * The page is generated between two markers rather than written whole. Its frontmatter is
+ * editorial, and a writer may want a paragraph of their own above or below the tables. Anything
+ * outside the markers survives a regeneration untouched; anything inside is replaced.
  *
  * Ported from arbitrum-docs `scripts/generate-cli-reference.ts`, which rewrote the whole file
  * and so had no way to keep a local edit.
@@ -41,7 +39,6 @@ const DO_NOT_EDIT =
 const SCAFFOLD_FRONTMATTER = `---
 title: 'CLI flags reference'
 description: 'Complete reference of all Nitro node command-line flags with types, defaults, and descriptions'
-user_story: 'As a node operator, I want a single page where I can look up any Nitro CLI flag'
 content_type: 'reference'
 author: gzeoneth
 sme: gzeoneth

@@ -55,31 +55,16 @@ function hasFullGitHistory(): boolean {
  */
 const lastModified = hasFullGitHistory() ? true : async () => undefined;
 
-/**
- * Per PRD §4.1, every doc page requires:
- *   title, description, content_type, author, sme
- * Optional:
- *   sidebar_label, user_story, draft
- *
- * The PRD's frontmatter contract is enforced at build time by Zod.
- * Build/validate fails on any MDX file missing a required field.
- */
+// Every page needs a title and a description; `sidebar_label` and `content_type` are optional.
+// `content_type` is an editorial label nothing renders, kept to one enum so values stay comparable.
 const arbitrumPageSchema = pageSchema.extend({
   description: z.string(),
   sidebar_label: z.string().optional(),
-  user_story: z.string().optional(),
-  content_type: z.enum([
-    'how-to',
-    'concept',
-    'quickstart',
-    'tutorial',
-    'reference',
-    'troubleshooting',
-    'faq',
-  ]),
-  author: z.string(),
-  sme: z.string(),
-  draft: z.boolean().default(false),
+  content_type: z
+    .enum(['how-to', 'concept', 'quickstart', 'tutorial', 'reference', 'troubleshooting', 'faq'])
+    .optional(),
+  author: z.string().optional(),
+  sme: z.string().optional(),
   /**
    * Free-form label for an archived version of a page (e.g. "ArbOS 20 (v1)"). Only set on the
    * archived MDX files consumed by the `docsVersions` collection; live pages leave it unset.

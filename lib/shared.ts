@@ -36,12 +36,9 @@ export { localSiteUrl };
  * `url` rather than a `user`/`repo` pair because both call sites join the two immediately, so the
  * split only offered a way for the halves to disagree.
  *
- * The JSON is imported with an explicit `with { type: 'json' }` attribute, and `content/vars.ts`
- * is deliberately not imported instead. Two reasons, and both are load-bearing. `scripts/lib/shared.test.ts`
- * and `scripts/static-docs-http.test.ts` import this module as `.ts` under `node --test`, where
- * Node strips the types but still rejects a bare JSON import with `ERR_IMPORT_ATTRIBUTE_MISSING`;
- * and `content/vars.ts` pulls in Zod, which this module must keep away from the client bundle,
- * since `components/sidebar-resource-links.tsx` is a client component that imports from here.
+ * The JSON is imported with an explicit `with { type: 'json' }` attribute, not through
+ * `content/vars.ts`, because `scripts/lib/shared.test.ts` and `scripts/static-docs-http.test.ts`
+ * import this module under `node --test`, where Node rejects a bare JSON import.
  */
 export const gitConfig = {
   url: vars.docsRepositoryUrl,

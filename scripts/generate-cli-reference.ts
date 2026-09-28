@@ -166,7 +166,7 @@ function materializeNitro({
   return treeDir;
 }
 
-/** The pinned Nitro tag, read off content/vars.json (whose Zod schema lives in content/vars.ts). */
+/** The pinned Nitro tag, read off content/vars.json. */
 function readNitroVersionTag(): string {
   const vars: unknown = JSON.parse(fs.readFileSync(VARS_PATH, 'utf-8'));
   const tag =

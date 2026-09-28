@@ -1,39 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { parseSchemaKeys, parseVarUsages } from './vars-audit.ts';
-
-const SCHEMA = `import { z } from 'zod';
-
-const varsSchema = z.object({
-  latestNitroVersion: z.string(),
-  arbOneChainId: z.number(),
-  nitroDocsRepo: z.url(),
-});
-
-export const vars = varsSchema.parse(varsJson);
-`;
-
-test('parseSchemaKeys reads a z.object literal', () => {
-  assert.deepEqual(parseSchemaKeys(SCHEMA), [
-    'latestNitroVersion',
-    'arbOneChainId',
-    'nitroDocsRepo',
-  ]);
-});
-
-test('parseSchemaKeys reads a z.strictObject literal too', () => {
-  assert.deepEqual(parseSchemaKeys(SCHEMA.replace('z.object(', 'z.strictObject(')), [
-    'latestNitroVersion',
-    'arbOneChainId',
-    'nitroDocsRepo',
-  ]);
-});
-
-test('parseSchemaKeys returns empty on an unrecognised shape so the caller can fail loudly', () => {
-  // vars-check exits 2 on an empty result rather than reporting a false all-clear.
-  assert.deepEqual(parseSchemaKeys('const x = 1;'), []);
-});
+import { parseVarUsages } from './vars-audit.ts';
 
 test('parseVarUsages captures static names with 1-indexed lines', () => {
   const usages = parseVarUsages('intro\n<Var name="latestArbOS" />\n');
@@ -69,7 +37,7 @@ test('parseVarUsages does not match a component whose name merely starts with Va
 });
 
 test('parseVarUsages counts a {var:name} placeholder as a usage', () => {
-  // The placeholder is the only syntax that works in a link destination (FS-2725). If this audit
+  // The placeholder is the only syntax that works in a link destination. If this audit
   // ignored it, a mistyped name there would render literal braces in a URL with the gate green.
   const usages = parseVarUsages(
     'x\n[Impl](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/x.go)\n',

@@ -14,10 +14,6 @@ import { source } from '@/lib/source';
  * `content/_versions/`, and the glossary in `content/glossary/`, all outside the doc collection
  * `dir`, so `source.getPages()` cannot return them. There is nothing to exclude.
  *
- * (`draft: true` pages are the one theoretical exception. Nothing in this app filters on `draft`
- * yet, and a draft page renders and appears in `llms.txt`, so filtering only here would make the
- * sitemap disagree with what the site actually serves. There are currently no draft pages.)
- *
  * Absolute URLs are required by the sitemap protocol. The origin comes from `getSiteUrl()` in
  * `lib/shared.ts`, the same helper behind `metadataBase` in `app/layout.tsx` and the docs page
  * canonical, so all three always agree and a production build with no `NEXT_PUBLIC_SITE_URL`

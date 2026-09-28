@@ -6,7 +6,6 @@ import type { ComponentPropsWithoutRef, ElementType } from 'react';
 
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
 import { CustomDetails } from '@/components/mdx/CustomDetails';
-import FAQStructuredData from '@/components/mdx/FAQStructuredData';
 import { ImageZoom } from '@/components/mdx/ImageZoom';
 import { PdfModal } from '@/components/mdx/PdfModal';
 import { Reference } from '@/components/mdx/Reference';
@@ -85,8 +84,6 @@ export function getMDXComponents(components?: MDXComponents) {
     AEL: AddressExplorerLink,
     CustomDetails,
     EdgeChallengeFlow,
-    FAQStructuredData,
-    FAQStructuredDataJsonLd: FAQStructuredData,
     FlowChart,
     ImageZoom,
     ImageWithCaption: ImageZoom,
