@@ -1,5 +1,5 @@
 /**
- * generate-precompile-tables — regenerate content/partials/precompile-tables/*.mdx.
+ * generate-precompile-tables: regenerate content/partials/precompile-tables/*.mdx.
  *
  * Usage:
  *   pnpm precompiles:generate          # write the tables
@@ -47,7 +47,7 @@ const OUTPUT_DIR = path.join('content', 'partials', 'precompile-tables');
 
 /**
  * Pins that only this generator consumes. They stay here rather than in content/vars.json
- * because that file is the writer-facing set rendered by `<Var>` — these are never shown
+ * because that file is the writer-facing set rendered by `<Var>`; these are never shown
  * to a reader. The shared pins (nitroVersionTag, nitroPrecompilesCommit, …) do live in
  * vars.json and are read from it below, so no value is duplicated across the two.
  */
@@ -95,20 +95,11 @@ const {
 /**
  * Prettier options for the generated `.mdx` partials.
  *
- * These files are the one place MDX gets Prettier-formatted in this repo: `.prettierignore`
- * excludes `**\/*.mdx` from `pnpm format`, so nothing else touches them and the generator
- * owns their shape (the same arrangement the ignore file documents for CATALOG.md).
- *
- * `printWidth: 9999` keeps each `<a>` tag's attributes on one line, which is what the
- * committed tables already look like, so regenerating produces no formatting churn.
- *
- * Every partial now opens with one `{/* … *\/}` expression comment (the do-not-edit marker), so
- * the `*`-escaping hazard that motivates the repo-wide MDX exclusion is no longer ruled out by
- * the file's content. It still does not bite: that hazard is Prettier escaping a `*` in prose,
- * and these files hold an expression comment on its own line followed by HTML tables, with no
- * prose anywhere. Measured rather than assumed, with these exact options Prettier returns the
- * marker line byte-identical and is idempotent on the result, including for a marker carrying a
- * literal `*\/`. `generatedMarker` rejects that input anyway, so the case cannot reach here.
+ * `printWidth: 9999` keeps each `<a>` tag's attributes on one line, so regenerating produces no
+ * formatting churn against the committed tables. Every partial opens with one `{/* … *\/}`
+ * expression comment (the do-not-edit marker); with these options Prettier returns that line
+ * unchanged and is idempotent on the result. `generatedMarker` rejects a marker carrying a literal
+ * `*\/`, so that case cannot reach here.
  */
 const MDX_FORMAT: PrettierOptions = {
   parser: 'mdx',

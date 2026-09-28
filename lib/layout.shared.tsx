@@ -12,9 +12,7 @@ export function baseOptions(): BaseLayoutProps {
       title: (
         <>
           {/* The Arbitrum mark is four-colour (navy/blue/light-blue/white), so it
-              cannot be a currentColor component the way OffchainMark was. Used in
-              both light and dark, matching arbitrum-docs docusaurus.config.js,
-              which sets `src` with no `srcDark`. */}
+              cannot be a currentColor component. One file serves light and dark. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/img/logo.svg" alt="" width={18} height={20} className="h-5 w-auto" />
           {appName}
@@ -22,19 +20,15 @@ export function baseOptions(): BaseLayoutProps {
       ),
     },
     links: [
-      // Mirrors the Docusaurus top navbar (docusaurus.config.js `navbar.items`):
-      // Get started · Build apps · Launch a chain · Run a node · Use the bridge ·
-      // How it works · Notices. Targets point to the nearest existing Fumadocs page
-      // to avoid 404s where a Docusaurus leaf has not been ported yet.
+      // The top navbar, in order. Each target is a section landing page.
       { text: 'Get started', url: docHref('get-started') },
       {
         type: 'menu',
         text: <BuildAppsNavLabel />,
         // Rendered as a popover list by both headers (the notebook header on docs pages and
         // components/home-header.tsx elsewhere): icon and text on one row, `[&_svg]:size-4`.
-        // Both ignore each item's `menu` options, and the icons carry no class of their own: the
-        // old mega-menu pill (`bg-fd-primary ... mb-2 rounded-md p-1`) sat above the text
-        // baseline once the same icons landed in a 16px inline slot.
+        // Both ignore each item's `menu` options, and the icons carry no class of their own, since
+        // a padded pill sits above the text baseline in a 16px inline slot.
         items: [
           {
             icon: <Code />,

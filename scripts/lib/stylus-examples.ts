@@ -75,8 +75,8 @@ const NUMBER = /-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/y;
  *
  * The grammar is deliberately smaller than JavaScript: an object or array of strings, numbers,
  * `true`, `false` and `null`, with bare or quoted property names and an optional trailing comma.
- * That is JSON plus the four things upstream's `metadata` blocks actually use — single quotes,
- * unquoted keys, trailing commas, and values wrapped onto the next line — and nothing else.
+ * That is JSON plus the four things upstream's `metadata` blocks actually use (single quotes,
+ * unquoted keys, trailing commas, and values wrapped onto the next line) and nothing else.
  * Every other token stops the run: an identifier that is not a keyword, a template literal, a
  * parenthesis, an operator, a comment. There is no fallback to evaluation.
  *
@@ -236,17 +236,16 @@ export function parseObjectLiteral(text: string, context: string): JsonValue {
  * Read the metadata object literal.
  *
  * It is a JavaScript expression, not JSON: upstream wraps long descriptions across lines, mixes
- * single and double quotes, and leaves a trailing comma — so `JSON.parse` will not do. It is read
+ * single and double quotes, and leaves a trailing comma, so `JSON.parse` will not do. It is read
  * with {@link parseObjectLiteral}, which accepts exactly that grammar as **data** and throws on
  * anything outside it. It is never evaluated: see that function for why the difference matters
  * when the input is an unpinned third-party repository.
  *
  * `title` and `description` are whitespace-normalized (runs of whitespace collapsed to one space,
- * ends trimmed) before being returned. This is a generator-level fix for the A14
- * `content:lint` rule, not an editorial one: upstream's own metadata strings occasionally carry a
- * stray doubled space or trailing space (e.g. `basic_examples/variables.mdx`'s description), which
- * is noise rather than a wording choice, and normalizing it here means it stays fixed across every
- * future `stylus:generate` run instead of needing a hand-edit upstream would just overwrite.
+ * ends trimmed) before being returned, because upstream's own metadata strings occasionally carry
+ * a stray doubled or trailing space that would otherwise ship verbatim into the `<title>` tag and
+ * the sidebar label. Normalizing here keeps it fixed across every `stylus:generate` run instead of
+ * needing a hand-edit the next run would overwrite.
  *
  * The object comes back whole, any other key upstream wrote included, with the two fields
  * normalized in place.
@@ -365,7 +364,7 @@ export function rewriteRelativeLinks(
  *
  * Position is upstream's: two lines above the opening fence, so the banner lands under the
  * heading that introduces the snippet rather than between the heading and its prose. The extra
- * blank lines are deliberate — Prettier collapses them, and emitting them here means the
+ * blank lines are deliberate: Prettier collapses them, and emitting them here means the
  * insertion cannot weld the banner onto the line above it.
  *
  * A page with no Rust snippet keeps its content and reports itself, because the banner is a
@@ -411,7 +410,7 @@ export function buildPage({
   const frontmatter = renderFrontmatter(metadata, frontmatterDefaults);
 
   // Replacing the metadata export in place, rather than rebuilding the file around the body,
-  // keeps everything upstream puts after it — the `{/* Begin Content */}` marker included —
+  // keeps everything upstream puts after it, the `{/* Begin Content */}` marker included,
   // exactly where upstream put it.
   // A callback inserts literal text: a replacement string would expand `$1`, `$$`, etc.
   let content = source.replace(METADATA_PATTERN, () => `${frontmatter}\n\n${marker}`);

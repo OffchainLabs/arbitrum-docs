@@ -3,10 +3,8 @@
 import { usePostHog } from 'posthog-js/react';
 import { useEffect } from 'react';
 
-// Reports a 404 to PostHog, porting the capture in upstream
-// src/theme/NotFound/Content/index.tsx. Feeds the inbound-404 monitoring that
-// drives the legacy redirect map after cutover.
-//
+// Reports a 404 to PostHog as `404_error`, which shows inbound URLs the redirect map misses.
+
 /**
  * Delay before each attempt, in milliseconds, measured from the attempt before it.
  *

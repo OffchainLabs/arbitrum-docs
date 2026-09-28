@@ -7,7 +7,7 @@
  * for events whose Go side has no doc comment.
  *
  * Keys are matched case-insensitively, so `getTxBaseFee` and `gettxbasefee` are the same
- * entry. Every precompile the generator should emit needs a key here, even if empty —
+ * entry. Every precompile the generator should emit needs a key here, even if empty:
  * the object's keys are the work list.
  *
  * Ported from arbitrum-docs `src/resources/precompilesInformation.js`.
@@ -125,7 +125,7 @@ export const precompilesInformation: Record<string, PrecompileInformation> = {
 };
 
 /**
- * NodeInterface is not a real precompile — it lives in nitro-contracts and is implemented
+ * NodeInterface is not a real precompile: it lives in nitro-contracts and is implemented
  * in `execution/nodeinterface`, so it gets its own entry and its own generator pass.
  */
 export const nodeInterfaceInformation: { methodOverrides: Overrides<MethodOverride> } = {

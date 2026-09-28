@@ -8,16 +8,13 @@
  * Sources of truth:
  * - `@arbitrum/sdk` for protocol-core and token-bridge addresses (rollup, inbox, sequencerInbox,
  *   bridge, outbox, classic outboxes, gateways, WETH, proxy admins, multicall). These follow
- *   automatically when the SDK devDependency is bumped, which is the whole point of the port:
- *   the partial used to be a static file that nothing kept honest.
+ *   automatically when the SDK devDependency is bumped, so no hand-kept copy can go stale.
  * - `scripts/data/contract-addresses.data.ts` for what the SDK does not expose (core proxy
  *   admin, fraud-proof contracts, resource constraint manager, canonical factories) and for the
  *   constant precompile addresses.
  *
  * Unlike `generate-precompile-tables.ts` this makes no network calls: the SDK ships its network
  * registry as data, so a run is offline and deterministic.
- *
- * Ported from arbitrum-docs `scripts/generate-contract-addresses.ts`.
  */
 import { getArbitrumNetwork } from '@arbitrum/sdk';
 import fs from 'node:fs';

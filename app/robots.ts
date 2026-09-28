@@ -3,26 +3,14 @@ import type { MetadataRoute } from 'next';
 import { getSiteUrl } from '@/lib/shared';
 
 /**
- * `/robots.txt` ports upstream `static/robots.txt` from arbitrum-docs.
+ * `/robots.txt`. No `Disallow` lines: Fumadocs generates no category index pages and the one hosted
+ * PDF is served from `public/nitro-whitepaper.pdf`, so there is nothing to keep crawlers out of.
  *
- * Two differences from upstream, both deliberate:
- *
- * 1. **No `Disallow` lines.** Upstream disallowed `/category/` (Docusaurus' auto-generated category
- *    index pages) and `/hosted-pdfs/`. Neither route exists here: Fumadocs generates no category
- *    pages, and the one hosted PDF is served from `public/nitro-whitepaper.pdf`. Disallowing paths
- *    that 404 would be noise. Keep this list in sync with `app/sitemap.ts` if that ever changes.
- *
- * 2. **`Content-Signal` goes through `other`.** It is not part of RFC 9309; it is
- *    draft-romm-aipref-contentsignals (https://contentsignals.org/). Next's `Robots` object models
- *    only the standard directives, and `other` is its documented escape hatch for exactly this:
- *    keys keep their casing and values pass through verbatim, scoped to this rule's `User-Agent`
- *    block. Available since Next 16.3.0, so no separate `app/robots.txt/route.ts` handler is
- *    needed. The emitted line order differs from upstream's file (Next writes `Allow` before
- *    `other`); robots.txt directives are order-independent within a group, so the meaning is the
- *    same.
- *
- * The signal is permissive for reading and restrictive for training: the docs may be indexed for
- * search and used as input to AI assistants, but not used as training data.
+ * `Content-Signal` goes through `other`. It is not part of RFC 9309 but
+ * draft-romm-aipref-contentsignals (https://contentsignals.org/), and `other` is Next's escape
+ * hatch for a non-standard directive: keys keep their casing and values pass through verbatim,
+ * scoped to this rule's `User-Agent` block (Next 16.3.0+). The signal permits search indexing and
+ * AI input and forbids training.
  *
  * The sitemap URL is absolute and its origin comes from `getSiteUrl()` in `lib/shared.ts`, the
  * same helper `app/sitemap.ts` and `metadataBase` use, so a production build with no

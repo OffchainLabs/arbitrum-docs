@@ -60,8 +60,8 @@ export function AuctionStepMarker({ step, interactive }: { step: number; interac
           role="button"
           tabIndex={0}
           aria-label={`Open step ${step}`}
-          // The focus ring belongs on the focusable element. It used to sit on the inner group,
-          // which never receives focus, so keyboard users saw nothing.
+          // The focus ring belongs on the focusable element; the inner group never receives focus,
+          // so a ring there would show keyboard users nothing.
           className={styles.markerInteractive}
           // Radix wires the click, but an SVG group is not a button: Enter and Space do not
           // synthesise one, so keyboard users need this.

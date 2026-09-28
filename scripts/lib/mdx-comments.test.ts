@@ -25,9 +25,9 @@ async function mirror(source: string, { strip = true } = {}): Promise<string> {
     remarkPlugins: [...(strip ? [remarkStripMdxComments] : []), [remarkLLMs, { _data: true }]],
   });
   const file = new VFile({ value: source, path: 'test.mdx' });
-  // `process` is parse, run and a final stringify. It used to be `parse` then `run`, which is the
-  // same transform chain, but `@mdx-js/mdx` types `run` as taking the estree `Program` it produces
-  // rather than the mdast `Root` it is actually handed, so that shape does not type-check.
+  // `process` is parse, run and a final stringify. `parse` then `run` would be the same transform
+  // chain, but `@mdx-js/mdx` types `run` as taking the estree `Program` it produces rather than
+  // the mdast `Root` it is actually handed, so that shape does not type-check.
   await processor.process(file);
   const { markdown } = file.data;
   assert.equal(typeof markdown, 'string', 'remarkLLMs attached no markdown to the file');

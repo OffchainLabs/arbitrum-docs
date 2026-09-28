@@ -10,8 +10,7 @@ import type { PostHog } from 'posthog-js';
 import { usePostHog } from 'posthog-js/react';
 import { useMemo } from 'react';
 
-// Shared Inkeep configuration, ported from the Docusaurus instance
-// (arbitrum-docs/inkeep.js + inkeep.config.js).
+// Shared Inkeep configuration for search and chat; tracked widget events are forwarded to PostHog.
 
 const trackedEvents = [
   // Chat events

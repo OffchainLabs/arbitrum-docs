@@ -1,6 +1,5 @@
 /**
- * doc-links: the shared filesystem and link layer for `check-links`, `move-doc` and
- * `inventory-links`.
+ * doc-links: the shared filesystem and link layer for `check-links` and `move-doc`.
  *
  * Maps doc files to the URLs Fumadocs serves them at, extracts every internal link occurrence with
  * its source offsets, resolves each to the file it points at, and re-renders a link in its written
@@ -264,8 +263,8 @@ export function extractRefs(source: string): LinkRef[] {
   for (let m; (m = include.exec(masked));) {
     const raw = m[2].trim();
     if (raw === '') continue;
-    // `cwd` includes are root-anchored (partials-check validates them); they must never be rewritten
-    // on move, so surface them with a null range like an unrewritable expression attr.
+    // `cwd` includes are root-anchored, so a move never rewrites them; surface them with a null
+    // range like an unrewritable expression attr.
     if (/\bcwd\b/.test(m[1])) {
       refs.push({ surface: 'include', rawUrl: raw, range: null, skipped: 'cwd' });
       continue;

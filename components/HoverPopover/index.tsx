@@ -19,7 +19,7 @@ import { type ReactNode, useState } from 'react';
 
 /**
  * Generic hover/focus popover built on `@floating-ui/react`. The interaction primitive behind
- * `<Reference>`/`<Term>`: inline, opens on hover/focus, closes on leave/blur. Owns open state,
+ * `<Term>`: inline, opens on hover/focus, closes on leave/blur. Owns open state,
  * positioning, dismissal, and the portal; consumers pass a trigger (`children`) and prebuilt
  * `content` (typically server-rendered).
  */

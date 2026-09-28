@@ -9,19 +9,11 @@
  *
  * `--source-path` also reads from `STYLUS_REPO_PATH`; the flag wins when both are set.
  *
- * Why this exists: the pages were ported by hand from a Docusaurus pipeline that lived in
- * arbitrum-docs (`scripts/sync-stylus-content.js` plus a job in `update-external-content.yml`).
- * That pipeline does not survive arbitrum-docs being archived, and without it an edit to
- * `offchainlabs/stylus-by-example` reaches this site through nobody and nothing.
+ * Without it, an edit to `offchainlabs/stylus-by-example` never reaches this site.
  *
- * Unlike `generate-cli-reference.ts` this pins no upstream ref. Nitro has releases and
- * content/vars.json already names the one the docs describe; stylus-by-example has neither, and
- * the site has always tracked its default branch, so a pin here would only be a second number to
- * forget to bump.
- *
- * That makes `--check` network-dependent and dependent on someone else's default branch, which is
- * why it is not a CI gate: it would redden every open PR the moment an unrelated repository
- * edited a page. Run it by hand.
+ * Unlike `generate-cli-reference.ts` this pins no upstream ref: stylus-by-example publishes no
+ * releases, and the site tracks its default branch. That makes `--check` depend on the network and
+ * on someone else's branch, so it is not a CI gate. Run it by hand.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -83,7 +75,7 @@ function parseArgs(argv: string[]): Args {
  * Put the upstream tree under `workDir` and return the directory holding the app-router pages.
  *
  * A local clone is read through `git archive`, not off the working tree, so a checkout with local
- * edits or a stale index cannot leak into the generated pages — the same rule
+ * edits or a stale index cannot leak into the generated pages, the same rule
  * `generate-cli-reference.ts` applies to Nitro.
  */
 function materializeSource({

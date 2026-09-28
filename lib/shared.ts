@@ -3,13 +3,8 @@ import { localSiteUrl, resolveSiteUrl } from './site-url.ts';
 
 export const appName = 'Arbitrum docs';
 /**
- * The site root's own title and description, for `app/(home)/page.tsx` and for the social card
- * `app/(home)/opengraph-image.tsx` renders from the same two strings.
- *
- * They live here, beside `appName`, so the page and its card cannot disagree, and they are
- * deliberately not the docs landing page's own title and description (`content/docs/index.mdx`,
- * "Arbitrum docs"). `/` and `/docs` are two separately indexable URLs, so giving them one title
- * would make each compete with the other for the same query.
+ * The site root's own title and description, for `app/(home)/page.tsx` and its social card. Not the
+ * docs index's "Arbitrum docs": `/` and `/docs` are separately indexable and should not compete.
  */
 export const siteTitle = 'Arbitrum documentation';
 export const siteDescription =
@@ -23,36 +18,16 @@ export const docsContentRoute = '/llms.mdx/docs';
 export { localSiteUrl };
 
 /**
- * This repository's own GitHub identity, for the edit link on every docs page and for the
- * "Request an update" issue link (`components/RequestUpdateLink.tsx`).
- *
- * The values are `content/vars.json`'s, not this file's (FS-2733). The contribute guide renders
- * the same URLs as `{var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/…` link destinations,
- * and two owners for one string is what the ticket closes: `check-links` skips every external
- * destination, so a repository rename used to leave six dead links on that page with no gate
- * turning red. One value, `docsRepositoryUrl`, flips at cutover and takes the code and the content
- * with it.
- *
- * `url` rather than a `user`/`repo` pair because both call sites join the two immediately, so the
- * split only offered a way for the halves to disagree.
- *
- * The JSON is imported with an explicit `with { type: 'json' }` attribute, not through
- * `content/vars.ts`, because `scripts/lib/shared.test.ts` and `scripts/static-docs-http.test.ts`
- * import this module under `node --test`, where Node rejects a bare JSON import.
+ * This repository's GitHub identity, for the edit link and the "Request an update" issue link. Read
+ * from `content/vars.json`, which the contribute guide also expands through `{var:…}`, so code and
+ * content retarget together. `with { type: 'json' }` because tests import this under `node --test`.
  */
 export const gitConfig = {
   url: vars.docsRepositoryUrl,
   branch: vars.docsRepositoryBranch,
 };
 
-/**
- * The cross-section links pinned in the sidebar footer on every docs page
- * (`components/sidebar-resource-links.tsx`). Kept here, not inline in that `.tsx` file, so
- * `scripts/lib/shared.test.ts` can assert each `url` still resolves to a real page under
- * `content/docs`. `check-links` walks MDX only, and `pnpm move-doc` does not retarget a `.tsx`
- * file, so without that test a deleted or renamed page would leave a silent 404 in every section
- * sidebar. Same ungated shape `announcementLinkHref` has, which earned its own `vars:check` rule.
- */
+/** Sidebar footer links; `scripts/lib/shared.test.ts` asserts each `url` is a real page. */
 export const sidebarResourceLinks = [
   { text: 'Chain info', url: '/docs/chain-info' },
   { text: 'Glossary', url: '/docs/glossary' },
@@ -60,20 +35,9 @@ export const sidebarResourceLinks = [
 ];
 
 /**
- * The absolute origin this site is served from, for `metadataBase`, canonical URLs, and anything
- * else that must be absolute.
- *
- * The rule itself lives in `lib/site-url.ts`, because `next.config.ts` has to apply the same rule
- * before any app code is compiled (Next transpiles the config and the `.ts` files it imports on its
- * own). That module's comment explains why the split exists and why the config file is the copy
- * that enforces. This is the app-facing name for it, bound to `process.env`.
- *
- * Callers that want the failure at build time must call it at module scope, as `app/layout.tsx`
- * does. A call inside a request handler only fails that request, and by then the build is already
- * deployed, so `next.config.ts` is the real gate.
- *
- * Deliberately imports nothing but the rule, so `app/sitemap.ts` and `app/robots.ts` can adopt it
- * without dragging `lib/source` (and the compiled collection) anywhere near a client bundle.
+ * The absolute origin this site is served from. The rule lives in `lib/site-url.ts` because
+ * `next.config.ts` applies it too. Call it at module scope to fail the build rather than a request.
+ * Imports nothing but the rule, so `app/sitemap.ts` and `app/robots.ts` stay clear of `lib/source`.
  */
 export function getSiteUrl(): string {
   return resolveSiteUrl(process.env);

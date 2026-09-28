@@ -1,14 +1,16 @@
 /**
- * references-check — build-time guardrail for the inline hover-reference system
- * (.claude/docs/superpowers/specs/2026-07-10-references-glossary-design.md). Replaces the old glossary's
- * silent runtime `console.warn` on unknown terms.
+ * references-check: build-time guardrail for the glossary hover references, so an unknown term
+ * fails the gate instead of rendering plainly with a runtime warning.
  *
  * Errors (exit 1):
  *   R1  every <Term id> / <Reference collection id> in content resolves to a real collection entry
  *   R2  <Reference> names a registered collection
- *   R3  no <Term>/<Reference> under content/partials (partials may be client-rendered by
- *       FloatingHoverModal, where the server components are illegal)
+ *   R3  no <Term>/<Reference> under content/partials (a partial may be client-rendered, where
+ *       these server components are illegal)
  *   R4  collection entry ids are unique
+ *
+ * `<Reference collection id>` is matched although `components/mdx.tsx` registers only `<Term>`
+ * today, so a future collection gets the same check without a change here.
  *
  *   node scripts/references-check.ts
  */
@@ -74,7 +76,7 @@ function main(): void {
     const refs = referencesIn(src);
     if (inPartials && refs.length) {
       errors.push(
-        `R3 ${rel(abs)}: <Term>/<Reference> in a partial — partials may be client-rendered, where these server components are illegal.`,
+        `R3 ${rel(abs)}: <Term>/<Reference> in a partial. Partials may be client-rendered, where these server components are illegal.`,
       );
       continue;
     }

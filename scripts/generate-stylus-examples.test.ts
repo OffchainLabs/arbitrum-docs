@@ -115,11 +115,10 @@ describe('parseMetadata', () => {
   });
 
   it('normalizes a doubled space or leading/trailing whitespace in title or description', () => {
-    // The upstream string basic_examples/variables/page.mdx actually ships (as of stylus-by-example
-    // 4bd4fb0): a doubled space baked into the literal. Not a line-wrap artifact from this
-    // generator, a real double space in upstream's own source string. Collapsed here so
-    // `content:lint` rule A14 stays clean across a regeneration instead of needing a hand-edit the
-    // next regeneration would overwrite.
+    // Upstream's own source string for basic_examples/variables/page.mdx carries a doubled space in
+    // its literal, not a line-wrap artifact from this generator. Collapsed here so the generated
+    // frontmatter stays clean across a regeneration instead of needing a hand-edit the next
+    // regeneration would overwrite.
     const source = `export const metadata = {
   title: '  Padded  Title  ',
   description: 'Two  spaces mid-sentence and trailing space ',

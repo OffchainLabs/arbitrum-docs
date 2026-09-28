@@ -40,9 +40,8 @@ const arbitrumPageSchema = pageSchema.extend({
 });
 
 /**
- * Partials live in `content/partials/` — outside the doc collection `dir` entirely — so they can
- * never be routed and need no glob exclusion here. They are inlined via `<include cwd>…</include>`.
- * `scripts/partials-check.ts` enforces that no `_`-prefixed file reappears under content/docs.
+ * Partials live in `content/partials/`, outside the doc collection `dir`, so they can never be
+ * routed and need no glob exclusion here. Pages inline them with `<include cwd>…</include>`.
  */
 export const docs = defineDocs({
   dir: 'content/docs',
@@ -59,13 +58,11 @@ export const docs = defineDocs({
 });
 
 /**
- * Reference collections back the inline hover-reference system (see
- * .claude/docs/superpowers/specs/2026-07-10-references-glossary-design.md). Every entry shares
- * `referenceSchema` ({ id, title, sortAs? }); the MDX body is the definition. The glossary is the
- * first consumer; new reference types (precompiles, config params, …) add a collection with this
- * schema + one registry entry in `lib/references.ts`. These are a separate collection, so they do
- * NOT carry the docs page contract. (source.config may only export collections, hence the schema
- * lives in lib/reference-schema.)
+ * Reference collections back the glossary hover references. Every entry shares `referenceSchema`
+ * ({ id, title, sortAs? }); the MDX body is the definition. A new reference type adds a collection
+ * with this schema plus one registry entry in `lib/references.ts`. A separate collection, so it
+ * does not carry the docs page contract; the schema lives in `lib/reference-schema.ts` because
+ * this file may only export collections.
  */
 export const glossary = defineCollections({
   type: 'doc',

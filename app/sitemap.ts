@@ -8,11 +8,9 @@ import { source } from '@/lib/source';
  * content consumer reads (see INTERNALS, "`source` is a choke point"). Adding a page to
  * `content/docs/` puts it in the sitemap; nothing here needs updating.
  *
- * **Upstream's `nonCanonicalRoutePatterns` has no equivalent here.** Docusaurus routed everything
- * under `docs/`, including partials and auto-generated category pages, so its sitemap needed an
- * ignore list. In this repo partials live in `content/partials/`, archived versions in
- * `content/_versions/`, and the glossary in `content/glossary/`, all outside the doc collection
- * `dir`, so `source.getPages()` cannot return them. There is nothing to exclude.
+ * There is nothing to exclude: partials (`content/partials/`) and the glossary
+ * (`content/glossary/`) live outside the doc collection `dir`, so `source.getPages()` cannot
+ * return them.
  *
  * Absolute URLs are required by the sitemap protocol. The origin comes from `getSiteUrl()` in
  * `lib/shared.ts`, the same helper behind `metadataBase` in `app/layout.tsx` and the docs page

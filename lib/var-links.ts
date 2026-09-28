@@ -1,41 +1,14 @@
 /**
- * var-links: expand `{var:name}` placeholders inside markdown link destinations.
+ * var-links: expand `{var:name}` placeholders in link destinations and JSX URL attributes.
  *
- * `<Var name="…" />` cannot be used in a link destination, and the failure is silent. CommonMark
- * reads an unbracketed destination as one raw token that may not contain a space, so
- * `[Interface](https://github.com/OffchainLabs/<Var name="nitroRepositorySlug" />/blob/…)` fails to
- * parse as a link at all: the reader is served the literal `[Interface](…)` brackets, with only the
- * bare URL prefix before the first `<Var>` autolinked by GFM. Nothing caught it: `vars:check` only
- * proves the key exists, `check-links` skips external destinations, and `content:lint` rule A6 reads
- * code fences and spans. Seventy-three links across five pages shipped that way (FS-2725).
- *
- * The placeholder form parses, because it holds no space:
- *
- *   [Interface](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/x.go)
- *
- * The braces survive verbatim in the mdast `link` node's `url`, and this plugin substitutes them.
- * Several placeholders in one destination are fine, which is what the precompiles table needs. The
- * same placeholder works in a JSX `href`, `to` or `src` attribute, where a `<Var>` tag is broken for
- * a different reason: its own quotes close the attribute value early.
- *
- * The `var:` prefix is not decoration. Without it a placeholder is indistinguishable from a URL that
- * documents a path template (`…/{chainId}/…`), and `vars:check` would have to choose between letting
- * a mistyped name ship silently and failing on a legitimate template. With it, an unknown name is
- * unambiguously a mistake, so the gate can be strict.
- *
- * An unknown name is left in place rather than thrown on, matching what `<Var>` does with one: the
- * defect reaches the page as visible nonsense and `pnpm vars:check` is the gate that fails on it.
- * Throwing here would take the whole site down for one typo, in a module that runs before any page.
- *
- * Deliberately import-free apart from `node:fs`, so `scripts/lib/var-links.test.ts` can import it
- * under `node --test` and exercise the real module rather than a copy. `scripts/lib/doc-links.ts`
- * imports it for the same reason `scripts/lib/doc-anchors.ts` imports `lib/mdx-options.ts`: a
- * checker has to resolve the URL the reader gets, not the one written in the file.
- *
- * The node types below are local and structural rather than imported from `mdast` and
- * `mdast-util-mdx-jsx`, because neither type package is resolvable from the repo root (they are
- * transitive dependencies only) and the plugin reads four fields. Every real mdast node the plugin
- * touches fits them.
+ * `<Var>` cannot be used in a link destination (a CommonMark destination may not hold a space, so
+ * the link never parses) or in an `href`/`to`/`src` attribute (its quotes close the value early);
+ * `content:lint` rule `var-in-link` reports the tag and names this placeholder as the fix. The
+ * `var:` prefix keeps a placeholder distinct from a path template like `…/{chainId}/…`, so
+ * `vars:check` can be strict about an unknown name; the plugin leaves one in place rather than
+ * throwing, so a typo reaches the page visibly instead of taking the site down. Import-free apart
+ * from `node:fs`, so scripts import it under `node --test`; node types are local because the
+ * `mdast` type packages are transitive dependencies only.
  */
 import { readFileSync } from 'node:fs';
 
@@ -63,18 +36,10 @@ export interface RemarkVarLinksOptions {
   vars?: VarValues;
 }
 
-/**
- * A `{var:name}` placeholder. The name matches a JavaScript identifier, which is the shape every
- * key in `content/vars.json` has; anything else is not a placeholder and is left alone, so a URL
- * that happens to contain braces is never touched.
- */
+/** A `{var:name}` placeholder; the name is an identifier, so plain braces in a URL stay put. */
 export const VAR_PLACEHOLDER: RegExp = /\{var:([A-Za-z_]\w*)\}/g;
 
-/**
- * Something that opens like a placeholder but whose name is not an identifier (`{var:}`,
- * `{var:two words}`). Reported by the gate rather than substituted, because silently leaving it
- * would put literal braces in a URL.
- */
+/** Opens like a placeholder but the name is not an identifier; `content:lint` reports it. */
 export const MALFORMED_VAR_PLACEHOLDER: RegExp = /\{var:(?![A-Za-z_]\w*\})[^}\n]*\}/g;
 
 /** Every placeholder name in a string, in source order, with duplicates kept. */
@@ -82,11 +47,7 @@ export function varPlaceholderNames(source: unknown): string[] {
   return [...String(source).matchAll(VAR_PLACEHOLDER)].map((m) => m[1]);
 }
 
-/**
- * Substitute every resolvable placeholder in `url`. `vars` is any object keyed by variable name;
- * a name it does not hold is left as written. Anything that is not a string passes straight through,
- * so a node's absent `title` stays absent.
- */
+/** Substitute every placeholder `vars` holds; an unknown name and a non-string pass through. */
 export function expandVarPlaceholders<T>(url: T, vars: VarValues): T | string {
   if (typeof url !== 'string' || !url.includes('{var:')) return url;
   return url.replace(VAR_PLACEHOLDER, (whole: string, name: string) =>
@@ -100,30 +61,13 @@ function walkTree(node: VarLinksNode, visit: (node: VarLinksNode) => void): void
   for (const child of node?.children ?? []) walkTree(child, visit);
 }
 
-/**
- * JSX attributes that carry a URL. A `<Var>` inside one of these is broken for a second reason: the
- * tag's own `name="…"` quotes close the attribute value early and truncate the URL. So the
- * placeholder has to work here too, or `content:lint` rule A11 would have no fix to name for that
- * shape.
- */
+/** JSX attributes that carry a URL. */
 const URL_ATTRIBUTES: ReadonlySet<string> = new Set(['href', 'to', 'src']);
 
 /**
- * The remark plugin. Rewrites the url and the title of a `link`, `image` or `definition` node, and
- * the URL attributes of a JSX element.
- *
- * `definition` is included because a reference-style link (`[text][ref]`) keeps its destination in a
- * definition node, and a writer who reaches for one should not find the mechanism missing. The
- * `title` is the tooltip in `[text](url "title")`, where a `<Var>` tag is plain text and never
- * substitutes, so everything written inside one link's parentheses now behaves the same way.
- *
- * `image` covers the destination of `![alt](url)`, which otherwise reaches the reader as literal
- * `%7Bvar:name%7D`. It only helps a remote src. Fumadocs inserts this plugin after its own
- * remark-image, and for a *local* src that plugin has already turned the node into an import of the
- * written path, so a placeholder there fails the build on a file that does not exist rather than
- * expanding. Nothing silent survives either way, and a markdown image with a remote src is blocked
- * by `pnpm images:presence` regardless (see INTERNALS.md "Remote images are never fetched at
- * build").
+ * The remark plugin. Rewrites the url and title of a `link`, `image` or `definition` node and the
+ * URL attributes of a JSX element. `image` only helps a remote src: Fumadocs runs remark-image
+ * first, and a local src is already an import of the written path by the time this runs.
  */
 export function remarkVarLinks({ vars }: RemarkVarLinksOptions = {}): (tree: VarLinksNode) => void {
   const values = vars ?? readVars();
@@ -147,12 +91,8 @@ export function remarkVarLinks({ vars }: RemarkVarLinksOptions = {}): (tree: Var
 }
 
 /**
- * Read `content/vars.json` off disk, resolved from this file rather than from the working
- * directory: the plugin is loaded by `source.config.ts` during a build and by `check-links`, which
- * run from different places.
- *
- * The JSON is read rather than `content/vars.ts` imported, because that module imports
- * `./vars.json` with no `with { type: 'json' }` attribute, which Node rejects.
+ * Read `content/vars.json` off disk, resolved from this file since `source.config.ts` and
+ * `check-links` run from different places. `content/vars.ts`'s bare JSON import fails under Node.
  */
 export function readVars(): Record<string, unknown> {
   const parsed: unknown = JSON.parse(

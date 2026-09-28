@@ -1,38 +1,28 @@
 /**
- * Tripwire for the content tree's links back into this repository (FS-2733).
+ * Tripwire for the content tree's links back into this repository.
  *
- * `scripts/check-links.ts` skips every external destination before resolving it, so a link that
- * spells this repository's own GitHub URL out in full is invisible to every gate. When the
- * contribute guide hardcoded six such URLs, a rename would have left six dead links on
- * `/docs/contribute` with nothing turning red, and the only thing standing between the reader and
- * that was a comment asking a human to retarget them by hand.
- *
- * The URLs now read `{var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/…`, and `gitConfig` in
- * `lib/shared.ts` reads the same two keys, so one edit to `content/vars.json` moves the content and
- * the code together. This file is what holds that, in four assertions:
+ * `scripts/check-links.ts` skips every external destination, so a link that spells this
+ * repository's own GitHub URL out in full is invisible to every gate, and a rename would leave it
+ * dead with nothing turning red. The contribute guide therefore writes
+ * `{var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/…`, and `gitConfig` in `lib/shared.ts`
+ * reads the same two keys, so one edit to `content/vars.json` moves content and code together.
+ * Four assertions hold that:
  *
  * 1. `gitConfig` and `content/vars.json` agree, with no server running.
  * 2. Every GitHub link the contribute guide renders belongs to the repository `gitConfig` names.
  * 3. No `.mdx` file anywhere under `content/` writes a docs-repository URL out in full.
  * 4. GitHub file links in the PR template agree with the configured repository and branch.
  *
- * The third one is deliberately repository-wide rather than pinned to the contribute guide. The
- * argument for the check is that `check-links` skips external destinations, and that argument holds
- * for every content file, not one: the round 1 review of FS-2733 found a second reader-facing issue
- * link, in `_know-more-tools-box-partial.mdx`, that a single-file check could never have seen.
+ * The third is repository-wide rather than pinned to the contribute guide, because the argument
+ * for it (that `check-links` skips external destinations) holds for every content file.
  *
  * It judges the configured repository's URL without exceptions, including the fork link. Other
  * `OffchainLabs/*` repositories are separate projects and are not checked. The PR template is
  * rendered by GitHub, so its URLs stay literal and the fourth assertion checks them separately.
  *
- * `lib/shared.ts` is imported as `.ts` for the reason `scripts/lib/shared.test.ts` gives: Node 22
- * strips types natively, so this asserts against the exact constant the pages render rather than a
- * copy of it. `lib/var-links.ts` supplies the expansion for the same reason, since a checker has
- * to judge the URL the reader gets, not the one written in the file.
- *
- * The HTTP half lives in `scripts/static-docs-http.test.ts`, which proves the placeholders really
- * expanded in the rendered page rather than shipping as literal braces. This half needs no running
- * site, so it runs in `pnpm test` and therefore in CI's blocking `Gates` job.
+ * `lib/shared.ts` and `lib/var-links.ts` are imported as `.ts` so this asserts against the exact
+ * constant the pages render and the expansion the reader gets. The HTTP half lives in
+ * `scripts/static-docs-http.test.ts`; this half needs no running site, so it runs in `pnpm test`.
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';

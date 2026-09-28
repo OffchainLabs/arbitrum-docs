@@ -48,11 +48,8 @@ export const frontmatterDefaults: Readonly<Record<string, string>> = {
  *
  * `pages` is an allowlist and doubles as the `meta.json` order, so it is **upstream's teaching
  * sequence, not alphabetical**: `hello_world` first, then the primitives, then the language
- * features that build on them. That sequence is the `allowLists` block of arbitrum-docs
- * `scripts/sync-stylus-content.js`, and it is what drove the Docusaurus sidebar before this site
- * existed. The hand port alphabetized it, which opened a beginner's section on "ABI Decode" and
- * pushed "Hello World" to tenth; restoring it is the parity this pipeline exists for. Sorting
- * this list is a change to the rendered sidebar, not a tidy-up.
+ * features that build on them. Sorting this list is a change to the rendered sidebar, not a
+ * tidy-up.
  *
  * The order of the sections themselves comes from the same place (upstream's `output.sections`):
  * `basic_examples` before `applications`. The parent `content/docs/stylus/stylus-by-example/

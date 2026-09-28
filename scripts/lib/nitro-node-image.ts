@@ -42,8 +42,8 @@ export interface SyncedFile {
 }
 
 /**
- * Rewrite the outgoing image tag in every opted-in file under `content/`, skipping the frozen
- * archive in `content/_versions/`. Pass `write: false` to report without touching disk.
+ * Rewrite the outgoing image tag in every opted-in file under `content/`. A `content/_versions/`
+ * directory, if present, is left alone. Pass `write: false` to report without touching disk.
  */
 export function syncImageInContent(
   repoRoot: string,

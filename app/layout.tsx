@@ -21,9 +21,8 @@ export const metadata: Metadata = {
   // social image URL. This call is at module scope on purpose: that is what makes it a build
   // failure rather than a per-request one. See lib/shared.ts.
   metadataBase: new URL(getSiteUrl()),
-  // Icons live in public/ (not app/, which would recreate the app/favicon.ico
-  // route that broke the Vercel build). Declared explicitly so Next emits the
-  // <link> tags.
+  // Icons live in public/, not app/, where a favicon.ico file would become a route. Declared
+  // explicitly so Next emits the <link> tags.
   //
   // The rasters are fallbacks for clients without SVG-favicon support (Safari
   // most notably) and are rendered from the same vector, so they show the same
@@ -125,8 +124,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             theme={{ attribute: 'class', defaultTheme: 'light' }}
             search={{ SearchDialog: InkeepSearchDialog }}
           >
-            {/* Announcement bar, ported from the Docusaurus `announcementBar`.
-              Above the navbar because it is a sibling rendered before
+            {/* Announcement bar. Above the navbar because it is a sibling rendered before
               {children}, and every layout's header lives inside those.
 
               Writers control it from content/vars.json: text, link, and the

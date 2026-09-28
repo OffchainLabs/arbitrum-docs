@@ -1,7 +1,6 @@
 /**
- * Classification and payload building for the PostHog `llms_file_fetched` event that `proxy.ts`
- * sends. The event and property names continue the series the Docusaurus site produced, so the
- * existing dashboards keep working.
+ * Classification and payload building for the PostHog `llms_file_fetched` event `proxy.ts` sends.
+ * Event and property names match the series the existing dashboards read.
  */
 import { docsContentRoute, docsRoute } from './shared.ts';
 
@@ -49,9 +48,8 @@ const MIRROR_PREFIX = `${docsContentRoute}/`;
 const MIRROR_SUFFIX = '/content.md';
 
 /**
- * Classifies a request path. Both markdown shapes, `/docs/<slug>.md` and
- * `/llms.mdx/docs/<slug>/content.md`, are tracked as `/docs/<slug>.md`, so one page is one series.
- * A rewrite does not re-enter the proxy, so each request is counted once.
+ * Classifies a request path. Both markdown shapes are tracked as `/docs/<slug>.md`, so one page is
+ * one series; a rewrite does not re-enter the proxy, so each request is counted once.
  */
 export function pathInfo(pathname: string): PathInfoResult {
   if (pathname === '/llms.txt' || pathname === '/llms-full.txt') {
@@ -100,10 +98,7 @@ export interface TrackingPayload {
   };
 }
 
-/**
- * Builds the PostHog capture body. Each event gets a random `distinct_id` and no person profile:
- * the series counts fetches and bot categories, not visitors.
- */
+/** The capture body: a random `distinct_id` and no person profile, since it counts fetches. */
 export function buildTrackingPayload(input: BuildPayloadInput): TrackingPayload {
   return {
     api_key: input.posthogKey,

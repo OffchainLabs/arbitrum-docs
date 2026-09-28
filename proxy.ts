@@ -7,9 +7,8 @@ const POSTHOG_HOST = 'https://us.i.posthog.com';
 
 /**
  * Records markdown and `llms*.txt` fetches as PostHog `llms_file_fetched` events, in production
- * only. The capture is handed to `event.waitUntil()` so the response is never delayed, and every
- * failure is logged and swallowed. `waitUntil` from `@vercel/functions` does not work here: Next 16
- * does not install the request context it reads, so it drops the promise silently.
+ * only. The capture goes through `event.waitUntil()` and every failure is logged and swallowed.
+ * `waitUntil` from `@vercel/functions` drops the promise silently under Next 16, so it is not used.
  */
 export default function proxy(request: NextRequest, event: NextFetchEvent) {
   if (process.env.VERCEL_ENV === 'production') track(request, event);
@@ -40,8 +39,7 @@ function track(request: NextRequest, event: NextFetchEvent): void {
       userAgent: request.headers.get('user-agent') ?? '',
       referrer: request.headers.get('referer') ?? '',
       posthogKey,
-      // The configured origin rather than the request's, so the `*.vercel.app` alias does not
-      // split a page into two series.
+      // The configured origin, so the `*.vercel.app` alias does not split a page into two series.
       siteUrl: getSiteUrl(),
     });
     event.waitUntil(

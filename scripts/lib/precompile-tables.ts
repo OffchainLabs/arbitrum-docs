@@ -318,7 +318,7 @@ export function renderEventsInTable(
   }
 
   // Events that are declared but never emitted (deprecated ones, or those emitted through
-  // wrapper code elsewhere) fall back to the first mention of the name — usually the
+  // wrapper code elsewhere) fall back to the first mention of the name, usually the
   // struct-field declaration. Guarantees the link resolves.
   for (const key of Object.keys(events)) {
     if (events[key].implementationLine !== 0) continue;

@@ -22,12 +22,9 @@ export function renderOgImage({ title, description }: { title: string; descripti
       title={title}
       description={description}
       site={appName}
-      // Arbitrum blue accent / teal site label. The generator hardcodes a
-      // #0c0c0c background internally; matching Arbitrum's navy exactly would
-      // require replacing DefaultImage with local JSX, which is out of scope.
-      // The accents are literal hsl() strings rather than --color-fd-* tokens
-      // because Satori (which next/og uses to rasterize) resolves no CSS custom
-      // properties, so a token reference here would silently produce no colour.
+      // Arbitrum blue accent / teal site label, as literal hsl() strings rather than
+      // --color-fd-* tokens: Satori (which next/og rasterizes with) resolves no CSS custom
+      // properties, so a token reference would silently produce no colour.
       primaryColor="hsl(211 99% 45%)"
       primaryTextColor="hsl(188 100% 53%)"
     />,

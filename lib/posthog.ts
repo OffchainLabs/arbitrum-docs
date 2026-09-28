@@ -2,35 +2,22 @@
 
 import { type PageFeedback, pageFeedback } from '@/components/feedback/schema';
 
-// Docs feedback sink. Upstream opens a GitHub Discussion per page, which needs a GitHub App and two
-// secrets; this site captures to PostHog instead so feedback lands alongside the readership data
-// already used for content-gap analysis.
+// Docs feedback sink: page ratings are captured to PostHog server-side, so feedback also works
+// locally and on previews, where the browser SDK is not initialized.
 //
-// `'use server'` is at module scope rather than inside the function (upstream uses the in-function
-// form in apps/docs/lib/github.ts, which it must, because that module also exports plain
-// constants). Exporting nothing but the action makes file scope a compile-time guarantee: a
-// non-async export here fails the build rather than quietly making this importable from a client
-// component.
-//
-// Capture is server-side so feedback also works locally and on preview deployments, where the
-// browser SDK is not initialized.
+// `'use server'` is at module scope so that a non-async export here fails the build rather than
+// making this importable from a client component.
 //
 // API: https://posthog.com/docs/api/capture
 
 const POSTHOG_HOST = 'https://us.i.posthog.com';
 
 /**
- * Records one page rating in PostHog.
- *
- * Never throws. Every failure path logs to the server console (visible in `vercel logs`) and
- * returns `false`, because an unhandled rejection here propagates out of the client's
- * `startTransition` and takes down the whole page render — a docs page must not break because an
- * analytics write failed.
- *
- * @returns whether the event reached PostHog.
+ * Records one page rating in PostHog. Never throws: an unhandled rejection here would propagate out
+ * of the client's `startTransition` and take down the page render.
  */
 export async function onPageFeedbackAction(feedback: PageFeedback): Promise<boolean> {
-  // A server action is a public endpoint — re-validate rather than trusting the caller.
+  // A server action is a public endpoint, so re-validate rather than trusting the caller.
   const parsed = pageFeedback.safeParse(feedback);
   if (!parsed.success) {
     console.error('[Feedback] rejected malformed payload:', parsed.error.issues);
@@ -38,8 +25,7 @@ export async function onPageFeedbackAction(feedback: PageFeedback): Promise<bool
   }
   const { opinion, url, message } = parsed.data;
 
-  // Read on the server despite the NEXT_PUBLIC_ prefix: that is PostHog's documented name for the
-  // publishable `phc_` project token, which is write-only and safe to expose either way.
+  // PostHog's name for the publishable, write-only `phc_` token; safe to read on the server.
   const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   if (!apiKey) {
     console.error(
@@ -57,8 +43,7 @@ export async function onPageFeedbackAction(feedback: PageFeedback): Promise<bool
       body: JSON.stringify({
         api_key: apiKey,
         event: 'docs_feedback',
-        // Feedback is anonymous, so the distinct_id is a throwaway. `$process_person_profile: false`
-        // stops each submission from minting a PostHog person profile keyed to it.
+        // Anonymous: a throwaway id, and no person profile is minted for it.
         distinct_id: crypto.randomUUID(),
         properties: {
           $process_person_profile: false,

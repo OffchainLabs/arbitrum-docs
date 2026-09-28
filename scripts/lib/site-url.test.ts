@@ -62,8 +62,8 @@ test('resolveSiteUrl treats an empty string as unset', () => {
 });
 
 /**
- * An origin pasted without a scheme is the realistic way to get this wrong, and it used to satisfy
- * every check here and then throw inside `new URL()` at the root layout's module scope, taking down
+ * An origin pasted without a scheme is the realistic way to get this wrong: it satisfies a presence
+ * check and would then throw inside `new URL()` at the root layout's module scope, taking down
  * every route on the first request after promotion.
  */
 test('resolveSiteUrl rejects a value that is not an absolute URL', () => {

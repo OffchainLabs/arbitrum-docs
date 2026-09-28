@@ -85,7 +85,7 @@ export interface WriteOrCheckOptions {
 /**
  * Format `content` with Prettier, then either write it (default) or, in check mode,
  * compare against the file on disk and throw {@link StaleFileError} if they differ.
- * Prettier is what makes check mode reliable — it turns the generator's loose template
+ * Prettier is what makes check mode reliable: it turns the generator's loose template
  * whitespace into one canonical form.
  *
  * `overrides` is merged over the resolved repo config. Callers writing `.mdx` MUST pass
@@ -131,7 +131,7 @@ export async function writeOrCheck(
 
 /**
  * Append a `name=value` pair to the GitHub Actions step-output file. No-op outside
- * Actions, where GITHUB_OUTPUT is unset — so local runs behave identically minus the
+ * Actions, where GITHUB_OUTPUT is unset, so local runs behave identically minus the
  * output plumbing.
  */
 export function setOutput(name: string, value: string): void {

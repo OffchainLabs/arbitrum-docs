@@ -268,7 +268,7 @@ export function extractFlags({
       // namespace missing from the page. Both ways of failing to follow one are reported rather
       // than skipped: silently dropping them is what the hardcoded go-ethereum check in
       // generate-cli-reference.ts guards against for one known case, and there is no reason the
-      // general case should be quieter. Measured against Nitro v3.11.3, neither fires.
+      // general case should be quieter.
       if (!args.includes('f')) continue;
       const targetDir = qualifier ? imports.get(qualifier) : dir;
       if (!targetDir || !dirs.get(targetDir)?.funcs.has(name)) {

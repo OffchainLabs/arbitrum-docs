@@ -14,8 +14,6 @@
  *
  * Existing redirects are left as written. If one pointed at the old URL it now chains, and
  * `pnpm test` (`scripts/lib/redirects-config.test.ts`) fails on it until it is retargeted by hand.
- * `VERSIONED` in `lib/versions-constants.ts` is also retargeted by hand; `pnpm test` fails on a dead
- * key there too.
  *
  * Paths are repo-relative files under `content/docs/`, not site URLs. `--dry-run` prints every
  * change without touching the filesystem. After a real run, verify with `pnpm check-links`.

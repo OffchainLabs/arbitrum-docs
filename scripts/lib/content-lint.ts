@@ -18,7 +18,7 @@
  *                         server HTML lacks, so React hydration fails.
  *   remote-image          A markdown image with an `http(s)` src. It becomes `next/image`, whose
  *                         optimizer rejects every remote host here, so the reader gets a broken
- *                         image. Commit the file under `public/`, or use `<ImageZoom src>`.
+ *                         image. Commit the file under `public/`, or wrap an `<img>` in `<ImageZoom>`.
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -124,10 +124,7 @@ export function lintSource(source: string): Finding[] {
   return findings.sort((a, b) => a.line - b.line || a.rule.localeCompare(b.rule));
 }
 
-/**
- * Lint every MDX file under `content/`, or only `files` (absolute or repo-root-relative) when
- * given, which is how the pre-commit hook passes staged files.
- */
+/** Lint every MDX file under `content/`, or only `files` (absolute or repo-root-relative). */
 export function lintContent(repoRoot: string, files?: readonly string[]): FileFinding[] {
   const targets = files
     ? files.map((f) => path.resolve(repoRoot, f)).filter(isMdx)
