@@ -11,11 +11,6 @@ on:
 permissions:
   contents: read
 
-# The pre-commit hook is for working copies; here the same checks run as gates. HUSKY=0 also
-# stops `pnpm install` from writing .husky/_ into the runner's checkout.
-env:
-  HUSKY: 0
-
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true

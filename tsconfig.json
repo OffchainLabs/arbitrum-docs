@@ -38,8 +38,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    // A `**/*.ts` include never matches a dotfile, so the lint-staged config is named on its own.
-    ".lintstagedrc.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
