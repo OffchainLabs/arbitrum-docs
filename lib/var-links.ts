@@ -151,12 +151,8 @@ export function remarkVarLinks({ vars }: RemarkVarLinksOptions = {}): (tree: Var
  * directory: the plugin is loaded by `source.config.ts` during a build and by `check-links`, which
  * run from different places.
  *
- * The JSON is read rather than `content/vars.ts` imported. This module is now TypeScript that Node
- * runs directly with its own type stripping, but the schema module still cannot be loaded that way:
- * it imports `./vars.json` with no `with { type: 'json' }` attribute, which Node rejects with
- * `ERR_IMPORT_ATTRIBUTE_MISSING`. The two cannot drift in the direction that matters: `varsSchema`
- * is a `z.strictObject`, so a JSON key absent from the schema throws at module load long before
- * anything renders.
+ * The JSON is read rather than `content/vars.ts` imported, because that module imports
+ * `./vars.json` with no `with { type: 'json' }` attribute, which Node rejects.
  */
 export function readVars(): Record<string, unknown> {
   const parsed: unknown = JSON.parse(

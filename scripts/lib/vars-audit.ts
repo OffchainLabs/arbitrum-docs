@@ -1,12 +1,9 @@
 /**
- * vars-audit — reconcile `<Var name="…">` usage in MDX against the `content/vars.ts` schema and
- * `content/vars.json` values.
+ * vars-audit: reconcile `<Var name="…">` and `{var:…}` usage in MDX against `content/vars.json`.
  *
- * Why this exists: `content/vars.ts` validates with `z.object`, which **strips** unknown keys rather
- * than rejecting them. So `vars` at runtime is `schemaKeys ∩ jsonKeys`, and `components/mdx/Var`
- * renders `String(vars[name])` — any name outside that intersection renders the literal string
- * `undefined` into the page. MDX is compiled by fumadocs-mdx and never type-checked, so `VarKey`
- * constrains nothing for the only call site that matters.
+ * `components/mdx/Var` renders `String(vars[name])`, so a name with no key in `vars.json` renders the
+ * literal string `undefined` into the page. MDX is never type-checked, so `VarKey` constrains
+ * nothing for the only call site that matters.
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -14,7 +11,6 @@ import path from 'node:path';
 import { MALFORMED_VAR_PLACEHOLDER, VAR_PLACEHOLDER } from '../../lib/var-links.ts';
 import { toPosix, walk } from './partials.ts';
 
-export const VARS_TS: string = path.join('content', 'vars.ts');
 export const VARS_JSON: string = path.join('content', 'vars.json');
 export const CONTENT_DIR = 'content';
 
@@ -41,22 +37,14 @@ export interface DynamicUsage extends UsageSite {
 export interface UnresolvedVar {
   name: string;
   sites: UsageSite[];
-  missingFromSchema: boolean;
-  missingFromJson: boolean;
 }
 
 export interface VarsAudit {
-  /** True when the schema is a `z.strictObject`. */
-  strict: boolean;
-  schemaKeys: string[];
   jsonKeys: string[];
-  effectiveKeys: string[];
   usages: Map<string, UsageSite[]>;
   dynamic: DynamicUsage[];
   findings: {
     unresolved: UnresolvedVar[];
-    strippedJsonKeys: string[];
-    missingJsonKeys: string[];
     unusedKeys: string[];
   };
 }
@@ -64,27 +52,11 @@ export interface VarsAudit {
 const isMdx = (p: string): boolean => /\.mdx?$/i.test(p);
 
 /**
- * Extract the Zod schema keys from `content/vars.ts`.
- *
- * Regex-based rather than an import of the module. This file is TypeScript run by Node directly
- * now, but `content/vars.ts` imports `vars.json` without the `with { type: 'json' }` attribute Node
- * requires (Next's bundler does not), and it runs `varsSchema.parse` at module load, so a bad value
- * would throw before this audit could report anything. The schema is a flat object literal, so this is
- * reliable — but a silent zero-match would make the whole gate vacuous, so callers must treat an empty
- * result as a hard error (see `auditVars`).
- */
-export function parseSchemaKeys(source: string): string[] {
-  const body = source.match(/z\.(?:strict)?[Oo]bject\(\{([\s\S]*?)\n\}\)/);
-  if (!body) return [];
-  return [...body[1].matchAll(/^\s*([A-Za-z_][\w]*)\s*:/gm)].map((m) => m[1]);
-}
-
-/**
  * Every variable reference in a source string, with 1-indexed line numbers.
  *
  * Two syntaxes, one audit. `<Var name="…" />` is the component. `{var:…}` is the placeholder a link
  * destination needs, because a `<Var>` tag holds a space and a space ends an unbracketed CommonMark
- * destination, so that form never parses as a link at all (FS-2725; `lib/var-links.ts` expands the
+ * destination, so that form never parses as a link at all (`lib/var-links.ts` expands the
  * placeholder and `content:lint` rule A11 blocks the broken form). Both name a key that has to
  * resolve, and a placeholder naming a key that does not exist leaves literal braces in a URL, so
  * both belong here or the newer syntax would be the one thing this gate cannot see.
@@ -112,19 +84,11 @@ export function parseVarUsages(source: string): VarUsage[] {
 }
 
 export function auditVars(repoRoot: string): VarsAudit {
-  const schemaSource = readFileSync(path.join(repoRoot, VARS_TS), 'utf8');
-  const schemaKeys = parseSchemaKeys(schemaSource);
   // Only the keys are read, so `JSON.parse`'s untyped result goes straight into `Object.keys`.
   const jsonKeys: string[] = Object.keys(
     JSON.parse(readFileSync(path.join(repoRoot, VARS_JSON), 'utf8')),
   );
-
-  const strict = /z\.strictObject\(/.test(schemaSource);
-  const schemaSet = new Set(schemaKeys);
   const jsonSet = new Set(jsonKeys);
-
-  // What `vars` actually contains at render time.
-  const effective = new Set(schemaKeys.filter((k) => jsonSet.has(k)));
 
   const usages = new Map<string, UsageSite[]>();
   const dynamic: DynamicUsage[] = [];
@@ -143,33 +107,19 @@ export function auditVars(repoRoot: string): VarsAudit {
 
   const unresolved: UnresolvedVar[] = [];
   for (const [name, sites] of usages) {
-    if (effective.has(name)) continue;
-    unresolved.push({
-      name,
-      sites,
-      missingFromSchema: !schemaSet.has(name),
-      missingFromJson: !jsonSet.has(name),
-    });
+    if (!jsonSet.has(name)) unresolved.push({ name, sites });
   }
   unresolved.sort((a, b) => b.sites.length - a.sites.length || a.name.localeCompare(b.name));
 
   return {
-    strict,
-    schemaKeys,
     jsonKeys,
-    effectiveKeys: [...effective],
     usages,
     dynamic,
     findings: {
       // Renders the literal string "undefined" to readers. The reason this gate exists.
       unresolved,
-      // Present in JSON, absent from the schema: silently dropped by z.object, so it looks configured
-      // but is not. Becomes a hard module-load error once the schema is z.strictObject.
-      strippedJsonKeys: jsonKeys.filter((k) => !schemaSet.has(k)),
-      // Present in the schema, absent from JSON: `parse()` throws at module load — site-wide outage.
-      missingJsonKeys: schemaKeys.filter((k) => !jsonSet.has(k)),
-      // Configured and validated but never referenced. Informational only.
-      unusedKeys: [...effective].filter((k) => !usages.has(k)),
+      // Configured but never referenced. Informational only.
+      unusedKeys: jsonKeys.filter((k) => !usages.has(k)),
     },
   };
 }

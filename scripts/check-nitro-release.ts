@@ -136,7 +136,7 @@ async function main(): Promise<void> {
   const vars: unknown = JSON.parse(fs.readFileSync(VARS_PATH, 'utf-8'));
   if (!isRecord(vars)) throw new Error(`${VARS_PATH} is not a JSON object`);
   // Every key is spread back into the rewritten file below, so only the ones read here are
-  // narrowed. content/vars.ts requires both to be strings; a missing one fails here by name.
+  // narrowed; a missing or non-string one fails here by name.
   const pinnedTag = stringField(vars, 'nitroVersionTag');
   const pinnedImage = stringField(vars, 'latestNitroNodeImage');
   if (pinnedTag === undefined || pinnedImage === undefined) {
