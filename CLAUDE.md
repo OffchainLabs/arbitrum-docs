@@ -21,6 +21,10 @@
 Arbitrum documentation portal on Next.js 16 and Fumadocs 16, with Tailwind 4 and TypeScript. English
 MDX docs under `content/docs/`, served at `/docs/…`, deployed on Vercel.
 
+## Grounding rule
+
+Grounding rule: State only what you read in a file, and cite it as `file:line`. Read the file before you describe it. Do not infer file content from file names, paths, directory listings, docs, comments, or other repos. If you did not read it, write "not verified" and name the check that would settle it. Never use "likely", "probably", "presumably", or "appears to" for a claim you could verify by reading.
+
 ## Commands
 
 ```bash
