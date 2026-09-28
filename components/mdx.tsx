@@ -22,7 +22,6 @@ import {
   TroubleshootingReport,
 } from '@/components/mdx/Troubleshooting';
 import { Popup, PopupContent, PopupTrigger } from '@/components/mdx/Twoslash';
-import { VanillaAdmonition } from '@/components/mdx/VanillaAdmonition';
 import { Var } from '@/components/mdx/Var';
 import { VendingMachine } from '@/components/mdx/VendingMachine';
 
@@ -103,7 +102,6 @@ export function getMDXComponents(components?: MDXComponents) {
     TroubleshootingChecklist,
     TroubleshootingConfig,
     TroubleshootingReport,
-    VanillaAdmonition,
     Var,
     VendingMachine,
     ...components,

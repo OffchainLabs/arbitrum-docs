@@ -6,10 +6,10 @@
  * documentation-about-syntax from syntax is noise, not a gate.
  *
  * Rules:
- *   A1  VanillaAdmonition with an empty body — the `:::type`→component codemod moved body prose into
- *       `title=`, leaving the box blank and the prose styled as a heading.
- *   A2  VanillaAdmonition `type` outside the component's union (note|tip|info|warning|danger); anything
- *       else indexes `styles[type]` as undefined and renders unstyled.
+ *   A1  Callout with an empty body: body prose written into `title=` leaves the box blank and the
+ *       prose styled as a heading.
+ *   A2  Callout `type` outside Fumadocs' `CalloutType` union (info|warn|error|success|warning|idea);
+ *       anything else renders with no icon and no color.
  *   A3  Unconverted Docusaurus `:::` directive — renders as literal `:::caution` text to readers.
  *   A4  Markdown syntax inside a `title=` attribute — `title` is a plain string prop, so
  *       `[text](/docs/x)` renders literally and the link is unclickable. HTML entities are not
@@ -151,11 +151,12 @@ export interface LocalImageSrc {
 }
 
 export const ADMONITION_TYPES: ReadonlySet<string> = new Set([
-  'note',
-  'tip',
   'info',
+  'warn',
+  'error',
+  'success',
   'warning',
-  'danger',
+  'idea',
 ]);
 const isMdx = (p: string): boolean => /\.mdx?$/i.test(p);
 
@@ -187,7 +188,7 @@ export function lintSource(source: string): Finding[] {
   // read attribute values from the original source at the same offsets: `stripCode` blanks characters
   // 1:1, so offsets are identical, and an inline-code span inside `title=` would otherwise be erased
   // before A4 could see it.
-  for (const m of text.matchAll(/<VanillaAdmonition\b([^>]*?)(\/?)>/g)) {
+  for (const m of text.matchAll(/<Callout\b([^>]*?)(\/?)>/g)) {
     const [full, , selfClose] = m;
     const attrs = source.slice(m.index, m.index + full.length);
     const type = attrs.match(/\btype\s*=\s*["']([^"']*)["']/)?.[1];
@@ -202,7 +203,7 @@ export function lintSource(source: string): Finding[] {
       // Locate the closer in the code-stripped text (so a closer inside a fence is ignored) but
       // read the body from `source`: a body consisting only of a fenced code block is all spaces
       // in `text`, which used to report a populated admonition as empty.
-      const close = text.indexOf('</VanillaAdmonition>', m.index + full.length);
+      const close = text.indexOf('</Callout>', m.index + full.length);
       if (close !== -1) body = source.slice(m.index + full.length, close);
     }
     if (body !== null && body.trim() === '') {

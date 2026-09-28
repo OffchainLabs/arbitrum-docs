@@ -233,7 +233,7 @@ export function humanize(absOrBase: string): string {
   return name ? name.charAt(0).toUpperCase() + name.slice(1) : name;
 }
 
-/** First meaningful title: frontmatter `title`, else leading ATX heading, else admonition title, else humanized name. */
+/** First meaningful title: frontmatter `title`, else leading ATX heading, else callout title, else humanized name. */
 export function deriveTitle(content: string, abs: string): string {
   const { fm, body } = splitFrontmatter(content);
   if (fm?.title) return fm.title;
@@ -243,8 +243,8 @@ export function deriveTitle(content: string, abs: string): string {
     if (line === '') continue;
     const heading = /^#{1,6}\s+(.*\S)/.exec(line);
     if (heading) return heading[1].trim();
-    const admonition = /<VanillaAdmonition\b[^>]*\btitle=(?:"([^"]*)"|'([^']*)')/.exec(line);
-    if (admonition) return (admonition[1] ?? admonition[2]).trim();
+    const callout = /<Callout\b[^>]*\btitle=(?:"([^"]*)"|'([^']*)')/.exec(line);
+    if (callout) return (callout[1] ?? callout[2]).trim();
     break; // only inspect the first non-blank line
   }
   return humanize(abs);

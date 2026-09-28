@@ -49,7 +49,7 @@ describe('generatedMarker', () => {
     // for a partial's first sentence, so the marker must keep starting with "{" or every
     // generated partial's catalog summary would be the marker text. deriveTitle reaches the same
     // outcome by a different route: it inspects only the first non-blank line and falls back to
-    // the humanized filename when that line is neither an ATX heading nor a VanillaAdmonition,
+    // the humanized filename when that line is neither an ATX heading nor a titled Callout,
     // which is what `<table>` already did before the marker existed.
     assert.ok(generatedMarker('pnpm x:generate', 'editing x').startsWith('{'));
   });
