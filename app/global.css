@@ -1,32 +1,17 @@
 @import 'tailwindcss';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
-@import 'fumadocs-twoslash/twoslash.css';
 
-/* Arbitrum brand palette, ported from the arbitrum.io marketing site (arbitrum-website
-   `tailwind.config.js` `theme.extend.colors`, the "REVAMP" block, plus `app/globals.scss` :root).
-   Hex values are copied verbatim so each line is directly comparable against the source.
-
-   Two layers, on purpose:
-   - `--color-arbitrum-*` is the raw brand palette. Use `bg-arbitrum-cyan` when a surface must be
-     *that colour* in both themes (a glow, the footer, the hero).
-   - `--color-fd-*` is the Fumadocs theme, defined on top of the raw palette and remapped in `.dark`.
-     Use `bg-fd-primary` when you mean "the theme's primary", whatever that is today.
-   Design rationale: .claude/docs/superpowers/specs/2026-09-15-arbitrum-website-styles-port.md */
+/* Brand tokens. `--color-arbitrum-*` is the raw arbitrum.io palette, the same in both themes;
+   `--color-fd-*` is the Fumadocs theme built on it and remapped in `.dark`. */
 @theme {
-  --color-arbitrum-navy: #05163d; /* primary-blue-1 */
-  --color-arbitrum-blue: #016be5; /* primary-blue-2 */
-  --color-arbitrum-cyan: #10e1ff; /* primary-blue-3 */
-  --color-arbitrum-green: #00e340;
-  --color-arbitrum-yellow: #ffe103;
-  --color-arbitrum-orange: #ff4400;
-  --color-arbitrum-stone: #f2f2f2; /* stone-white */
-  --color-arbitrum-gray: #333333; /* gray, also white-20-on-black-rgb */
+  --color-arbitrum-navy: #05163d;
+  --color-arbitrum-blue: #016be5;
+  --color-arbitrum-cyan: #10e1ff;
+  --color-arbitrum-stone: #f2f2f2;
+  --color-arbitrum-gray: #333333;
   --color-arbitrum-dark-gray: #344054;
-  --color-arbitrum-grey: #d6d6d6; /* globals.scss --grey */
-
-  /* Light: black type on white, stone surfaces, brand blue as the primary. The site itself is
-     light-only, so this is a straight transcription of what it renders. */
+  --color-arbitrum-grey: #d6d6d6;
   --color-fd-background: #ffffff;
   --color-fd-foreground: #000000;
   --color-fd-muted: var(--color-arbitrum-stone);
@@ -40,52 +25,27 @@
   --color-fd-primary-foreground: #ffffff;
   --color-fd-secondary: var(--color-arbitrum-stone);
   --color-fd-secondary-foreground: #000000;
-  /* Card hover on the site is `bg-black/10`; #e6e6e6 is that over white. */
   --color-fd-accent: #e6e6e6;
   --color-fd-accent-foreground: #000000;
-  /* Focus ring stays brand blue in light (5.0:1 on white). The site's cyan is 1.6:1 there, under
-     the 3:1 non-text minimum, and Fumadocs paints `focus-visible:ring-fd-ring` on every button,
-     code block and the sidebar. `.dark` switches it to cyan, 13:1 on black. */
+  /* Blue, not cyan: cyan is under 3:1 on white. */
   --color-fd-ring: var(--color-arbitrum-blue);
   --color-fd-overlay: rgb(5 22 61 / 0.5);
-
-  /* Success/failure states. Fumadocs' preset ships no status colors, and interactive widgets need
-     a pair, so they sit with the rest of the palette instead of as raw Tailwind shades inside one
-     component. Both clear 4.5:1 against --color-fd-card in their own theme, so they are safe on
-     text and not only on decoration. Danger is the site's `error` colour (rgb(205,0,0), 5.9:1 on
-     white). The site's green (#00e340, 1.6:1) is decoration-only there and never text, so success
-     keeps a darkened green with no source line to compare against. */
+  /* Status pair for interactive widgets; both clear 4.5:1 on the card colour. */
   --color-fd-success: hsl(142 72% 29%);
   --color-fd-danger: #cd0000;
 
-  /* Hero gradient: the site's `blue-dark-blue` (`#016BE5 -> #05163D`), run navy-first so the
-     headline sits on the dark end. White text clears AA at both ends: 16.3:1 on navy, 4.9:1 on
-     blue. The site's other brand gradients end in cyan, which fails with white text (1.6:1). */
-  --color-arbitrum-gradient-from: var(--color-arbitrum-navy);
-  --color-arbitrum-gradient-to: var(--color-arbitrum-blue);
-
-  /* Glows and shadows, from `boxShadow` / `dropShadow` in the site's tailwind config. */
   --shadow-button-glow: 0 0 14px 0 rgb(16 225 255 / 0.5);
   --shadow-card-hover: 0 0 20px 0 rgb(0 0 0 / 0.05);
-  --shadow-card-glow: 0 0 34px 0 rgb(16 225 255 / 0.5);
-  --shadow-glass-effect: 0 0 30px rgb(0 0 0 / 0.08);
   --drop-shadow-hex-glow: 0 0 3px rgb(16 225 255);
-
-  /* FK Screamer, the site's display face, for the home hero heading only (see app/layout.tsx). */
+  /* FK Screamer, for the home hero heading. */
   --font-display: var(--font-fk-screamer), var(--font-sans);
-
-  --spacing-page: 1436px;
 }
 
-/* Dark: the marketing site ships light-only (its ThemeProvider is commented out), so this is
-   built from the dark variants left in its class lists: a black page (`lg:bg-black`, the footer
-   gradient ends at #000), `white/10` cards, `#333333` borders (`white-20-on-black-rgb`), navy for
-   raised surfaces, cyan as the primary (11.2:1 against navy, 13:1 against black). */
 .dark {
   --color-fd-background: #000000;
   --color-fd-foreground: #ffffff;
-  --color-fd-muted: #1a1a1a; /* white/10 over black */
-  --color-fd-muted-foreground: #999999; /* white/60 over black, 5.9:1 */
+  --color-fd-muted: #1a1a1a;
+  --color-fd-muted-foreground: #999999;
   --color-fd-popover: var(--color-arbitrum-navy);
   --color-fd-popover-foreground: #ffffff;
   --color-fd-card: #1a1a1a;
@@ -95,7 +55,7 @@
   --color-fd-primary-foreground: var(--color-arbitrum-navy);
   --color-fd-secondary: var(--color-arbitrum-navy);
   --color-fd-secondary-foreground: #ffffff;
-  --color-fd-accent: #262626; /* white/15 over black, the site's dark card hover */
+  --color-fd-accent: #262626;
   --color-fd-accent-foreground: #ffffff;
   --color-fd-ring: var(--color-arbitrum-cyan);
   --color-fd-overlay: rgb(0 0 0 / 0.8);
@@ -103,610 +63,186 @@
   --color-fd-danger: hsl(0 91% 71%);
 }
 
-/* Rendering, from arbitrum-website `app/globals.scss` `html` and `app/layout.tsx` `body`.
-   `font-synthesis: none` matters more here than there: Aeonik ships 400 and 500 only, so any
-   `font-weight: 600/700` that slips through (Fumadocs' `font-semibold` nav title, a `<b>` in
-   content) now falls back to the real 500 face instead of a synthesised fake bold. */
-/* Anchor jumps only: app/layout.tsx sets `data-scroll-behavior="smooth"` so Next scrolls new pages
-   instantly, and readers who asked for less motion get an instant jump everywhere. */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
+@custom-variant phone (@media (max-width: 736px));
+@custom-variant nav-md (@media (max-width: 1280px));
+@custom-variant nav-sm (@media (max-width: 1104px));
 
-/* Italic text uses the Aeonik italic face, which `app/layout.tsx` declares as its own `next/font`
-   family so it can skip preloading (FS-2715). Naming the family here is what re-attaches it: the
-   uprights on `--font-sans` no longer carry an italic `src`, so without this rule `font-style:
-   italic` plus `font-synthesis: none` below would render `<em>` upright. Kept to the elements the
-   browser italicises by default, plus Tailwind's `italic` utility, which sets `font-style` and
-   would otherwise hit the same wall. */
-em,
-i,
-cite,
-dfn,
-var,
-address,
-.italic {
-  font-family: var(--font-sans-italic), var(--font-sans);
-}
-
-body {
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-::selection {
-  background: var(--color-arbitrum-cyan);
-  color: var(--color-arbitrum-navy);
-}
-
-/* The site's signature background: 1px hairlines every sixth of the width
-   (`backgroundImage['repeating-lines']`). Colours go through theme tokens so the same utility
-   reads in dark. Landing chrome only (home, 404): under running prose, tables and code it fights
-   the content, so docs pages never get it. */
+/* Hairlines every sixth of the width, for the home and 404 pages. */
 @utility bg-repeating-lines {
-  background-image: repeating-linear-gradient(
-    to right,
-    color-mix(in srgb, var(--color-fd-foreground) 8%, transparent) 0px,
-    color-mix(in srgb, var(--color-fd-foreground) 8%, transparent) 1px,
-    transparent 1px,
-    transparent 16.67%
-  );
+  --line: color-mix(in srgb, var(--color-fd-foreground) 8%, transparent);
+  background-image: repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 16.67%);
 }
 
-/* The site's hexagon bullet (`.hex-clip-path` + `aspect-hex`). Used by the nav labels, the footer
-   links and the brand button. */
+/* The hexagon bullet. */
 @utility hex-clip {
   clip-path: polygon(-50% 50%, 50% 100%, 150% 50%, 50% 0);
   aspect-ratio: cos(30deg);
 }
 
-/* Fumadocs `Card`, restyled to the site's card language (`CardBase` / `SubmenuCard`): 10px radius,
-   stone surface, transparent border that turns `black/40` on hover, `white/10` -> `white/15` in
-   dark. Attribute selector because forking the component to change four declarations would lose
-   upstream fixes. Unlayered, so it beats the component's `rounded-xl`, `bg-fd-card` and
-   `hover:bg-fd-accent/80` utilities.
-
-   Fumadocs also puts `data-card` on the anchor link inside every prose heading (that is what the
-   `.prose a:not([data-card])` exclusion above keys on), so the heading child is carved out here or
-   every h2 grows a stone pill. */
-[data-card]:not(:is(h1, h2, h3, h4, h5, h6) > *) {
-  border-radius: 10px;
-  border-color: transparent;
-  background: var(--color-fd-muted);
-  transition:
-    border-color 0.3s ease,
-    background-color 0.3s ease,
-    box-shadow 0.3s ease;
-
-  &:is(a):hover {
-    border-color: rgb(0 0 0 / 0.4);
-    background: var(--color-fd-muted);
-    box-shadow: var(--shadow-card-hover);
-  }
-
-  .dark &:is(a):hover {
-    border-color: rgb(255 255 255 / 0.4);
-    background: var(--color-fd-accent);
-  }
-}
-
-/* Arbitrum prose treatment, ported from arbitrum-docs `_typography.scss` (which
-   scopes to `article .markdown`; Fumadocs' DocsBody renders `.prose`).
-
-   Colour is almost free: Fumadocs' typography plugin already defaults every
-   --tw-prose-* variable to a --color-fd-* token, so Task 1 cascades into prose
-   automatically. Only three variables differ from the reference.
-
-   Selectors use :where() to keep specificity at 0,1,0 so Tailwind utilities can
-   still override, and exclude `.not-prose` (Fumadocs' heading-anchor links) and
-   `[data-card]` (Fumadocs Card links) — both would otherwise pick up the
-   underline treatment. All heading weights are 500: Aeonik has no heavier face. */
-.prose {
-  --tw-prose-quote-borders: var(--color-fd-primary);
-  --tw-prose-captions: var(--color-fd-muted-foreground);
-  --tw-prose-kbd-shadows: color-mix(in oklab, var(--color-fd-primary) 50%, transparent);
-
-  font-size: 1rem;
-  line-height: 1.75;
-
-  :where(h1, h2, h3, h4, h5, h6) {
-    font-weight: 500;
-    /* Include the announcement, header, and mobile TOC so anchor targets stay visible. */
-    scroll-margin-top: calc(var(--fd-docs-row-3, 56px) + 24px);
-    text-wrap: balance;
-  }
-
-  :where(h1) {
-    font-size: 2.5rem;
-    line-height: 1.1;
-    margin-top: 0;
-    margin-bottom: 1rem;
-  }
-
-  :where(h1:first-child) {
-    font-size: 2.25rem;
-  }
-
-  :where(h2) {
-    font-size: 1.625rem;
-    line-height: 1.25;
-    margin-top: 2.5em;
-    margin-bottom: 1em;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-fd-border);
-  }
-
-  :where(h3) {
-    font-size: 1.375rem;
-    line-height: 1.4;
-    margin-top: 2em;
-    margin-bottom: 0.75em;
-  }
-
-  :where(h4) {
-    font-size: 1.125rem;
-    line-height: 1.5;
-    margin-top: 1.75em;
-    margin-bottom: 0.5em;
-  }
-
-  :where(h5, h6) {
-    font-size: 0.875rem;
-    line-height: 1.5;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  :where(h6) {
-    color: var(--color-fd-muted-foreground);
-  }
-
-  :where(strong) {
-    font-weight: 500;
-  }
-
-  :where(a):not(:where([data-card], [data-quicklook-from], .not-prose, .not-prose *)) {
-    font-weight: 500;
-    text-decoration: underline;
-    text-decoration-color: var(--color-fd-primary);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 4px;
-    transition:
-      color 0.2s ease,
-      text-decoration-color 0.2s ease;
-
-    &:hover {
-      color: var(--color-fd-primary);
-      text-decoration-color: currentColor;
-    }
-  }
-
-  :where(ul > li)::marker {
-    color: var(--color-fd-primary);
-    font-size: 0.9em;
-  }
-
-  :where(ol > li)::marker {
-    color: var(--color-fd-primary);
-    font-weight: 500;
-    font-feature-settings: 'tnum' 1;
-  }
-
-  :where(blockquote) {
-    border-inline-start-width: 3px;
-    border-inline-start-color: var(--color-fd-primary);
-    background: color-mix(in oklab, var(--color-fd-primary) 5%, transparent);
-    padding: 1rem 1.25rem;
-  }
-
-  /* Inline code reads as *bigger* than its neighbours even though the glyphs are
-     smaller (14px vs 16px, x-height 7.5px vs 8.5px measured on screen). Two
-     causes, both about the pill rather than the type:
-
-     1. Aeonik Fono ships a 400 face only (see app/layout.tsx), so `font-weight:
-        500` made the browser synthesize a fake medium — thicker, wider strokes
-        than the real face. The same synthesis the heading clamp and the `dt` /
-        `thead th` rule below already guard against. Fumadocs' own default is 400.
-     2. Fono's content area is 1.140em, so `padding: 0.2em` + a 1px border put the
-        pill at 23.5px inside a 28px line box — 84% of the line, which optically
-        dominates. 0.125em brings that to 21.5px.
-
-     font-size stays at 0.875em: Aeonik and Aeonik Fono share identical metrics
-     (x-height 510, cap 700 per 1000 upem), so unlike a typical monospace there is
-     no larger x-height to compensate for — shrinking further would undersize it. */
-  :where(:not(pre) > code) {
-    font-size: 0.875em;
-    font-weight: 400;
-    padding: 0.125em 0.375em;
-    border: 1px solid var(--color-fd-border);
-    background: var(--color-fd-muted);
-  }
-
-  :where(thead) {
-    background: color-mix(in oklab, var(--color-fd-primary) 8%, var(--color-fd-muted));
-  }
-
-  :where(thead th) {
-    font-size: 0.8125rem;
-    padding: 0.75rem 1rem;
-  }
-
-  :where(tbody td) {
-    padding: 0.75rem 1rem;
-    vertical-align: top;
-  }
-
-  :where(tbody tr) {
-    border-bottom: 1px solid color-mix(in oklab, var(--color-fd-border) 50%, transparent);
-  }
-}
-
-@media (max-width: 736px) {
-  .prose {
-    font-size: 0.9375rem;
-    line-height: 1.7;
-
-    :where(h1) {
-      font-size: 1.875rem;
-    }
-
-    :where(h1:first-child) {
-      font-size: 1.75rem;
-    }
-
-    :where(h2) {
-      font-size: 1.375rem;
-      margin-top: 2em;
-    }
-
-    :where(h3) {
-      font-size: 1.25rem;
-      margin-top: 1.5em;
-      margin-bottom: 0.5em;
-    }
-
-    :where(h4) {
-      font-size: 1.0625rem;
-    }
-
-    :where(table) {
-      font-size: 0.8125rem;
-    }
-
-    :where(thead th),
-    :where(tbody td) {
-      padding: 0.625rem 0.75rem;
-    }
-  }
-}
-
-/* Headings inside a `not-prose` island are interactive controls, not document
-   structure: Fumadocs' accordion renders its trigger inside a Radix
-   `Accordion.Header`, which is an `<h3>`. The heading rules above carry no
-   `not-prose` exclusion (only `:where(a)` does), so an accordion trigger picked
-   up `font-size: 1.375rem` and `margin: 2em 0 0.75em` *inside* its own card —
-   44px of dead space above each title, which made a 50px collapsed row render
-   113px tall and read as a static panel rather than something expandable.
-
-   Reset rather than editing all thirteen heading selectors (the media query
-   included): one rule keeps the diff small and covers every future `not-prose`
-   component. `:is()` lifts specificity to 0,2,0 so it beats the `:where()`
-   rules above regardless of source order. font-weight is left alone — the
-   inherited 500 is what the component asks for anyway. */
-.prose :where(h1, h2, h3, h4, h5, h6):is(.not-prose, .not-prose *) {
-  font-size: inherit;
-  line-height: inherit;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-/* Fumadocs' accordion trigger ships no pointer and no hover state — only
-   `has-focus-visible:bg-fd-accent`, which a mouse user never sees. Anchoring on
-   the Radix trigger (`button[data-state]`) means this cannot catch an ordinary
-   prose heading. Hover uses --color-fd-accent to match the component's own
-   focus treatment. */
-h3:has(> button[data-state]) {
-  transition: background-color 0.15s ease;
-
-  &:hover {
-    background: var(--color-fd-accent);
-  }
-
-  & > button {
-    cursor: pointer;
-  }
-}
-
-/* Fenced code blocks use a true monospace; inline code keeps brand Aeonik Fono.
-   See the --font-code comment in app/layout.tsx. */
-pre,
-pre code {
-  font-family: var(--font-code), ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
-}
-
-/* Fumadocs' typography plugin sets these two to 600 in the `utilities` layer,
-   and the prose block above does not declare them — so definition terms and
-   table headers were the last prose elements still asking for a weight Aeonik
-   does not have (it ships 400 and 500 only), which the browser synthesizes.
-   Unlayered, so this wins over the plugin. */
-.prose :where(dt),
-.prose :where(thead th) {
-  font-weight: 500;
-}
-
-/* Table of contents (right rail + the mobile popover): Fumadocs gives each TOC
-   link `class="prose … text-sm"` — `prose` only to inherit link colour. But the
-   `.prose` block above is unlayered, so it beats Tailwind's `utilities` layer
-   and overrode that `text-sm`: 16px/1.75 links in a 268px rail, wrapping most
-   headings onto two or three lines. Restore the size the component asks for.
-   The ID/attribute selectors keep this off document prose. */
-#nd-toc .prose,
-[data-toc-popover-content] .prose {
-  font-size: 0.8125rem;
-  line-height: 1.5;
-}
-
-/* Sidebar (desktop rail): match the 13px of the TOC rule above. Fumadocs puts
-   `text-sm` (14px/20px) on the `#nd-sidebar` aside itself, so the nav tree read
-   a step larger than the right rail. The id selector targets that same element
-   and outranks the utility, and every item inherits from it.
-
-   Children that declare their own size keep it — the section dropdown label
-   ("Launch arbitrum chain") stays 14px, which is the intended hierarchy. The
-   mobile drawer (#nd-sidebar-mobile, 15px) is left alone: bigger touch targets.  */
-#nd-sidebar {
-  font-size: 0.8125rem;
-  line-height: 1.5;
-}
-
-/* Top navbar (notebook layout, nav mode "top", and the home header that copies its shape): mirror
-   the legacy Docusaurus navbar — logo, nav links on a single line, search pushed to the far right.
-   Overrides the default row (title flex-1 | search | links flex-1), which
-   squeezes the links into half the row and wraps their labels. */
-:is(#nd-subnav, #nd-nav) [data-header-body] {
-  /* Title group: natural width instead of half the row */
-  & > div:first-child {
-    flex: 0 0 auto;
-  }
-
-  /* Search: far right, like the legacy navbar; hugs its content
-     (default w-full stretches it, leaving a blank gap before the hotkey) */
-  & > [data-search-full] {
-    order: 1;
-    width: auto;
-    max-width: 15rem;
-  }
-
-  /* Nav links centered between the logo and the right-side controls,
-     so they sit over the content column */
-  & > div:last-child > div:first-child {
-    margin-inline: auto;
-  }
-
-  /* Keep each link label on one line */
-  a,
-  button {
-    white-space: nowrap;
-  }
-
-  /* Tight zone (lg–xl): links are visible but space is scarce —
-     compress link gaps and drop the search hotkey hint */
-  @media (max-width: 1280px) {
-    & > div:last-child > div:first-child {
-      gap: 0.75rem;
-    }
-
-    & > [data-search-full] kbd {
-      display: none;
-    }
-  }
-
-  /* Narrowest band before links collapse into the sidebar (lg = 1024px):
-     icon-only search (font-size: 0 hides its bare text node) */
-  @media (max-width: 1104px) {
-    & > div:last-child > div:first-child {
-      gap: 0.5rem;
-    }
-
-    & > [data-search-full] {
-      font-size: 0;
-      gap: 0;
-      padding-inline: 0.5rem;
-    }
-  }
-}
-
-/* Top-level navbar labels take the marketing site's menu treatment (`menuButton.tsx`): uppercase
-   Aeonik Fono at 14px, full foreground colour, and a hexagon bullet that turns cyan with a glow on
-   hover or while the menu is open. `#nd-subnav` is the notebook header on docs pages; `#nd-nav` is
-   components/home-header.tsx on the landing and 404 pages, which copies the notebook header's DOM
-   shape so one selector serves both. The direct-child selector stops at the top level, so items
-   inside the menu popover keep Fumadocs' sentence-case list style. */
-:is(#nd-subnav, #nd-nav) [data-header-body] > div:last-child > div:first-child > :is(a, button) {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--color-fd-foreground);
-  transition:
-    color 0.3s ease,
-    filter 0.3s ease;
-
-  &::before {
-    content: '';
-    display: block;
-    width: 9px;
-    flex: none;
-    clip-path: polygon(-50% 50%, 50% 100%, 150% 50%, 50% 0);
-    aspect-ratio: cos(30deg);
-    background: currentColor;
-    transition: background-color 0.3s ease;
-  }
-
-  &:hover,
-  &[data-state='open'],
-  &[data-active='true'],
-  &:has([data-active='true']) {
-    color: var(--color-fd-foreground);
-
-    &::before {
-      background: var(--color-arbitrum-cyan);
-      filter: drop-shadow(var(--drop-shadow-hex-glow));
-    }
-  }
-}
-
+/* Smooth scrolling is for in-page anchors; app/layout.tsx makes route changes jump. */
 html {
   scrollbar-gutter: stable;
+  @apply motion-safe:scroll-smooth;
 }
 
+/* The gutter already reserves the scrollbar, so Radix's scroll lock must not add a margin. */
 html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
 }
 
-@theme inline {
-  --animate-marquee: marquee var(--duration) infinite linear;
-  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+/* Aeonik ships 400 and 500 only, so any heavier weight resolves to the real 500 face. */
+body {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  @apply antialiased selection:bg-arbitrum-cyan selection:text-arbitrum-navy;
+}
 
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(-100% - var(--gap)));
-    }
+/* The italic face is its own `next/font` family (so it is not preloaded); this re-attaches it. */
+:where(em, i, cite, dfn, var, address, .italic) {
+  font-family: var(--font-sans-italic), var(--font-sans);
+}
+
+/* Fenced code uses a true monospace; inline code keeps Aeonik Fono (`--font-mono`). */
+:is(pre, pre code) {
+  font-family: var(--font-code), ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+}
+
+/* Fumadocs `Card` in the arbitrum.io card style. The heading anchor links also carry
+   `data-card`, hence the carve-out. */
+[data-card]:not(:is(h1, h2, h3, h4, h5, h6) > *) {
+  @apply rounded-[10px] border-transparent bg-fd-muted transition-[border-color,background-color,box-shadow] duration-300 ease-[ease];
+
+  &:is(a):hover {
+    @apply border-black/40 bg-fd-muted shadow-card-hover;
+  }
+  .dark &:is(a):hover {
+    @apply border-white/40 bg-fd-accent;
+  }
+}
+
+/* Prose: the arbitrum.io type scale and brand accents on top of the Fumadocs typography plugin.
+   Unlayered, so these beat the plugin; `:where()` keeps the specificity at one class. */
+.prose {
+  --tw-prose-quote-borders: var(--color-fd-primary);
+  --tw-prose-captions: var(--color-fd-muted-foreground);
+  @apply text-[1rem]/[1.75] phone:text-[0.9375rem]/[1.7];
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    /* Clears the header and the mobile TOC bar. */
+    scroll-margin-top: calc(var(--fd-docs-row-3, 56px) + 24px);
+    @apply font-medium text-balance;
+  }
+  :where(h1) {
+    @apply mb-4 text-[2.5rem]/[1.1] phone:text-[1.875rem];
+  }
+  :where(h1:first-child) {
+    @apply text-[2.25rem] phone:text-[1.75rem];
+  }
+  :where(h2) {
+    @apply mt-[2.5em] mb-[1em] border-b pb-2 text-[1.625rem]/[1.25] phone:mt-[2em] phone:text-[1.375rem];
+  }
+  :where(h3) {
+    @apply mt-[2em] mb-[0.75em] text-[1.375rem]/[1.4] phone:mt-[1.5em] phone:mb-[0.5em] phone:text-[1.25rem];
+  }
+  :where(h4) {
+    @apply mt-[1.75em] mb-[0.5em] text-[1.125rem]/[1.5] phone:text-[1.0625rem];
+  }
+  :where(h5, h6) {
+    @apply mt-[1.5em] mb-[0.5em] text-[0.875rem]/[1.5] tracking-[0.05em] uppercase;
+  }
+  :where(h6) {
+    @apply text-fd-muted-foreground;
+  }
+  :where(a):not(:where([data-card], .not-prose, .not-prose *)) {
+    @apply decoration-2 underline-offset-4 transition-colors duration-200 ease-[ease] hover:text-fd-primary hover:decoration-current;
+  }
+  :where(ul > li)::marker {
+    @apply text-[0.9em] text-fd-primary;
+  }
+  :where(ol > li)::marker {
+    font-feature-settings: 'tnum' 1;
+    @apply font-medium text-fd-primary;
+  }
+  :where(blockquote) {
+    @apply border-s-[3px] bg-fd-primary/5 px-5 py-4;
+  }
+  /* A slimmer pill than the plugin's, which dominates the line in Aeonik Fono. */
+  :where(:not(pre) > code) {
+    @apply px-[0.375em] py-[0.125em] text-[0.875em];
+  }
+  :where(table) {
+    @apply phone:text-[0.8125rem];
+  }
+  :where(thead) {
+    background: color-mix(in oklab, var(--color-fd-primary) 8%, var(--color-fd-muted));
+  }
+  :where(thead th) {
+    @apply px-4 py-3 text-[0.8125rem] font-medium phone:px-3 phone:py-2.5;
+  }
+  :where(tbody td) {
+    @apply px-4 py-3 align-top phone:px-3 phone:py-2.5;
+  }
+  :where(tbody tr) {
+    @apply border-b border-fd-border/50;
+  }
+  /* Dense scenario tables (`<table className="small-table">`). */
+  :where(table.small-table) {
+    @apply text-[0.8125rem]/[1.4];
+  }
+  :where(table.small-table th, table.small-table td) {
+    @apply px-3 py-2 align-top;
+  }
+}
+
+/* A heading inside a `not-prose` island (the accordion trigger is an `<h3>`) is a control, not
+   document structure, so it drops the scale above. */
+.prose :where(h1, h2, h3, h4, h5, h6):is(.not-prose, .not-prose *) {
+  font-size: inherit;
+  line-height: inherit;
+  @apply my-0;
+}
+
+/* Fumadocs' accordion trigger has no pointer and no hover state. */
+h3:has(> button[data-state]) {
+  @apply transition-colors duration-150 ease-[ease] *:cursor-pointer hover:bg-fd-accent;
+}
+
+/* The TOC links carry `prose`, and the sidebar is `text-sm`; both rails are 13px. */
+:is(#nd-toc .prose, [data-toc-popover-content] .prose, #nd-sidebar) {
+  @apply text-[0.8125rem]/[1.5];
+}
+
+/* Navbar (the notebook header on docs pages, components/home-header.tsx elsewhere): logo left,
+   links centred on one line, search at the far right. At the narrowest width the search
+   trigger's bare "Search" text node is hidden with `font-size: 0`. */
+:is(#nd-subnav, #nd-nav) [data-header-body] {
+  & > div:first-child {
+    @apply flex-none;
+  }
+  & > [data-search-full] {
+    @apply order-1 w-auto max-w-60 nav-sm:gap-0 nav-sm:px-2 nav-sm:text-[0px];
+  }
+  & > [data-search-full] kbd {
+    @apply nav-md:hidden;
+  }
+  & > div:last-child > div:first-child {
+    @apply mx-auto nav-md:gap-3 nav-sm:gap-2;
+  }
+  & :is(a, button) {
+    @apply whitespace-nowrap;
   }
 
-  @keyframes marquee-vertical {
-    from {
-      transform: translateY(0);
+  /* Top-level links: uppercase Aeonik Fono with a hexagon that lights cyan on hover or open. */
+  & > div:last-child > div:first-child > :is(a, button) {
+    @apply inline-flex items-center gap-2 font-mono text-[0.875rem] tracking-[0.02em] text-fd-foreground uppercase transition-[color,filter] duration-300 ease-[ease];
+
+    &::before {
+      content: '';
+      @apply block w-[9px] flex-none bg-current transition-colors duration-300 ease-[ease] hex-clip;
     }
-    to {
-      transform: translateY(calc(-100% - var(--gap)));
+    &:is(:hover, [data-state='open'], [data-active='true'], :has([data-active='true']))::before {
+      @apply bg-arbitrum-cyan drop-shadow-hex-glow;
     }
   }
-}
-
-/* Scenario/solution tables on the node troubleshooting page. Ported from arbitrum-docs
-   `.small-table`: dense rows so long log lines and their fixes stay scannable side by side. */
-.prose :where(table.small-table) {
-  font-size: 0.8125rem;
-  line-height: 1.4;
-}
-
-.prose :where(table.small-table th),
-.prose :where(table.small-table td) {
-  padding: 0.5rem 0.75rem;
-  vertical-align: top;
-}
-
-/* Glossary hover popover (`components/HoverPopover`, behind `<Term>` and `<Reference>`).
-   These rules lived in `components/HoverPopover/styles.css` until FS-2715. That import fed a
-   Turbopack stylesheet chunk which, because the component is reachable from `components/mdx.tsx`
-   (a server module, so Next cannot code-split it), the browser treats as render-blocking on every
-   docs page. Moving the rules here takes them off that chunk and changes nothing on screen.
-   **Moving one was not enough.** Turbopack groups the registry's plain `.css` imports into one
-   chunk, so with `components/mdx/reference-list.css` still importing, the chunk survived at a
-   smaller size and `/docs/stylus` still blocked on four stylesheets. Folding that one as well
-   (below) took it to three. See INTERNALS.md "Page weight and what loads late". */
-
-/* Trigger */
-.hover-popover__trigger {
-  border-bottom: 1px dotted var(--color-fd-primary);
-  background: none;
-  border-left: none;
-  border-right: none;
-  border-top: none;
-  padding: 0;
-  font: inherit;
-  color: inherit;
-  /* Match docs.arbitrum.io: the term reads as inline prose, not a help affordance. */
-  cursor: text;
-}
-
-/* Popover container */
-.hover-popover__content {
-  background: var(--color-fd-popover);
-  color: var(--color-fd-popover-foreground, var(--color-fd-foreground));
-  border: 1px solid var(--color-fd-border);
-  border-radius: 8px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.hover-popover__content--tooltip {
-  max-width: 380px;
-  max-height: 60vh;
-}
-
-/* Body */
-.hover-popover__body {
-  padding: 16px 20px;
-  overflow-y: auto;
-  flex: 1;
-  line-height: 1.6;
-}
-
-.hover-popover__title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 8px 0;
-  color: var(--color-fd-foreground);
-}
-
-/* Content spacing (definitions render as real MDX) */
-.hover-popover__body > :last-child {
-  margin-bottom: 0;
-}
-
-/* Links inside the popover. FloatingPortal mounts the popover on <body>, outside `.prose`, so the
-   global link treatment above never reaches these. Restated here to match prose links, because without it
-   a glossary cross-reference is indistinguishable from body text. */
-.hover-popover__body a {
-  font-weight: 500;
-  text-decoration: underline;
-  text-decoration-color: var(--color-fd-primary);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-  transition:
-    color 0.2s ease,
-    text-decoration-color 0.2s ease;
-}
-
-.hover-popover__body a:hover {
-  color: var(--color-fd-primary);
-  text-decoration-color: currentColor;
-}
-
-/* Glossary and reference index pages (`components/mdx/ReferenceList`, behind `<ReferenceList>`).
-   Here for the same reason as the popover rules above: `ReferenceList` is a server component in the
-   `components/mdx.tsx` registry, so its `./reference-list.css` import put these two rules on a
-   render-blocking chunk shared by all 349 docs pages, to style a list that one of them renders
-   (`content/docs/glossary.mdx`). Folding it was what finally deleted that chunk: with both plain
-   `.css` imports gone, the CSS modules left behind (`VanillaAdmonition`, `ImageZoom`, `PdfModal`)
-   merged into the chunk that already carried the image-zoom vendor CSS, and `/docs/stylus` went
-   from four render-blocking stylesheets to three. Total CSS bytes are unchanged; what went is the
-   round trip. The class names are component-scoped, so nothing outside `ReferenceList` matches. */
-.reference-list__item {
-  scroll-margin-top: 6rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--color-fd-border);
-  margin-bottom: 1.5rem;
-}
-
-.reference-list__term {
-  margin-bottom: 0.5rem;
 }
