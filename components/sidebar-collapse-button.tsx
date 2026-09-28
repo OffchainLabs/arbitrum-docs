@@ -11,8 +11,8 @@ import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
  * When collapsed, the only other way back is the 16px invisible hover strip
  * fumadocs-ui draws at the viewport edge, which it ignores for touch pointers.
  *
- * Requires the SidebarProvider that DocsLayout mounts — `useSidebar()` throws
- * without it, so this must not be added to the nav options shared with
+ * Requires the SidebarProvider that DocsLayout mounts (`useSidebar()` throws
+ * without it), so this must not be added to the nav options shared with
  * app/(home)/layout.tsx.
  */
 export function SidebarCollapseButton() {
@@ -32,7 +32,7 @@ export function SidebarCollapseButton() {
         size: 'icon-sm',
         // `order-first` puts this before the nav title: the header renders
         // `nav.children` after the title in one shared flex row.
-        // `max-md:hidden` because collapsing is desktop-only — mobile uses the
+        // `max-md:hidden` because collapsing is desktop-only; mobile uses the
         // drawer trigger in the navbar's right cluster.
         className: 'order-first -ms-1.5 me-2 text-fd-muted-foreground max-md:hidden',
       })}

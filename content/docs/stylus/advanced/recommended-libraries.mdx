@@ -1,7 +1,7 @@
 ---
 title: Recommended libraries (Rust crates)
-description: Recommended libraries (Rust crates)
 sidebar_label: Recommended libraries
+description: Recommended libraries (Rust crates)
 content_type: 'concept'
 author: gblanchemain
 sme: gblanchemain
@@ -19,7 +19,7 @@ While **crates.io** is a fantastic resource, many of these libraries were not de
 
 Using the standard Rust library often bloats contract sizes beyond the maximum size. For this reason, libraries designated as `no_std` are typically much stronger candidates for usage as a smart contract dependency. **crates.io** has a special tag for marking crates as `no_std`; however, it's not universally used. Still, it can be a good starting point for locating supported libraries. See ["No standard library"](https://crates.io/categories/no-std) crates for more details.
 
-<VanillaAdmonition type="info" title="Library compatibility checklist">
+<Callout type="info" title="Library compatibility checklist">
 
 A Rust library is compatible with Stylus if it meets all of the following:
 
@@ -29,7 +29,7 @@ A Rust library is compatible with Stylus if it meets all of the following:
 - **`no_std`-friendly**: prefer crates that compile without the standard library; the `std` lib pulls in OS-level features that are unavailable and inflates the binary.
 - **WASM-compatible target**: must build for `wasm32-unknown-unknown`.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Curated crates
 

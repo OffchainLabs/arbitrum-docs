@@ -2,25 +2,24 @@
 title: 'Configure a test Arbitrum chain'
 sidebar_label: 'Test chain configuration'
 description: 'Configure a non-production Arbitrum chain so that assertions post and confirm in seconds rather than days, and understand which parameters differ on testnets.'
-user_story: As an Arbitrum chain developer, I want assertions to confirm quickly on my test chain so that integration tests do not wait out a production challenge period.
-content_type: 'how-to'
+content_type: how-to
 author: pete-vielhaber
 sme: TBD
 ---
 
 On a production Arbitrum chain, an <Term id="assertion">assertion</Term> takes about a week to confirm (6.4 days). That delay is the security model working as intended, but it makes integration testing impractical. This page covers how to shorten it on a chain you do not need to secure. It also covers which parameters differ on a testnet.
 
-<VanillaAdmonition type="warning" title="These values are unsafe for production">
+<Callout type="warn" title="These values are unsafe for production">
 
 Every value on this page trades security for speed. A chain configured this way offers no meaningful dispute window, so an incorrect <Term id="assertion">assertion</Term> can be confirmed before anyone has time to dispute it — and if the validator allowlist is disabled, any address can trigger that confirmation. Use these settings only on chains that hold no value.
 
-</VanillaAdmonition>
+</Callout>
 
-<VanillaAdmonition type="note" title="This is not the same as fast withdrawals">
+<Callout type="info" title="This is not the same as fast withdrawals">
 
 <Term id="fast-withdrawals">Fast withdrawals</Term> are a production feature that shortens confirmation on an <Term id="arbitrum-anytrust-chain">AnyTrust</Term> chain by delegating confirmation to a committee, using the `--node.bold.enable-fast-confirmation` and `--node.staker.enable-fast-confirmation` flags. That is a deliberate trust assumption, configured separately, and it is not what this page describes. To learn how it works, see [Fast withdrawals](/docs/launch-arbitrum-chain/configuration/validation/fast-withdrawals).
 
-</VanillaAdmonition>
+</Callout>
 
 ## What actually gates confirmation speed
 
@@ -63,7 +62,11 @@ The interaction between `minimumAssertionPeriod` and the posting interval is the
 
 These are Nitro flags, set per validator. Lower them so your validator acts promptly inside the onchain floor you configured above.
 
-{/* SME REVIEW: defaults below read from OffchainLabs/nitro at a618155 (staker/bold/bold_staker.go:138-158 for BoLD, staker/legacy/staker.go:171-191 for legacy). Confirm they still match the Nitro release this page targets. */}
+{/*
+SME REVIEW: defaults below read from OffchainLabs/nitro at a618155
+(staker/bold/bold_staker.go:138-158 for BoLD, staker/legacy/staker.go:171-191
+for legacy). Confirm they still match the Nitro release this page targets.
+*/}
 
 | Flag                                          | Default  | Applies to    | For a test chain                                                                |
 | --------------------------------------------- | -------- | ------------- | ------------------------------------------------------------------------------- |
@@ -89,11 +92,11 @@ Nitro's own test suite configures the legacy staker for maximum speed. These val
 
 The negative `make-assertion-interval` is intentional rather than a typo. The staker checks whether more than the configured interval has elapsed since the last assertion. A negative duration makes that check always pass, so the staker posts on every cycle without waiting.
 
-<VanillaAdmonition type="note" title="BoLD has no equivalent preset">
+<Callout type="info" title="BoLD has no equivalent preset">
 
 Nitro defines no `TestBoldConfig`. On a <Term id="bold">BoLD</Term> chain, set the four `--node.bold.*` intervals individually rather than looking for a single test preset.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Why a test validator looks stuck when nothing is misconfigured
 

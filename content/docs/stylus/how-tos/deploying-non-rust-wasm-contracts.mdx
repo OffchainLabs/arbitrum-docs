@@ -1,5 +1,6 @@
 ---
 title: 'Deploying non-Rust WASM contracts'
+sidebar_label: 'Deploy non-Rust contracts'
 description: 'Deploy WebAssembly contracts from C, C++, and other languages to Arbitrum Stylus'
 content_type: 'how-to'
 author: chrisco
@@ -452,7 +453,7 @@ cargo stylus deploy \
 
 [Zig](https://ziglang.org/) is a systems language often described as a spiritual successor to C: it adds memory-safety guardrails, produces small binaries, and ships with a C compiler so existing C projects can adopt it incrementally. Because Zig compiles to WebAssembly, you can use it to write Stylus contracts that fit comfortably within the 24 KB Brotli-compressed limit and meet Stylus gas-metering requirements. Programs written in Zig have gas costs comparable to C.
 
-<VanillaAdmonition type="info">This walkthrough targets **Zig 0.11.0**. Some APIs used below (for example `std.mem.readIntSliceLittle` and the `std.heap.WasmAllocator` internals) changed or were removed in later Zig releases, so pin to 0.11.0 when following along.</VanillaAdmonition>
+<Callout type="info">This walkthrough targets **Zig 0.11.0**. Some APIs used below (for example `std.mem.readIntSliceLittle` and the `std.heap.WasmAllocator` internals) changed or were removed in later Zig releases, so pin to 0.11.0 when following along.</Callout>
 
 ### Requirements
 

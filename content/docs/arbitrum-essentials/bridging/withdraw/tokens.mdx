@@ -1,7 +1,7 @@
 ---
 title: Withdraw tokens to parent chain
+sidebar_label: Tokens
 description: 'Step-by-step guide to withdrawing ERC-20 tokens from an Arbitrum child chain back to Ethereum (parent chain) using the token bridge gateway system, including the 6.4-day challenge period.'
-user_story: 'As a developer, I want to withdraw ERC-20 tokens from Arbitrum back to Ethereum programmatically so I can integrate token bridging into my application.'
 content_type: 'how-to'
 author: gblanchemain
 sme: gblanchemain
@@ -191,7 +191,7 @@ console.log('Withdrawal executed on parent chain!');
 
 The token withdrawal process:
 
-<ImageZoom src="/img/apps-bridge_withdrawals.png" alt="Withdrawal process using the gateway" className="img-800px" />
+![Withdrawal process using the gateway](/img/apps-bridge_withdrawals.png)
 
 1. **Child chain**: Tokens are burned (or escrowed for custom tokens)
 2. **Message created**: A child-to-parent message is encoded and included in an assertion

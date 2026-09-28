@@ -18,41 +18,67 @@ import {
   Settings,
   ShieldCheck,
 } from 'lucide-react';
-import Link from 'next/link';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
-import { docsRoute } from '@/lib/shared';
+import { HomeHero } from '@/components/home-hero';
+import {
+  appName,
+  docsRoute,
+  getSiteUrl,
+  siteDescription,
+  siteTitle,
+  socialHandle,
+} from '@/lib/shared';
+
+/**
+ * The same metadata set `app/docs/[[...slug]]/page.tsx` emits per page. `og:image` comes from
+ * `opengraph-image.tsx` beside this file.
+ */
+export const metadata: Metadata = {
+  title: siteTitle,
+  description: siteDescription,
+  // Built from `getSiteUrl()`, which refuses to guess the origin in a production build.
+  alternates: {
+    canonical: new URL('/', getSiteUrl()).toString(),
+  },
+  openGraph: {
+    type: 'website',
+    siteName: appName,
+    title: siteTitle,
+    description: siteDescription,
+    url: new URL('/', getSiteUrl()).toString(),
+  },
+  // Next fills the rest of the Twitter card from openGraph; the card type and handle have no default.
+  twitter: {
+    card: 'summary_large_image',
+    site: socialHandle,
+  },
+};
+
+/** Section heading with the arbitrum.io glowing dot. */
+function SectionHeading({ children }: { children: ReactNode }) {
+  return (
+    <h2 className="flex items-center gap-4 text-2xl font-medium tracking-tight">
+      <span
+        aria-hidden
+        className="size-[9px] shrink-0 rounded-full bg-current shadow-[0_0_4px_currentColor]"
+      />
+      {children}
+    </h2>
+  );
+}
 
 export default function HomePage() {
   const docs = (path: string) => `${docsRoute}${path}`;
 
   return (
-    <main className="flex flex-col flex-1">
-      <section className="flex flex-col items-center justify-center text-center px-4 py-10 gap-2 bg-linear-[135deg] from-arbitrum-gradient-from to-arbitrum-gradient-to text-white">
-        <h1 className="text-4xl font-medium tracking-tight">Get started with Arbitrum</h1>
-        <p className="max-w-2xl">
-          Arbitrum is the finance-native platform providing infrastructure for applications,
-          tokenization, and dedicated chains. These docs explain the protocols, chains, services,
-          and SDKs developers use to build on the Arbitrum platform.
-        </p>
-        <div className="flex gap-3">
-          <Link
-            href={docs('/build-decentralized-apps/quickstart-solidity-remix')}
-            className="rounded-md bg-fd-primary text-fd-primary-foreground px-5 py-2 font-medium"
-          >
-            Solidity quickstart
-          </Link>
-          <Link
-            href={docs('/stylus/quickstart')}
-            className="rounded-md border border-white/30 px-5 py-2 font-medium"
-          >
-            Stylus quickstart
-          </Link>
-        </div>
-      </section>
+    <main className="flex flex-1 flex-col bg-repeating-lines">
+      <HomeHero />
 
-      <div className="mx-auto w-full max-w-5xl px-4 py-16 flex flex-col gap-12">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-4 py-16">
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Understand Arbitrum</h2>
+          <SectionHeading>Understand Arbitrum</SectionHeading>
           <Cards>
             <Card
               icon={<BookOpen />}
@@ -88,7 +114,7 @@ export default function HomePage() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Build decentralized apps</h2>
+          <SectionHeading>Build decentralized apps</SectionHeading>
           <Cards>
             <Card
               icon={<Code />}
@@ -118,7 +144,7 @@ export default function HomePage() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Launch your own chain</h2>
+          <SectionHeading>Launch your own chain</SectionHeading>
           <Cards>
             <Card
               icon={<BookOpen />}
@@ -150,7 +176,7 @@ export default function HomePage() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Run a node</h2>
+          <SectionHeading>Run a node</SectionHeading>
           <Cards>
             <Card
               icon={<Server />}
@@ -180,7 +206,7 @@ export default function HomePage() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="text-2xl font-medium tracking-tight">Bridge tokens</h2>
+          <SectionHeading>Bridge tokens</SectionHeading>
           <Cards>
             <Card
               icon={<ArrowRightLeft />}

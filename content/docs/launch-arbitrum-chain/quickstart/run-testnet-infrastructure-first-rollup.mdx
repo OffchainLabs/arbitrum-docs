@@ -1,7 +1,7 @@
 ---
 title: 'Run testnet infrastructure on your first rollup (product-level testnet)'
+sidebar_label: 'L3 rollup infrastructure'
 description: 'Step-by-step guide to run your Arbitrum chain infrastructure as a production-level testnet with high availability.'
-user_story: I have a deployed chain and want to run it with high availability so users can connect from anywhere.
 content_type: 'how-to'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
@@ -30,11 +30,11 @@ The setup uses multiple sequencers with automatic failover, Redis for coordinati
 12. Verify
 13. Deploy the token bridge
 
-<VanillaAdmonition type="tip" title="Run all steps in the same terminal">
+<Callout type="idea" title="Run all steps in the same terminal">
 
 The commands use shell variables (`$CHAIN_ID`, `$PARENT_CHAIN_ID`, `$PARENT_RPC`, `$REDIS_URL`). Run Steps 1–11 in the **same terminal session** so these variables persist, or re-export them if you open a new terminal.
 
-</VanillaAdmonition>
+</Callout>
 ## Prerequisites
 
 | Requirement            | What you need                                                                                                                                                                                          |
@@ -162,11 +162,11 @@ NITRO_NODE_SEQ__COORDINATOR_MY__URL value:
 kubectl get pods -l app.kubernetes.io/name=nitro -w
 ```
 
-<VanillaAdmonition type="warning" title="Set sequencer priority after deployment">
+<Callout type="warn" title="Set sequencer priority after deployment">
 
 After deploying sequencers, you must set at least one sequencer in the priority list. Without this, no sequencer will be active, and your chain won’t produce blocks. Complete Step 10 to set priorities using the Sequencer Coordinator Manager, or set them directly in Redis.
 
-</VanillaAdmonition>
+</Callout>
 ## Step 5: Deploy sequencer relays
 
 Sequencer relays combine feeds from all sequencer replicas. Other components connect to these relays rather than directly to the sequencers.
@@ -253,11 +253,11 @@ configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-ke
 rm batch-poster-key.txt
 ```
 
-<VanillaAdmonition type="warning" title="Do not add batch poster to sequencer priority">
+<Callout type="warn" title="Do not add batch poster to sequencer priority">
 
 Do **not** add the batch poster to the Sequencer Coordinator Manager's sequencer priority list. Otherwise, it could become the active sequencer unintentionally.
 
-</VanillaAdmonition>
+</Callout>
 ## Step 9: Deploy validator
 
 The validator validates blocks and posts assertions to the parent chain. It is required for chain security. The validator wallet needs **ETH** on the parent chain (Arbitrum Sepolia) for gas.
@@ -294,11 +294,11 @@ rm validator-key.txt
 
 ## Step 10: Set up Sequencer Coordinator Manager and set priority
 
-<VanillaAdmonition type="warning" title="Required for sequencer activation">
+<Callout type="warn" title="Required for sequencer activation">
 
 This step is **required**, not optional.
 
-</VanillaAdmonition>
+</Callout>
 You **must** set sequencer priority for your chain to work. Without setting a priority, no sequencer will be active. The Sequencer Coordinator Manager (SQM) provides a UI to manage the sequencer priority list. You can also set priority directly in Redis (advanced users).
 
 #### 1. Port-forward Redis (if using in-cluster Redis from Step 3):
@@ -338,16 +338,16 @@ When you first run SQM, all sequencers will be in the `--Not in priority list bu
 6. **Verify** one sequencer is marked with a `chosen` indicator (this is the active sequencer)
 7. **Press `q`** to quit
 
-<VanillaAdmonition type="tip" title="Add all sequencers to priority list">
+<Callout type="idea" title="Add all sequencers to priority list">
 
 For proper high availability with automatic failover, add all 3 sequencers to the priority list at different positions (1, 2, 3). The sequencer at position 1 becomes active. If it fails, position 2 takes over automatically.
 
-</VanillaAdmonition>
-<VanillaAdmonition type="warning">
+</Callout>
+<Callout type="warn">
 
 Do **not** add the batch poster to the priority list. The batch poster should never become the active sequencer.
 
-</VanillaAdmonition>
+</Callout>
 Alternatively, you can press `a` to manually add a new sequencer by entering its URL. The URL must match the `my-url` configured for each sequencer (e.g., `http://sequencer-nitro-0.sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc`).
 
 ## Step 11: Expose RPC

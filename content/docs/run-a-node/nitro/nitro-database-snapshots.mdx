@@ -1,5 +1,6 @@
 ---
 title: 'Nitro database snapshots'
+sidebar_label: 'Database snapshots'
 description: This page explains how to supply a snapshot to Nitro and how to create a new snapshot
 content_type: 'how-to'
 author: gligneul
@@ -18,11 +19,11 @@ There are multiple ways to supply Nitro with the database snapshot. The most str
 
 Nitro has a CLI configuration for downloading the latest snapshot from a remote server. Set the flag `--init.latest` to either `archive`, `pruned`, or `genesis`, and Nitro will download the preferred snapshot. Nitro rejects any other value. You may also change the `--init.latest-base` flag to set the base URL when searching for the latest snapshot.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 All three kinds that `--init.latest` accepts resolve to HashDB snapshots, so `--init.latest` cannot bootstrap a PathDB node. See [PathDB snapshots](#pathdb-snapshots).
 
-</VanillaAdmonition>
+</Callout>
 
 ### How it works
 
@@ -87,11 +88,11 @@ Your node's `--execution.caching.state-scheme` must match the snapshot's `state_
 
 ## Downloading the snapshot manually
 
-<VanillaAdmonition type="tip" title="For most users, automatic download is recommended">
+<Callout type="idea" title="For most users, automatic download is recommended">
 
 Use `--init.latest pruned` (or `archive`) to enable Nitro's automatic handling of multi-part downloads, checksum verification, and extraction. In contrast, manual downloading is preferable only when you need to host a single snapshot locally for multiple nodes, offering direct control but requiring additional effort.
 
-</VanillaAdmonition>
+</Callout>
 
 It is possible to download the snapshot manually and supply the archive instead of having Nitro download it.
 
@@ -128,13 +129,13 @@ f37e4552453202f2044e58b307bab7e466205bd280426abbc84f8646c6430cfa  archive.tar.pa
 972c5f513faca6ac4fadd22c70bea97707c6d38e9a646432bc311f0ca10497ed  archive.tar.part5
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 For directory-style snapshot URLs, the manifest is the `.manifest.txt` file inside the directory. For example, `https://snapshot.arbitrum.foundation/arb1/2026-08-01-a78755ba/.manifest.txt`. Its part names include the directory prefix, so resolve them against the parent of the snapshot URL.
 
 The same directory also holds a `metadata.json` giving each part's filename, size, and both SHA-256 and xxHash checksums. Either file works for a manual download; Nitro itself reads `.manifest.txt`.
 
-</VanillaAdmonition>
+</Callout>
 
 After downloading all the parts and verifying their checksums, you may use the command below to join them into a single archive.
 

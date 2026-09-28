@@ -1,10 +1,8 @@
 ---
 title: 'Batch poster recovery'
-sidebar_label: 'Batch poster recovery'
 description: 'Learn how the batch poster recovers state and the mechanisms that make recovery possible.'
 author: pete-vielhaber
 sme: Jason-W123
-user_story: As an Arbitrum chain operator, I want to understand how the batch poster recovers after a crash, restart, or bad state so I can restore reliable batch posting.
 content_type: 'reference'
 ---
 
@@ -16,9 +14,12 @@ The batch poster does **not** primarily checkpoint its position in its own datab
 
 ## Recovery state machine flow
 
-<ImageZoom src="/img/bp-recovery.png" className="img-600px" alt="Recovery state machine flow">
-  Recovery state machine flow
-</ImageZoom>
+<figure>
+
+![Recovery state machine flow](/img/bp-recovery.png)
+
+<figcaption>Recovery state machine flow</figcaption>
+</figure>
 
 ### The position "checkpoint"
 

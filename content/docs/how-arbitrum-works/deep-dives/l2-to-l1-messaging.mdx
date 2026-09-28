@@ -1,22 +1,20 @@
 ---
 title: Child to parent chain messaging
+sidebar_label: Child to Parent chain Messaging
 description: 'Learn the fundamentals of child to parent chain messaging on Arbitrum.'
-user_story: As a current or prospective Arbitrum user, I need to learn more about messaging between child chain and parent chain messaging on Arbitrum.
 content_type: 'concept'
 author: pete-vielhaber
 sme: TucksonDev
 ---
 
-<VanillaAdmonition type="tip" title="Looking for implementation guides?">
+<Callout type="idea" title="Looking for implementation guides?">
 
 This document explains the protocol-level concepts of child-to-parent messaging. For practical, step-by-step instructions on implementing withdrawals and messaging, see [How to bridge to parent chain from child chain](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages).
 
-</VanillaAdmonition>
+</Callout>
 <Term id="arbitrum">Arbitrum</Term>'s <Term id="outbox">outbox</Term> system allows arbitrary child-to-parent chain contract calls, i.e., messages initiated from the child chain that will eventually resolve through execution on the parent chain.
 
 Child-to-parent chain messages (i.e., outgoing messages) bear some things in common with Arbitrum’s [parent chain to child chain messages](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging), which are “in reverse” with differences, which we’ll explore in this section.
-
-Executing one of these messages on the parent chain requires the containing assertion to be confirmed, which is a stronger guarantee than a batch reaching the parent chain. [Finality](/docs/how-arbitrum-works/deep-dives/finality) explains why posting a batch does not make funds withdrawable.
 
 ## Protocol flow
 

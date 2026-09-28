@@ -1,18 +1,17 @@
 ---
 title: 'Build a decentralized app with Solidity (Quickstart)'
+sidebar_label: 'Quickstart'
 description: 'Learn how to build and deploy your first Solidity smart contract on Arbitrum using Remix IDE. This beginner-friendly quickstart guides you from a JavaScript vending machine to a decentralized app deployed on Arbitrum One, covering smart contract basics, wallet setup, and testnet deployment.'
-user_story: 'As a web2 developer new to blockchain, or a web3 developer new to Arbitrum, I want a step-by-step guide to writing, compiling, and deploying a Solidity smart contract on Arbitrum using Remix IDE so that I can understand the fundamentals of decentralized app development and start building on Arbitrum.'
 content_type: 'quickstart'
 author: symbolpunk
 sme: symbolpunk
 ---
 
-<VanillaAdmonition type="info" title="Want to use Rust instead?">
+<Callout type="info" title="Want to use Rust instead?">
 
 Head over to [the Stylus quickstart](/docs/stylus/quickstart) if you'd like to use Rust instead of Solidity.
 
-</VanillaAdmonition>
-
+</Callout>
 This quickstart is for web developers who want to start building **decentralized applications** using <Term id="arbitrum">Arbitrum</Term>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 ## What we'll learn
@@ -48,15 +47,23 @@ Let's implement the "Web3" version of the above vending machine using Arbitrum.
 
 ## Prerequisites
 
-<CustomDetails summary="VS Code">VS Code is the IDE we'll use to build our vending machine. See [code.visualstudio.com](https://code.visualstudio.com/) to install.</CustomDetails>
+<Accordions>
+  <Accordion title="VS Code">VS Code is the IDE we'll use to build our vending machine. See [code.visualstudio.com](https://code.visualstudio.com/) to install.</Accordion>
+</Accordions>
 
-<CustomDetails summary="Web3 wallet">
-  We will use Metamask as the <Term id="ethereum-wallet">wallet</Term> to interact with our vending machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
-</CustomDetails>
+<Accordions>
+  <Accordion title="Web3 wallet">
+    We will use Metamask as the <Term id="ethereum-wallet">wallet</Term> to interact with our vending machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
+  </Accordion>
+</Accordions>
 
-<CustomDetails summary="Yarn">Yarn is the package manager we'll use to install dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.</CustomDetails>
+<Accordions>
+  <Accordion title="Yarn">Yarn is the package manager we'll use to install dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.</Accordion>
+</Accordions>
 
-<CustomDetails summary="Foundry">Foundry is the toolchain we'll use to compile and deploy our smart contract. See [getfoundry.sh](https://getfoundry.sh) to install.</CustomDetails>
+<Accordions>
+  <Accordion title="Foundry">Foundry is the toolchain we'll use to compile and deploy our smart contract. See [getfoundry.sh](https://getfoundry.sh) to install.</Accordion>
+</Accordions>
 
 We'll address any remaining dependencies as we go.
 
@@ -82,7 +89,8 @@ We'll address any remaining dependencies as we go.
 
 Here's the vending machine implemented as a Javascript class:
 
-<CustomDetails summary="VendingMachine.js">
+<Accordions>
+<Accordion title="VendingMachine.js">
 
 ```js
 class VendingMachine {
@@ -117,15 +125,17 @@ class VendingMachine {
 }
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 The `VendingMachine` class uses _state variables_ and _functions_ to implement _predefined rules_. This implementation is useful because it automates cupcake distribution, but there's a problem: it's hosted by a centralized server controlled by a third-party service provider.
 
-<VanillaAdmonition type="info" title="Working web2 version">
+<Callout type="info" title="Working web2 version">
 
 To use the Vending Machine (web2), copy and paste the HTML code below into a text document, then open it in your web browser.
 
-<CustomDetails summary="VendingMachine.html">
+<Accordions>
+<Accordion title="VendingMachine.html">
 
 ```html
 <!DOCTYPE html>
@@ -300,9 +310,7 @@ To use the Vending Machine (web2), copy and paste the HTML code below into a tex
       padding-left: 0.75rem;
     }
   </style>
-
 </head>
-
 <body>
 
   <h1>Cupcake Vending Machine</h1>
@@ -451,15 +459,14 @@ function truncateAddress(text) {
 </script>
 
 </body>
-
 </html>
 
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-</VanillaAdmonition>
-
+</Callout>
 Now, let's decentralize our vending machine's business logic and data by porting the above JavaScript implementation into a Solidity smart contract.
 
 ## Review the Solidity vending machine
@@ -467,7 +474,8 @@ Now, let's decentralize our vending machine's business logic and data by porting
 Here is a Solidity implementation of the vending machine.
 Solidity is a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it is deployable to any Ethereum-compatible blockchain, including Ethereum mainnet, <Term id="arbitrum-one">Arbitrum One</Term>, and <Term id="arbitrum-nova">Arbitrum Nova</Term>.
 
-<CustomDetails summary="VendingMachine.sol">
+<Accordions>
+<Accordion title="VendingMachine.sol">
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -524,7 +532,8 @@ contract VendingMachine {
 }
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ## Compile your smart contract with Remix
 
@@ -534,33 +543,35 @@ Remix is a browser-based IDE for EVM development. There are other IDEs to choose
 
 Let's first add our smart contract to Remix following these steps:
 
-### 1. Load Remix: https://remix.ethereum.org
+### 1. Load Remix
+
+Open [remix.ethereum.org](https://remix.ethereum.org).
 
 ### 2. Create a blank workspace in Remix:
 
 {' '}
 
-<CustomDetails summary="File explorer > Workspaces > Create blank">
-  <ImageZoom src="/img/apps-remix-create-blank-project-2025-01-07.gif" alt="" className="img-600px" />
-</CustomDetails>
+<Accordions>
+  <Accordion title="File explorer > Workspaces > Create blank">![](/img/apps-remix-create-blank-project-2025-01-07.gif)</Accordion>
+</Accordions>
 
 ### 3. Copy your vending machine contract
 
 ### 4. Paste your contract in Remix
 
-<CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
-  <ImageZoom src="/img/apps-remix-paste-vending-machine-contract-2025-01-07.gif" alt="" className="img-600px" />
-</CustomDetails>
+<Accordions>
+  <Accordion title="Select vending machine contract > Click compile menu > Compile">![](/img/apps-remix-paste-vending-machine-contract-2025-01-07.gif)</Accordion>
+</Accordions>
 
 "File explorer > New file"
 
 ### 5. Compile your contract in Remix
 
-<CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
-  <ImageZoom src="/img/apps-remix-compile-contract-2025-01-07.gif" alt="" className="img-600px" />
-</CustomDetails>
+<Accordions>
+  <Accordion title="Select vending machine contract > Click compile menu > Compile">![](/img/apps-remix-compile-contract-2025-01-07.gif)</Accordion>
+</Accordions>
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Ensure that Remix's compiler version matches the one in your contract. You can find your contract's compiler version at the top of your contract's file. It looks like this:
 
@@ -570,7 +581,7 @@ pragma solidity ^0.8.2;
 
 You can easily select the right compiler version in Remix's the "Solidity compiler" menu.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Deploy the smart contract to a local Ethereum chain
 
@@ -590,7 +601,8 @@ Here, we'll use [Foundry's **anvil**](https://book.getfoundry.sh/anvil/) to run 
 curl -L https://foundry.paradigm.xyz | bash && anvil
 ```
 
-<CustomDetails summary="Once you've run the above commands, you should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.">
+<Accordions>
+<Accordion title="Once you've run the above commands, you should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.">
 
 ```shell
                             (_) | |
@@ -638,7 +650,8 @@ Derivation path: m/44'/60'/0'/0/
 31337.
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ### Configure Metamask
 
@@ -653,20 +666,19 @@ Next, click Metamask's network selector dropdown and click the **Add Network** b
 - Chain ID: `31337`
 - Currency Symbol: **ETH**
 
-<CustomDetails summary="Add Localhost 8545 to Metamask">
-  <ImageZoom src="/img/apps-metamask-add-localhost-2025-01-13.png" alt="" className="img-600px" />
-</CustomDetails>
+<Accordions>
+  <Accordion title="Add Localhost 8545 to Metamask">![](/img/apps-metamask-add-localhost-2025-01-13.png)</Accordion>
+</Accordions>
 
 Your wallet won't have a balance on your local testnet's node, but you can import one of the test accounts into Metamask to access to 10,000 testnet **ETH**. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g., `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80` or `ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`) and import it into Metamask. Metamask will ask you if you want to connect this new account to Remix, to which you should answer "yes":
 
-<ImageZoom src="/img/apps-quickstart-import-metamask.png" alt="Connect Metamask to Localhost 8545" className="img-600px" />
+![Connect Metamask to Localhost 8545](/img/apps-quickstart-import-metamask.png)
 
-<VanillaAdmonition type="warning" title="Never share your private keys">
+<Callout type="warn" title="Never share your private keys">
 
 Your Ethereum Mainnet wallet's private key is the password to all of your tokens. Never share it with anyone; avoid copying it to your clipboard.
 
-</VanillaAdmonition>
-
+</Callout>
 Note that in the context of this quickstart, "account" refers to an EOA (externally owned account), and its associated private key[^5].
 
 You should see a balance of 10,000 **ETH**. Keep your private key handy; we'll use it again shortly.
@@ -677,9 +689,9 @@ As we interact with our cupcake vending machine, we'll use Metamask's network se
 
 In the last step, we'll connect Remix to Metamask so we can deploy our smart contract to the local chain using Remix.
 
-<CustomDetails summary="Connect remix to Metamask">
-  <ImageZoom src="/img/apps-remix-connect-metamask-2025-01-13.gif" alt="" className="img-600px" />
-</CustomDetails>
+<Accordions>
+  <Accordion title="Connect remix to Metamask">![](/img/apps-remix-connect-metamask-2025-01-13.gif)</Accordion>
+</Accordions>
 
 At this point, we're ready to deploy our smart contract to any chain we want.
 
@@ -688,9 +700,9 @@ At this point, we're ready to deploy our smart contract to any chain we want.
 - In MetaMask, ensure that the `Localhost` network is selected.
 - In Remix, deploy the `VendingMachine` contract to the `Localhost` network, then go to the "Deploy & Run Transactions" tab and click "Deploy."
 
-<CustomDetails summary="Deploy the VendingMachine contract to the Localhost network">
-  <ImageZoom src="/img/apps-remix-deploy-to-local-chain-2025-01-14.gif" alt="" className="img-600px" />
-</CustomDetails>
+<Accordions>
+  <Accordion title="Deploy the VendingMachine contract to the Localhost network">![](/img/apps-remix-deploy-to-local-chain-2025-01-14.gif)</Accordion>
+</Accordions>
 
 Then copy and paste your **contract address** below and click **Get cupcake!**. A prompt should ask you to sign a transaction that gives you a cupcake.
 
@@ -700,7 +712,7 @@ Then copy and paste your **contract address** below and click **Get cupcake!**. 
 
 Our first `VendingMachine` is labeled "Web2" because it demonstrates traditional client-server web application architecture: the back-end lives in a centralized network of servers.
 
-<ImageZoom src="/img/apps-quickstart-vending-machine-architecture.png" alt="Architecture diagram" className="img-600px" />
+![Architecture diagram](/img/apps-quickstart-vending-machine-architecture.png)
 
 The "Web3" architecture is similar to the "Web2" architecture, with one key difference: with the "Web3" version, business logic and data are hosted by decentralized network of nodes\*\*
 
@@ -762,7 +774,7 @@ Select **Arbitrum Sepolia** from Metamask's dropdown, paste your contract addres
 
 The final step is deploying our Cupcake machine to a production network, such as Ethereum, Arbitrum One, or Arbitrum Nitro.
 The good news is: deploying a smart contract in production is exactly the same as for Sepolia Testnet.
-The harder news: it will cost real money, this time. If you deploy on Ethereum, the fees can be significant and the transaction confirmation time <Var name="l1SlotTimeSeconds" /> seconds on average.
+The harder news: it will cost real money, this time. If you deploy on Ethereum, the fees can be significant and the transaction confirmation time 12 seconds on average.
 Arbitrum, a child chain, reduces these costs about 10X and a confirmation time in the same order while maintaining a similar level of security and decentralization. For an in-depth look at how fees are calculated and estimated, see [How to estimate gas](/docs/arbitrum-essentials/how-to-estimate-gas).
 
 ## Summary
