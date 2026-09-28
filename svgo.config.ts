@@ -1,8 +1,11 @@
 /**
- * svgo configuration for hand-authored brand diagrams in static/img.
+ * svgo configuration for hand-authored brand diagrams in public/img.
  *
- * Applied by .claude/hooks/optimize-svg.sh on every write to static/img/*.svg,
- * and safe to run manually: yarn svgo --config svgo.config.ts <file>
+ * Applied by .claude/hooks/optimize-svg.sh on every write to public/img/*.svg,
+ * and safe to run manually: pnpm dlx svgo --config svgo.config.ts <file>
+ *
+ * svgo is not an installed dependency of this repo, so the hook is a no-op
+ * until it is added; running it manually via `pnpm dlx` needs no install.
  *
  * The overrides below all disable a preset-default plugin. Each one would
  * otherwise break something these diagrams depend on, so do not drop them

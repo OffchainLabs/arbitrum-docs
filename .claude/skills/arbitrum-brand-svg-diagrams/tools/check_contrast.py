@@ -7,7 +7,7 @@ true background. This works uniformly for text on an opaque box and for text
 sitting straight on the brand gradient, where the backdrop varies by position.
 
 Usage:
-    python3 check_contrast.py static/img/NAME.svg
+    python3 check_contrast.py public/img/NAME.svg
 
 Exits 1 if any label fails, so it can gate a build step.
 """
