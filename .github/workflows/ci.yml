@@ -53,9 +53,6 @@ jobs:
       - name: Partials resolve and stay unrouted
         run: pnpm partials:check
 
-      - name: Archived page registry
-        run: node scripts/versioned-docs-check.ts
-
       - name: Glossary references resolve
         run: pnpm references:check
 

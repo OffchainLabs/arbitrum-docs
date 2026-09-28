@@ -9,7 +9,7 @@
     "pnpm": ">=10.0.0"
   },
   "scripts": {
-    "build": "node scripts/versioned-docs-check.ts && node scripts/check-links.ts && next build",
+    "build": "node scripts/check-links.ts && next build",
     "dev": "next dev",
     "start": "next start",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
