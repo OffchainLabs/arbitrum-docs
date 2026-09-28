@@ -91,7 +91,7 @@ async function resolvePublishedNodeImage(tag: string): Promise<string> {
 
   const body: unknown = await response.json();
   const results = isRecord(body) && Array.isArray(body.results) ? body.results : [];
-  const exact = new RegExp(`^${tag.replace(/[.]/g, '\\.')}-[0-9a-f]{7}$`);
+  const exact = new RegExp(`^${tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-[0-9a-f]{7}$`);
   const matches = results
     .filter(isRecord)
     .flatMap((result) => {

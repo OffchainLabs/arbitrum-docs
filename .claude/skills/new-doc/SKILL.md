@@ -23,8 +23,7 @@ front, since it decides the file's path (it is not a frontmatter field).
 
 Optional (omit the key entirely if not provided, rather than leaving it blank):
 
-- `sidebar_label`: defaults to the page's `title` if omitted (see "Register in
-  the sidebar" below for how the nav manifest can override both)
+- `sidebar_label`: the page's name in the sidebar; defaults to `title` if omitted
 - `content_type`: one of `how-to`, `concept`, `quickstart`, `tutorial`,
   `reference`, `troubleshooting`, `faq`; an editorial label, nothing renders it
 - `author`: GitHub username
@@ -164,8 +163,9 @@ Sidebar order is controlled per directory by `meta.json`, not by file names. Ope
 
 Place it in logical order within the existing entries. A `"..."` entry means "everything else, in
 file order", so a new page appears automatically wherever `"..."` sits — add it explicitly only when
-it needs a specific position. Cross-directory links use the
-`"[Label](/docs/path)"` form.
+it needs a specific position. To list a page that lives in another directory, use a relative path
+entry such as `"../other-dir/page"`. Never write a `"[Label](/docs/path)"` entry for a page in this
+repo: it puts the page on two sidebar nodes and `pnpm test` fails.
 
 ## Terminology enforcement
 
@@ -193,8 +193,8 @@ After creating the file:
    `127.0.0.1` React does not hydrate and every component looks broken.
 2. Run `pnpm content:lint` and `pnpm types:check`. `types:check` is what enforces the frontmatter
    contract: a missing `title` or `description` fails the build (the other fields are optional).
-3. Confirm no broken links: `pnpm check-links`. It does not validate `#anchor` fragments — check
-   those in the browser.
+3. Confirm no broken links: `pnpm check-links`. It also validates `#anchor` fragments against the
+   compiled heading ids; only anchors that exist at runtime alone are outside its reach.
 4. To reference a global variable, use `<Var name="variableName" />`; the value must exist in
    `content/vars.json`. Verify with `pnpm vars:check`.
 5. Before writing a banner, note or config table, browse `content/partials/` (there is no catalog;

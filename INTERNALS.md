@@ -333,7 +333,7 @@ include `Callout`, `Card`, `Cards` and code blocks) and adds:
 - `AEL`, an address explorer link (`components/mdx/AddressExplorerLink.tsx`).
 - `Term`, `ReferenceList` and `Var` from `components/mdx/`.
 - Four widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`
-  boundary in its `index.tsx`: `FlowChart` (the Timeboost auction), `EdgeChallengeFlow` (BoLD,
+  boundary in its `index.tsx`: `FlowChart` from `CentralizedAuction/` (the Timeboost auction), `EdgeChallengeFlow` (BoLD,
   client only), `VendingMachine` (the cupcake demo, which pulls in viem) and the node
   troubleshooting set (`TroubleshootingChecklist`, `ChecklistItem`, `ConfigGuidance`,
   `TroubleshootingConfig`, `TroubleshootingReport`).
@@ -448,7 +448,7 @@ onto it. There is no `Accept` header negotiation: a `/docs` URL always serves HT
 
 **`/.well-known/`** holds the MCP discovery card, `public/.well-known/mcp/server-card.json`. It
 advertises the Inkeep MCP server over these docs, the same service behind search. Nothing
-regenerates or checks it.
+regenerates it; the HTTP smoke suite checks that it is served.
 
 ### Request tracking
 
@@ -480,7 +480,9 @@ Classification lives in `lib/llms-tracking.ts`, which imports only `lib/shared.t
 the prerendered 404 page from `app/not-found.tsx` with status 404, without rendering the docs page.
 The `og/` and `llms.mdx/` routes prerender one entry per page as well.
 
-Docs pages serve `Cache-Control: s-maxage=31536000`. The 404 keeps Next's `no-store` directives.
+Docs pages serve a `Cache-Control` header carrying an `s-maxage` directive; the value is Next's
+own, and the smoke suite asserts the directive, not the number. The 404 keeps Next's `no-store`
+directives.
 
 Two consequences to accept:
 
@@ -532,8 +534,9 @@ directly (`node scripts/x.ts`). There is no tsx, ts-node, `.mjs` or `.js`.
 - PostCSS is configured in the `postcss` key of `package.json`. Next ignores a `postcss.config.ts`
   silently, and Tailwind would stop compiling.
 
-Node 22 is stated in three places that must agree: `engines.node`, `.node-version`, and the Vercel
-project's Node.js Version setting, which is set by hand. Never bypass `engines`.
+Node 22 is stated in three places that must agree: `engines.node`, the `node-version` key in each
+`.github/workflows/*.yml`, and the Vercel project's Node.js Version setting, which is set by hand.
+Never bypass `engines`.
 
 ## The gates
 

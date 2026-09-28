@@ -32,9 +32,9 @@ scales perfectly; the draw.io exports it replaces are often >1MB.
 ## When NOT to use
 
 - **Complex or interactive diagrams** (animated flows, clickable nodes, the
-  transaction-lifecycle visualizers). Those use the ReactFlow /
-  `DrawioReactFlow` component pipeline (Excalidraw → draw.io → SVG). This skill
-  is for **static concept art only**.
+  transaction-lifecycle visualizers). Those are React widgets under
+  `components/widgets/` (see `EdgeChallengeFlow` and `CentralizedAuction`). This
+  skill is for **static concept art only**.
 - Photographic / screenshot content — keep as PNG/WebP.
 - Never propose Mermaid or any text-DSL diagram tool (standing preference).
 
@@ -755,57 +755,39 @@ never use the legacy Docusaurus `--ifm-*` ones.
 
 ## Reference examples
 
-**These live on unmerged branches, not on `master`.** Check before you trust a
-working-tree copy — on `master` and most feature branches `public/img/haw-*.svg`
-are still the multi-MB draw.io rasters, so opening one teaches you nothing:
+Every exemplar below is committed under `public/img/` on this branch, so open the working-tree
+file directly. Check the size first: a hand-authored diagram is tens of KB, while a draw.io export
+that still embeds a raster is measured in MB.
 
 ```bash
-stat -f%z public/img/haw-l1-to-l2.svg      # ~6 MB -> you are looking at the raster
-
-# Fetch a real exemplar from origin (works for any clone of this repo):
-git fetch origin haw-tier1-svg-diagrams
-git show origin/haw-tier1-svg-diagrams:public/img/haw-l1-to-l2.svg | head -c 2000
+stat -f%z public/img/haw-l1-to-l2.svg      # ~56 KB -> hand-authored
 ```
 
-| Diagram                       | Raster | Hand-authored | On origin branch                 | Shows                                                        |
-| ----------------------------- | -----: | ------------: | -------------------------------- | ------------------------------------------------------------ |
-| `haw-l1-to-l2`                | 6.2 MB |     **53 KB** | `haw-tier1-svg-diagrams`         | baked background, labeled lanes, code blocks, rounded elbows |
-| `haw-aliasing`                | 284 KB |     **50 KB** | `haw-tier1-svg-diagrams`         | baked background, address-aliasing math                      |
-| `haw-submit-tx-to-sequencer`  | 6.2 MB |     **50 KB** | `haw-tier1-svg-diagrams`         | baked background flow                                        |
-| `haw-bypassing-the-sequencer` | 6.2 MB |     **49 KB** | `haw-tier1-svg-diagrams`         | baked background flow                                        |
-| `haw-geth-sandwich`           | 1.5 MB |    **2.7 KB** | `inside-arbitrum-nitro-revision` | transparent canvas, opaque layers, bracket, legend chip      |
-
-Note that `haw-geth-sandwich` is on a _different_ branch —
-`haw-tier1-svg-diagrams` still carries its 1.5 MB raster.
+| Diagram                       | Hand-authored | Shows                                                        |
+| ----------------------------- | ------------: | ------------------------------------------------------------ |
+| `haw-l1-to-l2`                |     **56 KB** | baked background, labeled lanes, code blocks, rounded elbows |
+| `haw-aliasing`                |     **50 KB** | baked background, address-aliasing math                      |
+| `haw-submit-tx-to-sequencer`  |     **50 KB** | baked background flow                                        |
+| `haw-bypassing-the-sequencer` |     **49 KB** | baked background flow                                        |
+| `haw-geth-sandwich`           |    **2.7 KB** | transparent canvas, opaque layers, bracket, legend chip      |
 
 Note the floor: a baked-background diagram lands at **~50 KB regardless of
 complexity**, because ~44 KB of it is the background. Judge a baked-background
-diagram against that number and a gradient-backdrop one against ~2 KB — they are
+diagram against that number and a gradient-backdrop one against ~2 KB; they are
 different budgets, not a good and a bad result.
 
-Their color choices predate the measured contrast table above — copy their
+Their color choices predate the measured contrast table above. Copy their
 **layout and structure**, not their white-on-cyan text.
 
 ### Current-generation exemplars
 
-Copy these for colour and type; they all pass `check_contrast.py` clean. The
-three on `update-diagram-arbitrum-intro` sit on one page, so they also show how
-a small and a large diagram stay in the same family:
+Copy these for colour and type; both pass `check_contrast.py` clean and both sit in `public/img/`.
+No gradient-backdrop exemplar is committed on this branch.
 
-| Diagram                       |   Size | Canvas   | Backdrop         | Shows                                                       |
-| ----------------------------- | -----: | -------- | ---------------- | ----------------------------------------------------------- |
-| `arb-chain-fee-lifecycle.svg` |  52 KB | 1600×900 | baked background | two labeled lanes, three-role color key                     |
-| `arbitrum-chains-diagram.svg` |  53 KB | 1600×900 | baked background | **inlined brand logomarks**, per-chain colors, tier gutter  |
-| `scalability-trilemma.svg`    | 2.1 KB | 800×480  | brand gradient   | triangle, colour-as-argument, dark text low on the gradient |
-| `arbitrum-chain-naming.svg`   | 1.9 KB | 800×300  | brand gradient   | smallest useful shape: two boxes and a labeled connector    |
-
-`arb-chain-fee-lifecycle.svg` arrives with
-`tw-792-document-network-revenue-routing-and-feecollector-flow`; the other three
-with `update-diagram-arbitrum-intro`. If a file is absent on your branch:
-
-```bash
-git show origin/update-diagram-arbitrum-intro:public/img/arbitrum-chains-diagram.svg | head -c 2000
-```
+| Diagram                       |  Size | Canvas   | Backdrop         | Shows                                                      |
+| ----------------------------- | ----: | -------- | ---------------- | ---------------------------------------------------------- |
+| `arb-chain-fee-lifecycle.svg` | 53 KB | 1600×900 | baked background | two labeled lanes, three-role color key                    |
+| `arbitrum-chains-diagram.svg` | 54 KB | 1600×900 | baked background | **inlined brand logomarks**, per-chain colors, tier gutter |
 
 ## Tooling: FOSS options considered (not yet adopted)
 
@@ -853,8 +835,5 @@ Standing team conventions this skill assumes:
 
 - **Static concept art is hand-authored SVG. Never Mermaid or any text-DSL
   diagram tool** — that is a standing preference, not a default.
-- **Complex or interactive diagrams** use the ReactFlow / `DrawioReactFlow`
-  pipeline (Excalidraw → draw.io → SVG) instead of this skill.
-- The `DrawioReactFlow` component applies its own glassmorphic theme and
-  **ignores source draw.io `fillColor`/`strokeColor`** — don't try to pass brand
-  colors through it.
+- **Complex or interactive diagrams** are React widgets under
+  `components/widgets/`, not this skill.

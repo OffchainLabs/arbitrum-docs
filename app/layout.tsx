@@ -121,7 +121,9 @@ export default function Layout({ children }: { children: ReactNode }) {
       <body className="flex flex-col min-h-screen font-sans" suppressHydrationWarning>
         <PostHogProvider>
           <RootProvider
-            theme={{ attribute: 'class', defaultTheme: 'light' }}
+            // `hotKey: false` disables Fumadocs' theme shortcut, a bare `d` that fires whenever
+            // focus is outside a text field. The visible theme toggle is the intended path.
+            theme={{ attribute: 'class', defaultTheme: 'light', hotKey: false }}
             search={{ SearchDialog: InkeepSearchDialog }}
           >
             {/* Announcement bar. Above the navbar because it is a sibling rendered before

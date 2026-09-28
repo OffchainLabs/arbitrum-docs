@@ -12,7 +12,10 @@ import dynamic from 'next/dynamic';
  */
 const EdgeChallengeFlowImpl = dynamic(() => import('./EdgeChallengeFlow'), {
   ssr: false,
-  loading: () => <div className="ecf-loading">Loading edge challenge data...</div>,
+  // Tailwind utilities, because the widget's stylesheet arrives with the lazy chunk, after this.
+  loading: () => (
+    <div className="p-10 text-center text-fd-muted-foreground">Loading edge challenge data...</div>
+  ),
 });
 
 export function EdgeChallengeFlow() {

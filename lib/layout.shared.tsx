@@ -52,7 +52,7 @@ export function baseOptions(): BaseLayoutProps {
             icon: <Coins />,
             text: 'Machine Payments Protocol (MPP)',
             description: 'Machine-to-machine payments on Arbitrum.',
-            url: docHref('build-decentralized-apps'),
+            url: docHref('build-decentralized-apps/machine-payments-protocol'),
           },
         ],
       },

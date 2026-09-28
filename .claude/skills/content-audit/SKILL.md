@@ -28,8 +28,8 @@ pnpm check-links 2>&1
 
 Every internal doc link resolves to a real page. This is the gate that supplies Fumadocs'
 `onBrokenLinks: 'throw'`, and `pnpm build` runs it first, so a failure here also fails the Vercel
-deploy. It does **not** validate `#anchor` fragments — a live page with a dead anchor passes. Check
-those in a browser.
+deploy. It also validates `#anchor` fragments against the compiled heading ids, so a dead anchor
+fails; only anchors created at runtime are outside its reach.
 
 ### 3. Glossary and inline references
 
@@ -55,7 +55,8 @@ the committed partial is stale. Never hand-edit that partial; edit the generator
 pnpm vars:check 2>&1
 ```
 
-Every `<Var name="…" />` resolves to a key in `content/vars.json`.
+Every `<Var name="…" />` and `{var:name}` resolves to a key in `content/vars.json`, and the banner
+keys (`announcementId`, `announcementLinkHref`) are valid.
 
 ### 6. Formatting
 
@@ -72,7 +73,8 @@ pnpm test 2>&1
 ```
 
 `node --test` over `scripts/**/*.test.ts`: unit coverage for the gate scripts themselves (link
-resolution, nav rules, redirects, variable expansion, and so on).
+resolution, redirects, variable expansion, and so on), plus `scripts/sidebar.test.ts`, which
+builds the real sidebar tree and fails when a page is on no `meta.json` node or on two.
 
 ### 8. TypeScript
 
@@ -97,9 +99,6 @@ fixing findings, then run this once before calling the audit done.
 
 ## Not available
 
-- **Orphan pages**: pages absent from every sidebar. Nothing in this toolchain reports what a
-  `meta.json` omits, only what it claims incorrectly (frontmatter validation, dead links). Don't
-  claim this was checked.
 - **Doc manifest audit** (terminology consistency, missing metadata). The frontmatter contract
   (`title` and `description` required; `sidebar_label`, `content_type`, `author`, `sme` optional) is
   enforced at build time by the Zod schema in `source.config.ts`, which fails `types:check` on a

@@ -57,7 +57,6 @@ next-env.d.ts
 !/.claude/skills/arbitrum-brand-svg-diagrams/
 !/.claude/skills/arbitrum-brand-video-explainers/
 !/.claude/skills/content-audit/
-!/.claude/skills/image-debt-scan/
 !/.claude/skills/new-doc/
 .env*
 

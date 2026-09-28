@@ -41,7 +41,7 @@ Every rule below is testable in review.
 | **One idea per sentence**               | Two sentences of about 15 words each.                                          | One sentence of 40 words with three clauses.                     |
 | **Use verbs, not nominalizations**      | "Configure the sequencer."                                                     | "Perform configuration of the sequencer."                        |
 | **Put the condition before the action** | "If you run an AnyTrust chain, enable the DA server."                          | "Enable the DA server if you run an AnyTrust chain."             |
-| **Use the imperative for steps**        | "Run `yarn build`."                                                            | "You should now proceed to run `yarn build`."                    |
+| **Use the imperative for steps**        | "Run `pnpm build`."                                                            | "You should now proceed to run `pnpm build`."                    |
 | **State things positively**             | "Wait until the assertion is confirmed."                                       | "Do not continue before the assertion is no longer unconfirmed." |
 | **Give concrete numbers**               | "The challenge period is 6.4 days."                                            | "The challenge period takes a while."                            |
 | **Reserve must, should, and can**       | must = required, should = recommended, can = optional                          | "should" for a step the reader has no choice about               |

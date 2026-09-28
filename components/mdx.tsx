@@ -19,6 +19,7 @@ import {
   TroubleshootingReport,
 } from '@/components/widgets/Troubleshooting';
 import { VendingMachine } from '@/components/widgets/VendingMachine';
+import { cn } from '@/lib/cn';
 
 export function getMDXComponents(components?: MDXComponents) {
   const merged = {
@@ -29,8 +30,11 @@ export function getMDXComponents(components?: MDXComponents) {
     EdgeChallengeFlow,
     FlowChart,
     ImageZoom,
-    // Markdown images arrive with `src` as the static import remark-image resolved.
-    img: (props: ComponentProps<'img'>) => <ImageZoom {...(props as ImageZoomProps)} />,
+    // Markdown images arrive with `src`, `width` and `height` that remark-image measured from
+    // `public/`. `rounded-lg` matches the Fumadocs default `img` this mapping replaces.
+    img: (props: ComponentProps<'img'>) => (
+      <ImageZoom {...(props as ImageZoomProps)} className={cn('rounded-lg', props.className)} />
+    ),
     ReferenceList,
     Tab,
     Tabs,
@@ -52,7 +56,7 @@ export function getMDXComponents(components?: MDXComponents) {
     // Next's <Link> prefetches every same-origin href in the viewport, so a PDF under `public/`
     // renders as a plain anchor to keep the browser from downloading it ahead of a click.
     a: (props: ComponentProps<'a'>) =>
-      props.href?.startsWith('/') && /\.pdf$/i.test(props.href) ? (
+      props.href?.startsWith('/') && /\.pdf$/i.test(props.href.split(/[?#]/)[0]) ? (
         <a {...props} />
       ) : (
         <Link {...props} />

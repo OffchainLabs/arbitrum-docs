@@ -62,12 +62,6 @@
   text-align: center;
 }
 
-.ecf-loading {
-  padding: 40px;
-  text-align: center;
-  color: var(--ecf-muted);
-}
-
 /* ── Controls ──────────────────────────────────────────────── */
 
 .ecf-controls {
