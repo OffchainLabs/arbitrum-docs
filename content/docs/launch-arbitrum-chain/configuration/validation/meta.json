@@ -1,9 +1,10 @@
 {
-  "title": "Validation and security",
+  "title": "Validation",
   "pages": [
-    "customizable-challenge-period",
+    "../sequencer/batch-posting-assertion-control",
+    "../sequencer/bold-adoption-for-arbitrum-chains",
     "stake-and-validator-configurations",
-    "arbitrum-chain-finality",
+    "customizable-challenge-period",
     "fast-withdrawals",
     "test-chain-configuration",
     "..."

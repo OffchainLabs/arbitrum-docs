@@ -1,13 +1,14 @@
 {
-  "title": "How-tos",
+  "title": "Guides",
   "pages": [
-    "optimizing-binaries",
-    "trait-based-composition",
-    "verifying-contracts-arbiscan",
-    "exporting-abi",
-    "caching-contracts",
-    "deploying-non-rust-wasm-contracts",
     "using-constructors",
-    "importing-interfaces"
+    "trait-based-composition",
+    "importing-interfaces",
+    "exporting-abi",
+    "optimizing-binaries",
+    "caching-contracts",
+    "verifying-contracts-arbiscan",
+    "deploying-non-rust-wasm-contracts",
+    "..."
   ]
 }

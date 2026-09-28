@@ -2,12 +2,15 @@
   "title": "How Arbitrum works",
   "icon": "Cog",
   "description": "The protocols and mechanisms behind Arbitrum Nitro.",
+  "root": true,
   "pages": [
     "index",
     "inside-arbitrum-nitro",
+    "external:[Nitro whitepaper](/nitro-whitepaper.pdf)",
     "deep-dives",
     "reference",
     "bold",
+    "timeboost",
     "priority-gas-auction",
     "..."
   ]
