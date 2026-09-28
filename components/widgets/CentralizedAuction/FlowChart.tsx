@@ -3,8 +3,7 @@ import type { SVGProps } from 'react';
 import { AuctionStepMarker } from './AuctionStepMarker';
 
 /**
- * The Timeboost centralized auction diagram, transcribed from the Docusaurus
- * `InteractiveDiagrams/Timeboost/CentralizedAuction/index.jsx`.
+ * The Timeboost centralized auction diagram.
  *
  * This is brand artwork exported from a design tool, so its colours stay as authored (the
  * `linear-gradient` and the `.cls-*` rules in `<defs>` are self-contained) rather than being mapped

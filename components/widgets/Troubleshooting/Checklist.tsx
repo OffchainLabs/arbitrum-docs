@@ -8,8 +8,7 @@ import { registerChecklistLabel, toggleChecklistItem, useTroubleshooting } from 
 
 /**
  * The Step 1 checklist. Ticking an item highlights it and feeds its state into the generated
- * troubleshooting report, matching the Docusaurus original (which scraped `.task input` and the
- * sibling `label` text out of the DOM at report time).
+ * troubleshooting report.
  */
 
 export function TroubleshootingChecklist({ children }: { children: ReactNode }) {

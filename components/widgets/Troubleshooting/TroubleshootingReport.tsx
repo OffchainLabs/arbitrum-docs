@@ -16,8 +16,8 @@ import {
 /**
  * Step 3: build a plain-text troubleshooting report from the page state.
  *
- * The report text intentionally keeps the Docusaurus format (same headings, same `---------`
- * separators, same ✓/✗ marks) so support channels see exactly what they saw before.
+ * Support channels read this format (headings, `---------` separators, ✓/✗ marks), so keep it
+ * stable.
  */
 
 const PLACEHOLDER = 'Complete the checklist above before generating...';

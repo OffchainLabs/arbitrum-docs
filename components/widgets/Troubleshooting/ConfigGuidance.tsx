@@ -7,10 +7,8 @@ import { useTroubleshooting } from './store';
 /**
  * "Review the docs" guidance, resolved from the current Node type + Network selection.
  *
- * The Docusaurus original nested two tab groups here and kept them in step with the selector at the
- * top of the page through Docusaurus' `groupId` tab syncing. Fumadocs 16 has no `groupId`, and
- * duplicating the tabs would let the two controls disagree, so the guidance reads the shared
- * selection directly — one source of truth, and the reader only picks a configuration once.
+ * The guidance reads the shared selection from the store, so the reader picks a configuration once
+ * at the top of the page and every dependent block follows it.
  */
 
 interface Guidance {
@@ -32,8 +30,6 @@ const FULL_NODE_BY_NETWORK: Record<string, Guidance> = {
     href: '/docs/run-a-node/run-full-node',
     title: 'How to run a full node (Nitro)',
   },
-  // The legacy page pointed at /run-arbitrum-node/run-local-dev-node, which has no equivalent in
-  // this site; the ported page is run-nitro-dev-node.
   'localhost': {
     href: '/docs/run-a-node/run-nitro-dev-node',
     title: 'How to run a local Nitro dev node',

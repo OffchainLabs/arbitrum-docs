@@ -3,14 +3,8 @@
 import { useSyncExternalStore } from 'react';
 
 /**
- * Shared state for the node troubleshooting page (ported from the Docusaurus
- * MultiDimensionalContentWidget + GenerateTroubleshootingReportWidget).
- *
- * The original pair of widgets communicated through the DOM: one read which tab carried
- * Docusaurus' `--active` class and stashed the answer in `data-selected-*` attributes, the other
- * read those attributes back when generating the report. That needed `setTimeout` to race the
- * renderer. Here the selection is just state, so the config selector, the per-config guidance, the
- * checklist, and the report generator all read the same snapshot with no DOM coupling.
+ * Shared state for the node troubleshooting page. The config selector, the per-config guidance,
+ * the checklist, and the report generator all read the same snapshot.
  *
  * A module-level store (rather than context) keeps MDX authoring simple: components can be dropped
  * anywhere on the page without wrapping the whole document in a provider.

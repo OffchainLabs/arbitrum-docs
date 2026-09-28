@@ -49,16 +49,15 @@ function errorMessage(error: unknown) {
 }
 
 /**
- * The quickstart's "free cupcakes" demo, ported from the Docusaurus `VendingMachine` component.
+ * The quickstart's "free cupcakes" demo.
  *
  * The page renders it three times: once as `web2` (state lives in this browser tab) and twice as
  * web3 (state lives in a `VendingMachine.sol` the reader deploys themselves, on a local chain and
- * then on Arbitrum Sepolia). That contrast is the entire point of the page, so both modes and the
- * reader-supplied contract address are preserved exactly as upstream had them.
+ * then on Arbitrum Sepolia). That contrast is the entire point of the page.
  *
- * Upstream used ethers v6; this uses viem over the injected EIP-1193 provider, which keeps reads
- * and writes on whatever network the reader picked in their wallet. No chain or contract address is
- * hardcoded, because readers deploy their own instance from Remix.
+ * It uses viem over the injected EIP-1193 provider, which keeps reads and writes on whatever
+ * network the reader picked in their wallet. No chain or contract address is hardcoded, because
+ * readers deploy their own instance from Remix.
  */
 export function VendingMachine({ id, type = 'web2' }: { id?: string; type?: VendingMachineMode }) {
   // Membership test rather than `type !== 'web2'`: MDX call sites are not type-checked, and a

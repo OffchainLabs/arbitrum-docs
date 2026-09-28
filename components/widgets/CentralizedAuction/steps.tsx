@@ -10,25 +10,22 @@ export interface AuctionStep {
   /** The call or payload the step is about. */
   code: { lang: string; value: string };
   /**
-   * Deeper explanation, when upstream linked one. Upstream pointed at `docs.arbitrum.io`; this repo
-   * replaces that host and carries the same page, so these are site-relative.
+   * Site-relative link to a deeper explanation, when the step has one.
    *
-   * Nothing checks them automatically: `check-links` walks `content/docs/**` `.md(x)` only, and it
-   * does not validate anchors even there. Both targets were confirmed by hand against the headings
-   * in `content/docs/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx`. Re-check them if that
-   * page's headings are reworded.
+   * Nothing checks these automatically: `check-links` walks `content/docs/**` only. Both point at
+   * headings in `content/docs/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx`, so re-check
+   * them if that page's headings are reworded.
    */
   readMore?: string;
 }
 
 /**
- * Content of the five auction steps, transcribed from the Docusaurus
- * `modal-centralized-auction-step-N.mdx` files.
+ * Content of the five auction steps.
  *
  * They are plain data rather than MDX modules: the text is a fixed part of this widget, not page
  * content a writer edits, and keeping it here means the diagram needs no MDX plumbing of its own.
- * Steps 2 to 4 are the ones the diagram makes clickable, matching upstream; 1 and 5 are numbered
- * markers whose story the surrounding page tells.
+ * Steps 2 to 4 are the ones the diagram makes clickable. 1 and 5 are numbered markers whose story
+ * the surrounding page tells.
  */
 export const AUCTION_STEPS: Record<number, AuctionStep> = {
   1: {

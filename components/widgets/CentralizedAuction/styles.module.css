@@ -1,9 +1,8 @@
 /*
  * Markers and step dialog for the Timeboost auction diagram.
  *
- * Replaces the upstream `_modal.scss` and `_number-component.scss` partials. Dialog surfaces read
- * Fumadocs tokens; the marker sits on top of fixed brand artwork, so its orange keeps the artwork's
- * palette rather than following the theme.
+ * Dialog surfaces read Fumadocs tokens. The marker sits on top of fixed brand artwork, so its
+ * orange keeps the artwork's palette rather than following the theme.
  */
 .markerCircle {
   fill: #ff7f2a;
@@ -14,7 +13,7 @@
   fill: #fff;
 }
 
-/* Pulsing halo that marks a step as openable, the CSS equivalent of the upstream spring loop. */
+/* Pulsing halo that marks a step as openable. */
 .markerRing {
   fill: none;
   stroke: #fff;
