@@ -1,32 +1,29 @@
 /**
- * move-doc — move a doc file and rewrite everything that points at it.
+ * move-doc: move a doc file and rewrite everything that points at it.
  *
  * Usage:
  *   pnpm move-doc <from> <to> [--dry-run]
  *
  * In one command this:
- *   1. rewrites every internal link in the tree that resolves to <from> so it points at <to>,
- *      preserving each link's written form (absolute URL, `.mdx` file link, relative link, `<include>`,
- *      with any `#anchor`/`?query`);
- *   2. moves the file (via `git mv`), recomputing the file's *own* relative links so they stay valid;
- *   3. updates the doc's entry in the surrounding `meta.json` navigation;
- *   4. records the old→new URL in `redirects.config.ts`;
- *   5. retargets every existing entry in `redirects.config.ts` whose destination was the old URL
- *      (a legacy docs.arbitrum.io entry, or an earlier move's), so no redirect chains through the
- *      one just written (`pnpm redirects:check` follows one hop only and would report a chain
- *      DEAD), and deletes any entry whose source is the new URL, which an earlier move away from
- *      that URL would have left behind to shadow the page now living there.
+ *   1. rewrites every internal link that resolves to <from> so it points at <to>, preserving each
+ *      link's written form (absolute URL, `.mdx` file link, relative link, `<include>`, with any
+ *      `#anchor`/`?query`);
+ *   2. moves the file with `git mv`, re-basing the file's own relative links;
+ *   3. updates the doc's entry in the surrounding `meta.json`;
+ *   4. appends the old-to-new URL to `redirects.config.ts` between the AUTO-GENERATED markers.
  *
- * One hand-written registry is still on the mover: `VERSIONED` in `lib/versions-constants.ts`
- * (keyed by canonical slug). `scripts/versions-routing.test.ts` fails on a dead key, so forgetting
- * is loud, but retarget it by hand.
+ * Existing redirects are left as written. If one pointed at the old URL it now chains, and
+ * `pnpm test` (`scripts/lib/redirects-config.test.ts`) fails on it until it is retargeted by hand.
+ * `VERSIONED` in `lib/versions-constants.ts` is also retargeted by hand; `pnpm test` fails on a dead
+ * key there too.
  *
- * `--dry-run` prints every change without touching the filesystem. Paths are repo-relative files under
- * `content/docs/` (not site URLs). After a real run, verify with `pnpm check-links`.
+ * Paths are repo-relative files under `content/docs/`, not site URLs. `--dry-run` prints every
+ * change without touching the filesystem. After a real run, verify with `pnpm check-links`.
  */
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { format, resolveConfig } from 'prettier';
 
 import {
   CONTENT_DIR,
@@ -49,12 +46,9 @@ import {
   stringifyMeta,
   toPosix,
 } from './lib/doc-links.ts';
-import {
-  REDIRECTS_CONFIG_PATH,
-  REDIRECTS_END,
-  REDIRECTS_START,
-  retargetRedirects,
-} from './lib/redirects-config.ts';
+
+const REDIRECTS_CONFIG_PATH = 'redirects.config.ts';
+const REDIRECTS_END = '// AUTO-GENERATED REDIRECTS END';
 
 /** One link occurrence, with the file that holds it and the file it resolves to. */
 interface LinkRecord {
@@ -84,7 +78,7 @@ function validatePath(label: string, raw: string, abs: string, docsRoot: string)
   if (raw.startsWith('/')) {
     console.error(
       `move-doc: <${label}> starts with '/': ${raw}\n` +
-        `  Pass a repo-relative file path under ${CONTENT_DIR}/, not a site URL — e.g. '${raw.replace(/^\/+/, '')}'.`,
+        `  Pass a repo-relative file path under ${CONTENT_DIR}/, not a site URL, e.g. '${raw.replace(/^\/+/, '')}'.`,
     );
     process.exit(1);
   }
@@ -205,7 +199,7 @@ function moveFile(fromAbs: string, toAbs: string, repoRoot: string): boolean {
 /**
  * Update the surrounding `meta.json` `pages` ordering for a move. Same-directory rename replaces the
  * basename token; cross-directory move removes it from the source dir and appends it to the dest dir
- * (only when the dest lists explicit pages without a `...` rest-glob). Never corrupts — returns
+ * (only when the dest lists explicit pages without a `...` rest-glob). Never corrupts; returns
  * human-readable notes for anything it declines to touch.
  */
 function updateMeta(fromAbs: string, toAbs: string, dryRun: boolean): string[] {
@@ -216,7 +210,7 @@ function updateMeta(fromAbs: string, toAbs: string, dryRun: boolean): string[] {
   const toDir = path.dirname(toAbs);
 
   if (/^index$/i.test(oldBase) || /^index$/i.test(newBase)) {
-    notes.push('index page move — update meta.json navigation manually (folder-level entry).');
+    notes.push('index page move: update meta.json navigation manually (folder-level entry).');
     return notes;
   }
 
@@ -255,11 +249,11 @@ function updateMeta(fromAbs: string, toAbs: string, dryRun: boolean): string[] {
   const dstPages = dstMeta && pagesOf(dstMeta);
   if (!dstMeta || !dstPages) {
     notes.push(
-      `meta.json: dest dir has no explicit pages list — '${newBase}' auto-included by file order (verify ordering).`,
+      `meta.json: dest dir has no explicit pages list; '${newBase}' auto-included by file order (verify ordering).`,
     );
   } else if (pagesHasRest(dstPages)) {
     notes.push(
-      `meta.json: dest dir uses '...' rest-glob — '${newBase}' auto-included (verify ordering).`,
+      `meta.json: dest dir uses '...' rest-glob; '${newBase}' auto-included (verify ordering).`,
     );
   } else if (dstPages.includes(newBase)) {
     notes.push(`meta.json: '${newBase}' already listed in dest dir`);
@@ -281,39 +275,20 @@ function pagesOf(meta: MetaFile): unknown[] | null {
   return Array.isArray(data.pages) ? data.pages : null;
 }
 
-function redirectsTemplate(): string {
-  return `// Single source of truth for internal doc redirects. Consumed by next.config.ts.
-// Entries between the AUTO-GENERATED markers are maintained by \`pnpm move-doc\`.
-export const redirects: { source: string; destination: string; permanent: boolean }[] = [
-  ${REDIRECTS_START}
-  ${REDIRECTS_END}
-];
-`;
-}
-
-/** Append one redirect to redirects.config.ts (creating it if absent). Idempotent on `source`. */
-//
-// `source` and `destination` are `null` for a partial, which has no URL. Both are null together for
-// a partial-to-partial move, which never reaches here; a move between a partial and a page name
-// writes the literal `null`, exactly as the JavaScript original did.
-function appendRedirect(
+/** Append one redirect before the AUTO-GENERATED END marker and format the file with Prettier. */
+async function appendRedirect(
   redirectsPath: string,
-  source: string | null,
-  destination: string | null,
-  dryRun: boolean,
-): 'exists' | 'appended' | 'created' {
-  const existed = existsSync(redirectsPath);
-  const current = existed ? readFileSync(redirectsPath, 'utf8') : redirectsTemplate();
-  if (current.includes(`source: '${source}'`)) return 'exists';
+  source: string,
+  destination: string,
+): Promise<void> {
+  const current = readFileSync(redirectsPath, 'utf8');
   if (!current.includes(REDIRECTS_END)) {
-    throw new Error(
-      `move-doc: ${path.basename(redirectsPath)} is missing the ${REDIRECTS_END} sentinel`,
-    );
+    throw new Error(`move-doc: ${REDIRECTS_CONFIG_PATH} is missing the ${REDIRECTS_END} marker`);
   }
   const entry = `  { source: '${source}', destination: '${destination}', permanent: true },\n  ${REDIRECTS_END}`;
   const next = current.replace(`  ${REDIRECTS_END}`, entry);
-  if (!dryRun) writeFileSync(redirectsPath, next);
-  return existed ? 'appended' : 'created';
+  const config = await resolveConfig(redirectsPath);
+  writeFileSync(redirectsPath, await format(next, { ...config, filepath: redirectsPath }));
 }
 
 /** The set of relative links inside partials that can't be auto-resolved (a partial has no fixed URL). */
@@ -352,6 +327,11 @@ async function main(): Promise<void> {
 
   const fromMeta = computeFileMeta(docsRoot, fromAbs);
   const toMeta = computeFileMeta(docsRoot, toAbs);
+  // A partial has no URL, so moving one needs no redirect.
+  const redirect =
+    fromMeta.url && toMeta.url && fromMeta.url !== toMeta.url
+      ? { source: fromMeta.url, destination: toMeta.url }
+      : null;
   const records = scanLinks(index);
   const { editsByFile, changes, unrenderable } = planMove(records, index, fromAbs, toAbs);
 
@@ -396,14 +376,11 @@ async function main(): Promise<void> {
     }
     const metaNotes = updateMeta(fromAbs, toAbs, true);
     for (const n of metaNotes) console.log(`  ${n}`);
-    if (fromMeta.url !== toMeta.url) {
+    if (redirect) {
       console.log(
-        `  redirect: { source: '${fromMeta.url}', destination: '${toMeta.url}', permanent: true }`,
+        `  redirect: { source: '${redirect.source}', destination: '${redirect.destination}', permanent: true }`,
       );
     }
-    // Reported last, mirroring the order a real run applies the steps in.
-    for (const n of await retargetRedirects(repoRoot, fromMeta.url, toMeta.url, true))
-      console.log(`  ${n}`);
     console.log('\n[dry-run] no files were changed.');
     return;
   }
@@ -419,24 +396,20 @@ async function main(): Promise<void> {
   const staged = moveFile(fromAbs, toAbs, repoRoot);
   writeFileSync(toAbs, movedContent);
   if (!staged)
-    console.warn('  note: moved without git (untracked source or no work tree) — move is unstaged');
+    console.warn('  note: moved without git (untracked source or no work tree); move is unstaged');
 
   for (const n of updateMeta(fromAbs, toAbs, false)) console.log(`  ${n}`);
 
-  // Redirect for the moved URL.
-  const redirectsPath = path.join(repoRoot, REDIRECTS_CONFIG_PATH);
-  if (fromMeta.url !== toMeta.url) {
+  if (redirect) {
+    await appendRedirect(
+      path.join(repoRoot, REDIRECTS_CONFIG_PATH),
+      redirect.source,
+      redirect.destination,
+    );
     console.log(
-      `  ${REDIRECTS_CONFIG_PATH}: ${appendRedirect(redirectsPath, fromMeta.url, toMeta.url, false)} ${fromMeta.url} -> ${toMeta.url}`,
+      `  ${REDIRECTS_CONFIG_PATH}: appended ${redirect.source} -> ${redirect.destination}`,
     );
   }
-
-  // Every entry that pointed at the old URL now points at the new one, and nothing redirects away
-  // from the new URL. Last only so the notes print in the order the steps happened; the entry just
-  // appended has the new URL as its destination and the old as its source, so neither rewrite can
-  // touch it whichever order they run in.
-  for (const n of await retargetRedirects(repoRoot, fromMeta.url, toMeta.url, false))
-    console.log(`  ${n}`);
 
   console.log('\nDone. Verify with `pnpm check-links`.');
 }

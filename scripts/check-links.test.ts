@@ -73,7 +73,7 @@ test('a root-absolute path with no matching file does not resolve', () => {
 test('a relative path never resolves to public/', () => {
   const root = fixture();
   // Relative links resolve against the page's own URL inside the docs route tree, not against the
-  // static root — so `audit-reports/report.pdf` written on /docs/audit-reports is a genuine 404 and
+  // static root, so `audit-reports/report.pdf` written on /docs/audit-reports is a genuine 404 and
   // must keep being reported.
   assert.equal(resolvesToPublicAsset('audit-reports/report.pdf', root), false);
   assert.equal(resolvesToPublicAsset('./audit-reports/report.pdf', root), false);
