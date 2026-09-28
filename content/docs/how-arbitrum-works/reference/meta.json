@@ -1,4 +1,11 @@
 {
   "title": "Reference",
-  "pages": ["geth", "arbos-reference", "stf-inputs", "finality-and-reorgs", "..."]
+  "pages": [
+    "../deep-dives/sequencer",
+    "geth",
+    "finality-and-reorgs",
+    "stf-inputs",
+    "arbos-reference",
+    "..."
+  ]
 }

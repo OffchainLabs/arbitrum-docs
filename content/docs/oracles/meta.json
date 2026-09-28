@@ -3,15 +3,13 @@
   "icon": "Radio",
   "description": "Integrate oracle price feeds and VRF into your Arbitrum apps.",
   "pages": [
-    "index",
-    "overview-oracles",
-    "api3",
-    "chainlink",
-    "chronicle",
-    "DIA",
-    "ora",
-    "supra",
-    "trellor",
+    "...api3",
+    "...chainlink",
+    "...chronicle",
+    "...DIA",
+    "...ora",
+    "...supra",
+    "...trellor",
     "..."
   ]
 }

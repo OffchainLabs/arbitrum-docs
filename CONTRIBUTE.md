@@ -53,67 +53,52 @@ landing page they reach today.
 
 ### Place your page in the sidebar
 
-**Two files decide where a page appears, and you may need only one of them.**
+**A page's directory is its place in the sidebar, and that directory's `meta.json` orders it.**
+Nothing else decides the sidebar.
 
-`meta.json` in each content directory lists what that directory holds and in what order. Add your
-new page's basename to its `pages` array. The array also supports `...` rest-globs,
-`---Separator---` headings, `[text](url)` links to other sites, and `!exclude`.
+Each of the nine sections is a top-level directory under `content/docs` whose `meta.json` sets
+`"root": true`. The navbar picks the section, and the sidebar shows the tree of the section folder
+the current page sits in. A subdirectory is a collapsible group in that tree, titled by the
+`title` in its own `meta.json`. A subdirectory's `index.mdx` is what opens when a reader clicks the
+group's name.
 
-`lib/docs-navigation.json` decides the sidebar a reader sees: the nine sections, the groups inside
-them, the order, and the label on each entry. To give your page a place in a section's main menu,
-add an entry to that section's `children`:
-
-```json
-{ "name": "Run a full node in Docker", "page": "/docs/run-a-node/nitro/docker-and-cli-binaries" }
-```
-
-Use `page` for a page the section owns. Use `href` for a link to a page another section owns, which
-renders as a normal sidebar link and leaves the destination's own sidebar alone. Never write a
-second `page` entry for a URL the manifest already claims, in your section or in any other:
-`pnpm nav:check` fails on it. Two claims are easy to miss because they are not written in
-`children`. Every section already shows its own landing page, so a `page` entry for
-`/docs/<section id>` is one node too many, in that section or in any other; use `href` there, as Get
-started does. And a `folder` entry pulls in every page under it, so a `page` entry naming one of
-those is too. `buildDocsNavigation` throws on either,
-which fails `pnpm dev`, `pnpm build` and `pnpm test`.
-
-**Landing pages.** A folder's `index.mdx` that no entry claims goes to Additional guides like any
-other page. Twenty-nine do today and they stay there by design; the reasoning is in
-[INTERNALS](INTERNALS.md#pages-the-manifest-never-lists). To put one in the reading order, give its
-group a `page` of its own:
+To add a page, put the `.mdx` file in the directory where it belongs and add its basename to the
+`pages` array of that directory's `meta.json`, in the position you want:
 
 ```json
 {
-  "name": "Chain configuration",
-  "page": "/docs/launch-arbitrum-chain/configuration",
-  "children": []
+  "title": "Sequencer",
+  "pages": ["run-sequencer-node", "read-sequencer-feed", "your-new-page", "..."]
 }
 ```
 
-**If you do nothing, your page still reaches the sidebar.** A page the manifest never lists is
-appended to its section under **Additional guides**, keeping the label from its `sidebar_label`, or
-its `title` if it has none. That is a reasonable home for a reference page. Add an entry when the
-page belongs in the reading order.
+`"..."` lists every page and folder the array does not name yet, pages before folders, each sorted
+by file name. Most directories end with it, so a page you forget to list still appears, at the end
+of its group.
 
-**A new top-level section needs one thing**: its directory name in some section's
-`sourceFolders` array in `lib/docs-navigation.json`. Miss it and your pages render above the
-sections with no sidebar of their own; `pnpm nav:check` fails and names the directory. Do not add
-`"root": true` to its `meta.json`, and do not copy one from an older directory: the sidebar
-transformer decides which folders are roots, and no `meta.json` under `content/docs` carries that
-flag any more.
+The `pages` array also accepts these entries:
 
-**A new loose page at the top of `content/docs`** (beside `chain-info.mdx` and the other three)
-needs a `"../your-page"` entry in `content/docs/resources/meta.json`, which is the directory those
-four belong to. Without it the page renders above the sections too, and `pnpm nav:check` names it.
+- **A subdirectory name**, such as `"sequencer"`, places that whole group.
+- **A path into another directory**, such as `"../oracles/overview-oracles"`, shows that page
+  here without moving it or changing its URL. List each page in exactly one `meta.json`. When two
+  files list the same page, the one Fumadocs reads first silently wins.
+- **`"...nitro"`** lists the pages of the `nitro` subdirectory directly, without a group.
+- **`"external:[Label](https://example.com)"`** adds a link to another site.
+- **`"---Heading---"`** adds a heading between entries.
 
-**Do not add a `[Title](/docs/…)` entry pointing at a page in this repo.** A link entry becomes a
-real node in the content tree, so it overwrites that page's sidebar label and can drag the page into
-your section. `pnpm nav:check` fails on it. Reference the page as `"../name"` from the one directory
-that should hold it, or link to it with an `href` entry in the manifest.
+The sidebar name is the page's `sidebar_label`, or its `title` when it has none.
 
-Run `pnpm nav:check` after touching either file, and open the page at `http://localhost:3000` to see
-where it landed. [The sidebar and its roots](INTERNALS.md#the-sidebar-and-its-roots) in INTERNALS
-covers the rest of the manifest.
+Never write a `[Label](/docs/...)` link entry for a page in this repository. It puts the page in
+the tree a second time, and the reader lands in whichever section Fumadocs finds first. Use a path
+entry instead. Links to other sections are not needed at all, because the navbar lists every section
+and the sidebar footer pins Chain info, Glossary and Contribute under every section.
+
+A new top-level directory needs `"root": true` in its `meta.json` and an entry in
+`content/docs/meta.json`. A new page at the top of `content/docs`, beside `chain-info.mdx`, needs a
+`"../your-page"` entry in the `meta.json` of the section that should show it.
+
+`pnpm test` fails when a page is on no sidebar node, is on two, or sits outside every section. Open
+the page at `http://localhost:3000` to see where it landed.
 
 ## Reuse a partial before you write new prose
 

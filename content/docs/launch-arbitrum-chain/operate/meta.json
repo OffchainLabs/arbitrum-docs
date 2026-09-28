@@ -1,19 +1,19 @@
 {
-  "title": "Operate your chain",
+  "title": "Operate",
   "pages": [
     "arbos-upgrade",
-    "upgrade-runbook",
+    "bp-recovery",
+    "../configuration/sequencer/batch-poster-troubleshooting",
     "bold-upgrade-playbook",
+    "error-index",
+    "key-rotation",
     "monitoring-tools-and-considerations",
     "ownership-access-control",
-    "key-rotation",
-    "gas-target",
-    "state-growth",
     "post-launch-contract-deployments",
-    "bp-recovery",
     "sequencer-troubleshooting",
+    "state-growth",
+    "upgrade-runbook",
     "validator-troubleshooting",
-    "error-index",
     "..."
   ]
 }

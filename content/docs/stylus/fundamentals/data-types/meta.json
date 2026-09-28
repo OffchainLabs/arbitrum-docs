@@ -1,4 +1,10 @@
 {
   "title": "Data types",
-  "pages": ["conversions-between-types", "primitives", "compound-types", "storage"]
+  "pages": [
+    "primitives",
+    "compound-types",
+    "storage",
+    "conversions-between-types",
+    "..."
+  ]
 }

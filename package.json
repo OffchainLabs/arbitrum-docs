@@ -16,7 +16,6 @@
     "inventory-links": "node scripts/inventory-links.ts",
     "move-doc": "node scripts/move-doc.ts",
     "check-links": "node scripts/check-links.ts",
-    "nav:check": "node scripts/nav-check.ts",
     "restructure": "node scripts/restructure.ts",
     "partials:catalog": "node scripts/generate-partials-catalog.ts",
     "partials:check": "node scripts/partials-check.ts",

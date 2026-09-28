@@ -1,11 +1,12 @@
 {
-  "title": "Deploy an Arbitrum chain",
+  "title": "Deployment",
   "pages": [
+    "canonical-factory-contracts",
+    "custom-genesis-state",
+    "../arbitrum-chain-sdk-preparing-node-config",
     "deploying-an-arbitrum-chain",
     "deploying-token-bridge",
     "token-bridge-troubleshooting",
-    "canonical-factory-contracts",
-    "custom-genesis-state",
     "..."
   ]
 }
