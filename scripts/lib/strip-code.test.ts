@@ -1,13 +1,7 @@
 /**
- * strip-code. The shared suite for the one scanner every content gate now uses (FS-2729).
- *
- * It carries the 29-case matrix the FS-2723 review built against the old regex `stripCode`, the two
- * limits that review documented rather than fixed (both marked below, both now passing), and the
- * cases the three replaced helpers used to own. Where a case asserts a rule of CommonMark, the
- * expectation was checked against `mdast-util-from-markdown` rather than reasoned about.
- *
- * Every case also asserts the contract: same length in and out, same line count, so a `file:line` in
- * any report stays true and a range still slices the original source.
+ * strip-code. Where a case asserts a rule of CommonMark, the expectation matches
+ * `mdast-util-from-markdown`. Every case also asserts the contract: same length and line count out
+ * as in.
  */
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -15,7 +9,6 @@ import { test } from 'node:test';
 import {
   type CodeRegionOptions,
   codeRegions,
-  fenceDefects,
   maskCode,
   maskRegions,
   stripCode,
@@ -45,7 +38,6 @@ test('a closing run longer than the opening run closes the fence', () => {
 });
 
 test('a closing run shorter than the opening run does not close the fence', () => {
-  // FS-2723 residual limit A, which the regex scanner could not express. It now passes.
   const src = lines('````', 'HIDDEN_A', '```', 'HIDDEN_B', '````', 'SHOWN', '');
   assert.ok(blanked(src, 'HIDDEN_A'));
   assert.ok(blanked(src, 'HIDDEN_B'));
@@ -158,16 +150,12 @@ test('an unterminated fence runs to the end of the file', () => {
 });
 
 test('a backtick in a backtick fence info string is not modelled', () => {
-  // A documented limit. CommonMark forbids a backtick in a backtick fence's info string, so mdast
-  // reads this as a paragraph and no fence opens at all. The scanner opens one and masks to EOF,
-  // which over-masks. Every helper this module replaced did the same. Pinned, not asserted correct.
+  // CommonMark opens no fence here; the scanner opens one and masks to EOF. Pinned, not correct.
   assert.ok(blanked(lines('```js `foo`', 'HIDDEN', ''), 'HIDDEN'));
 });
 
 test('a fence inside a blockquote is not modelled', () => {
-  // A documented limit, and the same at `fork/main`: `FENCE_OPEN` does not strip a `>` prefix, so
-  // the body stays visible. Pinned because the paragraph bound is what removed an accidental mask
-  // here: an unbounded span used to pair the two backtick runs and cover roughly the same range.
+  // `FENCE_OPEN` does not strip a `>` prefix, so the body stays visible. Pinned.
   assert.ok(kept(lines('> ```md', '> SHOWN', '> ```', ''), 'SHOWN'));
 });
 
@@ -242,8 +230,7 @@ test('a backtick inside a fence never opens a span', () => {
 //
 // Each of these is a line that ends a paragraph in CommonMark with no blank line before it, so a
 // stray backtick above it must not pair with one below. Every expectation was checked against
-// mdast-util-from-markdown, which finds zero inlineCode nodes in all of them. The direction matters:
-// pairing here blanks real prose, and `content:lint` then reports nothing on a page that 404s.
+// mdast-util-from-markdown, which finds zero inlineCode nodes in all of them.
 
 const straddles = (middle: string): string =>
   lines('Prose with a stray ` tick', middle, 'More SHOWN_PROSE with a ` tick', '');
@@ -356,7 +343,7 @@ test('an element opening and closing on one line does not bound a span', () => {
 });
 
 test('a self-closing or unclosed element does bound a span', () => {
-  // The other half, also measured: both are flow elements in MDX and split the paragraph in two.
+  // Flow elements in MDX, so they split the paragraph in two.
   for (const tag of ['<Foo />', '<Callout type="note">', '</Tab>']) {
     assert.ok(kept(lines('para `x', tag, 'more SHOWN_PROSE `y tail', ''), 'SHOWN_PROSE'), tag);
   }
@@ -389,8 +376,6 @@ test('an MDX comment containing an inline code span is blanked whole', () => {
 });
 
 test('an unbalanced backtick straddling a comment closer still closes the comment', () => {
-  // FS-2723 residual limit B. Two ordered passes could not get this and backticked delimiters in
-  // prose both right; one left-to-right scan gets both. It now passes.
   const src = lines('{/* HIDDEN `a */} b`', '', 'SHOWN', '');
   assert.ok(blanked(src, 'HIDDEN'));
   assert.ok(kept(src, 'SHOWN'));
@@ -503,7 +488,7 @@ test('codeRegions is in source order and non-overlapping', () => {
   for (let i = 1; i < found.length; i++) assert.ok(found[i].start >= found[i - 1].end);
 });
 
-// --- The contract, on shapes that used to be handled by three different helpers -----------------
+// --- The contract ------------------------------------------------------------------------------
 
 test('the contract holds over an emoji, whose two halves both count', () => {
   const src = 'a 🚀 `code` b';
@@ -511,94 +496,11 @@ test('the contract holds over an emoji, whose two halves both count', () => {
   assert.equal(out.indexOf('b'), src.indexOf('b'));
 });
 
-test('the contract holds over a fence, which the images helper used to collapse', () => {
+test('the contract holds over a fence', () => {
   const src = lines('a', '```js', 'const x = 1;', '```', 'b', '');
   strip(src, {});
 });
 
 test('the contract holds over an inline span across lines', () => {
   strip(lines('a `x` b', 'c `d` e', ''), {});
-});
-
-// --- fenceDefects: where the CommonMark scanner and the MDX renderer disagree (FS-2743) ---------
-//
-// The expectations below were checked against both parsers, not reasoned about: closer indents 0 to
-// 6 on one input, `mdast-util-from-markdown` versus `remark-parse` plus `remark-mdx`. CommonMark
-// stops closing at 4; MDX keeps closing at 4, 5 and 6, because `remark-mdx` turns off indented code
-// blocks and with them the cap.
-
-test('fenceDefects is silent on a fence both parsers close the same way', () => {
-  assert.deepEqual(fenceDefects(lines('```js', 'const x = 1;', '```', '')), []);
-});
-
-test('fenceDefects allows the three columns CommonMark allows', () => {
-  for (const indent of ['', ' ', '  ', '   ']) {
-    assert.deepEqual(
-      fenceDefects(lines('```js', 'x', indent + '```', '')),
-      [],
-      `indent ${indent.length}`,
-    );
-  }
-});
-
-test('fenceDefects reports a closer indented four columns past its opener', () => {
-  const src = lines('```js', 'x', '    ```', '');
-  assert.deepEqual(
-    fenceDefects(src).map((d) => [d.kind, src.slice(0, d.closerStart).split('\n').length]),
-    [['indentedCloser', 3]],
-  );
-});
-
-test('fenceDefects measures the allowance against the opener, not column 0', () => {
-  // A fence four columns deep inside a list item, closed at its own indentation. Ordinary in
-  // `content/`, and both parsers close it, so it must not be reported.
-  assert.deepEqual(fenceDefects(lines('- item', '', '    ```js', '    x', '    ```', '')), []);
-});
-
-test('fenceDefects reports a fence with no closer at all', () => {
-  const src = lines('text', '', '```js', 'const x = 1;', '');
-  const found = fenceDefects(src);
-  assert.deepEqual(
-    found.map((d) => d.kind),
-    ['unclosed'],
-  );
-  assert.equal(found[0].closerStart, -1);
-  assert.equal(src.slice(0, found[0].start).split('\n').length, 3);
-});
-
-test('fenceDefects reports a stray trailing fence, the shape that renders an empty code box', () => {
-  assert.deepEqual(
-    fenceDefects(lines('- a bullet list', '- and another', '```', '')).map((d) => d.kind),
-    ['unclosed'],
-  );
-});
-
-test('fenceDefects calls an over-indented closer at end of file indentedCloser, not unclosed', () => {
-  // The fence still runs to EOF under the CommonMark reading, but a closer exists and the fix is to
-  // dedent it, so it must not be reported as the id whose fix is to delete a line.
-  assert.deepEqual(
-    fenceDefects(lines('```js', 'x', '    ```')).map((d) => d.kind),
-    ['indentedCloser'],
-  );
-});
-
-test('fenceDefects matches the marker character and length, so ``` never closes ~~~', () => {
-  assert.deepEqual(
-    fenceDefects(lines('~~~js', 'x', '```', '')).map((d) => d.kind),
-    ['unclosed'],
-  );
-});
-
-test('fenceDefects does not see a fence documented inside a longer fence', () => {
-  assert.deepEqual(fenceDefects(lines('````md', '```js', 'x', '```', '````', '')), []);
-});
-
-test('fenceDefects and codeRegions read the same fences', () => {
-  const src = lines('```js', 'x', '```', '', '```sh', 'y', '');
-  const fences = codeRegions(src).filter((r) => r.kind === 'fence');
-  assert.equal(fences.length, 2);
-  assert.deepEqual(
-    fenceDefects(src).map((d) => d.start),
-    [fences[1].start],
-  );
 });

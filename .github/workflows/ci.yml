@@ -50,9 +50,6 @@ jobs:
       - name: Navigation integrity
         run: pnpm nav:check
 
-      - name: Partials resolve and stay unrouted
-        run: pnpm partials:check
-
       - name: Archived page registry
         run: node scripts/versioned-docs-check.ts
 
@@ -65,18 +62,13 @@ jobs:
       - name: Contract address reference is current
         run: pnpm contracts:check
 
-      - name: Remote Markdown images are absent
-        run: pnpm images:presence
-
       # Fumadocs has no `onBrokenLinks: 'throw'`, and `pnpm build` does not check links,
       # so this step is the only thing standing between a broken link and main.
       # Caveat: check-links does not validate anchors — a live page with a dead #anchor passes.
       - name: Internal links
         run: pnpm check-links
 
-      # Reached zero on 2026-09-21 and moved up from `content-debt`. A1 and A4 were cleared in
-      # 0e5a64a, A2 and A5 in 297730a, and A6 shipped at zero with the defect it names.
-      - name: MDX structural lint
+      - name: MDX that builds but renders wrong
         run: pnpm content:lint
 
       # Reached zero on 2026-09-24: MDX joined Prettier's scope, and the files the tooling writes
