@@ -40,11 +40,11 @@ Customizing the <Term id="arbos">ArbOS</Term> version involves modifying the Nit
 - **New state variable**: Add `myNumber` initialized in `UpgradeArbosVersion` switch for v21: `ensure(state.SetNewMyNumber(randomNumber))`.
 - **STF Logic change**: Branch in a method: `if p.state.ArbOSVersion() >= 32 { return "hi, new version" } else { return "hi" }`.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 It is important to understand that this is part of customizing the behavior of your chain. You can read more about this on the [Choose Custom Behavior](/docs/launch-arbitrum-chain/features/advanced/choose-custom-behavior) page.
 
-</VanillaAdmonition>
+</Callout>
 ## How to configure
 
 1. **Clone and modify Nitro**: Use a branch like v3.7.2 (`git clone --branch v3.7.2 https://github.com/OffchainLabs/nitro.git`). Edit files (e.g., precompile.go, arbosstate.go) for changes, adding version gates.

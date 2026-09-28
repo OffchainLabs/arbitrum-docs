@@ -19,11 +19,11 @@ The metric names in this page are the internal Nitro metric paths (for example, 
 
 The [Arbitrum chain verification script](https://github.com/OffchainLabs/arbitrum-chain-sdk/tree/feat-add-verification-scripts/examples/verify-rollup) retrieves information from an Arbitrum chain and its <Term id="parent-chain">parent chain</Term> to verify that all parameters are configured correctly. After gathering the data, it generates a comprehensive report and issues warnings for any discrepancies detected. This tool is particularly useful after deploying and configuring an Arbitrum chain, to make sure that the onchain information has been correctly set.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 The Arbitrum chain verification script is currently under active development and is considered a work-in-progress (WIP). Consequently, its findings should be approached with caution, as there is a potential for false positives.
 
-</VanillaAdmonition>
+</Callout>
 
 ## The `arbitrum-monitoring` alerting suite
 
@@ -84,11 +84,11 @@ The sequencer accepts <Term id="transaction">transactions</Term>, orders them, a
 | `arb/feed/backlog/messages` | Nitro metric (nodes with feed output enabled — the sequencer or a relay) | Messages retained by the broadcast server until it sees them covered by batches on the parent chain. Growth means batches aren't landing — not that a follower is lagging. | Sustained growth                             |
 | `eth_syncing` fields        | RPC (any node)                                                           | While a node is syncing, `eth_syncing` returns fields such as `batchSeen`, `batchProcessed`, `msgCount`, and `blockNum`. See caveats below.                                | `batchSeen` − `batchProcessed` keeps growing |
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 `eth_syncing` returns `false` once a node is fully synced, so it is useful for tracking a node that is catching up, not for steady-state health. Its out-of-sync output is **not a stable API** and can change between Nitro versions, so do not build production alerting on the exact field shape. For a fully synced node, use the metrics above and an RPC liveness check (an `eth_chainId` call returning HTTP 200) instead. See [`eth_syncing`](/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods#eth_syncing) for the full field reference.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Batch poster
 
@@ -101,11 +101,11 @@ The batch poster (the "batcher") posts sequenced transactions to the <Term id="s
 | `arb/inbox/latest/batch`                  | Nitro metric (any node)         | The latest batch number the node has seen in the `SequencerInbox`. Stalls if batches stop landing.                                | No increase while the chain has activity       |
 | `SequencerBatchDelivered` event           | Parent chain (`SequencerInbox`) | Emitted each time a batch is delivered onchain. The onchain <Term id="confirmation">confirmation</Term> that batches are landing. | No event within your expected posting interval |
 
-<VanillaAdmonition type="tip">
+<Callout type="idea">
 
 Monitor the batch poster account balance directly through `arb/batchposter/wallet/eth` (and the validator balance through `arb/staker/balance`, below) rather than estimating monthly spend from configs and gas multipliers. Direct balance monitoring reflects real usage; config-based estimation drifts from reality as parent-chain fees move. There is no automatic mechanism to refund these accounts, so keep them overfunded and alert well before they run dry.
 
-</VanillaAdmonition>
+</Callout>
 
 If batches stop being posted, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting) for common causes and tuning flags.
 
@@ -113,11 +113,11 @@ If batches stop being posted, see [Batch poster troubleshooting](/docs/launch-ar
 
 Validators post and confirm <Term id="assertion">assertions</Term> (historically called "RBlocks" or "nodes") of the chain's state to the Rollup contract on the parent chain. The metrics differ depending on whether your chain runs the legacy staker or the BoLD staker.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 If you are relying on `arb/staker/action/last_success` and seeing it go stale for long periods even while assertions are being created, this is expected on two counts. First, that gauge updates each time the staker successfully acts — during periods when the staker has no action to take, it stays flat even though the validator is healthy and polling. Second, it is a **legacy-staker** metric; on BoLD chains, assertion activity is tracked by the `arb/validator/poster/*` and `arb/validator/scanner/*` metrics instead. Prefer the assertion-progress and failure signals below over `last_success` as your primary health check, and corroborate with the onchain assertion events.
 
-</VanillaAdmonition>
+</Callout>
 
 | Signal                                                          | Source                         | What it means                                                                                                  | Suggested alert                          |
 | --------------------------------------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
@@ -131,13 +131,13 @@ If you are relying on `arb/staker/action/last_success` and seeing it go stale fo
 | `arb/validator/validations/failed`                              | Nitro metric (any validator)   | Counter of failed block validations.                                                                           | Any sustained increase                   |
 | `NodeCreated` or `AssertionCreated` events                      | Parent chain (Rollup contract) | The onchain confirmation that assertions are being created. Watch alongside the metrics above.                 | No event over an extended period         |
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 **Long periods of inactivity can disable the validator allowlist.** If the latest confirmed assertion (or its first child, once one exists) is older than `validatorAfkBlocks` parent-chain blocks, the Rollup contract's validator allowlist can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). `validatorAfkBlocks` is configured per chain — read it from your Rollup contract; a value of `0` disables this mechanism entirely. Alert on assertion inactivity well before this window elapses. For example, on Arbitrum One `validatorAfkBlocks` is set to `201600` (~28 days of parent-chain blocks).
 
 Note that this applies regardless of `disableValidatorWhitelist`. Setting `disableValidatorWhitelist` to `false` keeps your chain permissioned in normal operation but does not protect the allowlist from this escape hatch. To learn how the two parameters interact, and why any deliberate validator pause counts toward this window, see [BoLD adoption for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains), which recommends keeping validation permissioned.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Chain fees and load
 

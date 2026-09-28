@@ -12,11 +12,11 @@ Configuring the <Term id="delayed-inbox">Delayed Inbox</Term> finality refers to
 
 By default, finality for these transactions relies on Layer-1 (<Term id="layer-1-l1">L1</Term>) Ethereum block confirmations (typically tens of minutes). Configuration allows shifting to faster <Term id="layer-2-l2">L2</Term>-based finality or reducing <Term id="confirmation">confirmation</Term> waits, trading speed for potential re-org risks. This reduction is an advanced sequencer-level setting, not a deployment-time parameter, and is primarily used to optimize bridging speed for use cases like high-frequency DeFi or gaming.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 It's worth noting that this page is based on a well-behaved sequencer, not one that is censoring.
 
-</VanillaAdmonition>
+</Callout>
 ## Key concepts
 
 - **Delayed Inbox**: A contract on the <Term id="parent-chain">parent chain</Term> where users can submit transactions (e.g., retryable tickets for token bridges or direct calls) to be force-included on the child chain if the sequencer delays them. These are held until the sequencer releases them based on parent chain progress.
@@ -30,11 +30,11 @@ It's worth noting that this page is based on a well-behaved sequencer, not one t
 
 This configuration sets up the sequencer to release Delayed Inbox messages earlier, prioritizing speed over maximum security. For instance, in a default setup, a deposit from Ethereum to an L3 (via L2 settlement) waits for L1 to finalize the L2's batch posting. Enabling L2-only finality skips this, releasing after L2 confirmations (e.g., when a DACert posts on Nova). Further reducing the finalize-distance minimizes L2 waits, allowing near-instant execution but exposing the chain to parent re-orgs if unconfirmed blocks revert. It's ideal for low-latency apps but requires monitoring for re-org events.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 This affects only incoming (parent-to-child) Delayed Inbox flows; outgoing (child-to-parent) finality uses separate mechanisms, such as DAC in AnyTrust mode, for ~15-minute confirmations.
 
-</VanillaAdmonition>
+</Callout>
 ### Configuration process:
 
 - **Prepare the sequencer node**: When running your Arbitrum chain's sequencer (e.g., via Docker or local build from Nitro source), add the flags to the startup command. Example for a Dockerized sequencer:

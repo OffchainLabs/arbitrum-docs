@@ -15,23 +15,23 @@ This how-to assumes that you're familiar with the following:
 - [How Timeboost works](/docs/how-arbitrum-works/timeboost/gentle-introduction)
 - [viem](https://viem.sh/), since the snippets of code present in the how-to use this library
 
-<VanillaAdmonition type="note"  title="Note about transferring express lane rights">
+<Callout type="info"  title="Note about transferring express lane rights">
 
 Please note that in the initial release of Timeboost, transferring control of the express lane via either the `setTransferor` or the `transferExpressLaneController` will not be supported by the Arbitrum Nitro node software at launch and may be implemented at a future date via a regular node upgrade. Calls made to these two functions on the auction contract will be successful, but the node software (including the Sequencer) will not recognize the actual rights transfer.
 
 A round's express lane controller, at their choice, can still send transactions signed by others on a per-transaction basis, as explained later in this guide.
 
-</VanillaAdmonition>
+</Callout>
 
 ## How to submit bids for the right to be the express lane controller
 
 To use the express lane for faster transaction inclusion, you must win an auction for the right to be the express lane controller for a specific round.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Remember that, by default, each round lasts 60 seconds, and the auction for a specific round closes 15 seconds before the start of the round. These default values can be configured on a chain using the `roundDurationSeconds` and `auctionClosingSeconds` parameters.
 
-</VanillaAdmonition>
+</Callout>
 
 An auction contract facilitates auctions, and bids get submitted to an autonomous auctioneer that interacts with the contract. Let's examine the process of submitting bids and determining the winner of an auction.
 
@@ -79,11 +79,11 @@ const biddingTokenContractAddress = await publicClient.readContract({
 console.log(`biddingToken: ${biddingTokenContractAddress}`);
 ```
 
-<VanillaAdmonition type="note"  title="Bidding token in Arbitrum chains">
+<Callout type="info"  title="Bidding token in Arbitrum chains">
 
 On Arbitrum One and Arbitrum Nova, the default bidding token is **WETH**.
 
-</VanillaAdmonition>
+</Callout>
 
 Once we know what the bidding token is, we can deposit funds to the auction contract by calling the function `deposit` of the contract after having it approved as spender of the amount we want to deposit:
 
@@ -134,11 +134,11 @@ let currentAuctionRoundIsClosed = await publicClient.readContract({
 });
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Remember that, by default, auctions for a given round open 60 seconds before that round starts and close 15 seconds before the round starts, so there might be no auctions opened at certain times.
 
-</VanillaAdmonition>
+</Callout>
 Once we know the current round, we can bid for (`currentRound + 1`) and verify that the auction is still open (`!currentAuctionRoundIsClosed`), then we can submit a bid.
 
 When bids get submitted to the autonomous auctioneer endpoint, we need to send an `auctioneer_submitBid` request with the following information:
@@ -150,11 +150,11 @@ When bids get submitted to the autonomous auctioneer endpoint, we need to send a
 - the amount in `wei` of the deposit **ERC-20** token to bid
 - signature (explained below)
 
-<VanillaAdmonition type="info"  title="Minimum reserve price">
+<Callout type="info"  title="Minimum reserve price">
 
 The amount to bid must be above the minimum reserve price at the moment you are bidding. This parameter is configurable per chain. You can obtain the minimum reserve price by calling the method `minReservePrice()(uint256)` in the `Auction` contract.
 
-</VanillaAdmonition>
+</Callout>
 
 Let's see an example of a call to this RPC method:
 
@@ -221,11 +221,11 @@ const signature = await account.sign({
 });
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 You can also call the function `getBidHash` in the auction contract to obtain the `signatureData`, specifying the `round`, `userAddress`, and `amountToBid`.
 
-</VanillaAdmonition>
+</Callout>
 
 When sending the request, the autonomous auctioneer will return an empty result with an HTTP status `200` if received correctly. If the result returned contains an error message, something went wrong. Following are some of the error messages that can help us understand what's happening:
 
@@ -288,16 +288,16 @@ The sequencer handles the express lane. When sending transactions to the Sequenc
 - conditional options for Arbitrum transactions ([more information](https://github.com/OffchainLabs/go-ethereum/blob/48de2030c7a6fa8689bc0a0212ebca2a0c73e3ad/arbitrum_types/txoptions.go#L71))
 - signature (explained below)
 
-<VanillaAdmonition type="info" title="Timeboost-ing third party transactions">
+<Callout type="info" title="Timeboost-ing third party transactions">
 
 Notice that while the express lane controller must sign the `timeboost_sendExpressLaneTransaction` request, any party can sign the transaction for execution. In other words, the express lane controller can receive transactions signed by other parties and sign them to apply the time advantage offered by the express lane to those transactions.
 
-</VanillaAdmonition>
-<VanillaAdmonition type="info" title="Support for eth_sendRawTransactionConditional">
+</Callout>
+<Callout type="info" title="Support for eth_sendRawTransactionConditional">
 
 Timeboost doesn't currently support the `eth_sendRawTransactionConditional` method.
 
-</VanillaAdmonition>
+</Callout>
 Let's see an example of a call to this RPC method:
 
 ```tsx
@@ -375,11 +375,11 @@ Note that if you get any of the errors below, then the sequence number used in y
 | `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number
 | `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached. Read more about this on our [Troubleshoot Timeboost page](/docs/how-arbitrum-works/timeboost/troubleshoot-timeboost#the-block-based-timeout-for-express-lane-transactions) |
 
-<VanillaAdmonition type="info" title="What happens if you're not the express lane controller?">
+<Callout type="info" title="What happens if you're not the express lane controller?">
 
 If you are not the express lane controller and you try to submit a transaction to the express lane, the sequencer will respond with the error `NOT_EXPRESS_LANE_CONTROLLER` or `NO_ONCHAIN_CONTROLLER`.
 
-</VanillaAdmonition>
+</Callout>
 {/*
 
 ## How to transfer the right to use the express lane to someone else
@@ -509,21 +509,21 @@ In the current implementation, information about the winning bid for a resolved 
 
 #### Table 4: S3 URLs for historical bid data
 
-<VanillaAdmonition type="info" title="URL updates for historical bid data">
+<Callout type="info" title="URL updates for historical bid data">
 On June 9 2025, at around 17:27 ET (UTC−05:00), the region in which the Amazon S3 bucket for historical bid data on Arbitrum One was _changed_ from `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/` to `s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/`. The below table has been updated for the new, correct URL to access bid data after June 9, 2025 17:27 ET, but if you require data from before June 9, 2025 17:27 ET, then please use `s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/`.
 
-</VanillaAdmonition>
+</Callout>
 | Chain            | S3 bucket URL                                                   |
 | ---------------- | --------------------------------------------------------------- |
 | Arbitrum Sepolia | s3://timeboost-auctioneer-sepolia/ue2/validated-timeboost-bids/ |
 | Arbitrum One     | s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/    |
 | Arbitrum Nova    | s3://timeboost-auctioneer-nova/ue2/validated-timeboost-bids/    |
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Make sure you use `--no-sign-request` with the [AWS S3 CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/).
 
-</VanillaAdmonition>
+</Callout>
 Here is an example query on how to look up and download historical bid data:
 
 ```shell

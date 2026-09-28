@@ -30,11 +30,11 @@ Set confirmation speed and settlement behavior for products where timing and cer
 | Configure deposit finality (<Term id="delayed-inbox">delayed inbox</Term>)                    | You match certainty guarantees to your actual risk profile to avoid paying for stronger finality than your product needs. Adjust the time before the chain processes a deposit.                         | Predictable, well-defined settlement means users know exactly when funds and actions are final—important for anyone moving real value.                                | [Configure chain finality](/docs/launch-arbitrum-chain/configuration/validation/arbitrum-chain-finality)                                                                                                                                    |
 | Enable <Term id="fast-withdrawals">fast withdrawals</Term> to reduce withdrawal finality time | Fewer support tickets and complaints about locked-up capital, and a more competitive bridging story when users compare your chain to alternatives.                                                      | Users get their funds in minutes instead of waiting the full challenge window, dramatically lowering the friction of exiting the chain.                               | [Fast withdrawals](/docs/launch-arbitrum-chain/configuration/validation/fast-withdrawals)                                                                                                                                                   |
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The 100ms figure is an optional lower bound on block time, not the default. Most chains run at the 250ms default; 100ms is available when you opt into it. By default, fast withdrawals is not enabled—the default withdrawal time is 6.4 days.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Transaction pricing model
 
@@ -66,11 +66,11 @@ Create participation rules and data access controls that align with regulated wo
 | Restrict who can read chain data by keeping data off the public <Term id="L1">L1</Term> with an AnyTrust <Term id="data-availability-committee-dac">data availability committee</Term> | You keep sensitive business and user data out of a fully public ledger, satisfying privacy obligations and protecting competitive information.                                                | Greater confidentiality around their activity and data than a fully public chain would offer.                                                             | [Configure data availability](/docs/launch-arbitrum-chain/configuration/data-availability/config-data-availability) |
 | Move to permissionless validation later via <Term id="bold">BoLD</Term> when you are ready to decentralize                                                                             | You can launch with tight control and decentralize on your own timeline — no re-platforming required as your product and risk tolerance mature.                                               | A credible path to stronger trustlessness and censorship resistance over time, rather than being locked into a permissioned model forever.                | [BoLD for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/bold-adoption-for-arbitrum-chains)   |
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 These controls apply at the validator and data-availability layers—who validates the chain and who can read its data. They are not a per-user transaction allowlist; screening which end users may submit transactions is an application-layer concern, not a chain-config setting.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Transaction sequencing
 

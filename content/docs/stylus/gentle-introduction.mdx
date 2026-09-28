@@ -40,11 +40,11 @@ To make your contract callable, it must undergo an [activation process](/docs/st
 
 Stylus measures computational costs using ink instead of gas. Ink works like gas but is thousands of times smaller. WASM executes faster than the EVM, so a single EVM operation takes as long as thousands of WASM operations. A finer-grained unit makes pricing more precise.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/docs/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/docs/arbitrum-essentials/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable. The 365-day expiry and a minimum age of about 31 days before a contract can be kept alive are both configurable chain parameters; these are the current defaults.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Execution
 
@@ -71,13 +71,13 @@ Stylus can integrate into existing Solidity projects by calling a Stylus contrac
 
 Stylus's gas advantage is concentrated in **computation**. Storage operations cost roughly the same as in the EVM, so storage-heavy contracts gain little by porting.
 
-<VanillaAdmonition type="info" title="Quick rule of thumb">
+<Callout type="info" title="Quick rule of thumb">
 
 - **Use Stylus** for compute-heavy logic: cryptography, math-heavy DeFi, ZK verification, in-memory algorithms, ports of existing Rust/C/C++ libraries.
 - **Stick with Solidity** when the contract mostly reads and writes storage with little computation in between — you won't see a meaningful gas reduction.
 - **Hybrid approach**: keep your storage layout in Solidity and call out to a Stylus contract for the compute-heavy hot paths.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Getting started
 

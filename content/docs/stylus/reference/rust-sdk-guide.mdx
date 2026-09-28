@@ -8,11 +8,11 @@ sme: rachel-bousfield, jose-franco, mehdi-salehi
 
 This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](/docs/stylus/gentle-introduction). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](/docs/stylus/quickstart).
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 Many of the affordances use macros. Though this section details what each does, it may be helpful to use [`cargo expand`](https://crates.io/crates/cargo-expand) to see what they expand into if you’re doing advanced work in Rust.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Storage
 
@@ -82,17 +82,17 @@ The above will expand to the equivalent definitions in Rust, each structure impl
 
 Because the layout is identical to [Solidity’s](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html), existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
-<VanillaAdmonition type="warning" title="Storage layout in contracts using inheritance">
+<Callout type="warn" title="Storage layout in contracts using inheritance">
 
 One exception to this storage layout guarantee is contracts which utilize inheritance. The current solution in Stylus using `#[borrow]` and `#[inherits(...)]` packs nested (inherited) structs into their own slots. This is consistent with regular struct nesting in solidity, but not inherited structs. We plan to revisit this behavior in an upcoming release.
 
-</VanillaAdmonition>
+</Callout>
 
-<VanillaAdmonition type="tip">
+<Callout type="idea">
 
 Existing Solidity smart contracts can upgrade to Rust if they use proxy patterns.
 
-</VanillaAdmonition>
+</Callout>
 
 Consequently, the order of fields will affect the JSON ABIs produced that explorers and tooling might use. Most developers won’t need to worry about this though and can freely order their types when working on a Rust contract from scratch.
 
@@ -128,11 +128,11 @@ impl Contract {
 
 In Solidity, one has to be very careful about storage access patterns. Getting or setting the same value twice doubles costs, leading developers to avoid storage access at all costs. By contrast, the Stylus SDK employs an optimal storage-caching policy that avoids the underlying [`SLOAD`](https://www.evm.codes/#54) or [`SSTORE`](https://www.evm.codes/#55) operations.
 
-<VanillaAdmonition type="tip">
+<Callout type="idea">
 
 Stylus uses storage caching, so multiple accesses of the same variable is virtually free.
 
-</VanillaAdmonition>
+</Callout>
 
 However it must be said that storage is ultimately more expensive than memory. So if a value doesn’t need to be stored in state, you probably shouldn’t do it.
 
@@ -266,11 +266,11 @@ The above will make the public methods of `Contract` the first to consider durin
 
 If a contract calls another that then calls the first, it is said to be reentrant. Stylus contracts are reentrancy-safe by default: the high-level call functions ([`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html), [`static_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html), and [`delegate_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html)) automatically flush or clear the storage cache before invoking another contract, so cached values can't go stale across reentry. This happens through the type system and requires no configuration.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 The `reentrant` Cargo feature flag and the `deny_reentrant` entrypoint guard are deprecated as of SDK 0.10.5 and should not be used. Reentrancy safety now comes from automatic storage-cache flushing, which makes the guard redundant.
 
-</VanillaAdmonition>
+</Callout>
 
 Automatic cache flushing protects your storage, but it is only part of defending against exploits. Continue to follow the checks-effects-interactions pattern—update your own state before calling untrusted contracts—and review reentrant code carefully, ideally with third-party auditors. You can detect whether the current call is reentrant via `self.vm().msg_reentrant()` and condition your business logic accordingly.
 
@@ -305,11 +305,11 @@ Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint
 
 Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the **ERC-20**, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Stylus does not currently contain explicit `override` or `virtual` keywords for explicitly marking override functions. It is important, therefore, to carefully ensure that contracts are only overriding the functions.
 
-</VanillaAdmonition>
+</Callout>
 
 Inheritance can also be chained. `#[inherit(Erc20, Erc721)]` will inherit both `Erc20` and `Erc721`, checking for methods in that order. `Erc20` and `Erc721` may also inherit other types themselves. Method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
 
@@ -365,11 +365,11 @@ Both methods can be annotated with `#[payable]` to accept **ETH** along with the
 
 Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus#exporting-solidity-abis).
 
-<VanillaAdmonition type="tip">
+<Callout type="idea">
 
 You can call contracts in any programming language with the Stylus SDK.
 
-</VanillaAdmonition>
+</Callout>
 
 ### `sol_interface!`
 
@@ -390,11 +390,11 @@ sol_interface! {
 
 The above will define `IService` and `ITree` for calling the methods of the two contracts.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 Currently only functions are supported, and any other items in the interface will cause an error.
 
-</VanillaAdmonition>
+</Callout>
 
 For example, `IService` will have a `make_payment` method that accepts an [`Address`](https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Address.html) and returns a [`B256`](https://docs.rs/alloy-primitives/latest/alloy_primitives/aliases/type.B256.html).
 
@@ -500,11 +500,11 @@ The host (`self.vm()`) is the first argument, followed by the call context, the 
 
 [`transfer_eth`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.transfer_eth.html) provides a convenient shorthand for transferring ether.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 This method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) function may be used instead.
 
-</VanillaAdmonition>
+</Callout>
 
 ```rust
 // these two are equivalent
@@ -530,20 +530,20 @@ let data = unsafe {
 
 Pass the host (`self.vm()`) to the constructor: use [`RawCall::new(self.vm())`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.new) for a regular call or [`RawCall::new_delegate(self.vm())`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.new_delegate) for a delegate call.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call) method is always `unsafe`. Unlike the high-level [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) functions, `RawCall` does not flush the storage cache for you, so use [`flush_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache) and [`clear_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.clear_storage_cache) when reentry could observe stale state.
 
-</VanillaAdmonition>
+</Callout>
 
 ## `RawDeploy` and `unsafe` deployments
 
 Right now the only way to deploy a contract from inside Rust is to use [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html), similar to [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html). As with [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html), this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the [`StorageCache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html).
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 That the EVM allows init code to make calls to other contracts, which provides a vector for reentrancy. This means that this technique may enable storage aliasing if used in the middle of a storage reference's lifetime and if reentrancy is allowed.
 
-</VanillaAdmonition>
+</Callout>
 
 When configured with a `salt`, [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html) will use [`CREATE2`](https://www.evm.codes/#f5) instead of the default [`CREATE`](https://www.evm.codes/#f0), facilitating address determinism.

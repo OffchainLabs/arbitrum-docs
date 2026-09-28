@@ -53,12 +53,12 @@ Every document should be a specific _type_ of document, set in its frontmatter a
 
 `content_type` must be exactly one of the seven frontmatter values above, spelled in lowercase, or the build fails. See [Document type conventions]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/CONTRIBUTE.md#document-type-conventions) in CONTRIBUTE.md for more on what each type owes the reader.
 
-<VanillaAdmonition type="info" title="About Promotional Content">
+<Callout type="info" title="About Promotional Content">
 
 While it is acceptable to include conceptual and how-to content that links to products, services, and protocols in the third party section, we do not accept promotional content in our core docs.
 Feature pieces that are primarily promotional and do not provide actionable guidance to readers are not accepted as third-party docs, either.
 
-</VanillaAdmonition>
+</Callout>
 ### Style conventions
 
 The following style guidelines provide a number of loose recommendations that help us deliver **a consistent content experience** across our docs:
@@ -119,7 +119,7 @@ Some important disclaimers:
 
 ### Banner conventions
 
-Use banners to set expectations for your readers or emphasize an important callout, but use them conservatively, since they interrupt the flow of the document. This site renders a banner with the `<VanillaAdmonition>` component; the same callout-syntax rule appears in [STYLE-GUIDE.md]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/STYLE-GUIDE.md#what-is-not-here). Docusaurus `:::` directives do not render here and fail the `content:lint` A3 gate, so never write one. The `type` prop is one of `note`, `tip`, `info`, `warning`, or `danger`; pick the type that matches the message, not the page's subject. `title` is optional and defaults to the capitalized type name (`note` becomes "Note", and so on).
+Use banners to set expectations for your readers or emphasize an important callout, but use them conservatively, since they interrupt the flow of the document. This site renders a banner with the `<Callout>` component; the same callout-syntax rule appears in [STYLE-GUIDE.md]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/STYLE-GUIDE.md#what-is-not-here). Docusaurus `:::` directives do not render here and fail the `content:lint` A3 gate, so never write one. The `type` prop is one of `info` (the default), `idea`, `warn`, `error`, or `success`; pick the type that matches the message, not the page's subject. `title` is optional; without it the callout shows no heading, and its icon and color carry the type.
 
 **Before writing a new banner, search [`content/partials/CATALOG.md`]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/content/partials/CATALOG.md) for one that already says what you need**, and reuse it instead of duplicating the prose. Every catalog entry ends with the directive to paste into your page:
 
@@ -133,24 +133,24 @@ Two banners come up often enough to be worth naming directly.
 
 #### Under construction banner
 
-Use `type="warning"` when a page's steps are incomplete or likely to change soon, so readers know to expect gaps.
+Use `type="warn"` when a page's steps are incomplete or likely to change soon, so readers know to expect gaps.
 
 Example:
 
-<VanillaAdmonition type="warning" title="UNDER CONSTRUCTION">
+<Callout type="warn" title="UNDER CONSTRUCTION">
 
 The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an update** at the top of this document if you have any feedback along the way.
 
-</VanillaAdmonition>
+</Callout>
 
 Usage:
 
 ```mdx
-<VanillaAdmonition type="warning" title="UNDER CONSTRUCTION">
+<Callout type="warn" title="UNDER CONSTRUCTION">
 
 The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an update** at the top of this document if you have any feedback along the way.
 
-</VanillaAdmonition>
+</Callout>
 ```
 
 #### Community member contribution banner
@@ -159,20 +159,20 @@ Use `type="info"` at the top of a third-party or community-submitted document to
 
 Example:
 
-<VanillaAdmonition type="info" title="Community member contribution">
+<Callout type="info" title="Community member contribution">
 
 Shoutout to [@handle](https://github.com/handle) for contributing the following [third-party document](/docs/third-party-docs/contribute)!
 
-</VanillaAdmonition>
+</Callout>
 
 Usage:
 
 ```mdx
-<VanillaAdmonition type="info" title="Community member contribution">
+<Callout type="info" title="Community member contribution">
 
 Shoutout to [@handle](https://github.com/handle) for contributing the following [third-party document](/docs/third-party-docs/contribute)!
 
-</VanillaAdmonition>
+</Callout>
 ```
 
 ### Frequently asked questions

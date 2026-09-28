@@ -696,7 +696,7 @@ html > body[data-scroll-locked] {
    `components/mdx.tsx` registry, so its `./reference-list.css` import put these two rules on a
    render-blocking chunk shared by all 349 docs pages, to style a list that one of them renders
    (`content/docs/glossary.mdx`). Folding it was what finally deleted that chunk: with both plain
-   `.css` imports gone, the CSS modules left behind (`VanillaAdmonition`, `ImageZoom`, `PdfModal`)
+   `.css` imports gone, the CSS modules left behind (`ImageZoom`, `PdfModal`)
    merged into the chunk that already carried the image-zoom vendor CSS, and `/docs/stylus` went
    from four render-blocking stylesheets to three. Total CSS bytes are unchanged; what went is the
    round trip. The class names are component-scoped, so nothing outside `ReferenceList` matches. */

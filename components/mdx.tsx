@@ -13,7 +13,6 @@ import { Reference } from '@/components/mdx/Reference';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
 import { Popup, PopupContent, PopupTrigger } from '@/components/mdx/Twoslash';
-import { VanillaAdmonition } from '@/components/mdx/VanillaAdmonition';
 import { Var } from '@/components/mdx/Var';
 import { FlowChart } from '@/components/widgets/CentralizedAuction';
 import { EdgeChallengeFlow } from '@/components/widgets/EdgeChallengeFlow';
@@ -101,7 +100,6 @@ export function getMDXComponents(components?: MDXComponents) {
     TroubleshootingChecklist,
     TroubleshootingConfig,
     TroubleshootingReport,
-    VanillaAdmonition,
     Var,
     VendingMachine,
     ...components,

@@ -86,11 +86,11 @@ The Sequencer runs a tight loop that drains its queues and groups transactions i
 
 Once the Sequencer has a finalized ordering, it calls the ExecutionEngine, which in turn invokes ArbOS to produce the block.
 
-<VanillaAdmonition type="note" title="Handoff: execution belongs to ArbOS and the STF">
+<Callout type="info" title="Handoff: execution belongs to ArbOS and the STF">
 
 Everything from this point of execution—iterating the ordered transactions, applying pre- and post-execution filters, running each transaction against chain state, metering child- and parent-chain gas, and computing the resulting state—is the job of the [State Transition Function](/docs/how-arbitrum-works/deep-dives/stf) and [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos). The Sequencer supplies the ordered input and receives a produced block in return; it does not decide execution outcomes.
 
-</VanillaAdmonition>
+</Callout>
 
 #### 4. Persistence and broadcast
 
@@ -189,11 +189,11 @@ The Sequencer uses two primary methods to send batches to the parent chain, depe
   - **Cost evaluation**: the Sequencer dynamically assesses whether using calldata is more cost-effective than blobs based on current gas prices and blob fees.
   - **Compatibility**: if the parent chain does not support EIP-4844, this method is the default and only option for batch posting.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The Sequencer continuously monitors network conditions to select the most cost-effective batch posting method, ensuring optimal operation under varying conditions.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Authority and finality
 

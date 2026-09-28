@@ -33,11 +33,11 @@ const tx = await inbox.depositEth(destinationAddress, {
 await tx.wait();
 ```
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Depositing **ETH** directly via `depositEth` to a contract on a child chain **will not** invoke that contract's fallback function. If you need to trigger a fallback function, use retryable tickets instead.
 
-</VanillaAdmonition>
+</Callout>
 ### How **ETH** deposits work
 
 When you deposit **ETH**, the funds are held in the Arbitrum Bridge contract on the parent chain. The bridge then credits the deposited amount to your address on the child chain:

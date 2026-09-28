@@ -83,10 +83,10 @@ Add the following to your Sequencer's node configuration file:
 
 ### Step 2: Enable priority fee collection
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Complete Step 1 before you start Step 2. Tip collection alone does not change transaction ordering; the Sequencer must also run the PGA logic configured above.
 
-</VanillaAdmonition>
+</Callout>
 
 Verify that your chain runs ArbOS 61 or newer. If your chain has a toggler contract for tip collection, use it. Otherwise, make an `ArbOwner` precompile call to `setCollectTips`.

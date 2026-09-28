@@ -38,7 +38,7 @@ const DA_TOOLS: GuideLink = {
 };
 
 /**
- * The guides the page's intro admonition sends the reader to, in order.
+ * The guides the page's intro callout sends the reader to, in order.
  *
  * Not derived from `namespaceLinks` below: this list deliberately includes the DA tools
  * reference, which explains a body of flags without being any single namespace's guide, and

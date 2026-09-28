@@ -78,13 +78,13 @@ install Docker from your distribution's package manager and start the Docker ser
 
 Once you have Docker installed, you can simply run `docker build . --tag custom-nitro-node` in the `nitro` folder to build your custom node.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 A chain running a customized State Transition Function will produce blocks that don't match the verified Nitro WASM module root on the parent chain. Coordinate with Offchain Labs before operating a customized STF against a production chain, as the validator configuration required is not covered in this guide.
 
 For local testing before the matching WASM module root is set, run a node with staking disabled (`--node.staker.enable=false`). Do not use `--node.staker.dangerous.without-block-validator` to operate a validator without block validation.
 
-</VanillaAdmonition>
+</Callout>
 
 You have two ways of running your local node.
 
@@ -110,11 +110,11 @@ This method will only run the customized Nitro node (i.e., it will not run Block
 docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:8449:8449 custom-nitro-node --conf.file /home/user/.arbitrum/nodeConfig.json
 ```
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 The instructions provided in [How to run a full node](/docs/run-a-node/run-full-node) **will not** work with your Arbitrum chain node. See [Optional parameters (Arbitrum chain)](/docs/run-a-node/run-full-node#optional-parameters) for Arbitrum chain-specific CLI flags.
 
-</VanillaAdmonition>
+</Callout>
 Once your node is running, you can try out your modifications to the State Transition Function and confirm they work as expected.
 
 ### Step 4. Enable fraud proofs

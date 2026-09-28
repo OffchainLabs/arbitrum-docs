@@ -106,7 +106,7 @@ export function groupByNamespace(
 }
 
 /**
- * The generated region: the intro admonition, the usage examples, and one collapsible table per
+ * The generated region: the intro callout, the usage examples, and one collapsible table per
  * namespace. `flags` arrive already filtered and sorted.
  */
 export function renderGeneratedRegion(
@@ -117,7 +117,7 @@ export function renderGeneratedRegion(
   const lines: string[] = [];
   const intro = introLinks.map((link) => `- [${link.label}](${link.href})`).join('\n');
 
-  lines.push(`<VanillaAdmonition type="info" title="Auto-generated reference">
+  lines.push(`<Callout type="info" title="Auto-generated reference">
 
 This page lists every CLI flag accepted by the Nitro node binary. For explanations, examples, and recommended configurations, see the curated guides:
 
@@ -125,7 +125,7 @@ ${intro}
 
 **Total flags:** ${flags.length} across ${groups.length} namespaces, read from Nitro \`${nitroVersionTag}\`.
 
-</VanillaAdmonition>
+</Callout>
 
 Pass flags on the command line with \`--\` prefix:
 

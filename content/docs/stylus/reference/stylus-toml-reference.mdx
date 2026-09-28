@@ -93,11 +93,11 @@ crate-type = ["lib", "cdylib"]
 - `lib` enables standard Rust imports and testing.
 - `cdylib` produces the WebAssembly binary that gets deployed onchain.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Removing `cdylib` from `crate-type` prevents the contract from compiling to WASM. Removing `lib` prevents running tests and exporting ABI.
 
-</VanillaAdmonition>
+</Callout>
 
 ### `[dependencies]`
 
@@ -170,11 +170,11 @@ opt-level = 3
 | `panic`         | `abort` | Use immediate abort on panic instead of unwinding (smaller binary).                                                                                           |
 | `opt-level`     | `3`     | Optimize for speed. Use `"s"` or `"z"` to optimize for binary size instead. See [Optimizing binaries](/docs/stylus/how-tos/optimizing-binaries) for guidance. |
 
-<VanillaAdmonition type="tip">
+<Callout type="idea">
 
 If your contract exceeds the 24KB compressed size limit, change `opt-level` to `"z"` for maximum size reduction. This typically produces smaller binaries at the cost of some runtime performance.
 
-</VanillaAdmonition>
+</Callout>
 
 ## `rust-toolchain.toml`
 
@@ -191,11 +191,11 @@ targets = ["wasm32-unknown-unknown"]
 | `channel` | Rust compiler version. Used by block explorers for deterministic source verification.                           |
 | `targets` | Must include `wasm32-unknown-unknown` for Stylus contracts. Additional targets can be listed for local testing. |
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Changing the Rust version may affect source code verification on block explorers like Arbiscan. Pin to a specific stable version rather than using `stable` or `nightly`.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Complete examples
 
