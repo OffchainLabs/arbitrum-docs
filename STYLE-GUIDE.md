@@ -2,7 +2,7 @@
 
 The house prose rules for the Arbitrum documentation portal, for anyone writing or reviewing a
 page. [CONTRIBUTE.md](CONTRIBUTE.md) holds the workflow: frontmatter, partials, variables, moving
-pages, the gates, opening a PR. This file holds the prose. The six-item summary under
+pages, the gates, opening a PR. This file holds the prose. The seven-item summary under
 [Style conventions](CONTRIBUTE.md#style-conventions) in that file is the short version; everything
 below is the long one, and the two do not disagree.
 
@@ -115,12 +115,10 @@ Four rules:
 - **Add the entry rather than skipping the link** when a term deserves one and has none. A new file
   under `content/glossary/` needs only `id` and `title` in its frontmatter, plus the definition as
   its body.
-- **Never inside a partial.** `content/partials/` is off limits for `<Term>` and `<Reference>`, and
+- **Never inside a partial.** `content/partials/` is off limits for `<Term>`, and
   `pnpm references:check` rule R3 fails on one. Put the link in the page that includes the partial.
 
-`<Reference collection="glossary" id="…">` is the general form and `<Term>` is the shorthand for the
-glossary collection. Use `<Term>` in pages. `<ReferenceList>` renders a whole collection and belongs
-only on the glossary index page.
+`<ReferenceList>` renders the whole glossary and belongs only on the glossary index page.
 
 ## Terminology
 
@@ -145,11 +143,10 @@ One spelling, one capitalization, across the whole site.
 
 **The Sequencer Coordination Manager row is unsettled, so do not act on it yet.** The Correct column
 records upstream's wording verbatim, `(SQM)` included, which is upstream's initialism and not an
-abbreviation of either expansion. Measured over `content/docs`, this repo's own pages say
-"Coordinator Manager" 18 times (15 capitalized, 3 lowercase) against "Coordination Manager" 3
-times, one page is filed at `run-sequencer-coordination-manager.mdx` while its own title says
-Coordinator, and Nitro's flag family is `node.seq-coordinator.*`. Naming the tool is the docs
-owner's call and was requested in FS-2708, so leave both spellings alone until it lands.
+abbreviation of either expansion. This repo's pages mostly say "Coordinator Manager", one page is
+filed at `run-sequencer-coordination-manager.mdx` while its own title says Coordinator, and Nitro's
+flag family is `node.seq-coordinator.*`. Naming the tool is the docs owner's call and is still open,
+so leave both spellings alone until it is decided.
 
 ## What is not here
 
@@ -157,12 +154,11 @@ owner's call and was requested in FS-2708, so leave both spellings alone until i
   `troubleshooting` or `faq` a page is, and what each one owes the reader, is in
   [CONTRIBUTE.md](CONTRIBUTE.md#document-type-conventions). The enum itself is enforced by the
   frontmatter schema in `source.config.ts`.
-- **Callout syntax.** Use `<VanillaAdmonition type="…">`. Docusaurus `:::` directives do not render
-  here, and `pnpm content:lint` rule A3 is a blocking gate that fails on one.
+- **Callout syntax.** Use `<Callout type="…">`, with `type` set to `info`, `warn`, `error`, `idea`
+  or `success`. Docusaurus `:::` directives do not render here, and `pnpm content:lint` rule
+  `docusaurus-directive` is a blocking gate that fails on one.
 - **Diagrams.** Prefer SVG for scalable, editable diagrams; use PNG when SVG is unsuitable. Concept
   diagrams follow the `arbitrum-brand-svg-diagrams` skill under `.claude/skills/`, which covers the
   palette, asset location, and an Excalidraw editing workflow.
 
-This file replaces the Offchain Labs pattern guide that lived in the Docusaurus repo
-(`OffchainLabs/arbitrum-docs`, `docs/Offchain-pattern-guide.md`). That repo is being archived, so
-this is the live copy.
+This file is the live copy of the Offchain Labs pattern guide.

@@ -6,14 +6,14 @@ Serves English MDX docs; deployed on Vercel.
 
 This file covers **how to work on the docs.** For how the codebase works and why, see
 [INTERNALS.md](INTERNALS.md). Contributing a page or a PR? Start with
-[CONTRIBUTE.md](CONTRIBUTE.md) instead — it covers the frontmatter contract, partials, variables,
+[CONTRIBUTE.md](CONTRIBUTE.md) instead. It covers the frontmatter contract, partials, variables,
 moving pages, and the gates to run before you push. For the prose itself, the house editorial
 standard is [STYLE-GUIDE.md](STYLE-GUIDE.md): plain-language rules, words and phrases to replace or
 cut, the terminology table, and the glossary-linking convention.
 
 New to Fumadocs, or arriving from the old Docusaurus site? Start with
 [What Fumadocs is](INTERNALS.md#what-fumadocs-is) and
-[Coming from Docusaurus](INTERNALS.md#coming-from-docusaurus) — they take about five minutes and
+[Coming from Docusaurus](INTERNALS.md#coming-from-docusaurus). They take about five minutes and
 cover the differences that cause the most mistakes.
 
 ## Setup
@@ -25,7 +25,7 @@ pnpm dev          # http://localhost:3000
 
 Node 22 (`>=22.18 <23`) · pnpm 10. Other Node majors are rejected by `engines`.
 
-**Browse on `localhost:3000`, not `127.0.0.1`** — on `127.0.0.1` React does not hydrate and every
+**Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken.
 
 Search and the "Ask AI" chat button are powered by [Inkeep](https://inkeep.com). Set the
@@ -67,123 +67,98 @@ no matter what you set, because `components/analytics/posthog-provider.tsx` also
 same way, on the server-side `VERCEL_ENV`, so nothing is sent locally or from a preview and no key
 is needed for either. See [Analytics](INTERNALS.md#analytics).
 
-Tracking events carry a `distinct_id` derived from the reader's IP, hashed with that day's date as
-the salt. The raw address is never sent. **The hash is pseudonymous rather than anonymous:** the
-salt is a public date, so it stops a reader being linked across days but not re-identified by anyone
-willing to hash the IPv4 space against it. Treat it as personal data when querying or exporting. See
-[Routing and `proxy.ts`](INTERNALS.md#routing-and-proxyts).
+Each tracking event carries a random `distinct_id` and creates no person profile. The proxy never
+reads the reader's IP address. See [Routing and `proxy.ts`](INTERNALS.md#routing-and-proxyts).
 
 ## Before you push
 
 ```bash
 pnpm types:check   # the main verification gate
+pnpm test          # tooling tests, including the sidebar and redirect checks
 pnpm check-links   # broken internal links and MDX fragments
+pnpm content:lint  # MDX that compiles but renders wrong
+pnpm format        # prettier, in place
 ```
 
-CI runs thirteen blocking checks, including Prettier formatting and the MDX structural lint, plus a
-blocking `pnpm build` that also serves the built site and checks it over HTTP.
-`pnpm build` runs the same link check, so a broken link fails the Vercel deploy too. See
-[The gates](INTERNALS.md#the-gates) for the full list.
+CI runs eight blocking checks, then a `pnpm build` that serves the built site and checks it over
+HTTP. `pnpm build` runs the same link check first, so a broken link fails the Vercel deploy too. See
+[The gates](INTERNALS.md#the-gates) for the full list. There is no pre-commit hook, so run these
+yourself.
 
-A Husky pre-commit hook also runs automatically on `git commit`, scoped to staged files only
-([`.lintstagedrc.mjs`](.lintstagedrc.mjs)):
-
-- Prettier formats every staged file it understands, except `meta.json` (generator output;
-  formatting it here would fight `pnpm move-doc` on every run).
-- Staged `.mdx` under `content/` also gets `content:lint`, restricted to those files but running
-  every rule, the same set CI blocks on (see [The gates](INTERNALS.md#the-gates)).
-- A staged `.ts`/`.tsx` file triggers one full `pnpm types:check` (not per file). This regenerates
-  `.source/`, runs `next typegen`, then type-checks the whole project, so it takes several seconds
-  even for a one-line change. That is expected, not a hang.
-
-It skips entirely when `HUSKY=0` or `CI=true`, and reverts to the pre-commit state if any task
-fails, so a failed commit never leaves half-formatted files staged. Bypass with
-`git commit --no-verify` only when you have a good reason — fix the underlying issue instead
-where you can.
-
-`types:check` proves the schema, not the render — it passes on a page that serves literal `:::` or
+`types:check` proves the schema, not the render. It passes on a page that serves literal `:::` or
 `undefined`. **Always confirm content changes in a browser.**
 
 ## Layout
 
 | Path                    | Purpose                                                    |
 | ----------------------- | ---------------------------------------------------------- |
-| `content/docs/`         | MDX pages + source-folder `meta.json` metadata             |
-| `content/partials/`     | Reusable `_`-prefixed fragments + generated `CATALOG.md`   |
-| `content/glossary/`     | Glossary terms for `<Reference>` / `<Term>` (hand-written) |
+| `content/docs/`         | MDX pages and the `meta.json` files that order the sidebar |
+| `content/partials/`     | Reusable `_`-prefixed fragments, included into pages       |
+| `content/glossary/`     | Glossary terms for `<Term>` (hand-written)                 |
 | `content/vars.json`     | Global variables                                           |
 | `app/docs/[[...slug]]/` | Docs route                                                 |
-| `components/mdx/`       | Custom MDX components (registered in `components/mdx.tsx`) |
+| `components/mdx.tsx`    | The MDX component registry                                 |
+| `components/widgets/`   | The four interactive widgets, each used by one page        |
 | `lib/source.ts`         | Fumadocs source adapter                                    |
-| `proxy.ts`              | Markdown negotiation + static-asset bypass list            |
-| `source.config.ts`      | Fumadocs MDX config (Zod-typed frontmatter)                |
+| `proxy.ts`              | PostHog tracking for markdown and `llms*.txt` fetches      |
+| `source.config.ts`      | Fumadocs MDX config and the frontmatter schema             |
 
 ## Write a page
 
-Every page needs five frontmatter fields. A missing or invalid one fails the build.
+Every page needs a `title` and a `description`. A missing one fails the build.
 
 ```mdx
 ---
 title: 'How to run a full node'
 description: One-line summary shown in search results and social cards.
-content_type: 'how-to'
+content_type: how-to
 author: your-github-handle
 sme: reviewing-sme-handle
 ---
 ```
 
-`content_type` must be one of: `how-to`, `concept`, `quickstart`, `tutorial`, `reference`,
-`troubleshooting`, `faq`. Optional: `sidebar_label`, `user_story`, `draft`.
+`content_type`, `author`, `sme` and `sidebar_label` are optional. When set, `content_type` must be
+one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq`.
 
-Sidebar order, labels and groups come from `lib/docs-navigation.json`. Directory `meta.json` files
-supply the underlying content tree; see
-[The sidebar and its roots](INTERNALS.md#the-sidebar-and-its-roots). `sidebar_label` becomes the
-page's sidebar name only if the page has no explicit `name` in that manifest; a manifest `name`
-always wins, and a page the manifest never names renders its `sidebar_label`.
+The sidebar comes from the `meta.json` in each directory: a page's directory is its place, and
+that file's `pages` array orders it. `sidebar_label` replaces the title as the page's sidebar name.
+See [Place your page in the sidebar](CONTRIBUTE.md#place-your-page-in-the-sidebar) and
+[The sidebar and its roots](INTERNALS.md#the-sidebar-and-its-roots).
+
+Callouts use Fumadocs' component. Docusaurus `:::` directives render as plain text.
+
+```mdx
+<Callout type="warn" title="Before you start">
+  Fund the batch poster account first.
+</Callout>
+```
+
+`type` is one of `info`, `warn`, `error`, `idea` or `success`.
 
 ## Use a partial
 
-**Before writing a banner, note, config table, or troubleshooting block, search
-[`content/partials/CATALOG.md`](content/partials/CATALOG.md)** (⌘F by intent — title, summary, tags)
-and reuse the partial instead of duplicating prose. The catalog gives you a copy-paste snippet for
-each one.
+**Before writing a banner, note, config table, or troubleshooting block, look in
+`content/partials/`** and reuse a partial instead of duplicating prose. File names say what each
+one holds.
 
 ```mdx
 <!-- From a doc page: root-anchored, so moving the page never breaks it -->
 
-<include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>
+<include cwd>content/partials/_hardware-requirements.mdx</include>
 ```
 
 ```mdx
-<!-- From another partial: MUST be file-relative, never cwd -->
+<!-- From another partial: file-relative -->
 
 <include>../_hardware-requirements.mdx</include>
 ```
 
-The relative form is required inside partials — a `cwd` include there crashes the build.
-`partials:check` enforces it. ([Why](INTERNALS.md#partials).)
-
-### Add or change one
-
-1. Create `content/partials/<area>/_your-partial.mdx`. No frontmatter — `<include>` strips it.
-2. Reference it, then run `pnpm partials:catalog` to refresh the catalog and manifest.
-3. Optionally curate its title, summary, tags, and scope in `content/partials/registry.json`:
-
-   ```json
-   {
-     "content/partials/<area>/_your-partial.mdx": {
-       "summary": "…",
-       "tags": ["…"],
-       "scope": "neutral"
-     }
-   }
-   ```
-
-`CATALOG.md` and `manifest.json` are generated — never edit them by hand.
+To add one, create `content/partials/<area>/_your-partial.mdx` and include it. It needs no
+frontmatter. ([Details](INTERNALS.md#partials).)
 
 ## Use a variable
 
-Values that move on a release cadence — version tags, chain parameters, node image names — live in
+Values that move on a release cadence (version tags, chain parameters, node image names) live in
 one file, so you edit them once and every page follows.
 
 ```mdx
@@ -196,8 +171,8 @@ The current Nitro release is <Var name="nitroVersionTag" />.
 or an inline code span, so `<Var name="…" />` there renders as a literal tag, not its value.
 Usually the value was never code to begin with, and dropping the backticks is the whole fix. When a
 reader is meant to copy the line, as in a `docker run` command, hardcode the current value in the
-code and reference the variable in the prose next to it. `pnpm content:lint` (rule A6) fails on any
-`<Var>` found inside code. To have a hardcoded copy of `latestNitroNodeImage` kept current for you,
+code and reference the variable in the prose next to it. `pnpm content:lint` (rule `var-in-code`)
+fails on any `<Var>` found inside code. To have a hardcoded copy of `latestNitroNodeImage` kept current for you,
 put `{/* sync-with-var: latestNitroNodeImage */}` anywhere in the page and `pnpm nitro:check-release`
 will rewrite it whenever it bumps that variable. Do not put that marker on a page that states a
 Nitro version as a historical fact, such as an ArbOS release note, or a bump will rewrite history.
@@ -217,7 +192,7 @@ expands before it resolves. Everywhere else on the page, the link text included,
 `<Var name="…" />`: a placeholder written in prose is read as a JavaScript expression and fails the
 build with an acorn parse error. The one destination it cannot do is a local image path
 (`![a](/img/…)`), which is imported before the placeholder is expanded, so write that path out in
-full. `pnpm content:lint` (rule A11) fails on a `<Var>` left in a destination, and `pnpm vars:check`
+full. `pnpm content:lint` (rule `var-in-link`) fails on a `<Var>` left in a destination, and `pnpm vars:check`
 reads placeholders too, so a mistyped name is caught the way a mistyped `<Var>` name is.
 
 **After editing a value in `vars.json`, restart `pnpm dev` to see it in a placeholder.** A `<Var>`
@@ -226,15 +201,14 @@ that reads the file once, so a link keeps the old value until the server is rest
 
 **To update a value:** edit [`content/vars.json`](content/vars.json), then run `pnpm vars:check`.
 
-**To add a new variable:** add the key to `content/vars.json` **and** its type to the `varsSchema`
-in [`content/vars.ts`](content/vars.ts). Miss either side and the gate fails. ([Why two
-files](INTERNALS.md#global-variables).)
+**To add a new variable:** add the key to `content/vars.json`. No other file changes.
+([Details](INTERNALS.md#global-variables).)
 
 Never hardcode a version or chain parameter into a page.
 
 **Links to a file in this repository are variables too.** `docsRepositoryUrl` and
 `docsRepositoryBranch` hold this repository's own GitHub identity, so a link to `CONTRIBUTE.md`,
-`STYLE-GUIDE.md` or the partials catalog is written
+or `STYLE-GUIDE.md` is written
 `[Contribute]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/CONTRIBUTE.md)`. The same two
 values build the edit link and the "Request an update" button on every page, so editing
 `docsRepositoryUrl` once moves every link home at the same time. That is the one value that changes
@@ -255,8 +229,8 @@ retiring it is a content edit. Five keys control it:
 | `announcementId`       | Dismissal key. **Change it whenever you change the message** |
 
 `announcementId` also lands in the page as an HTML `id` and inside a CSS selector, so it has to
-start with a letter and use only letters, digits, hyphens and underscores. Anything else fails at
-module load with a message naming the key.
+start with a letter and use only letters, digits, hyphens and underscores. `pnpm vars:check` fails
+on anything else.
 
 **Keep the message short: `announcementText` plus `announcementLinkText` under roughly 140
 characters combined.** The bar has a fixed height (3rem, and 4rem below 640px) because the layout
@@ -281,12 +255,9 @@ pnpm move-doc <from> <to>
 ```
 
 This rewrites inbound links, re-bases the moved page's own relative links and includes, updates
-`meta.json`, writes the redirect, retargets every existing redirect that pointed at the old URL so
-none of them chains, and removes any redirect away from the new URL that an earlier move left
-behind. Add `--dry-run` to see all of it without touching a file. One registry it
-cannot fix is `VERSIONED` in `lib/versions-constants.ts`. If the page you moved has a version
-dropdown, retarget its key by hand. Forgetting is not silent, at least. `pnpm test` fails on a
-registry key that names no live page.
+`meta.json`, and appends the redirect. Add `--dry-run` to see all of it without touching a file. It
+touches no other redirect. If an older redirect pointed at the old URL, `pnpm test` fails and names
+the entry to retarget by hand.
 
 **Never hand-edit between the `AUTO-GENERATED` markers in `redirects.config.ts`**, since `move-doc`
 owns that block. ([Details](INTERNALS.md#redirects).)
@@ -299,30 +270,28 @@ pnpm types:check         # regenerate .source/, generate Next types, tsc --noEmi
 pnpm build               # production build (runs check-links first)
 pnpm start               # serve the production build
 
+pnpm test                # tooling test suites, including the sidebar and redirects
 pnpm check-links         # broken internal doc links and MDX fragments
-pnpm vars:check          # every <Var name> resolves
-pnpm nav:check           # meta.json nav integrity + sidebar section coverage
-pnpm partials:check      # includes resolve, no routing leak, catalog fresh
-pnpm references:check    # glossary ids + <Reference> targets
+pnpm vars:check          # every <Var name> and {var:name} resolves; banner keys are valid
+pnpm references:check    # every <Term id> resolves
+pnpm contracts:check     # the contract-address partial is current
 pnpm content:lint        # MDX structural defects
-pnpm format:check        # prettier
-pnpm test                # tooling script test suites
+pnpm format:check        # prettier (pnpm format writes)
 
-pnpm partials:catalog    # regenerate CATALOG.md + manifest.json
 pnpm move-doc <from> <to>
-pnpm redirects:check     # every redirect destination is a real page (needs a running site)
 ```
 
-Precompile, CLI and Stylus tooling runs by hand only. See
-[The gates](INTERNALS.md#the-gates).
+Nitro, precompile, contract, CLI, Stylus and edge-challenge tooling runs by hand only. See
+[Hand-run tools](INTERNALS.md#hand-run-tools).
 
 ## Conventions
 
 - Theme tokens are `--color-fd-*` (Fumadocs). Never `--ifm-*` (legacy Docusaurus).
-- Route constants live in `lib/shared.ts` — reference these rather than hardcoding paths.
-- Never hand-edit generated files: `.source/`, `CATALOG.md`, `manifest.json`, the
-  `AUTO-GENERATED` block in `redirects.config.ts`, and every page under
-  `content/docs/stylus/stylus-by-example/` (republished from
+- Route constants live in `lib/shared.ts`. Reference these rather than hardcoding paths.
+- Never hand-edit generated files: `.source/`, the `AUTO-GENERATED` block in
+  `redirects.config.ts`, the precompile tables and contract-address partial, the generated region
+  of the Nitro CLI flags page, and every page under `content/docs/stylus/stylus-by-example/`
+  (republished from
   [`offchainlabs/stylus-by-example`](https://github.com/offchainlabs/stylus-by-example) by
-  `pnpm stylus:generate` — fix those upstream, or they are overwritten the next Monday).
+  `pnpm stylus:generate`, so fix those upstream).
 - Fumadocs reference: <https://www.fumadocs.dev/llms.txt>
