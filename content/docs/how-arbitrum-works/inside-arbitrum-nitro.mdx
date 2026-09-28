@@ -33,7 +33,12 @@ Nitro is a major upgrade to Arbitrum, improving over <Term id="arbitrum-classic"
 
 At the most basic level, an <Term id="arbitrum-chain">Arbitrum chain</Term> works like this:
 
-<ImageWithCaption caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten" src="/img/haw-eds-napkin-drawing.png" />
+<figure>
+
+![](/img/haw-eds-napkin-drawing.png)
+
+<figcaption>Original napkin sketch drawn by Arbitrum co-founder Ed Felten</figcaption>
+</figure>
 
 People and contracts put messages into the inbox. The chain reads the messages one at a time and processes each one. This updates the chain's state and produces outputs.
 
@@ -63,9 +68,12 @@ The essence of Nitro, and its key innovations, lie in four big ideas. We'll list
 
 This diagram summarizes how transactions are processed in Nitro.
 
-<ImageZoom src="/img/haw-transaction-lifecycle.svg" className="img-800px" alt="Transaction lifecycle">
-  Transaction lifecycle
-</ImageZoom>
+<figure>
+
+![Transaction lifecycle](/img/haw-transaction-lifecycle.svg)
+
+<figcaption>Transaction lifecycle</figcaption>
+</figure>
 
 Let's [follow a user's transaction](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle) through this process.
 
@@ -98,7 +106,12 @@ The second key design idea in Nitro is "Geth at the core." Here, "Geth" refers t
 
 <Callout type="info">In Ethereum's post-Merge architecture, Geth is an **execution client**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles in Geth's execution core as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.</Callout>
 
-<ImageWithCaption caption="Geth sandwich" src="/img/haw-geth-sandwich.svg" />
+<figure>
+
+![](/img/haw-geth-sandwich.svg)
+
+<figcaption>Geth sandwich</figcaption>
+</figure>
 
 The software that makes up a Nitro node can be thought of as built in three main layers, which are shown above:
 

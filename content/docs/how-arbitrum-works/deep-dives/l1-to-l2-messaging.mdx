@@ -37,7 +37,7 @@ We generally categorize these parent-to-child chain messaging methods as follows
 
 This section will explore these categories in detail and explain how they work. The diagram below illustrates the various paths available for parent-to-child chain communication and asset transfers.
 
-<ImageZoom src="/img/haw-l1-to-l2.svg" alt="Parent to child messaging" className="img-800px" />
+![Parent to child messaging](/img/haw-l1-to-l2.svg)
 
 ## Native token bridging
 
@@ -68,7 +68,7 @@ Note on caller type and aliasing:
 - **If the caller is a `7702-enabled account` (EOA with temporary contract code)**:
   - The **ETH** goes to the aliased address, similar to contracts. This is due to the presence of runtime code during execution, and ensures consistent aliasing behavior post-EIP-7702.
 
-<ImageZoom src="/img/haw-aliasing.svg" alt="Address aliasing" className="img-800px" />
+![Address aliasing](/img/haw-aliasing.svg)
 
 ### Address aliasing
 

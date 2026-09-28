@@ -26,13 +26,16 @@ Contract interfaces provide a type-safe way to communicate with other contracts 
 
 Before implementing interfaces, ensure you have:
 
-<CustomDetails summary="Rust toolchain">
+<Accordions>
+<Accordion title="Rust toolchain">
 
 Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v<Var name="stylusRustToolchain" /> or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="cargo stylus">
+<Accordions>
+<Accordion title="cargo stylus">
 
 In your terminal, run:
 
@@ -49,7 +52,8 @@ rustup target add wasm32-unknown-unknown --toolchain 1.91
 
 You can verify that `cargo stylus` is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ## Declaring interfaces with `sol_interface!`
 

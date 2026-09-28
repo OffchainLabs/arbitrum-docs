@@ -73,7 +73,7 @@ There are three components make up the native mint/burn feature:
 
 Below is a high-level data-flow diagram:
 
-<ImageZoom src="/img/mint-burn-gas-token-hld.png" alt="Bridge provider mint and burn" className="img-600px" />
+![Bridge provider mint and burn](/img/mint-burn-gas-token-hld.png)
 
 ### Security timeLock
 
@@ -100,7 +100,12 @@ A seven-day timelock gates the feature. Call [`ArbOwner.setNativeTokenManagement
    - [`addNativeTokenOwner(address)`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L44-L46)
    - [`removeNativeTokenOwner(address)`](https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/f49a4889b486fd804a7901203f5f663cfd1581c8/ArbOwner.sol#L50-L52)
 
-<ImageZoom src="/img/bridge-provider-mint-burn-diagram.png" alt="Bridge provider mint and burn" caption="A third-party messaging layer triggers its Adapter to unlock to a specific address. The Adapter mints new tokens and distributes them to the user." className="img-600px" />
+<figure>
+
+![Bridge provider mint and burn](/img/bridge-provider-mint-burn-diagram.png)
+
+<figcaption>A third-party messaging layer triggers its Adapter to unlock to a specific address. The Adapter mints new tokens and distributes them to the user.</figcaption>
+</figure>
 
 ### Collateralization technique
 
