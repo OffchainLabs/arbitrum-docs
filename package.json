@@ -31,7 +31,6 @@
     "stylus:check": "node scripts/generate-stylus-examples.ts --check",
     "edge-challenge:fetch": "node scripts/fetch-edge-challenge-data.ts",
     "references:check": "node scripts/references-check.ts",
-    "faq:check": "node scripts/faq-data-check.ts",
     "redirects:check": "node scripts/redirects-check.ts",
     "vars:check": "node scripts/vars-check.ts",
     "content:lint": "node scripts/content-lint.ts",

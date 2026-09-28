@@ -59,9 +59,6 @@ jobs:
       - name: Glossary references resolve
         run: pnpm references:check
 
-      - name: FAQ data is current
-        run: pnpm faq:check
-
       - name: Contract address reference is current
         run: pnpm contracts:check
 

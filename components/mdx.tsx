@@ -8,7 +8,6 @@ import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
 import { FlowChart } from '@/components/mdx/CentralizedAuction';
 import { CustomDetails } from '@/components/mdx/CustomDetails';
 import { EdgeChallengeFlow } from '@/components/mdx/EdgeChallengeFlow';
-import FAQStructuredData from '@/components/mdx/FAQStructuredData';
 import { ImageZoom } from '@/components/mdx/ImageZoom';
 import { PdfModal } from '@/components/mdx/PdfModal';
 import { Reference } from '@/components/mdx/Reference';
@@ -86,8 +85,6 @@ export function getMDXComponents(components?: MDXComponents) {
     AEL: AddressExplorerLink,
     CustomDetails,
     EdgeChallengeFlow,
-    FAQStructuredData,
-    FAQStructuredDataJsonLd: FAQStructuredData,
     FlowChart,
     ImageZoom,
     ImageWithCaption: ImageZoom,
