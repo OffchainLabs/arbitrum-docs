@@ -1,0 +1,7 @@
+---
+title: Roll forward
+key: roll-forward
+titleforSort: Roll forward
+---
+
+In the [Fast Feed](/intro/glossary#fast-feed) `Tickets` contract, the step that advances stored round state (round number, ticket price, tickets sold, and queued parameter changes) to the current round. The contract rolls state forward lazily: the first state-changing call in a new round performs it, and view functions compute the rolled-forward values on the fly without writing them.
