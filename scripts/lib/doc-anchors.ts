@@ -67,7 +67,6 @@ type Pluggable = NonNullable<ProcessorOptions['rehypePlugins']>[number];
 
 function pluginName(plugin: Pluggable): string | undefined {
   const fn = Array.isArray(plugin) ? plugin[0] : plugin;
-  // A preset object has no name, which is what reading `.name` off one returned before.
   return typeof fn === 'function' ? fn.name : undefined;
 }
 
@@ -213,9 +212,8 @@ export async function createAnchorCompiler(
         ...options,
         format,
         remarkPlugins: [remarkInclude, ...(options.remarkPlugins ?? []), collectLinks],
-        // Code blocks never produce an id, and shiki plus the twoslash transformer were two thirds
-        // of the run (15.5 s -> 5.1 s on 348 pages, same findings). A fumadocs-core rename of the
-        // plugin only un-matches this filter and slows the run; it cannot change the answer.
+        // Code blocks never produce an id, so the slow syntax highlighter is skipped. A rename of
+        // the plugin only un-matches this filter and slows the run; it cannot change the answer.
         rehypePlugins: [
           ...(options.rehypePlugins ?? []).filter((plugin) => pluginName(plugin) !== 'rehypeCode'),
           collectIds,
@@ -248,8 +246,6 @@ export async function createAnchorCompiler(
     const tree = parser(format).parse(file) as unknown as Parameters<Processor['run']>[0];
     await processor(format).run(tree, file);
     const { anchorIds: ids, anchorLinks: links } = file.data;
-    // Both plugins run on every compile, so neither is ever missing; reading an absent field used
-    // to hand an `undefined` to the caller, which then threw on first use.
     if (!ids || !links) throw new Error(`anchor collectors did not run on ${filePath}`);
     return { ids, links };
   };

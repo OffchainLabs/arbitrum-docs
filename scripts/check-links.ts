@@ -1,14 +1,10 @@
 /**
- * check-links — fail on broken internal doc links.
+ * check-links: fail on broken internal doc links. Exits 1 if any exists.
  *
- * Usage:
- *   pnpm check-links           # human report; exits 1 if any broken link exists
- *   pnpm check-links --json    # JSON array of broken links to stdout; exits 0 (for tooling/diffs)
- *
- * Replicates Docusaurus's `onBrokenLinks: 'throw'`, which the Fumadocs build does not do. Walks every
- * `content/docs/**` `.md(x)` file and asserts that each internal link (markdown, JSX `href`/`to`,
- * `<include>`) resolves to an existing file. Fragments are checked against the site's MDX pipeline,
- * including nested partials and custom heading ids. External links and dynamic JSX attrs are skipped.
+ * Fumadocs has no broken-link check of its own. This walks every `content/docs/**` `.md(x)` file
+ * and asserts that each internal link (markdown, JSX `href`/`to`, `<include>`) resolves to an
+ * existing file. Fragments are checked against the site's MDX pipeline, including nested partials
+ * and custom heading ids. External links and JSX expression attributes are skipped.
  */
 import { findBrokenAnchors } from './lib/doc-anchors.ts';
 import type { BrokenAnchor } from './lib/doc-anchors.ts';
@@ -25,14 +21,8 @@ function messageOf(error: unknown): unknown {
 }
 
 async function main(): Promise<void> {
-  const json = process.argv.slice(2).includes('--json');
   const index = buildIndex(process.cwd());
   const broken: Finding[] = [...findBrokenLinks(index), ...(await findBrokenAnchors(index))];
-
-  if (json) {
-    console.log(JSON.stringify(broken.map(({ rel, line, url }) => ({ rel, line, url }))));
-    return;
-  }
 
   if (broken.length === 0) {
     console.log('check-links: no broken internal links.');

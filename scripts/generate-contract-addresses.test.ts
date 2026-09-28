@@ -201,7 +201,7 @@ describe('lineDiff', () => {
   });
 
   it('separates an address change from the formatting churn around it', () => {
-    // The stated purpose of the printed summary: a reviewer of the weekly refresh PR has to be
+    // The stated purpose of the printed summary: a reviewer of the regenerated file has to be
     // able to see which line is the address and which is the table widening around it.
     const before = ['| Rollup | 0xaaa |', '| Inbox  | 0xbbb |'].join('\n');
     const after_ = ['| Rollup   | 0xaaa |', '| Inbox    | 0xccc |'].join('\n');

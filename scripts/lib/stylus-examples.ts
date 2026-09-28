@@ -80,10 +80,8 @@ const NUMBER = /-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/y;
  * Every other token stops the run: an identifier that is not a keyword, a template literal, a
  * parenthesis, an operator, a comment. There is no fallback to evaluation.
  *
- * This replaces a `new Function(\`return ${literal}\`)()`. The distinction matters because the
- * literal comes out of a third-party repository that this generator clones unpinned, on a weekly
- * cron in a job holding `contents: write`, and on a maintainer's own machine whenever they run
- * `pnpm stylus:generate`. Cloning a repository copies bytes; evaluating one of them runs them, at
+ * The literal comes out of a third-party repository that this generator clones unpinned, on a
+ * maintainer's own machine whenever they run `pnpm stylus:generate`. Cloning a repository copies bytes; evaluating one of them runs them, at
  * whatever privilege the run has. Reading them as data is the whole point here.
  *
  * @param text the literal, starting at `{` or `[`
@@ -237,14 +235,14 @@ export function parseObjectLiteral(text: string, context: string): JsonValue {
 /**
  * Read the metadata object literal.
  *
- * It is a JavaScript expression, not JSON — upstream wraps long descriptions across lines, mixes
+ * It is a JavaScript expression, not JSON: upstream wraps long descriptions across lines, mixes
  * single and double quotes, and leaves a trailing comma — so `JSON.parse` will not do. It is read
  * with {@link parseObjectLiteral}, which accepts exactly that grammar as **data** and throws on
  * anything outside it. It is never evaluated: see that function for why the difference matters
- * when the input is an unpinned third-party repository read on a weekly cron.
+ * when the input is an unpinned third-party repository.
  *
  * `title` and `description` are whitespace-normalized (runs of whitespace collapsed to one space,
- * ends trimmed) before being returned. This is a generator-level fix for FS-2747's A14
+ * ends trimmed) before being returned. This is a generator-level fix for the A14
  * `content:lint` rule, not an editorial one: upstream's own metadata strings occasionally carry a
  * stray doubled space or trailing space (e.g. `basic_examples/variables.mdx`'s description), which
  * is noise rather than a wording choice, and normalizing it here means it stays fixed across every

@@ -131,7 +131,7 @@ test('section includes and repeated includes follow the Fumadocs include plugin'
   assert.deepEqual([...ids], ['selected', 'repeated', 'repeated-1']);
 });
 
-test('check-links blocks missing fragments, keeps JSON mode, and fails on compilation errors', (t) => {
+test('check-links blocks missing fragments and fails on compilation errors', (t) => {
   const root = fixture(t, { 'content/docs/page.mdx': '## Existing\n\n[bad](#missing)' });
   const cli = fileURLToPath(new URL('../check-links.ts', import.meta.url));
   const run = (...args: string[]) =>
@@ -139,15 +139,10 @@ test('check-links blocks missing fragments, keeps JSON mode, and fails on compil
   const broken = run();
   assert.equal(broken.status, 1);
   assert.match(broken.stderr, /content\/docs\/page.mdx:3.*#missing.*missing anchor/);
-  const json = run('--json');
-  assert.equal(json.status, 0);
-  assert.deepEqual(JSON.parse(json.stdout), [
-    { rel: 'content/docs/page.mdx', line: 3, url: '#missing' },
-  ]);
   writeFileSync(path.join(root, 'content/docs/page.mdx'), '## Existing\n\n[good](#existing)');
   assert.equal(run().status, 0);
   writeFileSync(path.join(root, 'content/docs/page.mdx'), '<include>./missing.mdx</include>');
-  const invalid = run('--json');
+  const invalid = run();
   assert.equal(invalid.status, 1);
   assert.match(invalid.stderr, /Cannot validate anchors in content\/docs\/page.mdx/);
 });

@@ -260,7 +260,7 @@ async function main(): Promise<void> {
     await writeOrCheck(OUTPUT_PATH, content, { check, overrides: MDX_FORMAT });
   } catch (error) {
     // "The page is stale" does not say whether a flag or a default moved or only whitespace did,
-    // which is what a reviewer of the weekly upstream-refresh PR needs to know. `writeOrCheck`
+    // which is what a reviewer of the regenerated file needs to know. `writeOrCheck`
     // hands back the text it formatted, so this prints the diff without formatting it again.
     // `formatted` is optional on the error's type but always set in check mode, the only mode
     // that throws it.

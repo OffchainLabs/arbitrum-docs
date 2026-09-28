@@ -21,9 +21,7 @@
  *
  * That makes `--check` network-dependent and dependent on someone else's default branch, which is
  * why it is not a CI gate: it would redden every open PR the moment an unrelated repository
- * edited a page. It runs weekly in `upstream-refresh.yml`, where a change becomes a PR instead.
- *
- * Ported from arbitrum-docs `scripts/sync-stylus-content.js`.
+ * edited a page. Run it by hand.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -127,7 +125,7 @@ function materializeSource({
  *
  * The allowlist is the reason the published set is stable, and also the reason an example added
  * upstream would otherwise be invisible here forever. Reporting is the whole job: nothing is
- * generated for these, and the weekly refresh log is where somebody notices one worth porting.
+ * generated for these, and the run's log is where somebody notices one worth porting.
  */
 function reportUnpublished(appDir: string): void {
   for (const section of sections) {
@@ -153,7 +151,7 @@ function reportUnpublished(appDir: string): void {
  * Write (or check) one file, printing the line diff before rethrowing a staleness error.
  *
  * Every generator in this repo does this, for the same reason: "the file is stale" does not tell
- * a reviewer of the weekly refresh PR whether a code sample changed or only whitespace did.
+ * a reviewer whether a code sample changed or only whitespace did.
  */
 async function emit(
   filePath: string,

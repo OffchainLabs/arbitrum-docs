@@ -14,9 +14,9 @@
  * happens to be in a working tree.
  *
  * This file is I/O only (fetch the pinned sources, write the result). Parsing and rendering
- * live in `scripts/lib/precompile-tables.ts` (FS-2730) as pure functions, so
+ * live in `scripts/lib/precompile-tables.ts` as pure functions, so
  * `scripts/lib/precompile-tables.test.ts` can exercise them offline against fixture source,
- * without the network round trip that makes `pnpm precompiles:check` `continue-on-error` in CI.
+ * without the network round trip `pnpm precompiles:check` needs.
  *
  * Ported from arbitrum-docs `scripts/precompile-reference-generator.ts`.
  */

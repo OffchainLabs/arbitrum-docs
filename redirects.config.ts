@@ -1,18 +1,13 @@
-// Single source of truth for every redirect on this site. Consumed by next.config.ts.
+// Every redirect on this site. Consumed by next.config.ts.
 //
 // Two blocks:
-//   - Between the AUTO-GENERATED markers: one entry per moved page, written by `pnpm move-doc`.
-//     Never hand-edit between the markers.
-//   - After them: legacy docs.arbitrum.io URLs (root-level, pre-migration) pointing at this
-//     site's /docs paths. HAND-MAINTAINED. Add an entry by writing it here, in source order, and
-//     prove the destination with `pnpm redirects:check`. See INTERNALS.md#redirects for how to
-//     pick a destination.
+//   - Between the AUTO-GENERATED markers: one entry per moved page, appended by `pnpm move-doc`.
+//   - After them: legacy docs.arbitrum.io URLs pointing at this site's /docs paths, maintained by
+//     hand. See INTERNALS.md#redirects for how to pick a destination.
 //
-// `pnpm move-doc` also retargets every entry in this file whose destination is the moved page, so
-// no entry ever chains through a second redirect, and deletes any entry whose source is the page's
-// new URL, so no entry shadows it. `pnpm test` asserts every internal destination still names a
-// page under content/docs, that no source is a live page, and that no source is listed twice.
-// Listed in this order so a move-doc entry always wins over a legacy one for the same source.
+// `pnpm test` (scripts/lib/redirects-config.test.ts) asserts that every internal destination is a
+// page under content/docs, that no source is a live page, that nothing chains, and that no source
+// is listed twice. After a move, fix any entry it reports by hand.
 
 /** The shape `next.config.ts` hands to Next. */
 export type Redirect = { source: string; destination: string; permanent: boolean };

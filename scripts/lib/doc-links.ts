@@ -1,15 +1,11 @@
 /**
- * doc-links — the shared filesystem + link layer for the doc-restructure CLIs.
+ * doc-links: the shared filesystem and link layer for `check-links`, `move-doc` and
+ * `inventory-links`.
  *
- * Builds a bidirectional map between doc files and the URLs Fumadocs serves them at, extracts every
- * internal link occurrence (dependency-free, offset-preserving), resolves each to the file it points
- * at, and re-renders a link preserving its written form. `move-doc`, `inventory-links`,
- * `check-links`, and `restructure` are thin CLIs over these primitives.
- *
- * Fumadocs specifics (vs. the Docusaurus original this ports): content lives directly under
- * `content/docs/…` (baseUrl `/docs`, single locale); slugs are the path minus extension with a
- * trailing `index` dropped (no numeric prefixes, no `slug:` frontmatter override); navigation order
- * lives in per-directory `meta.json` `pages` arrays.
+ * Maps doc files to the URLs Fumadocs serves them at, extracts every internal link occurrence with
+ * its source offsets, resolves each to the file it points at, and re-renders a link in its written
+ * form. Content lives under `content/docs/` (baseUrl `/docs`); a slug is the path minus extension
+ * with a trailing `index` dropped; navigation order lives in per-directory `meta.json` `pages`.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
@@ -83,19 +79,13 @@ export interface MetaFile {
   data: unknown;
 }
 
-/**
- * The variable values the site builds with, read once. `scripts/lib/doc-anchors.ts` already imports
- * from `lib/` for the same reason: a checker that does not share the site's transforms checks a
- * different document than the one the reader gets.
- */
+/** The variable values the site builds with, read once. */
 let varValues: Record<string, unknown> | undefined;
 
 /**
- * Resolve a raw link URL the way the reader's browser will see it, by expanding any `{var:name}`
- * placeholder the way `remarkVarLinks` does at build (FS-2725). Every consumer that *resolves* a
- * link has to go through this, or a placeholder in an internal destination is reported broken even
- * though the built page carries a working URL. Rewriting consumers must not: the written form is
- * what belongs in the file.
+ * Resolve a raw link URL the way the reader's browser sees it, by expanding any `{var:name}`
+ * placeholder the way `remarkVarLinks` does at build. Resolving consumers go through this;
+ * rewriting consumers must not, since the written form is what belongs in the file.
  */
 export function expandRefUrl(rawUrl: string): string {
   if (typeof rawUrl !== 'string' || !rawUrl.includes('{var:')) return rawUrl;
@@ -140,14 +130,7 @@ export function isExternalOrFragment(pathPart: string): boolean {
   );
 }
 
-/**
- * True when a file is a content partial (underscore-prefixed): imported via `<include>`, not routed.
- *
- * Re-exported from `partials.ts` so there is one definition. This module used to carry a looser
- * copy that matched any `_`-prefixed basename, including `_diagram.png`; `partials.ts` also
- * requires a `.md`/`.mdx` extension. Both were live — `move-doc` read this one while
- * `partials-check` read the other — so the answer depended on the caller's import.
- */
+/** True when a file is a content partial (underscore-prefixed `.md`/`.mdx`), re-exported from `partials.ts`. */
 export { isPartial };
 
 /** Slug segments for a doc: path minus extension, trailing `index` dropped. */
@@ -165,7 +148,7 @@ function buildUrl(slug: string): string {
 }
 
 /**
- * Derive a doc file's slug, URL, and partial flag from its path — works for a file that does not
+ * Derive a doc file's slug, URL, and partial flag from its path. Works for a file that does not
  * exist yet (a move target), so callers can compute the destination's identity up front.
  */
 export function computeFileMeta(docsRoot: string, abs: string): FileMeta {
@@ -238,7 +221,7 @@ export function buildIndex(repoRoot: string): DocIndex {
  *
  * Surfaces: markdown inline links, markdown link definitions, JSX `href`/`to` string attributes,
  * and `<include>` directives. JSX expression attrs (`href={…}`) are flagged (range `null`), not
- * rewritten. ESM imports are ignored — they reference code modules, never docs.
+ * rewritten. ESM imports are ignored: they reference code modules, never docs.
  */
 export function extractRefs(source: string): LinkRef[] {
   const masked = maskRegions(source);
@@ -257,8 +240,7 @@ export function extractRefs(source: string): LinkRef[] {
     refs.push({ surface: 'markdown', rawUrl: raw, range: [start, end] });
   }
 
-  // `(?!\^)` excludes GFM footnote definitions (`[^2]: Although …`), whose label is not a link label —
-  // without it the first word of every footnote is reported as a broken target.
+  // `(?!\^)` excludes GFM footnote definitions (`[^2]: Although …`), whose label is not a link label.
   const mdDef = /^[ \t]*\[(?!\^)[^\]\n]+\]:[ \t]+(\S+)/gm;
   for (let m; (m = mdDef.exec(masked));) {
     const raw = m[1];
@@ -339,11 +321,10 @@ export function resolveRefToFile(
  *
  * Next serves static bytes from `public/`, so `/audit-reports/x.pdf` is the correct URL for
  * `public/audit-reports/x.pdf`. The docs index only knows `content/docs`, so without this check
- * every asset link — PDFs, images — looks broken.
+ * every asset link (PDFs, images) looks broken.
  *
- * Relative paths are excluded deliberately: they resolve against the page's own URL inside the docs
- * route tree, never against the static root, so `audit-reports/x.pdf` written on `/docs/audit-reports`
- * really is a 404 and must keep being reported.
+ * Relative paths resolve against the page's own URL, never against the static root, so they are
+ * never treated as assets.
  */
 export function resolvesToPublicAsset(pathPart: string, repoRoot: string): boolean {
   if (!pathPart.startsWith('/')) return false;
@@ -351,7 +332,7 @@ export function resolvesToPublicAsset(pathPart: string, repoRoot: string): boole
   const publicRoot = path.join(repoRoot, 'public');
   const abs = path.resolve(publicRoot, `.${pathPart}`);
 
-  // Refuse anything that escapes `public/` — such a URL is not servable regardless of what is there.
+  // Refuse anything that escapes `public/`.
   const rel = path.relative(publicRoot, abs);
   if (rel.startsWith('..') || path.isAbsolute(rel)) return false;
 
@@ -382,8 +363,7 @@ export function renderRef(
     case 'fileRel':
       return dotSlash(toPosix(path.relative(path.dirname(containerAbs), targetAbs)));
     case 'fileAbs': {
-      // `detectStyle` returns `fileAbs` only for a path ending in `.md`/`.mdx`, so this always
-      // matches; the throw stands where indexing a null match used to throw a TypeError.
+      // `detectStyle` returns `fileAbs` only for a path ending in `.md`/`.mdx`.
       const ext = originalPathPart.match(/\.mdx?$/i)?.[0];
       if (ext === undefined) throw new Error(`renderRef: not a file link: ${originalPathPart}`);
       const { url } = computeFileMeta(index.docsRoot, targetAbs);
@@ -421,9 +401,8 @@ export function lineAt(content: string, offset: number): number {
 
 /**
  * Find every broken internal link in the tree: an internal ref (not external/fragment/expression)
- * that resolves to no existing file, or that carries a literal `.md`/`.mdx` suffix (always 404s at
- * runtime even though it resolves once the extension is stripped — see the inline comment below).
- * Relative-URL links inside partials are skipped (no fixed URL).
+ * that resolves to no existing file, or that carries a literal `.md`/`.mdx` suffix. Relative-URL
+ * links inside partials are skipped (no fixed URL).
  */
 export function findBrokenLinks(
   index: Pick<DocIndex, 'files' | 'repoRoot' | 'byAbs' | 'urlByAbs' | 'byUrl'>,
@@ -434,9 +413,8 @@ export function findBrokenLinks(
       if (ref.range === null) continue;
       const { pathPart } = splitSuffix(expandRefUrl(ref.rawUrl));
       if (isExternalOrFragment(pathPart)) continue;
-      // A literal `.md`/`.mdx` suffix always 404s at runtime: `proxy.ts` only rewrites a bare `.md`
-      // suffix, so the URL falls through to Fumadocs with an extension no page owns. `<include>`
-      // directives are exempt — they splice a partial at build time and never become a URL.
+      // A literal `.md`/`.mdx` suffix serves markdown or 404s, never the page. `<include>`
+      // directives are exempt: they splice a partial at build time and never become a URL.
       if (ref.surface !== 'include' && /\.mdx?$/i.test(pathPart)) {
         broken.push({
           file: file.abs,
@@ -447,8 +425,6 @@ export function findBrokenLinks(
         continue;
       }
       if (resolveRefToFile(ref.rawUrl, file.abs, index) !== null) continue;
-      // Static assets live outside the docs index: `/audit-reports/x.pdf` is served from
-      // `public/audit-reports/x.pdf`. Without this the checker reports every asset link as broken.
       if (resolvesToPublicAsset(pathPart, index.repoRoot)) continue;
       if (isPartial(file.abs) && !pathPart.startsWith('/') && !/\.mdx?$/i.test(pathPart)) continue;
       broken.push({

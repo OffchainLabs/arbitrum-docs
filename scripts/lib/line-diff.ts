@@ -2,7 +2,7 @@
  * A minimal line-level diff, for the `--check` output of the generated-partial scripts.
  *
  * Comparing the two texts by line index is not good enough here. The point of the printed
- * summary is to let a reviewer of the weekly upstream-refresh PR tell an address change from a
+ * summary is to let a reviewer of the regenerated file tell an address change from a
  * formatting one, and a positional comparison reports every line after an insertion as changed:
  * on the 112-line contract-address partial, adding two lines reports 53. So this aligns the two
  * sides properly and reports only the lines that actually moved in or out.
