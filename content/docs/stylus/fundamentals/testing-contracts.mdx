@@ -57,7 +57,8 @@ You can find all the code in this tutorial as a Rust workspace in the [Quickstar
 
 </VanillaAdmonition>
 
-<CustomDetails summary="Cupcake Vending Machine Contract">
+<Accordions>
+<Accordion title="Cupcake Vending Machine Contract">
 
 ```rust
 #![cfg_attr(not(any(test, feature = "export-abi")), no_main)]
@@ -131,7 +132,8 @@ let five_seconds_from_last_distribution = last_distribution + U256::from(5);
 }
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ## Writing Tests for the Vending Machine
 
@@ -177,7 +179,8 @@ The `TestVM` allows you to control aspects like:
 
 Let's create a test suite that covers all aspects of our contract, we'll go over the code features one by one:
 
-<CustomDetails summary="Test Vending Machine Contract">
+<Accordions>
+<Accordion title="Test Vending Machine Contract">
 
 ```rust
 #[cfg(test)]
@@ -229,7 +232,8 @@ mod test {
 }
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ### TestVM: advanced use
 
@@ -242,7 +246,8 @@ This test shows how you can use advanced configuration and usage of the TestVM b
 - Testing time-dependent contract behavior
 - Testing logs
 
-<CustomDetails summary="Advanced TestVM Configuration">
+<Accordions>
+<Accordion title="Advanced TestVM Configuration">
 
 #### 1: TestVM Setup and Configuration
 
@@ -427,11 +432,13 @@ fn test_advanced_testvm_configuration() {
 }
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 Here is a `cargo.toml` file to add the required dependencies:
 
-<CustomDetails summary="cargo.toml">
+<Accordions>
+<Accordion title="cargo.toml">
 
 ```toml
 [package]
@@ -474,7 +481,8 @@ panic = "abort"
 opt-level = 3
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 You can find the example above in the [stylus-quickstart-vending-machine git repository](https://github.com/OffchainLabs/stylus-quickstart-vending-machine).
 

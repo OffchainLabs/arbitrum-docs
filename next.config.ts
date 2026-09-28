@@ -22,14 +22,6 @@ const withMDX = createMDX();
 const config: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
-  /**
-   * `fumadocs-twoslash` resolves type information by running the real TypeScript compiler, and from
-   * v4 that is the native (Go) TypeScript 7 binary rather than a bundled JavaScript copy. Bundling
-   * `typescript` into the server output would detach it from the platform binary it shells out to,
-   * so Fumadocs requires it to stay external. Only MDX compilation touches it, so nothing ships to
-   * the browser either way.
-   */
-  serverExternalPackages: ['typescript'],
   async redirects() {
     return redirects;
   },

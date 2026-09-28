@@ -1,17 +1,14 @@
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { ImageZoom, type ImageZoomProps } from 'fumadocs-ui/components/image-zoom';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
-import type { ComponentPropsWithoutRef, ElementType } from 'react';
+import type { ComponentProps, ElementType } from 'react';
 
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
 import { FlowChart } from '@/components/mdx/CentralizedAuction';
-import { CustomDetails } from '@/components/mdx/CustomDetails';
 import { EdgeChallengeFlow } from '@/components/mdx/EdgeChallengeFlow';
 import FAQStructuredData from '@/components/mdx/FAQStructuredData';
-import { ImageZoom } from '@/components/mdx/ImageZoom';
-import { PdfModal } from '@/components/mdx/PdfModal';
-import { Reference } from '@/components/mdx/Reference';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
 import {
@@ -21,77 +18,23 @@ import {
   TroubleshootingConfig,
   TroubleshootingReport,
 } from '@/components/mdx/Troubleshooting';
-import { Popup, PopupContent, PopupTrigger } from '@/components/mdx/Twoslash';
 import { VanillaAdmonition } from '@/components/mdx/VanillaAdmonition';
 import { Var } from '@/components/mdx/Var';
 import { VendingMachine } from '@/components/mdx/VendingMachine';
 
-/**
- * Route internal PDF links through `<PdfModal>` so they open in an overlay instead of navigating away.
- *
- * Doing it here rather than tagging each link in MDX keeps the content plain markdown — `[view](/audit-reports/x.pdf)`
- * needs no special syntax — and any PDF link added later gets the behaviour automatically. Only
- * root-absolute paths qualify: those are the ones Next serves from `public/`. External PDFs are left
- * to the default link so we never frame a third-party document.
- */
-function isInternalPdf(href: string | undefined): href is string {
-  return typeof href === 'string' && href.startsWith('/') && /\.pdf$/i.test(href);
-}
-
-type AnchorProps = ComponentPropsWithoutRef<'a'>;
-
-/**
- * Wrap an existing anchor component so internal PDF links open in the modal and everything else falls
- * through untouched.
- *
- * This must WRAP rather than replace: `app/[lang]/docs/[[...slug]]/page.tsx` passes
- * `a: createRelativeLink(source, page)`, which resolves relative markdown links against the current
- * page. Overriding `a` outright silently broke that. PDF interception is orthogonal — internal PDF
- * hrefs are root-absolute, so they never needed relative resolution in the first place.
- */
-function withPdfModal(Base: NonNullable<MDXComponents['a']>) {
-  return function Anchor({ href, children, ...rest }: AnchorProps) {
-    if (isInternalPdf(href)) {
-      return <PdfModal href={href}>{children}</PdfModal>;
-    }
-    // `MDXComponents['a']` widens to every intrinsic tag name (including `'symbol'`), so TypeScript
-    // cannot see that this slot holds an anchor-shaped component. In practice it is always
-    // `defaultMdxComponents.a` or the `createRelativeLink` the docs page passes.
-    const Base_ = Base as ElementType<AnchorProps>;
-    return (
-      <Base_ href={href} {...rest}>
-        {children}
-      </Base_>
-    );
-  };
-}
-
 export function getMDXComponents(components?: MDXComponents) {
   const merged = {
     ...defaultMdxComponents,
-    // `transformerTwoslash` (wired in source.config.ts) compiles a ```ts twoslash block into markup
-    // that references `Popup` / `PopupTrigger` / `PopupContent` by name. Those names have to be in
-    // this map or the page throws "Expected component `Popup` to be defined" at render time. That is
-    // a 500, not a build failure, because the frontmatter schema is all `types:check` sees. The
-    // registration has been missing since twoslash was first wired up (twoslash 3.3.1 emitted the
-    // same three tag names and 500s on the same page), and it went unnoticed only because no page
-    // uses a twoslash block yet. `components/mdx/Twoslash` keeps the popover code out of every docs
-    // page's eager bundle; see the comment there.
-    Popup,
-    PopupContent,
-    PopupTrigger,
     Accordion,
     Accordions,
-    AddressExplorerLink,
     AEL: AddressExplorerLink,
-    CustomDetails,
     EdgeChallengeFlow,
     FAQStructuredData,
     FAQStructuredDataJsonLd: FAQStructuredData,
     FlowChart,
     ImageZoom,
-    ImageWithCaption: ImageZoom,
-    Reference,
+    // Markdown images arrive with `src` as the static import remark-image resolved.
+    img: (props: ComponentProps<'img'>) => <ImageZoom {...(props as ImageZoomProps)} />,
     ReferenceList,
     Tab,
     Tabs,
@@ -108,12 +51,19 @@ export function getMDXComponents(components?: MDXComponents) {
     VendingMachine,
     ...components,
   };
+  // Whichever `a` won the merge, usually the docs page's `createRelativeLink`.
+  const Link = merged.a as ElementType<ComponentProps<'a'>>;
 
   return {
     ...merged,
-    // Applied last so PDF interception composes with whatever `a` won the merge above — notably
-    // `createRelativeLink`, which the docs page supplies.
-    a: withPdfModal(merged.a),
+    // Next's <Link> prefetches every same-origin href in the viewport, so a PDF under `public/`
+    // renders as a plain anchor to keep the browser from downloading it ahead of a click.
+    a: (props: ComponentProps<'a'>) =>
+      props.href?.startsWith('/') && /\.pdf$/i.test(props.href) ? (
+        <a {...props} />
+      ) : (
+        <Link {...props} />
+      ),
   } satisfies MDXComponents;
 }
 

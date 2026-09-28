@@ -53,7 +53,7 @@ To start, the default duration of a round is 60 seconds. Transactions not in the
 
 ### The express lane
 
-<ImageZoom src="/img/timeboost-centralized-timeboost-express-lane-workflow.jpg" alt="using the express lane" className="img-900px" />
+![using the express lane](/img/timeboost-centralized-timeboost-express-lane-workflow.jpg)
 
 The express lane implementation uses a special endpoint on the sequencer, formally titled `timeboost_sendExpressLaneTransaction`. This endpoint is special because transactions submitted to it will be sequenced immediately by the sequencer, hence the name "express lane." The sequencer will only accept valid transaction payloads to this endpoint if they are signed correctly by the current round’s <Term id="express-lane-controller">express lane controller</Term>.
 

@@ -9,7 +9,7 @@ sme: Mehdi
 
 The Sequencer’s job is to receive, admit, and order transactions and then publish and post the resulting blocks. The moment ordered transactions are handed to the execution engine, responsibility shifts to the <Term id="state-transition-function">State Transition Function (STF)</Term> and <Term id="arbos">ArbOS</Term>, where transactions are executed against the chain state, gas is metered, and the new state root is computed. Throughout this section, we flag those handoff points and point to the relevant pages rather than duplicating them.
 
-<ImageZoom src="/img/haw-sequencer-operations.svg" alt="Sequencer operations" className="img-600px" />
+![Sequencer operations](/img/haw-sequencer-operations.svg)
 
 This page covers:
 
@@ -30,7 +30,7 @@ The Sequencer communicates the transaction sequence it has ordered through two p
 1. **Real-time Sequencer feed**: a live broadcast that publishes transactions instantly as they are sequenced. Nodes and clients subscribed to this feed receive immediate notifications, allowing them to process transactions without delay.
 2. **Batches posted on the parent chain**: at regular intervals, the Sequencer aggregates transactions and posts them to the parent chain for finality. See [Batch posting](#batch-posting) for the detail.
 
-<ImageZoom src="/img/haw-sequencer-feed.svg" alt="Sequencer feed" className="img-600px" />
+![Sequencer feed](/img/haw-sequencer-feed.svg)
 
 ### Real-time Sequencer feed
 
@@ -72,7 +72,7 @@ Developers and users should design their applications and interactions with thes
 
 ## A transaction’s path through the Sequencer
 
-<ImageZoom src="/img/sequencer-path.png" alt="Sequencer path" className="img-600px" />
+![Sequencer path](/img/sequencer-path.png)
 
 #### 1. Receipt and admission
 
@@ -116,7 +116,7 @@ This section covers batch posting from the Sequencer's side. For the <Term id="b
 
 The Sequencer in Arbitrum is critical in collecting and organizing child chain transactions before posting them to the parent chain. The batching process is designed to optimize for both cost efficiency and timely transaction inclusion.
 
-<ImageZoom src="/img/haw-batching.svg" alt="Batching" className="img-600px" />
+![Batching](/img/haw-batching.svg)
 
 #### Transaction collection and ordering
 
@@ -141,7 +141,7 @@ The batching mechanism allows the Sequencer to efficiently manage transactions b
 
 The Sequencer employs compression when forming transaction batches to optimize the data and cost of batches posted to the parent chain. Arbitrum uses the Brotli compression algorithm due to its high compression ratio and efficiency, crucial for reducing parent chain posting costs.
 
-<ImageZoom src="/img/haw-compression.svg" alt="Compression" className="img-600px" />
+![Compression](/img/haw-compression.svg)
 
 ### Compression level in the Brotli algorithm
 
@@ -166,7 +166,7 @@ After batching and compressing transactions, the Sequencer posts these batches t
 
 The Sequencer uses two primary methods to send batches to the parent chain, depending on whether the chain supports [EIP-4844 (Proto-Danksharding)](https://eips.ethereum.org/EIPS/eip-4844) and the current network conditions. For how the batch poster encodes a batch for each method and self-checks it before sending, see [The batch is wrapped for the parent chain and self-checked](/docs/how-arbitrum-works/deep-dives/batchposter#5-the-batch-is-wrapped-for-the-parent-chain-and-self-checked).
 
-<ImageZoom src="/img/haw-submit-to-sequencer-inbox.svg" alt="Submit to Sequencer inbox" className="img-600px" />
+![Submit to Sequencer inbox](/img/haw-submit-to-sequencer-inbox.svg)
 
 ### 1. Using blobs with `addSequencerL2BatchFromBlobs`
 

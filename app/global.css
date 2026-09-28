@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
-@import 'fumadocs-twoslash/twoslash.css';
 
 /* Arbitrum brand palette, ported from the arbitrum.io marketing site (arbitrum-website
    `tailwind.config.js` `theme.extend.colors`, the "REVAMP" block, plus `app/globals.scss` :root).
