@@ -19,18 +19,8 @@ import { HomeHeader } from '@/components/home-header';
 import { baseOptions } from '@/lib/layout.shared';
 import { docsRoute } from '@/lib/shared';
 
-// Root 404, replacing the Next default and the Docusaurus NotFound swizzle.
-// Next routes both an unmatched URL and any `notFound()` thrown in a segment
-// here, so this one file covers `/anything` and `/docs/anything`.
-//
-// It sits under app/layout.tsx but outside every route group, so it inherits
-// the root theme, search dialog, and analytics providers but not the navbar any group
-// adds. HomeLayout brings the navbar back with the same options the home route
-// group uses; DocsLayout is the wrong choice here because it needs a page tree
-// and the visitor has no place in it.
-//
-// Next injects `noindex` on a 404 response, so the section links below cannot
-// turn this into an indexable hub page.
+// Root 404 for both `/anything` and `/docs/anything`. It sits outside every route group, so
+// HomeLayout supplies the navbar; DocsLayout would need a page tree. Next adds `noindex`.
 
 export const metadata: Metadata = {
   title: 'Page not found',
@@ -92,8 +82,7 @@ export default function NotFound() {
   return (
     <HomeLayout {...baseOptions()} slots={{ header: HomeHeader }}>
       <NotFoundTracker />
-      {/* A div, not a <main>: HomeLayout's container already is the page's
-          <main> landmark, and nesting one inside another is invalid HTML. */}
+      {/* A div: HomeLayout's container is already the <main> landmark. */}
       <div className="flex flex-1 flex-col bg-repeating-lines">
         <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-16">
           <div className="flex flex-col gap-3">
@@ -106,8 +95,6 @@ export default function NotFound() {
           </div>
 
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-            {/* Opens the same dialog as the navbar trigger and Cmd/Ctrl+K: the
-              Inkeep modal wired into RootProvider in app/layout.tsx. */}
             <FullSearchTrigger className="w-full sm:w-80" />
             <BrandButton href={docsRoute} mode="secondary">
               Browse all docs
