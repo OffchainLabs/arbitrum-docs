@@ -10,28 +10,13 @@ import type { ComponentProps } from 'react';
 import { Fragment, useRef, useState } from 'react';
 
 /**
- * Navbar for the home layout (landing page, 404), replacing Fumadocs' `slots.header`.
+ * Navbar for the home layout (landing page, 404), passed as `slots.header`, so these pages share
+ * the docs pages' notebook navbar instead of the home layout's mega menu.
  *
- * Fumadocs ships two navbars. The docs pages use the notebook layout's header: a compact bar
- * whose `type: 'menu'` links open a small popover list. The home layout's header is a Radix
- * NavigationMenu whose menus open a full-width "mega menu" viewport of cards under the bar, with
- * the same `links` config. On this site that meant the landing page had a different navbar from
- * every docs page, and on the home hero the mega menu opened as a blurred, page-wide sheet.
- *
- * This slot renders the same `links` the notebook way: identical DOM shape to
- * `fumadocs-ui/layouts/notebook/slots/header` (`[data-header-body]`, title left, search in the
- * middle, links then controls on the right), so the navbar CSS in `app/global.css` keyed on
- * `[data-header-body]` applies to both. The popover logic below is copied from that file at
- * fumadocs-ui 16.15.9; re-diff it on a bump. The `id` stays `nd-nav` because Fumadocs' own styles
- * and the docs layout's `--fd-docs-row-1` sticky offsets key on `nd-subnav`, which this is not.
- *
- * Same popover behaviour as the notebook header: hover with a short delay opens, a freeze window
- * after each change stops the popover from fighting Radix's own click handling, and touch closes
- * the menu on selection. The notebook header is not reusable directly because it reads
- * `useNotebookLayout()`, which the home layout does not provide.
- *
- * The home layout has no sidebar, so below `md` a hamburger opens one popover listing every
- * link (menu children flattened under their heading), with the theme switch at the bottom.
+ * The DOM shape matches `fumadocs-ui/layouts/notebook/slots/header` (`[data-header-body]`), so the
+ * navbar CSS in `app/global.css` styles both. The popover logic is copied from that file at
+ * fumadocs-ui 16.15.9; re-diff it on a bump. The notebook header itself cannot be reused because
+ * it reads `useNotebookLayout()`. Below `md` a hamburger opens one popover listing every link.
  */
 export function HomeHeader(props: ComponentProps<'header'>) {
   const { slots, navItems, menuItems } = useHomeLayout();
@@ -139,8 +124,7 @@ function NavbarLinkItemMenu({ item }: { item: Extract<LinkItemType, { type: 'men
         )}
         <ChevronDown className="size-3" />
       </PopoverTrigger>
-      {/* Opaque for the same reason as MobileMenu below: on the landing page this opens over the
-          hero gradient, where Fumadocs' translucent default leaves grey labels on blurred blue. */}
+      {/* Opaque, unlike Fumadocs' translucent default, because it opens over the hero. */}
       <PopoverContent
         className="flex flex-col p-1 text-start text-fd-muted-foreground !bg-fd-popover"
         onPointerEnter={onPointerEnter}
@@ -186,8 +170,7 @@ function MobileMenu({
       >
         <Menu />
       </PopoverTrigger>
-      {/* Opaque, unlike Fumadocs' translucent popover default: on the phone this sheet opens over
-          the hero's gradient and slashes, where blurred navy behind grey text is not readable. */}
+      {/* Opaque, unlike Fumadocs' translucent default, because it opens over the hero. */}
       <PopoverContent className="flex max-h-[80svh] w-[calc(100vw-2rem)] max-w-xs flex-col overflow-auto p-2 text-fd-muted-foreground !bg-fd-popover">
         {items.map((item, i) => {
           if (item.type === 'custom') return <Fragment key={i}>{item.children}</Fragment>;

@@ -32,19 +32,13 @@ import {
 } from '@/lib/shared';
 
 /**
- * The site root shipped with no title, description, canonical or social tags at all: everything
- * below is what `app/docs/[[...slug]]/page.tsx` emits per page, stated once for the one route that
- * is not a docs page (FS-2713).
- *
- * `og:image` is not listed. Next fills it, with its width, height, type and alt, from
+ * The same metadata set `app/docs/[[...slug]]/page.tsx` emits per page. `og:image` comes from
  * `opengraph-image.tsx` beside this file.
  */
 export const metadata: Metadata = {
   title: siteTitle,
   description: siteDescription,
-  // Absolute, built from `getSiteUrl()` rather than left relative for `metadataBase` to resolve,
-  // for the reason the docs page gives: the value a wrong canonical would depend on is then read
-  // through the one helper that refuses to guess it in a production build.
+  // Built from `getSiteUrl()`, which refuses to guess the origin in a production build.
   alternates: {
     canonical: new URL('/', getSiteUrl()).toString(),
   },
@@ -55,18 +49,14 @@ export const metadata: Metadata = {
     description: siteDescription,
     url: new URL('/', getSiteUrl()).toString(),
   },
-  // Next fills twitter:title/description/image from openGraph when they are absent, but the card
-  // type and the site handle have no such default and are what X needs to render a large card.
+  // Next fills the rest of the Twitter card from openGraph; the card type and handle have no default.
   twitter: {
     card: 'summary_large_image',
     site: socialHandle,
   },
 };
 
-/**
- * The site's section eyebrow (`GradientFromTopSection`, `Dot`): a 9px dot with a soft shadow
- * beside the title. `currentColor` keeps it readable in both themes without a second class list.
- */
+/** Section heading with the arbitrum.io glowing dot. */
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
     <h2 className="flex items-center gap-4 text-2xl font-medium tracking-tight">
@@ -84,8 +74,6 @@ export default function HomePage() {
 
   return (
     <main className="flex flex-1 flex-col bg-repeating-lines">
-      {/* The site's hero panel, static. Inset rather than full-bleed so the hairline background
-          shows around it, as it does on arbitrum.io. See components/home-hero.tsx. */}
       <HomeHero />
 
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-4 py-16">

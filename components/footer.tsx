@@ -3,22 +3,10 @@ import Link from 'fumadocs-core/link';
 import { appName } from '@/lib/shared';
 
 /**
- * Site footer.
- *
- * Fumadocs has no footer slot — neither `BaseLayoutProps` nor the home/notebook
- * layouts expose one, and upstream ships no `<footer>` anywhere. The documented
- * placement is a sibling of the layout inside the `flex flex-col min-h-screen`
- * body, which is where `app/layout.tsx` renders it. It must NOT go inside
- * `DocsLayout`: that container is a named-area CSS grid, so an unplaced child is
- * auto-placed into the gutter cell beside the navbar (and `overflow-x-clip`
- * would trim it).
- *
- * Content mirrors arbitrum-docs `docusaurus.config.js` `themeConfig.footer`.
- * Styling mirrors arbitrum-website `components/footer/footer.tsx`: the
- * navy-to-black `bg-footer` gradient, uppercase 12px type, `white/50` column
- * labels, and links that slide right to reveal a glowing cyan hexagon on hover.
- * The site's footer is dark on a light page, so this one renders identically in
- * both colour modes and uses brand tokens (`arbitrum-*`), not theme tokens (`fd-*`).
+ * Site footer, styled after the arbitrum.io footer. Fumadocs has no footer slot, so
+ * `app/layout.tsx` renders it as a sibling of the layout in the flex-column body; inside
+ * `DocsLayout` it would be auto-placed into a grid cell. Dark in both colour modes, so it uses
+ * brand tokens (`arbitrum-*`) rather than theme tokens (`fd-*`).
  */
 
 interface FooterLink {
@@ -34,7 +22,7 @@ const columns: { title: string; items: FooterLink[] }[] = [
       { text: 'Arbitrum.io', url: 'https://arbitrum.io/' },
       { text: 'Arbitrum chains', url: 'https://arbitrum.io/launch-chain' },
       { text: 'Arbitrum Foundation', url: 'https://arbitrum.foundation/' },
-      // Served from public/; exempted from locale rewriting in proxy.ts.
+      // Served from public/.
       { text: 'Arbitrum whitepaper', url: '/nitro-whitepaper.pdf' },
     ],
   },
@@ -67,14 +55,9 @@ const columns: { title: string; items: FooterLink[] }[] = [
   },
 ];
 
-/**
- * The site's `StyledLink`: a hexagon sits hidden at the left edge and the label is pulled 1rem
- * left over it; on hover the label slides back to reveal the hexagon, both lit cyan.
- */
+/** A hidden hexagon at the left edge; on hover the label slides right to reveal it, lit cyan. */
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    // fumadocs-core/link routes internal hrefs through next/link and marks
-    // external ones target=_blank rel=noreferrer.
     <Link
       href={href}
       className="group relative inline-block pl-4 transition-colors duration-300 hover:text-arbitrum-cyan hover:text-shadow-[0_0_6px_rgb(16_225_255/0.8)]"
@@ -95,14 +78,9 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 export function Footer() {
   return (
     <footer className="bg-linear-to-b from-arbitrum-navy to-black text-xs text-white uppercase">
-      {/* Same container as the home page content (`app/(home)/page.tsx`), so
-          the columns line up with the body text. Both content areas are
-          viewport-centred at ~1000px — the docs article column included — so one
-          centred container aligns the footer on every page type. */}
+      {/* The same centred `max-w-5xl` container as the home page content. */}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 pt-10 pb-12 lg:flex-row lg:justify-between lg:pb-16">
         <Link href="/" className="flex w-fit items-center gap-3 self-start normal-case">
-          {/* Four-colour mark, as in the navbar. The site's footer wordmark is white and takes
-              these same colours on hover, so the coloured mark on navy is its hover state. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/img/logo.svg" alt="" width={27} height={30} className="h-[30px] w-auto" />
           <span className="text-base font-medium">{appName}</span>
@@ -122,8 +100,6 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Legal links live in the copyright row, not a fifth column, so the four
-          link columns stay even. */}
       <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-white/20 px-4 py-5 text-white/50">
         <span className="normal-case">© {new Date().getFullYear()} Offchain Labs</span>
         <span className="flex gap-6">

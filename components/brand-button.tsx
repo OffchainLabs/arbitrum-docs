@@ -2,19 +2,8 @@ import Link from 'fumadocs-core/link';
 import type { ComponentProps } from 'react';
 
 /**
- * The arbitrum.io pill button, ported from arbitrum-website `components/atom/button.tsx`.
- *
- * Two modes and one surface flag. `primary` is a filled pill, `secondary` an outlined one. `onDark`
- * is for a button sitting on a navy or gradient panel, where the site swaps to its white
- * variants (`colorMode: 'white'`). Every variant shares the same hover: cyan glow, navy and cyan
- * swapped for text and fill. The trailing arrow is the site's own path.
- *
- * A server component over `fumadocs-core/link`, so an external href opens in a new tab the same
- * way footer and navbar links do. The site's version is a client component only because it can
- * also render a `<button>`; nothing here needs an onClick.
- *
- * `font-medium`, not the site's `font-semibold`: Aeonik has no 600 face and `font-synthesis:
- * none` (global.css) would resolve 600 to the 500 face anyway, so asking for 500 says what renders.
+ * The arbitrum.io pill button. `primary` is filled, `secondary` outlined; `onDark` switches to the
+ * white variants for a navy or gradient panel. Every variant shares the cyan-glow hover.
  */
 export function BrandButton({
   mode = 'primary',
@@ -28,9 +17,8 @@ export function BrandButton({
   onDark?: boolean;
   arrow?: boolean;
 }) {
-  // Each variant owns its border colour. Putting `border-transparent` on the shared base and
-  // `border-black/20` on the outlined variant does not work: both set the same property and
-  // Tailwind orders them by its own sort, not by position in the class string, so the outline lost.
+  // Each variant owns its border colour: two border-colour classes in one list are ordered by
+  // Tailwind's sort, not by their position in the string.
   const surface = {
     primary: onDark
       ? 'border-transparent bg-white text-black hover:bg-arbitrum-cyan hover:text-arbitrum-navy active:bg-arbitrum-navy active:text-arbitrum-cyan'
