@@ -748,9 +748,20 @@ that is where a new JSX tag can actually break the site.
 ## Caption styling
 
 `<ImageZoom>` (`fumadocs-ui/components/image-zoom`) has no `caption` prop and
-renders no `<figure>`/`<figcaption>`, so there is no supported way to caption
-an image through the component today. Put any caption in the surrounding MDX
-prose instead of baking it into the diagram. Theme tokens are `--color-fd-*`;
+renders no `<figure>`/`<figcaption>`. Caption an image with a `<figure>` block
+in the MDX, with the markdown image between blank lines so it parses as
+markdown rather than JSX text (see "Image captions" in INTERNALS.md):
+
+```mdx
+<figure>
+
+![Transaction lifecycle](/img/haw-transaction-lifecycle.svg)
+
+<figcaption>Transaction lifecycle</figcaption>
+</figure>
+```
+
+Never bake the caption into the diagram. Theme tokens are `--color-fd-*`;
 never use the legacy Docusaurus `--ifm-*` ones.
 
 ## Reference examples
