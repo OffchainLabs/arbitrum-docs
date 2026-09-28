@@ -5,7 +5,7 @@
  * the five fields `source.config.ts` requires plus `user_story`, all of them editorial, and a
  * writer may want a paragraph of their own above or below the tables. Anything outside the markers
  * survives a regeneration untouched; anything inside is replaced. The scaffold sets no
- * `sidebar_label`: the field is optional, and one identical to the title has no effect (FS-2745).
+ * `sidebar_label`: the field is optional, and one identical to the title has no effect.
  *
  * Ported from arbitrum-docs `scripts/generate-cli-reference.ts`, which rewrote the whole file
  * and so had no way to keep a local edit.

@@ -59,8 +59,8 @@ export const frontmatterDefaults: Readonly<Record<string, string>> = {
  * meta.json` is hand-owned rather than generated, so that one has to be kept in step by hand.
  *
  * Upstream publishes far more examples than these; the generator reports the ones it skipped on
- * every run, so a new upstream page shows up in the weekly refresh log instead of vanishing
- * silently. Adding one here is a deliberate act — it is a new page on this site.
+ * every run, so a new upstream page shows up in the run's log instead of vanishing silently.
+ * Adding one here is a deliberate act: it is a new page on this site.
  */
 export const sections: readonly StylusSection[] = [
   {

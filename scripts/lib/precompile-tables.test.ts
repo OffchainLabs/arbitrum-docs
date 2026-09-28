@@ -1,11 +1,10 @@
 /**
- * Tests for the precompile-table parser and renderer (FS-2730).
+ * Tests for the precompile-table parser and renderer.
  *
  * `scripts/generate-precompile-tables.ts` cannot be imported for a unit test: it calls
  * `runScript(main)` at module scope and every path to `writeOrCheck` runs through a `fetch` of a
- * pinned GitHub commit, so its only end-to-end guard used to be `pnpm precompiles:check`, which is
- * network-bound and `continue-on-error` in CI. This exercises the pure parse/render functions the
- * runner now delegates to, against small fixture Solidity/Go source, entirely offline.
+ * pinned GitHub commit. This exercises the pure parse/render functions the runner delegates to,
+ * against small fixture Solidity/Go source, entirely offline.
  *
  * Fixture source stands in for the real Nitro/nitro-precompile-interfaces trees so the assertions
  * stay pinned to the parsing and rendering rules rather than to whatever a pinned commit happens to
@@ -184,8 +183,8 @@ describe('renderMethodsInTable', () => {
     // This preserves current behavior on purpose: two committed partials
     // (content/partials/precompile-tables/_ArbOwner.mdx and _ArbOwnerPublic.mdx) already ship a
     // genuinely blank <td></td> for a method with no preceding // comment, and
-    // `precompiles:generate` output for the current pins must stay byte-identical across this
-    // refactor (FS-2730). Introducing placeholder copy here would change that committed output.
+    // `precompiles:generate` output for the current pins must stay byte-identical. Introducing
+    // placeholder copy here would change that committed output.
     const html = render();
     const row = html.match(/<tr>\s*<td><code>noComment\(\)<\/code><\/td>[\s\S]*?<\/tr>/);
     assert.ok(row, 'expected a table row for noComment()');

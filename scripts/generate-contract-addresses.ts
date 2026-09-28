@@ -62,7 +62,7 @@ async function main(): Promise<void> {
     await writeOrCheck(OUTPUT_PATH, content, { check, overrides: MDX_FORMAT });
   } catch (error) {
     // "The file is stale" does not say whether an address moved or only whitespace did, which is
-    // exactly what a reviewer of the weekly upstream-refresh PR needs to know. `writeOrCheck`
+    // exactly what a reviewer of the regenerated file needs to know. `writeOrCheck`
     // hands back the text it formatted, so this prints the diff without formatting it again.
     if (error instanceof StaleFileError && error.formatted !== undefined) {
       const current = fs.existsSync(OUTPUT_PATH) ? fs.readFileSync(OUTPUT_PATH, 'utf-8') : '';

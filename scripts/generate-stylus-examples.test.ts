@@ -114,12 +114,12 @@ describe('parseMetadata', () => {
     });
   });
 
-  it('normalizes a doubled space or leading/trailing whitespace in title or description (FS-2747)', () => {
+  it('normalizes a doubled space or leading/trailing whitespace in title or description', () => {
     // The upstream string basic_examples/variables/page.mdx actually ships (as of stylus-by-example
     // 4bd4fb0): a doubled space baked into the literal. Not a line-wrap artifact from this
     // generator, a real double space in upstream's own source string. Collapsed here so
     // `content:lint` rule A14 stays clean across a regeneration instead of needing a hand-edit the
-    // next weekly `stylus` job would overwrite.
+    // next regeneration would overwrite.
     const source = `export const metadata = {
   title: '  Padded  Title  ',
   description: 'Two  spaces mid-sentence and trailing space ',
@@ -158,9 +158,8 @@ describe('parseObjectLiteral', () => {
     });
   });
 
-  // The point of the whole function: this used to be `new Function(\`return ${literal}\`)()`,
-  // which ran whatever an unpinned third-party repository put here, weekly in CI and on any
-  // maintainer's machine. Each case below is a payload that evaluation would have executed.
+  // The literal comes from an unpinned third-party repository, so it is parsed as data. Each case
+  // below is a payload that evaluating it would execute.
   it('throws on an expression that would run code, rather than evaluating it', () => {
     for (const literal of [
       `{ title: (globalThis.x = 1, 'a') }`,

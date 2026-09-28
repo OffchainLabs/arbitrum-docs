@@ -1,10 +1,10 @@
 /**
  * Parsing and rendering for the precompile-table partials.
  *
- * Kept separate from `scripts/generate-precompile-tables.ts` (FS-2730) so this can be exercised
+ * Kept separate from `scripts/generate-precompile-tables.ts` so this can be exercised
  * against fixture Solidity/Go source in `scripts/lib/precompile-tables.test.ts` without reaching
- * the network: the runner fetches every source from a pinned commit over `raw.githubusercontent.com`,
- * which is what makes `pnpm precompiles:check` `continue-on-error` in CI. Everything here is pure
+ * the network: the runner fetches every source from a pinned commit over `raw.githubusercontent.com`.
+ * Everything here is pure
  * (no `fetch`, no `fs`); the runner supplies the fetched source text and does the writing.
  *
  * Ported from `scripts/generate-precompile-tables.ts`, unchanged in behavior. See that file's
