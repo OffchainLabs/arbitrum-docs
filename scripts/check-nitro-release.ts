@@ -1,5 +1,5 @@
 /**
- * check-nitro-release — bump the pinned Nitro version in content/vars.json.
+ * check-nitro-release: bump the pinned Nitro version in content/vars.json.
  *
  * Usage:
  *   pnpm nitro:check-release
@@ -9,24 +9,14 @@
  *
  *   nitroVersionTag       the git tag, which also drives the precompile source links
  *   latestNitroNodeImage  the published node Docker image, read from Docker Hub
- *   goEthereumCommit     the go-ethereum submodule commit at nitroVersionTag
+ *   goEthereumCommit      the go-ethereum submodule commit at nitroVersionTag
  *
- * The submodule pin is also repaired when Nitro is already current, so a stale or missing
- * goEthereumCommit does not have to wait for another release. Resolve all pins before writing.
+ * The submodule pin is also repaired when Nitro is already current. All pins are resolved before
+ * anything is written. It then rewrites the outgoing image tag in files that opt in with a
+ * `sync-with-var: latestNitroNodeImage` marker (see scripts/lib/nitro-node-image.ts).
  *
- * It then rewrites hardcoded copies of the **outgoing** image tag, but only in the files that opt in
- * with a `sync-with-var: latestNitroNodeImage` marker. Those copies exist because `<Var>` does not
- * evaluate inside a code fence (content-lint rule A6), so a copy-pasteable `docker run` command has
- * to spell the tag out. See scripts/lib/nitro-node-image.ts for why matching the outgoing value is
- * not safe on its own: the ArbOS release notes pin the same string as a fact about the past.
- *
- * Callers must regenerate the precompile tables afterwards — their implementation links
- * embed `nitroVersionTag`, so a bump leaves them stale. `.github/workflows/upstream-refresh.yml`
- * runs `precompiles:generate` in the same job for exactly this reason.
- *
- * Slimmed from arbitrum-docs `scripts/check-releases.ts`, which also maintains a
- * dependencies.json ledger for four other repositories. Nothing in this repo reads those
- * entries — they exist upstream so a commit message can tell a human "a new SDK shipped".
+ * Run `pnpm precompiles:generate` afterwards: the precompile tables embed `nitroVersionTag`.
+ * `.github/workflows/upstream-refresh.yml` runs both in one job.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -69,9 +59,8 @@ async function githubJson(endpoint: string): Promise<Record<string, unknown>> {
 }
 
 /**
- * Compare `vX.Y.Z` tags numerically. `releases/latest` already excludes prereleases, so a
- * three-part compare is enough and avoids taking on a semver dependency. Returns true when
- * `candidate` is strictly newer, so a deleted release can never trigger a downgrade.
+ * Compare `vX.Y.Z` tags numerically (`releases/latest` excludes prereleases). True only when
+ * `candidate` is strictly newer, so a deleted release never triggers a downgrade.
  */
 function isNewer(candidate: string, current: string): boolean {
   const parse = (tag: string): number[] | null => {
@@ -88,15 +77,9 @@ function isNewer(candidate: string, current: string): boolean {
 }
 
 /**
- * The published node image for a release, read from Docker Hub.
- *
- * Deliberately NOT derived from the git tag's commit sha, which is what arbitrum-docs'
- * check-releases.ts does. That approach is unsound: `v3.11.3` is a lightweight tag on
- * commit 4130f4c, but the published image is `v3.11.3-beb2108`, and
- * `offchainlabs/nitro-node:v3.11.3-4130f4c` returns 404 on Docker Hub. The image tag tracks
- * whichever commit the release pipeline built, so the registry is the only authority.
- *
- * Matches `<tag>-<7 hex>` exactly, excluding the -arm64/-amd64/-slim/-validator/-dev/
+ * The published node image for a release, read from Docker Hub. The image suffix is the commit
+ * the release pipeline built, which need not be the tag's commit, so the registry is the only
+ * authority. Matches `<tag>-<7 hex>` exactly, excluding the -arm64/-amd64/-slim/-validator/-dev/
  * -stripped variants of the same build.
  */
 async function resolvePublishedNodeImage(tag: string): Promise<string> {
@@ -122,7 +105,7 @@ async function resolvePublishedNodeImage(tag: string): Promise<string> {
   if (matches.length === 0) {
     throw new Error(
       `No published offchainlabs/nitro-node image for ${tag}. The release may predate its ` +
-        `image build — rerun once the image is pushed.`,
+        `image build; rerun once the image is pushed.`,
     );
   }
   if (matches.length > 1) {
@@ -135,8 +118,7 @@ async function resolvePublishedNodeImage(tag: string): Promise<string> {
 async function main(): Promise<void> {
   const vars: unknown = JSON.parse(fs.readFileSync(VARS_PATH, 'utf-8'));
   if (!isRecord(vars)) throw new Error(`${VARS_PATH} is not a JSON object`);
-  // Every key is spread back into the rewritten file below, so only the ones read here are
-  // narrowed. content/vars.ts requires both to be strings; a missing one fails here by name.
+  // Every key is spread back into the rewritten file below, so only the ones read here are narrowed.
   const pinnedTag = stringField(vars, 'nitroVersionTag');
   const pinnedImage = stringField(vars, 'latestNitroNodeImage');
   if (pinnedTag === undefined || pinnedImage === undefined) {
@@ -183,10 +165,6 @@ async function main(): Promise<void> {
   console.log(`updated latestNitroNodeImage → ${updated.latestNitroNodeImage}`);
   console.log(`updated goEthereumCommit    → ${updated.goEthereumCommit}`);
 
-  // A `docker run` line a reader copies has to carry the image tag literally, because `<Var>` does
-  // not evaluate inside a code fence (content-lint A6). Those copies would otherwise keep the old
-  // tag while the prose beside them advertises the new one, with no gate to catch it. Only files
-  // that opted in are rewritten; a page stating a Nitro version historically carries no marker.
   const synced = syncImageInContent(process.cwd(), pinnedImage, updated.latestNitroNodeImage);
   const total = synced.reduce((n, f) => n + f.count, 0);
   console.log(
