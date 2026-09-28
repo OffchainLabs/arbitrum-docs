@@ -79,10 +79,10 @@ mistakes:
 ## The pipeline
 
 Read `source.config.ts`, `lib/source.ts` and `app/docs/[[...slug]]/page.tsx` together. Nothing else
-reads content.
+reads the `docs` collection. The `glossary` collection has one reader, `lib/references.ts`.
 
-1. `fumadocs-mdx` scans `content/docs/**`, validates every page's frontmatter against the schema in
-   `source.config.ts`, and emits the `.source/` collection.
+1. `fumadocs-mdx` scans `content/docs/**` and `content/glossary/**`, validates every docs page's
+   frontmatter against the schema in `source.config.ts`, and emits the `.source/` collections.
 2. `lib/source.ts` runs `loader()` over that collection with the Lucide icons plugin and exports
    `source`.
 3. Route handlers read `source`. The docs page renders pages; the `llms.txt`, `llms-full.txt`,
@@ -110,7 +110,8 @@ Eight files under `app/` import `source`: the docs page and layout, the `llms.tx
 - URL derivation lives next to `source` (`getPageImage`, `getPageMarkdownUrl`, `getLLMText`), not
   in routes.
 - `postprocess.includeProcessedMarkdown: true` on the collection is what makes
-  `page.data.getText('processed')` work. Remove it and the `llms*` routes break.
+  `page.data.getText('processed')` work. Remove it and the `llms-full.txt` and `llms.mdx` routes
+  break. `llms.txt` only lists pages and does not read their text.
 - **Server only.** Never import `lib/source`, or a module that imports it, from a client
   component. It drags the compiled collection into the browser bundle, and no gate notices.
 
@@ -157,7 +158,9 @@ Dates are formatted in UTC, so a prerendered page reads the same wherever it was
 **The sidebar is the directory tree, ordered by `meta.json`.** Nothing else decides it.
 
 - Each of the nine sections is a top-level directory under `content/docs` whose `meta.json` sets
-  `"root": true`. The navbar (`lib/layout.shared.tsx`) links to each section's landing page.
+  `"root": true`. The navbar (`lib/layout.shared.tsx`) links into each section. Two entries do
+  not point at a landing page: Stylus goes to `stylus/quickstart`, and the Build menu carries an
+  extra entry for `build-decentralized-apps/machine-payments-protocol`.
 - `tabs={false}` in `app/docs/layout.tsx` turns off the root switcher. Fumadocs resolves the current
   URL to its node in the tree and renders the nearest `root: true` folder above it. A page outside
   every root folder gets the whole tree.
@@ -177,7 +180,8 @@ Dates are formatted in UTC, so a prerendered page reads the same wherever it was
 second node, and the reader lands in whichever section Fumadocs finds first. Use a path entry.
 
 `scripts/sidebar.test.ts` builds the real tree with Fumadocs' loader and fails when a page is on no
-node, on more than one, or outside every root folder. It runs under `pnpm test`.
+node, on more than one, or outside every root folder. The docs index, `/docs`, is exempt from the
+root-folder check. It runs under `pnpm test`.
 
 ## Page metadata
 
@@ -293,8 +297,10 @@ identity. `gitConfig` in `lib/shared.ts` reads them for the edit link and the "R
 link, and the contribute partials write their links home as
 `{var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/…`. `lib/shared.ts` imports the JSON with
 `with { type: 'json' }` because tests import it under `node --test`.
-`scripts/lib/contribute-repo-links.test.ts` asserts the partial's links and the PR template's links
-match `gitConfig`, and that no `.mdx` file writes a docs-repository URL in full.
+`scripts/lib/contribute-repo-links.test.ts` asserts that the links in
+`_contribute-docs-partial.mdx` and in the PR template match `gitConfig`, and that no `.mdx` file
+writes a docs-repository URL in full. `_know-more-tools-box-partial.mdx` also uses the placeholders
+and is covered only by that last check.
 `.github/pull_request_template.md` stays hardcoded because GitHub renders it, not this site.
 
 ### Announcement banner
@@ -319,9 +325,10 @@ the definition in a hover popover (`components/HoverPopover`), rendered on the s
 ships only the definitions it cites. `<ReferenceList collection="glossary" />` renders the whole
 collection on the glossary page.
 
-`pnpm references:check` fails on an unknown id, a duplicate id, or a `<Term>` inside a partial. A
-new term is a new file in `content/glossary/`. A new reference type is a new collection in
-`source.config.ts` plus one registry entry.
+`pnpm references:check` fails on an unknown id, a duplicate id, an entry with no `id` frontmatter,
+an unknown `<Reference collection>`, or a `<Term>` or `<Reference>` inside a partial. A new term is
+a new file in `content/glossary/`. A new reference type is a new collection in `source.config.ts`
+plus one registry entry.
 
 ## Custom MDX components
 
@@ -338,12 +345,31 @@ include `Callout`, `Card`, `Cards` and code blocks) and adds:
   troubleshooting set (`TroubleshootingChecklist`, `ChecklistItem`, `ConfigGuidance`,
   `TroubleshootingConfig`, `TroubleshootingReport`).
 
-Callouts are `<Callout type="info|warn|error|idea|success" title="…">`. A Docusaurus `:::` line
-renders as text, and `content:lint` fails on one.
+Callouts are `<Callout type="info|warn|error|idea|success" title="…">`. Fumadocs also accepts
+`warning` as a spelling of `warn`; write `warn`. A Docusaurus `:::` line renders as text, and
+`content:lint` fails on one.
 
 The registry also overrides `a`: an internal link ending in `.pdf` renders as a plain anchor so
 Next's `<Link>` does not prefetch the file. Every other link goes through Fumadocs' relative-link
 resolver.
+
+### Image captions
+
+Fumadocs' `ImageZoom` has no caption prop: its props are the image props plus `zoomInProps` and
+`rmiz`. A caption is a sibling `<figcaption>` inside a `<figure>`, with the markdown image on its
+own line between blank lines so MDX parses it as markdown rather than as JSX text:
+
+```mdx
+<figure>
+
+![Nitro support windows](/img/nitro-support-policy.png)
+
+<figcaption>Nitro support windows</figcaption>
+</figure>
+```
+
+Nothing in the registry maps `figure` or `figcaption`; both pass through as HTML, and Fumadocs'
+prose styles size and color the caption.
 
 `EdgeChallengeFlow` renders a committed snapshot, `public/data/edge-challenge-flow.json`, refreshed
 by hand with `pnpm edge-challenge:fetch` from Arbitrum Sepolia. It has no `--check` mode because a
@@ -352,8 +378,9 @@ live source is never stale, only older.
 ### Remote images are never fetched at build
 
 `lib/mdx-options.ts` sets `remarkImageOptions: { external: false }`, so the build never requests a
-third-party image. A local `/img/…` src is measured from `public/`, and a missing file fails the
-build. A markdown image with a remote src reaches Next's image component with no dimensions and
+third-party image. A local `/img/…` src is measured from `public/`, and a missing raster file fails
+the build. A missing `.svg` is skipped silently by the remark image plugin, so check SVG paths by
+eye. A markdown image with a remote src reaches Next's image component with no dimensions and
 renders broken. Commit the file under `public/img/`, or wrap a plain `<img>`:
 
 ```mdx
@@ -409,7 +436,8 @@ The file has two blocks:
 
 - **Between the `AUTO-GENERATED` markers**, one entry per moved page, appended by
   `pnpm move-doc`. Never hand-edit between the markers.
-- **After them**, legacy `docs.arbitrum.io` paths mapped to `/docs/…`, maintained by hand.
+- **After them**, hand-maintained entries: two site-local ones for the retired pattern guide,
+  then legacy `docs.arbitrum.io` paths mapped to `/docs/…`.
 
 `pnpm move-doc <from> <to>` rewrites every internal link that resolves to the page (keeping each
 link's written form), moves the file with `git mv`, re-bases its relative links, updates
@@ -503,11 +531,12 @@ flight payload. `scripts/static-docs-http.test.ts` asserts this against a runnin
 
 ## Analytics
 
-Four paths send events to one PostHog project. They share only the project token.
+Four paths send events to one PostHog project. They share only the project token and the ingest
+host.
 
 | Path                                   | Where                                               | Runs            |
 | -------------------------------------- | --------------------------------------------------- | --------------- |
-| Page feedback                          | `lib/posthog.ts`, a server action                   | everywhere      |
+| Page feedback (`docs_feedback`)        | `lib/posthog.ts`, a server action                   | everywhere      |
 | Web analytics (`$pageview`)            | `components/analytics/posthog-provider.tsx`, client | production only |
 | Inkeep search and chat (`inkeep_*`)    | `lib/inkeep.ts`, through the same client            | production only |
 | Markdown fetches (`llms_file_fetched`) | `proxy.ts`, server                                  | production only |
@@ -535,7 +564,8 @@ directly (`node scripts/x.ts`). There is no tsx, ts-node, `.mjs` or `.js`.
   silently, and Tailwind would stop compiling.
 
 Node 22 is stated in three places that must agree: `engines.node`, the `node-version` key in each
-`.github/workflows/*.yml`, and the Vercel project's Node.js Version setting, which is set by hand.
+workflow that sets up Node (`ci.yml` and `upstream-refresh.yml`), and the Vercel project's Node.js
+Version setting, which is set by hand.
 Never bypass `engines`.
 
 ## The gates
@@ -569,7 +599,8 @@ There is no pre-commit hook. Run the gates yourself before you push.
 ### The content-lint rules
 
 `scripts/lib/content-lint.ts` reads each MDX file under `content/` with code masked by
-`scripts/lib/strip-code.ts`, so an example inside a fence is never reported.
+`scripts/lib/strip-code.ts`, so an example inside a fence is never reported. The one exception is
+`var-in-code`, which looks only inside code.
 
 | Rule                   | Catches                                                                                  |
 | ---------------------- | ---------------------------------------------------------------------------------------- |
@@ -585,7 +616,7 @@ another.
 
 ### Hand-run tools
 
-These run nowhere automatically:
+None of these is a CI gate. `upstream-refresh.yml` runs two of them on a schedule (below):
 
 | Command                                | Does                                                                |
 | -------------------------------------- | ------------------------------------------------------------------- |
@@ -616,7 +647,8 @@ UTC and opens `automated/upstream-refresh` as a PR when anything changed. A PR o
   Upstream's `metadata` export is parsed, never evaluated. A relative link to a slug this site does
   not publish stops the run. Nothing upstream is pinned, so `stylus:check` is not a CI gate.
 
-Generated `meta.json` files are not formatted, because `.prettierignore` excludes `meta.json`.
+Generated `meta.json` files are not formatted: `.prettierignore` excludes `content/**/meta.json`,
+and the generators write them with `format: false`.
 
 ## What nothing catches
 
