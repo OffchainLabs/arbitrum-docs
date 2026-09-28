@@ -40,11 +40,13 @@ To make your contract callable, it must undergo an [activation process](/docs/st
 
 Stylus measures computational costs using ink instead of gas. Ink works like gas but is thousands of times smaller. WASM executes faster than the EVM, so a single EVM operation takes as long as thousands of WASM operations. A finer-grained unit makes pricing more precise.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
+
+Contract size: As of ArbOS61, Stylus contracts are not bound by the 24 KB EVM contract code limit. The maximum size of a Stylus contract is 96 KB — four times the limit for Solidity contracts on the EVM. This is enabled by a fragment-based deployment model; see [Deploying contracts larger than 24 KB](/docs/stylus/cli-tools/overview#deploying-contracts-larger-than-24-kb).
 
 Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/docs/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/docs/arbitrum-essentials/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable. The 365-day expiry and a minimum age of about 31 days before a contract can be kept alive are both configurable chain parameters; these are the current defaults.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Execution
 
@@ -64,20 +66,20 @@ Stylus can integrate into existing Solidity projects by calling a Stylus contrac
 
 - Onchain verification with zero-knowledge proofs: Reduce gas costs for onchain verification using zero-knowledge proving systems. See [case study](https://blog.arbitrum.io/renegade-stylus-case-study/) for an example implementation.
 - DeFi instruments: Implement custom pricing curves for AMMs, synthetic assets, options, and futures with onchain computation. You can extend existing protocols (such as Uniswap V4 hooks) or build your own.
-- Memory and compute-intensive applications: Build onchain games, generative art, or other applications that benefit from reduced memory costs. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
+- Memory and compute-intensive applications: Build onchain games, generative art, or other applications that benefit from reduced memory costs — Stylus programs can use up to 8 MB of memory, and costs grow near-linearly with the size of the workload. You can write the entire application in Stylus or optimize specific parts of existing Solidity contracts.
 - Cryptographic applications: Implement applications that require advanced cryptography or other compute-heavy operations that would be cost-prohibitive in Solidity.
 
 ## When Stylus saves gas (and when it doesn't)
 
 Stylus's gas advantage is concentrated in **computation**. Storage operations cost roughly the same as in the EVM, so storage-heavy contracts gain little by porting.
 
-<VanillaAdmonition type="info" title="Quick rule of thumb">
+<Callout type="info" title="Quick rule of thumb">
 
 - **Use Stylus** for compute-heavy logic: cryptography, math-heavy DeFi, ZK verification, in-memory algorithms, ports of existing Rust/C/C++ libraries.
 - **Stick with Solidity** when the contract mostly reads and writes storage with little computation in between — you won't see a meaningful gas reduction.
 - **Hybrid approach**: keep your storage layout in Solidity and call out to a Stylus contract for the compute-heavy hot paths.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Getting started
 

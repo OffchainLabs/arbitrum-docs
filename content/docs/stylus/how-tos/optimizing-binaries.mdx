@@ -1,7 +1,7 @@
 ---
 title: 'How to optimize Stylus WASM binaries'
 description: 'A guide on optimizing Stylus WASM program sizes'
-content_type: 'how-to'
+content_type: how-to
 author: rauljordan
 sme: rauljordan
 ---
@@ -41,11 +41,11 @@ cargo +nightly -Z build-std=std,panic_abort -Zbuild-std-features=panic_immediate
 
 Combined with disabling storage caching, this can shave roughly 20% off binary size on small contracts.
 
-<VanillaAdmonition type="warning" title="Use nightly flags at your own risk">
+<Callout type="warning" title="Use nightly flags at your own risk">
 
 Nightly compiler flags are unstable and may change between toolchain releases. Always re-run `cargo stylus check` after enabling them to confirm the resulting binary is still valid.
 
-</VanillaAdmonition>
+</Callout>
 
 If your contract still exceeds the size limit after these optimizations, consider splitting functionality across multiple Stylus contracts and composing them via inter-contract calls.
 

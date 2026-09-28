@@ -4,8 +4,8 @@ description: 'Learn how to import Solidity interfaces and call external contract
 sidebar_label: 'Importing interfaces'
 user_story: 'As a Rust developer building Stylus smart contracts, I want to interact with other contracts on the blockchain'
 content_type: 'how-to'
-author: anegg0
-sme: anegg0
+author: 'anegg0'
+sme: 'anegg0'
 ---
 
 Interfaces enable your Stylus contract to interact with other contracts on the blockchain, regardless of whether they're written in Solidity, Rust, or another language. This guide shows you how to import and use external contract interfaces in your Stylus smart contracts.
@@ -19,9 +19,9 @@ Contract interfaces provide a type-safe way to communicate with other contracts 
 - **Cross-language interoperability**: Stylus contracts can call Solidity contracts and vice versa
 - **Upgradeability patterns**: Use interfaces to interact with proxy contracts
 
-<VanillaAdmonition type="info" title="Language agnostic">
+<Callout type="info" title="Language agnostic">
   Since interfaces operate at the ABI level, they work identically whether the target contract is written in Solidity, Rust, or any other language that compiles to EVM bytecode.
-</VanillaAdmonition>
+</Callout>
 
 ## Prerequisites
 
@@ -95,9 +95,9 @@ sol_interface! {
 }
 ```
 
-<VanillaAdmonition type="info" title="Solidity syntax">
+<Callout type="info" title="Solidity syntax">
   Interface declarations use standard Solidity syntax. The SDK computes the correct 4-byte function selectors based on the exact names and parameter types you provide.
-</VanillaAdmonition>
+</Callout>
 
 ## Calling external contract methods
 
@@ -222,9 +222,9 @@ impl MyContract {
 }
 ```
 
-<VanillaAdmonition type="warning" title="Mutating calls require &mut self">
+<Callout type="warning" title="Mutating calls require &mut self">
   When using `Call::new_mutating(self)`, your method must take `&mut self` as its first parameter. This ensures the Stylus runtime properly handles state changes and reentrancy protection.
-</VanillaAdmonition>
+</Callout>
 
 ### Payable calls with `Call::new_payable(self, value)`
 
