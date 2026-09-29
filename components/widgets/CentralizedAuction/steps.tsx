@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 
+import type { AuctionStepId } from './constants';
+
 export interface AuctionStep {
   /** Modal heading. */
   title: ReactNode;
@@ -27,7 +29,7 @@ export interface AuctionStep {
  * Steps 2 to 4 are the ones the diagram makes clickable. 1 and 5 are numbered markers whose story
  * the surrounding page tells.
  */
-export const AUCTION_STEPS: Record<number, AuctionStep> = {
+export const AUCTION_STEPS: Record<AuctionStepId, AuctionStep> = {
   1: {
     title: 'Step 1: Deposit funds into the auction contract',
     lead: 'Users must first deposit ERC-20 tokens into the auction contract to participate in bidding.',
