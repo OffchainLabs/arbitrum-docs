@@ -372,6 +372,7 @@ describe('buildSourceUrls', () => {
     nitroRepositorySlug: 'nitro',
     nitroVersionTag: 'v9.9.9',
     nitroPathToPrecompiles: 'precompiles',
+    nitroPathToNodeInterface: 'execution/nodeinterface',
   };
   const pins = {
     nitroContractsRepositorySlug: 'nitro-contracts',
@@ -403,6 +404,17 @@ describe('buildSourceUrls', () => {
     assert.equal(
       buildSourceUrls(vars, pins).interfaceBaseUrl,
       'https://github.com/OffchainLabs/nitro-precompile-interfaces/blob/cafe0123/',
+    );
+  });
+
+  it('takes the NodeInterface Go directory from the nitroPathToNodeInterface pin', () => {
+    const moved = buildSourceUrls(
+      { ...vars, nitroPathToNodeInterface: 'moved/nodeinterface' },
+      pins,
+    );
+    assert.equal(
+      moved.nodeInterfaceImplementationBaseUrl,
+      'https://github.com/OffchainLabs/nitro/blob/v9.9.9/moved/nodeinterface/',
     );
   });
 

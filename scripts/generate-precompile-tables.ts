@@ -59,7 +59,7 @@ const NODE_INTERFACE_PINS: NodeInterfacePins = {
 };
 
 /**
- * Read the five pins {@link buildSourceUrls} needs out of the parsed `content/vars.json`,
+ * Read the six pins {@link buildSourceUrls} needs out of the parsed `content/vars.json`,
  * throwing naming the key rather than rendering `undefined` into a URL.
  */
 function readSourceVars(parsed: unknown): PrecompileSourceVars {
@@ -78,6 +78,7 @@ function readSourceVars(parsed: unknown): PrecompileSourceVars {
     nitroRepositorySlug: read('nitroRepositorySlug'),
     nitroVersionTag: read('nitroVersionTag'),
     nitroPathToPrecompiles: read('nitroPathToPrecompiles'),
+    nitroPathToNodeInterface: read('nitroPathToNodeInterface'),
   };
 }
 

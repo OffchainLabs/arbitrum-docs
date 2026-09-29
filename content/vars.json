@@ -13,6 +13,7 @@
   "nitroPathToArbosState": "arbos/arbosState",
   "nitroPathToPrecompiles": "precompiles",
   "nitroPathToStorage": "arbos/storage",
+  "nitroPathToNodeInterface": "execution/nodeinterface",
   "nitroPrecompilesRepositorySlug": "nitro-precompile-interfaces",
   "nitroPrecompilesCommit": "e7e6566ae5b0efa0ad4d779138f64ead11928c66",
   "goEthereumCommit": "dff2aadcd2e75e33923b13acce6468d847477e79",

@@ -77,6 +77,7 @@ export interface PrecompileSourceVars {
   nitroRepositorySlug: string;
   nitroVersionTag: string;
   nitroPathToPrecompiles: string;
+  nitroPathToNodeInterface: string;
 }
 
 /** The runner's `NODE_INTERFACE_PINS`. */
@@ -100,9 +101,10 @@ export interface SourceUrls {
  * across two files: `nitroPrecompilesRepositorySlug` and `nitroPrecompilesCommit` (the Solidity
  * interface), `nitroRepositorySlug`, `nitroVersionTag` and `nitroPathToPrecompiles` (the Go
  * implementation), all in `content/vars.json`, plus `NODE_INTERFACE_PINS
- * .nitroPrecompilesPathToInterfaces` in `scripts/generate-precompile-tables.ts`. The marker names
- * the two files rather than the six pins so that it cannot go stale as pins are added, and so it
- * fits on one line in the fifteen partials that carry it.
+ * .nitroPrecompilesPathToInterfaces` in `scripts/generate-precompile-tables.ts`
+ * (`nitroPathToNodeInterface` only feeds `_NodeInterface.mdx`). The marker names the two files
+ * rather than the six pins so that it cannot go stale as pins are added, and so it fits on one
+ * line in the fifteen partials that carry it.
  */
 export const PRECOMPILE_MARKER = generatedMarker(
   'pnpm precompiles:generate',
@@ -113,16 +115,16 @@ export const PRECOMPILE_MARKER = generatedMarker(
  * Opens `_NodeInterface.mdx`. That partial's Solidity interface comes from `nitro-contracts`,
  * not `nitro-precompile-interfaces`, so it reads `NODE_INTERFACE_PINS` (in
  * `scripts/generate-precompile-tables.ts`) instead of the `nitroPrecompiles*` vars.json pins;
- * its Go implementation still follows `nitroVersionTag` and `nitroRepositorySlug`. That is a
- * short enough list to name in full, so this marker does, and naming it is the only thing telling
- * a `_NodeInterface.mdx` editor that `nitroPrecompilesCommit` is not their lever. Both markers
- * name the runner by path, because "this script" has no referent for somebody reading the
- * partial.
+ * its Go implementation still follows `nitroVersionTag`, `nitroRepositorySlug` and
+ * `nitroPathToNodeInterface`. That is a short enough list to name in full, so this marker does,
+ * and naming it is the only thing telling a `_NodeInterface.mdx` editor that
+ * `nitroPrecompilesCommit` is not their lever. Both markers name the runner by path, because
+ * "this script" has no referent for somebody reading the partial.
  */
 export const NODE_INTERFACE_MARKER = generatedMarker(
   'pnpm precompiles:generate',
-  'bumping nitroVersionTag or nitroRepositorySlug in content/vars.json, or NODE_INTERFACE_PINS ' +
-    'in scripts/generate-precompile-tables.ts',
+  'bumping nitroVersionTag, nitroRepositorySlug or nitroPathToNodeInterface in content/vars.json, ' +
+    'or NODE_INTERFACE_PINS in scripts/generate-precompile-tables.ts',
 );
 
 export const DEPRECATION_NOTICE: string =
@@ -149,7 +151,7 @@ export function buildSourceUrls(vars: PrecompileSourceVars, pins: NodeInterfaceP
     interfaceBaseUrl: `https://github.com/OffchainLabs/${vars.nitroPrecompilesRepositorySlug}/blob/${vars.nitroPrecompilesCommit}${interfacePath}/`,
     implementationBaseUrl: `https://github.com/OffchainLabs/${vars.nitroRepositorySlug}/blob/${vars.nitroVersionTag}/${vars.nitroPathToPrecompiles}/`,
     nodeInterfaceInterfaceBaseUrl: `https://github.com/OffchainLabs/${pins.nitroContractsRepositorySlug}/blob/${pins.nitroContractsCommit}/${pins.nitroContractsPathToPrecompilesInterface}/`,
-    nodeInterfaceImplementationBaseUrl: `https://github.com/OffchainLabs/${vars.nitroRepositorySlug}/blob/${vars.nitroVersionTag}/execution/nodeinterface/`,
+    nodeInterfaceImplementationBaseUrl: `https://github.com/OffchainLabs/${vars.nitroRepositorySlug}/blob/${vars.nitroVersionTag}/${vars.nitroPathToNodeInterface}/`,
   };
 }
 
