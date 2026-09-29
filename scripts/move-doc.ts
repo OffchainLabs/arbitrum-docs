@@ -287,8 +287,13 @@ async function appendRedirect(
   if (!current.includes(REDIRECTS_END)) {
     throw new Error(`move-doc: ${REDIRECTS_CONFIG_PATH} is missing the ${REDIRECTS_END} marker`);
   }
-  const entry = `  { source: '${source}', destination: '${destination}', permanent: true },\n  ${REDIRECTS_END}`;
-  const next = current.replace(`  ${REDIRECTS_END}`, entry);
+  // JSON string literals are valid TypeScript ones, so a quote or backslash in a file name cannot
+  // end the string early; Prettier then re-quotes them to the repo's style. The replacement is a
+  // callback so a `$&` or `$1` in a path is inserted literally rather than expanded.
+  const entry =
+    `  { source: ${JSON.stringify(source)}, destination: ${JSON.stringify(destination)}, ` +
+    `permanent: true },\n  ${REDIRECTS_END}`;
+  const next = current.replace(`  ${REDIRECTS_END}`, () => entry);
   const config = await resolveConfig(redirectsPath);
   writeFileSync(redirectsPath, await format(next, { ...config, filepath: redirectsPath }));
 }
