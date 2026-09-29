@@ -7,8 +7,15 @@ import { appName, gitConfig } from '../lib/shared.ts';
 const baseUrl = process.env.STATIC_DOCS_TEST_URL;
 const livePath = '/docs/run-a-node/start-here';
 const liveMirror = `/llms.mdx${livePath}/content.md`;
-const documentOnly = (html: string): string =>
-  html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+const documentOnly = (html: string): string => {
+  let previous: string;
+  let current = html;
+  do {
+    previous = current;
+    current = current.replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, '');
+  } while (current !== previous);
+  return current;
+};
 const get = (path: string, options?: RequestInit): Promise<Response> =>
   fetch(new URL(path, baseUrl), options);
 
