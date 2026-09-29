@@ -151,10 +151,21 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
   });
 });
 
+/** Fenced blocks and inline code removed: a code sample may show a component's source on purpose. */
+const prose = (markdown: string): string =>
+  markdown
+    .replace(/^([ \t]*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1\2[ \t]*$/gm, '')
+    .replace(/(`+)[^`\n][\s\S]*?\1/g, '');
+/** Components `lib/llms-markdown.ts` turns into markdown; none may reach a mirror as a tag. */
+const COMPONENT_TAG =
+  /<(Var|Term|Callout|AEL|Card|Cards|Accordion|Accordions|Tab|Tabs|ImageZoom)\b/;
+
 test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => {
   const noComments = (body: string, path: string): void => {
     assert.ok(body.length > 0, path);
     assert.equal(body.includes('{/*'), false, `${path} still serves an MDX comment`);
+    const leak = prose(body).match(COMPONENT_TAG)?.[0];
+    assert.equal(leak, undefined, `${path} still serves the component tag ${leak}`);
   };
 
   await t.test('a page mirror is clean and still carries its prose', async () => {
@@ -165,6 +176,13 @@ test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => 
       noComments(body, path);
       assert.match(body, /Arbitrum documentation/, path);
     }
+  });
+
+  await t.test('a mirror with variables and glossary terms prints values and words', async () => {
+    const path = '/arbitrum-essentials/reference/chain-params.md';
+    const response = await get(path);
+    assert.equal(response.status, 200, path);
+    noComments(await response.text(), path);
   });
 
   await t.test('llms-full.txt is clean site-wide', async () => {
