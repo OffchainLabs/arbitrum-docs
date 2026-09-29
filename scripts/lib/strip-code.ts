@@ -73,9 +73,10 @@ function* scanFences(source: string, bodyStart: number): Generator<{ start: numb
 
     const marker = open[1];
     const indent = open[0].length - marker.length;
-    const closes = new RegExp(
-      `^[ \\t]{0,${indent + 3}}\\${marker[0]}{${marker.length},}[ \\t\\r]*$`,
-    );
+    // The fence character is a literal chosen by comparison, not a slice of the source: the only
+    // source-derived inputs to this pattern are lengths, so no scanned text is used as a regex.
+    const fence = marker.startsWith('~') ? '~' : '`';
+    const closes = new RegExp(`^[ \\t]{0,${indent + 3}}\\${fence}{${marker.length},}[ \\t\\r]*$`);
 
     let end = source.length;
     let scan = lineEnd + 1;
