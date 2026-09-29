@@ -6,7 +6,7 @@ author: pete-vielhaber
 sme: mehdi salehi
 ---
 
-This document provides a deep dive into the design and rationale of <Term id="arbitrum-nitro">Arbitrum Nitro</Term>. This isn't API documentation, nor is it a guided tour of the code—look elsewhere for those. "Inside Arbitrum Nitro" is for people who want to understand Nitro's design.
+## Transaction processing journey on Arbitrum
 
 This document provides a deep dive into the design and rationale of <Term id="arbitrum-nitro">Arbitrum Nitro</Term>. This isn't API documentation, nor is it a guided tour of the code—look elsewhere for those. "Inside Arbitrum Nitro" is for people who want to understand Nitro's design.
 
@@ -38,6 +38,7 @@ At the most basic level, an <Term id="arbitrum-chain">Arbitrum chain</Term> work
 ![Original napkin sketch drawn by Arbitrum co-founder Ed Felten](/img/haw-eds-napkin-drawing.png)
 
 <figcaption>Original napkin sketch drawn by Arbitrum co-founder Ed Felten</figcaption>
+
 </figure>
 
 People and contracts put messages into the inbox. The chain reads the messages one at a time and processes each one. This updates the chain's state and produces outputs.
@@ -70,7 +71,9 @@ The essence of Nitro, and its key innovations, lie in four big ideas. We'll list
 
 This diagram summarizes how transactions are processed in Nitro.
 
-<Term id="arbitrum">Arbitrum</Term> is an <Term id="L2">L2</Term> scaling solution for Ethereum, offering a unique combination of benefits:
+<ImageZoom src="/img/haw-transaction-lifecycle.svg" className="img-800px" alt="Transaction lifecycle">
+  Transaction lifecycle
+</ImageZoom>
 
 Let's [follow a user's transaction](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle) through this process.
 
@@ -107,8 +110,13 @@ The second key design idea in Nitro is "Geth at the core." Here, "Geth" refers t
   In Ethereum's post-Merge architecture, Geth is an **execution <Term id="client">client</Term>**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles in Geth's execution core as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.
 </Callout>
 
-- a real-time feed, and
-- batches posted on L1 Ethereum
+<figure>
+
+![](/img/haw-geth-sandwich.svg)
+
+<figcaption>Geth sandwich</figcaption>
+
+</figure>
 
 The software that makes up a Nitro node can be thought of as built in three main layers, which are shown above:
 
@@ -568,8 +576,10 @@ In this overview, you've learned about the complete transaction journey through 
 
 - [Transaction Lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle): Detailed transaction lifecycle from submission to finality
 - [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer): How the Sequencer orders, batches, and posts transactions
+- [Finality](/docs/how-arbitrum-works/deep-dives/finality): Soft and hard finality, trust models, and when to wait for each
+- [Batch poster](/docs/how-arbitrum-works/deep-dives/batchposter): How a sequenced batch is built, compressed, and posted to the parent chain
 - [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees): Gas pricing, fee calculations, and adaptive pricing algorithm
-- [State Transition Function: Gentle Introduction](/docs/how-arbitrum-works/deep-dives/stf): Foundational concepts of the STF
+- [State Transition Function](/docs/how-arbitrum-works/deep-dives/stf): Foundational concepts of the STF
 - [Geth](/docs/how-arbitrum-works/reference/geth): Geth core and EVM compatibility
 - [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos): Arbitrum Operating System features and capabilities
 - [State Transition Function inputs](/docs/how-arbitrum-works/reference/stf-inputs): Message types and STF processing mechanics
