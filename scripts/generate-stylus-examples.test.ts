@@ -395,6 +395,13 @@ describe('buildPage', () => {
     assert.match(built.content, /^title: 'ABI Decode • Stylus by Example'$/m);
   });
 
+  it('demotes a later body `# ` heading to `## `, so the page keeps one h1', () => {
+    const source = `${SOURCE}\n# Full Example code:\n\nBelow.\n`;
+    const built = build(source).content;
+    assert.match(built, /^## Full Example code:$/m);
+    assert.doesNotMatch(built, /^# /m);
+  });
+
   it('leaves a `# ` line inside a code fence alone', () => {
     const source = SOURCE.replace(/^# Hello World\n\n/m, '') + '\n```sh\n# a shell comment\n```\n';
     assert.match(build(source).content, /^# a shell comment$/m);

@@ -446,14 +446,34 @@ export function findBodyHeading(source: string): { text: string; index: number }
   return { text: match[1], index: match.index };
 }
 
-/** Remove the body heading {@link findBodyHeading} finds, and the blank line after it. */
+/**
+ * Remove the body heading {@link findBodyHeading} finds, and the blank line after it. Any later
+ * `# ` heading outside a fence (three upstream pages head their listing "Full Example code:")
+ * becomes `## `, so the page keeps one `<h1>`.
+ */
 export function stripBodyHeading(content: string): string {
   const heading = findBodyHeading(content);
-  if (!heading) return content;
-  const lineEnd = content.indexOf('\n', heading.index);
+  const stripped = heading ? removeLine(content, heading.index) : content;
+  return demoteBodyHeadings(stripped);
+}
+
+function removeLine(content: string, index: number): string {
+  const lineEnd = content.indexOf('\n', index);
   const end = lineEnd === -1 ? content.length : lineEnd + 1;
   const after = content.startsWith('\n', end) ? end + 1 : end;
-  return content.slice(0, heading.index) + content.slice(after);
+  return content.slice(0, index) + content.slice(after);
+}
+
+/** `# ` to `## ` on every line outside a code fence. */
+function demoteBodyHeadings(content: string): string {
+  let inFence = false;
+  return content
+    .split('\n')
+    .map((line) => {
+      if (/^(```|~~~)/.test(line)) inFence = !inFence;
+      return !inFence && /^# /.test(line) ? `#${line}` : line;
+    })
+    .join('\n');
 }
 
 /**
