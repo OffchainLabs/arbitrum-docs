@@ -1,6 +1,7 @@
 'use server';
 
 import { type PageFeedback, pageFeedback } from '@/components/feedback/schema';
+import { getSiteUrl } from '@/lib/shared';
 
 // Docs feedback sink: page ratings are captured to PostHog server-side, so feedback also works
 // locally and on previews, where the browser SDK is not initialized.
@@ -23,7 +24,7 @@ export async function onPageFeedbackAction(feedback: PageFeedback): Promise<bool
     console.error('[Feedback] rejected malformed payload:', parsed.error.issues);
     return false;
   }
-  const { opinion, url, message } = parsed.data;
+  const { opinion, pathname, message } = parsed.data;
 
   // PostHog's name for the publishable, write-only `phc_` token; safe to read on the server.
   const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -47,8 +48,10 @@ export async function onPageFeedbackAction(feedback: PageFeedback): Promise<bool
         distinct_id: crypto.randomUUID(),
         properties: {
           $process_person_profile: false,
-          $current_url: url,
-          $pathname: new URL(url).pathname,
+          // Concatenated, not `new URL(pathname, origin)`: a pathname like `//host` would resolve
+          // to another origin.
+          $current_url: `${getSiteUrl().replace(/\/+$/, '')}${pathname}`,
+          $pathname: pathname,
           opinion,
           message,
         },
