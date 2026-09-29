@@ -16,9 +16,6 @@ const documentOnly = (html: string): string => {
   } while (current !== previous);
   return current;
 };
-  for (const node of doc.querySelectorAll('script')) node.remove();
-  return doc.documentElement.outerHTML;
-};
 const get = (path: string, options?: RequestInit): Promise<Response> =>
   fetch(new URL(path, baseUrl), options);
 
