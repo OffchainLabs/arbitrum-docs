@@ -104,6 +104,6 @@ For more information or if you'd like to use the toolkit locally, you can find w
 
 ---
 
-- **`.set`\*\***:\*\* This method is used directly to set a value in storage. It's a straightforward way to assign a value if you only need to perform a one-time set operation.
-- **`.setter`\*\***:\*\* This method provides a handle to a storage slot. It allows you to both `set` and `get` the value of the storage slot, making it more versatile if you need to access the current value and also update it.
+- **`.set`:** This method is used directly to set a value in storage. It's a straightforward way to assign a value if you only need to perform a one-time set operation.
+- **`.setter`:** This method provides a handle to a storage slot. It allows you to both `set` and `get` the value of the storage slot, making it more versatile if you need to access the current value and also update it.
   If you plan to both retrieve and modify a value frequently, it's more efficient to use `.setter`, assign it to a variable, and then use the `.get` and `.set` methods on that variable. However, if you only need to set a value, you can use `.set` directly.

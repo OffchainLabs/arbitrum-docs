@@ -412,7 +412,9 @@ export function buildPage({
   baseUrl,
   include,
 }: BuildPageOptions): { content: string; metadata: StylusMetadata; banner: boolean } {
-  const metadata = parseMetadata(source, context);
+  const parsed = parseMetadata(source, context);
+  const heading = findBodyHeading(source);
+  const metadata = { ...parsed, title: titleFor(parsed.title, heading?.text) };
   const frontmatter = renderFrontmatter(metadata, frontmatterDefaults);
 
   // Replacing the metadata export in place, rather than rebuilding the file around the body,
@@ -420,11 +422,50 @@ export function buildPage({
   // exactly where upstream put it.
   // A callback inserts literal text: a replacement string would expand `$1`, `$$`, etc.
   let content = source.replace(METADATA_PATTERN, () => `${frontmatter}\n\n${marker}`);
+  content = stripBodyHeading(content);
   content = rewriteRelativeLinks(content, { sections, baseUrl, context });
 
   const banner = insertNotForProductionBanner(content, include);
   assertStaticBody(banner.content, { context, include });
   return { content: banner.content, metadata, banner: banner.inserted };
+}
+
+/** The title suffix upstream puts on every page. */
+const TITLE_SUFFIX = ' • Stylus by Example';
+
+/**
+ * Upstream's `page.mdx` opens its body with a `# Heading`. The docs page already renders the
+ * frontmatter title as the `<h1>`, so the body heading would be a second one (screen readers and
+ * search snippets get two top-level headings). The first `# ` line before any code fence is the
+ * one to drop; a `# ` inside a fence is a shell comment and stays.
+ */
+export function findBodyHeading(source: string): { text: string; index: number } | undefined {
+  const firstFence = source.search(/^(```|~~~)/m);
+  const match = /^# (.+?)\s*$/m.exec(source);
+  if (!match || (firstFence !== -1 && match.index > firstFence)) return undefined;
+  return { text: match[1], index: match.index };
+}
+
+/** Remove the body heading {@link findBodyHeading} finds, and the blank line after it. */
+export function stripBodyHeading(content: string): string {
+  const heading = findBodyHeading(content);
+  if (!heading) return content;
+  const lineEnd = content.indexOf('\n', heading.index);
+  const end = lineEnd === -1 ? content.length : lineEnd + 1;
+  const after = content.startsWith('\n', end) ? end + 1 : end;
+  return content.slice(0, heading.index) + content.slice(after);
+}
+
+/**
+ * The page title, from the body heading when the two disagree. Upstream's `abi_decode` page, for
+ * example, carries the metadata title "ABI Encode" over a body headed "ABI Decode"; readers saw
+ * the heading, so the heading wins. Only titles that carry upstream's suffix are corrected, and
+ * the suffix is kept.
+ */
+export function titleFor(metadataTitle: string, heading: string | undefined): string {
+  if (!heading || !metadataTitle.endsWith(TITLE_SUFFIX)) return metadataTitle;
+  const base = metadataTitle.slice(0, -TITLE_SUFFIX.length);
+  return base === heading ? metadataTitle : `${heading}${TITLE_SUFFIX}`;
 }
 
 /** The frontmatter block {@link renderFrontmatter} writes, at the top of a built page. */

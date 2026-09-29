@@ -1543,6 +1543,11 @@ export const redirects: Redirect[] = [
     permanent: true,
   },
   {
+    source: '/how-arbitrum-works/priority-gas-auction/use-fast-feed',
+    destination: '/docs/how-arbitrum-works/priority-gas-auction/use-fast-feed',
+    permanent: true,
+  },
+  {
     source: '/how-arbitrum-works/priority-gas-auction/pga',
     destination: '/docs/how-arbitrum-works/priority-gas-auction/pga',
     permanent: true,
