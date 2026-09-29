@@ -1,8 +1,6 @@
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      id="svg415"
       viewBox="0 0 1600 900"
-      style="pointer-events:none"
 
     >
       <defs id="defs3">
@@ -19,7 +17,7 @@
           <stop id="stop3" offset="0.75" stop-color="#152c4e" />
         </linearGradient>
         <style id="style1">
-          #svg415 .cls-1,#svg415 .cls-2,#svg415 .cls-4{fill:none}#svg415 .cls-5{fill:#e30663}#svg415 .cls-7{fill:#12aaff}#svg415 .cls-8,#svg415 .cls-9{fill:#e5e5e5}#svg415 .cls-2,#svg415 .cls-4{stroke-miterlimit:10}#svg415 .cls-2{stroke-width:.86px;stroke:#fff}#svg415 .cls-4{stroke-width:1.09px}#svg415 .cls-10{fill:#fff}#svg415 .cls-11,#svg415 .cls-9{opacity:.1}#svg415 .cls-4{stroke:#e5e5e5}#svg415 .cls-13{fill:#213147}
+          .cls-1,.cls-2,.cls-4{fill:none}.cls-5{fill:#e30663}.cls-7{fill:#12aaff}.cls-8,.cls-9{fill:#e5e5e5}.cls-2,.cls-4{stroke-miterlimit:10}.cls-2{stroke-width:.86px;stroke:#fff}.cls-4{stroke-width:1.09px}.cls-10{fill:#fff}.cls-11,.cls-9{opacity:.1}.cls-4{stroke:#e5e5e5}.cls-13{fill:#213147}
         </style>
       </defs>
       <g id="bkgd" aria-hidden="true">
