@@ -21,12 +21,12 @@
   },
   {
     "question": "Can I use a smart contract wallet in the bridge?",
-    "answer": "Support for Smart Contract Wallets is currently limited to token deposits and withdrawals. Keep in mind that when withdrawing funds, you won't be able to claim them on L1 using the [bridge](https://bridge.arbitrum.io/) (unless you also control that address on L1). In that case, you can use the [cross-chain dashboard](https://retryable-dashboard.arbitrum.io/tx) to claim your funds on L1.\n\n**ETH** deposits and withdrawals using a Smart Contract Wallet are currently not supported, but will be available soon.\n\n",
+    "answer": "Support for Smart Contract Wallets is currently limited to token deposits and withdrawals. Keep in mind that when withdrawing funds, the withdrawal may not show up in your [bridge](https://portal.arbitrum.io/bridge) transaction history unless you also control that address on L1. In that case, you can search for the withdrawal transaction hash in the [bridge transaction history](https://portal.arbitrum.io/bridge?tab=tx_history) to claim your funds on L1.\n\n**ETH** deposits and withdrawals using a Smart Contract Wallet are currently not supported, but will be available soon.\n\n",
     "key": "can-i-use-a-smart-contract-wallet-in-the-bridge"
   },
   {
     "question": "How can I claim withdrawn funds if I don't control on L1 the address that initiated the transaction on L2?",
-    "answer": "Once the [withdrawal period](https://docs.arbitrum.io/learn-more/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window) is past, you can use the [cross-chain dashboard](https://retryable-dashboard.arbitrum.io/tx) to execute the message on L1. Paste the transaction hash that initiated the withdrawal on L2, and follow the process described in the dashboard.\n\n\n\n",
+    "answer": "Once the [withdrawal period](https://docs.arbitrum.io/learn-more/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window) is past, you can claim the funds on L1 from the [bridge transaction history](https://portal.arbitrum.io/bridge?tab=tx_history). Search for the transaction hash that initiated the withdrawal on L2, then claim it from the result.\n\n\n\n",
     "key": "how-can-i-claim-withdrawn-funds-if-i-dont-control-on-l1-the-address-that-initiated-the-transaction-on-l2"
   }
 ]
