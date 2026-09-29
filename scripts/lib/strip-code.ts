@@ -73,16 +73,25 @@ function* scanFences(source: string, bodyStart: number): Generator<{ start: numb
 
     const marker = open[1];
     const indent = open[0].length - marker.length;
-    // The fence character is a literal chosen by comparison, not a slice of the source: the only
-    // source-derived inputs to this pattern are lengths, so no scanned text is used as a regex.
     const fence = marker.startsWith('~') ? '~' : '`';
-    const closes = new RegExp(`^[ \\t]{0,${indent + 3}}\\${fence}{${marker.length},}[ \\t\\r]*$`);
+    // CommonMark: a closing fence is the same character, at least as long as the opener, indented
+    // at most three columns more, with only whitespace after it. Checked with string operations
+    // rather than a RegExp built from the source, so no scanned text ever becomes a pattern.
+    const closesFence = (line: string): boolean => {
+      let column = 0;
+      while (column < line.length && (line[column] === ' ' || line[column] === '\t')) column++;
+      if (column > indent + 3) return false;
+      let run = column;
+      while (run < line.length && line[run] === fence) run++;
+      if (run - column < marker.length) return false;
+      return /^[ \t\r]*$/.test(line.slice(run));
+    };
 
     let end = source.length;
     let scan = lineEnd + 1;
     while (scan <= source.length) {
       const scanEnd = lineEndFrom(source, scan);
-      if (closes.test(source.slice(scan, scanEnd))) {
+      if (closesFence(source.slice(scan, scanEnd))) {
         end = scanEnd;
         break;
       }
