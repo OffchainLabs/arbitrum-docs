@@ -31,7 +31,7 @@
   },
   {
     "question": "How can I check the status of my cross chain message?",
-    "answer": "You can check the status of any Arbitrum cross chain message by searching for its transaction hash in the [bridge transaction history](https://portal.arbitrum.io/bridge?tab=tx_history), where you can also claim withdrawals. To check or redeem a retryable ticket, use the [Retryable Tickets tool](https://portal.arbitrum.io/build/retryables).\n\nYou'll need the transaction hash of the \"initiating transaction\":  the L1 transaction hash for an L1-to-L2 message (e.g., a deposit), or the L2 transaction hash for an L2-to-L1 message (e.g., a withdrawal).\n\n\n\nIf you cross-chain message was initiated from [https://bridge.arbitrum.io/](https://bridge.arbitrum.io/), you can also check its status / execute it at that site in the transaction history tab. \n\n\n\n",
+    "answer": "To check the status of a deposit or withdrawal, search for its transaction hash in the [bridge transaction history](https://portal.arbitrum.io/bridge?tab=tx_history), where you can also claim withdrawals. For any other retryable ticket, or to redeem one manually, use the [Retryable Tickets tool](https://portal.arbitrum.io/build/retryables).\n\nYou'll need the transaction hash of the \"initiating transaction\":  the L1 transaction hash for an L1-to-L2 message (e.g., a deposit), or the L2 transaction hash for an L2-to-L1 message (e.g., a withdrawal).\n\n\n\nIf you cross-chain message was initiated from [https://bridge.arbitrum.io/](https://bridge.arbitrum.io/), you can also check its status / execute it at that site in the transaction history tab. \n\n\n\n",
     "key": "how-can-i-check-the-status-of-my-cross-chain-message"
   },
   {
