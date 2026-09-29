@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { type TestContext, test } from 'node:test';
-import { fileURLToPath } from 'node:url';
+import { URL, fileURLToPath } from 'node:url';
 
 const SCRIPT = fileURLToPath(new URL('./check-nitro-release.ts', import.meta.url));
 const OLD_SHA = '1'.repeat(40);
@@ -239,7 +239,7 @@ test('--to at the pinned tag repairs the submodule without an image lookup', (t)
   const result = run(t, { args: ['--to', 'v3.11.3'] });
   assert.equal(result.status, 0, result.stderr);
   assert.deepEqual(result.vars, { ...VARS, goEthereumCommit: NEW_SHA });
-  assert.ok(result.requests.every((url) => !url.includes('hub.docker.com')));
+  assert.ok(result.requests.every((url) => new URL(url).hostname !== 'hub.docker.com'));
   assert.match(result.outputs, /updates_made=true\nupdated_version=v3\.11\.3/);
 });
 
