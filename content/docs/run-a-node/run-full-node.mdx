@@ -147,14 +147,7 @@ On **HashDB**, the default, pruning is a _manual, opt-in_ operation. It removes 
 
 On **PathDB**, pruning is automatic and runs online. Nitro discards state older than the `--execution.caching.state-history` window as it goes, so you never schedule a prune and the node never goes offline to run one. Disk use stays within that window instead of growing between manual prunes.
 
-When you leave `--execution.caching.state-history` unset, Nitro chooses the default at startup:
-
-| Node type                                         | Default `state-history`                                                              |
-| :------------------------------------------------ | :----------------------------------------------------------------------------------- |
-| Full node (`--execution.caching.archive=false`)   | 345,600 blocks — 24 hours at the default <Var name="l2BlockTimeMs" /> ms block speed |
-| Archive node (`--execution.caching.archive=true`) | `0`, meaning the entire chain                                                        |
-
-From v3.10.0, Nitro derives this default from the archive flag. On earlier versions the default was always 24 hours' worth of blocks, so an archive node needs an explicit `--execution.caching.state-history=0`.
+<include cwd>content/partials/run-a-node/_state-history-defaults.mdx</include>
 
 <Callout type="info">
 
