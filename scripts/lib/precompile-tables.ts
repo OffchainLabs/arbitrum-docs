@@ -10,7 +10,7 @@
  * Ported from `scripts/generate-precompile-tables.ts`, unchanged in behavior. See that file's
  * history for the original arbitrum-docs source (`scripts/precompile-reference-generator.ts`).
  */
-import { generatedMarker } from './generated-partial.ts';
+import { assertInertMdx, generatedMarker } from './generated-partial.ts';
 
 /**
  * Hand-curated fields for one method, from `scripts/data/precompiles-information.ts`. Every field
@@ -170,6 +170,39 @@ export function extractDocComment(lines: string[], lineIdx: number): string {
   return commentLines.join(' ').trim();
 }
 
+/**
+ * Escape upstream text for a JSX text position (inside `<td>` or `<code>`).
+ *
+ * These tables are raw JSX, and in MDX a `{` there opens a JavaScript expression that runs in the
+ * build and the browser, and a `<` opens an element (or fails the build on `a < b`). Each is
+ * written as a character reference, which MDX decodes back to the same character on the page. An
+ * `&` that does not already start a reference is escaped too, so `&lt;` in a Go comment still
+ * reads `&lt;` rather than `<`.
+ *
+ * Applied to the parsed Solidity and Go text only. The hand-written overrides in
+ * `scripts/data/precompiles-information.ts` are reviewed in this repo and use `<code>` on purpose.
+ */
+export function escapeJsxText(text: string): string {
+  return text
+    .replace(/&(?![A-Za-z][A-Za-z0-9]*;|#[0-9]+;|#[xX][0-9A-Fa-f]+;)/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\{/g, '&#123;')
+    .replace(/\}/g, '&#125;');
+}
+
+/** The elements the table renderers write. Anything else in a partial came from upstream. */
+const TABLE_ELEMENTS = ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'code', 'a', 'p'] as const;
+
+/**
+ * Throw unless an assembled partial is static content: the second fence behind
+ * {@link escapeJsxText}, which also covers an override that slipped markup in.
+ */
+function assertStaticPartial(partial: string, context: string): string {
+  assertInertMdx(partial, { context, allowedElements: TABLE_ELEMENTS });
+  return partial;
+}
+
 /** Lowercase every key so overrides match regardless of how they were written. */
 export function lowercaseKeys<T>(overrides: Overrides<T>): Overrides<T> {
   return Object.fromEntries(
@@ -222,7 +255,7 @@ export function renderMethodsInTable(
       signatureSource.split(')')[0].replace('function', '').replace(/\(\s+/, '(').trim() + ')';
 
     methods[signature.split('(')[0].toLowerCase()] = {
-      signature,
+      signature: escapeJsxText(signature),
       interfaceLine: i + 1,
       implementationLine: 0,
       description: '',
@@ -239,7 +272,7 @@ export function renderMethodsInTable(
     const methodName = afterReceiver.split('(')[0].trim().toLowerCase();
     if (methods[methodName]) {
       methods[methodName].implementationLine = i + 1;
-      methods[methodName].description = extractDocComment(implLines, i);
+      methods[methodName].description = escapeJsxText(extractDocComment(implLines, i));
     }
   }
 
@@ -305,7 +338,7 @@ export function renderEventsInTable(
       name,
       interfaceLine: i + 1,
       implementationLine: 0,
-      description: extractDocComment(interfaceLines, i),
+      description: escapeJsxText(extractDocComment(interfaceLines, i)),
     };
   }
 
@@ -347,7 +380,7 @@ export function renderEventsInTable(
   const rows = Object.values(entries)
     .map(
       (event) => `<tr>
-              <td><code>${event.name}</code></td>
+              <td><code>${escapeJsxText(event.name ?? '')}</code></td>
               <td><a href="${interfaceUrl}#L${event.interfaceLine}" target="_blank">Interface</a></td>
               <td><a href="${implementationUrl}#L${event.implementationLine}" target="_blank">Implementation</a></td>
               <td>${event.description}</td>
@@ -415,7 +448,7 @@ export function renderPrecompilePartial({
     eventOverrides,
   );
 
-  return `${marker}\n\n${methodsTable}${eventsTable}`;
+  return assertStaticPartial(`${marker}\n\n${methodsTable}${eventsTable}`, interfaceUrl);
 }
 
 /**
@@ -439,5 +472,5 @@ export function renderNodeInterfacePartial({
     methodOverrides,
   );
 
-  return `${marker}\n\n${methodsTable}`;
+  return assertStaticPartial(`${marker}\n\n${methodsTable}`, interfaceUrl);
 }
