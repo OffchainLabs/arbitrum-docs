@@ -156,7 +156,7 @@ test('default mode reports a newer release without bumping the pin or the image'
   assert.equal(result.vars.nitroVersionTag, 'v3.11.3');
   assert.equal(result.vars.latestNitroNodeImage, VARS.latestNitroNodeImage);
   assert.ok(result.page.includes(VARS.latestNitroNodeImage));
-  assert.ok(result.requests.every((url) => !url.includes('hub.docker.com')));
+  assert.ok(result.requests.every((url) => new URL(url).hostname !== 'hub.docker.com'));
   assert.match(result.outputs, /newer_release=v3\.11\.4/);
   assert.match(result.stdout, /--to v3\.11\.4/);
   assert.ok(result.requests.some((url) => url.endsWith('contents/arbos?ref=v3.11.3')));
