@@ -250,8 +250,12 @@ Inside a partial, write the include file-relative (`<include>../_x.mdx</include>
 fragment resolves from its own location.
 
 The include is spliced in at build time, so its headings join the page's table of contents and
-`check-links` validates its links per including page. Writers find partials by browsing
-`content/partials/`; there is no catalog.
+`check-links` validates its `#anchors` per including page. Root-absolute links (`/section/page`) written
+inside a partial or a glossary entry are checked against the page index too, and reported against
+the partial's own file and line; a relative link inside a partial is not, so write partial links
+root-absolute. A missing include is reported as a finding with the including page and the line of
+the `<include>`, and the other findings for that page still print. Writers find partials by
+browsing `content/partials/`; there is no catalog.
 
 Two partials are generated and carry a do-not-edit comment: `content/partials/precompile-tables/`
 (`pnpm precompiles:generate`) and `_reference-arbitrum-contract-addresses-partial.mdx`
@@ -354,8 +358,11 @@ ships only the definitions it cites. `<ReferenceList collection="glossary" />` r
 collection on the glossary page.
 
 `pnpm references:check` fails on an unknown id, a duplicate id, an entry with no `id` frontmatter,
-an unknown `<Reference collection>`, or a `<Term>` or `<Reference>` inside a partial. A new term is
-a new file in `content/glossary/`. A new reference type is a new collection in `source.config.ts`
+or an unknown `<Reference collection>`. A `<Term>` inside a partial is allowed: the include is
+spliced into the page at build time, so the server component renders in the page like any other.
+(An earlier rule, R3, forbade it on the theory that a partial might be client-rendered; no partial
+is, and the rule cost thirteen hovers on the run-a-node and launch-chain pages.) A new term is a
+new file in `content/glossary/`. A new reference type is a new collection in `source.config.ts`
 plus one registry entry.
 
 ## Custom MDX components
@@ -623,8 +630,8 @@ directly (`node scripts/x.ts`). There is no tsx, ts-node, `.mjs` or `.js`.
   silently, and Tailwind would stop compiling.
 
 Node 22 is stated in three places that must agree: `engines.node`, the `node-version` key in each
-workflow that sets up Node (`ci.yml` and `upstream-refresh.yml`), and the Vercel project's Node.js
-Version setting, which is set by hand.
+workflow that sets up Node (`ci.yml`, `upstream-refresh.yml` and `nitro-bump.yml`), and the Vercel
+project's Node.js Version setting, which is set by hand.
 Never bypass `engines`.
 
 ## The gates
@@ -633,27 +640,31 @@ Never bypass `engines`.
 
 **`Gates`**, in order:
 
-| Step                | What it proves                                                               |
-| ------------------- | ---------------------------------------------------------------------------- |
-| `types:check`       | Generated collections, Next types, and `tsc` over the project                |
-| `frontmatter:check` | Every documentation page satisfies `lib/page-schema.ts`                      |
-| `test`              | Every `scripts/**/*.test.ts` suite, including the sidebar and redirect tests |
-| `vars:check`        | Every variable reference resolves; the banner keys are valid                 |
-| `references:check`  | Every glossary id resolves                                                   |
-| `contracts:check`   | The contract-address partial matches `@arbitrum/sdk` and its data file       |
-| `faq:check`         | The six FAQ partials match their `content/faq/*.json` snapshots              |
-| `check-links`       | Internal links and their `#fragments` resolve, using the real MDX transforms |
-| `content:lint`      | MDX that compiles but renders wrong (below)                                  |
-| `format:check`      | Prettier                                                                     |
+| Step                | What it proves                                                                                                                                                                                                        |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `types:check`       | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                         |
+| `frontmatter:check` | Every page under `content/docs` satisfies the page schema in `lib/page-schema.ts`                                                                                                                                     |
+| `test`              | Every `scripts/**/*.test.ts` suite: the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import |
+| `vars:check`        | Every variable reference resolves, including a `<Var>` split across lines; the banner keys are valid                                                                                                                  |
+| `references:check`  | Every glossary id resolves and is unique                                                                                                                                                                              |
+| `contracts:check`   | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                |
+| `faq:check`         | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                       |
+| `check-links`       | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                      |
+| `content:lint`      | MDX that compiles but renders wrong (below)                                                                                                                                                                           |
+| `format:check`      | Prettier                                                                                                                                                                                                              |
 
 **`Build and HTTP smoke tests`** runs `pnpm build` (which runs `check-links` first), starts the
 server, and runs `scripts/static-docs-http.test.ts`. That suite checks what only a built site
-shows: prerendered pages, markdown URLs, the 404 shape, mirrors free of MDX comments, the MCP card,
-home and docs metadata, and the contribute guide's links home. The build also catches a page that
-compiles but throws at prerender. Nothing in the build reaches the network after `pnpm install`.
+shows: prerendered pages, markdown URLs, the 404 shape, mirrors free of MDX comments and of `<Var>`,
+`<Term>` and `<Callout>` tags, the stylesheet count on a plain docs page, the MCP card, home and
+docs metadata, and the contribute guide's links home. The build also catches a page that compiles
+but throws at prerender. Nothing in the build reaches the network after `pnpm install`.
 
 `merge-controlled.yml` fails a PR while it carries the `merge-controlled` label. Which checks block
-a merge is decided by branch rules on GitHub, not by these files.
+a merge is decided by branch rules on GitHub, not by these files. `sbom-export.yaml` generates a
+CycloneDX SBOM with `cdxgen` from `pnpm-lock.yaml` on pushes to `master` and weekly, and uploads it
+to the organisation's Dependency-Track; it gates nothing, and it is the successor of the workflow
+the Docusaurus repo ran.
 
 There is no pre-commit hook. Run the gates yourself before you push.
 
@@ -663,14 +674,22 @@ There is no pre-commit hook. Run the gates yourself before you push.
 `scripts/lib/strip-code.ts`, so an example inside a fence is never reported. The one exception is
 `var-in-code`, which looks only inside code.
 
-| Rule                   | Catches                                                                                  |
-| ---------------------- | ---------------------------------------------------------------------------------------- |
-| `docusaurus-directive` | A `:::note` line, which renders as literal colons                                        |
-| `var-in-code`          | `<Var>` inside a fence or inline code, which renders as a literal tag                    |
-| `var-in-link`          | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder     |
-| `link-in-heading`      | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration         |
-| `tr-in-table`          | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks |
-| `remote-image`         | A markdown image with a remote src, which renders broken                                 |
+| Rule                           | Catches                                                                                                                                 |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                       |
+| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                      |
+| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                            |
+| `site-import`                  | An `import … from '@site/…'` or `'@theme/…'` line, which has no module here and fails the build                                         |
+| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx`, nor a Fumadocs default, nor imported in the file, which throws at render |
+| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                   |
+| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                      |
+| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                         |
+| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                |
+| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                   |
+| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                    |
+| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                        |
+| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                |
+| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                |
 
 `strip-code.ts` is the one "ignore code" scanner for every script; import it rather than writing
 another.
@@ -683,10 +702,10 @@ Only `faq:check` is also a CI gate. Three workflows run some of them (below):
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `pnpm move-doc <from> <to>`             | Moves a page, see [Redirects](#redirects)                                                                                                                                                                                                                                                                                          |
 | `pnpm nitro:check-release [--to <tag>]` | Reports a newer Nitro release and a stale go-ethereum submodule pin, verifies every `nitroPathTo*` pin and Nitro source link at the pinned tag, writes nothing; `--to <tag>` is the only writer: it bumps the pinned release, the node image and the marked image tags to that tag, or repairs the submodule pin at the pinned tag |
-| `pnpm precompiles:generate` / `:check`  | Precompile tables from the pinned Nitro refs (fetches from GitHub)                                                                                                                                                                                                                                                                 |
+| `pnpm precompiles:generate` / `:check`  | Precompile tables from the pinned Nitro refs (fetches from GitHub); upstream doc comments, signatures and event names are escaped, never interpolated as MDX                                                                                                                                                                       |
 | `pnpm contracts:generate`               | The contract-address partial                                                                                                                                                                                                                                                                                                       |
 | `pnpm cli:generate` / `:check`          | The Nitro CLI flags page from the pinned tag's Go source                                                                                                                                                                                                                                                                           |
-| `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example`                                                                                                                                                                                                                                                                  |
+| `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example` at the commit SHA pinned in `scripts/data/stylus-examples.data.ts`                                                                                                                                                                                               |
 | `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                  |
 | `pnpm faq:fetch`                        | The FAQ snapshots in `content/faq/` from the Notion "FAQ CMS" database (needs `NOTION_TOKEN`)                                                                                                                                                                                                                                      |
 | `pnpm faq:generate` / `:check`          | The six `_troubleshooting-*-partial.mdx` partials from the snapshots; offline                                                                                                                                                                                                                                                      |
@@ -716,8 +735,16 @@ partial changed. It is the only place the token is used; `faq:check` in CI is of
   `pnpm stylus:generate`. Each page carries a do-not-edit comment, so fix those pages upstream. The
   published set is the allowlist in `scripts/data/stylus-examples.data.ts`, whose order is the
   sidebar order and follows upstream's teaching sequence. The parent `meta.json` is hand-owned.
-  Upstream's `metadata` export is parsed, never evaluated. A relative link to a slug this site does
-  not publish stops the run. Nothing upstream is pinned, so `stylus:check` is not a CI gate.
+  Upstream is cloned at the commit SHA pinned as `repoRef` in that data file, so a bump is a
+  reviewed edit. Upstream's `metadata` export is parsed, never evaluated, and the page body is
+  published as MDX, so after building each page the generator parses it with `@mdx-js/mdx` and
+  rejects any ESM (`import`, `export`), any `{expression}` and any JSX element other than its own
+  markers, naming the file and line. Without that check an upstream `export` would run at build
+  with the Vercel environment and in every reader's browser. A relative link to a slug this site
+  does not publish stops the run. `stylus:check` still needs the network, so it is not a CI gate.
+- **`content/docs/run-a-node/nitro/cli-flags-reference.mdx`'s code cells** escape `|` and refuse a
+  `\|` in a flag default with a named error, since that sequence would end the code span and put
+  upstream text into live MDX.
 - **`content/partials/_troubleshooting-{users,nodes,building,bridging,arbitrum-chain,stylus}-partial.mdx`**
   are written by `pnpm faq:generate` from `content/faq/<key>.json`, which `pnpm faq:fetch` reads
   from the Notion "FAQ CMS" database: rows that are `Publishable` and `4 - Continuously
@@ -737,13 +764,15 @@ and the generators write them with `format: false`.
   `http://localhost:3000`, not `127.0.0.1`, where React does not hydrate.
 - **Runtime anchors.** `check-links` validates compiled heading ids but runs no components. Click
   changed anchors and confirm the target is visible under the sticky header.
-- **A client component importing `lib/source`.** It bloats every bundle that loads it.
-- **A new plain `.css` import in a registered component.** Recount the stylesheets.
 - **A redirect to the wrong page that exists.**
 - **A page added since the cutover and deleted without a redirect.** `master-routes.test.ts`
   knows only the routes master published; for a newer page, every gate passes while its URL starts
   to 404.
 - **A remote image that has rotted.** Nothing requests third-party images.
+
+Three gaps earlier versions of this list named are now tests: a `'use client'` module reaching
+`lib/source` through its imports, a `next/font/google` import, and a fourth stylesheet on a docs
+page (the HTTP smoke suite counts them).
 
 ## Contributor agent setups
 

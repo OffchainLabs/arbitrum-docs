@@ -17,8 +17,9 @@ pnpm content:lint 2>&1
 ```
 
 Reports structural MDX defects: stray `:::` fences left by the old Docusaurus site, malformed
-admonitions, and other hydration-breaking or parser-ambiguous MDX shapes (see the content-lint rules
-in the project's `CLAUDE.md`). Not auto-fixable: each finding is an edit.
+admonitions, Docusaurus habits (`@@var@@`, `data-quicklook-from`, `@site` imports, unregistered
+components) and other hydration-breaking or parser-ambiguous MDX shapes (the rule table is under
+"The content-lint rules" in `INTERNALS.md`). Not auto-fixable: each finding is an edit.
 
 ### 2. Orphan pages
 
@@ -65,7 +66,8 @@ fails; only anchors created at runtime are outside its reach.
 pnpm references:check 2>&1
 ```
 
-Every `<Term>` / `<ReferenceList>` target resolves to a real `content/glossary/` entry.
+Every `<Term>` (and `<Reference>`) id resolves to a real `content/glossary/` entry, and entry ids
+are unique.
 
 ### 6. Contract addresses
 
@@ -160,6 +162,7 @@ Produce a summary table first, then details per check:
 | Variables          | PASS/FAIL | N unresolved    |
 | Formatting         | PASS/FAIL | N unformatted   |
 | Tests              | PASS/FAIL | N failures      |
+| Frontmatter        | PASS/FAIL | N violations    |
 | TypeScript         | PASS/FAIL | N errors        |
 | Frontmatter        | PASS/FAIL | N invalid pages |
 | Build              | PASS/FAIL | N errors        |
