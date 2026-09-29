@@ -539,6 +539,8 @@ page apart from the two Fumadocs ships, and PostCSS is configured in `package.js
   `--drop-shadow-hex-glow` are the three shadows; `--font-display` is FK Screamer for the home hero.
   The status pair `--color-fd-success` and `--color-fd-danger`, and the hues the BoLD widget uses,
   live in `@theme` too, so a widget never carries a colour literal.
+- **Sidebar contrast.** In light mode the active sidebar item carries a 5% primary tint so its
+  label clears 4.5:1; the dark side needs none.
 - **Prose.** The `.prose` block applies the arbitrum.io type scale, list markers, blockquote,
   table and inline-code styles on top of Fumadocs' typography plugin. It is unlayered so it beats
   the plugin, and every selector is wrapped in `:where()` so its specificity stays at one class and
@@ -592,8 +594,12 @@ link's written form), moves the file with `git mv`, re-bases its relative links,
 When an older entry pointed at the old URL, or a page moves back to a URL an earlier move
 redirected away, `scripts/lib/redirects-config.test.ts` fails and names the entry to fix by hand.
 That test asserts that every internal destination names a page under `content/docs`
-(case-sensitively), that no source is a live page, that nothing chains or loops, and that no source
-is listed twice.
+(case-sensitively), a file under `public/` or a markdown mirror, that no source is a live page, that
+nothing chains or loops, and that no source is listed twice; it runs over the hand-written list and
+the derived `.md` twins together, and every pattern entry (today, the audit-report PDFs) needs a
+dedicated test of its own. Never hand-write a `.md` entry: the twin is derived. The 17 legacy
+`features/` sources point at the `configuration/**` pages that replaced the retired decision pages,
+as master's own redirects did.
 
 **Choosing a legacy destination**, in order:
 
@@ -657,7 +663,8 @@ There is one locale and no `[lang]` segment. Pages live under `content/docs/` an
 `/llms.mdx/docs/<slug>/content.md`, as `text/markdown; charset=utf-8`. `next.config.ts` rewrites
 `/docs/<slug>.md` (and `/docs.md`) onto it. There is no `Accept` header negotiation: a `/docs` URL
 always serves HTML. `/llms.txt` lists every page with its title, summary and `.md` link, and
-`/llms-full.txt` concatenates them. The text they serve is Fumadocs' stringified mdast, and
+`/llms-full.txt` concatenates them; `lib/llms-index.ts` shapes the index (master's title and
+summary, one `.md` link per page). The text the mirrors serve is Fumadocs' stringified mdast, and
 `lib/llms-markdown.ts` supplies the `stringify` hook (through `includeProcessedMarkdown` in
 `source.config.ts`) that turns the site's components into markdown: `<Var>` becomes its value,
 `<Term>` and the other wrappers become their children, `<Callout>` a blockquote opening with its
@@ -701,7 +708,9 @@ no other request runs the proxy.
   the request before the rewrite, and a rewrite does not re-enter the proxy, so each request counts
   once.
 - **Each event gets a random `distinct_id`** and `$process_person_profile: false`. The series
-  counts fetches and bot categories, not readers. No IP address is read.
+  counts fetches and bot categories, not readers. No IP address is read, and `user-agent` and
+  `referer` are truncated to 512 characters before they are forwarded, since a client controls
+  both.
 - **`$current_url` uses `getSiteUrl()`**, so the `*.vercel.app` alias does not split a page into two
   series.
 - **The capture goes through `event.waitUntil()`** on the `NextFetchEvent`, so the response is
@@ -854,7 +863,7 @@ None of these is a CI gate. Two workflows run some of them (below):
 | `pnpm precompiles:generate` / `:check`  | Precompile tables from the pinned Nitro refs (fetches from GitHub); upstream doc comments, signatures and event names are escaped, never interpolated as MDX                                                                                                                                                                       |
 | `pnpm contracts:generate`               | The contract-address partial                                                                                                                                                                                                                                                                                                       |
 | `pnpm cli:generate` / `:check`          | The Nitro CLI flags page from the pinned tag's Go source                                                                                                                                                                                                                                                                           |
-| `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example` at the commit SHA pinned in `scripts/data/stylus-examples.data.ts`                                                                                                                                                                                               |
+| `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example` at the commit pinned as `repoRef` in `scripts/data/stylus-examples.data.ts` (fetches from GitHub, or reads `--source-path`)                                                                                                                                      |
 | `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                  |
 
 `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` every Monday at 08:00
@@ -873,18 +882,24 @@ either PR's diff and run the gates locally.
   between `{/* GENERATED:START */}` and `{/* GENERATED:END */}` is replaced, so frontmatter and
   surrounding prose survive. Flags whose default is not a static value are declared in
   `scripts/data/nitro-cli-reference.data.ts`; anything else the reader cannot evaluate fails the
-  run.
+  run, as does a default holding a backslash before a pipe, which has no safe spelling in a table
+  code cell. The fix for either is a hand-declared default in `defaultOverrides` in that file.
 - **`content/docs/stylus/stylus-by-example/`** is republished whole, frontmatter included, by
   `pnpm stylus:generate`. Each page carries a do-not-edit comment, so fix those pages upstream. The
   published set is the allowlist in `scripts/data/stylus-examples.data.ts`, whose order is the
   sidebar order and follows upstream's teaching sequence. The parent `meta.json` is hand-owned.
-  Upstream is cloned at the commit SHA pinned as `repoRef` in that data file, so a bump is a
-  reviewed edit. Upstream's `metadata` export is parsed, never evaluated, and the page body is
-  published as MDX, so after building each page the generator parses it with `@mdx-js/mdx` and
-  rejects any ESM (`import`, `export`), any `{expression}` and any JSX element other than its own
-  markers, naming the file and line. Without that check an upstream `export` would run at build
-  with the Vercel environment and in every reader's browser. A relative link to a slug this site
-  does not publish stops the run. `stylus:check` still needs the network, so it is not a CI gate.
+  Upstream is fetched at the commit pinned as `repoRef` in that data file, bumped by a reviewed
+  one-line diff. Upstream's `metadata` export is parsed, never evaluated. The rest of each page is
+  published as MDX, which the build runs, so after building each page the generator parses it with
+  `@mdx-js/mdx` (`assertInertMdx` in `scripts/lib/generated-partial.ts`) and refuses a body holding
+  any `import`, `export`, `{…}` expression or JSX element other than its own `<include>`, naming
+  the page and line; comment-only `{/* */}` expressions pass, and a symlinked upstream file is
+  refused. Without that check an upstream `export` would run at build with the Vercel environment
+  and in every reader's browser. A relative link to a slug this site does not publish stops the
+  run. `stylus:check` still needs the network, so it is not a CI gate.
+- **The precompile tables** escape upstream Solidity and Go text (signatures, doc comments, event
+  names) before it lands in JSX, and each generated partial must pass the same `assertInertMdx`:
+  no expression, and no element other than the table elements.
 - **`content/docs/run-a-node/nitro/cli-flags-reference.mdx`'s code cells** escape `|` and refuse a
   `\|` in a flag default with a named error, since that sequence would end the code span and put
   upstream text into live MDX.

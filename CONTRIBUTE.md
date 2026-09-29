@@ -317,7 +317,8 @@ block. Use `--dry-run` first to preview the changes, and confirm afterward with 
 `move-doc` touches no other redirect. If an older entry pointed at the old URL, it now chains, and
 `pnpm test` fails and names it. Retarget that entry by hand. The legacy `docs.arbitrum.io` entries
 after the markers are hand-maintained: add one by editing the file directly, in source order, and
-run `pnpm test`. Deleting a page is not a move, so write its redirect by hand in the same PR.
+run `pnpm test`. Deleting a page is not a move, so write its redirect by hand in the same PR. Never
+write a `.md` entry: the markdown twin of every redirect is derived at build.
 
 ## Gates to run before you push
 

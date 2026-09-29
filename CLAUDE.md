@@ -109,9 +109,10 @@ entries do not carry this contract.
 ## Where things live
 
 - **Pipeline.** `source.config.ts` (collections), `lib/page-schema.ts` (the frontmatter schema),
-  `lib/source.ts` (the single
-  `loader()`, the only reader of `.source/`), `app/docs/[[...slug]]/page.tsx` (every page,
-  prerendered, `dynamicParams = false`). MDX options are in `lib/mdx-options.ts`.
+  `lib/source.ts` (the single `loader()`, the only reader of `.source/`),
+  `app/docs/[[...slug]]/page.tsx` (every page, prerendered, `dynamicParams = false`). MDX options
+  are in `lib/mdx-options.ts`; `lib/llms-markdown.ts` decides how each component reads in the
+  markdown mirrors.
 - **Sidebar.** `meta.json` files only. The nine section folders set `"root": true`; `sidebar_label`
   renames a page. Never write a `[Label](/docs/…)` link entry for a page in this repo; use a
   `"../path"` entry. `scripts/sidebar.test.ts` checks the tree.
@@ -125,10 +126,12 @@ entries do not carry this contract.
 - **Redirects.** `redirects.config.ts`, hand-maintained. Never hand-edit between the
   `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
   entry left chaining, and fails when a URL in `scripts/data/master-routes.json` is neither a page
-  nor a redirect source. `next.config.ts` derives a `.md` twin for every entry. A source that was a
-  Docusaurus page route is `permanent: true`; the rest are `permanent: false`.
+  nor a redirect source. `next.config.ts` derives a `.md` twin for every entry; never hand-write
+  one. A source that was a Docusaurus page route is `permanent: true`; the rest are
+  `permanent: false`.
 - **Routing.** `next.config.ts` rewrites `/docs/<slug>.md` to the `/llms.mdx/` mirror and sets the
-  response headers (security headers, report-only CSP, `Link` on `/`, CORS on the markdown surface).
+  response headers from `lib/http-headers.ts` (security headers, report-only CSP, `Link` on `/`,
+  CORS on the markdown surface).
   The `og/` and `llms.mdx/` routes have `dynamicParams = false`. `proxy.ts` only records PostHog
   `llms_file_fetched` events, in production.
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
