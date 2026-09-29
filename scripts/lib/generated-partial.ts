@@ -155,6 +155,26 @@ export function setOutput(name: string, value: string): void {
   fs.appendFileSync(outputFile, `${name}=${value}\n`);
 }
 
+/**
+ * Read a file from an upstream checkout, refusing one reached through a symlink.
+ *
+ * `git clone` and `tar` both check a symlink out as a symlink, so an upstream file (or a directory
+ * above it) could point at any file on the machine running the generator, and its text would be
+ * read as if upstream had written it. Used by the Stylus and CLI-reference generators. Resolving the real path and requiring it to be the same file, under the real
+ * root, catches a link at any depth below `root`.
+ */
+export function readRegularFile(file: string, root: string): string {
+  const realRoot = fs.realpathSync(root);
+  const expected = path.join(realRoot, path.relative(root, file));
+  if (fs.lstatSync(file).isSymbolicLink() || fs.realpathSync(file) !== expected) {
+    throw new Error(
+      `${path.relative(root, file) || file} is a symlink, or sits under one, in the upstream tree. The ` +
+        `generator reads only regular files, so a link cannot publish a file from outside the clone.`,
+    );
+  }
+  return fs.readFileSync(file, 'utf-8');
+}
+
 /** Options for {@link assertInertMdx}. */
 export interface InertMdxOptions {
   /** The file the text becomes, for the error message. */

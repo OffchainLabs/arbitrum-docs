@@ -18,7 +18,8 @@
  *
  * Each built page is checked before it is written: a body holding an `import`, `export`, `{…}`
  * expression or JSX the generator did not write fails the run (`assertStaticBody`), because the
- * build compiles and runs MDX.
+ * build compiles and runs MDX. A symlinked page is refused too, since `git clone` checks symlinks
+ * out as symlinks and one could point anywhere on the machine running the generator.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -41,6 +42,7 @@ import {
   StaleFileError,
   type WriteOrCheckOptions,
   isCheckMode,
+  readRegularFile,
   runScript,
   writeOrCheck,
 } from './lib/generated-partial.ts';
@@ -220,7 +222,7 @@ async function main(): Promise<void> {
         }
 
         const { content, banner } = buildPage({
-          source: fs.readFileSync(sourceFile, 'utf-8'),
+          source: readRegularFile(sourceFile, appDir),
           context,
           marker: MARKER,
           frontmatterDefaults,
