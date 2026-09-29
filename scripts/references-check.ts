@@ -5,8 +5,10 @@
  * Errors (exit 1):
  *   R1  every <Term id> / <Reference collection id> in content resolves to a real collection entry
  *   R2  <Reference> names a registered collection
- *   R3  no <Term>/<Reference> under content/partials (a partial may be client-rendered, where
- *       these server components are illegal)
+ *   R3  a partial that holds <Term>/<Reference> is never ESM-imported. A partial spliced into a
+ *       page by <include> compiles as part of that server-rendered page, so these server
+ *       components are legal there; an imported partial can end up in a client module, where
+ *       they are not
  *   R4  collection entry ids are unique
  *
  * `<Reference collection id>` is matched although `components/mdx.tsx` registers only `<Term>`
@@ -50,6 +52,24 @@ function collectionIds(name: string): Set<string> {
   return new Set(ids.keys());
 }
 
+/** Partials that some file pulls in with an ESM `import` instead of `<include>` (R3). */
+function importedPartials(): Set<string> {
+  const out = new Set<string>();
+  for (const root of ['app', 'components', 'content', 'lib']) {
+    for (const abs of walk(path.join(repoRoot, root), (p) => /\.(mdx?|tsx?)$/i.test(p))) {
+      const src = readFileSync(abs, 'utf8');
+      for (const m of src.matchAll(/^\s*import\s[^'"]*['"]([^'"]+\.mdx?)['"]/gm)) {
+        const spec = m[1];
+        const target = spec.startsWith('.')
+          ? path.resolve(path.dirname(abs), spec)
+          : path.resolve(repoRoot, spec.replace(/^@\//, ''));
+        out.add(rel(target));
+      }
+    }
+  }
+  return out;
+}
+
 /** Every <Term id> and <Reference collection id> occurrence in `src`, as {collection, id}. */
 function referencesIn(src: string): { collection: string; id: string }[] {
   const out: { collection: string; id: string }[] = [];
@@ -69,14 +89,16 @@ function main(): void {
     Object.keys(COLLECTION_DIRS).map((name) => [name, collectionIds(name)]),
   );
 
+  const imported = importedPartials();
+
   for (const abs of walk(path.join(repoRoot, 'content'), (p) => /\.mdx?$/i.test(p))) {
     const src = readFileSync(abs, 'utf8');
     const inPartials =
       rel(abs).startsWith(`content${path.sep}partials`) || rel(abs).startsWith('content/partials');
     const refs = referencesIn(src);
-    if (inPartials && refs.length) {
+    if (inPartials && refs.length && imported.has(rel(abs))) {
       errors.push(
-        `R3 ${rel(abs)}: <Term>/<Reference> in a partial. Partials may be client-rendered, where these server components are illegal.`,
+        `R3 ${rel(abs)}: <Term>/<Reference> in a partial that is ESM-imported. Include it with <include> instead; an imported partial can be compiled into a client module, where these server components are illegal.`,
       );
       continue;
     }
