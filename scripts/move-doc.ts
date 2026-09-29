@@ -86,10 +86,14 @@ function validatePath(label: string, raw: string, abs: string, docsRoot: string)
   }
 }
 
-/** Scan every file for links, resolving each to the file it targets. */
+/**
+ * Scan every file for links, resolving each to the file it targets. Partials under
+ * `content/partials/` and glossary entries are scanned too: `check-links` checks their
+ * root-absolute links, so a move must rewrite them.
+ */
 function scanLinks(index: DocIndex): LinkRecord[] {
   const records: LinkRecord[] = [];
-  for (const file of index.files) {
+  for (const file of [...index.files, ...index.sharedFiles]) {
     for (const ref of extractRefs(file.content)) {
       // A destination holding a `{var:name}` placeholder resolves, because the resolver expands it
       // the way the build does, but it must never be rewritten: `renderRef` writes a literal path,
@@ -307,7 +311,7 @@ function ambiguousPartialLinks(records: LinkRecord[]): LinkRecord[] {
 
 /** An indexed file's content; every path this is asked for came out of the index. */
 function contentOf(index: DocIndex, abs: string): string {
-  const file = index.files.find((f) => f.abs === abs);
+  const file = [...index.files, ...index.sharedFiles].find((f) => f.abs === abs);
   if (!file) throw new Error(`move-doc: not an indexed doc: ${abs}`);
   return file.content;
 }

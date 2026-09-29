@@ -52,6 +52,13 @@ export interface DocIndex {
   repoRoot: string;
   docsRoot: string;
   files: DocFile[];
+  /**
+   * Files outside `content/docs` whose links still reach a reader: partials under
+   * `content/partials` (rendered inside every page that includes them) and glossary entries under
+   * `content/glossary` (rendered in hover cards). They have no URL, so only their root-absolute
+   * links resolve; they are never link targets and are not in `byAbs`.
+   */
+  sharedFiles: DocFile[];
   byAbs: Set<string>;
   slugByAbs: Map<string, string>;
   urlByAbs: Map<string, string>;
@@ -62,6 +69,16 @@ export interface DocIndex {
 export interface Rewrite {
   range: [number, number];
   newText: string;
+}
+
+/** An `<include>` whose target file does not exist, as `findMissingIncludes` reports it. */
+export interface MissingInclude {
+  file: string;
+  rel: string;
+  line: number;
+  /** The target as written, and the absolute path it resolves to. */
+  target: string;
+  targetAbs: string;
 }
 
 /** One broken internal link, as `findBrokenLinks` reports it. */
@@ -93,6 +110,9 @@ export function expandRefUrl(rawUrl: string): string {
 }
 
 export const CONTENT_DIR = path.join('content', 'docs');
+
+/** The directories `sharedFiles` come from, repo-relative. */
+export const SHARED_DIRS = [path.join('content', 'partials'), path.join('content', 'glossary')];
 
 /** Convert an OS path to posix separators. */
 export function toPosix(p: string): string {
@@ -204,10 +224,30 @@ export function buildIndex(repoRoot: string): DocIndex {
     });
   }
 
+  const sharedFiles: DocFile[] = [];
+  for (const dir of SHARED_DIRS) {
+    const dirAbs = path.join(repoRoot, dir);
+    if (!existsSync(dirAbs)) continue;
+    for (const r of readdirSync(dirAbs, { recursive: true, encoding: 'utf8' })) {
+      if (!/\.mdx?$/i.test(r)) continue;
+      const abs = path.join(dirAbs, r);
+      const rel = toPosix(path.relative(repoRoot, abs));
+      sharedFiles.push({
+        abs,
+        rel,
+        slug: rel,
+        url: null,
+        content: readFileSync(abs, 'utf8'),
+        partial: true,
+      });
+    }
+  }
+
   return {
     repoRoot,
     docsRoot,
     files,
+    sharedFiles,
     byAbs,
     slugByAbs,
     urlByAbs,
@@ -401,40 +441,70 @@ export function lineAt(content: string, offset: number): number {
 /**
  * Find every broken internal link in the tree: an internal ref (not external/fragment/expression)
  * that resolves to no existing file, or that carries a literal `.md`/`.mdx` suffix. Relative-URL
- * links inside partials are skipped (no fixed URL).
+ * links inside partials are skipped (no fixed URL). In `sharedFiles` (partials under
+ * `content/partials`, glossary entries) only root-absolute links are checked, for the same reason.
  */
 export function findBrokenLinks(
-  index: Pick<DocIndex, 'files' | 'repoRoot' | 'byAbs' | 'urlByAbs' | 'byUrl'>,
+  index: Pick<DocIndex, 'files' | 'repoRoot' | 'byAbs' | 'urlByAbs' | 'byUrl'> &
+    Partial<Pick<DocIndex, 'sharedFiles'>>,
 ): BrokenLink[] {
   const broken: BrokenLink[] = [];
-  for (const file of index.files) {
+  const check = (file: DocFile, rootAbsoluteOnly: boolean): void => {
     for (const ref of extractRefs(file.content)) {
-      if (ref.range === null) continue;
+      // `findMissingIncludes` owns `<include>` targets, which resolve against the file system.
+      if (ref.range === null || ref.surface === 'include') continue;
       const { pathPart } = splitSuffix(expandRefUrl(ref.rawUrl));
       if (isExternalOrFragment(pathPart)) continue;
-      // A literal `.md`/`.mdx` suffix serves markdown or 404s, never the page. `<include>`
-      // directives are exempt: they splice a partial at build time and never become a URL.
-      if (ref.surface !== 'include' && /\.mdx?$/i.test(pathPart)) {
-        broken.push({
-          file: file.abs,
-          rel: file.rel,
-          line: lineAt(file.content, ref.range[0]),
-          url: ref.rawUrl,
-        });
+      if (rootAbsoluteOnly && !pathPart.startsWith('/')) continue;
+      const line = lineAt(file.content, ref.range[0]);
+      const report = (): void => {
+        broken.push({ file: file.abs, rel: file.rel, line, url: ref.rawUrl });
+      };
+      // A literal `.md`/`.mdx` suffix serves markdown or 404s, never the page.
+      if (/\.mdx?$/i.test(pathPart)) {
+        report();
         continue;
       }
       if (resolveRefToFile(ref.rawUrl, file.abs, index) !== null) continue;
       if (resolvesToPublicAsset(pathPart, index.repoRoot)) continue;
       if (isPartial(file.abs) && !pathPart.startsWith('/') && !/\.mdx?$/i.test(pathPart)) continue;
-      broken.push({
+      report();
+    }
+  };
+  for (const file of index.files) check(file, false);
+  for (const file of index.sharedFiles ?? []) check(file, true);
+  return broken;
+}
+
+/**
+ * Every `<include>` in the tree whose target file is missing, with the line it is written on.
+ * Resolution matches fumadocs-mdx's include plugin: a `cwd` include is relative to the repo root,
+ * any other relative to the including file, and a trailing `#section` names a section, not a file.
+ */
+export function findMissingIncludes(
+  index: Pick<DocIndex, 'files' | 'repoRoot'> & Partial<Pick<DocIndex, 'sharedFiles'>>,
+): MissingInclude[] {
+  const missing: MissingInclude[] = [];
+  for (const file of [...index.files, ...(index.sharedFiles ?? [])]) {
+    const masked = maskRegions(file.content);
+    for (const m of masked.matchAll(/<include\b([^>]*)>([\s\S]*?)<\/include>/g)) {
+      const target = m[2].trim();
+      if (target === '') continue;
+      const hash = target.lastIndexOf('#');
+      const relPath = hash === -1 ? target : target.slice(0, hash);
+      const base = /\bcwd\b/.test(m[1]) ? index.repoRoot : path.dirname(file.abs);
+      const targetAbs = path.resolve(base, relPath);
+      if (existsSync(targetAbs) && statSync(targetAbs).isFile()) continue;
+      missing.push({
         file: file.abs,
         rel: file.rel,
-        line: lineAt(file.content, ref.range[0]),
-        url: ref.rawUrl,
+        line: lineAt(file.content, m.index),
+        target,
+        targetAbs,
       });
     }
   }
-  return broken;
+  return missing;
 }
 
 /** Read a directory's `meta.json`, or `null` if absent/unparseable. */
