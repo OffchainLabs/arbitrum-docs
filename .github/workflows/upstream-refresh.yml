@@ -57,12 +57,13 @@ jobs:
       - name: Regenerate precompile tables
         run: pnpm precompiles:generate
 
-      # zizmor: ignore[superfluous-actions]
       # zizmor suggests `gh pr create`, which would mean hand-rolling the branch/commit/push
       # plumbing and a "did anything change?" check. create-pull-request does all of that and
       # no-ops when the tree is clean, which is the normal outcome of a weekly run.
+      # The ignore comment sits on the `uses:` line because zizmor only honours one inside the
+      # finding's span.
       - name: Open a pull request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1 # zizmor: ignore[superfluous-actions]
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: automated/upstream-refresh
