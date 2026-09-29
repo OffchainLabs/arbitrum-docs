@@ -253,7 +253,7 @@
   },
   "devtools-dashboard": {
     "title": "Dev-Tools Dashboard",
-    "text": "<p>Web application built and maintained by <a href=\"/intro/glossary#offchain-labs\">Offchain Labs</a> for developers and users to debug Arbitrum transactions; i.e., executing or checking the status of <a href=\"/intro/glossary#crosschain-message\">Cross-chain messages</a>; visit it <a href=\"https://retryable-dashboard.arbitrum.io/\">here</a>.</p>\n"
+    "text": "<p>Deprecated web application built by <a href=\"/intro/glossary#offchain-labs\">Offchain Labs</a> for developers and users to debug Arbitrum transactions; i.e., executing or checking the status of <a href=\"/intro/glossary#crosschain-message\">Cross-chain messages</a>. It has been replaced by the <a href=\"https://portal.arbitrum.io/build/retryables\">Retryable Tickets tool</a> and the <a href=\"https://portal.arbitrum.io/bridge?tab=tx_history\">bridge transaction history</a>.</p>\n"
   },
   "dissection": {
     "title": "Dissection",
