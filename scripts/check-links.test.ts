@@ -1,14 +1,19 @@
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { test } from 'node:test';
+import { type TestContext, test } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import { readVars } from '../lib/var-links.ts';
+import { findBrokenAnchors } from './lib/doc-anchors.ts';
 import {
   buildIndex,
   expandRefUrl,
   extractRefs,
+  findBrokenLinks,
+  findMissingIncludes,
   resolveRefToFile,
   resolvesToPublicAsset,
 } from './lib/doc-links.ts';
@@ -123,4 +128,111 @@ test('an internal link written with a placeholder resolves to the page it expand
   assert.equal(resolveRefToFile('/docs/{var:nitroRepositorySlug}/target', fromAbs, index), target);
   // And an expansion that names no page is still reported, so the gate stays honest.
   assert.equal(resolveRefToFile('/docs/{var:nitroRepositorySlug}/missing', fromAbs, index), null);
+});
+
+// --- partials, glossary entries and missing includes ---------------------------------------------
+
+const CHECK_LINKS = path.join(path.dirname(fileURLToPath(import.meta.url)), 'check-links.ts');
+
+/** A throwaway repo root holding `files` (repo-relative path to content). */
+function treeFixture(t: TestContext, files: Record<string, string>): string {
+  const root = mkdtempSync(path.join(tmpdir(), 'check-links-shared-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  for (const [rel, content] of Object.entries(files)) {
+    mkdirSync(path.dirname(path.join(root, rel)), { recursive: true });
+    writeFileSync(path.join(root, rel), content);
+  }
+  return root;
+}
+
+const PAGE = '---\ntitle: Page\ndescription: A page.\n---\n\n';
+
+test('a dead root-absolute link in a partial under content/partials is reported', (t) => {
+  const root = treeFixture(t, {
+    'content/docs/live.mdx': PAGE + '## Section\n',
+    'content/partials/_note.mdx': [
+      'See [live](/docs/live) and [dead](/docs/no-such-page).',
+      '',
+      'A relative [link](./somewhere) has no fixed URL and is skipped.',
+    ].join('\n'),
+  });
+  assert.deepEqual(
+    findBrokenLinks(buildIndex(root)).map((b) => `${b.rel}:${b.line} ${b.url}`),
+    ['content/partials/_note.mdx:1 /docs/no-such-page'],
+  );
+});
+
+test('a dead link in a glossary entry is reported, path and fragment', async (t) => {
+  const root = treeFixture(t, {
+    'content/docs/live.mdx': PAGE + '## Section\n',
+    'content/docs/glossary.mdx': PAGE + '<ReferenceList collection="glossary" />\n',
+    'content/glossary/term.mdx': [
+      '---',
+      'id: term',
+      "title: 'Term'",
+      '---',
+      '',
+      'See [live](/docs/live#section), [other](/docs/glossary#other-term),',
+      '[dead](/docs/gone) and [bad anchor](/docs/live#no-such-heading).',
+    ].join('\n'),
+    'content/glossary/other-term.mdx': "---\nid: other-term\ntitle: 'Other'\n---\n\nBody.\n",
+  });
+  const index = buildIndex(root);
+  assert.deepEqual(
+    findBrokenLinks(index).map((b) => `${b.rel}:${b.line} ${b.url}`),
+    ['content/glossary/term.mdx:7 /docs/gone'],
+  );
+  // `/docs/glossary#other-term` resolves: the ReferenceList renders one section per entry id.
+  assert.deepEqual(
+    (await findBrokenAnchors(index)).map((b) => `${b.rel}:${b.line} ${b.url} ${b.page}`),
+    ['content/glossary/term.mdx:7 /docs/live#no-such-heading undefined'],
+  );
+});
+
+test('a missing include is reported with its line, and every other broken link still is', (t) => {
+  const root = treeFixture(t, {
+    'content/docs/live.mdx': PAGE + '## Section\n',
+    'content/docs/page.mdx':
+      PAGE +
+      [
+        '<include cwd>content/partials/_does-not-exist.mdx</include>',
+        '',
+        '[dead](/docs/does-not-exist) and [anchor](/docs/live#no-such-heading)',
+      ].join('\n'),
+    'content/docs/other.mdx': PAGE + '<include cwd>content/partials/_outer.mdx</include>\n',
+    'content/partials/_outer.mdx': 'Intro.\n\n<include>./_inner-missing.mdx</include>\n',
+  });
+  const run = spawnSync(process.execPath, [CHECK_LINKS], { cwd: root, encoding: 'utf8' });
+  assert.equal(run.status, 1, run.stdout + run.stderr);
+  const lines = run.stderr.split('\n').map((l) => l.trim());
+  assert.ok(
+    lines.includes(
+      'content/docs/page.mdx:6: include target not found: content/partials/_does-not-exist.mdx',
+    ),
+    run.stderr,
+  );
+  assert.ok(
+    lines.includes('content/partials/_outer.mdx:3: include target not found: ./_inner-missing.mdx'),
+    run.stderr,
+  );
+  assert.ok(lines.includes('content/docs/page.mdx:8  ->  /docs/does-not-exist'), run.stderr);
+  // The page that holds the missing include cannot compile, so its own fragments go unchecked;
+  // `findMissingIncludes` is what tells the writer why. Other pages are still compiled.
+  assert.doesNotMatch(run.stderr, /Cannot validate anchors/);
+});
+
+test('findMissingIncludes ignores includes in code and a #section suffix on a real file', (t) => {
+  const root = treeFixture(t, {
+    'content/docs/page.mdx':
+      PAGE +
+      [
+        '<include cwd>content/partials/_real.mdx#part</include>',
+        '',
+        '```mdx',
+        '<include cwd>content/partials/_example.mdx</include>',
+        '```',
+      ].join('\n'),
+    'content/partials/_real.mdx': '<section id="part">Part.</section>\n',
+  });
+  assert.deepEqual(findMissingIncludes(buildIndex(root)), []);
 });
