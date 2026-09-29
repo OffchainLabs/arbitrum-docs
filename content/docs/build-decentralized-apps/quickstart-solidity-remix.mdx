@@ -12,6 +12,7 @@ sme: symbolpunk
 Head over to [the Stylus quickstart](/docs/stylus/quickstart) if you'd like to use Rust instead of Solidity.
 
 </Callout>
+
 This quickstart is for web developers who want to start building **decentralized applications** using <Term id="arbitrum">Arbitrum</Term>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 ## What we'll learn
@@ -48,7 +49,11 @@ Let's implement the "Web3" version of the above vending machine using Arbitrum.
 ## Prerequisites
 
 <Accordions>
-  <Accordion title="VS Code">VS Code is the IDE we'll use to build our vending machine. See [code.visualstudio.com](https://code.visualstudio.com/) to install.</Accordion>
+<Accordion title="VS Code">
+
+VS Code is the IDE we'll use to build our vending machine. See [code.visualstudio.com](https://code.visualstudio.com/) to install.
+
+</Accordion>
 </Accordions>
 
 <Accordions>
@@ -58,11 +63,19 @@ Let's implement the "Web3" version of the above vending machine using Arbitrum.
 </Accordions>
 
 <Accordions>
-  <Accordion title="Yarn">Yarn is the package manager we'll use to install dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.</Accordion>
+<Accordion title="Yarn">
+
+Yarn is the package manager we'll use to install dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.
+
+</Accordion>
 </Accordions>
 
 <Accordions>
-  <Accordion title="Foundry">Foundry is the toolchain we'll use to compile and deploy our smart contract. See [getfoundry.sh](https://getfoundry.sh) to install.</Accordion>
+<Accordion title="Foundry">
+
+Foundry is the toolchain we'll use to compile and deploy our smart contract. See [getfoundry.sh](https://getfoundry.sh) to install.
+
+</Accordion>
 </Accordions>
 
 We'll address any remaining dependencies as we go.
@@ -342,6 +355,8 @@ To use the Vending Machine (web2), copy and paste the HTML code below into a tex
       <div class="status" id="web2-status"></div>
     </div>
 
+
+
 <script>
 // ============================================================
 // VendingMachine.js — the JavaScript class from the quickstart
@@ -461,12 +476,14 @@ function truncateAddress(text) {
 </body>
 </html>
 
+
 ```
 
 </Accordion>
 </Accordions>
 
 </Callout>
+
 Now, let's decentralize our vending machine's business logic and data by porting the above JavaScript implementation into a Solidity smart contract.
 
 ## Review the Solidity vending machine
@@ -677,6 +694,7 @@ Your wallet won't have a balance on your local testnet's node, but you can impor
 Your Ethereum Mainnet wallet's private key is the password to all of your tokens. Never share it with anyone; avoid copying it to your clipboard.
 
 </Callout>
+
 Note that in the context of this quickstart, "account" refers to an EOA (externally owned account), and its associated private key[^5].
 
 You should see a balance of 10,000 **ETH**. Keep your private key handy; we'll use it again shortly.
@@ -712,7 +730,7 @@ Our first `VendingMachine` is labeled "Web2" because it demonstrates traditional
 
 ![Architecture diagram](/img/apps-quickstart-vending-machine-architecture.png)
 
-The "Web3" architecture is similar to the "Web2" architecture, with one key difference: with the "Web3" version, business logic and data are hosted by decentralized network of nodes\*\*
+The "Web3" architecture is similar to the "Web2" architecture, with one key difference: with the "Web3" version, business logic and data are hosted by decentralized network of nodes
 
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
@@ -723,7 +741,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).       | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).   | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | ← same                                                                                    | ← same                                                                                 | ← same                                                                                    |
-| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet ETH** to testnet validators.                  | ← same, but instead of testnet **ETH**, they use **mainnet **ETH\*\*\*\*.                 |
+| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet ETH** to testnet validators.                  | ← same, but instead of testnet **ETH**, they use **mainnet ETH**.                         |
 
 So far, we've deployed our "Web3" app to an emulated blockchain (Anvil), which is a normal step in EVM development.
 
@@ -791,7 +809,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 
 For a list of learning resources, repositories, and useful information about Solidity, see the [Solidity references](/docs/arbitrum-essentials/reference/solidity-references) page.
 
-[^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
+[^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](https://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted and executed by Ethereum's public, decentralized network of nodes. Arbitrum has its own network of nodes that use advanced cryptography techniques to "batch process" Ethereum transactions and then submit them to the Ethereum parent chain, which significantly reduces the cost of using Ethereum. All without requiring developers to compromise on security or decentralization.
 
