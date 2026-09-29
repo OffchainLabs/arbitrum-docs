@@ -1,9 +1,9 @@
 ---
 name: image-debt-scan
 description: >-
-  Find heavy image debt in public/img — both oversized raster photos (PNG/JPG)
+  Find heavy image debt in public/img: both oversized raster photos (PNG/JPG)
   AND .svg files that are secretly base64 rasters (draw.io / editor exports,
-  often 1–6 MB) — map each to the MDX pages that reference it, and rank the best
+  often 1 to 6 MB): map each to the MDX pages that reference it, and rank the best
   candidates to convert to lean brand SVGs. Use when asked to "find heavy
   images", "image debt scan", "what diagrams should we convert", or before a
   batch diagram-cleanup pass. Read-only reconnaissance that feeds the
@@ -20,19 +20,19 @@ reconnaissance step before `arbitrum-brand-svg-diagrams`.
 
 - "Which images should we convert next?" / "find our heaviest diagrams"
 - Planning a batch cleanup of `public/img/`
-- Before dispatching `diagram-converter` subagents — this produces their work list
+- Before dispatching `diagram-converter` subagents: this produces their work list
 
 ## When NOT to use
 
-- Photos/screenshots — they legitimately stay raster (only _diagrams_ convert well)
-- A single known file — just use `arbitrum-brand-svg-diagrams` directly
+- Photos/screenshots: they legitimately stay raster (only _diagrams_ convert well)
+- A single known file: just use `arbitrum-brand-svg-diagrams` directly
 
 ## The blind spot this skill exists to close
 
-The biggest image debt in this repo is **not** the PNGs — it's `.svg` files that
+The biggest image debt in this repo is **not** the PNGs: it's `.svg` files that
 are actually a base64-encoded raster wrapped in draw.io/editor XML. They carry a
 `.svg` extension (so a naïve size scan of `*.png/*.jpg` misses them entirely) yet
-weigh **1–6 MB each** and blur when zoomed. A whole-repo scan this session found
+weigh **1 to 6 MB each** and blur when zoomed. A whole-repo scan this session found
 ~15 of them at ~6 MB apiece (e.g. `haw-token-gateway.svg`, `haw-batching.svg`,
 `apps-pull-oracle.svg`, `arb-chain-aep-scenario-*.svg`). The scanner detects them
 by grepping each `.svg` for `data:image/…;base64` (and `mxfile` for draw.io).
@@ -57,9 +57,9 @@ THRESHOLD_KB=500 .agents/skills/image-debt-scan/scan.sh
 Sample output (from the Docusaurus tree; paths and sizes differ here):
 
 ```
-== Raster-in-SVG (draw.io / embedded-raster wearing a .svg extension — top debt) ==
+== Raster-in-SVG (draw.io / embedded-raster wearing a .svg extension: top debt) ==
    6584 KB  public/img/haw-token-gateway.svg  [embedded-raster]
-           (unreferenced — candidate for deletion)
+           (unreferenced: candidate for deletion)
    6087 KB  public/img/apps-pull-oracle.svg  [embedded-raster]
            content/docs/build-decentralized-apps/oracles/01-overview.mdx
    1863 KB  public/img/arb-chain-aep-scenario-2.svg  [draw.io PNG-in-SVG]
@@ -84,17 +84,17 @@ Rank into tiers, biggest + most-referenced first:
    recompress. Gradients and fine detail don't vectorize well.
 
 Report a ranked table: `size · path · referencing pages · verdict`. Do **not**
-convert here — that's the SVG skill's job. Hand the "convert" list to a
+convert here: that's the SVG skill's job. Hand the "convert" list to a
 `diagram-converter` subagent per file (parallel) or `arbitrum-brand-svg-diagrams`
 for one.
 
 ## Gotchas
 
-- **`.svg` extension guarantees nothing.** Always grep for `base64`/`mxfile` —
+- **`.svg` extension guarantees nothing.** Always grep for `base64`/`mxfile` , 
   `head -c 2000` can miss a base64 blob that starts later in the file (some
   Serif/Affinity exports reference embedded images via `<use xlink:href>` well
   past the header), so `scan.sh` greps the whole file.
-- **Genuine large vector exists** (e.g. an 80 KB Graphviz UML with no base64) —
+- **Genuine large vector exists** (e.g. an 80 KB Graphviz UML with no base64) , 
   it is _not_ flagged, correctly. Size alone isn't the signal; base64 is.
 - `rg` may be rewritten to `grep` by a shell hook here; `scan.sh` uses `grep -r`
   directly to avoid that.

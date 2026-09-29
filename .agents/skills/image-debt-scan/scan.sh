@@ -21,11 +21,11 @@ emit() {  # size_kb  path  [tag]
   if [ -n "$tag" ]; then printf '%7d KB  %s  [%s]\n' "$kb" "$path" "$tag"
   else printf '%7d KB  %s\n' "$kb" "$path"; fi
   if [ -n "$refs" ]; then printf '%s\n' "$refs" | sed 's/^/           /'
-  else echo '           (unreferenced — candidate for deletion)'; fi
+  else echo '           (unreferenced: candidate for deletion)'; fi
 }
 
-echo "== Raster-in-SVG (draw.io / embedded-raster wearing a .svg extension — top debt) =="
-# A .svg that contains a base64 raster is not real vector; often 1–6 MB.
+echo "== Raster-in-SVG (draw.io / embedded-raster wearing a .svg extension: top debt) =="
+# A .svg that contains a base64 raster is not real vector; often 1 to 6 MB.
 find public/img -type f -iname '*.svg' -print0 \
   | xargs -0 stat -f '%z %N' | sort -rn \
   | while read -r bytes path; do

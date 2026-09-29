@@ -29,7 +29,7 @@ next-env.d.ts
 /.serena
 # Ignore .claude/ contents but keep the design docs in .claude/docs/ tracked.
 # All three lines are load-bearing, in this order:
-#   1. un-ignore the directory itself — the user's global excludesFile
+#   1. un-ignore the directory itself: the user's global excludesFile
 #      (~/.gitignore_global) ignores `.claude/`, and git will not descend into an
 #      excluded directory, so no negation below it can take effect until this
 #      repo-level rule (higher precedence) re-admits it;
