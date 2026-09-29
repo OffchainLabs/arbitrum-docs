@@ -41,16 +41,15 @@ export const LLM_SURFACE_SOURCES: readonly string[] = [
 
 /**
  * The CSP, one directive per entry. `vercel.live` (the preview toolbar) is added off production.
- * Google Fonts is listed because Inkeep's theme provider imports Inter unless
- * `disableLoadingDefaultFont` is set; drop both entries once lib/inkeep.ts sets it.
+ * No Google Fonts entries: lib/inkeep.ts sets `disableLoadingDefaultFont`, so nothing requests them.
  */
 export function contentSecurityPolicy(isProduction: boolean): string {
   const toolbar = isProduction ? '' : ' https://vercel.live';
   return [
     "default-src 'self'",
     `script-src 'self' 'unsafe-inline' https://us-assets.i.posthog.com${toolbar}`,
-    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com${toolbar}`,
-    `font-src 'self' data: https://fonts.gstatic.com${toolbar}`,
+    `style-src 'self' 'unsafe-inline'${toolbar}`,
+    `font-src 'self' data:${toolbar}`,
     // Any https image: Inkeep answers can carry remote images, and a blocked image only reports.
     `img-src 'self' data: blob: https:`,
     'connect-src ' +
