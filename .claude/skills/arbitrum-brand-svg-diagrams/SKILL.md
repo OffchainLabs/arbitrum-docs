@@ -300,8 +300,8 @@ often too big to `Read`; move it to Trash (`trash …`) then write fresh. No
 3. **Don't reach for an `img-*px` className.** Those came from Docusaurus'
    `src/css/custom.css` and are defined nowhere here. `app/global.css` caps every
    prose image at 600px wide; a diagram that needs the full column carries
-   `data-wide` on the image (see "Image sizing" in CONTRIBUTE.md). Most
-   1600×900 diagrams are wide images.
+   `data-wide` on the image or on the `<figure>` around it (see "Image sizing"
+   in CONTRIBUTE.md). Most 1600×900 diagrams are wide images.
 4. **Write the `alt` text in full** (see gotcha 3) and keep it in the diagram's
    `<desc>` too.
 5. **Check the page still compiles and lints:**
@@ -827,8 +827,8 @@ In this repo:
   registered for all MDX.
 - The `img-*px` width classes are **no longer defined anywhere**; they came from
   Docusaurus' `src/css/custom.css`, which this tree does not have. `app/global.css`
-  caps prose images at 600px and `data-wide` on the image lifts the cap (CONTRIBUTE.md,
-  "Image sizing"). Don't add new `img-*px` classes or per-image widths.
+  caps prose images at 600px and `data-wide` on the image or its `<figure>` lifts the
+  cap (CONTRIBUTE.md, "Image sizing"). Don't add new `img-*px` classes or per-image widths.
 - **Finding the next candidate.** Raster-in-SVG files declare themselves in the
   first few KB. As of `origin/master` this finds **26 files totalling 101.5 MB**
   — the backlog this skill exists to work through:

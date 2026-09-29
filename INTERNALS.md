@@ -19,6 +19,7 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 - [Glossary and inline references](#glossary-and-inline-references)
 - [Custom MDX components](#custom-mdx-components)
 - [Page weight and what loads late](#page-weight-and-what-loads-late)
+- [Theme](#theme)
 - [Redirects](#redirects)
 - [Routing and `proxy.ts`](#routing-and-proxyts)
 - [Static routing under `/docs`](#static-routing-under-docs)
@@ -90,9 +91,10 @@ Read `source.config.ts`, `lib/source.ts` and `app/docs/[[...slug]]/page.tsx` tog
 reads the `docs` collection. The `glossary` collection has one reader, `lib/references.ts`.
 
 1. `fumadocs-mdx` scans `content/docs/**` and `content/glossary/**` and emits the `.source/`
-   collections. The frontmatter schema in `source.config.ts` is not applied here: the loader runs it
-   when it compiles a page, in `next build` and `next dev`. `pnpm frontmatter:check` runs the same
-   schema offline (`scripts/frontmatter-check.ts`).
+   collections. The frontmatter schema (`arbitrumPageSchema` in `lib/page-schema.ts`, applied by
+   the `docs` collection in `source.config.ts`) does not run here: the loader runs it when it
+   compiles a page, in `next build` and `next dev`. `pnpm frontmatter:check` runs the same schema
+   offline (`scripts/frontmatter-check.ts`).
 2. `lib/source.ts` runs `loader()` over that collection with the Lucide icons plugin and exports
    `source`.
 3. Route handlers read `source`. The docs page renders pages; the `llms.txt`, `llms-full.txt`,
@@ -119,7 +121,8 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 - Helpers are typed `(typeof source)['$inferPage']`, so a schema edit re-types every consumer.
 - URL derivation lives next to `source` (`getPageImage`, `getPageMarkdownUrl`, `getLLMText`), not
   in routes.
-- `postprocess.includeProcessedMarkdown: true` on the collection is what makes
+- `postprocess.includeProcessedMarkdown` on the collection (an object carrying the `stringify`
+  hook from `lib/llms-markdown.ts`) is what makes
   `page.data.getText('processed')` work. Remove it and the `llms-full.txt` and `llms.mdx` routes
   break. `llms.txt` only lists pages and does not read their text.
 - **Server only.** Never import `lib/source`, or a module that imports it, from a client
@@ -127,12 +130,14 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 
 ## The frontmatter contract
 
-`source.config.ts` extends the Fumadocs page schema:
+`arbitrumPageSchema` in `lib/page-schema.ts` extends the Fumadocs page schema, and the `docs`
+collection in `source.config.ts` applies it (the schema has its own module because
+`source.config.ts` may only export collections):
 
 | Field           | Rule                                                                                                  |
 | --------------- | ----------------------------------------------------------------------------------------------------- |
 | `title`         | Required, trimmed, not empty                                                                          |
-| `description`   | Required, trimmed                                                                                     |
+| `description`   | Required, trimmed, not empty                                                                          |
 | `sidebar_label` | Optional; replaces the title as the page's sidebar name                                               |
 | `content_type`  | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
 | `author`, `sme` | Optional strings                                                                                      |
@@ -362,15 +367,18 @@ runs only here, not in CI, because the gates stay offline.
 
 `content/glossary/*.mdx` is a reference collection (`{ id, title, sortAs? }`, body is the
 definition). `lib/references.ts` is the registry. `<Term id="…">text</Term>` renders the text with
-the definition in a hover popover (`components/HoverPopover`), rendered on the server so each page
-ships only the definitions it cites. `<ReferenceList collection="glossary" />` renders the whole
+the definition in a popover (`components/HoverPopover`, a non-modal dialog that opens on hover,
+focus or click, so the links inside a definition are reachable by keyboard), rendered on the server
+so each page ships only the definitions it cites. `<ReferenceList collection="glossary" />` renders the whole
 collection on the glossary page.
 
 `pnpm references:check` fails on an unknown id, a duplicate id, an entry with no `id` frontmatter,
 or an unknown `<Reference collection>`. A `<Term>` inside a partial is allowed: the include is
 spliced into the page at build time, so the server component renders in the page like any other.
-(An earlier rule, R3, forbade it on the theory that a partial might be client-rendered; no partial
-is, and the rule cost thirteen hovers on the run-a-node and launch-chain pages.) A new term is a
+Rule R3 now only forbids ESM-importing (`import X from '…/_x.mdx'`) a partial that holds one,
+because an imported partial can end up in a client module where a server component is illegal; no
+component imports a partial today. (R3 used to forbid the tag in every partial, which cost thirteen
+hovers on the run-a-node and launch-chain pages.) A new term is a
 new file in `content/glossary/`. A new reference type is a new collection in `source.config.ts`
 plus one registry entry.
 
@@ -379,11 +387,14 @@ plus one registry entry.
 `components/mdx.tsx` is the registry and the source of truth. It spreads Fumadocs' defaults (which
 include `Callout`, `Card`, `Cards` and code blocks) and adds:
 
-- Fumadocs' `Accordions`, `Tab`, `Tabs` and `ImageZoom`. Markdown images render through
-  `ImageZoom` too.
+- Fumadocs' `Accordions`, `Tab`, `Tabs`, `Step`, `Steps` and `ImageZoom`. Markdown images render
+  through `ImageZoom` too. `Tab` is wrapped with `forceMount`, so an inactive panel's text is in the
+  server HTML (for find-in-page, crawlers and the TOC) and only hidden.
 - `Accordion` from `components/mdx/Accordion.tsx`, Fumadocs' own with the panel force-mounted.
   Fumadocs unmounts a closed accordion panel and an inactive tab, so their text never reaches the
   server HTML that search engines index. The registry force-mounts both and CSS hides them.
+- `Callout` is wrapped too: it gets `role="note"` (`alert` for `error`) and, when it has no
+  title, a visually hidden label naming its type, so the type is not conveyed by colour alone.
 - `AEL`, an address explorer link (`components/mdx/AddressExplorerLink.tsx`).
 - `Term`, `ReferenceList` and `Var` from `components/mdx/`.
 - Four widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`
@@ -422,8 +433,9 @@ prose styles size and color the caption.
 
 `app/global.css` caps an image inside `.prose` at 600px wide (`max-width: min(100%, 600px)`),
 which restores the common case the Docusaurus `img-600px` class covered on 55 of the 64 sized
-images without editing a page. An image marked `data-wide` escapes the cap and takes the full
-column. There is no per-image width and no `img-*px` utility: the presets were dropped in
+images without editing a page. An image marked `data-wide`, or any wrapper around it that carries
+`data-wide` (a `<figure>`, say), escapes the cap and takes the full column, as does anything inside
+`not-prose`. There is no per-image width and no `img-*px` utility: the presets were dropped in
 `3a5cb1e0d` on the claim that no stylesheet defined them, which was wrong (master's `custom.css`
 did), and the cap is the replacement rather than a restoration, so that a writer never has to pick
 a number. CONTRIBUTE has the writer's version.
@@ -463,9 +475,18 @@ curl -s http://localhost:3000/docs/stylus | grep -o '<link rel="stylesheet"' | w
 ```
 
 Use `grep -o … | wc -l`, not `grep -c`: every stylesheet link sits on the document's first line.
+`scripts/static-docs-http.test.ts` asserts the same count against the built site, so a fourth
+stylesheet fails the build job.
 
 Other things not to undo:
 
+- **The Inkeep search dialog** (`components/inkeep/inkeep-search.tsx`) renders nothing until the
+  first time Fumadocs opens it, tracked by a `hasOpened` state. Fumadocs' `SearchProvider` mounts
+  the dialog on first render (its `preload` option defaults to true), so without the gate every
+  page view downloaded the 1.19 MB Inkeep chunk, 327 KB gzipped, with no interaction. When
+  `NEXT_PUBLIC_INKEEP_API_KEY` is unset, Fumadocs' default dialog over `/api/search` is used and
+  the chat button is not rendered; that route clamps its `limit` and query length and exists only
+  as the keyless fallback.
 - **The Inkeep chat widget** (`components/inkeep/inkeep-chat-button.tsx`) waits for `load` and then
   an idle callback before it loads its chunk, so it downloads after the resources that decide
   Largest Contentful Paint.
@@ -483,21 +504,87 @@ Other things not to undo:
 - **The home hero image** sets `preload`, `fetchPriority="high"` and `loading="eager"` together on
   purpose.
 
-`@inkeep/cxkit-primitives` requests the Inter face from Google Fonts at runtime, from inside the
-chat chunk. Nothing here can remove that short of dropping the widget.
+`@inkeep/cxkit-primitives` would request the Inter face from Google Fonts at runtime once its chunk
+loads, sending every visitor's IP to Google. The Inkeep config sets
+`theme: { disableLoadingDefaultFont: true }`, so it does not; the widget renders in the site's own
+font. The report-only Content Security Policy (see [Response headers](#response-headers)) still
+lists `fonts.googleapis.com` and `fonts.gstatic.com`; those two entries can go now that the option
+is set, and once they do a regression shows up as a CSP report.
+
+## Theme
+
+`app/global.css` is the whole theme: it imports Tailwind, Fumadocs' `neutral.css` and
+`preset.css`, then sets the tokens in a `@theme` block. There is no other stylesheet on a plain docs
+page apart from the two Fumadocs ships, and PostCSS is configured in `package.json` (a
+`postcss.config.ts` is ignored silently and Tailwind stops compiling).
+
+- **Two token families.** `--color-arbitrum-*` (navy, blue, cyan, stone, gray, dark-gray, grey) is
+  the raw arbitrum.io palette and is the same in both themes; never remap one in `.dark`.
+  `--color-fd-*` is the Fumadocs theme built on it, and every `fd` token set in `@theme` is set
+  again in `.dark`. Components use `fd` tokens, not palette tokens, so a colour change lands in
+  both themes. `--ifm-*` is Docusaurus and does not exist here.
+- **The sidebar override.** Fumadocs' `neutral.css` sets `--color-fd-muted`,
+  `--color-fd-secondary` and `--color-fd-muted-foreground` on `.dark #nd-sidebar`, which outranks
+  `.dark`. `global.css` carries a `.dark #nd-sidebar` block that maps those three back to the brand
+  values; without it the dark sidebar is Fumadocs grey and a `.dark` edit never reaches it.
+- **Breakpoints.** Components use Tailwind's `sm`, `md`, `lg`, `xl` and their `max-*` forms, and
+  so does `global.css` (`max-md:` for the prose type scale, `max-xl:` for the navbar). The one
+  custom variant is `nav-sm` (`max-width: 1104px`), the width at which the navbar links stop
+  fitting on one line; Tailwind has no step there.
+- **Utilities.** `bg-repeating-lines` draws the hairlines on the home and 404 pages; `hex-clip` is
+  the hexagon bullet the navbar links carry. `small-table` is not a utility but a class the `.prose`
+  block styles (`<table className="small-table">`), for dense tables such as the node
+  troubleshooting page.
+- **Tokens beyond colour.** `--shadow-button-glow`, `--shadow-card-hover` and
+  `--drop-shadow-hex-glow` are the three shadows; `--font-display` is FK Screamer for the home hero.
+  The status pair `--color-fd-success` and `--color-fd-danger`, and the hues the BoLD widget uses,
+  live in `@theme` too, so a widget never carries a colour literal.
+- **Prose.** The `.prose` block applies the arbitrum.io type scale, list markers, blockquote,
+  table and inline-code styles on top of Fumadocs' typography plugin. It is unlayered so it beats
+  the plugin, and every selector is wrapped in `:where()` so its specificity stays at one class and
+  a page can still override it. The image cap and its `data-wide` escape live here
+  (see [Image sizing](#image-sizing)). A heading inside a `not-prose` island (the accordion trigger
+  is an `h3`) drops the scale.
+- **Focus.** A global `:focus-visible` rule draws the ring in `--color-fd-ring` (blue in light,
+  cyan in dark, both over 3:1 on their background). Never remove an outline without a replacement.
+- **The navbar selectors are structural.** `:is(#nd-subnav, #nd-nav) [data-header-body]` and the
+  `> div:first-child`, `[data-search-full]` and `> div:last-child > div:first-child` rules under it
+  restyle Fumadocs' notebook header by its DOM shape
+  (`node_modules/fumadocs-ui/dist/layouts/notebook/slots/header.js`), and
+  `components/home-header.tsx` reproduces that shape so the home page gets the same navbar. A
+  `fumadocs-ui` release that changes the header DOM breaks the layout silently; `fumadocs-ui` is
+  pinned to an exact version for that reason, and the navbar is the first thing to check after a
+  bump, at 1280px, 1104px and phone width.
 
 ## Redirects
 
 Every redirect lives in `redirects.config.ts`, consumed by `next.config.ts`. Next compiles them into
 the routes manifest Vercel reads, so there is no `vercel.json`. Adding one would shadow this file,
-because Vercel applies `vercel.json` routes first.
+because Vercel applies `vercel.json` routes first. Nothing generates the list at build time: it is
+a hand-maintained array, and `move-doc` is the only tool that writes to it.
 
 The file has two blocks:
 
 - **Between the `AUTO-GENERATED` markers**, one entry per moved page, appended by
   `pnpm move-doc`. Never hand-edit between the markers.
 - **After them**, hand-maintained entries: two site-local ones for the retired pattern guide,
-  then legacy `docs.arbitrum.io` paths mapped to `/docs/…`.
+  then legacy `docs.arbitrum.io` paths mapped to `/docs/…`, and the pattern entry for the audit
+  PDFs.
+
+**Permanence.** An entry is `permanent: true` (308) when its source was a canonical page route on
+`docs.arbitrum.io` (one of the 293 page routes in `scripts/data/master-routes.json`), a file master
+published at that URL, or a `/docs` URL this site itself used to serve (every `move-doc` entry):
+that URL is in search indexes and inbound links and will never serve a page again. Every other
+legacy entry is `permanent: false` (307): those URLs were already redirects on master, and a
+temporary answer keeps the mapping free to change. The header comment in `redirects.config.ts`
+states the rule; keep to it when adding an entry.
+
+**The `.md` twins.** For every entry whose destination is a `/docs` page, `next.config.ts` adds a
+second redirect from `<source>.md` to `<destination>.md` (`lib/markdown-redirects.ts`), plus
+`/index.md` to `/docs.md`, so the root-level markdown URLs the Docusaurus site advertised keep
+resolving. Pattern sources and sources that already end in `.md` get no twin. The twins are derived
+in `redirects()`, never written to the file, cost no proxy invocation, and the redirect test checks
+the combined list.
 
 `pnpm move-doc <from> <to>` rewrites every internal link that resolves to the page (keeping each
 link's written form), moves the file with `git mv`, re-bases its relative links, updates
@@ -522,7 +609,44 @@ means retargeting its entry by hand. **A redirect to a wrong page that exists is
 and no test can see it, so decline rather than guess. Never add a source that names a live route:
 Next's redirects run before routes.
 
-Deleting a page is not a move. Write its redirect by hand in the same commit.
+Deleting a page is not a move. Write its redirect by hand in the same commit. A page that the
+Docusaurus site served is in `scripts/data/master-routes.json`, and `pnpm test` fails until its URL
+is a page or a redirect source again.
+
+### Removed at the migration
+
+URLs the Docusaurus site served that this site does not, with the reason, and the redirect where
+one exists. The list comes from the September 2026 review's sweep of 1,609 master-era URLs.
+
+- **Root `.md` mirrors** (`/<slug>.md`, about 300 URLs master told readers to fetch). Redirected:
+  `next.config.ts` derives a `.md` twin for every entry in `redirects.config.ts` and adds
+  `/index.md` to `/docs.md`, so the "append `.md`" habit still works and no proxy runs.
+- **Audit-report PDFs** at `/assets/files/<name>-<hash>.pdf` (47 files). Redirected by one pattern
+  entry to `/audit-reports/<name>.pdf` under `public/`.
+- **`/category/best-practices`, `/category/troubleshooting`**, Docusaurus generated-index pages for
+  the Stylus section, and **`/blog`**, an empty listing. Redirected.
+- **`/img/haw-transaction-lifecycle.png`**. The diagram is an SVG now; redirected to it.
+- **`/glossary.json`**. It fed the Docusaurus Quicklooks component. The glossary is rendered on the
+  server here (`<Term>`, `<ReferenceList>`), so there is no derived file and no redirect. Nothing in
+  this repo reads it; whether anything outside did is not known.
+- **Six `/*-faqs.json` files** (`bridging`, `building`, `building-orbit`, `building-stylus`,
+  `get-started`, `node-running`). They fed the FAQ structured-data component, which `a429f7004`
+  removed with its gate. No redirect.
+- **234 partial routes** such as `/arbitrum-essentials/bridging/partials/_token-compatibility`.
+  Docusaurus routed every partial because master's `exclude` replaced the default underscore
+  exclusion, and master itself classed them as non-canonical and kept them out of its sitemap and
+  `llms.txt`. Partials live outside the docs collection here and cannot be routed. No redirect.
+- **The three `.otf` and `.woff` fonts** under `/fonts/`. Renamed to the `.woff2` files in
+  `public/fonts/`; no page links a font file.
+- **`/.nojekyll`** (a GitHub Pages artefact) and **`/img/devdocs.png`** (only ever the
+  `twitter:image` of the old site, pointing at `developer.arbitrum.io`). Not carried over.
+- **`/img/haw-token-gateway.svg`**, a 6.5 MB raster wrapped in SVG that no page referenced. Not
+  carried over.
+- **The "Request an update" auto-close.** The old issue template promised that a non-docs issue
+  would be closed with a templated reply; the `check-undocumented-issues.yml` workflow that did it
+  was not carried over, and the template no longer says so.
+- **`/llms.txt` changed shape.** It carries a title, a summary and one `.md` link per page, rather
+  than master's list. Consumers that parsed the old shape need updating.
 
 ## Routing and `proxy.ts`
 
@@ -530,9 +654,36 @@ There is one locale and no `[lang]` segment. Pages live under `content/docs/` an
 `/docs/…`.
 
 **Markdown mirrors.** `app/llms.mdx/docs/[[...slug]]/route.ts` serves every page as markdown at
-`/llms.mdx/docs/<slug>/content.md`. `next.config.ts` rewrites `/docs/<slug>.md` (and `/docs.md`)
-onto it. There is no `Accept` header negotiation: a `/docs` URL always serves HTML.
-`/llms.txt` lists every page and `/llms-full.txt` concatenates them.
+`/llms.mdx/docs/<slug>/content.md`, as `text/markdown; charset=utf-8`. `next.config.ts` rewrites
+`/docs/<slug>.md` (and `/docs.md`) onto it. There is no `Accept` header negotiation: a `/docs` URL
+always serves HTML. `/llms.txt` lists every page with its title, summary and `.md` link, and
+`/llms-full.txt` concatenates them. The text they serve is Fumadocs' stringified mdast, and
+`lib/llms-markdown.ts` supplies the `stringify` hook (through `includeProcessedMarkdown` in
+`source.config.ts`) that turns the site's components into markdown: `<Var>` becomes its value,
+`<Term>` and the other wrappers become their children, `<Callout>` a blockquote opening with its
+title or type, `<Accordion>` and `<Tab>` a level-4 heading and body, `<Cards>` a link list, `<AEL>`
+an explorer link, `<ImageZoom>` a markdown image, and a self-closing widget nothing. Code is never
+touched, an unknown `<Var>` keeps its tag so the typo stays visible, and the rendered page is
+unaffected because it compiles from the same tree. The HTTP smoke suite asserts that no component
+tag reaches `/llms-full.txt` or a mirror outside code.
+
+### Response headers
+
+`headers()` in `next.config.ts` is the one place response headers are set, and `poweredByHeader`
+is off.
+
+- Every route: `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`,
+  `Permissions-Policy` (camera, microphone and geolocation off; `clipboard-write` stays at its
+  default because the Copy Markdown button needs it), `X-Frame-Options: DENY`, and a
+  `Content-Security-Policy-Report-Only`. The rules live in `lib/http-headers.ts`, which imports
+  nothing so the tests can read it. The CSP is report-only
+  because pages are prerendered, so a nonce is impossible and `script-src` and `style-src` need
+  `'unsafe-inline'`; before enforcing it, add a report endpoint and watch a week of reports. HSTS
+  is left to Vercel, which already sends it on the custom domain.
+- `/`: a `Link` header advertising `/llms.txt` (`rel="service-doc"`) and the sitemap, as the
+  Docusaurus site did.
+- `/llms.txt`, `/llms-full.txt` and the markdown routes: `Access-Control-Allow-Origin: *`, so a
+  browser-side agent can fetch them, as it could from the Docusaurus site.
 
 **`/.well-known/`** holds the MCP discovery card, `public/.well-known/mcp/server-card.json`. It
 advertises the Inkeep MCP server over these docs, the same service behind search. Nothing
@@ -566,7 +717,11 @@ Classification lives in `lib/llms-tracking.ts`, which imports only `lib/shared.t
 `app/docs/[[...slug]]/page.tsx` exports `generateStaticParams()` over `source.generateParams()` and
 `dynamicParams = false`. Every page is prerendered at build, and any other slug under `/docs` gets
 the prerendered 404 page from `app/not-found.tsx` with status 404, without rendering the docs page.
-The `og/` and `llms.mdx/` routes prerender one entry per page as well.
+The `og/` and `llms.mdx/` routes prerender one entry per page as well, and both export
+`dynamicParams = false`, so an unknown slug answers 404 without rendering and without writing an
+entry to the ISR cache. The OG route also answers 404 unless the last segment is `image.png`.
+Without those two lines any junk URL under either route rendered (a fresh Satori PNG on the OG
+route) and was cached for a year, 404s included.
 
 Docs pages serve a `Cache-Control` header carrying an `s-maxage` directive; the value is Next's
 own, and the smoke suite asserts the directive, not the number. The 404 keeps Next's `no-store`
@@ -637,7 +792,7 @@ Never bypass `engines`.
 | Step                | What it proves                                                                                                                                                                                                        |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `types:check`       | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                         |
-| `frontmatter:check` | Every page under `content/docs` satisfies `arbitrumPageSchema` in `source.config.ts`                                                                                                                                  |
+| `frontmatter:check` | Every page under `content/docs` satisfies `arbitrumPageSchema` in `lib/page-schema.ts`                                                                                                                                |
 | `test`              | Every `scripts/**/*.test.ts` suite: the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import |
 | `vars:check`        | Every variable reference resolves, including a `<Var>` split across lines; the banner keys are valid                                                                                                                  |
 | `references:check`  | Every glossary id resolves and is unique                                                                                                                                                                              |
@@ -654,10 +809,11 @@ docs metadata, and the contribute guide's links home. The build also catches a p
 but throws at prerender. Nothing in the build reaches the network after `pnpm install`.
 
 `merge-controlled.yml` fails a PR while it carries the `merge-controlled` label. Which checks block
-a merge is decided by branch rules on GitHub, not by these files. `sbom-export.yaml` generates a
-CycloneDX SBOM with `cdxgen` from `pnpm-lock.yaml` on pushes to `master` and weekly, and uploads it
-to the organisation's Dependency-Track; it gates nothing, and it is the successor of the workflow
-the Docusaurus repo ran.
+a merge is decided by branch rules on GitHub, not by these files: until an admin makes it a
+required status check, a red run is advisory. `sbom-export.yaml` generates a CycloneDX SBOM with
+`cdxgen` from `pnpm-lock.yaml` on pushes to `master` and weekly, and uploads it to the
+organisation's Dependency-Track; it gates nothing, it skips itself when the Dependency-Track
+secrets are absent, and it is the Docusaurus repo's workflow restored for pnpm.
 
 There is no pre-commit hook. Run the gates yourself before you push.
 

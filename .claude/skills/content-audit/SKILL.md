@@ -84,7 +84,7 @@ builds the real sidebar tree and fails when a page is on no `meta.json` node or 
 pnpm frontmatter:check 2>&1
 ```
 
-Runs the page schema from `source.config.ts` over every page under `content/docs` and prints
+Runs the page schema from `lib/page-schema.ts` over every page under `content/docs` and prints
 `file: field: message` for each violation: a missing `title` or `description`, or a `content_type`
 outside the enum. This is the only offline gate that reads frontmatter; `next build` and `next dev`
 apply the same schema when they compile a page.
@@ -113,7 +113,7 @@ fixing findings, then run this once before calling the audit done.
 
 - **Doc manifest audit** (terminology consistency, missing metadata). The frontmatter contract
   (`title` and `description` required; `sidebar_label`, `content_type`, `author`, `sme` optional) is
-  the Zod schema in `source.config.ts`, enforced by `pnpm frontmatter:check` (step 8) and by the
+  the Zod schema in `lib/page-schema.ts`, enforced by `pnpm frontmatter:check` (step 8) and by the
   build. `types:check` does not see it. There is no `user_story` or `draft` field in this schema, so
   don't add one when scaffolding a page. Terminology consistency itself is a `STYLE-GUIDE.md`
   review-time rule, not a gate.

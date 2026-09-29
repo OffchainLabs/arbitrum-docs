@@ -39,7 +39,7 @@ The same list as in CLAUDE.md. When the two disagree, CLAUDE.md is right.
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # http://localhost:3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
-pnpm frontmatter:check # every page's frontmatter satisfies the schema in source.config.ts
+pnpm frontmatter:check # every page's frontmatter satisfies the schema in lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build

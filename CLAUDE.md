@@ -31,7 +31,7 @@ Grounding rule: State only what you read in a file, and cite it as `file:line`. 
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # http://localhost:3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
-pnpm frontmatter:check # every page's frontmatter satisfies the schema in source.config.ts
+pnpm frontmatter:check # every page's frontmatter satisfies the schema in lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build
@@ -61,8 +61,9 @@ opens a PR that gets no CI run of its own.
 
 ## Frontmatter contract
 
-`source.config.ts` extends the Fumadocs page schema. Required: `title` (trimmed, not empty) and
-`description` (trimmed). Optional: `sidebar_label`, `content_type`, `author`, `sme`. `content_type`
+`arbitrumPageSchema` in `lib/page-schema.ts` extends the Fumadocs page schema; `source.config.ts`
+applies it to the `docs` collection. Required: `title` and `description` (both trimmed, not empty).
+Optional: `sidebar_label`, `content_type`, `author`, `sme`. `content_type`
 is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
 required field or an out-of-enum value fails `pnpm frontmatter:check` and the build (`next build`
 and `next dev` apply the schema when they compile the page). `types:check` does not see
@@ -94,8 +95,8 @@ entries do not carry this contract.
   `<a data-quicklook-from>` (`quicklook-anchor`), `import … from '@site/…'` (`site-import`), a JSX
   tag that is neither registered in `components/mdx.tsx` nor imported (`unknown-component`), and
   `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
-- **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check` no
-  longer forbids it.
+- **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check`
+  rule R3 only forbids ESM-importing such a partial, which no component does.
 - **No link in a heading, and no `<tr>` directly in `<table>`.** Both break React hydration (rules
   `link-in-heading`, `tr-in-table`).
 - **A plain `.css` import in a component registered in `components/mdx.tsx` adds a render-blocking
@@ -107,7 +108,8 @@ entries do not carry this contract.
 
 ## Where things live
 
-- **Pipeline.** `source.config.ts` (collections and schema), `lib/source.ts` (the single
+- **Pipeline.** `source.config.ts` (collections), `lib/page-schema.ts` (the frontmatter schema),
+  `lib/source.ts` (the single
   `loader()`, the only reader of `.source/`), `app/docs/[[...slug]]/page.tsx` (every page,
   prerendered, `dynamicParams = false`). MDX options are in `lib/mdx-options.ts`.
 - **Sidebar.** `meta.json` files only. The nine section folders set `"root": true`; `sidebar_label`
@@ -120,13 +122,21 @@ entries do not carry this contract.
 - **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
 - **Components.** `components/mdx.tsx` is the registry.
-- **Redirects.** `redirects.config.ts`. Never hand-edit between the `AUTO-GENERATED` markers.
-  `move-doc` appends one entry and touches no other; `pnpm test` names any entry left chaining.
-- **Routing.** `next.config.ts` rewrites `/docs/<slug>.md` to the `/llms.mdx/` mirror. `proxy.ts`
-  only records PostHog `llms_file_fetched` events, in production.
+- **Redirects.** `redirects.config.ts`, hand-maintained. Never hand-edit between the
+  `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
+  entry left chaining, and fails when a URL in `scripts/data/master-routes.json` is neither a page
+  nor a redirect source. `next.config.ts` derives a `.md` twin for every entry. A source that was a
+  Docusaurus page route is `permanent: true`; the rest are `permanent: false`.
+- **Routing.** `next.config.ts` rewrites `/docs/<slug>.md` to the `/llms.mdx/` mirror and sets the
+  response headers (security headers, report-only CSP, `Link` on `/`, CORS on the markdown surface).
+  The `og/` and `llms.mdx/` routes have `dynamicParams = false`. `proxy.ts` only records PostHog
+  `llms_file_fetched` events, in production.
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
   production build without `NEXT_PUBLIC_SITE_URL`.
-- **Theme.** Tokens are `--color-fd-*`; never `--ifm-*`. PostCSS config lives in `package.json`.
+- **Theme.** `app/global.css` only. Tokens are `--color-fd-*`, built on the `--color-arbitrum-*`
+  palette; never `--ifm-*`. Breakpoints are Tailwind's plus `nav-sm`. Prose images are capped at
+  600px with a `data-wide` escape. The navbar selectors depend on Fumadocs' header DOM. PostCSS
+  config lives in `package.json`.
 - **Generated pages.** `content/docs/stylus/stylus-by-example/` and
   `content/docs/run-a-node/nitro/cli-flags-reference.mdx`. Change their generators, not the pages.
 

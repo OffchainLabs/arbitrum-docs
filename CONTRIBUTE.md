@@ -196,7 +196,7 @@ by blank lines).
 | Numbered steps           | `<Steps><Step>…</Step></Steps>`                                       | Registered globally; no import                                                                    |
 | Explorer-linked address  | `<AEL address="0x…" chainID={42161} />`                               | The address must be EIP-55 checksummed or the page throws                                         |
 | Image with caption       | `<figure>` + markdown image + `<figcaption>`                          | See the example below                                                                             |
-| Wide image               | `data-wide` on the image                                              | Prose images are capped at 600px; see [Image sizing](#image-sizing)                               |
+| Wide image               | `data-wide` on the image or its `<figure>`                            | Prose images are capped at 600px; see [Image sizing](#image-sizing)                               |
 | Remote image             | `<ImageZoom><img src="https://…" alt="…" /></ImageZoom>`              | A markdown image with a remote src renders broken; prefer committing the file under `public/img/` |
 | Dense table              | `<table className="small-table">` with `<thead>` and `<tbody>`        | Smaller type and padding; a `<tr>` directly in `<table>` breaks hydration                         |
 | Math                     | `$$ … $$`                                                             | KaTeX, unchanged from Docusaurus                                                                  |
@@ -287,12 +287,16 @@ markdown rather than as JSX text:
 A markdown image renders through `ImageZoom` at its file's intrinsic size, capped by
 `app/global.css` at 600px wide inside prose, so a phone screenshot no longer fills the column. That
 cap replaces the Docusaurus `img-400px`, `img-600px` and `img-900px` classes, which no stylesheet
-defines here. For a diagram that needs the full column, add `data-wide` to the image:
+defines here. For a diagram that needs the full column, put `data-wide` on the image or on a
+wrapper around it. With a markdown image, wrap it in a `<figure>`, which also takes the caption:
 
 ```mdx
-<ImageZoom>
-  <img src="/img/haw-transaction-lifecycle.svg" alt="Transaction lifecycle" data-wide />
-</ImageZoom>
+<figure data-wide>
+
+![Transaction lifecycle](/img/haw-transaction-lifecycle.svg)
+
+<figcaption>How a transaction moves through Nitro</figcaption>
+</figure>
 ```
 
 There is no per-image width. If a diagram is unreadable at 600px, it is a wide image; if it is
