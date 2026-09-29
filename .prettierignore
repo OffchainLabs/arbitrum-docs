@@ -28,8 +28,12 @@ CLAUDE.md
 .superpowers
 AGENTS.md
 
-# Prettier's MDX parser corrupts comments or adds a stray closing fence in these pages.
-# Keep their valid MDX intact; content:lint and the production build validate them.
+# Prettier's MDX parser damages these files. It rewrites MDX comments, adds a stray closing
+# fence, and, in a fence that directly follows a JSX closing tag, escapes `*` and `_` and dedents
+# the code. The 27f230fcd reformat did that to the Go sample in the DA API guide and the TypeScript
+# sample on the node-config page. Both were restored from 27f230fcd^ and now have a blank line
+# after the tag. Edit these files by hand. content:lint and the build catch broken MDX, not code
+# that was altered inside a fence.
 content/docs/launch-arbitrum-chain/arbitrum-chain-sdk-preparing-node-config.mdx
 content/docs/launch-arbitrum-chain/integrations/da-api-integration-guide.mdx
 content/docs/stylus/how-tos/trait-based-composition.mdx
