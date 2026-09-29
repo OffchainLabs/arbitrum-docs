@@ -61,6 +61,21 @@
   --color-fd-overlay: rgb(0 0 0 / 0.8);
   --color-fd-success: hsl(142 69% 58%);
   --color-fd-danger: hsl(0 91% 71%);
+  --color-ecf-active: #6aa7ff;
+  --color-ecf-bisected: #ffb347;
+  --color-ecf-rival: #ff6b6b;
+  --color-ecf-osp: #4cd5a7;
+}
+
+/* The four status hues of the BoLD edge challenge diagram (active, bisected, rival, OSP
+   confirmed). They encode meaning the widget's legend refers to, so no Fumadocs token expresses
+   them. `static` because the widget's own stylesheet reads them as variables, which Tailwind does
+   not see when it decides which theme variables to emit. Remapped in `.dark` above. */
+@theme static {
+  --color-ecf-active: #1d6bd8;
+  --color-ecf-bisected: #b45309;
+  --color-ecf-rival: #d92d20;
+  --color-ecf-osp: #047857;
 }
 
 /* Fumadocs' neutral preset sets its own greys on `.dark #nd-sidebar`, which outranks `.dark`
