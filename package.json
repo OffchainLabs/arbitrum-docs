@@ -16,6 +16,7 @@
     "content:lint": "node scripts/content-lint.ts",
     "contracts:check": "node scripts/generate-contract-addresses.ts --check",
     "format:check": "prettier --check .",
+    "frontmatter:check": "node scripts/frontmatter-check.ts",
     "references:check": "node scripts/references-check.ts",
     "test": "node --test \"scripts/**/*.test.ts\"",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
