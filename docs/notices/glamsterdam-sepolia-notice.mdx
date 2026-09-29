@@ -1,0 +1,33 @@
+---
+title: 'Glamsterdam compatibility notice for Arbitrum Sepolia'
+description: Arbitrum Sepolia node operators must upgrade to Nitro v3.11.4 before Ethereum Sepolia activates Glamsterdam on October 6, 2026
+user_story: As an Arbitrum Sepolia node operator, I want my node to keep syncing after Ethereum Sepolia activates Glamsterdam.
+content_type: notice
+---
+
+<!-- Temporary notice. Remove it after Ethereum Sepolia activates Glamsterdam on October 6, 2026. -->
+
+Ethereum Sepolia activates the Glamsterdam hard fork on Monday, October 6, 2026, at 13:53:36 UTC. This notice is <a data-quicklook-from="parent-chain">parent chain</a> compatibility guidance for Arbitrum Sepolia node operators. It does not require an <a data-quicklook-from="arbos">ArbOS</a> upgrade.
+
+<VanillaAdmonition type="warning" title="Action required">
+
+If you run an Arbitrum Sepolia node, upgrade to <a data-quicklook-from="arbitrum-nitro">Nitro</a> **`v3.11.4`** or higher before October 6, 2026.
+
+- **Docker image:** [offchainlabs/nitro-node:v3.11.4-7d5ac27](https://hub.docker.com/r/offchainlabs/nitro-node/tags?name=3.11.4)
+- **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/v3.11.4
+
+</VanillaAdmonition>
+
+## Why the upgrade is required
+
+Glamsterdam adds new fields to Ethereum block headers. Nitro v3.11.4 decodes these fields ([EIP-7928](https://eips.ethereum.org/EIPS/eip-7928) and [EIP-7843](https://eips.ethereum.org/EIPS/eip-7843)) and reproduces the canonical parent chain block hash. Earlier Nitro releases do not.
+
+Offchain Labs will publish a newer release, Nitro v3.12.1, after this date. Upgrade to it when it is available.
+
+## Important dates
+
+| Date                                    | Network upgrade                        | Affected audience                       |
+| --------------------------------------- | -------------------------------------- | --------------------------------------- |
+| Monday, October 6, 2026 at 13:53:36 UTC | Ethereum Sepolia Glamsterdam hard fork | Node operators running Arbitrum Sepolia |
+
+This notice covers Ethereum Sepolia only. Ethereum mainnet has no scheduled Glamsterdam activation date. For the Sepolia schedule and client releases, refer to the [Glamsterdam testnet announcement](https://blog.ethereum.org/2026/09/17/glamsterdam-testnet-announcement) and [EIP-7773](https://eips.ethereum.org/EIPS/eip-7773).

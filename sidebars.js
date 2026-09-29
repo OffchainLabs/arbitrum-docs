@@ -1921,6 +1921,11 @@ const sidebars = {
   noticeSidebar: [
     {
       type: 'doc',
+      id: 'notices/glamsterdam-sepolia-notice',
+      label: 'Glamsterdam notice for Arbitrum Sepolia',
+    },
+    {
+      type: 'doc',
       id: 'notices/arbos61-upgrade-notice',
       label: 'Upgrade notice for ArbOS 61',
     },
