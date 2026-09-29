@@ -6,7 +6,7 @@ See instructions [in our guide about running a full node](https://developer.arbi
 
 We use an accumulator hash for all messages, ensuring that a new message doesn't get added to the database without the preceding message being valid.
 
-To verify that everything is functioning correctly, you can check if it is [syncing](https://docs.arbitrum.io/node-running/faq#how-can-i-verify-that-my-node-is-fully-synced) and confirm that the latest block is consistent with other Arbitrum nodes. For instance, you might compare it with information on [Arbiscan](https://arbiscan.io/) (please note that the search function on Arbiscan does not support searches by block hash).
+To verify that everything is functioning correctly, you can check if it is [syncing](/docs/run-a-node/faq#how-can-i-verify-that-my-node-is-fully-synced) and confirm that the latest block is consistent with other Arbitrum nodes. For instance, you might compare it with information on [Arbiscan](https://arbiscan.io/) (please note that the search function on Arbiscan does not support searches by block hash).
 
 ### How can I check if the node is running properly and diagnose the issue if it is not?
 
@@ -24,13 +24,13 @@ Arbitrum doesn't have a consensus mechanism, so "p2p mode" doesn't apply. For no
 
 ### How do I read messages from the Sequencer feed?
 
-Running an Arbitrum relay locally as a [Feed Relay](https://docs.arbitrum.io/node-running/how-tos/running-a-feed-relay) lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions offchain. Refer to [How to read the sequencer feed](https://docs.arbitrum.io/node-running/how-tos/read-sequencer-feed) for a detailed guide.
+Running an Arbitrum relay locally as a [Feed Relay](/docs/run-a-node/run-feed-relay) lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions offchain. Refer to [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed) for a detailed guide.
 
 ### How do I run a node locally for development?
 
 See instructions in our  [our guide about running a local devnet node](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).
 
-We recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](https://docs.arbitrum.io/node-running/how-tos/build-nitro-locally).
+We recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](/docs/run-a-node/nitro/build-nitro-locally).
 
 ### Is there any way to retrieve pre-Nitro archive data from a Nitro node?
 
@@ -50,11 +50,11 @@ You can make an `eth_syncing` RPC call to your node. Once a Nitro node is fully 
 
 When a Nitro node is still syncing, `eth_syncing` returns a map of values to help understand why the node is not syncing. Nitro execution and bottlenecks differ from those of a normal Geth node, so the `eth_syncing` output is unique to Nitro.
 
-You can find information to understand the output of `eth_syncing` in the [RPC methods](https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods#eth_syncing) page.
+You can find information to understand the output of `eth_syncing` in the [RPC methods](/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods#eth_syncing) page.
 
 ### Is there an alternative to Docker when running a node?
 
-We recommend running Nitro nodes using Docker, following [the guide](https://docs.arbitrum.io/run-arbitrum-node/run-full-node) provided in our documentation. However, you can compile the code directly by following the steps described in [this guide](https://developer.arbitrum.io/node-running/how-tos/build-nitro-locally).
+We recommend running Nitro nodes using Docker, following [the guide](/docs/run-a-node/run-full-node) provided in our documentation. However, you can compile the code directly by following the steps described in [this guide](https://developer.arbitrum.io/node-running/how-tos/build-nitro-locally).
 
 ### What are the minimum hardware requirements to run a full node?
 
@@ -68,4 +68,4 @@ Keep in mind that this must be done after a clean shutdown, while the node is no
 
 ### When querying Classic transactions from a Nitro node, I sometimes get incorrect data, like the zero address as the sender. Why is that?
 
-Some old Nitro genesis database snapshots didn't properly set the retry sender for Classic blocks and contained this error. If you need to access that information, you can either resync your Nitro node with one of the [current snapshots](https://snapshot.arbitrum.foundation/index.html) or [run a Classic node](https://docs.arbitrum.io/node-running/how-tos/running-a-classic-node) alongside your Nitro node and configure a redirection for requests to Classic blocks. Please note that this only happens on Arbitrum One.
+Some old Nitro genesis database snapshots didn't properly set the retry sender for Classic blocks and contained this error. If you need to access that information, you can either resync your Nitro node with one of the [current snapshots](https://snapshot.arbitrum.foundation/index.html) or [run a Classic node](/docs/run-a-node/more-types/run-classic-node) alongside your Nitro node and configure a redirection for requests to Classic blocks. Please note that this only happens on Arbitrum One.

@@ -6,11 +6,11 @@ All languages are compiled to WASM for them to be able to work with Stylus. So i
 
 Yes, starting with SDK version 0.7.0, the Router trait supports both `fallback` and `receive` methods, similar to their Solidity counterparts. The `fallback` method is called when a transaction has calldata
 that doesn't match any defined function, while the `receive` method is called when a transaction has empty calldata. You can find more information in [Fallback and receive
-functions](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#fallback-and-receive-functions).
+functions](/docs/stylus/reference/rust-sdk-guide#fallback-and-receive-functions).
 
 For older SDK versions (pre-0.7.0), you can use a minimal entrypoint and perform raw delegate calls, forwarding your calldata. You can find more information in [Bytes-in, bytes-out
-programming](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming) and [call, static_call and
-delegate_call](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#call-static_call-and-delegate_call).
+programming](/docs/stylus/stylus-by-example/basic_examples/bytes_in_bytes_out) and [call, static_call and
+delegate_call](/docs/stylus/reference/rust-sdk-guide#call-static_call-and-delegate_call).
 
 ### Is it possible to verify Stylus contracts on the block explorer?
 
@@ -28,7 +28,7 @@ Stylus contracts are deployed onchain as a blob of bytes, just like EVM ones. Th
 
 You deploy a Stylus contract the same way that Solidity contracts are deployed. There are no special transaction types. As a UX note: a WASM will revert until a special instrumentation operation is performed by a call to the new  `ArbWasm` precompile, which readies the program for calls onchain.
 
-You can find instructions for deploying a Stylus contract in our [Quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart#checking-your-stylus-project-is-valid).
+You can find instructions for deploying a Stylus contract in our [Quickstart](/docs/stylus/quickstart#checking-if-your-stylus-project-is-valid).
 
 ### Do Stylus contracts use a different type of ABI?
 
@@ -40,9 +40,9 @@ For in-memory usage, you should be able to use any implementation of custom data
 
 For storage usage, it may be more complicated. Stylus uses the EVM storage system, so you'll need to define the data structure on top of it. However, in the SDK, there's a storage trait that custom types can implement to back their collections with the EVM state trie. The SDK macros are also compatible with them, although it's still fundamentally a global key-value system.
 
-You can read more about it in the [Stylus Rust SDK page](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#storage).
+You can read more about it in the [Stylus Rust SDK page](/docs/stylus/reference/rust-sdk-guide#storage).
 
-As an alternative solution, you can use [entrypoint-style contracts](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide#bytes-in-bytes-out-programming) for your custom data structures.
+As an alternative solution, you can use [entrypoint-style contracts](/docs/stylus/stylus-by-example/basic_examples/bytes_in_bytes_out) for your custom data structures.
 
 ### Why do I get an error "no library targets found in package" when trying to compile and old example?
 
