@@ -62,7 +62,7 @@ ArbOS 61 also ships three optional features. A <a data-quicklook-from="chain-own
 
 - **Alternative Data Availability (AltDA) Layer API.** Disabled on Arbitrum One and Nova. It requires [nitro-contracts v3.2.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.2.0) or higher. To learn how to build a custom DA provider against the new API, refer to [How to integrate with the DA API](/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx).
 - **Compliance transaction filtering.** Disabled on Arbitrum One and Nova. On a live chain, filtering takes effect seven days after the chain owner enables it. To learn how transaction filtering works, refer to [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx).
-- **Priority fee collection.** Enabled on Arbitrum One since September 23, 2026, together with PGA. Disabled on Nova. Users could always set a priority fee, but before ArbOS 61 no Arbitrum chain accepted one. To learn how to enable it, refer to [Priority fees collection](/launch-arbitrum-chain/chain-config/costs/priority-fees.mdx).
+- **Priority fee collection.** Enabled on Arbitrum One since September 23, 2026, together with PGA. Disabled on Nova. To learn how to enable it, refer to [Priority fees collection](/launch-arbitrum-chain/chain-config/costs/priority-fees.mdx).
 
 ArbOS 61 corrects two interacting bugs in the gas refund logic that were found while testing ArbOS 60 on Arbitrum Sepolia. The fixes change the State Transition Function (STF), so they required a new ArbOS version. ArbOS 60 never activated on Arbitrum One or Nova, so neither chain was affected.
 
