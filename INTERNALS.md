@@ -68,15 +68,23 @@ edit link) and `RequestUpdateLink`, which opens a prefilled GitHub issue.
 Most of the team knows the Docusaurus site this one replaced. These are the differences that cause
 mistakes:
 
-| Docusaurus                                 | Here                                                          |
-| ------------------------------------------ | ------------------------------------------------------------- |
-| `docusaurus.config.js`, presets, plugins   | `next.config.ts` and `source.config.ts`; no plugin system     |
-| `sidebars.js`, one global file             | A `meta.json` per directory                                   |
-| Swizzling a theme component                | Edit the component; it is our code                            |
-| `onBrokenLinks: 'throw'`                   | Nothing built in, so `pnpm check-links` supplies it           |
-| `02-foo/bar` serves at `/foo/bar`          | The numeric prefix stays in the slug                          |
-| `@@varName@@` preprocessing                | `<Var name="…" />`, see [Global variables](#global-variables) |
-| Client-redirects plugin plus `vercel.json` | Next `redirects()` only, see [Redirects](#redirects)          |
+| Docusaurus                                                           | Here                                                                                                    |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `docusaurus.config.js`, presets, plugins                             | `next.config.ts` and `source.config.ts`; no plugin system                                               |
+| `sidebars.js`, one global file                                       | A `meta.json` per directory                                                                             |
+| `sidebar_position`, `displayed_sidebar` frontmatter                  | The `pages` array in `meta.json`, and the `root: true` folder the file sits in                          |
+| `user_story`, `target_audience`, `last_reviewed` frontmatter         | Dropped; the schema strips unknown keys silently                                                        |
+| Swizzling a theme component                                          | Edit the component; it is our code                                                                      |
+| `onBrokenLinks: 'throw'`                                             | Nothing built in, so `pnpm check-links` supplies it                                                     |
+| `02-foo/bar` serves at `/foo/bar`                                    | The numeric prefix stays in the slug                                                                    |
+| `:::note`, `:::caution`, `:::info` admonitions                       | `<Callout type="info\|warn\|error\|idea\|success">` on its own lines (`docusaurus-directive`)           |
+| `<a data-quicklook-from="id">text</a>`                               | `<Term id="id">text</Term>` (`quicklook-anchor`)                                                        |
+| `@@varName@@` preprocessing                                          | `<Var name="…" />` in prose, `{var:name}` in a URL, see [Global variables](#global-variables)           |
+| `import Partial from '@site/docs/partials/_x.mdx'` and `<Partial />` | `<include cwd>content/partials/_x.mdx</include>` (`site-import`)                                        |
+| `import Tabs from '@theme/Tabs'` and `<TabItem value label>`         | `<Tabs items={[…]}>` and `<Tab value>`; nothing is imported                                             |
+| `<details>`                                                          | `<Accordions><Accordion title="…">`                                                                     |
+| `className="img-600px"` on an image                                  | One prose cap (600px) in `app/global.css`, with a `data-wide` escape, see [Image sizing](#image-sizing) |
+| Client-redirects plugin plus `vercel.json`                           | Next `redirects()` only, see [Redirects](#redirects)                                                    |
 
 ## The pipeline
 
@@ -414,6 +422,16 @@ own line between blank lines so MDX parses it as markdown rather than as JSX tex
 
 Nothing in the registry maps `figure` or `figcaption`; both pass through as HTML, and Fumadocs'
 prose styles size and color the caption.
+
+### Image sizing
+
+`app/global.css` caps an image inside `.prose` at 600px wide (`max-width: min(100%, 600px)`),
+which restores the common case the Docusaurus `img-600px` class covered on 55 of the 64 sized
+images without editing a page. An image marked `data-wide` escapes the cap and takes the full
+column. There is no per-image width and no `img-*px` utility: the presets were dropped in
+`3a5cb1e0d` on the claim that no stylesheet defined them, which was wrong (master's `custom.css`
+did), and the cap is the replacement rather than a restoration, so that a writer never has to pick
+a number. CONTRIBUTE has the writer's version.
 
 `EdgeChallengeFlow` renders a committed snapshot, `public/data/edge-challenge-flow.json`, refreshed
 by hand with `pnpm edge-challenge:fetch` from Arbitrum Sepolia. It has no `--check` mode because a
