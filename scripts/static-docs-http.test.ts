@@ -8,7 +8,14 @@ const baseUrl = process.env.STATIC_DOCS_TEST_URL;
 const livePath = '/docs/run-a-node/start-here';
 const liveMirror = `/llms.mdx${livePath}/content.md`;
 const documentOnly = (html: string): string => {
-  const doc = new DOMParser().parseFromString(html, 'text/html');
+  let previous: string;
+  let current = html;
+  do {
+    previous = current;
+    current = current.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+  } while (current !== previous);
+  return current;
+};
   for (const node of doc.querySelectorAll('script')) node.remove();
   return doc.documentElement.outerHTML;
 };
