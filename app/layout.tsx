@@ -163,10 +163,14 @@ export default function Layout({ children }: { children: ReactNode }) {
                   in README next to the key. Raising a height here means
                   raising the budget there too. */}
                 <style>{`:root{--fd-announcement-height:4rem}@media (min-width:640px){:root{--fd-announcement-height:3rem}}`}</style>
+                {/* Fumadocs styles the close button `text-fd-muted-foreground/50` with an
+                  `fd-ring` focus ring, which is the banner's own colour here: both measured under
+                  1.5:1. The `[&>button]` utilities restyle that one button in the banner's
+                  foreground colour, which clears 4.5:1 in both themes. */}
                 <Banner
                   id={vars.announcementId}
                   height="var(--fd-announcement-height)"
-                  className="bg-fd-primary text-fd-primary-foreground"
+                  className="bg-fd-primary text-fd-primary-foreground [&>button]:text-fd-primary-foreground [&>button]:hover:bg-fd-primary-foreground/15 [&>button]:hover:text-fd-primary-foreground [&>button]:focus-visible:ring-fd-primary-foreground"
                 >
                   <span className="pe-8 text-balance">
                     {vars.announcementText}{' '}
