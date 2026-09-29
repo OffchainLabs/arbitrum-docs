@@ -2,10 +2,9 @@
  * Edge challenge flow visualisation.
  *
  * Every surface, border and text colour reads a Fumadocs theme token, so the diagram follows the
- * site theme. Only the four status hues (active, bisected, rival, OSP
- * confirmed) stay bespoke: they encode meaning the legend refers to, and they are the one thing a
- * theme token cannot express. They are declared once here and flipped for dark mode, so no hex
- * value appears in the SVG code.
+ * site theme. The four status hues (active, bisected, rival, OSP confirmed) are `--color-ecf-*`
+ * in app/global.css, remapped for dark mode there, so no hex value appears here or in the SVG code.
+ * The root is a `not-prose` island, so the prose type scale does not reach its labels.
  */
 .ecf-page {
   --ecf-surface: var(--color-fd-card);
@@ -15,35 +14,15 @@
   --ecf-muted: var(--color-fd-muted-foreground);
   --ecf-badge-bg: var(--color-fd-muted);
 
-  --ecf-active: #1d6bd8;
-  --ecf-bisected: #b45309;
-  --ecf-rival: #d92d20;
-  --ecf-osp: #047857;
+  --ecf-active: var(--color-ecf-active);
+  --ecf-bisected: var(--color-ecf-bisected);
+  --ecf-rival: var(--color-ecf-rival);
+  --ecf-osp: var(--color-ecf-osp);
 
   max-width: 100%;
   margin: 0 auto;
   padding: 0 0 40px;
   color: var(--ecf-text);
-}
-
-.dark .ecf-page {
-  --ecf-active: #6aa7ff;
-  --ecf-bisected: #ffb347;
-  --ecf-rival: #ff6b6b;
-  --ecf-osp: #4cd5a7;
-}
-
-/* The widget is not a `not-prose` island, so app/global.css's prose heading rules reach these
-   labels. At h5 those rules add uppercase and letter-spacing, which the panels do not want, and a
-   plain `.ecf-page h5` ties with `.prose :where(h5, h6)` on specificity, leaving the winner to
-   stylesheet order. The doubled class settles it outright. */
-.ecf-page.ecf-page h4,
-.ecf-page.ecf-page h5 {
-  margin-top: 0;
-  padding-top: 0;
-  text-transform: none;
-  letter-spacing: normal;
-  border-bottom: none;
 }
 
 .ecf-header-info {
@@ -54,12 +33,6 @@
   margin: 0;
   color: var(--ecf-muted);
   line-height: 1.5;
-}
-
-.ecf-error {
-  padding: 20px;
-  color: var(--ecf-rival);
-  text-align: center;
 }
 
 /* ── Controls ──────────────────────────────────────────────── */
@@ -511,7 +484,8 @@
 .ecf-event-log {
   padding-left: 18px;
   margin: 0;
-  list-style-position: inside;
+  /* Stated because Tailwind's preflight removes list markers outside prose. */
+  list-style: decimal inside;
 }
 
 .ecf-event-log li {

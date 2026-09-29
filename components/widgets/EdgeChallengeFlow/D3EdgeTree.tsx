@@ -74,7 +74,9 @@ export default function D3EdgeTree({
         if (d.x > x1) x1 = d.x;
       });
 
-      const margin = { top: 24, right: 30, bottom: 24, left: 30 };
+      const nodeWidth = 280;
+      // The root's rect is centred on its x, so the left margin must hold half a node or the root clips.
+      const margin = { top: 24, right: 30, bottom: 24, left: nodeWidth / 2 + 10 };
       const panelWidth = container.clientWidth || 360;
       const height = Math.max(200, x1 - x0 + margin.top + margin.bottom);
       const viewWidth = Math.max(
@@ -137,7 +139,6 @@ export default function D3EdgeTree({
         .attr('class', 'ecf-link')
         .attr('d', linkPath as any);
 
-      const nodeWidth = 280;
       const textLineHeight = 15;
       const textPadding = 10;
 
