@@ -1,8 +1,10 @@
 name: merge-controlled
 
 # Blocks merging while the `merge-controlled` label is on the PR. The label is
-# the whole gate: any other label, or no label, merges normally. Enforcement
-# comes from requiring the `merge-controlled` check on the default branch.
+# the whole gate: any other label, or no label, merges normally. The block only
+# holds once `merge-controlled` is a required status check in the default
+# branch's ruleset. Until an admin adds it there, a red run is advisory and the
+# PR can still be merged.
 #
 # `labeled` and `unlabeled` are required trigger types. Without them the check
 # does not re-run when the label is added or removed, and the PR keeps a stale
@@ -19,6 +21,12 @@ name: merge-controlled
 on:
   pull_request:
     types: [opened, reopened, synchronize, labeled, unlabeled]
+
+# A newer run for the same PR supersedes an older one; only the latest label
+# state matters.
+concurrency:
+  group: merge-controlled-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 permissions: {}
 
