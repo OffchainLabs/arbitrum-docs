@@ -22,7 +22,8 @@ component looks broken, which is a common false alarm when checking a content ch
 
 ## Add or edit a page
 
-Every page needs a `title` and a `description` in its frontmatter. A missing one fails the build:
+Every page needs a `title` and a `description` in its frontmatter. A missing one fails
+`pnpm frontmatter:check` and the build:
 
 ```mdx
 ---
@@ -126,8 +127,10 @@ prose. File names say what each one holds.
 ```
 
 If nothing fits, create `content/partials/<area>/_your-partial.mdx` with no frontmatter and include
-it. `pnpm check-links` validates the include path and the links inside the partial, once for every
-page that includes it.
+it. `pnpm check-links` reports a missing include with the including page and its line, checks every
+`/docs/…` link written inside the partial (and inside every glossary entry) against the page index,
+and validates the partial's `#anchors` once for every page that includes it. A relative link inside
+a partial is not checked, so write partial links root-absolute.
 
 ## Use a variable, don't hardcode a value
 
@@ -184,7 +187,8 @@ run `pnpm test`. Deleting a page is not a move, so write its redirect by hand in
 ## Gates to run before you push
 
 ```bash
-pnpm types:check       # regenerates .source/, generates Next types, tsc --noEmit (the main gate)
+pnpm frontmatter:check # every page's frontmatter satisfies the schema (title, description, content_type)
+pnpm types:check       # regenerates .source/, generates Next types, tsc --noEmit
 pnpm test              # tooling tests, including the sidebar tree and redirects
 pnpm vars:check        # every <Var name> and {var:name} resolves
 pnpm references:check  # every <Term id> resolves
@@ -198,12 +202,12 @@ runs them all, plus `contracts:check`. A second job runs `pnpm build`, serves th
 it over HTTP. Both block. There is no pre-commit hook, so nothing runs on `git commit`.
 
 If you touched MDX with components, imports or raw JSX, run `pnpm build` yourself before you push.
-It catches a page that compiles but throws while rendering, which `types:check` does not.
+It catches a page that compiles but throws while rendering, which no gate above does.
 
-A green PR does not by itself mean the content renders correctly: `types:check` proves the
-frontmatter schema, not the render, and it exits 0 on a page that serves a literal `:::` or the
-string `undefined`. **Always open a changed page on `http://localhost:3000` and confirm it looks
-right**, in light and dark mode if you touched styling.
+A green PR does not by itself mean the content renders correctly: `frontmatter:check` proves the
+schema and `types:check` proves the types, not the render, and both exit 0 on a page that serves a
+literal `:::` or the string `undefined`. **Always open a changed page on `http://localhost:3000`
+and confirm it looks right**, in light and dark mode if you touched styling.
 
 ## Document type conventions
 

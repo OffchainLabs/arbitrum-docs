@@ -191,8 +191,10 @@ After creating the file:
 1. Verify the sidebar entry and the page render: `pnpm dev`, then browse
    `http://localhost:3000/docs/{section}/{slug}`. Use `localhost`, not `127.0.0.1` — on
    `127.0.0.1` React does not hydrate and every component looks broken.
-2. Run `pnpm content:lint` and `pnpm types:check`. `types:check` is what enforces the frontmatter
-   contract: a missing `title` or `description` fails the build (the other fields are optional).
+2. Run `pnpm content:lint`, `pnpm frontmatter:check` and `pnpm types:check`. `frontmatter:check`
+   is what enforces the frontmatter contract offline: a missing `title` or `description`, or a
+   `content_type` outside the enum, fails it and the build (the other fields are optional).
+   `types:check` does not read frontmatter.
 3. Confirm no broken links: `pnpm check-links`. It also validates `#anchor` fragments against the
    compiled heading ids; only anchors that exist at runtime alone are outside its reach.
 4. To reference a global variable, use `<Var name="variableName" />`; the value must exist in

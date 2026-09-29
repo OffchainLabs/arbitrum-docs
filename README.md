@@ -73,20 +73,22 @@ reads the reader's IP address. See [Routing and `proxy.ts`](INTERNALS.md#routing
 ## Before you push
 
 ```bash
-pnpm types:check   # the main verification gate
-pnpm test          # tooling tests, including the sidebar and redirect checks
-pnpm check-links   # broken internal links and MDX fragments
-pnpm content:lint  # MDX that compiles but renders wrong
-pnpm format        # prettier, in place
+pnpm types:check       # regenerates .source/, generates Next types, tsc --noEmit
+pnpm frontmatter:check # every page's frontmatter satisfies the schema
+pnpm test              # tooling tests, including the sidebar and redirect checks
+pnpm check-links       # broken internal links and MDX fragments
+pnpm content:lint      # MDX that compiles but renders wrong
+pnpm format            # prettier, in place
 ```
 
-CI runs eight blocking checks, then a `pnpm build` that serves the built site and checks it over
+CI runs nine blocking checks, then a `pnpm build` that serves the built site and checks it over
 HTTP. `pnpm build` runs the same link check first, so a broken link fails the Vercel deploy too. See
 [The gates](INTERNALS.md#the-gates) for the full list. There is no pre-commit hook, so run these
 yourself.
 
-`types:check` proves the schema, not the render. It passes on a page that serves literal `:::` or
-`undefined`. **Always confirm content changes in a browser.**
+`frontmatter:check` proves the schema and `types:check` proves the types; neither proves the
+render. Both pass on a page that serves literal `:::` or `undefined`. **Always confirm content
+changes in a browser.**
 
 ## Layout
 
@@ -105,7 +107,8 @@ yourself.
 
 ## Write a page
 
-Every page needs a `title` and a `description`. A missing one fails the build.
+Every page needs a `title` and a `description`. A missing one fails `pnpm frontmatter:check` and
+the build. `pnpm types:check` does not see frontmatter, so run the check before you push.
 
 ```mdx
 ---
@@ -267,6 +270,7 @@ owns that block. ([Details](INTERNALS.md#redirects).)
 ```bash
 pnpm dev                 # http://localhost:3000
 pnpm types:check         # regenerate .source/, generate Next types, tsc --noEmit
+pnpm frontmatter:check   # every page's frontmatter satisfies the schema in source.config.ts
 pnpm build               # production build (runs check-links first)
 pnpm start               # serve the production build
 
