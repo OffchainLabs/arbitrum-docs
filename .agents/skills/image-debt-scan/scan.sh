@@ -3,15 +3,15 @@
 # vector, map each to the MDX pages that reference it, rank by size.
 #
 # Usage:
-#   .claude/skills/image-debt-scan/scan.sh                 # whole repo
-#   .claude/skills/image-debt-scan/scan.sh docs/how-arbitrum-works   # scope refs to a section
-#   THRESHOLD_KB=500 .claude/skills/image-debt-scan/scan.sh          # raise raster threshold
+#   .agents/skills/image-debt-scan/scan.sh                 # whole repo
+#   .agents/skills/image-debt-scan/scan.sh content/docs/how-arbitrum-works   # scope refs to a section
+#   THRESHOLD_KB=500 .agents/skills/image-debt-scan/scan.sh          # raise raster threshold
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 SCOPE="${1:-}"                       # optional docs subpath; only report images referenced under it
 THRESHOLD_KB="${THRESHOLD_KB:-300}"
-DOCS_DIR="${SCOPE:-docs}"
+DOCS_DIR="${SCOPE:-content}"
 
 refs_for() { grep -rl -- "$1" "$DOCS_DIR" 2>/dev/null || true; }
 emit() {  # size_kb  path  [tag]
@@ -26,7 +26,7 @@ emit() {  # size_kb  path  [tag]
 
 echo "== Raster-in-SVG (draw.io / embedded-raster wearing a .svg extension — top debt) =="
 # A .svg that contains a base64 raster is not real vector; often 1–6 MB.
-find static/img -type f -iname '*.svg' -print0 \
+find public/img -type f -iname '*.svg' -print0 \
   | xargs -0 stat -f '%z %N' | sort -rn \
   | while read -r bytes path; do
       grep -qm1 'data:image/[a-z]*;base64' "$path" || continue
@@ -37,7 +37,7 @@ find static/img -type f -iname '*.svg' -print0 \
 
 echo
 echo "== Raster images over ${THRESHOLD_KB} KB (convert diagrams; keep photos/screenshots) =="
-find static/img -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.gif' \) -print0 \
+find public/img -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.gif' \) -print0 \
   | xargs -0 stat -f '%z %N' \
   | awk -v t=$((THRESHOLD_KB*1024)) '$1>t' | sort -rn \
   | while read -r bytes path; do emit "$((bytes/1024))" "$path"; done

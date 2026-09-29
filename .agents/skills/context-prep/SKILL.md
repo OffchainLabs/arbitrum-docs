@@ -31,7 +31,7 @@ Launch **4 parallel agents** using the Task tool, then synthesize findings.
 ```text
 PROGRESSIVE REVELATION: Build a documentation map with links, not content.
 
-1. List files in docs/ or documentation/ - document topics, don't read yet
+1. List the root documents (README.md, INTERNALS.md, CONTRIBUTE.md, STYLE-GUIDE.md) - document topics, don't read yet
 2. Scan README.md first 50 lines - extract project purpose (1-2 sentences)
 3. Check for todo.md, CHANGELOG.md, AGENTS.md - current status
 4. List package.json locations - map monorepo structure
@@ -40,7 +40,7 @@ Deliver navigable map:
 - Project purpose (1-2 sentences) → Link: README.md
 - Current status → Link: todo.md or AGENTS.md
 - Package structure → Links: packages/*/package.json
-- Reference materials → Links: docs/*.md (filenames only)
+- Reference materials → Links: the root *.md files (filenames only)
 ```
 
 ### Agent 2: Technology Stack

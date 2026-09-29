@@ -69,4 +69,4 @@ mcp__arbitrumDocs__ask-question-about-arbitrum: Ask specific questions
 
 ## Full Rule Reference
 
-See `AGENTS.md` for the complete compiled rule set with all details.
+Each rule is a file under `rules/` beside this file; open the file for the full text and examples.
