@@ -60,7 +60,7 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
   return (
     <Link
       href={href}
-      className="group relative inline-block pl-4 transition-colors duration-300 hover:text-arbitrum-cyan hover:text-shadow-[0_0_6px_rgb(16_225_255/0.8)]"
+      className="group relative inline-block pl-4 transition-colors duration-300 hover:text-arbitrum-cyan hover:text-shadow-cyan-glow"
     >
       <span
         aria-hidden
@@ -78,10 +78,15 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 export function Footer() {
   return (
     <footer className="bg-linear-to-b from-arbitrum-navy to-black text-xs text-white uppercase">
+      {/* For agents reading the page text, as master's theme Layout had on every page. Hidden from
+          sighted readers and from screen readers, who have the page itself. */}
+      <p className="sr-only" aria-hidden="true">
+        For AI agents: a documentation index is available at the root level at /llms.txt and
+        /llms-full.txt. Append .md to any docs page URL for the markdown version of that page.
+      </p>
       {/* The same centred `max-w-5xl` container as the home page content. */}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 pt-10 pb-12 lg:flex-row lg:justify-between lg:pb-16">
         <Link href="/" className="flex w-fit items-center gap-3 self-start normal-case">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/img/logo.svg" alt="" width={27} height={30} className="h-[30px] w-auto" />
           <span className="text-base font-medium">{appName}</span>
         </Link>
