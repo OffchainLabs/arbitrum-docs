@@ -173,8 +173,8 @@ Usually the value was never code to begin with, and dropping the backticks is th
 reader is meant to copy the line, as in a `docker run` command, hardcode the current value in the
 code and reference the variable in the prose next to it. `pnpm content:lint` (rule `var-in-code`)
 fails on any `<Var>` found inside code. To have a hardcoded copy of `latestNitroNodeImage` kept current for you,
-put `{/* sync-with-var: latestNitroNodeImage */}` anywhere in the page and `pnpm nitro:check-release`
-will rewrite it whenever it bumps that variable. Do not put that marker on a page that states a
+put `{/* sync-with-var: latestNitroNodeImage */}` anywhere in the page and
+`pnpm nitro:check-release --to <tag>` will rewrite it when it bumps that variable. Do not put that marker on a page that states a
 Nitro version as a historical fact, such as an ArbOS release note, or a bump will rewrite history.
 
 **Variables do not work in a link destination either, and that one leaves no link at all.** A
