@@ -169,7 +169,7 @@ test('default mode reports a stale submodule pin without writing', (t) => {
   assert.equal(result.raw, result.original);
   assert.ok(result.page.includes(VARS.latestNitroNodeImage));
   assert.ok(result.requests.some((url) => url.endsWith('go-ethereum?ref=v3.11.3')));
-  assert.ok(result.requests.every((url) => !url.includes('hub.docker.com')));
+  assert.ok(result.requests.every((url) => new URL(url).hostname !== 'hub.docker.com'));
   assert.match(result.outputs, /updates_made=false/);
   assert.match(result.outputs, /stale_pins=true/);
   assert.match(result.outputs, /newer_release=v3\.11\.4/);
@@ -195,7 +195,7 @@ test('default mode reports a missing submodule pin without writing', (t) => {
   assert.equal(result.raw, result.original);
   assert.ok(result.page.includes(VARS.latestNitroNodeImage));
   assert.ok(result.requests.some((url) => url.endsWith('go-ethereum?ref=v3.11.3')));
-  assert.ok(result.requests.every((url) => !url.includes('hub.docker.com')));
+  assert.ok(result.requests.every((url) => new URL(url).hostname !== 'hub.docker.com'));
   assert.match(result.outputs, /updates_made=false/);
   assert.match(result.outputs, /stale_pins=true/);
   assert.match(result.outputs, /newer_release=v3\.11\.4/);
