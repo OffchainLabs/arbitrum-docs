@@ -72,11 +72,21 @@ function parseArgs(argv: string[]): { from: string; to: string; dryRun: boolean 
   return { from: positional[0], to: positional[1], dryRun: argv.includes('--dry-run') };
 }
 
+/** The file a site URL such as `/a/b` (or the pre-cutover `/docs/a/b`) is served from, as a hint. */
+function fileHintForUrl(raw: string): string {
+  const stripped = raw
+    .replace(/^\/+/, '')
+    .replace(/^docs\//, '')
+    .replace(/[#?].*$/, '')
+    .replace(/\/+$/, '');
+  return /\.mdx?$/i.test(stripped) ? `content/docs/${stripped}` : `content/docs/${stripped}.mdx`;
+}
+
 function validatePath(label: string, raw: string, abs: string, docsRoot: string): void {
   if (raw.startsWith('/')) {
     console.error(
       `move-doc: <${label}> starts with '/': ${raw}\n` +
-        `  Pass a repo-relative file path under ${CONTENT_DIR}/, not a site URL, e.g. '${raw.replace(/^\/+/, '')}'.`,
+        `  Pass a repo-relative file path under ${CONTENT_DIR}/, not a site URL, e.g. '${fileHintForUrl(raw)}'.`,
     );
     process.exit(1);
   }
@@ -298,6 +308,23 @@ async function appendRedirect(
   writeFileSync(redirectsPath, await format(next, { ...config, filepath: redirectsPath }));
 }
 
+/**
+ * Existing redirects whose destination is `url` (any `#fragment` ignored). After the move each one
+ * chains through the new redirect, which `pnpm test` rejects, so it must be retargeted by hand.
+ */
+function redirectsTo(
+  redirectsPath: string,
+  url: string,
+): { source: string; destination: string }[] {
+  if (!existsSync(redirectsPath)) return [];
+  const found: { source: string; destination: string }[] = [];
+  const text = readFileSync(redirectsPath, 'utf8');
+  for (const m of text.matchAll(/source:\s*'([^']+)',\s*destination:\s*'([^']+)'/g)) {
+    if (m[2].split('#')[0] === url) found.push({ source: m[1], destination: m[2] });
+  }
+  return found;
+}
+
 /** The set of relative links inside partials that can't be auto-resolved (a partial has no fixed URL). */
 function ambiguousPartialLinks(records: LinkRecord[]): LinkRecord[] {
   return records.filter((rec) => {
@@ -358,6 +385,15 @@ async function main(): Promise<void> {
   console.log(`  moved-file relative links rewritten: ${outboundCount}`);
 
   const partialWarns = ambiguousPartialLinks(records);
+  const chaining = redirect
+    ? redirectsTo(path.join(repoRoot, REDIRECTS_CONFIG_PATH), redirect.source)
+    : [];
+  if (chaining.length) {
+    console.warn(
+      `  WARNING: ${chaining.length} existing redirect(s) point at ${redirect?.source} and will chain after the move; retarget each to ${redirect?.destination} in ${REDIRECTS_CONFIG_PATH}:`,
+    );
+    for (const r of chaining) console.warn(`    ${r.source} -> ${r.destination}`);
+  }
   if (unrenderable.length) {
     console.warn(
       `  WARNING: ${unrenderable.length} reference(s) resolve to the move but can't be auto-rewritten:`,
