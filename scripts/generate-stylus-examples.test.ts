@@ -15,8 +15,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 
-import { outputDir, sections } from './data/stylus-examples.data.ts';
 import {
+  notForProductionInclude,
+  outputDir,
+  repoRef,
+  sections,
+} from './data/stylus-examples.data.ts';
+import {
+  assertStaticBody,
   buildPage,
   buildSectionMeta,
   insertNotForProductionBanner,
@@ -374,6 +380,70 @@ describe('buildPage', () => {
   });
 });
 
+describe('buildPage refuses a body that would compile to code', () => {
+  // The input of the review's proof of concept (09.1): an `export` and an expression in the body,
+  // both of which ran when the built page was evaluated.
+  const POC = [
+    "export const metadata = { title: 'Hello', description: 'World' };",
+    '',
+    '{/* Begin Content */}',
+    '',
+    '# Hello',
+    '',
+    'export const leak = (globalThis.ranAtImport = Object.keys(process.env).length);',
+    '',
+    "Text {globalThis.ranAtRender = 'yes', null}",
+    '',
+  ].join('\n');
+
+  it('rejects the proof-of-concept page, naming the page and each line', () => {
+    assert.throws(
+      () => build(POC),
+      (error: Error) =>
+        error.message.startsWith('src/app/basic_examples/hello_world/page.mdx') &&
+        /line \d+: mdxjsEsm "export const leak/.test(error.message) &&
+        /line \d+: mdxTextExpression "globalThis\.ranAtRender/.test(error.message),
+    );
+  });
+
+  it('reports lines counted from the top of the generated page', () => {
+    // Frontmatter (lines 1-7), a blank, the marker on line 9, then `{x}` on line 10.
+    const source = "export const metadata = { title: 'T', description: 'D' };\n{x}\n";
+    assert.throws(() => build(source), /line 10: mdxFlowExpression "x"/);
+  });
+
+  for (const [label, body] of [
+    ['an import', "import Foo from './foo'\n"],
+    ['a component', '<Foo />\n'],
+    ['an element other than the include', '<script>alert(1)</script>\n'],
+    ['an expression attribute on the include', '<include cwd={process.cwd()}>x</include>\n'],
+  ] as const) {
+    it(`rejects ${label}`, () => {
+      const source = `export const metadata = { title: 'T', description: 'D' };\n\n${body}`;
+      assert.throws(() => build(source), /would compile to code, not content/);
+    });
+  }
+
+  it('passes braces and tags inside code, and the inserted include', () => {
+    const source =
+      "export const metadata = { title: 'T', description: 'D' };\n\n" +
+      'Inline `Vec<T> {}`.\n\n```rust\nfn f<T>() { {x} }\n```\n';
+    assert.ok(build(source).content.includes(INCLUDE));
+  });
+
+  it('passes every committed page', () => {
+    for (const section of sections) {
+      for (const slug of section.pages) {
+        const file = path.join(outputDir, section.dir, `${slug}.mdx`);
+        assertStaticBody(fs.readFileSync(file, 'utf-8'), {
+          context: file,
+          include: notForProductionInclude,
+        });
+      }
+    }
+  });
+});
+
 describe('buildSectionMeta', () => {
   it('keeps the listed order and appends the catch-all the committed files carry', () => {
     assert.deepEqual(buildSectionMeta({ title: 'Applications', pages: ['erc20', 'erc721'] }), {
@@ -384,6 +454,10 @@ describe('buildSectionMeta', () => {
 });
 
 describe('stylus-examples.data.ts', () => {
+  it('pins upstream to a full commit SHA, not a branch or tag', () => {
+    assert.match(repoRef, /^[0-9a-f]{40}$/);
+  });
+
   it('names a page that exists for every allowlist entry', () => {
     for (const section of sections) {
       for (const slug of section.pages) {
