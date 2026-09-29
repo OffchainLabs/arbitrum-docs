@@ -108,6 +108,23 @@ test('move-doc --dry-run reports the redirect without writing it', (t) => {
   );
 });
 
+test('move-doc writes a quote or dollar sequence in a file name as a string, not as code', (t) => {
+  // Review 09.15: the entry was built by pasting the path between single quotes, so a `'` ended
+  // the string and left the rest of the name as TypeScript in redirects.config.ts.
+  const { root, redirectsPath, fromRel } = fixtureRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const toRel = "content/docs/example/it's-$&-new.mdx";
+  execFileSync('node', [MOVE_DOC, fromRel, toRel], { cwd: root, encoding: 'utf8' });
+  const after = readFileSync(redirectsPath, 'utf8');
+
+  assert.ok(
+    after.includes(`destination: "/docs/example/it's-$&-new"`),
+    `the destination is one string literal, with $& kept literally:\n${after}`,
+  );
+  assert.match(after, entry('/docs/example/older-name', '/docs/example/old-name'));
+});
+
 // --- `{var:name}` placeholder links ------------------------------------------------------------------
 
 test('move-doc warns about a placeholder link to the moved page and never rewrites one', (t) => {
