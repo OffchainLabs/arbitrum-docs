@@ -75,6 +75,9 @@ async function githubJson(endpoint: string, notFound?: string): Promise<Record<s
   return body;
 }
 
+/** A Nitro release tag, exactly: `v` and three numbers, anchored at both ends. */
+const RELEASE_TAG = /^v\d+\.\d+\.\d+$/;
+
 /**
  * The `--to <tag>` argument, or `undefined` in default mode. Parsed before any request so a typo
  * fails at once. The tag shape is exact: `releases/tags/<tag>` looks it up verbatim.
@@ -83,7 +86,7 @@ function targetFromArgs(argv: string[]): string | undefined {
   const index = argv.findIndex((arg) => arg === '--to' || arg.startsWith('--to='));
   if (index === -1) return undefined;
   const value = argv[index] === '--to' ? argv[index + 1] : argv[index].slice('--to='.length);
-  if (value === undefined || !/^v\d+\.\d+\.\d+$/.test(value)) {
+  if (value === undefined || !RELEASE_TAG.test(value)) {
     throw new Error(
       `--to needs a release tag like v3.11.5, got ${value === undefined ? 'nothing' : JSON.stringify(value)}`,
     );
@@ -318,6 +321,14 @@ async function main(): Promise<void> {
     console.log(
       `newer release available: ${releaseTag} (run: pnpm nitro:check-release --to ${releaseTag})`,
     );
+    // The tag becomes a step output that later workflow steps read, so it must be exactly a
+    // release tag, the shape `--to` accepts, and not whatever the API returned.
+    if (!RELEASE_TAG.test(releaseTag)) {
+      throw new Error(
+        `GitHub API returned the release tag ${JSON.stringify(releaseTag)}, which is not vX.Y.Z; ` +
+          `refusing to pass it on as newer_release`,
+      );
+    }
     setOutput('newer_release', releaseTag);
   }
 }
