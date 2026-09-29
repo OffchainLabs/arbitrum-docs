@@ -97,6 +97,9 @@ entries do not carry this contract.
   `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
 - **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check`
   rule R3 only forbids ESM-importing such a partial, which no component does.
+- **No JSX component in a heading.** Fumadocs compiles heading text into the table of contents
+  with no component in scope, so a `<Var>` or `<Term>` there fails the build
+  (`component-in-heading`). Put the variable in the first sentence below the heading.
 - **No link in a heading, and no `<tr>` directly in `<table>`.** Both break React hydration (rules
   `link-in-heading`, `tr-in-table`).
 - **A plain `.css` import in a component registered in `components/mdx.tsx` adds a render-blocking

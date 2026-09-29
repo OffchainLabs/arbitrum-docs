@@ -109,9 +109,9 @@ Keep in mind that you can execute any message in this way, be it a withdrawal of
 
 You can also find an example of force-inclusion in [this tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/delayedInbox-l2msg).
 
-### Are there any plans to reduce the time a transaction needs to wait before being able to be force-included from Ethereum into the Arbitrum chain, bypassing the sequencer? (Currently <Var name="arbOneForceIncludePeriodHours" /> hours)
+### Are there any plans to reduce the time a transaction needs to wait before being able to be force-included from Ethereum into the Arbitrum chain, bypassing the sequencer?
 
-The mechanism that allows force-including transactions from Ethereum (bypassing the sequencer) is intended to be used in very rare cases, especially when it is expected that the sequencer will not be operational again, so that users have a way of interacting with Arbitrum in a trustless way.
+The wait is currently <Var name="arbOneForceIncludePeriodHours" /> hours. The mechanism that allows force-including transactions from Ethereum (bypassing the sequencer) is intended to be used in very rare cases, especially when it is expected that the sequencer will not be operational again, so that users have a way of interacting with Arbitrum in a trustless way.
 
 When using this mechanism, if the sequencer is down for longer than the time window for force-including transactions from Ethereum, the moment it is online again, it can lead to a reorganization of blocks in Arbitrum (it would have received transactions timestamped before the force-included one).
 

@@ -56,6 +56,12 @@ test('a link, <a> or bare URL in a heading is reported', () => {
   assert.deepEqual(rules('## See https://example.com\n'), ['link-in-heading']);
 });
 
+test('a JSX component in a heading is reported', () => {
+  assert.deepEqual(rules('## Wait (currently <Var name="x" /> hours)\n'), ['component-in-heading']);
+  assert.deepEqual(rules('## A <Term id="dapp">dapp</Term> here\n'), ['component-in-heading']);
+  assert.deepEqual(rules('## Fixed bytes (`FixedBytes<N>`)\n'), []);
+});
+
 test('an image, a custom id or inline code in a heading is fine', () => {
   assert.deepEqual(rules('## Logo ![x](/img/x.png)\n'), []);
   assert.deepEqual(rules('## Heading [#custom-id]\n'), []);

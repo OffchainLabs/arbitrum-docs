@@ -832,22 +832,23 @@ There is no pre-commit hook. Run the gates yourself before you push.
 `scripts/lib/strip-code.ts`, so an example inside a fence is never reported. The one exception is
 `var-in-code`, which looks only inside code.
 
-| Rule                           | Catches                                                                                                                                 |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                       |
-| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                      |
-| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                            |
-| `site-import`                  | An `import … from '@site/…'` or `'@theme/…'` line, which has no module here and fails the build                                         |
-| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx`, nor a Fumadocs default, nor imported in the file, which throws at render |
-| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                   |
-| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                      |
-| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                         |
-| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                |
-| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                   |
-| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                    |
-| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                        |
-| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                |
-| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                |
+| Rule                           | Catches                                                                                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                        |
+| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                       |
+| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                             |
+| `site-import`                  | An `import … from '@site/…'` or `'@theme/…'` line, which has no module here and fails the build                                          |
+| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx`, nor a Fumadocs default, nor imported in the file, which throws at render  |
+| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                    |
+| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                       |
+| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                          |
+| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                 |
+| `component-in-heading`         | A JSX component such as `<Var>` in a heading; Fumadocs compiles heading text into the TOC with no component in scope, so the build fails |
+| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                    |
+| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                     |
+| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                         |
+| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                 |
+| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                 |
 
 `strip-code.ts` is the one "ignore code" scanner for every script; import it rather than writing
 another.

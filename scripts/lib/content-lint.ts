@@ -14,6 +14,9 @@
  *   link-in-heading       A link or bare URL in a heading. Fumadocs wraps heading content in its
  *                         own anchor, so the page serves `<a>` inside `<a>` and React hydration
  *                         fails. `[#custom-id]` and images are fine.
+ *   component-in-heading  A JSX component (`<Var>`, `<Term>`, …) in a heading. Fumadocs compiles
+ *                         heading text into the table of contents as JSX with no component in
+ *                         scope, so `next build` fails with "X is not defined". Move it below.
  *   tr-in-table           A `<tr>` directly inside `<table>`. The browser inserts a `<tbody>` the
  *                         server HTML lacks, so React hydration fails.
  *   remote-image          A markdown image with an `http(s)` src. It becomes `next/image`, whose
@@ -56,6 +59,7 @@ export const RULES = {
   'var-in-code': '<Var> inside code renders as a literal tag',
   'var-in-link': '<Var> in a link destination never substitutes',
   'link-in-heading': 'link inside a heading nests <a> inside <a>',
+  'component-in-heading': 'a JSX component in a heading breaks the table of contents at build',
   'tr-in-table': '<tr> is a direct child of <table>',
   'remote-image': 'markdown image with a remote src renders broken',
   'docusaurus-var-token': 'Docusaurus @@variable@@ token renders as literal text',
@@ -253,6 +257,9 @@ export function lintSource(source: string, options: LintOptions = {}): Finding[]
     if (/(?:https?:\/\/|\bwww\.)\S/i.test(rest)) problems.push('a bare URL');
     if (problems.length)
       add('link-in-heading', m.index, `heading contains ${problems.join(' + ')}`);
+    const component = /<([A-Z][A-Za-z0-9]*)[\s/>]/.exec(heading.replace(/`[^`]*`/g, ' '));
+    if (component)
+      add('component-in-heading', m.index, `move <${component[1]}> out of the heading text`);
   }
 
   for (const table of text.matchAll(/<table[\s>][\s\S]*?<\/table>/g)) {
