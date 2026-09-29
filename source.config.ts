@@ -3,6 +3,7 @@ import { defineCollections, defineConfig, defineDocs } from 'fumadocs-mdx/config
 import { execFileSync } from 'node:child_process';
 import { z } from 'zod';
 
+import { llmsStringify } from './lib/llms-markdown.ts';
 import { mdxOptions } from './lib/mdx-options.ts';
 import { referenceSchema } from './lib/reference-schema';
 
@@ -48,7 +49,8 @@ export const docs = defineDocs({
   docs: {
     schema: arbitrumPageSchema,
     postprocess: {
-      includeProcessedMarkdown: true,
+      // The markdown mirrors and llms-full.txt: components read as markdown (lib/llms-markdown.ts).
+      includeProcessedMarkdown: { stringify: llmsStringify },
     },
     lastModified,
   },
