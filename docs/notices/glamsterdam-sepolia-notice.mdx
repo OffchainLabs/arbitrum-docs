@@ -7,7 +7,7 @@ content_type: notice
 
 <!-- Temporary notice. Remove it after Ethereum Sepolia activates Glamsterdam on October 6, 2026. -->
 
-Ethereum Sepolia activates the Glamsterdam hard fork on Monday, October 6, 2026, at 13:53:36 UTC. This notice is <a data-quicklook-from="parent-chain">parent chain</a> compatibility guidance for Arbitrum Sepolia node operators and for operators of Arbitrum chains that settle on Ethereum Sepolia. It does not require an <a data-quicklook-from="arbos">ArbOS</a> upgrade.
+Ethereum Sepolia activates the Glamsterdam hard fork on Monday, October 6, 2026, at 13:53:36 UTC. This notice is <a data-quicklook-from="parent-chain">parent chain</a> compatibility guidance. It does not require an <a data-quicklook-from="arbos">ArbOS</a> upgrade.
 
 <VanillaAdmonition type="warning" title="Action required">
 
@@ -17,6 +17,18 @@ If you run an Arbitrum Sepolia node, or a node for an Arbitrum chain that settle
 - **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/v3.11.4
 
 </VanillaAdmonition>
+
+## Who is this notice for?
+
+This notice applies to you if you run either of the following:
+
+- **An Arbitrum Sepolia node.** Upgrade Nitro before the activation.
+- **An <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> that settles on Ethereum Sepolia.** Upgrade Nitro on every node of your chain, and read the batch poster and blob sections below.
+
+This notice does not apply to:
+
+- Arbitrum One, Arbitrum Nova, or Arbitrum chains that settle on Ethereum mainnet. Ethereum mainnet has no scheduled Glamsterdam activation date.
+- Arbitrum chains that settle on another Arbitrum chain (L3s). Their parent chain is not Ethereum Sepolia.
 
 ## Why the upgrade is required
 
@@ -39,7 +51,7 @@ If your chain posts <a data-quicklook-from="blob">blobs</a> to Ethereum Sepolia,
 --node.batch-poster.ignore-blob-price=true
 ```
 
-Chains that settle on an Arbitrum chain (L3s) and chains that post calldata need no change. To learn more about these flags, refer to [Enabling blob transactions for Arbitrum batch poster](/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs.mdx).
+Chains that post calldata need no change. To learn more about these flags, refer to [Enabling blob transactions for Arbitrum batch poster](/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs.mdx).
 
 ## Important dates
 
@@ -47,4 +59,4 @@ Chains that settle on an Arbitrum chain (L3s) and chains that post calldata need
 | --------------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Monday, October 6, 2026 at 13:53:36 UTC | Ethereum Sepolia Glamsterdam hard fork | Node operators running Arbitrum Sepolia; operators of Arbitrum chains settling on Ethereum Sepolia |
 
-This notice covers Ethereum Sepolia only. Ethereum mainnet has no scheduled Glamsterdam activation date. For the Sepolia schedule and client releases, refer to the [Glamsterdam testnet announcement](https://blog.ethereum.org/2026/09/17/glamsterdam-testnet-announcement) and [EIP-7773](https://eips.ethereum.org/EIPS/eip-7773).
+This notice covers Ethereum Sepolia only. For the Sepolia schedule and client releases, refer to the [Glamsterdam testnet announcement](https://blog.ethereum.org/2026/09/17/glamsterdam-testnet-announcement) and [EIP-7773](https://eips.ethereum.org/EIPS/eip-7773).
