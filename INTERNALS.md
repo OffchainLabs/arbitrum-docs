@@ -266,9 +266,9 @@ is not type-checked and a missing key renders the string `undefined`.
 **`<Var>` does not evaluate inside a fenced block or an inline code span.** The reader sees the
 literal tag. `content:lint` rule `var-in-code` fails on it. When a command must be copy-pasteable,
 hardcode the value in the code and put `<Var>` in the prose beside it. For `latestNitroNodeImage`,
-`pnpm nitro:check-release` keeps those copies current, but only in files that carry the marker
-`{/* sync-with-var: latestNitroNodeImage */}`. Never add the marker to a page that states a Nitro
-version historically, such as an ArbOS release page, or a bump rewrites history.
+`pnpm nitro:check-release --to <tag>` keeps those copies current, but only in files that carry the
+marker `{/* sync-with-var: latestNitroNodeImage */}`. Never add the marker to a page that states a
+Nitro version historically, such as an ArbOS release page, or a bump rewrites history.
 
 ### A variable in a link destination is a placeholder
 
@@ -316,6 +316,29 @@ Five `vars.json` keys drive it: `announcementEnabled`, `announcementText`, `anno
   `localStorage`, so **a new message needs a new id**.
 - The bar's height is fixed (`3rem`, `4rem` below 640px) because it feeds the layout's sticky
   offsets. No gate couples it to the text; the budget is in README.
+
+### When Nitro moves a directory
+
+Paths into the Nitro repository live as `nitroPathTo*` keys in `content/vars.json`. The prefix is
+what registers them: `nitro:check-release` verifies each one, plus every content link under
+`github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/`, against the GitHub
+contents API at the target tag before it writes anything (`scripts/lib/nitro-upstream-paths.ts`).
+The NodeInterface pins for `nitro-contracts` stay in `scripts/generate-precompile-tables.ts`
+because they point at a fixed commit.
+
+When a release moves a directory:
+
+1. `pnpm nitro:check-release --to <tag>`, locally or in `nitro-bump.yml`, fails naming the pin or
+   link that no longer resolves at the new tag.
+2. Find the new path in the Nitro release diff.
+3. Edit the pin in `content/vars.json`, or the link when a file moved but its directory did not.
+4. Rerun `pnpm nitro:check-release --to <tag>` when the move came with a release bump, or plain
+   `pnpm nitro:check-release` when it did not, then `pnpm precompiles:generate` and
+   `pnpm cli:generate`.
+5. Open the PR by hand and run the gates locally, since the automated branch gets no CI run.
+
+`check-links` skips external URLs, so this check is the only thing that sees these links, and it
+runs only here, not in CI, because the gates stay offline.
 
 ## Glossary and inline references
 
@@ -616,21 +639,26 @@ another.
 
 ### Hand-run tools
 
-None of these is a CI gate. `upstream-refresh.yml` runs two of them on a schedule (below):
+None of these is a CI gate. Two workflows run some of them (below):
 
-| Command                                | Does                                                                |
-| -------------------------------------- | ------------------------------------------------------------------- |
-| `pnpm move-doc <from> <to>`            | Moves a page, see [Redirects](#redirects)                           |
-| `pnpm nitro:check-release`             | Bumps the pinned Nitro release in `vars.json` and marked image tags |
-| `pnpm precompiles:generate` / `:check` | Precompile tables from the pinned Nitro refs (fetches from GitHub)  |
-| `pnpm contracts:generate`              | The contract-address partial                                        |
-| `pnpm cli:generate` / `:check`         | The Nitro CLI flags page from the pinned tag's Go source            |
-| `pnpm stylus:generate` / `:check`      | The Stylus by Example pages from `offchainlabs/stylus-by-example`   |
-| `pnpm edge-challenge:fetch`            | The BoLD challenge snapshot from Arbitrum Sepolia                   |
+| Command                                 | Does                                                                                                                                                                                                                                                                                                                               |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm move-doc <from> <to>`             | Moves a page, see [Redirects](#redirects)                                                                                                                                                                                                                                                                                          |
+| `pnpm nitro:check-release [--to <tag>]` | Reports a newer Nitro release and a stale go-ethereum submodule pin, verifies every `nitroPathTo*` pin and Nitro source link at the pinned tag, writes nothing; `--to <tag>` is the only writer: it bumps the pinned release, the node image and the marked image tags to that tag, or repairs the submodule pin at the pinned tag |
+| `pnpm precompiles:generate` / `:check`  | Precompile tables from the pinned Nitro refs (fetches from GitHub)                                                                                                                                                                                                                                                                 |
+| `pnpm contracts:generate`               | The contract-address partial                                                                                                                                                                                                                                                                                                       |
+| `pnpm cli:generate` / `:check`          | The Nitro CLI flags page from the pinned tag's Go source                                                                                                                                                                                                                                                                           |
+| `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example`                                                                                                                                                                                                                                                                  |
+| `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                  |
 
 `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` every Monday at 08:00
-UTC and opens `automated/upstream-refresh` as a PR when anything changed. A PR opened with
-`GITHUB_TOKEN` triggers no CI run, so review that PR's diff and run the gates locally.
+UTC. It never writes `content/vars.json`. It opens `automated/upstream-refresh` as a maintenance
+PR when the tables changed, and one "Nitro vX.Y.Z is available" issue per newer release, with the
+bump checklist. A stale submodule pin is only reported in the job log; a human repairs it with
+`pnpm nitro:check-release --to <pinned tag>`. `nitro-bump.yml` is a `workflow_dispatch` that takes
+the agreed version, runs `nitro:check-release --to <tag>` plus both generators, and opens
+`automated/nitro-bump` as a PR. A PR opened with `GITHUB_TOKEN` triggers no CI run, so review
+either PR's diff and run the gates locally.
 
 ### Generated pages
 

@@ -45,7 +45,7 @@ pnpm format:check      # prettier (pnpm format writes)
 
 # By hand only
 pnpm move-doc <from> <to> [--dry-run]  # move a page, rewrite links, update meta.json, add a redirect
-pnpm nitro:check-release               # bump the pinned Nitro release and marked image tags
+pnpm nitro:check-release               # report a newer Nitro release and stale pins, verify paths; --to <tag> is the only writer
 pnpm precompiles:generate              # precompile tables (:check compares)
 pnpm contracts:generate                # contract-address partial
 pnpm cli:generate                      # Nitro CLI flags page (:check compares)

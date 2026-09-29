@@ -1,28 +1,43 @@
 /**
- * check-nitro-release: bump the pinned Nitro version in content/vars.json.
+ * check-nitro-release: report on the Nitro pins in content/vars.json, and bump them on request.
  *
  * Usage:
- *   pnpm nitro:check-release
+ *   pnpm nitro:check-release              # report only; writes nothing
+ *   pnpm nitro:check-release --to v3.11.5 # bump to that published release
  *
- * Reads the latest published Nitro release, and if it is newer than the pinned
- * `nitroVersionTag`, updates the release values in content/vars.json:
+ * Default mode is read-only. It prints the pinned and the latest published release, reports when
+ * `goEthereumCommit` (the go-ethereum submodule commit at the pinned `nitroVersionTag`) is stale
+ * or missing and sets the `stale_pins` step output, and verifies every `nitroPathTo*` pin and
+ * every content link under `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/`
+ * against the GitHub contents API at the pinned tag (see scripts/lib/nitro-upstream-paths.ts;
+ * `check-links` skips external URLs). When a newer release exists it says so and sets the
+ * `newer_release` step output, which the weekly workflow turns into an issue. It never writes:
+ * which release the docs describe, and every pin under it, is a human decision, taken after
+ * reading the release notes and updating the support policy page.
  *
- *   nitroVersionTag       the git tag, which also drives the precompile source links
- *   latestNitroNodeImage  the published node Docker image, read from Docker Hub
- *   goEthereumCommit      the go-ethereum submodule commit at nitroVersionTag
+ * `--to <tag>` is that decision and the only writer. It confirms the release is published, then
+ * at that tag resolves the submodule commit, verifies the same pins and links, reads the node
+ * image from Docker Hub, writes `nitroVersionTag`, `latestNitroNodeImage` and `goEthereumCommit`,
+ * and rewrites the outgoing image tag in files that opt in with a
+ * `sync-with-var: latestNitroNodeImage` marker (see scripts/lib/nitro-node-image.ts). `--to` at
+ * the pinned tag repairs a stale submodule pin and skips the Docker Hub lookup. Every pin is
+ * resolved before anything is written. An older tag is accepted with a warning: a rollback is
+ * also a decision.
  *
- * The submodule pin is also repaired when Nitro is already current. All pins are resolved before
- * anything is written. It then rewrites the outgoing image tag in files that opt in with a
- * `sync-with-var: latestNitroNodeImage` marker (see scripts/lib/nitro-node-image.ts).
- *
- * Run `pnpm precompiles:generate` afterwards: the precompile tables embed `nitroVersionTag`.
- * `.github/workflows/upstream-refresh.yml` runs both in one job.
+ * Run `pnpm precompiles:generate` and `pnpm cli:generate` after a bump: both embed
+ * `nitroVersionTag`. `.github/workflows/nitro-bump.yml` runs all three in one job.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 
 import { runScript, setOutput, writeOrCheck } from './lib/generated-partial.ts';
 import { syncImageInContent } from './lib/nitro-node-image.ts';
+import {
+  findMissingUpstreamPaths,
+  nitroPathPins,
+  nitroSourcePaths,
+} from './lib/nitro-upstream-paths.ts';
+import { toPosix, walk } from './lib/partials.ts';
 
 const VARS_PATH = path.join('content', 'vars.json');
 const NITRO_REPO = 'OffchainLabs/nitro';
@@ -46,16 +61,34 @@ function githubHeaders(): Record<string, string> {
   return headers;
 }
 
-async function githubJson(endpoint: string): Promise<Record<string, unknown>> {
+/** A GitHub API response body. `notFound` replaces the generic message when the status is 404. */
+async function githubJson(endpoint: string, notFound?: string): Promise<Record<string, unknown>> {
   const response = await fetch(`https://api.github.com/repos/${NITRO_REPO}/${endpoint}`, {
     headers: githubHeaders(),
   });
+  if (response.status === 404 && notFound !== undefined) throw new Error(notFound);
   if (!response.ok) {
     throw new Error(`GitHub API ${endpoint} failed with status ${response.status}`);
   }
   const body: unknown = await response.json();
   if (!isRecord(body)) throw new Error(`GitHub API ${endpoint} returned a non-object body`);
   return body;
+}
+
+/**
+ * The `--to <tag>` argument, or `undefined` in default mode. Parsed before any request so a typo
+ * fails at once. The tag shape is exact: `releases/tags/<tag>` looks it up verbatim.
+ */
+function targetFromArgs(argv: string[]): string | undefined {
+  const index = argv.findIndex((arg) => arg === '--to' || arg.startsWith('--to='));
+  if (index === -1) return undefined;
+  const value = argv[index] === '--to' ? argv[index + 1] : argv[index].slice('--to='.length);
+  if (value === undefined || !/^v\d+\.\d+\.\d+$/.test(value)) {
+    throw new Error(
+      `--to needs a release tag like v3.11.5, got ${value === undefined ? 'nothing' : JSON.stringify(value)}`,
+    );
+  }
+  return value;
 }
 
 /**
@@ -115,50 +148,126 @@ async function resolvePublishedNodeImage(tag: string): Promise<string> {
   return `offchainlabs/nitro-node:${matches[0].name}`;
 }
 
-async function main(): Promise<void> {
-  const vars: unknown = JSON.parse(fs.readFileSync(VARS_PATH, 'utf-8'));
-  if (!isRecord(vars)) throw new Error(`${VARS_PATH} is not a JSON object`);
-  // Every key is spread back into the rewritten file below, so only the ones read here are narrowed.
-  const pinnedTag = stringField(vars, 'nitroVersionTag');
-  const pinnedImage = stringField(vars, 'latestNitroNodeImage');
-  if (pinnedTag === undefined || pinnedImage === undefined) {
-    throw new Error(`${VARS_PATH} needs string nitroVersionTag and latestNitroNodeImage values`);
+/** Whether Nitro has `repoPath` at `ref`. Only a 404 is absence; a rate-limit 403 must throw. */
+async function upstreamPathExists(repoPath: string, ref: string): Promise<boolean> {
+  const endpoint = `contents/${repoPath}?ref=${encodeURIComponent(ref)}`;
+  const response = await fetch(`https://api.github.com/repos/${NITRO_REPO}/${endpoint}`, {
+    headers: githubHeaders(),
+  });
+  if (response.ok) return true;
+  if (response.status === 404) return false;
+  throw new Error(`GitHub API ${endpoint} failed with status ${response.status}`);
+}
+
+/**
+ * Fail before anything is written when a `nitroPathTo*` pin or a content link into Nitro does not
+ * resolve at `targetTag`. Links are read at the target tag, not the pinned one, so a bump checks
+ * where the docs are about to point.
+ */
+async function verifyUpstreamPaths(
+  vars: Record<string, unknown>,
+  targetTag: string,
+): Promise<void> {
+  const pins = nitroPathPins(vars).map(({ key, path: pinned }) => ({
+    path: pinned,
+    label: `${key} = "${pinned}" (${toPosix(VARS_PATH)})`,
+  }));
+  const files = walk(path.join(process.cwd(), 'content'), (p) => /\.mdx?$/i.test(p)).map((abs) => ({
+    rel: toPosix(path.relative(process.cwd(), abs)),
+    source: fs.readFileSync(abs, 'utf8'),
+  }));
+  const links = nitroSourcePaths(files, { ...vars, nitroVersionTag: targetTag }).map(
+    ({ path: linked, rel, line }) => ({ path: linked, label: `${linked} (${rel}:${line})` }),
+  );
+
+  const paths = [...pins, ...links];
+  const missing = await findMissingUpstreamPaths(paths, (p) => upstreamPathExists(p, targetTag));
+  if (missing.length > 0) {
+    throw new Error(
+      [
+        `Nitro ${targetTag} no longer has ${missing.length} path(s) the docs pin or link:`,
+        ...missing.map((label) => `  - ${label}`),
+      ].join('\n'),
+    );
   }
+  console.log(`verified ${new Set(paths.map((p) => p.path)).size} upstream paths at ${targetTag}`);
+}
 
-  const release = await githubJson('releases/latest');
-  const latest = stringField(release, 'tag_name');
-  if (latest === undefined) throw new Error('GitHub API releases/latest returned no tag_name');
-  const publishedAt = stringField(release, 'published_at');
-
-  console.log(`pinned:  ${pinnedTag}`);
-  console.log(`latest:  ${latest} (published ${publishedAt?.slice(0, 10) ?? 'unknown'})`);
-
-  const bumpRelease = isNewer(latest, pinnedTag);
-  const targetTag = bumpRelease ? latest : pinnedTag;
-  const submodule = await githubJson(`contents/go-ethereum?ref=${encodeURIComponent(targetTag)}`);
-  const submoduleSha = stringField(submodule, 'sha');
+/** The go-ethereum submodule commit Nitro pins at `tag`. */
+async function submoduleCommitAt(tag: string): Promise<string> {
+  const submodule = await githubJson(`contents/go-ethereum?ref=${encodeURIComponent(tag)}`);
+  const sha = stringField(submodule, 'sha');
   if (
     submodule.type !== 'submodule' ||
     submodule.submodule_git_url !== 'https://github.com/OffchainLabs/go-ethereum.git' ||
-    submoduleSha === undefined ||
-    !/^[0-9a-f]{40}$/.test(submoduleSha)
+    sha === undefined ||
+    !/^[0-9a-f]{40}$/.test(sha)
   ) {
-    throw new Error(`Invalid go-ethereum submodule at Nitro ${targetTag}`);
+    throw new Error(`Invalid go-ethereum submodule at Nitro ${tag}`);
+  }
+  return sha;
+}
+
+/**
+ * Resolve the submodule commit at the target tag and verify every pin and link there. Default
+ * mode then only reports: `updates_made=false`, plus `stale_pins=true` when `goEthereumCommit`
+ * differs from the submodule commit at the pinned tag. `--to <tag>` is the only writer.
+ */
+async function syncPins(
+  vars: Record<string, unknown>,
+  pinnedTag: string,
+  target: string | undefined,
+): Promise<void> {
+  const tag = target ?? pinnedTag;
+  const submoduleSha = await submoduleCommitAt(tag);
+  await verifyUpstreamPaths(vars, tag);
+
+  if (target === undefined) {
+    setOutput('updates_made', 'false');
+    if (vars.goEthereumCommit === submoduleSha) {
+      console.log('nitro and go-ethereum pins are up to date.');
+      return;
+    }
+    console.log(
+      `goEthereumCommit is stale for ${pinnedTag}: run pnpm nitro:check-release --to ${pinnedTag}`,
+    );
+    setOutput('stale_pins', 'true');
+    return;
   }
 
-  if (!bumpRelease && vars.goEthereumCommit === submoduleSha) {
+  const changed = await writePins(vars, pinnedTag, target, submoduleSha);
+  setOutput('updates_made', String(changed));
+  if (changed) setOutput('updated_version', target);
+}
+
+/**
+ * Write vars.json and the opted-in image copies when anything differs at `tag`. The node image is
+ * read only on a bump: at the pinned tag it is already right.
+ */
+async function writePins(
+  vars: Record<string, unknown>,
+  pinnedTag: string,
+  tag: string,
+  submoduleSha: string,
+): Promise<boolean> {
+  // Every key is spread back into the rewritten file below, so only the ones read here are narrowed.
+  const pinnedImage = stringField(vars, 'latestNitroNodeImage');
+  if (pinnedImage === undefined) {
+    throw new Error(`${VARS_PATH} needs a string latestNitroNodeImage`);
+  }
+  const bump = tag !== pinnedTag;
+
+  if (!bump && vars.goEthereumCommit === submoduleSha) {
     console.log('nitro and go-ethereum pins are up to date.');
-    setOutput('updates_made', 'false');
-    return;
+    return false;
   }
 
   const updated = {
     ...vars,
-    nitroVersionTag: targetTag,
-    latestNitroNodeImage: bumpRelease ? await resolvePublishedNodeImage(targetTag) : pinnedImage,
+    nitroVersionTag: tag,
+    latestNitroNodeImage: bump ? await resolvePublishedNodeImage(tag) : pinnedImage,
     goEthereumCommit: submoduleSha,
   };
-
   await writeOrCheck(VARS_PATH, JSON.stringify(updated, null, 2), { check: false });
 
   console.log(`updated nitroVersionTag      → ${updated.nitroVersionTag}`);
@@ -173,11 +282,44 @@ async function main(): Promise<void> {
       : `rewrote ${total} hardcoded copies of the old image across ${synced.length} file(s):`,
   );
   for (const f of synced) console.log(`  ${f.rel} (${f.count})`);
+  if (bump)
+    console.log(
+      'Regenerate the tables and the CLI page: pnpm precompiles:generate && pnpm cli:generate',
+    );
+  return true;
+}
 
-  console.log('Regenerate the precompile tables: pnpm precompiles:generate');
+async function main(): Promise<void> {
+  const target = targetFromArgs(process.argv.slice(2));
+  const vars: unknown = JSON.parse(fs.readFileSync(VARS_PATH, 'utf-8'));
+  if (!isRecord(vars)) throw new Error(`${VARS_PATH} is not a JSON object`);
+  const pinnedTag = stringField(vars, 'nitroVersionTag');
+  if (pinnedTag === undefined) throw new Error(`${VARS_PATH} needs a string nitroVersionTag`);
+  console.log(`pinned:  ${pinnedTag}`);
 
-  setOutput('updates_made', 'true');
-  setOutput('updated_version', targetTag);
+  // The release the run is about: the target on a bump, else the latest, reported but not applied.
+  const release = await githubJson(
+    target === undefined ? 'releases/latest' : `releases/tags/${target}`,
+    target === undefined ? undefined : `No published Nitro release ${target}`,
+  );
+  const releaseTag = stringField(release, 'tag_name');
+  if (releaseTag === undefined) throw new Error('GitHub API release lookup returned no tag_name');
+  const publishedAt = stringField(release, 'published_at')?.slice(0, 10) ?? 'unknown';
+  console.log(
+    `${target === undefined ? 'latest' : 'target'}:  ${releaseTag} (published ${publishedAt})`,
+  );
+  if (target !== undefined && isNewer(pinnedTag, target)) {
+    console.warn(`warning: ${target} is older than the pinned ${pinnedTag}`);
+  }
+
+  await syncPins(vars, pinnedTag, target);
+
+  if (target === undefined && isNewer(releaseTag, pinnedTag)) {
+    console.log(
+      `newer release available: ${releaseTag} (run: pnpm nitro:check-release --to ${releaseTag})`,
+    );
+    setOutput('newer_release', releaseTag);
+  }
 }
 
 runScript(main);
