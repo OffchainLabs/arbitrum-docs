@@ -1742,26 +1742,22 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/bold',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/bold',
     permanent: false,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/additional-configuration-parameters',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/additional-configuration-parameters',
+    destination: '/docs/launch-arbitrum-chain/chain-config/additional-configuration-parameters',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/assertion-control',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/assertion-control',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
+    destination: '/docs/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs',
     permanent: true,
   },
   {
@@ -1771,7 +1767,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/chainConfig-reference',
-    destination: '/docs/launch-arbitrum-chain/configuration/chain-config-reference',
+    destination: '/docs/launch-arbitrum-chain/chain-config/chainConfig-reference',
     permanent: true,
   },
   {
@@ -1811,8 +1807,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
+    destination: '/docs/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
     permanent: true,
   },
   {
@@ -1827,8 +1822,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
+    destination: '/docs/launch-arbitrum-chain/chain-config/costs/dynamic-pricing',
     permanent: true,
   },
   {
@@ -1874,8 +1868,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/data-availability/configure-dac',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/data-availability/configure-dac',
+    destination: '/docs/launch-arbitrum-chain/chain-config/data-availability/configure-dac',
     permanent: true,
   },
   {
@@ -1886,20 +1879,17 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations',
+    destination: '/docs/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
+    destination: '/docs/launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment',
+    destination: '/docs/launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment',
     permanent: true,
   },
   {
@@ -1910,14 +1900,12 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/data-availability/deploy-das',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-das',
+    destination: '/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-das',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
+    destination: '/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das',
     permanent: true,
   },
   {
@@ -1947,32 +1935,27 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
+    destination: '/docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/sequencer/timeboost',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/sequencer/timeboost',
+    destination: '/docs/launch-arbitrum-chain/chain-config/sequencer/timeboost',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/validation/assertion-control',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/assertion-control',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/assertion-control',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/validation/bold',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/bold',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/bold',
     permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
     permanent: true,
   },
   {
@@ -1982,8 +1965,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/chain-config/validation/challenge-period',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
     permanent: true,
   },
   {
@@ -2500,8 +2482,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/features/advanced/sequencer-timing-adjustments',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
+    destination: '/docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments',
     permanent: false,
   },
   {
@@ -2549,8 +2530,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/features/common/gas-and-fees/choose-native-mint-burn',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
+    destination: '/docs/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn',
     permanent: false,
   },
   {
@@ -2565,22 +2545,19 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/features/common/validation-and-security/choose-bold',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/bold',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/bold',
     permanent: false,
   },
   {
     source:
       '/launch-arbitrum-chain/features/common/validation-and-security/choose-challenge-period',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/challenge-period',
     permanent: false,
   },
   {
     source:
       '/launch-arbitrum-chain/features/common/validation-and-security/choose-permissioned-validators',
-    destination:
-      '/docs/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
+    destination: '/docs/launch-arbitrum-chain/chain-config/validation/bond-and-validator',
     permanent: false,
   },
   {

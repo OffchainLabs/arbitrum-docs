@@ -93,8 +93,6 @@ If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-clie
   </Tab>
 </Tabs>
 
-  </Tabs>
-
 <Callout type="warn" title="Defaults that commonly trip up operators">
 
 - **Don't copy the chart README's init example verbatim.** It uses `nitro-genesis.tar`, which syncs from genesis — a huge, slow process on a chain with a long history, such as Arbitrum One. Where a pruned snapshot exists, prefer `configmap.data.init.latest=pruned` (default base `https://snapshot.arbitrum.foundation/`).

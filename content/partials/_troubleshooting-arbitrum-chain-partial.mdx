@@ -1,8 +1,8 @@
 ### Can I use the Chain SDK to deploy a mainnet chain?
 
-Yes! The Arbitrum Chain SDK's core technology has undergone a comprehensive audit and is now capable of supporting deployments to mainnet. You can read more about it in our [preview expectations notice](/docs/launch-arbitrum-chain/overview/public-preview-expectations#arbitrum-chains-are-mainnet-ready-but-deploy-to-testnet-first).
+Yes! The Arbitrum Chain SDK's core technology has undergone a comprehensive audit and is now capable of supporting deployments to mainnet. You can read more about it in our [preview expectations notice](/docs/launch-arbitrum-chain/overview/public-preview#arbitrum-chains-are-mainnet-ready-but-deploy-to-testnet-first).
 
-Learn more: [Chain SDK introduction](/docs/launch-arbitrum-chain/overview/arbitrum-chain-sdk-introduction).
+Learn more: [Chain SDK introduction](/docs/launch-arbitrum-chain/quickstart/sdk-introduction).
 
 ### Do I need permission/license to launch an Arbitrum chain?
 
@@ -12,19 +12,19 @@ Nitro's license is under a [Business Source license](https://github.com/Offchain
 
 However, Arbitrum chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the [AEP](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
 
-Learn more: [AEP license](/docs/launch-arbitrum-chain/overview/aep-license).
+Learn more: [AEP license](/docs/launch-arbitrum-chain/overview/license).
 
 ### Does Arbitrum officially deploy and/or maintain L3s for external teams?
 
 No. Teams are required to deploy and maintain their Arbitrum chains. There are, however, several RaaS (Rollup as a Service) providers that can deploy and maintain your Arbitrum chain on your behalf.
 
-Learn more: [Third-party providers](/docs/launch-arbitrum-chain/third-party-integrations/third-party-providers).
+Learn more: [Third-party providers](/docs/launch-arbitrum-chain/integrations/infrastructure-providers).
 
 ### Can I modify the underlying technology to customize my Arbitrum chain?
 
 Yes, you can make any changes you require to the underlying Nitro code base.
 
-Learn more: [Customize the State Transition Function](/docs/launch-arbitrum-chain/configuration/core/customize-stf).
+Learn more: [Customize the State Transition Function](/docs/launch-arbitrum-chain/extend-the-protocol/stf).
 
 ### What Data Availability (DA) solutions are currently available for Arbitrum chains?
 
@@ -35,13 +35,13 @@ Arbitrum chains currently support three different DA solutions:
 - Celestia, posting data to the [Celestia network](https://blog.celestia.org/celestia-is-first-modular-data-availability-network-to-integrate-with-arbitrum-orbit/).
   Note that using AnyTrust provides the chain owner with the most flexibility and the most cost-effective fees.
 
-Learn more: [Configure data availability](/docs/launch-arbitrum-chain/configuration/data-availability/config-data-availability).
+Learn more: [Configure data availability](/docs/launch-arbitrum-chain/chain-config/data-availability/config-data-availability).
 
 ### What token is used to pay gas fees on Arbitrum chains?
 
 By default, Arbitrum chains pay gas in **ETH**. However, Arbitrum chains that use AnyTrust are configurable to use any **ERC-20** token for the gas fee token of the chain.
 
-Learn more: [Choose a custom gas token](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup).
+Learn more: [Choose a custom gas token](/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup).
 
 ### Can I use Ethereum toolkits to develop on my Arbitrum chain?
 
@@ -75,7 +75,7 @@ Learn more: [The Graph](/docs/third-party-docs/TheGraph/thegraph).
 
 Yes, Arbitrum chains support an increased smart contract size limit of up to 96kB. You can use our [Chain SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk) and configure the parameters [`MaxCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)[ and ](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29)[`MaxInitCodeSize`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29) when calling [`prepareNodeConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43). Once deployed, you cannot change the parameters for the smart contract size limit through an upgrade.
 
-For more information refer to the [Smart contract size limit page](/docs/launch-arbitrum-chain/configuration/core/config-smart-contract-size-limit)
+For more information refer to the [Smart contract size limit page](/docs/launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit)
 
 ### How can I modify Nitro to force posting an invalid assertion and test the fraud proof mechanism?
 
@@ -98,7 +98,7 @@ Four fee types are configurable on an Arbitrum chain:
 
 To learn more about precompiles, refer to the [Precompiles reference page](/docs/arbitrum-essentials/precompiles/reference).
 
-Learn more: [Fee management](/docs/launch-arbitrum-chain/configuration/costs/fee-management).
+Learn more: [Fee management](/docs/launch-arbitrum-chain/chain-config/costs/fee-management).
 
 ### What is the lowest you can set the base fee to?
 
@@ -131,11 +131,11 @@ No. There's no way to version it so that old blocks are executed under the past 
 
 The implications of reducing the block speed below 100ms are that an increased block count will put more strain on third-party providers, node runners, indexers, etc.
 
-Learn more: [Sequencer timing adjustments](/docs/launch-arbitrum-chain/configuration/sequencer/config-sequencer-timing-adjustments).
+Learn more: [Sequencer timing adjustments](/docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments).
 
 ### Can I set fast deposits for an L3?
 
-Yes, we have documented fast deposits in [how to configure delayed inbox finality](/docs/launch-arbitrum-chain/configuration/validation/arbitrum-chain-finality).
+Yes, we have documented fast deposits in [how to configure delayed inbox finality](/docs/launch-arbitrum-chain/chain-config/sequencer/chain-finality).
 
 There is a flag that can be changed, which allows an Arbitrum chain to wait for finality on the parent chain before depositing a transaction.
 
@@ -149,7 +149,7 @@ For an L2, however, we recommend waiting ~12 minutes for L1 finality, as there i
 
 Test this thoroughly on a testnet first.
 
-1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](/docs/launch-arbitrum-chain/configuration/core/customize-stf) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.
+1. This is a hard limit in the codebase to prevent DoS attacks. If you want to modify this, you'll need to follow this [procedure](/docs/launch-arbitrum-chain/extend-the-protocol/stf) to create a new WASM module root with an updated max L2 message size. Other limits might also need to be updated, such as the maximum decompressed batch size. Be sure to modify everything starting with the latest version, which includes a couple of extra safety checks that may help prevent issues.
 2. You could disable this limit if you were confident you would stick to AnyTrust and not need to fall back to posting data onchain.
 3. Defaults are in place for non-AnyTrust batch posting, which would need to fit the L3 user's transaction into a batch posted as an L2 transaction, thus respecting L2 transaction size limits.
 
@@ -177,7 +177,7 @@ The **WETH** gateway used in the token bridge is a special, custom gateway that 
 
 If you want to enable extra custom operations with **WETH**, you can create a custom token and a custom gateway to handle this case.
 
-Learn more: [Choose a custom gas token](/docs/launch-arbitrum-chain/configuration/costs/use-a-custom-gas-token-rollup).
+Learn more: [Choose a custom gas token](/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup).
 
 ### How do we verify if an ERC-20 was bridged using the native bridge?
 

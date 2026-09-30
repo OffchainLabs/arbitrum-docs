@@ -4,7 +4,6 @@ description: This how-to will help you deploy a Data Availability Server (DAS)
 content_type: 'how-to'
 author: Mehdi Salehi, jose-franco
 sidebar_position: 2
-content_type: how-to
 sme: Mehdi Salehi, jose-franco
 ---
 
@@ -165,17 +164,17 @@ To enable the REST aggregator, use the following parameters:
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
-  <Tabs items={['AWS S3 bucket', 'Local files', '(Experimental) Google Cloud Storage']}>
-    <Tab value="AWS S3 bucket">
-      <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_s3-parameters.mdx</include>
-    </Tab>
-    <Tab value="Local files">
-      <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_local-files-parameters.mdx</include>
-    </Tab>
-    <Tab value="(Experimental) Google Cloud Storage">
-      <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_gcs-parameters.mdx</include>
-    </Tab>
-  </Tabs>
+<Tabs items={['AWS S3 bucket', 'Local files', '(Experimental) Google Cloud Storage']}>
+  <Tab value="AWS S3 bucket">
+    <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_s3-parameters.mdx</include>
+  </Tab>
+  <Tab value="Local files">
+    <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_local-files-parameters.mdx</include>
+  </Tab>
+  <Tab value="(Experimental) Google Cloud Storage">
+    <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_gcs-parameters.mdx</include>
+  </Tab>
+</Tabs>
 
 Here's an example `anytrustserver` command for a DAS that:
 
