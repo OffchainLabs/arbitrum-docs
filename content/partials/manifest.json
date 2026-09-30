@@ -517,12 +517,7 @@
     "title": "State history defaults",
     "summary": "When you leave --execution.caching.state-history unset, Nitro chooses the default at startup:",
     "scope": "neutral",
-    "tags": [
-      "run-a-node",
-      "state",
-      "history",
-      "defaults"
-    ],
+    "tags": ["run-a-node", "state", "history", "defaults"],
     "usedIn": 2,
     "snippet": "<include cwd>content/partials/run-a-node/_state-history-defaults.mdx</include>"
   },

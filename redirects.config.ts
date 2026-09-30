@@ -29,6 +29,21 @@ export const redirects: Redirect[] = [
     destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
     permanent: true,
   },
+  {
+    source: '/docs/run-a-node/run-batch-poster',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
+    permanent: true,
+  },
+  {
+    source: '/docs/run-a-node/run-split-validator-node',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
+    permanent: true,
+  },
+  {
+    source: '/docs/run-a-node/high-availability-sequencer-docs',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
+    permanent: true,
+  },
   // AUTO-GENERATED REDIRECTS END
 
   // The pattern guide now lives in CONTRIBUTE.md and STYLE-GUIDE.md; the public contribution page links to both.
