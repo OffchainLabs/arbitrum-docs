@@ -1,11 +1,6 @@
 ---
 title: 'Enabling blob transactions for Arbitrum batch poster'
-sidebar_label: 'Enable EIP-4844 blobs'
 description: 'How to configure your Arbitrum node to post EIP-4844 blob transactions to the parent chain'
-<<<<<<<< HEAD:content/docs/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs.mdx
-========
-content_type: 'how-to'
->>>>>>>> fumadocs:content/docs/launch-arbitrum-chain/chain-config/data-availability/enable-post-4844-blobs.mdx
 author: Jason Wan
 sme: Jason Wan
 content_type: how-to
@@ -31,19 +26,11 @@ Your parent chain (typically Ethereum mainnet or a testnet) must support [EIP-48
 
 ### 3. ArbOS version
 
-<<<<<<<< HEAD:content/docs/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs.mdx
 Your [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos) version must be **20 or higher**. To check your current version:
 
 #### Method 1: Smart contract call
 
 Call the `arbOSVersion()` function on the ArbSys [precompile](/docs/arbitrum-essentials/precompiles/reference) contract:
-========
-Your <Term id="arbos">ArbOS</Term> version must be **20 or higher**. To check your current version:
-
-#### Method 1: Smart contract call
-
-Call the `arbOSVersion()` function on the ArbSys <Term id="precompile">precompile</Term> contract:
->>>>>>>> fumadocs:content/docs/launch-arbitrum-chain/chain-config/data-availability/enable-post-4844-blobs.mdx
 
 - Contract address: `0x0000000000000000000000000000000000000064`
 - Function: `arbOSVersion()` returns `uint256`
@@ -59,11 +46,7 @@ If your version is below 20, upgrade by following the [ArbOS upgrade guide](/doc
 
 ## Configuration
 
-<<<<<<<< HEAD:content/docs/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs.mdx
 To enable blob <Term id="transaction">transaction</Term> posting, add the following configuration to your [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) node:
-========
-To enable blob <Term id="transaction">transaction</Term> posting, add the following configuration to your <Term id="batch-poster">Batch Poster</Term> node:
->>>>>>>> fumadocs:content/docs/launch-arbitrum-chain/chain-config/data-availability/enable-post-4844-blobs.mdx
 
 ```json
 {

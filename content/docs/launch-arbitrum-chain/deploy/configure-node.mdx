@@ -1,6 +1,5 @@
 ---
 title: "How to configure your Arbitrum chain's node using the Chain SDK"
-sidebar_label: "Node configuration"
 description: 'Learn how to configure a node using the Chain SDK'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
@@ -122,8 +121,8 @@ import { createPublicClient, http } from 'viem';
 import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, ChainConfig, prepareNodeConfig } from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
-chain: parentChain,
-transport: http(),
+  chain: parentChain,
+  transport: http(),
 });
 
 // get the transaction
@@ -138,16 +137,15 @@ const chainConfig: ChainConfig = JSON.parse(config.chainConfig);
 const coreContracts = txReceipt.getCoreContracts();
 
 const nodeConfig = prepareNodeConfig({
-chainName: 'MyArbitrumChain',
-chainConfig,
-coreContracts,
-batchPosterPrivateKey,
-validatorPrivateKey,
-stakeToken: config.stakeToken,
-parentChainId: parentChain.id,
-parentChainRpcUrl: parentChain.rpcUrls.default.http[0],
+  chainName: 'MyArbitrumChain',
+  chainConfig,
+  coreContracts,
+  batchPosterPrivateKey,
+  validatorPrivateKey,
+  stakeToken: config.stakeToken,
+  parentChainId: parentChain.id,
+  parentChainRpcUrl: parentChain.rpcUrls.default.http[0],
 });
-
 ```
 
 `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.

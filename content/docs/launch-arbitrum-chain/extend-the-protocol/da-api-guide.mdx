@@ -1,6 +1,5 @@
 ---
 title: 'How to integrate with the DA API'
-sidebar_label: 'DA API guide'
 description: 'Learn how to implement your own custom DA provider for Nitro'
 author: Tristan-Wilson
 sme: Tristan-Wilson
@@ -928,7 +927,7 @@ Invalid certificates (bad format, bad signature, untrusted signer) must return a
     "proof": "0x0101" // claimedValid=1, version=1
   }
 }
-```
+    ```
   </Tab>
   <Tab value="invalid certificate - still success!">
 ```json
@@ -1960,18 +1959,17 @@ func (s *Server) StartChunkedStore(ctx context.Context, timestamp, nChunks, chun
   return s.dataReceiver.StartReceiving(ctx, uint64(timestamp), uint64(nChunks), uint64(chunkSize), uint64(totalSize), uint64(timeout), sig)
 }
 
-func (s \*Server) SendChunk(ctx context.Context, messageId, chunkId hexutil.Uint64, chunk hexutil.Bytes, sig hexutil.Bytes) error {
-return s.dataReceiver.ReceiveChunk(ctx, data_streaming.MessageId(messageId), uint64(chunkId), chunk, sig)
+func (s *Server) SendChunk(ctx context.Context, messageId, chunkId hexutil.Uint64, chunk hexutil.Bytes, sig hexutil.Bytes) error {
+  return s.dataReceiver.ReceiveChunk(ctx, data_streaming.MessageId(messageId), uint64(chunkId), chunk, sig)
 }
 
-func (s *Server) CommitChunkedStore(ctx context.Context, messageId hexutil.Uint64, sig hexutil.Bytes) (*server*api.StoreResult, error) {
-message, timeout, *, err := s.dataReceiver.FinalizeReceiving(ctx, data_streaming.MessageId(messageId), sig)
-if err != nil {
-return nil, err
-}
+func (s *Server) CommitChunkedStore(ctx context.Context, messageId hexutil.Uint64, sig hexutil.Bytes) (*server_api.StoreResult, error) {
+  message, timeout, _, err := s.dataReceiver.FinalizeReceiving(ctx, data_streaming.MessageId(messageId), sig)
+  if err != nil {
+    return nil, err
+  }
 
-// do the actual full data store and generate DA certificate
-return s.Store(ctx, message, hexutil.Uint64(timeout))
+  // do the actual full data store and generate DA certificate
+  return s.Store(ctx, message, hexutil.Uint64(timeout))
 }
-
 ```

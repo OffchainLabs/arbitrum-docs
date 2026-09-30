@@ -1,6 +1,5 @@
 ---
 title: "How to customize your Arbitrum chain's behavior"
-sidebar_label: 'State Transition Function'
 description: "Learn how to customize your Arbitrum chain's behavior (known as the State Transition Function or STF)"
 author: plasmapower
 sme: jasonwan
@@ -71,7 +70,7 @@ Next, make your changes to the State Transition Function. For example, you could
 After this step, you should visit [Customize ArbOS version](/docs/launch-arbitrum-chain/extend-the-protocol/arbos) to see if your changes need to upgrade the ArbOS version. If so, please continue to
 follow that document to add an ArbOS upgrade logic to your code.
 
-### Step 3. Run a local node
+### Step 3. Run the node
 
 To build the Arbitrum Nitro node image, you'll first need to install Docker.
 You can confirm if it's already setup by running `docker version` in a terminal.
@@ -86,9 +85,7 @@ A chain running a customized State Transition Function will produce blocks that 
 
 </Callout>
 
-</Callout>
-
-You have two ways of running your local node.
+You have two ways of running your node.
 
 #### 1. Using the docker-compose file
 
@@ -154,7 +151,7 @@ Once you have the WASM module root, you can put it onchain by calling `setWasmMo
 The `upgradeExecutor` contract address and Rollup contract address can be found in the chain deployment info JSON.
 You can confirm that the WASM module root was updated by calling `wasmModuleRoot()` on the Rollup contract.
 
-Once you have set the new WASM module root onchain, the validator will recognize blocks produced by your customized STF. You can now run your node with block validation enabled.
+Once you have set the new WASM module root onchain, the validator will recognize blocks produced by your customized STF. You can now run your node with fraud proof verification enabled.
 
 You have two ways of running your node.
 

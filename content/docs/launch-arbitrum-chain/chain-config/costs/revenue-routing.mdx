@@ -4,6 +4,7 @@ sidebar_label: 'Revenue routing'
 description: 'Learn how transaction fees flow through an Arbitrum chain: which addresses collect each fee component, when funds actually move, and how to withdraw revenue to the parent chain'
 author: emredincoglu
 sme: emredincoglu
+user_story: As an Arbitrum chain owner or RaaS provider, I need to understand where my chain's fee revenue accumulates, when it is paid out, and how to move it.
 content_type: concept
 ---
 
@@ -17,12 +18,12 @@ To change the fee parameters and collector addresses described here, follow the 
 
 Transaction fees on an Arbitrum chain split into four components, each with its own collector:
 
-| Fee component                                                       | What it covers                                                                                                 | Collected by                                                                                                                  | Paid out                        |
-| :------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------- | :------------------------------ |
-| **Arbitrum chain base fee**                                         | Execution, up to the configured minimum base fee                                                               | `infraFeeAccount`                                                                                                             | Immediately, per transaction    |
-| **Arbitrum chain surplus fee**                                      | Execution paid above the minimum base fee (congestion), plus any priority fees                                 | `networkFeeAccount`                                                                                                           | Immediately, per transaction    |
+| Fee component                                            | What it covers                                                                                      | Collected by                                                                                                       | Paid out                        |
+| :------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------- | :------------------------------ |
+| **Arbitrum chain base fee**                              | Execution, up to the configured minimum base fee                                                    | `infraFeeAccount`                                                                                                  | Immediately, per transaction    |
+| **Arbitrum chain surplus fee**                           | Execution paid above the minimum base fee (congestion), plus any priority fees                      | `networkFeeAccount`                                                                                                | Immediately, per transaction    |
 | **<Term id="parent-chain">Parent chain</Term> base fee** | Estimated cost of posting the transaction's data to the <Term id="parent-chain">parent chain</Term> | `L1PricerFundsPoolAddress` (system pool), then the <Term id="batch-poster">batch poster</Term>'s **fee collector** | After each batch posting report |
-| **Parent chain surplus fee**                                        | Optional per data unit reward configured by the <Term id="chain-owner">chain owner</Term>           | `L1RewardRecipient`                                                                                                           | After each batch posting report |
+| **Parent chain surplus fee**                             | Optional per data unit reward configured by the <Term id="chain-owner">chain owner</Term>           | `L1RewardRecipient`                                                                                                | After each batch posting report |
 
 <Callout type="info" title="Fallback behavior">
 
@@ -34,7 +35,7 @@ The first two components are straightforward: <Term id="arbos">ArbOS</Term> cred
 
 ## Fee lifecycle
 
-![A user pays one gas fee on the child chain. ArbOS splits that fee into two paths. ArbOS credits the execution fee in the same transaction: the Arbitrum chain base fee to infraFeeAccount, and the surplus fee plus priority fees to networkFeeAccount. ArbOS credits the parent chain fee to the L1PricerFundsPoolAddress system pool (0xA4B0…00f6), where it accumulates. Separately, the batch poster posts a batch to SequencerInbox on the parent chain and pays that gas out of pocket. SequencerInbox then sends a batch posting report into the delayed inbox. When ArbOS processes that report, it pays out from the pool: first the parent chain surplus fee to L1RewardRecipient, then the amount due to the batch poster's fee collector.](/img/arb-chain-fee-lifecycle.svg)
+<ImageZoom src="/img/arb-chain-fee-lifecycle.svg" alt="A user pays one gas fee on the child chain. ArbOS splits that fee into two paths. ArbOS credits the execution fee in the same transaction: the Arbitrum chain base fee to infraFeeAccount, and the surplus fee plus priority fees to networkFeeAccount. ArbOS credits the parent chain fee to the L1PricerFundsPoolAddress system pool (0xA4B0…00f6), where it accumulates. Separately, the batch poster posts a batch to SequencerInbox on the parent chain and pays that gas out of pocket. SequencerInbox then sends a batch posting report into the delayed inbox. When ArbOS processes that report, it pays out from the pool: first the parent chain surplus fee to L1RewardRecipient, then the amount due to the batch poster's fee collector." className="img-900px" />
 
 1. **A user pays the transaction fee.** ArbOS estimates the transaction's parent chain footprint by compressing it and multiplying the size by the current price per data unit (its running estimate of parent chain costs). This amount is charged as part of the transaction's gas.
 
@@ -88,7 +89,6 @@ The protocol's pricing loop makes the second balance grow in proportion to what 
 There are two options to move revenue from the child chain to the parent chain:
 
 1. **Withdraw manually through the bridge.** If a collector is an EOA or multisig you control, initiate a standard child to parent withdrawal and execute it on the parent chain after the <Term id="challenge">challenge</Term> period.
-
 2. **Use the AEP fee router contracts.** Set your collector addresses to `ChildToParentRouter` contracts, which route received funds to a configurable parent chain address and can be triggered permissionlessly. This is the recommended setup for chains with [Arbitrum Expansion Program](/docs/launch-arbitrum-chain/chain-config/costs/aep-overview) obligations (see [AEP fee router contracts](/docs/launch-arbitrum-chain/chain-config/costs/aep-router-contracts)).
 
 <Callout type="warning" title="Custom gas token chains">

@@ -1,5 +1,5 @@
 {
-  "title": "Deployment",
+  "title": "Deploy an arbitrum chain",
   "pages": [
     "canonical-factory-contracts",
     "configure-node",
