@@ -1,9 +1,5 @@
 {
   "title": "PGA and Fast Feed",
   "root": true,
-  "pages": [
-    "pga",
-    "fast-feed",
-    "..."
-  ]
+  "pages": ["pga", "fast-feed", "..."]
 }

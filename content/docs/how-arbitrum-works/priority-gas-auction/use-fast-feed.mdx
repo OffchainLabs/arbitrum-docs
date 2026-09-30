@@ -8,25 +8,21 @@ user_story: As a developer who runs a latency-sensitive strategy on Arbitrum One
 content_type: how-to
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
-
-This guide is for searchers, propAMM operators, market makers, and anyone else who wants to read onchain data faster. It shows you how to subscribe to the <a data-quicklook-from="fast-feed">Fast Feed</a> on <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, open a connection to it, and keep that connection across rounds.
+This guide is for searchers, propAMM operators, market makers, and anyone else who wants to read onchain data faster. It shows you how to subscribe to the <Term id="fast-feed">Fast Feed</Term> on <Term id="arbitrum-one">Arbitrum One</Term>, open a connection to it, and keep that connection across rounds.
 
 It covers the full path: hash your API key, deposit USDG, read the round state, call `purchaseTickets`, open an authenticated WebSocket, and automate the purchase with the reference bot.
 
-<VanillaAdmonition type="note" title="If you don't know what the Fast Feed is">
+<Callout type="info" title="If you don't know what the Fast Feed is">
 
-The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> executes it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
+The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <Term id="sequencer">Sequencer</Term> executes it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
 
-</VanillaAdmonition>
+</Callout>
 
 The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid for one round. To keep a connection open, you buy a new ticket every round from the `Tickets` contract on Arbitrum One.
 
 ## Prerequisites
 
-- You know how Fast Feed rounds and prices work. If not, read the [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) and the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga), which sets the round cadence.
+- You know how Fast Feed rounds and prices work. If not, read the [introduction to the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) and the [introduction to PGA](/docs/how-arbitrum-works/priority-gas-auction/pga), which sets the round cadence.
 - An account on Arbitrum One that holds USDG to pay for tickets and ETH to pay for gas.
 - An Arbitrum One JSON-RPC endpoint.
 - [Foundry's `cast`](https://getfoundry.sh/), or any EVM client, to send transactions. The examples use `cast` and leave out `--rpc-url $RPC_URL --private-key $PRIVATE_KEY` to stay short.
@@ -94,7 +90,7 @@ The contract debits ticket purchases from an internal balance, not from your wal
    cast call $TICKETS "tokenBalance(address)(uint256)" <your-address>
    ```
 
-Deposit enough for several rounds. The price can rise by up to about two times between rounds, as the [rounds and pricing](/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) section explains. You can withdraw an unused balance at any time with `withdrawToken(amount)`.
+Deposit enough for several rounds. The price can rise by up to about two times between rounds, as the [rounds and pricing](/docs/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) section explains. You can withdraw an unused balance at any time with `withdrawToken(amount)`.
 
 ## Step 3: Read the round state
 
@@ -117,7 +113,7 @@ cast call $TICKETS "grandfatherCount(address)(uint256)" <your-address>
 | `grandfatherCount`     | How many tickets you can still buy during the grandfather period. It equals the tickets you held last round, minus those bought this round. |
 | `ticketsSoldThisRound` | Tickets sold so far. Compare it with `maxTicketsPerRound` to see how much room is left.                                                     |
 
-Round state updates lazily: the first state-changing call in a new round <a data-quicklook-from="roll-forward">rolls it forward</a>. View functions compute the rolled-forward values on the fly, so the values you read are current.
+Round state updates lazily: the first state-changing call in a new round <Term id="roll-forward">rolls it forward</Term>. View functions compute the rolled-forward values on the fly, so the values you read are current.
 
 ## Step 4: Buy tickets
 
@@ -149,17 +145,17 @@ The endpoint hashes the key with Keccak-256, compares it against the active tick
 - Send only ping and pong frames.
 - Read as fast as the feed arrives. The endpoint drops a client that lags behind, so parse and process off the read loop.
 
-Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](/how-arbitrum-works/priority-gas-auction/fast-feed#what-the-fast-feed-publishes) section lists every field.
+Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](/docs/how-arbitrum-works/priority-gas-auction/fast-feed#what-the-fast-feed-publishes) section lists every field.
 
-<Tabs groupId="ws-client">
-<TabItem value="cli" label="Command line">
+<Tabs groupId="ws-client" items={["Command line", "Node.js", "Python"]}>
+<Tab value="Command line">
 
 ```shell
 wscat -c "$FEED_URL" -H "Authorization: Bearer $API_KEY"
 ```
 
-</TabItem>
-<TabItem value="node" label="Node.js">
+</Tab>
+<Tab value="Node.js">
 
 ```typescript
 import WebSocket from 'ws';
@@ -184,8 +180,8 @@ ws.on('close', (code, reason) => {
 });
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
+</Tab>
+<Tab value="Python">
 
 ```python
 import asyncio
@@ -214,7 +210,7 @@ asyncio.run(main())
 
 This example needs `websockets` 14 or later. Older versions use `extra_headers=` instead of `additional_headers=`.
 
-</TabItem>
+</Tab>
 </Tabs>
 
 ## Step 6: Keep the connection across rounds
@@ -251,7 +247,7 @@ Configure it with environment variables:
 | `MAX_SCHEDULE_JITTER_MS` | No       | Upper bound of the random delay added at round boundaries. Default `30000`.                            |
 | `GAS_POLL_INTERVAL_MS`   | No       | How often to re-check gas while waiting for it to fit the budget. Default `10000`.                     |
 | `BOUNDARY_BUFFER_MS`     | No       | Delay after a round or grandfather boundary before acting, so the chain has passed it. Default `2000`. |
-| `PRIORITY_FEE_PER_GAS`   | No       | <a data-quicklook-from="eip-1559">EIP-1559</a> priority fee per gas, in wei. Default `0`.              |
+| `PRIORITY_FEE_PER_GAS`   | No       | <Term id="eip-1559">EIP-1559</Term> priority fee per gas, in wei. Default `0`.              |
 | `BASE_FEE_BOOST_PERCENT` | No       | Percentage added to the latest base fee when computing `maxFeePerGas`. Default `20`.                   |
 
 Run it with Docker:
@@ -314,4 +310,4 @@ At the end of the round in which you buy it. It stays active until the end of th
 It stays in your internal balance. Withdraw it at any time with `withdrawToken(amount)`.
 
 **Do I need a Nitro node?**
-No. The Fast Feed is a stream for your own client. To follow the chain, use the free [sequencer feed](/run-arbitrum-node/sequencer/read-sequencer-feed) instead.
+No. The Fast Feed is a stream for your own client. To follow the chain, use the free [sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed) instead.
