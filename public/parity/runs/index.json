@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "runs": [
+    {
+      "label": "fumadocs",
+      "commit": "e6fb429cf41b355290ffd66a58185b20a7eb1a50",
+      "prs": [],
+      "generatedAt": "2026-09-30T09:02:39.147Z",
+      "health": 93.4,
+      "triage": 141,
+      "summary": {
+        "checked": 295,
+        "health": 93.4,
+        "triage": 141,
+        "threshold": 0.97,
+        "categories": {
+          "direct": 1,
+          "same-slug": 224,
+          "changed-slug": 64,
+          "unrelated": 2,
+          "not-found": 4,
+          "loop": 0
+        },
+        "sections": {
+          "Offchain-pattern-guide": {
+            "score": 41.8,
+            "pages": 1,
+            "triage": 1
+          },
+          "arbitrum-bridge": {
+            "score": 98.5,
+            "pages": 6,
+            "triage": 1
+          },
+          "arbitrum-essentials": {
+            "score": 97,
+            "pages": 34,
+            "triage": 8
+          },
+          "audit-reports": {
+            "score": 99.7,
+            "pages": 1,
+            "triage": 0
+          },
+          "blog": {
+            "score": 0,
+            "pages": 1,
+            "triage": 1
+          },
+          "build-decentralized-apps": {
+            "score": 96.4,
+            "pages": 3,
+            "triage": 2
+          },
+          "for-devs": {
+            "score": 95.2,
+            "pages": 35,
+            "triage": 9
+          },
+          "get-started": {
+            "score": 67,
+            "pages": 1,
+            "triage": 1
+          },
+          "home": {
+            "score": 94.7,
+            "pages": 1,
+            "triage": 1
+          },
+          "how-arbitrum-works": {
+            "score": 86.1,
+            "pages": 30,
+            "triage": 22
+          },
+          "intro": {
+            "score": 99.4,
+            "pages": 1,
+            "triage": 0
+          },
+          "launch-arbitrum-chain": {
+            "score": 92,
+            "pages": 80,
+            "triage": 59
+          },
+          "learn-more": {
+            "score": 100,
+            "pages": 1,
+            "triage": 0
+          },
+          "node-running": {
+            "score": 48.5,
+            "pages": 2,
+            "triage": 2
+          },
+          "notices": {
+            "score": 97.7,
+            "pages": 3,
+            "triage": 1
+          },
+          "run-arbitrum-node": {
+            "score": 96.6,
+            "pages": 34,
+            "triage": 17
+          },
+          "stylus": {
+            "score": 95.8,
+            "pages": 42,
+            "triage": 16
+          },
+          "stylus-by-example": {
+            "score": 99.8,
+            "pages": 19,
+            "triage": 0
+          }
+        },
+        "newOnly": 65,
+        "brokenLinksTargetOnly": 7,
+        "brokenLinksAlsoProd": 15
+      },
+      "file": "fumadocs.json"
+    }
+  ]
+}
