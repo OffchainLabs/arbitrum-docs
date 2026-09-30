@@ -358,8 +358,11 @@ plus one registry entry.
 `components/mdx.tsx` is the registry and the source of truth. It spreads Fumadocs' defaults (which
 include `Callout`, `Card`, `Cards` and code blocks) and adds:
 
-- Fumadocs' `Accordion`, `Accordions`, `Tab`, `Tabs` and `ImageZoom`. Markdown images render
-  through `ImageZoom` too.
+- Fumadocs' `Accordions`, `Tab`, `Tabs` and `ImageZoom`. Markdown images render through
+  `ImageZoom` too.
+- `Accordion` from `components/mdx/Accordion.tsx`, Fumadocs' own with the panel force-mounted.
+  Fumadocs unmounts a closed accordion panel and an inactive tab, so their text never reaches the
+  server HTML that search engines index. The registry force-mounts both and CSS hides them.
 - `AEL`, an address explorer link (`components/mdx/AddressExplorerLink.tsx`).
 - `Term`, `ReferenceList` and `Var` from `components/mdx/`.
 - Four widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`

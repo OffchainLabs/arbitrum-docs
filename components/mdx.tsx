@@ -1,11 +1,12 @@
-import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { Accordions } from 'fumadocs-ui/components/accordion';
 import { ImageZoom, type ImageZoomProps } from 'fumadocs-ui/components/image-zoom';
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Tab, type TabProps, Tabs } from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import type { ComponentProps, ElementType } from 'react';
 
 import { InLink } from '@/components/HoverPopover/in-link';
+import { Accordion } from '@/components/mdx/Accordion';
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
@@ -37,7 +38,8 @@ export function getMDXComponents(components?: MDXComponents) {
       <ImageZoom {...(props as ImageZoomProps)} className={cn('rounded-lg', props.className)} />
     ),
     ReferenceList,
-    Tab,
+    // Inactive panels stay in the server HTML (hidden by CSS) so their text is indexed and findable.
+    Tab: (props: TabProps) => <Tab forceMount {...props} />,
     Tabs,
     Term,
     ChecklistItem,
