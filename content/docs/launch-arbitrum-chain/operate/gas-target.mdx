@@ -1,9 +1,8 @@
 ---
 title: 'Guidance for Arbitrum chains gas target'
+sidebar_label: 'Gas target'
 description: 'How to manage your Arbitrum chain gas target'
-sidebar_label: 'Manage gas target'
 sidebar_position: 6
-user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to manage my gas target.
 content_type: 'how-to'
 author: anegg0
 sme: anegg0
@@ -18,7 +17,7 @@ The gas target is measured in _gas per second_ and is used as a threshold for in
 
 For example, when cumulative usage on Arbitrum One and Arbitrum Nova exceed a certain amount of gas per second, the `L2 base fee` rises to increase the amount of `gwei` charged per unit of gas. This happens using a similar approach to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md).
 
-[You can read more about how gas fees are calculated on Arbitrum in this explainer](/docs/how-arbitrum-works/deep-dives/gas-and-fees)
+[You can read more about how gas fees are calculated on Arbitrum in this explainer](/docs/launch-arbitrum-chain/features/common/gas-and-fees)
 
 ## Why do we have throughput limits on blockchains?
 
@@ -47,11 +46,11 @@ Before you change anything, find out which pricing model your chain runs. The mo
 
 Call `ArbGasInfo.getGasPricingConstraints()` first (available from ArbOS 51 onward; on earlier versions the call reverts and your chain always uses a single gas target). If it returns an empty array, your chain uses a single gas target and `setSpeedLimit` applies. If it returns one or more constraints, your chain uses multiple gas targets.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 From [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) onward, `setSpeedLimit` writes only the single gas target value. It does not change a multiple gas target configuration. On a chain with constraints configured, the call succeeds and the stored value changes, but gas prices do not respond. To move such a chain back to a single gas target, call `setGasPricingConstraints` with an empty array, then call `setSpeedLimit`.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Parameters that only the single gas target model uses
 

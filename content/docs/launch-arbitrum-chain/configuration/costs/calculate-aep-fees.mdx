@@ -1,8 +1,6 @@
 ---
 title: 'Calculating AEP license fees'
 description: 'Learn how to calculate your Arbitrum chains revenue and license fees.'
-sidebar_label: 'Calculating AEP license fees'
-user_story: As a current Arbitrum chain owner, I need to understand how my Arbitrum chain revenue and AEP license fees are calculated.
 content_type: 'how-to'
 author: Midroni
 sme: Midroni
@@ -46,11 +44,11 @@ AEP_FEES = [(sequencing revenue + additional revenue) - (settlement costs)]*0.1
 AEP_FEES = [(l2BaseFee + l2SurplusFee + l1SurplusFee) - settlement costs]*0.1
 ```
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 As of June 6th, assertion costs have been removed from the AEP formula calculation.
 
-</VanillaAdmonition>
+</Callout>
 ## Special cases and exceptions
 
 Certain Arbitrum chain configurations and customizations require special handling of AEP fees. The following is a non-exhaustive list of applicable scenarios and how to ensure AEP compliance. If any of the following cases apply, the recommended approach for fee handling will require manual handling of a portion of or all AEP Fees.

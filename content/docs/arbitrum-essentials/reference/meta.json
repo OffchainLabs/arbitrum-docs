@@ -3,13 +3,13 @@
   "pages": [
     "chain-params",
     "contract-addresses",
-    "node-providers",
-    "development-frameworks",
-    "web3-libraries-tools",
-    "solidity-references",
-    "monitoring-tools-block-explorers",
     "debugging-tools",
+    "development-frameworks",
     "mainnet-risks",
+    "monitoring-tools-block-explorers",
+    "node-providers",
+    "solidity-references",
+    "web3-libraries-tools",
     "..."
   ]
 }

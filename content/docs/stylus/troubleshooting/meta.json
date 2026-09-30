@@ -1,4 +1,7 @@
 {
   "title": "Troubleshooting",
-  "pages": ["common-issues"]
+  "pages": [
+    "common-issues",
+    "..."
+  ]
 }

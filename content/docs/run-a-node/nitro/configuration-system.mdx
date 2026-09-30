@@ -1,12 +1,13 @@
 ---
 title: 'Nitro configuration system'
-description: 'How Nitro loads configuration from files, environment variables, CLI flags, and S3 — including precedence rules and how to dump running config'
 sidebar_label: 'Configuration system'
-user_story: 'As a node operator, I want to understand how Nitro configuration works so I can correctly set up and debug my node config'
+description: 'How Nitro loads configuration from files, environment variables, CLI flags, and S3 — including precedence rules and how to dump running config'
 content_type: 'how-to'
 author: gzeoneth
 sme: gzeoneth
 ---
+
+{/* sync-with-var: latestNitroNodeImage */}
 
 Nitro nodes accept configuration from multiple sources. When the same setting appears in more than one source, Nitro applies a deterministic precedence order so you always know which value wins. This guide explains each configuration source, how they interact, and how to inspect the merged result.
 
@@ -21,7 +22,7 @@ Nitro loads configuration in the following order. Each source overrides values s
 5. **CLI flags** — individual flags like `--http.port 8547`. CLI flags are re-applied after each config source loads, so they override config files and config strings.
 6. **Environment variables** — variables matching the configured prefix (see [Environment variables](#environment-variables)). These are applied last and override everything else, including CLI flags.
 
-<VanillaAdmonition type="tip">Because environment variables have the highest precedence, they are the safest way to inject secrets or per-environment overrides without modifying config files.</VanillaAdmonition>
+<Callout type="idea">Because environment variables have the highest precedence, they are the safest way to inject secrets or per-environment overrides without modifying config files.</Callout>
 ## Config file format
 
 Nitro config files use **JSON format only** (not YAML or TOML). Keys use flat dot-separated names that match the corresponding CLI flag names. Nitro uses the [koanf](https://github.com/knadh/koanf) library with its JSON parser to load config files.

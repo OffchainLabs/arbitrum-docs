@@ -1,20 +1,23 @@
 ---
 title: 'How to run an archive node'
+sidebar_label: 'Run an archive node'
 description: Learn how to run an Arbitrum archive node on your local machine
 content_type: 'how-to'
 author: jason-wanxt
 sme: jason-wanxt
 ---
 
+{/* sync-with-var: latestNitroNodeImage */}
+
 An Arbitrum **archive node** is a full node that maintains an archive of historical chain states. This how-to walks you through the process of configuring an archive node on your local machine so that you can query both pre-Nitro and post-Nitro state data.
 
 For how archive mode relates to the other Nitro node roles, see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles).
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 **Most users won't need to configure an archive node**. This node type is great for a small number of use cases––for example if you need to process historical data.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Before we begin
 
@@ -53,13 +56,13 @@ To enable PathDB on your archive node, start it with these flags:
 | `--execution.caching.archive`           | Enables archive mode; under PathDB, builds the state-history index so RPC can serve historical state |
 | `--execution.caching.state-scheme=path` | Selects PathDB instead of the default HashDB                                                         |
 
-<VanillaAdmonition type="warning" title="On Nitro before v3.10.0, also set --execution.caching.state-history=0">
+<Callout type="warn" title="On Nitro before v3.10.0, also set --execution.caching.state-history=0">
 
 `--execution.caching.state-history` controls how many blocks of state history PathDB retains. From v3.10.0 onward, setting `--execution.caching.archive` makes it default to `0`, which keeps the entire chain, so you can leave it unset.
 
 Before v3.10.0 it defaulted to 24 hours' worth of blocks even in archive mode. Nitro logs a warning — `Path scheme archive mode enabled, but state-history is not zero` — and then silently retains only recent history, leaving you with an archive node that cannot serve older state. Pass `--execution.caching.state-history=0` explicitly on those versions.
 
-</VanillaAdmonition>
+</Callout>
 
 For cache sizing and memory tuning that applies to archive nodes generally, see [Nitro memory management](/docs/run-a-node/nitro/nitro-memory-management).
 

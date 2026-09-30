@@ -5,9 +5,7 @@ description: 'How to tune the ArbOwner parameters that control what your Arbitru
 author: petevielhaber
 sme: petevielhaber
 target_audience: 'Developers deploying and maintaining Arbitrum chains.'
-sidebar_position: 7
-user_story: As an Arbitrum chain owner, I want to tune how my chain prices parent chain data costs so that fee revenue tracks my batch posting costs.
-content_type: 'how-to'
+content_type: how-to
 ---
 
 Your Arbitrum chain charges users for the cost of posting their transaction data to the <Term id="parent-chain">parent chain</Term>. Four `ArbOwner` methods control how that charge adjusts over time. Tune them when fee revenue drifts away from what your <Term id="batch-poster">batch poster</Term> actually spends.
@@ -38,13 +36,13 @@ Call all four methods on the <Term id="precompile">precompile</Term> `ArbOwner` 
 
 The `160,000,000` default for equilibration units applies from ArbOS 6 onward. Chains initialized before ArbOS 6 used `96,000,000`.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 `setL1PricingInertia` and `setL1BaseFeeEstimateInertia` write the same stored value. To read it back, call `ArbGasInfo.getL1BaseFeeEstimateInertia()`.
 
 `ArbGasInfo.getPricingInertia()` does not return this value. It returns the congestion pricing inertia set by `setL2GasPricingInertia`, which is a different parameter for a different algorithm. Refer to [Manage gas target](/docs/launch-arbitrum-chain/operate/gas-target#parameters-that-only-the-single-gas-target-model-uses).
 
-</VanillaAdmonition>
+</Callout>
 
 ## Read the current values
 
@@ -82,11 +80,11 @@ cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getL1
 
 Change one parameter at a time and watch the surplus across several batch posting cycles before you change another. Adjusting two at once makes it hard to attribute the resulting fee behavior.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Test every change on a devnet or testnet chain first. A short equilibration horizon combined with low inertia makes data fees swing sharply between updates, which harms user experience even when the long-run average is correct.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Related parameters
 
