@@ -1,5 +1,6 @@
 ---
 title: 'Stylus contracts'
+sidebar_label: 'Contract structure'
 description: 'Stylus Rust SDK contracts, methods, and lifecycle'
 content_type: 'concept'
 author: chrisco
@@ -1172,11 +1173,11 @@ pub fn raw_delegate_call(
 
 ### Safety considerations
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Delegate calls are inherently unsafe and should be used with caution.
 
-</VanillaAdmonition>
+</Callout>
 
 - **Trust requirement**: The calling contract must trust the external contract to uphold safety requirements
 - **Storage modification**: The external contract can arbitrarily change the calling contract's storage
@@ -1447,7 +1448,7 @@ impl SendEther {
 
 The factory pattern allows a contract to deploy other contracts programmatically. This is useful for creating contract instances on demand, such as deploying new token contracts or creating user-specific vaults.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Advanced deployment patterns documentation is in development. This section will cover:
 
@@ -1456,7 +1457,7 @@ Advanced deployment patterns documentation is in development. This section will 
 - Deterministic deployment with CREATE2
 - Handling deployment failures
 
-</VanillaAdmonition>
+</Callout>
 
 **Constructor considerations for factory-deployed contracts:**
 

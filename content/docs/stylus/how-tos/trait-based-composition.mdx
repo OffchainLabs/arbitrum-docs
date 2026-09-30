@@ -1,5 +1,6 @@
 ---
 title: 'Composition and trait-based routing model'
+sidebar_label: 'Composition, trait-based routing'
 description: 'Learn how to implement trait-based composition in your Stylus smart contracts'
 content_type: 'how-to'
 author: anegg0
@@ -8,9 +9,9 @@ sme: mahsamoosavi
 
 Inheritance allows you to build upon existing smart contract functionality without duplicating code. In Stylus, the Rust SDK provides tools to implement inheritance patterns similar to Solidity, but with some important differences. This guide walks you through implementing trait-based composition in your Stylus smart contracts.
 
-<VanillaAdmonition type="warning" title="For Solidity developers">
+<Callout type="warn" title="For Solidity developers">
   There's no direct equivalent of inheritance in Rust, but the following will show you the Rust-way of achieving similar results.
-</VanillaAdmonition>
+</Callout>
 
 ## Overview
 
@@ -20,13 +21,16 @@ The Stylus SDK offers trait-based composition using traits and the `#[implements
 
 Before implementing trait-based composition, ensure you have:
 
-<CustomDetails summary="Rust toolchain">
+<Accordions>
+<Accordion title="Rust toolchain">
 
 Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v<Var name="stylusRustToolchain" /> or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="cargo stylus">
+<Accordions>
+<Accordion title="cargo stylus">
 
 In your terminal, run:
 
@@ -43,7 +47,8 @@ rustup target add wasm32-unknown-unknown --toolchain 1.91
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ## Trait-based composition model
 
@@ -51,7 +56,8 @@ The recommended approach to inheritance in Stylus uses traits and the `#[impleme
 
 ### Basic example of trait-based composition
 
-<CustomDetails summary="Trait-Based Inheritance Example: ERC-20">
+<Accordions>
+<Accordion title="Trait-Based Inheritance Example: ERC-20">
 
 ```rust
 use stylus_sdk::{
@@ -149,7 +155,8 @@ impl IOwnable for Contract {
 }
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ### How trait-based composition works
 
@@ -166,19 +173,20 @@ This approach is aligned with Rust's composition patterns and offers better type
 
 If both parent and child implement the same method, the one in the child will override the one in the parent. This allows for customizing inherited functionality.
 
-<VanillaAdmonition type="warning" title="No explicit override keywords">
+<Callout type="warn" title="No explicit override keywords">
   Stylus does not currently contain explicit override or virtual keywords for marking override functions. It is important to carefully ensure that contracts are only overriding the functions you intend to override.
-</VanillaAdmonition>
+</Callout>
 
 ### ABI export considerations with trait-based composition
 
 When using trait-based composition, you need to be careful about function selectors to ensure correct ABI generation. Due to how Rust handles traits, you may need to explicitly set selectors for methods to match Solidity's expected function signatures.
 
-<VanillaAdmonition type="warning" title="Selector precision">
+<Callout type="warn" title="Selector precision">
   When implementing traits with methods that have matching names, you must manually use the `#[selector(name = "ActualName")]` attribute to avoid method selector collisions. This is particularly important when implementing standard interfaces like **ERC-20** or **ERC-721**.
-</VanillaAdmonition>
+</Callout>
 
-<CustomDetails summary="Selector issue example: ERC-721">
+<Accordions>
+<Accordion title="Selector issue example: ERC-721">
 ```rust
 // In Solidity, both these functions would have different selectors:
 // function safeTransferFrom(address from, address to, uint256 tokenId)
@@ -211,13 +219,14 @@ data: Bytes,
 }
 
 ```
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<VanillaAdmonition type="info" title="ABI generation and inheritance">
+<Callout type="info" title="ABI generation and inheritance">
   The Stylus SDK generates ABIs based on the methods that are available at the entrypoint contract.
   When using trait-based composition, make sure that all methods you want exposed in the ABI are
   properly included through the #[implements] attribute.
-</VanillaAdmonition>
+</Callout>
 
 ## Methods search order
 
@@ -233,4 +242,3 @@ In a typical composition chain:
 - If not found there, it looks in the first trait specified in the inheritance list
 - If still not found, it searches in the next trait in the list
 - This continues until the method is found or all possibilities are exhausted
-```

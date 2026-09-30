@@ -1,11 +1,10 @@
 {
-  "title": "Customize your chain",
+  "title": "Extend the protocol",
   "pages": [
-    "customize-stf",
-    "customize-precompile",
     "customize-arbos",
-    "config-smart-contract-size-limit",
-    "additional-configuration-parameters",
+    "../../integrations/da-api-integration-guide",
+    "customize-precompile",
+    "customize-stf",
     "..."
   ]
 }

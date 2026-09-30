@@ -1,5 +1,5 @@
 {
-  "title": "Withdraw",
+  "title": "Withdraw (child → parent)",
   "pages": [
     "eth-and-messages",
     "tokens",

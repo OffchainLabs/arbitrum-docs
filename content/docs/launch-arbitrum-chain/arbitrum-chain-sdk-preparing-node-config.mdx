@@ -1,7 +1,7 @@
 ---
 title: "How to configure your Arbitrum chain's node using the Chain SDK"
+sidebar_label: "Node configuration"
 description: 'Learn how to configure a node using the Chain SDK'
-user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Chain SDK.
 content_type: 'how-to'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
@@ -89,11 +89,11 @@ You can find information about what these parameters configure in [How to config
 
 Let's look at what methods to use for generating a configuration file for the Nitro node of your Arbitrum chain, using the Chain SDK.
 
-<VanillaAdmonition type="info" title="Example script">
+<Callout type="info" title="Example script">
 
 The Arbitrum Chain SDK includes an example script for generating a node configuration file. We recommend that you first understand the process described in this section and then check the [prepare-node-config](https://github.com/OffchainLabs/arbitrum-chain-sdk/blob/main/examples/prepare-node-config/index.ts) script.
 
-</VanillaAdmonition>
+</Callout>
 ### 1. Gather information from the deployed chain
 
 To generate the configuration file for your node, you'll need the following information:
@@ -109,18 +109,18 @@ The `prepareNodeConfig` method generates a JSON object with the configuration fo
 
 Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash`
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node.
 
-</VanillaAdmonition>
+</Callout>
 ```typescript
 import { createPublicClient, http } from 'viem';
 import { createRollupPrepareTransaction, createRollupPrepareTransactionReceipt, ChainConfig, prepareNodeConfig } from '@arbitrum/chain-sdk';
 
 const parentChainPublicClient = createPublicClient({
-  chain: parentChain,
-  transport: http(),
+chain: parentChain,
+transport: http(),
 });
 
 // get the transaction
@@ -135,15 +135,16 @@ const chainConfig: ChainConfig = JSON.parse(config.chainConfig);
 const coreContracts = txReceipt.getCoreContracts();
 
 const nodeConfig = prepareNodeConfig({
-  chainName: 'MyArbitrumChain',
-  chainConfig,
-  coreContracts,
-  batchPosterPrivateKey,
-  validatorPrivateKey,
-  stakeToken: config.stakeToken,
-  parentChainId: parentChain.id,
-  parentChainRpcUrl: parentChain.rpcUrls.default.http[0],
+chainName: 'MyArbitrumChain',
+chainConfig,
+coreContracts,
+batchPosterPrivateKey,
+validatorPrivateKey,
+stakeToken: config.stakeToken,
+parentChainId: parentChain.id,
+parentChainRpcUrl: parentChain.rpcUrls.default.http[0],
 });
+
 ```
 
 `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.

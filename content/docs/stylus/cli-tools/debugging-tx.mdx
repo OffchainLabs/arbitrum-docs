@@ -1,8 +1,7 @@
 ---
 title: 'How to debug Stylus transactions'
+sidebar_label: 'Debugging transactions'
 description: 'Learn how to debug Stylus transactions using cargo-stylus replay, trace, and usertrace commands, as well as the StylusDB debugger for advanced multi-contract debugging.'
-sidebar_label: 'Debug transactions'
-user_story: 'As a Stylus developer, I want to debug my smart contract transactions so that I can identify and fix issues in my contract logic.'
 content_type: 'how-to'
 author: mahsamoosavi
 sme: mahsamoosavi
@@ -193,11 +192,11 @@ The `replay` command allows you to debug transaction execution interactively:
 cargo stylus replay --tx=$TX_HASH --endpoint=$RPC_URL --use-native-tracer
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The `--use-native-tracer` flag uses `stylusTracer` instead of `jsTracer`, which is required for tracing Stylus transactions on most RPC providers. See [RPC endpoint compatibility](#rpc-endpoint-compatibility) for details.
 
-</VanillaAdmonition>
+</Callout>
 
 The debugger loads and sets a breakpoint at the `user_entrypoint` function:
 
@@ -298,13 +297,13 @@ Both tracers are available on local nodes, but `stylusTracer` is more efficient.
 
 ## Limitations
 
-<VanillaAdmonition type="warning" title="Cannot debug deployment or activation transactions">
+<Callout type="warn" title="Cannot debug deployment or activation transactions">
 
 `cargo stylus replay` and `cargo stylus trace` only work on regular Stylus contract calls. They cannot trace contract **deployment** transactions (initial bytecode upload) or **activation** transactions (calls to the `ArbWasm` precompile).
 
 For issues at deploy or activate time, run `cargo stylus check` against a local devnet and inspect the resulting error messages directly.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Additional resources
 

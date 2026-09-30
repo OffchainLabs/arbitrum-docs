@@ -1,13 +1,15 @@
 {
-  "title": "Configure your chain",
+  "title": "Chain configuration",
   "pages": [
-    "chain-config-reference",
-    "core",
+    "sequencer/batch-poster-fee-tuning",
+    "data-availability/enable-post-4844-blobs",
     "costs",
     "data-availability",
+    "core/config-smart-contract-size-limit",
     "sequencer",
-    "batch-poster",
     "validation",
+    "core/additional-configuration-parameters",
+    "chain-config-reference",
     "..."
   ]
 }

@@ -1,5 +1,6 @@
 ---
 title: 'A gentle introduction to Stylus'
+sidebar_label: 'A gentle introduction'
 description: 'An introduction to Stylus, which enables writing EVM-compatible smart contracts in programming languages that compile to WASM, such as Rust, C, and C++.'
 content_type: 'concept'
 author: amarrazza
@@ -16,7 +17,7 @@ sme: amarrazza
 
 Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](/docs/run-a-node/arbos-releases/arbos32), the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. This paradigm is called MultiVM because it is additive to existing functionality.
 
-<ImageZoom src="/img/stylus-multivm.jpg" alt="Stylus gives you MultiVM" className="img-800px" />
+![Stylus gives you MultiVM](/img/stylus-multivm.jpg)
 
 This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode. WASM is a binary format used in web standards and browsers for efficient computation. Its design is to be portable and human-readable, with sandboxed execution environments for security. Working with WASM is nothing new for Arbitrum chains. Ever since the [Nitro upgrade](https://medium.com/offchainlabs/arbitrum-nitro-one-small-step-for-l2-one-giant-leap-for-ethereum-bc9108047450), WASM has been a fundamental component of Arbitrum's fraud proofs.
 
@@ -40,11 +41,11 @@ To make your contract callable, it must undergo an [activation process](/docs/st
 
 Stylus measures computational costs using ink instead of gas. Ink works like gas but is thousands of times smaller. WASM executes faster than the EVM, so a single EVM operation takes as long as thousands of WASM operations. A finer-grained unit makes pricing more precise.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/docs/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/docs/arbitrum-essentials/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable. The 365-day expiry and a minimum age of about 31 days before a contract can be kept alive are both configurable chain parameters; these are the current defaults.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Execution
 
@@ -71,13 +72,13 @@ Stylus can integrate into existing Solidity projects by calling a Stylus contrac
 
 Stylus's gas advantage is concentrated in **computation**. Storage operations cost roughly the same as in the EVM, so storage-heavy contracts gain little by porting.
 
-<VanillaAdmonition type="info" title="Quick rule of thumb">
+<Callout type="info" title="Quick rule of thumb">
 
 - **Use Stylus** for compute-heavy logic: cryptography, math-heavy DeFi, ZK verification, in-memory algorithms, ports of existing Rust/C/C++ libraries.
 - **Stick with Solidity** when the contract mostly reads and writes storage with little computation in between — you won't see a meaningful gas reduction.
 - **Hybrid approach**: keep your storage layout in Solidity and call out to a Stylus contract for the compute-heavy hot paths.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Getting started
 

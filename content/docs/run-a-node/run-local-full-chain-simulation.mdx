@@ -1,5 +1,6 @@
 ---
 title: 'How to run a local full chain simulation'
+sidebar_label: 'Run a local full chain simulation'
 description: This page provides instructions for setting up a complete local development environment for testing Arbitrum contracts in a fully simulated environment.
 content_type: 'how-to'
 author: jose-franco
@@ -38,11 +39,11 @@ To relaunch the node after the first installation, run the following command.
 ./test-node.bash
 ```
 
-<VanillaAdmonition type="info" title="Clear local data">
+<Callout type="info" title="Clear local data">
 
 Running the --init flag will clear all chain data and redeploy!
 
-</VanillaAdmonition>
+</Callout>
 ## Rollup contract addresses and chain configuration
 
 You can obtain the rollup chain configuration by running the following command. The chain configuration also includes the addresses of the core contracts.
@@ -139,11 +140,11 @@ Some important addresses:
 
 You can fund other addresses by using the scripts `send-l1` and `send-l2` as explained [here](#helper-scripts).
 
-<VanillaAdmonition type="warning" title="Private keys publicly known">
+<Callout type="warn" title="Private keys publicly known">
 
 Do not use any of these addresses in a production environment.
 
-</VanillaAdmonition>
+</Callout>
 ## Optional parameters
 
 Here, We show a list of the parameters that might be useful when running a local devnode. You can also use the flag `./test-node.bash --help` to get them.

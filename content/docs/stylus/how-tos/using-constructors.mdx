@@ -1,8 +1,7 @@
 ---
 title: 'Using constructors with Stylus'
-description: 'A comprehensive guide to implementing and deploying smart contracts with constructors in Stylus'
 sidebar_label: 'Using constructors'
-user_story: 'As a Rust developer, I want to understand how to implement and use constructors in Stylus smart contracts'
+description: 'A comprehensive guide to implementing and deploying smart contracts with constructors in Stylus'
 content_type: 'how-to'
 author: anegg0
 sme: anegg0
@@ -24,13 +23,16 @@ By the end of this guide, you'll be able to:
 
 Before implementing constructors, ensure you have:
 
-<CustomDetails summary="Rust toolchain">
+<Accordions>
+<Accordion title="Rust toolchain">
 
 Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v<Var name="stylusRustToolchain" /> or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="cargo stylus">
+<Accordions>
+<Accordion title="cargo stylus">
 
 In your terminal, run:
 
@@ -47,21 +49,24 @@ rustup target add wasm32-unknown-unknown --toolchain 1.91
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="A local Arbitrum test node">
+<Accordions>
+<Accordion title="A local Arbitrum test node">
 
 Instructions on how to set up a local Arbitrum test node can be found [in the Nitro-devnode repository](https://github.com/OffchainLabs/nitro-devnode).
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ## Understanding Stylus constructors
 
 Stylus constructors provide an atomic way to deploy, activate, and initialize a contract in a single transaction. If your contract lacks a constructor, it may allow access to the contract's storage before the initialization logic runs, leading to unexpected behavior.
 
-<VanillaAdmonition type="info" title="Constructors and composition">
+<Callout type="info" title="Constructors and composition">
   Stylus uses [trait-based composition](/docs/stylus/how-tos/trait-based-composition) instead of traditional inheritance. When building contracts that compose multiple traits, constructors help initialize all components properly. See the [Constructor with trait-based composition](#constructor-with-trait-based-composition) section for examples.
-</VanillaAdmonition>
+</Callout>
 
 ### Constructor rules and guarantees
 
@@ -76,9 +81,9 @@ Stylus constructors follow these important rules:
 | **Use `tx_origin()` for deployer address**  | Factory contracts are used in deployment, so `msg_sender()` returns the factory address |
 | **Constructor runs exactly once**           | The SDK uses a sentinel system to prevent re-execution                                  |
 
-<VanillaAdmonition type="info" title="Factory pattern in deployment">
+<Callout type="info" title="Factory pattern in deployment">
   Stylus uses a factory pattern for deployment, which means `msg_sender()` in a constructor returns the factory contract address, not the deployer. Always use `tx_origin()` to get the actual deployer address.
-</VanillaAdmonition>
+</Callout>
 
 ## Basic constructor implementation
 
@@ -293,9 +298,9 @@ impl MyToken {
 }
 ```
 
-<VanillaAdmonition type="info" title="Trait-based composition in Stylus">
+<Callout type="info" title="Trait-based composition in Stylus">
   Unlike Solidity's inheritance, Stylus uses Rust's trait system for composition. Each component is initialized explicitly in the constructor.
-</VanillaAdmonition>
+</Callout>
 
 ## Testing constructors
 

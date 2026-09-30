@@ -1,8 +1,7 @@
 ---
 title: 'Run a batch poster'
+sidebar_label: 'Batch poster'
 description: 'Learn how to run and configure a batch poster.'
-sidebar_label: 'Run a batch poster'
-user_story: As a current Arbitrum chain owner, I need to understand how to configure and run a batch poster.
 content_type: 'how-to'
 author: emredincoglu
 sme: jason-w123
@@ -12,14 +11,14 @@ To learn how the batch-poster role relates to the other Nitro node roles, includ
 
 The batch poster uses the following default configuration flags and values:
 
-| Flag                                                  | Default value | Description                                                                                       |
-| ----------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------- |
-| `--node.batch-poster.enable`                          | false         | Enables posting batches to L1                                                                     |
+| Flag                                                  | Default value | Description                                                                                                                                                                                                                |
+| ----------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.enable`                          | false         | Enables posting batches to L1                                                                                                                                                                                              |
 | `--node.batch-poster.max-calldata-batch-size`         | 100000        | Maximum calldata batch size; replaces the deprecated `--node.batch-poster.max-size`. Default value is overwritten if it's an L3 (90000). For AnyTrust batches, use `--node.da.anytrust.max-batch-size` (default 1,000,000) |
-| `--node.batch-poster.poll-interval`                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                      |
-| `--node.batch-poster.error-delay`                     | 10 seconds    | Delay time after error posting batch                                                              |
-| `--node.batch-poster.compression-level`               | 11            | Batch compression level (Arbitrum uses Brotli compression which has compression levels from 1-11) |
-| `--node.batch-poster.parent-chain-wallet.private-key` | none          | Sets the private key of the parent chains wallet                                                  |
+| `--node.batch-poster.poll-interval`                   | 10 seconds    | Period to wait after no batches are ready to be posted before checking again                                                                                                                                               |
+| `--node.batch-poster.error-delay`                     | 10 seconds    | Delay time after error posting batch                                                                                                                                                                                       |
+| `--node.batch-poster.compression-level`               | 11            | Batch compression level (Arbitrum uses Brotli compression which has compression levels from 1-11)                                                                                                                          |
+| `--node.batch-poster.parent-chain-wallet.private-key` | none          | Sets the private key of the parent chains wallet                                                                                                                                                                           |
 
 If you created an L3 Arbitrum chain and generated your node config file for a full node, the only values for the batch poster that will be set are:
 
@@ -47,11 +46,11 @@ cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCE
 
 You can use only one database at a time, so you can't have both a Redis server and a DB in use simultaneously.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 If your parent chain is an Arbitrum chain or doesn't have a mempool, you can ignore this section. Noop storage is automatically chosen because batches post sequentially -- a new batch only posts after the previous transaction goes through. No database tracking for queued transactions is required.
 
-</VanillaAdmonition>
+</Callout>
 ### Noop
 
 Noop storage does not store any `queuedTxs`. This is beneficial when the parent chain is an Arbitrum chain or one without a mempool, since the sequencer processes every transaction immediately and is never stuck in mempool limbo due to low gas.
@@ -74,11 +73,11 @@ To configure Redis, you can also specify a `redis-signer` value with the flag `-
 
 #### Key differences
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 The default values are DB on by default, and Noop on by default if and only if the parent chain does not have a mempool (any L3 whose parent is an Arbitrum chain).
 
-</VanillaAdmonition>
+</Callout>
 | Feature            | Noop | DB         | Redis          |
 | ------------------ | ---- | ---------- | -------------- |
 | Persistence        | None | Local disk | External Redis |
@@ -219,7 +218,7 @@ const networkFeeAccount = await orbitChainClient.arbAggregatorReadContract({
 });
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 Before setting a fee collector for a batch poster, ensure the batch poster is registered in the `BatchPostersTable`. This can be achieved by:
 
@@ -253,7 +252,7 @@ await orbitChainClient.sendRawTransaction({
 });
 ```
 
-</VanillaAdmonition>
+</Callout>
 To add a new batch poster, call the `setIsBatchPoster(address,bool)` method of the [`SequencerInbox` contract](https://github.com/OffchainLabs/nitro/blob/6aa06038ef34f9838be5952f4a66fa99807a2e6e/arbnode/sequencer_inbox.go#L59) on the parent chain:
 
 ```shell
@@ -262,11 +261,11 @@ cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCE
 
 ### Setting revenue values
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 These values are only editable by the chain owner(s).
 
-</VanillaAdmonition>
+</Callout>
 There are onchain values in ArbOS that set how much ArbOS changes per L1 gas spent on transaction data. This can be set by communicating with the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner).
 
 ```shell

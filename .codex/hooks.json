@@ -1,0 +1,123 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/allup/OCL/Fumadocs-test/.codex/hooks/require-pattern-guide.sh'"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '\"\\(.tool_input.command) - \\(.tool_input.description // \"No description\")\"' >> ~/.claude/bash-command-log.txt"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"); CONTENT=$(echo $STDIN_JSON | jq -r '.tool_input.content // \"\"); if [[ \"$FILE\" =~ \\.(js|jsx|ts|tsx)$ ]] && echo \"$CONTENT\" | grep -q 'console\\.log'; then echo 'Warning: console.log statements should be removed before committing' >&2; exit 2; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" == \"package.json\" ]]; then echo 'Checking for vulnerable dependencies...'; npm audit --audit-level=moderate; fi",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if echo \"$FILE\" | grep -qE '/docs/sdk/|/docs/stylus-by-example/'; then echo 'BLOCKED: This file is auto-generated from a git submodule. Edit the source in submodules/ instead, then run the appropriate generate/sync command.' >&2; exit 2; fi"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/allup/OCL/Fumadocs-test/.codex/hooks/optimize-svg.sh'",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(js|jsx|ts|tsx)$ ]]; then npx prettier --write \"$FILE\"; fi",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(ts|tsx)$ ]]; then RESULT=$(npx tsc --noEmit 2>&1); if [ $? -ne 0 ]; then echo \"TypeScript errors found: $RESULT\" >&2; exit 2; fi; fi",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(js|jsx|ts|tsx)$ ]] && grep -q 'import \\* from' \"$FILE\"; then echo 'Warning: Avoid wildcard imports for better tree-shaking' >&2; exit 2; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(js|jsx|ts|tsx)$ && \"$FILE\" != *\".test.\"* && \"$FILE\" != *\".spec.\"* ]]; then DIR=$(dirname \"$FILE\"); BASENAME=$(basename \"$FILE\" | sed -E 's/\\.(js|jsx|ts|tsx)$//'); for TEST_FILE in \"$DIR/$BASENAME.test.\"* \"$DIR/$BASENAME.spec.\"*; do if [ -f \"$TEST_FILE\" ]; then echo \"Running tests for $TEST_FILE...\"; if command -v jest >/dev/null 2>&1; then npx jest \"$TEST_FILE\" --passWithNoTests; elif command -v vitest >/dev/null 2>&1; then npx vitest run \"$TEST_FILE\"; fi; break; fi; done; fi",
+            "timeout": 60
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [[ -f package.json && $(git status --porcelain | wc -l) -gt 0 ]]; then echo 'Running linter...'; npm run lint 2>/dev/null || echo 'Linting completed'; fi",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [[ -f package.json && $(git status --porcelain | grep -E '\\.js$|\\.jsx$|\\.ts$|\\.tsx$') ]]; then echo 'Analyzing bundle size impact...'; if command -v bundlesize >/dev/null 2>&1; then npx bundlesize; elif npm list webpack-bundle-analyzer >/dev/null 2>&1; then echo 'Use: npx webpack-bundle-analyzer build/static/js/*.js'; else echo 'No bundle analysis tool found'; fi; fi",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

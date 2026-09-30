@@ -71,7 +71,8 @@ npm install @radix-ui/react-label @radix-ui/react-slot @radix-ui/react-tabs @tan
 
 - **Setup a Smart Contract Interaction Service:**
 
-<CustomDetails summary="lib/transfer-service.ts">
+<Accordions>
+<Accordion title="lib/transfer-service.ts">
 ```javascript
    import { createPublicClient, http, getContract, encodeFunctionData,   encodePacked, parseAbi, parseErc6492Signature, formatUnits, hexToBigInt } from 'viem'
    import { createBundlerClient } from 'viem/account-abstraction'
@@ -206,11 +207,13 @@ return userOpReceipt
 }
 
 ````
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - **Setup Permit Helper for EIP-2612 Integration:**
 
-<CustomDetails summary="lib/permit-helpers.ts">
+<Accordions>
+<Accordion title="lib/permit-helpers.ts">
 ```javascript
 import { Address, Chain, TypedDataDomain, getContract } from 'viem'
 export const eip2612Abi = [
@@ -321,13 +324,15 @@ export async function eip2612Permit({
 }
 ````
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ### Step 5: Build the frontend
 
 - **Update Main Component:**
 
-<CustomDetails summary="app/page.tsx">
+<Accordions>
+<Accordion title="app/page.tsx">
 ```javascript
 'use client'
 import { useState, useEffect } from 'react'
@@ -547,7 +552,8 @@ return (
 ) }
 
 ````
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 - **Update Root Layout for Application:**
   **File:** `app/layout.tsx`
@@ -573,7 +579,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 mkdir -p components/ui
 ```
 
-<CustomDetails summary="components/ui/button.tsx">
+<Accordions>
+<Accordion title="components/ui/button.tsx">
 ```javascript
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
@@ -622,9 +629,11 @@ return (
 <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />) } ) Button.displayName = "Button" export {(Button, buttonVariants)}
 
 ````
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="components/ui/card.tsx">
+<Accordions>
+<Accordion title="components/ui/card.tsx">
 ```javascript
 import * as React from "react"
 import { cn } from "@/lib/utils"
@@ -697,9 +706,11 @@ CardFooter.displayName = "CardFooter"
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 ````
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="components/ui/input.tsx">
+<Accordions>
+<Accordion title="components/ui/input.tsx">
 ```javascript
 import * as React from "react"
 import { cn } from "@/lib/utils"
@@ -711,9 +722,11 @@ return (
 <input type={type} className={cn('flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm', className)} ref={ref} {...props} />) } ) Input.displayName = "Input" export {Input}
 
 ````
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="components/ui/label.tsx">
+<Accordions>
+<Accordion title="components/ui/label.tsx">
 ```javascript
 "use client"
 import * as React from "react"
@@ -739,9 +752,11 @@ Label.displayName = LabelPrimitive.Root.displayName
 export { Label }
 ````
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="components/ui/tabs.tsx">
+<Accordions>
+<Accordion title="components/ui/tabs.tsx">
 ```javascript
 "use client"
 import * as React from "react"
@@ -795,9 +810,11 @@ const TabsContent = React.forwardRef<
 TabsContent.displayName = TabsPrimitive.Content.displayName
 export { Tabs, TabsList, TabsTrigger, TabsContent }
 ```
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="components/ui/alert.tsx">
+<Accordions>
+<Accordion title="components/ui/alert.tsx">
 ```javascript
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -856,7 +873,8 @@ const AlertDescription = React.forwardRef<
 AlertDescription.displayName = "AlertDescription"
 export { Alert, AlertTitle, AlertDescription }
 ```
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ### Step 6: Start development server
 

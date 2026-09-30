@@ -4,16 +4,16 @@ sidebar_label: 'Introduction to PGA'
 description: 'Learn how PGA works and how it can benefit your Arbitrum-based project.'
 author: anegg0
 sme: gligneul
-user_story: As a current or prospective Arbitrum user, I want to understand how PGA works and how to use it.
 content_type: 'concept'
 ---
 
 PGA is an ordering policy in which users bid for ordering by attaching a priority fee to each <Term id="transaction">transaction</Term>. Ordering becomes a continuous, permissionless, per-transaction competition.
-PGA is now available for activation across all Arbitrum chains.
+PGA is available for activation on supported Arbitrum chains with priority fee collection and a PGA-capable Sequencer build.
 
 ### Why sunset Timeboost?
 
-<Term id="arbitrum-one">Arbitrum One</Term> has used Timeboost since April 2025. Timeboost auctions off a 60-second "<Term id="express-lane">express lane</Term>" in a sealed-bid, second-price auction and falls back to first-come, first-served (FCFS) ordering for everything else. This policy served to reduce latency-race spam and create the first sequencing revenue stream for the <Term id="arbitrum-dao">Arbitrum DAO</Term>.
+<Term id="arbitrum-one">Arbitrum One</Term> has used Timeboost since April 2025. Timeboost auctions off a 60-second "<Term id="express-lane">express lane</Term>" in a sealed-bid, second-price auction and falls back to first-come, first-served (FCFS) ordering for everything else. This policy served to reduce latency-race spam and create the first sequencing revenue stream for the
+<Term id="arbitrum-dao">Arbitrum DAO</Term>.
 
 However, some design limitations became clear:
 
@@ -75,7 +75,7 @@ PGA uses three components that work together:
 
   On Arbitrum One, the block time `B` is 250ms and the proposed number of rounds per block `K` is 2, giving a nominal round length of **125ms**. Let's look at each component.
 
-<ImageZoom src="/img/haw-pga-three-components.svg" alt="PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125ms, then transfer the queue into the block. An anti-starvation boost raises the queue position of transactions still waiting after each round, never the fee charged, and that feeds the next round. On Arbitrum One the block time is 250ms with 2 rounds per block." className="img-900px" />
+![PGA uses three components that work together. A two-stage mempool holds an unordered waiting list and a priority queue keyed on the priority fee. PGA rounds promote the waiting list into the queue every 125ms, then transfer the queue into the block. An anti-starvation boost raises the queue position of transactions still waiting after each round, never the fee charged, and that feeds the next round. On Arbitrum One the block time is 250ms with 2 rounds per block.](/img/haw-pga-three-components.svg)
 
 ### The two-stage mempool
 
@@ -90,11 +90,11 @@ priority_fee_per_gas = min(
 )
 ```
 
-<ImageZoom src="/img/haw-pga-two-stage-mempool.svg" alt="Transactions arrive into an unordered waiting list. At the start of each PGA round, the Sequencer moves the whole waiting list into a priority queue keyed on each transaction's priority fee, highest first." className="img-900px" />
+![Transactions arrive into an unordered waiting list. At the start of each PGA round, the Sequencer moves the whole waiting list into a priority queue keyed on each transaction's priority fee, highest first.](/img/haw-pga-two-stage-mempool.svg)
 
 Ties are broken by the arrival timestamp recorded when the transaction first reached the Sequencer, not when it entered the queue.
 
-<ImageZoom src="/img/haw-pga-tie-breaking.svg" alt="Three transactions carry the same priority fee of 2 gwei. The Sequencer orders them by the arrival timestamp it recorded when each transaction first reached it, so the earliest arrival goes first." className="img-900px" />
+![Three transactions carry the same priority fee of 2 gwei. The Sequencer orders them by the arrival timestamp it recorded when each transaction first reached it, so the earliest arrival goes first.](/img/haw-pga-tie-breaking.svg)
 
 The queue is re-keyed against the new base fee at the start of every block because the priority fee depends on the base fee, which changes between blocks.
 
