@@ -17,6 +17,8 @@ import {
 } from '@floating-ui/react';
 import { type ReactNode, useState } from 'react';
 
+import { useInLink } from './in-link';
+
 /**
  * Generic hover/focus popover built on `@floating-ui/react`. The interaction primitive behind
  * `<Term>`: inline, opens on hover/focus, closes on leave/blur. Owns open state,
@@ -33,6 +35,7 @@ export function HoverPopover({
   title?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const inLink = useInLink();
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
@@ -57,21 +60,36 @@ export function HoverPopover({
 
   return (
     <>
-      <button
-        ref={triggerRef}
-        type="button"
-        className="cursor-text border-b border-dotted border-fd-primary"
-        {...getReferenceProps()}
-      >
-        {children}
-      </button>
+      {/* Inside a link the trigger must not be interactive: a button in an anchor is invalid HTML. */}
+      {inLink ? (
+        <span
+          ref={triggerRef}
+          className="border-b border-dotted border-fd-primary"
+          {...getReferenceProps()}
+        >
+          {children}
+        </span>
+      ) : (
+        <button
+          ref={triggerRef}
+          type="button"
+          className="cursor-text border-b border-dotted border-fd-primary"
+          {...getReferenceProps()}
+        >
+          {children}
+        </button>
+      )}
       {isOpen && (
         <FloatingPortal>
           <div
             ref={refs.setFloating}
             style={floatingStyles}
             className="z-9999 flex max-h-[60vh] max-w-[380px] flex-col overflow-hidden rounded-lg border bg-fd-popover text-fd-popover-foreground shadow-[0_8px_30px_rgb(0_0_0/0.12)]"
-            {...getFloatingProps()}
+            {...getFloatingProps({
+              // React bubbles events out of a portal through the component tree, so without this a
+              // click in the definition reaches an enclosing link and navigates to its href.
+              onClick: (event) => event.stopPropagation(),
+            })}
           >
             {/* Portaled outside `.prose`, so links restate the prose link treatment. */}
             <div className="flex-1 overflow-y-auto px-5 py-4 leading-[1.6] [&_a]:font-medium [&_a]:underline [&_a]:decoration-fd-primary [&_a]:decoration-2 [&_a]:underline-offset-4 [&_a]:transition-colors [&_a]:duration-200 [&_a:hover]:text-fd-primary [&_a:hover]:decoration-current [&>:last-child]:mb-0">

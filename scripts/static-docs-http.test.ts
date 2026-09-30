@@ -116,6 +116,22 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
     }
   });
 
+  await t.test('a page has an open graph image and other image URLs 404', async () => {
+    const image = await get(`/og${livePath}/image.png`);
+    assert.equal(image.status, 200);
+    assert.match(image.headers.get('content-type') ?? '', /image\/png/);
+    await image.arrayBuffer();
+    for (const path of [
+      `/og${livePath}/other.png`,
+      `/og${livePath}/image.png/image.png`,
+      '/og/docs/does-not-exist/image.png',
+    ]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
+  });
+
   await t.test('the docs 404 is the same response as the root 404', async () => {
     const [root, docs] = await Promise.all([get('/does-not-exist'), get('/docs/does-not-exist')]);
     assert.equal(root.status, 404);
