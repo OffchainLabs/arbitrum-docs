@@ -100,8 +100,8 @@ Generators that depend on a marker comment read the raw `.mdx` file from disk.
 
 ## `source` is a choke point
 
-Eight files under `app/` import `source`: the docs page and layout, the `llms.txt`,
-`llms-full.txt`, `llms.mdx` and `og` routes, the search route and the sitemap. The rules around it:
+Seven files under `app/` import `source`: the docs page and layout, the `llms.txt`,
+`llms-full.txt`, `llms.mdx` and `og` routes, and the sitemap. The rules around it:
 
 - `docs.toFumadocsSource()` is the only adapter for `.source/`. Never build a second read path.
 - `baseUrl` is an argument to the single `loader()` call. A second loader would restate it and let
@@ -358,8 +358,11 @@ plus one registry entry.
 `components/mdx.tsx` is the registry and the source of truth. It spreads Fumadocs' defaults (which
 include `Callout`, `Card`, `Cards` and code blocks) and adds:
 
-- Fumadocs' `Accordion`, `Accordions`, `Tab`, `Tabs` and `ImageZoom`. Markdown images render
-  through `ImageZoom` too.
+- Fumadocs' `Accordions`, `Tab`, `Tabs` and `ImageZoom`. Markdown images render through
+  `ImageZoom` too.
+- `Accordion` from `components/mdx/Accordion.tsx`, Fumadocs' own with the panel force-mounted.
+  Fumadocs unmounts a closed accordion panel and an inactive tab, so their text never reaches the
+  server HTML that search engines index. The registry force-mounts both and CSS hides them.
 - `AEL`, an address explorer link (`components/mdx/AddressExplorerLink.tsx`).
 - `Term`, `ReferenceList` and `Var` from `components/mdx/`.
 - Four widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`
@@ -435,6 +438,9 @@ Other things not to undo:
 - **The Inkeep chat widget** (`components/inkeep/inkeep-chat-button.tsx`) waits for `load` and then
   an idle callback before it loads its chunk, so it downloads after the resources that decide
   Largest Contentful Paint.
+- **The search dialog mounts on first open.** `app/layout.tsx` passes `preload: false` to
+  Fumadocs' search options; its default of `true` mounts the dialog at once, which fetches the
+  Inkeep bundle on every page load.
 - **Fonts are self-hosted** under `public/fonts/` and loaded with `next/font/local` in
   `app/layout.tsx`. Never add `next/font/google`: it makes the build fetch from Google. Only the two
   upright Aeonik faces preload. The italic is its own declaration so it can skip preloading, and
