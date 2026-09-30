@@ -16,7 +16,7 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { type ReactNode, useId, useState } from 'react';
+import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
 
 import { useInLink } from './in-link';
 
@@ -43,6 +43,7 @@ export function HoverPopover({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const inLink = useInLink();
+  const linkedTriggerRef = useRef<HTMLSpanElement>(null);
 
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
@@ -74,12 +75,38 @@ export function HoverPopover({
   ]);
   const titleId = useId();
 
+  useEffect(() => {
+    if (!inLink) return;
+    const trigger = linkedTriggerRef.current;
+    const link = trigger?.closest('a');
+    if (!trigger || !link) return;
+
+    // Position at the term, but use the containing link as the keyboard reference. A nested
+    // button or a tabindex on the span would make the anchor's HTML invalid.
+    refs.setReference(link);
+    refs.setPositionReference(trigger);
+    const onFocus = () => setIsOpen(true);
+    const onBlur = () => {
+      requestAnimationFrame(() => {
+        const active = document.activeElement;
+        if (active !== link && !refs.floating.current?.contains(active)) setIsOpen(false);
+      });
+    };
+    link.addEventListener('focus', onFocus);
+    link.addEventListener('blur', onBlur);
+    if (document.activeElement === link) onFocus();
+    return () => {
+      link.removeEventListener('focus', onFocus);
+      link.removeEventListener('blur', onBlur);
+    };
+  }, [inLink, refs]);
+
   return (
     <>
       {/* Inside a link the trigger must not be interactive: a button in an anchor is invalid HTML. */}
       {inLink ? (
         <span
-          ref={refs.setReference}
+          ref={linkedTriggerRef}
           className="border-b border-dotted border-fd-primary"
           {...getReferenceProps()}
         >
