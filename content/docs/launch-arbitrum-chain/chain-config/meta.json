@@ -1,0 +1,14 @@
+{
+  "title": "Configure your chain",
+  "pages": [
+    "batch-poster",
+    "costs",
+    "data-availability",
+    "execution",
+    "sequencer",
+    "validation",
+    "additional-configuration-parameters",
+    "chainConfig-reference",
+    "..."
+  ]
+}

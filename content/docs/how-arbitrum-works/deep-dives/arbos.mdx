@@ -1,7 +1,6 @@
 ---
 title: 'ArbOS'
 description: 'How ArbOS works as the child chain hypervisor, managing resources, block production, cross-chain messaging, and EVM execution.'
-user_story: As a current or prospective Arbitrum user, I need to learn more about Nitro's design.
 content_type: 'concept'
 author: petevielhaber
 sme: mehdi salehi
@@ -46,6 +45,8 @@ For the subspace-by-subspace breakdown, including `blockhashes`, `l1PricingState
 
 ## Gas and fees
 
+An Arbitrum transaction has a cost structure on L1: the chain must pay Ethereum to store its data and spend compute to execute it. ArbOS meters both, so every transaction pays two parties:
+
 - Child-chain execution is priced by `l2PricingState`, which runs a dynamic base-fee mechanism. A gas pool tracks demand across a time window, pushing that base fee up under load and down when idle, smoothing spikes while preserving capacity.
 - Parent-chain data is tracked by `l1PricingState`, which records what the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) spent posting compressed data to Ethereum and reimburses the <Term id="batch-poster">batch poster</Term> from user fees.
 
@@ -69,7 +70,7 @@ For the reflection and dispatch mechanics, see the [precompile architecture refe
 
 Retryable tickets are a special message type that enables atomic parent-to-child messaging: a ticket is created on the parent chain and redeemed on the child chain, with funds and execution handled together. Retryable state lives in the `retryables` subspace. See the [parent-to-child messaging](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging) documentation for the full lifecycle.
 
-## ArbOS versions and upgrades
+ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple <Term id="gas-target">gas targets</Term> over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) (for parent chain data costs) and the network (for child chain execution).
 
 ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple <Term id="gas-target">gas targets</Term> over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) (for parent chain data costs) and the network (for child chain execution).
 

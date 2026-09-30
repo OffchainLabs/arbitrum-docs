@@ -154,7 +154,7 @@ test('resolveDestination lets a hand-confirmed override win over every rule', ()
   assert.equal(result.rule, 'manual');
   assert.equal(
     result.destination,
-    '/docs/launch-arbitrum-chain/configuration/costs/gas-optimization-tools',
+    '/docs/launch-arbitrum-chain/chain-config/costs/gas-optimization',
   );
 });
 
@@ -229,7 +229,7 @@ test('buildCurrentRedirects throws rather than emitting a destination that is no
   ];
   assert.throws(
     () => buildCurrentRedirects({ pages, destPages }),
-    /destination does not exist: \/docs\/run-a-node\/run-batch-poster/,
+    /destination does not exist: \/docs\/launch-arbitrum-chain\/run-a-node\/batch-poster/,
   );
 });
 

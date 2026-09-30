@@ -1,8 +1,7 @@
 ---
 title: 'How to assign roles to a Nitro node'
-description: "Understand how a Nitro node's role (RPC node, archive node, sequencer, batch poster, validator — optionally with split validation — or feed relay) is set by configuration flags, and how to convert a node from one role to another."
 sidebar_label: 'Assign node roles'
-user_story: "As a node operator, I want to understand how a Nitro node's role is set by configuration so that I can run and convert nodes safely."
+description: "Understand how a Nitro node's role (RPC node, archive node, sequencer, batch poster, validator — optionally with split validation — or feed relay) is set by configuration flags, and how to convert a node from one role to another."
 content_type: 'how-to'
 author: Gowtham118
 sme: Gowtham118
@@ -20,15 +19,15 @@ Roles can combine on a single node (a sequencer can also post batches, for examp
 
 ## Roles at a glance
 
-| Role                                 | Defining flags                                                                  | Wallet and bond                                           | Runs how many?                            | Full guide                                                                               |
-| ------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
-| RPC node (full node)                 | none (the default)                                                              | No wallet, no bond                                        | Many (horizontal scaling)                 | [Run a full node](/docs/run-a-node/run-full-node)                               |
-| Archive node                         | `--execution.caching.archive`                                                   | No wallet, no bond                                        | Many (same as RPC nodes)                  | [Run an archive node](/docs/run-a-node/more-types/run-archive-node)             |
-| Sequencer                            | `--node.sequencer` + `--execution.sequencer.enable`                             | No wallet, no bond                                        | One per chain (or one coordinator set)    | [Run a sequencer node](/docs/run-a-node/sequencer/run-sequencer-node)           |
+| Role                                 | Defining flags                                                                  | Wallet and bond                                           | Runs how many?                            | Full guide                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------- |
+| RPC node (full node)                 | none (the default)                                                              | No wallet, no bond                                        | Many (horizontal scaling)                 | [Run a full node](/docs/run-a-node/run-full-node)                       |
+| Archive node                         | `--execution.caching.archive`                                                   | No wallet, no bond                                        | Many (same as RPC nodes)                  | [Run an archive node](/docs/run-a-node/more-types/run-archive-node)     |
+| Sequencer                            | `--node.sequencer` + `--execution.sequencer.enable`                             | No wallet, no bond                                        | One per chain (or one coordinator set)    | [Run a sequencer node](/docs/run-a-node/sequencer/run-sequencer-node)   |
 | Batch poster                         | `--node.batch-poster.enable`                                                    | Funded parent-chain wallet; no bond                       | One active (Redis lock coordinates a set) | [Run a batch poster](/docs/run-a-node/run-batch-poster)                 |
-| Validator (staker)                   | `--node.staker.strategy` set to an active value                                 | Funded wallet and bond for active strategies only         | One active per wallet                     | [Run a validator](/docs/run-a-node/more-types/run-validator-node)               |
+| Validator (staker)                   | `--node.staker.strategy` set to an active value                                 | Funded wallet and bond for active strategies only         | One active per wallet                     | [Run a validator](/docs/run-a-node/more-types/run-validator-node)       |
 | Validation server (split validation) | `nitro-val` binary + `--node.block-validator.validation-server.url` on the node | No wallet, no bond (all onchain action stays on the node) | Many (one node can use several)           | [Run a split validator node](/docs/run-a-node/run-split-validator-node) |
-| Feed relay                           | `relay` binary + `--node.feed.input.url` + `--chain.id`                         | No wallet, no bond, no parent-chain connection            | Many (stateless fan-out)                  | [Run a feed relay](/docs/run-a-node/run-feed-relay)                                |
+| Feed relay                           | `relay` binary + `--node.feed.input.url` + `--chain.id`                         | No wallet, no bond, no parent-chain connection            | Many (stateless fan-out)                  | [Run a feed relay](/docs/run-a-node/run-feed-relay)                     |
 
 Every role except the feed relay and the split-validation server needs a parent-chain connection through `--parent-chain.connection.url`. Nodes whose parent chain is Ethereum <Term id="L1">L1</Term> also need `--parent-chain.blob-client.beacon-url` to read batches posted as EIP-4844 blobs. For well-known chains, setting `--chain.id` or `--chain.name` auto-fills defaults such as `--execution.forwarding-target` and `--node.feed.input.url` from the chain info embedded in the binary (the forwarding target is only auto-filled when the sequencer is disabled).
 
@@ -48,11 +47,11 @@ Beyond those defaults, a full node needs only the shared basics — `--parent-ch
 
 Operationally, a full node needs a parent-chain connection but no funded wallet and no bond. Feed connectivity is strongly recommended for low latency but is not required: a node with no feed input still syncs by reading batches from the parent chain, just with higher latency. You can run as many RPC nodes as you like; they share no state and need no coordination.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 `--node.staker.enable` defaults to `true`, so a default full node is technically a <Term id="watchtower-validator">watchtower validator</Term>: it watches onchain assertions and logs when one disagrees with its locally computed state. With the default watchtower strategy it loads no wallet and posts no bond, so it takes no onchain action. This is why "converting to a validator" is mostly a matter of changing the strategy and providing a wallet and bond, rather than enabling a module. To silence the watchtower entirely, set `--node.staker.enable=false`.
 
-</VanillaAdmonition>
+</Callout>
 
 For the full setup, including snapshots, pruning, and Docker details, see [How to run a full node](/docs/run-a-node/run-full-node).
 
@@ -191,7 +190,7 @@ For setup, Docker commands, and Kubernetes charts, see [How to run a feed relay]
 
 Converting a node from one role to another means changing its flags and restarting, plus arranging whatever the target role needs operationally (funding a wallet, arranging a bond and allowlisting, provisioning Redis, or opening a feed port). Before changing any role, read the safety rules below.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Some roles must not be duplicated for the same chain:
 
@@ -200,7 +199,7 @@ Some roles must not be duplicated for the same chain:
 - **Never run two active stakers with the same wallet.** There is no built-in staker leader election, so they conflict on nonces and stall each other.
 - **Safe to run many:** RPC nodes, archive nodes, feed relays, and validation servers. They share no protocol state and need no coordination.
 
-</VanillaAdmonition>
+</Callout>
 
 Role-specific conversion notes:
 

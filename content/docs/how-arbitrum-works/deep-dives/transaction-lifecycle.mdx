@@ -1,7 +1,7 @@
 ---
 title: Transaction lifecycle on Arbitrum
+sidebar_label: Transaction lifecycle
 description: 'Learn how transactions are submitted and processed on Arbitrum, including sequencer and non-sequencer pathways.'
-user_story: As a current or prospective Arbitrum user, I need to learn more about the transaction lifecycle.
 content_type: 'concept'
 author: pete-vielhaber
 sme: Mehdi
@@ -83,7 +83,7 @@ Use this method when you need the lowest possible latency for time-sensitive tra
 
 The following diagram shows the four methods for submitting transactions to the Sequencer:
 
-<ImageZoom src="/img/haw-submit-tx-to-sequencer.svg" alt="Submit transaction to the Sequencer" className="img-600px" />
+![Submit transaction to the Sequencer](/img/haw-submit-tx-to-sequencer.svg)
 
 ## Bypassing the Sequencer
 
@@ -102,7 +102,7 @@ When you submit a transaction to the Delayed Inbox, two things can happen:
 
 This two-path system ensures your transaction will always be processed, even if the Sequencer is unresponsive or censoring transactions.
 
-<ImageZoom src="/img/haw-bypassing-the-sequencer.svg" alt="Bypassing the Sequencer" className="img-600px" />
+![Bypassing the Sequencer](/img/haw-bypassing-the-sequencer.svg)
 
 ### Using the Delayed Inbox
 

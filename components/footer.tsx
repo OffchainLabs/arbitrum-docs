@@ -1,17 +1,12 @@
 import Link from 'fumadocs-core/link';
 
+import { appName } from '@/lib/shared';
+
 /**
- * Site footer.
- *
- * Fumadocs has no footer slot — neither `BaseLayoutProps` nor the home/notebook
- * layouts expose one, and upstream ships no `<footer>` anywhere. The documented
- * placement is a sibling of the layout inside the `flex flex-col min-h-screen`
- * body, which is where `app/[lang]/layout.tsx` renders it. It must NOT go inside
- * `DocsLayout`: that container is a named-area CSS grid, so an unplaced child is
- * auto-placed into the gutter cell beside the navbar (and `overflow-x-clip`
- * would trim it).
- *
- * Content mirrors arbitrum-docs `docusaurus.config.js` `themeConfig.footer`.
+ * Site footer, styled after the arbitrum.io footer. Fumadocs has no footer slot, so
+ * `app/layout.tsx` renders it as a sibling of the layout in the flex-column body; inside
+ * `DocsLayout` it would be auto-placed into a grid cell. Dark in both colour modes, so it uses
+ * brand tokens (`arbitrum-*`) rather than theme tokens (`fd-*`).
  */
 
 interface FooterLink {
@@ -27,7 +22,7 @@ const columns: { title: string; items: FooterLink[] }[] = [
       { text: 'Arbitrum.io', url: 'https://arbitrum.io/' },
       { text: 'Arbitrum chains', url: 'https://arbitrum.io/launch-chain' },
       { text: 'Arbitrum Foundation', url: 'https://arbitrum.foundation/' },
-      // Served from public/; exempted from locale rewriting in proxy.ts.
+      // Served from public/.
       { text: 'Arbitrum whitepaper', url: '/nitro-whitepaper.pdf' },
     ],
   },
@@ -60,54 +55,57 @@ const columns: { title: string; items: FooterLink[] }[] = [
   },
 ];
 
-const linkClass = 'text-fd-muted-foreground transition-colors hover:text-fd-primary';
+/** A hidden hexagon at the left edge; on hover the label slides right to reveal it, lit cyan. */
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group relative inline-block pl-4 transition-colors duration-300 hover:text-arbitrum-cyan hover:text-shadow-[0_0_6px_rgb(16_225_255/0.8)]"
+    >
+      <span
+        aria-hidden
+        className="absolute top-[3px] left-0 block h-[10px] w-[10px] drop-shadow-hex-glow"
+      >
+        <span className="hex-clip block h-[10px] bg-arbitrum-cyan opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      </span>
+      <span className="block -translate-x-4 text-nowrap transition-transform duration-300 group-hover:translate-x-0">
+        {children}
+      </span>
+    </Link>
+  );
+}
 
 export function Footer() {
   return (
-    // Light: a recessed band, as in Docusaurus. Dark: `fd-muted` is *lighter*
-    // than the page, which would invert that reading, so the footer sits flush
-    // on `fd-background` and the top border alone separates it.
-    <footer className="border-t bg-fd-muted text-[0.8125rem] dark:bg-fd-background">
-      {/* Same container as the home page content (`app/[lang]/(home)/page.tsx`),
-          so the columns line up with the body text. Both content areas are
-          viewport-centred at ~1000px — the docs article column included — so one
-          centred container aligns the footer on every page type. */}
-      <div className="mx-auto w-full max-w-5xl px-4 py-6">
-        {/* Grid + gap replaces Infima's four-then-one column jump: one column on
-            phones, 2x2 on tablets, a single row on desktop. */}
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="bg-linear-to-b from-arbitrum-navy to-black text-xs text-white uppercase">
+      {/* The same centred `max-w-5xl` container as the home page content. */}
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 pt-10 pb-12 lg:flex-row lg:justify-between lg:pb-16">
+        <Link href="/" className="flex w-fit items-center gap-3 self-start normal-case">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/img/logo.svg" alt="" width={27} height={30} className="h-[30px] w-auto" />
+          <span className="text-base font-medium">{appName}</span>
+        </Link>
+
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 lg:gap-x-12">
           {columns.map((column) => (
-            <div key={column.title}>
-              {/* Aeonik ships only 400 and 500, so headings stop at `font-medium`
-                  rather than the source's 600, which the browser would synthesize. */}
-              <h2 className="mb-3 text-sm font-medium text-fd-foreground">{column.title}</h2>
-              <ul className="flex flex-col gap-2">
-                {column.items.map((item) => (
-                  <li key={item.text}>
-                    {/* fumadocs-core/link routes internal hrefs through next/link
-                        and marks external ones target=_blank rel=noreferrer. */}
-                    <Link href={item.url} className={linkClass}>
-                      {item.text}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            <div key={column.title} className="grid content-start gap-4">
+              <p className="text-white/50">{column.title}</p>
+              {column.items.map((item) => (
+                <FooterLink key={item.text} href={item.url}>
+                  {item.text}
+                </FooterLink>
+              ))}
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Legal links live in the copyright row, not a fifth column, so the four
-            link columns stay even. */}
-        <div className="mt-6 border-t pt-4 text-center text-xs text-fd-muted-foreground">
-          © {new Date().getFullYear()} Offchain Labs{' · '}
-          <Link href="https://arbitrum.io/privacy" className={linkClass}>
-            Privacy Policy
-          </Link>
-          {' · '}
-          <Link href="https://arbitrum.io/tos" className={linkClass}>
-            Terms of Service
-          </Link>
-        </div>
+      <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-white/20 px-4 py-5 text-white/50">
+        <span className="normal-case">© {new Date().getFullYear()} Offchain Labs</span>
+        <span className="flex gap-6">
+          <FooterLink href="https://arbitrum.io/privacy">Privacy Policy</FooterLink>
+          <FooterLink href="https://arbitrum.io/tos">Terms of Service</FooterLink>
+        </span>
       </div>
     </footer>
   );

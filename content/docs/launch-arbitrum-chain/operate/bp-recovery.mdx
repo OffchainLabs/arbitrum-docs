@@ -5,7 +5,7 @@ description: 'Learn how the batch poster recovers state and the mechanisms that 
 author: pete-vielhaber
 sme: Jason-W123
 user_story: As an Arbitrum chain operator, I want to understand how the batch poster recovers after a crash, restart, or bad state so I can restore reliable batch posting.
-content_type: 'reference'
+content_type: reference
 ---
 
 This section covers how the batch poster recovers state after a crash, restart, or bad start—including DB restore from a batch-poster checkpoint, storage backends, revert and halt recovery, Redis failover, nonce sync, and reorg handling.
@@ -47,10 +47,10 @@ In short: _queue intact → resume in-flight; queue gone → rebuild cleanly fro
 ## Storage backends and what survives a restart
 
 | Backend          | Persists?                                     | Recovery behavior                                                                  |
-| ----------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| ---------------- | --------------------------------------------- | ---------------------------------------------------------------------------------- |
 | **dbstorage**    | Yes (consensus DB, `BatchPosterPrefix` table) | Queue rehydrated from keyed entries; `FetchContents`/`FetchLast` reload on startup |
 | **redisstorage** | Yes (shared)                                  | Sorted-set keyed by nonce; **HMAC-signed** entries; enables failover               |
-| **noop**         | No                                             | Stores nothing; post-and-forget; used when parent chain is Arbitrum (no mempool)   |
+| **noop**         | No                                            | Stores nothing; post-and-forget; used when parent chain is Arbitrum (no mempool)   |
 
 Notably, when the parent chain itself is an Arbitrum chain, the data poster **forces no-op storage**—there's no L1 mempool to RBF into, so there's nothing to persist or recover.
 
@@ -107,7 +107,7 @@ So failover state-sharing rides on persistent, signed Redis storage plus L1-deri
 
 - **Parent-chain reorg, revert polling**: if the chain went backward (`nextRevertCheckBlock > blockNum`) it resets to re-check; the >100-block gap warning fast-forwards and skips.
 - **Mempool nonce-gap avoidance**: before sending a transaction of a different type than its predecessor (or whose predecessor isn't yet reorg-resistant), it checks the sender nonce one block back (latest − 1) and, if the nonce exceeds the reorg-resistant count, leaves the transaction queued—`"DataPoster is avoiding creating a mempool nonce gap"`—rather than risk a gap a reorg would expose.
-- **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see also [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting)).
+- **`l1-block-bound`** (`safe`/`finalized`/`latest`/`ignore`) and **`reorg-resistance-margin`** (default 10m) keep batches from referencing L1 blocks that could reorg out (see also [Batch poster troubleshooting](/docs/launch-arbitrum-chain/operate/batch-poster-troubleshooting)).
 
 ## Where state physically lives
 

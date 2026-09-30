@@ -1,21 +1,16 @@
 {
   "title": "Documentation",
   "pages": [
+    "index",
     "get-started",
     "build-decentralized-apps",
     "stylus",
     "arbitrum-essentials",
     "launch-arbitrum-chain",
     "run-a-node",
-    "how-arbitrum-works",
     "arbitrum-bridge",
+    "how-arbitrum-works",
     "notices",
-    "audit-reports",
-    "oracles",
-    "third-party-docs",
-    "chain-info",
-    "glossary",
-    "contribute",
     "..."
   ]
 }

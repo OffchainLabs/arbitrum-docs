@@ -3,13 +3,13 @@
   "root": true,
   "pages": [
     "gentle-introduction",
-    "how-bold-bisection-works",
-    "bold-economics-of-disputes",
     "bold-faq",
     "bold-technical-deep-dive",
-    "[Deploy validator on testnet](https://github.com/offchainlabs/bold-validator-starter-kit)",
-    "[BoLD specification](https://github.com/OffchainLabs/bold)",
-    "[BoLD whitepaper](https://arxiv.org/abs/2404.10491)",
+    "how-bold-bisection-works",
+    "bold-economics-of-disputes",
+    "external:[Deploy a validator on testnet](https://github.com/offchainlabs/bold-validator-starter-kit)",
+    "external:[BoLD Whitepaper](https://arxiv.org/abs/2404.10491)",
+    "external:[Specification on GitHub](https://github.com/OffchainLabs/bold)",
     "..."
   ]
 }

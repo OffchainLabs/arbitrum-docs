@@ -1,31 +1,33 @@
 ---
 title: 'Arbitrum Node Key Rotation Guide'
-description: 'Learn how to rotate keys for the different roles in your Arbitrum chain.'
 sidebar_label: 'Node Key Rotation Guide'
-user_story: As a current or prospective Arbitrum chain deployer and maintainer, I need to learn how to rotate my Arbitrum node keys.
-content_type: 'how-to'
+description: 'Learn how to rotate keys for the different roles in your Arbitrum chain.'
 author: Jason-W123
 sme: Jason-W123
 target_audience: 'Developers deploying and maintaining Arbitrum chains.'
+user_story: As a current or prospective Arbitrum chain deployer and maintainer, I need to learn how to rotate my Arbitrum node keys.
+content_type: how-to
 ---
 
 This guide covers how to rotate keys for different roles in your Arbitrum Orbit chain: batch poster, validator/bonder, and Data Availability Servers (DAS).
 
-<VanillaAdmonition type="warning" title="Important Prerequisites">
+<Callout type="warning" title="Important Prerequisites">
 
 - **Backup**: Always back up your current configuration and private keys before starting
 - **Testing**: Test key rotation on a testnet environment first, if possible
 - **Downtime**: Plan for potential brief service interruptions during the rotation process
 - **Permissions**: Ensure you have the necessary permissions to call the required smart contract functions
 
-</VanillaAdmonition>
+</Callout>
+
 ## 1. Batch poster key rotation
 
-<VanillaAdmonition type="danger" title="Critical warning">
+<Callout type="error" title="Critical warning">
 
-For sequencer nodes running both the sequencer and batch poster on the same server, you **must** first split them and then configure Redis for message synchronization. Failure to do so may cause chain reorganizations. Refer to the [High Availability Sequencer documentation](/docs/run-a-node/high-availability-sequencer-docs) for setup instructions.
+For sequencer nodes running both the sequencer and batch poster on the same server, you **must** first split them and then configure Redis for message synchronization. Failure to do so may cause chain reorganizations. Refer to the [High Availability Sequencer documentation](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer) for setup instructions.
 
-</VanillaAdmonition>
+</Callout>
+
 ### Prerequisites
 
 - A new batch poster account funded with sufficient **ETH** for gas fees
@@ -117,7 +119,7 @@ setValidator([<old_validator_address>], [false])
 
 #### 1. Generate a new keyset
 
-- Follow the [Generate Keyset documentation](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/configure-dac#step-1-generate-the-keyset-and-keyset-hash-with-all-the-information-from-the-servers) with your new group of DAS servers
+- Follow the [Generate Keyset documentation](/docs/launch-arbitrum-chain/chain-config/data-availability/configure-dac#step-1-generate-the-keyset-and-keyset-hash-with-all-the-information-from-the-servers) with your new group of DAS servers
 - Ensure that all new DASs are properly configured and accessible
 
 #### 2. Register the new keyset onchain
@@ -128,11 +130,12 @@ Call the following function on the `SequencerInbox` contract. The caller must be
 setValidKeyset(<new_keyset_bytes>)
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The `setValidKeyset` function takes the raw keyset bytes as its only parameter. The assumed-honest count is encoded within the keyset bytes themselves during keyset generation — it is not a separate contract parameter.
 
-</VanillaAdmonition>
+</Callout>
+
 #### 3. Deploy new DAS servers
 
 - Start the new DAS with the updated configuration
@@ -152,15 +155,16 @@ Once the new DAS servers and keyset are fully verified, you can optionally inval
 invalidateKeysetHash(<old_keyset_hash>)
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 After invalidating the old keyset, you **must** stop and restart the batch poster so it picks up the new keyset. If you skip this step, the batch poster will continue attempting to use the old (now invalid) keyset and fail to submit batches.
 
-</VanillaAdmonition>
-<VanillaAdmonition type="warning">
+</Callout>
+
+<Callout type="warning">
 
 - You can obtain the old keyset hash from the `SetValidKeyset` event that was emitted when the old keyset was originally registered
 - Do **not** invalidate the old keyset until the new keyset is fully verified and the batch poster is successfully posting with the new DAS servers — invalidating prematurely can disrupt data availability for your chain
 - After invalidation, the old keyset can no longer be used to certify data availability certificates
 
-</VanillaAdmonition>
+</Callout>

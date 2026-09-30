@@ -1,7 +1,6 @@
 ---
 title: Gas and fees
 description: 'Learn the fundamentals of how to calculate fees on Arbitrum, including parent chain pricing formulas and child chain gas mechanics.'
-user_story: As a current or prospective Arbitrum user, I need to learn more about gas/fee calculations on Arbitrum.
 content_type: 'concept'
 author: pete-vielhaber
 sme: TucksonDev
@@ -241,7 +240,7 @@ Setting the gas target accurately depends on estimating the time required to val
 
 The total fee charged to a transaction is the child chain basefee multiplied by the sum of the child chain gas used and the parent chain calldata charge.
 
-As on Ethereum, a transaction fails if it does not supply enough gas or specifies a basefee limit below the current basefee. Ethereum also allows a "tip." A Nitro chain ignores that field unless the chain owner enables tip collection, and the tip changes the ordering only under PGA. See [Child chain tips](#child-chain-tips).
+As on Ethereum, a transaction will fail if it does not supply enough gas or specifies a basefee limit below the current basefee. Ethereum also allows a "tip," but Nitro ignores this field and never collects any tips.
 
 ### Allocating funds and paying what is owed
 

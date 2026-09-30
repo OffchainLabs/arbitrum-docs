@@ -2,11 +2,12 @@
 title: 'Docker images and CLI binaries'
 description: 'Nitro Docker image variants, available CLI binaries, entrypoint usage, and Docker Compose examples'
 sidebar_label: 'Docker and CLI binaries'
-user_story: 'As a node operator, I want to know what binaries are available in the Nitro Docker image and how to use them'
 content_type: 'reference'
 author: gzeoneth
 sme: gzeoneth
 ---
+
+{/* sync-with-var: latestNitroNodeImage */}
 
 The Nitro Docker images bundle multiple CLI binaries that serve different roles in the Arbitrum ecosystem. This page documents the image variants, the binaries they contain, and how to override entrypoints to run specific tools.
 
@@ -36,11 +37,11 @@ The `--validation.wasm.allowed-wasm-module-roots` flag tells the node which WASM
 - `/home/user/nitro-legacy/machines` — WASM roots from earlier Nitro versions, needed to validate historical blocks.
 - `/home/user/target/machines` — Current WASM roots shipped with this image version.
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 If you override the entrypoint (for example, `--entrypoint relay`), the default flags are **not** applied. You must pass `--validation.wasm.allowed-wasm-module-roots` manually if the binary you are running requires validation support.
 
-</VanillaAdmonition>
+</Callout>
 
 ### The split validator entrypoint
 

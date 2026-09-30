@@ -1,5 +1,6 @@
 ---
 title: The batch poster
+sidebar_label: Batch poster
 description: 'Learn the fundamentals of the Arbitrum batch poster.'
 user_story: As a current or prospective Arbitrum user, I need to learn more about the batch poster.
 content_type: 'reference'
@@ -19,7 +20,7 @@ A transaction’s journey into the <Term id="batch-poster">batch poster</Term> b
 
 #### 2. The poster decides where it stands
 
-The main loop (`MaybePostSequencerBatch`) first does a safety check (refuse to post if a prior batch reverted), then asks “what batch number and the parent chain nonce am I on?” and establishes the parent chain time/block window the batch will use. That window comes from reading the parent chain SequencerInbox contract’s `MaxTimeVariation`—a read-only handoff out to the parent chain.
+The main loop (`MaybePostSequencerBatch`) first does a safety check (refuse to post if a prior batch reverted), then asks “what batch number and parent chain nonce am I on?” and establishes the parent chain time/block window the batch will use. That window comes from reading the parent chain SequencerInbox contract’s `MaxTimeVariation`—a read-only handoff out to the parent chain.
 
 #### 3. Messages become a compressed batch
 
@@ -48,4 +49,4 @@ Once the parent chain transaction confirms, the transactions cross from the Sequ
 - [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing): how the parent chain pricer reimburses batch posting costs.
 - [Finality and reorgs](/docs/how-arbitrum-works/reference/finality-and-reorgs): what parent chain finality guarantees, and the failure modes around posting.
 - [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol): what the DAC does with the data behind the DA handoff.
-- [Run a batch poster](/docs/run-a-node/run-batch-poster) and [Batch poster troubleshooting](/docs/launch-arbitrum-chain/configuration/sequencer/batch-poster-troubleshooting): the operator view.
+- [Run a batch poster](/docs/run-a-node/run-batch-poster) and [Batch poster troubleshooting](/docs/launch-arbitrum-chain/operate/batch-poster-troubleshooting): the operator view.

@@ -1,11 +1,11 @@
 ---
 title: 'API3'
-description: 'Learn how to query a price feed for your smart contract.'
 sidebar_label: 'API3'
-user_story: As an Arbitrum developer, I want to learn how to use oracles in my app.
+description: 'Learn how to query a price feed for your smart contract.'
 content_type: 'quickstart'
 author: GreatSoshiant
 sme: GreatSoshiant
+user_story: As an Arbitrum developer, I want to learn how to use oracles in my app.
 ---
 
 [API3](https://api3.org/) is a collaborative project to deliver price feeds to smart contract platforms in a decentralized and trust-minimized way. The Price feeds provided by API3 allow apps to regain lost value with Oracle Extractable Value built in to the price feed allowing the ability to earn additional revenue for your app.
@@ -28,9 +28,12 @@ import "@api3/contracts/interfaces/IApi3ReaderProxy.sol";
 
 In this case, we want to obtain the current price of **ARB** in **USD** in Arbitrum One, so we need to know the proxy address that will provide that information. We will search the feed on the API3 Market and connect our wallet. We would then want to see if the feed is active, and if it is, we can check its configuration parameters, deploy the proxy contract and click on `Integrate.` You can find the proxy address of ARB/USD [here](https://market.api3.org/arbitrum?search=ARB%2FUSD).
 
-<VanillaAdmonition type="info">
+<Callout type="info">
+
 If a dAPI is already active, you can use the proxy address directly. If it is not active, you can activate it by clicking on **Activate** and following the instructions to deploy a proxy contract.
-</VanillaAdmonition>
+
+</Callout>
+
 We can now build the function to get the latest price of **ARB**. We’ll use this example contract:
 
 ```solidity
