@@ -66,7 +66,16 @@ const baseSettings = {
   // Keep Inkeep's visitor ID in memory and its functional state in sessionStorage.
   // Both options are required by cxkit-primitives: they control separate storage paths.
   privacyPreferences: { optOutAnalyticalCookies: true, optOutFunctionalCookies: true },
-};
+  // Follow the class next-themes sets on <html>. A selector rather than an element, because
+  // Inkeep resolves it in an effect and this module is also evaluated during the server render.
+  colorMode: {
+    sync: {
+      target: 'html',
+      attributes: ['class'],
+      isDarkMode: (attributes) => /\bdark\b/.test(attributes.class ?? ''),
+    },
+  },
+} satisfies InkeepBaseSettings;
 
 export function useInkeepBaseSettings(): InkeepBaseSettings {
   const posthog = usePostHog();
