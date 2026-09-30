@@ -92,7 +92,7 @@ crate-type = ["lib", "cdylib"]
 - `lib` enables standard Rust imports and testing.
 - `cdylib` produces the WebAssembly binary that gets deployed onchain.
 
-<Callout type="warn">
+<Callout type="warning">
 
 Removing `cdylib` from `crate-type` prevents the contract from compiling to WASM. Removing `lib` prevents running tests and exporting ABI.
 
@@ -190,7 +190,7 @@ targets = ["wasm32-unknown-unknown"]
 | `channel` | Rust compiler version. Used by block explorers for deterministic source verification.                           |
 | `targets` | Must include `wasm32-unknown-unknown` for Stylus contracts. Additional targets can be listed for local testing. |
 
-<Callout type="warn">
+<Callout type="warning">
 
 Changing the Rust version may affect source code verification on block explorers like Arbiscan. Pin to a specific stable version rather than using `stable` or `nightly`.
 

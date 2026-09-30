@@ -1,8 +1,9 @@
 ---
 title: 'How to debug Stylus transactions'
-sidebar_label: 'Debugging transactions'
 description: 'Learn how to debug Stylus transactions using cargo-stylus replay, trace, and usertrace commands, as well as the StylusDB debugger for advanced multi-contract debugging.'
-content_type: 'how-to'
+sidebar_label: 'Debug transactions'
+user_story: 'As a Stylus developer, I want to debug my smart contract transactions so that I can identify and fix issues in my contract logic.'
+content_type: how-to
 author: mahsamoosavi
 sme: mahsamoosavi
 ---
@@ -23,7 +24,7 @@ Cargo Stylus provides several debugging capabilities:
 
 ## Requirements
 
-- **Rust** (version 1.77 or higher)
+- **Rust** (version <Var name="stylusRustToolchain" /> or higher)
 - **cargo-stylus** crate
 - **Debugger**: One of the following:
   - **GDB** (Linux)
@@ -297,7 +298,7 @@ Both tracers are available on local nodes, but `stylusTracer` is more efficient.
 
 ## Limitations
 
-<Callout type="warn" title="Cannot debug deployment or activation transactions">
+<Callout type="warning" title="Cannot debug deployment or activation transactions">
 
 `cargo stylus replay` and `cargo stylus trace` only work on regular Stylus contract calls. They cannot trace contract **deployment** transactions (initial bytecode upload) or **activation** transactions (calls to the `ArbWasm` precompile).
 

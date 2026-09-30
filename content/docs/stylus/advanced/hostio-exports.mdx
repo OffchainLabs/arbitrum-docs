@@ -1,7 +1,7 @@
 ---
 title: 'Hostio exports'
 description: 'Learn about low-level hostio functions for direct VM access in Stylus smart contracts'
-content_type: 'concept'
+content_type: concept
 author: chrisco
 sme: chrisco
 ---
@@ -134,8 +134,8 @@ Writes a 32-byte value to the storage cache. Equivalent to EVM's `SSTORE` opcode
 pub fn storage_cache_bytes32(key: *const u8, value: *const u8);
 ```
 
-<Callout type="warn">
-
+<Callout type="warning">
+  
 Values are cached and must be persisted using `storage_flush_cache` before they're permanently written to storage.
 
 </Callout>
@@ -342,7 +342,7 @@ pub fn delegate_call_contract(
 ) -> u8;
 ```
 
-<Callout type="warn">
+<Callout type="warning">
 
 Delegate calls execute code in the context of the current contract. Be extremely careful when delegate calling to untrusted contracts, as they have full access to your storage.
 
@@ -437,7 +437,7 @@ pub fn emit_log(data: *const u8, len: usize, topics: usize);
 - `len`: Total length of data, including topics
 - `topics`: Number of topics (0-4)
 
-<Callout type="warn">
+<Callout type="warning">
 
 Requesting more than 4 topics will cause a revert.
 
