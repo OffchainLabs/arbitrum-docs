@@ -17,8 +17,9 @@ pnpm content:lint 2>&1
 ```
 
 Reports structural MDX defects: stray `:::` fences left by the old Docusaurus site, malformed
-admonitions, and other hydration-breaking or parser-ambiguous MDX shapes (see the content-lint rules
-in the project's `CLAUDE.md`). Not auto-fixable: each finding is an edit.
+admonitions, Docusaurus habits (`@@var@@`, `data-quicklook-from`, `@site` imports, unregistered
+components) and other hydration-breaking or parser-ambiguous MDX shapes (the rule table is under
+"The content-lint rules" in `INTERNALS.md`). Not auto-fixable: each finding is an edit.
 
 ### 2. Internal links
 
@@ -37,7 +38,8 @@ fails; only anchors created at runtime are outside its reach.
 pnpm references:check 2>&1
 ```
 
-Every `<Term>` / `<ReferenceList>` target resolves to a real `content/glossary/` entry.
+Every `<Term>` (and `<Reference>`) id resolves to a real `content/glossary/` entry, and entry ids
+are unique.
 
 ### 4. Contract addresses
 
@@ -76,18 +78,28 @@ pnpm test 2>&1
 resolution, redirects, variable expansion, and so on), plus `scripts/sidebar.test.ts`, which
 builds the real sidebar tree and fails when a page is on no `meta.json` node or on two.
 
-### 8. TypeScript
+### 8. Frontmatter
+
+```shell
+pnpm frontmatter:check 2>&1
+```
+
+Runs the page schema from `lib/page-schema.ts` over every page under `content/docs` and prints
+`file: field: message` for each violation: a missing `title` or `description`, or a `content_type`
+outside the enum. This is the only offline gate that reads frontmatter; `next build` and `next dev`
+apply the same schema when they compile a page.
+
+### 9. TypeScript
 
 ```shell
 pnpm types:check 2>&1
 ```
 
 Regenerates the `.source/` collection, generates Next types, then runs `tsc --noEmit`. This proves
-the frontmatter schema and the types — it does **not** prove a page renders. Confirm content changes
-in a browser on `http://localhost:3000` (on `127.0.0.1` React does not hydrate and every component
-looks broken).
+the types, not the frontmatter and not the render. Confirm content changes in a browser on
+`http://localhost:3000` (on `127.0.0.1` React does not hydrate and every component looks broken).
 
-### 9. Build
+### 10. Build
 
 ```shell
 pnpm build 2>&1
@@ -101,10 +113,10 @@ fixing findings, then run this once before calling the audit done.
 
 - **Doc manifest audit** (terminology consistency, missing metadata). The frontmatter contract
   (`title` and `description` required; `sidebar_label`, `content_type`, `author`, `sme` optional) is
-  enforced at build time by the Zod schema in `source.config.ts`, which fails `types:check` on a
-  missing or invalid field. There is no `user_story` or `draft` field in this schema, so don't add
-  one when scaffolding a page. Terminology consistency itself is a `STYLE-GUIDE.md` review-time rule,
-  not a gate.
+  the Zod schema in `lib/page-schema.ts`, enforced by `pnpm frontmatter:check` (step 8) and by the
+  build. `types:check` does not see it. There is no `user_story` or `draft` field in this schema, so
+  don't add one when scaffolding a page. Terminology consistency itself is a `STYLE-GUIDE.md`
+  review-time rule, not a gate.
 
 ## Output format
 
@@ -120,6 +132,7 @@ Produce a summary table first, then details per check:
 | Variables          | PASS/FAIL | N unresolved    |
 | Formatting         | PASS/FAIL | N unformatted   |
 | Tests              | PASS/FAIL | N failures      |
+| Frontmatter        | PASS/FAIL | N violations    |
 | TypeScript         | PASS/FAIL | N errors        |
 | Build              | PASS/FAIL | N errors        |
 ```

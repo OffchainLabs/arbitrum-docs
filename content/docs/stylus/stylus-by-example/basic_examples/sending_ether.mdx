@@ -10,8 +10,6 @@ sme: gblanchemain
 
 {/* Begin Content */}
 
-# Sending Ether
-
 We have three main ways to send Ether in Rust Stylus: using the `transfer_eth` method, using low level `call` method, and sending value while calling an external contract.
 
 It's important to note that the `transfer_eth` method in Rust Stylus invokes the recipient contract, which may subsequently call other contracts. All the gas is supplied to the recipient, which it may burn. Conversely, the transfer method in Solidity is capped at 2300 gas. In Rust Stylus, you can cap the gas by using the low-level call method with a specified gas. An example of this is provided in the code on bottom of the page.

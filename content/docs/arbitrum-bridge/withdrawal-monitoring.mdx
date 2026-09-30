@@ -9,7 +9,7 @@ content_type: how-to
 
 This page is intended for chain operators and integration partners (exchanges, bridges, infrastructure providers) who need to track withdrawals programmatically and be alerted when one gets stuck. To trace a single transaction end to end, see [Tracing bridge transactions](/docs/arbitrum-bridge/bridge-transaction-traceability). To initiate withdrawals from code, see [Withdraw ETH and messages](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages). To learn the protocol-level background, see [Child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging).
 
-A withdrawal from an Arbitrum chain is a <Term id="child-chain">child chain</Term>-to-<Term id="parent-chain">parent chain</Term> message that passes through several protocol stages before funds are claimable. Most "where is my withdrawal?" questions come down to not knowing which stage a withdrawal is in, or how long each stage is expected to take on a given chain. This guide maps the lifecycle to observable onchain state and to the [`@arbitrum/sdk`](https://github.com/OffchainLabs/arbitrum-sdk) status model, gives expected timelines per chain type, and shows how to diagnose a withdrawal that gets stuck.
+A withdrawal from an Arbitrum chain is a <Term id="child-chain">child chain</Term>-to-<Term id="parent-chain">parent chain</Term> message that passes through several protocol stages before funds are claimable. Most "where is my withdrawal?" questions come down to not knowing which stage a withdrawal is in, or how long each stage is expected to take on a given chain. This guide maps the lifecycle to observable onchain state and to the [`@arbitrum/sdk`](https://github.com/OffchainLabs/arbitrum-sdk) status model, gives expected timelines per chain type, and provides tested code for monitoring one withdrawal or indexing many.
 
 ## The withdrawal lifecycle
 
@@ -62,7 +62,7 @@ Additional timing facts your alerting thresholds should account for:
 
 A withdrawal from an <Term id="layer-3-l3">L3</Term> (an Arbitrum chain that settles on Arbitrum One or another child chain) to Ethereum is **two sequential child-to-parent withdrawals**: L3 → L2, then L2 → L1. Each leg has its own challenge period—by default <Var name="arbOneDisputeWindowBlocks" /> parent chain blocks (≈ <Var name="arbOneDisputeWindowDays" /> days) per leg on mainnet configurations—and each leg's claim must execute before the next leg can begin. The worst case with default settings is therefore roughly two weeks end to end.
 
-Monitor each leg independently with the code in this guide, pointing the provider pair at the relevant chains (L3 + L2 for the first leg, L2 + L1 for the second).
+Monitor each leg independently with the same code from this guide, pointing the provider pair at the relevant chains (L3 + L2 for the first leg, L2 + L1 for the second).
 
 Chain operators have three options for reducing the delay:
 
@@ -74,7 +74,7 @@ Chain operators have three options for reducing the delay:
 
 ## Monitor withdrawals with the SDK
 
-The [`@arbitrum/sdk`](https://github.com/OffchainLabs/arbitrum-sdk) (v4, ethers v5) exposes the lifecycle through `ChildToParentMessage` objects and the `ChildToParentMessageStatus` enum, whose three values match the lifecycle table above: `UNCONFIRMED` (0), `CONFIRMED` (1), and `EXECUTED` (2). The SDK handles both current (BoLD) and legacy assertion models automatically, so the same code works across chains. For the base pattern of getting these message objects from a transaction receipt and executing a claim, see [Using the Arbitrum SDK](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#using-the-arbitrum-sdk).
+The [`@arbitrum/sdk`](https://github.com/OffchainLabs/arbitrum-sdk) (v4, ethers v5) exposes the lifecycle through `ChildToParentMessage` objects and the `ChildToParentMessageStatus` enum, whose three values match the lifecycle table above: `UNCONFIRMED` (0), `CONFIRMED` (1), and `EXECUTED` (2). The SDK handles both current (BoLD) and legacy assertion models automatically, so the same code works across chains.
 
 Arbitrum One, Nova, and Arbitrum Sepolia are pre-registered in the SDK. For any other Arbitrum chain, register it first—all required parameters can be derived from the chain's Rollup contract address:
 
@@ -97,7 +97,7 @@ registerCustomArbitrumNetwork({
 });
 ```
 
-### Check the status of a withdrawal and estimate a countdown
+### Check the status of a withdrawal
 
 Given the withdrawal's child chain transaction hash:
 
@@ -128,7 +128,47 @@ async function main() {
 main();
 ```
 
-`getFirstExecutableBlock()` returns an estimate of the parent chain block at which the message becomes claimable (based on the covering assertion's creation block plus the challenge period), or `null` once the message is already `CONFIRMED` or `EXECUTED`. Comparing it against the parent chain's current block number gives you a countdown you can surface to users—the same countdown the bridge UI shows. Once the message reaches `CONFIRMED`, follow [Using the Arbitrum SDK](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages#using-the-arbitrum-sdk) to execute the claim.
+`getFirstExecutableBlock()` returns an estimate of the parent chain block at which the message becomes claimable (based on the covering assertion's creation block plus the challenge period), or `null` once the message is already `CONFIRMED` or `EXECUTED`. Comparing it against the parent chain's current block number gives you a countdown you can surface to users—the same countdown the bridge UI shows.
+
+### Wait for confirmation and execute the claim
+
+`waitUntilReadyToExecute()` polls until the message leaves `UNCONFIRMED`, then returns the terminal status. A `ChildToParentMessageWriter` (obtained by passing a parent chain _signer_ instead of a provider) can then execute the claim:
+
+```ts
+import { providers, Wallet } from 'ethers';
+import { ChildTransactionReceipt, ChildToParentMessageStatus } from '@arbitrum/sdk';
+
+const withdrawalTxHash = WITHDRAWAL_TX_HASH;
+
+const parentProvider = new providers.JsonRpcProvider(PARENT_RPC_URL);
+const childProvider = new providers.JsonRpcProvider(CHILD_RPC_URL);
+const parentSigner = new Wallet(PRIVATE_KEY, parentProvider);
+
+async function main() {
+  const receipt = await childProvider.getTransactionReceipt(withdrawalTxHash);
+  const childReceipt = new ChildTransactionReceipt(receipt);
+
+  // Passing a signer yields ChildToParentMessageWriter instances, which can execute claims
+  const messages = await childReceipt.getChildToParentMessages(parentSigner);
+  const message = messages[0];
+
+  // Polls every 30 seconds until the message leaves UNCONFIRMED.
+  // On a chain with a live challenge period this call blocks for days —
+  // use it in a worker, or poll status() on your own schedule instead.
+  const status = await message.waitUntilReadyToExecute(childProvider, 30 * 1000);
+
+  if (status === ChildToParentMessageStatus.CONFIRMED) {
+    const executeTx = await message.execute(childProvider);
+    const executeReceipt = await executeTx.wait();
+    console.log('Claim executed on parent chain:', executeReceipt.transactionHash);
+  } else {
+    console.log('Message already executed');
+  }
+}
+main();
+```
+
+Under the hood, `execute()` fetches the Merkle proof from the [`NodeInterface`](/docs/arbitrum-essentials/nodeinterface/reference) and calls `Outbox.executeTransaction()` on the parent chain. It throws if the message isn't `CONFIRMED` yet. If you need the proof itself (for example, to execute through your own contracts), call `message.getOutboxProof(childProvider)`.
 
 ### Index many withdrawals
 
@@ -170,7 +210,7 @@ For a production monitor, a practical pattern is:
 
 ## Query assertion and outbox state onchain
 
-If you prefer raw contract calls—or want to monitor the assertion pipeline itself rather than individual messages—the same lifecycle is observable from three contracts: the `ArbSys` precompile on the child chain, and the Rollup and Outbox contracts on the parent chain. This differs from [tracing a withdrawal to its execution transaction](/docs/arbitrum-bridge/bridge-transaction-traceability#tracing-withdrawals-from-child-chain-to-parent-chain): the snippet below checks every stage for one withdrawal, which is useful for building an alerting dashboard rather than answering "which parent-chain transaction executed this."
+If you prefer raw contract calls—or want to monitor the assertion pipeline itself rather than individual messages—the same lifecycle is observable from three contracts: the `ArbSys` precompile on the child chain, and the Rollup and Outbox contracts on the parent chain. The following snippet checks every stage for one withdrawal:
 
 ```ts
 import { providers, Contract } from 'ethers';
@@ -265,7 +305,7 @@ Ethereum consensus nodes are required to serve blob data for only 4,096 epochs (
 ## See also
 
 - [Tracing bridge transactions](/docs/arbitrum-bridge/bridge-transaction-traceability) — follow a single deposit or withdrawal end to end
-- [Withdraw ETH and messages](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages) and [Withdraw tokens](/docs/arbitrum-essentials/bridging/withdraw/tokens) — initiating withdrawals and executing claims
+- [Withdraw ETH and messages](/docs/arbitrum-essentials/bridging/withdraw/eth-and-messages) and [Withdraw tokens](/docs/arbitrum-essentials/bridging/withdraw/tokens) — initiating withdrawals
 - [Child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging) and [Assertions](/docs/how-arbitrum-works/deep-dives/assertions) — protocol deep dives
 - [Fast withdrawals](/docs/launch-arbitrum-chain/chain-config/validation/fast-withdrawals) and [Customizable challenge period](/docs/launch-arbitrum-chain/chain-config/validation/challenge-period) — chain owner configuration
 - [Monitoring tools for your chain](/docs/launch-arbitrum-chain/operate/monitoring) — the `arbitrum-monitoring` alerting suite

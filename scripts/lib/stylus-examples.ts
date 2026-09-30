@@ -8,6 +8,7 @@
  * Ported from the content-transformation half of arbitrum-docs `scripts/sync-stylus-content.js`.
  */
 import { extractRefs } from './doc-links.ts';
+import { assertInertMdx } from './generated-partial.ts';
 
 /** What {@link parseObjectLiteral} can return: JSON's value space, nothing more. */
 export type JsonValue = string | number | boolean | null | JsonValue[] | JsonObject;
@@ -80,9 +81,14 @@ const NUMBER = /-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/y;
  * Every other token stops the run: an identifier that is not a keyword, a template literal, a
  * parenthesis, an operator, a comment. There is no fallback to evaluation.
  *
- * The literal comes out of a third-party repository that this generator clones unpinned, on a
- * maintainer's own machine whenever they run `pnpm stylus:generate`. Cloning a repository copies bytes; evaluating one of them runs them, at
+ * The literal comes out of a third-party repository, cloned at the commit pinned in
+ * `scripts/data/stylus-examples.data.ts`, on a maintainer's own machine whenever they run
+ * `pnpm stylus:generate`. Cloning a repository copies bytes; evaluating one of them runs them, at
  * whatever privilege the run has. Reading them as data is the whole point here.
+ *
+ * That covers the metadata only. The rest of the page is published as MDX, which the site's build
+ * compiles and runs, so {@link buildPage} refuses a body that holds any `import`, `export`, `{…}`
+ * expression or JSX element other than the generator's own `<include>` (see `assertInertMdx`).
  *
  * @param text the literal, starting at `{` or `[`
  * @param context a path, for the error message
@@ -406,7 +412,9 @@ export function buildPage({
   baseUrl,
   include,
 }: BuildPageOptions): { content: string; metadata: StylusMetadata; banner: boolean } {
-  const metadata = parseMetadata(source, context);
+  const parsed = parseMetadata(source, context);
+  const heading = findBodyHeading(source);
+  const metadata = { ...parsed, title: titleFor(parsed.title, heading?.text) };
   const frontmatter = renderFrontmatter(metadata, frontmatterDefaults);
 
   // Replacing the metadata export in place, rather than rebuilding the file around the body,
@@ -414,10 +422,97 @@ export function buildPage({
   // exactly where upstream put it.
   // A callback inserts literal text: a replacement string would expand `$1`, `$$`, etc.
   let content = source.replace(METADATA_PATTERN, () => `${frontmatter}\n\n${marker}`);
+  content = stripBodyHeading(content);
   content = rewriteRelativeLinks(content, { sections, baseUrl, context });
 
   const banner = insertNotForProductionBanner(content, include);
+  assertStaticBody(banner.content, { context, include });
   return { content: banner.content, metadata, banner: banner.inserted };
+}
+
+/** The title suffix upstream puts on every page. */
+const TITLE_SUFFIX = ' • Stylus by Example';
+
+/**
+ * Upstream's `page.mdx` opens its body with a `# Heading`. The docs page already renders the
+ * frontmatter title as the `<h1>`, so the body heading would be a second one (screen readers and
+ * search snippets get two top-level headings). The first `# ` line before any code fence is the
+ * one to drop; a `# ` inside a fence is a shell comment and stays.
+ */
+export function findBodyHeading(source: string): { text: string; index: number } | undefined {
+  const firstFence = source.search(/^(```|~~~)/m);
+  const match = /^# (.+?)\s*$/m.exec(source);
+  if (!match || (firstFence !== -1 && match.index > firstFence)) return undefined;
+  return { text: match[1], index: match.index };
+}
+
+/**
+ * Remove the body heading {@link findBodyHeading} finds, and the blank line after it. Any later
+ * `# ` heading outside a fence (three upstream pages head their listing "Full Example code:")
+ * becomes `## `, so the page keeps one `<h1>`.
+ */
+export function stripBodyHeading(content: string): string {
+  const heading = findBodyHeading(content);
+  const stripped = heading ? removeLine(content, heading.index) : content;
+  return demoteBodyHeadings(stripped);
+}
+
+function removeLine(content: string, index: number): string {
+  const lineEnd = content.indexOf('\n', index);
+  const end = lineEnd === -1 ? content.length : lineEnd + 1;
+  const after = content.startsWith('\n', end) ? end + 1 : end;
+  return content.slice(0, index) + content.slice(after);
+}
+
+/** `# ` to `## ` on every line outside a code fence. */
+function demoteBodyHeadings(content: string): string {
+  let inFence = false;
+  return content
+    .split('\n')
+    .map((line) => {
+      if (/^(```|~~~)/.test(line)) inFence = !inFence;
+      return !inFence && /^# /.test(line) ? `#${line}` : line;
+    })
+    .join('\n');
+}
+
+/**
+ * The page title, from the body heading when the two disagree. Upstream's `abi_decode` page, for
+ * example, carries the metadata title "ABI Encode" over a body headed "ABI Decode"; readers saw
+ * the heading, so the heading wins. Only titles that carry upstream's suffix are corrected, and
+ * the suffix is kept.
+ */
+export function titleFor(metadataTitle: string, heading: string | undefined): string {
+  if (!heading || !metadataTitle.endsWith(TITLE_SUFFIX)) return metadataTitle;
+  const base = metadataTitle.slice(0, -TITLE_SUFFIX.length);
+  return base === heading ? metadataTitle : `${heading}${TITLE_SUFFIX}`;
+}
+
+/** The frontmatter block {@link renderFrontmatter} writes, at the top of a built page. */
+const FRONTMATTER_BLOCK = /^---\n[\s\S]*?\n---\n/;
+
+/**
+ * Throw unless a built page's MDX body is content rather than code.
+ *
+ * Upstream's body is copied through verbatim, and an `export`, an `{expression}` or a component in
+ * it would run in this site's build and in every reader's browser. The upstream pages are plain
+ * markdown with Rust in code fences, so the rule costs nothing today. The allowed JSX is exactly
+ * the element the generator inserts itself (the `<include>` directive); comment-only expressions
+ * such as the do-not-edit marker and upstream's `{/* Begin Content *\/}` compile to nothing and
+ * pass. The frontmatter is YAML, not MDX, so it is split off first and the reported line numbers
+ * count from the top of the generated page.
+ */
+export function assertStaticBody(
+  content: string,
+  { context, include }: { context: string; include: string },
+): void {
+  const frontmatter = FRONTMATTER_BLOCK.exec(content)?.[0] ?? '';
+  const includeElement = /^<([A-Za-z][\w.-]*)/.exec(include)?.[1];
+  assertInertMdx(content.slice(frontmatter.length), {
+    context: `${context} (line numbers are in the generated page)`,
+    allowedElements: includeElement ? [includeElement] : [],
+    lineOffset: frontmatter.split('\n').length - 1,
+  });
 }
 
 /**

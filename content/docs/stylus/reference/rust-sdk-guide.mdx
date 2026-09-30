@@ -82,7 +82,7 @@ The above will expand to the equivalent definitions in Rust, each structure impl
 
 Because the layout is identical to [Solidity’s](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html), existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
-<Callout type="warning" title="Storage layout in contracts using inheritance">
+<Callout type="warn" title="Storage layout in contracts using inheritance">
 
 One exception to this storage layout guarantee is contracts which utilize inheritance. The current solution in Stylus using `#[borrow]` and `#[inherits(...)]` packs nested (inherited) structs into their own slots. This is consistent with regular struct nesting in solidity, but not inherited structs. We plan to revisit this behavior in an upcoming release.
 
@@ -266,7 +266,7 @@ The above will make the public methods of `Contract` the first to consider durin
 
 If a contract calls another that then calls the first, it is said to be reentrant. Stylus contracts are reentrancy-safe by default: the high-level call functions ([`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html), [`static_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html), and [`delegate_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html)) automatically flush or clear the storage cache before invoking another contract, so cached values can't go stale across reentry. This happens through the type system and requires no configuration.
 
-<Callout type="warning">
+<Callout type="warn">
 
 The `reentrant` Cargo feature flag and the `deny_reentrant` entrypoint guard are deprecated as of SDK 0.10.5 and should not be used. Reentrancy safety now comes from automatic storage-cache flushing, which makes the guard redundant.
 
@@ -305,7 +305,7 @@ Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint
 
 Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the **ERC-20**, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
 
-<Callout type="warning">
+<Callout type="warn">
 
 Stylus does not currently contain explicit `override` or `virtual` keywords for explicitly marking override functions. It is important, therefore, to carefully ensure that contracts are only overriding the functions.
 

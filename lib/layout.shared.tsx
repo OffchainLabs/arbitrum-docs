@@ -13,7 +13,6 @@ export function baseOptions(): BaseLayoutProps {
         <>
           {/* The Arbitrum mark is four-colour (navy/blue/light-blue/white), so it
               cannot be a currentColor component. One file serves light and dark. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/img/logo.svg" alt="" width={18} height={20} className="h-5 w-auto" />
           {appName}
         </>

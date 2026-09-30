@@ -151,10 +151,21 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
   });
 });
 
+/** Fenced blocks and inline code removed: a code sample may show a component's source on purpose. */
+const prose = (markdown: string): string =>
+  markdown
+    .replace(/^([ \t]*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1\2[ \t]*$/gm, '')
+    .replace(/(`+)[^`\n][\s\S]*?\1/g, '');
+/** Components `lib/llms-markdown.ts` turns into markdown; none may reach a mirror as a tag. */
+const COMPONENT_TAG =
+  /<(Var|Term|Callout|AEL|Card|Cards|Accordion|Accordions|Tab|Tabs|ImageZoom)\b/;
+
 test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => {
   const noComments = (body: string, path: string): void => {
     assert.ok(body.length > 0, path);
     assert.equal(body.includes('{/*'), false, `${path} still serves an MDX comment`);
+    const leak = prose(body).match(COMPONENT_TAG)?.[0];
+    assert.equal(leak, undefined, `${path} still serves the component tag ${leak}`);
   };
 
   await t.test('a page mirror is clean and still carries its prose', async () => {
@@ -165,6 +176,14 @@ test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => 
       noComments(body, path);
       assert.match(body, /Arbitrum documentation/, path);
     }
+  });
+
+  await t.test('a mirror with variables and glossary terms prints values and words', async () => {
+    const path = '/docs/arbitrum-essentials/reference/chain-params.md';
+    const response = await get(path);
+    assert.equal(response.status, 200, path);
+    assert.match(response.headers.get('content-type') ?? '', /charset=utf-8/i, path);
+    noComments(await response.text(), path);
   });
 
   await t.test('llms-full.txt is clean site-wide', async () => {
@@ -292,5 +311,92 @@ test('the contribute guide links back into this repository', { skip: !baseUrl },
 
   await t.test('no placeholder survived into the rendered page', () => {
     assert.ok(!html.includes('{var:'), 'a {var:…} placeholder reached the reader unexpanded');
+  });
+});
+
+test('legacy URLs, headers and the llms index', { skip: !baseUrl }, async (t) => {
+  const location = async (path: string): Promise<[number, string | null]> => {
+    const response = await get(path, { redirect: 'manual' });
+    await response.text();
+    return [response.status, response.headers.get('location')];
+  };
+
+  await t.test('a master page URL and its .md mirror answer 308 into /docs', async () => {
+    for (const [path, target] of [
+      ['/how-arbitrum-works/deep-dives/stf', '/docs/how-arbitrum-works/deep-dives/stf'],
+      ['/how-arbitrum-works/deep-dives/stf.md', '/docs/how-arbitrum-works/deep-dives/stf.md'],
+      ['/index.md', '/docs.md'],
+    ]) {
+      const [status, to] = await location(path);
+      assert.equal(status, 308, path);
+      assert.equal(new URL(to ?? '', baseUrl).pathname, target, path);
+    }
+  });
+
+  await t.test('a hashed Docusaurus PDF URL lands on the audit report', async () => {
+    const [status, to] = await location(
+      '/assets/files/2022_03_14_trail_of_bits_security_audit_nitro_1_of_2-d777111730bd602222978f7d98713d40.pdf',
+    );
+    assert.equal(status, 308);
+    const target = new URL(to ?? '', baseUrl).pathname;
+    assert.equal(target, '/audit-reports/2022_03_14_trail_of_bits_security_audit_nitro_1_of_2.pdf');
+    const pdf = await get(target);
+    assert.equal(pdf.status, 200);
+    await pdf.arrayBuffer();
+  });
+
+  await t.test('the root sends the discovery Link header and no X-Powered-By', async () => {
+    const response = await get('/');
+    await response.text();
+    assert.match(response.headers.get('link') ?? '', /<\/llms\.txt>; rel="service-doc"/);
+    assert.equal(response.headers.get('x-powered-by'), null);
+    assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(response.headers.get('x-frame-options'), 'DENY');
+    assert.ok(response.headers.get('content-security-policy-report-only'));
+  });
+
+  await t.test('the markdown surface is readable cross-origin', async () => {
+    for (const path of ['/llms.txt', '/llms-full.txt', '/docs.md', `${livePath}.md`, liveMirror]) {
+      const response = await get(path);
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get('access-control-allow-origin'), '*', path);
+      await response.text();
+    }
+  });
+
+  await t.test('llms.txt has master title and summary and links each mirror once', async () => {
+    const body = await (await get('/llms.txt')).text();
+    assert.match(body, /^# Arbitrum Documentation\n\n> Official documentation/);
+    const links = [...body.matchAll(/\]\((\/docs[^)]*)\)/g)].map((m) => m[1]);
+    assert.ok(links.length > 100);
+    assert.deepEqual(
+      links.filter((l) => !l.endsWith('.md')),
+      [],
+    );
+    assert.equal(new Set(links).size, links.length);
+  });
+
+  await t.test('the mirror route 404s for paths it did not prerender', async () => {
+    for (const path of ['/llms.mdx/docs/zz-junk/content.md', `/llms.mdx${livePath}/other.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
+  });
+});
+
+test('page weight', { skip: !baseUrl }, async (t) => {
+  await t.test('a plain docs page links exactly three stylesheets', async () => {
+    // INTERNALS.md#page-weight-and-what-loads-late: a plain `.css` import in a component that
+    // `components/mdx.tsx` reaches adds a render-blocking stylesheet to every docs page.
+    for (const path of ['/docs/stylus', livePath]) {
+      const html = documentOnly(await head(path));
+      const sheets = [...html.matchAll(/<link\b[^>]*\brel="stylesheet"[^>]*>/g)].map((m) => m[0]);
+      assert.equal(
+        sheets.length,
+        3,
+        `${path} links ${sheets.length} stylesheets:\n${sheets.join('\n')}`,
+      );
+    }
   });
 });

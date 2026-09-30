@@ -73,7 +73,11 @@ MALLOC_ARENA_MAX=2
 
 Setting `MALLOC_ARENA_MAX=2` caps glibc to two arenas, reducing worst-case arena overhead from gigabytes to ~128 MB. In testing, this eliminated the slow memory growth with no measurable performance impact on RPC throughput.
 
-<Callout type="warn">Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.</Callout>
+<Callout type="warn">
+
+Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.
+
+</Callout>
 
 ### Thread stacks
 
@@ -227,7 +231,11 @@ http://<metrics-server.addr>:<metrics-server.port>/debug/metrics/prometheus
 | `arb_feed_backlog_messages` | Number of messages in the feed backlog. A growing backlog indicates the node is falling behind the sequencer feed. |
 | Batch poster backlog        | For batch poster nodes, tracks how many batches are pending submission to the parent chain.                        |
 
-<Callout type="idea">Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.</Callout>
+<Callout type="idea">
+
+Always alert on `container_memory_rss`, not Go heap metrics. As described in [Memory allocators in Nitro](#memory-allocators-in-nitro), most of Nitro's memory is invisible to Go's runtime.
+
+</Callout>
 
 ### Kubernetes ServiceMonitor
 

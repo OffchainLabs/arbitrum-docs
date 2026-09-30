@@ -55,11 +55,11 @@ jobs:
       - name: Regenerate the CLI flags page
         run: pnpm cli:generate
 
-      # zizmor: ignore[superfluous-actions]
       # zizmor suggests `gh pr create`, which would mean hand-rolling the branch/commit/push
-      # plumbing. create-pull-request does all of that.
+      # plumbing. create-pull-request does all of that. The ignore comment sits on the `uses:`
+      # line because zizmor only honours one inside the finding's span.
       - name: Open a pull request
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1 # zizmor: ignore[superfluous-actions]
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: automated/nitro-bump

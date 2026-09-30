@@ -21,6 +21,11 @@ export function PostHogProvider({ children }: { children: ReactNode }) {
         persistence: 'memory',
         disable_session_recording: true,
         advanced_disable_flags: true,
+        // Surveys, product tours and conversations load remote scripts configured from the PostHog
+        // dashboard, outside code review. The site uses none of them.
+        disable_surveys: true,
+        disable_product_tours: true,
+        disable_conversations: true,
         capture_pageview: { path: true, search: true },
       }}
     >

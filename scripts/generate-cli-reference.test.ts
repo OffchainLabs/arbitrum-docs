@@ -12,6 +12,7 @@ import path from 'node:path';
 import { after, before, describe, it } from 'node:test';
 
 import {
+  UnrepresentableCellError,
   codeCell,
   escapeCell,
   groupByNamespace,
@@ -20,6 +21,7 @@ import {
 } from './lib/cli-reference-page.ts';
 import {
   type GoTree,
+  goFiles,
   indexGoTree,
   literalFields,
   splitArgs,
@@ -154,6 +156,28 @@ function readFixtureFlags() {
     },
   });
 }
+
+describe('go-source symlinks (review 09.16)', () => {
+  it('refuses a symlinked .go file and skips a symlinked directory', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'go-symlink-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'go-symlink-outside-'));
+    t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+    fs.writeFileSync(path.join(outside, 'secret.go'), 'package secret\n');
+    fs.mkdirSync(path.join(root, 'pkg'));
+    fs.writeFileSync(path.join(root, 'pkg', 'real.go'), 'package pkg\n');
+    fs.symlinkSync(outside, path.join(root, 'linked-dir'));
+
+    assert.deepEqual(goFiles(root), [path.join(root, 'pkg', 'real.go')]);
+
+    fs.symlinkSync(path.join(outside, 'secret.go'), path.join(root, 'pkg', 'linked.go'));
+    assert.throws(() => goFiles(root), /pkg\/linked\.go is a symlink/);
+    assert.throws(
+      () => indexGoTree([{ modulePath: MODULE, dir: '', absDir: root }]),
+      /linked\.go is a symlink/,
+    );
+  });
+});
 
 describe('go-source', () => {
   it('strips comments without letting an apostrophe open a literal', () => {
@@ -385,6 +409,30 @@ describe('page rendering', () => {
 
   it('escapes only the pipe inside a code span, where the rest would be literal text', () => {
     assert.equal(codeCell('a|b <c> {d}'), '`a\\|b <c> {d}`');
+  });
+
+  it('escapes a bare pipe in a code cell: `a|b`', () => {
+    assert.equal(codeCell('a|b'), '`a\\|b`');
+  });
+
+  it('refuses a backslash before a pipe, which no code cell can hold (review 09.5, 08.8)', () => {
+    assert.throws(
+      () => codeCell('a\\|b'),
+      (error: unknown) =>
+        error instanceof UnrepresentableCellError &&
+        error.name === 'UnrepresentableCellError' &&
+        error.message.includes('scripts/data/nitro-cli-reference.data.ts') &&
+        error.message.includes('defaultOverrides'),
+    );
+    // The review's proof of concept: the default that split the cell and ran the expression.
+    assert.throws(
+      () => codeCell('x\\|{globalThis.pwned = "from-default", "LIVE"}'),
+      UnrepresentableCellError,
+    );
+  });
+
+  it('keeps a backslash that is not before a pipe', () => {
+    assert.equal(codeCell('C:\\dir | x\\'), '`C:\\dir \\| x\\`');
   });
 
   it('widens the fence around a value that contains backticks', () => {

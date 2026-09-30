@@ -1,9 +1,10 @@
-import { metaSchema, pageSchema } from 'fumadocs-core/source/schema';
+import { metaSchema } from 'fumadocs-core/source/schema';
 import { defineCollections, defineConfig, defineDocs } from 'fumadocs-mdx/config';
 import { execFileSync } from 'node:child_process';
-import { z } from 'zod';
 
+import { llmsStringify } from './lib/llms-markdown.ts';
 import { mdxOptions } from './lib/mdx-options.ts';
+import { arbitrumPageSchema } from './lib/page-schema';
 import { referenceSchema } from './lib/reference-schema';
 
 // A shallow clone reports its oldest commit as adding every file, which would stamp most pages
@@ -26,19 +27,6 @@ function hasFullGitHistory(): boolean {
 // the fallback is a resolver that returns no date.
 const lastModified = hasFullGitHistory() ? true : async () => undefined;
 
-// Every page needs a title and a description; `sidebar_label` and `content_type` are optional.
-// `content_type` is an editorial label nothing renders, kept to one enum so values stay comparable.
-const arbitrumPageSchema = pageSchema.extend({
-  title: z.string().trim().min(1),
-  description: z.string().trim(),
-  sidebar_label: z.string().trim().optional(),
-  content_type: z
-    .enum(['how-to', 'concept', 'quickstart', 'tutorial', 'reference', 'troubleshooting', 'faq'])
-    .optional(),
-  author: z.string().optional(),
-  sme: z.string().optional(),
-});
-
 /**
  * Partials live in `content/partials/`, outside the doc collection `dir`, so they can never be
  * routed and need no glob exclusion here. Pages inline them with `<include cwd>…</include>`.
@@ -48,7 +36,8 @@ export const docs = defineDocs({
   docs: {
     schema: arbitrumPageSchema,
     postprocess: {
-      includeProcessedMarkdown: true,
+      // The markdown mirrors and llms-full.txt: components read as markdown (lib/llms-markdown.ts).
+      includeProcessedMarkdown: { stringify: llmsStringify },
     },
     lastModified,
   },

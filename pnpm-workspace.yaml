@@ -1,2 +1,16 @@
+# Dependency lifecycle scripts. pnpm 10 runs none by default. Every package that ships one is
+# listed here as an explicit decision, and strictDepBuilds fails the install when a new one
+# appears, instead of printing a warning that scrolls past.
+# - esbuild: its postinstall checks the platform binary and downloads one from npm only when
+#   the matching @esbuild/<platform> optional dependency is missing. pnpm installs that
+#   package, so the script has nothing to do.
+# - core-js: its postinstall only prints a funding banner. Pulled in by posthog-js.
 ignoredBuiltDependencies:
+  - core-js
   - esbuild
+strictDepBuilds: true
+
+# Refuse to resolve any version published less than 7 days ago (the value is in minutes). It
+# matches Dependabot's 7-day cooldown in .github/dependabot.yml and also covers a hand-run
+# `pnpm add` or `pnpm update`. `--frozen-lockfile` installs are unaffected: they resolve nothing.
+minimumReleaseAge: 10080

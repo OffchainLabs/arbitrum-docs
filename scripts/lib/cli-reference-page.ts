@@ -64,6 +64,24 @@ export function escapeCell(text: string): string {
 }
 
 /**
+ * Thrown by {@link codeCell} for a value holding a backslash directly before a pipe, which a
+ * table code cell cannot hold. The fix is editorial, not a code change here.
+ */
+export class UnrepresentableCellError extends Error {
+  constructor(text: string) {
+    super(
+      `codeCell: ${JSON.stringify(text)} contains a backslash directly before a pipe (\\|), ` +
+        `which a markdown table code cell cannot represent: it would split the cell and publish ` +
+        `the rest of the value as MDX. If this is a flag's default, add the flag to ` +
+        `defaultOverrides in scripts/data/nitro-cli-reference.data.ts with a hand-declared ` +
+        `default that has no backslash before a pipe. If it is a flag name, exclude the flag in ` +
+        `that file.`,
+    );
+    this.name = 'UnrepresentableCellError';
+  }
+}
+
+/**
  * Wrap a value in a code span, escaping only what a code span needs.
  *
  * `escapeCell` is for the prose columns and would be wrong here: inside a code span a backslash
@@ -72,12 +90,18 @@ export function escapeCell(text: string): string {
  * backslash, because GFM splits a table row on unescaped pipes before any inline parsing happens.
  * The fence widens past any backtick run in the value, and a value that starts or ends with a
  * backtick gets the padding space CommonMark strips back off.
+ *
+ * A backslash directly before a pipe has no safe spelling here. Written as `\\|`, GFM reads an
+ * escaped backslash and then a bare pipe, which splits the cell and parses the rest of the value
+ * as MDX, outside the code span. Doubling the backslash does not help, because inside a code span
+ * a backslash is literal. So the value is refused with {@link UnrepresentableCellError}.
  */
 export function codeCell(text: string): string {
+  if (text.includes('\\|')) throw new UnrepresentableCellError(text);
   const longest = (text.match(/`+/g) ?? []).reduce((n, run) => Math.max(n, run.length), 0);
   const fence = '`'.repeat(longest + 1);
   const pad = text.startsWith('`') || text.endsWith('`') ? ' ' : '';
-  return `${fence}${pad}${text.replace(/\\/g, '\\\\').replace(/\|/g, '\\|')}${pad}${fence}`;
+  return `${fence}${pad}${text.replace(/\|/g, '\\|')}${pad}${fence}`;
 }
 
 /** An empty default renders as a dash: pflag omits zero-value defaults, and so does the page. */

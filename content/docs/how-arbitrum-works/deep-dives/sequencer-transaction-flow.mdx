@@ -25,7 +25,7 @@ All code references below point to [Nitro `v3.11.0`](https://github.com/Offchain
 
 ## Transaction flow at a glance
 
-![Transaction flow from a user through an RPC node into the Sequencer's bounded transaction queue, FIFO into block creation, then out to the sequencer feed and, via the batch poster, to the sequencer inbox on the parent chain where validators verify it](/img/haw-sequencer-transaction-flow.svg)
+![Transaction flow from a user through an RPC node into the Sequencer. Inside the Sequencer, a two-stage mempool holds an unordered waiting list, and each ordering round promotes the whole list into a priority queue keyed on the priority fee. Block creation takes the highest priority fee first, publishes each transaction to the Fast Feed inside the round, and publishes the closed block to the sequencer feed for full nodes and feed relays. The batch poster sends the compressed sequence to the sequencer inbox on the parent chain, where validators verify it.](/img/haw-sequencer-transaction-flow.svg)
 
 1. A user submits a signed transaction to any RPC node on the chain.
 2. The RPC node does not execute or pool the transaction; it forwards it to the Sequencer.
@@ -44,7 +44,7 @@ Validators only read the ordered transactions from the parent chain and re-execu
 
 Only one node on the chain actively sequences transactions at any given time (in a high-availability setup, several sequencer-capable nodes may run behind a coordinator, which picks the active one; see the scope note above). Every other node runs a <Term id="forwarder">forwarder</Term>: when it receives a transaction over RPC, it immediately relays the raw transaction to the Sequencer's endpoint instead of processing it locally ([`forwarder.go`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/forwarder.go#L126)). The target is configured with `--execution.forwarding-target`; for known chains, Nitro fills it in automatically from the chain's configuration when the node is not a sequencer. A non-sequencer node with no forwarding target (explicitly set to `"null"`) simply drops incoming transactions.
 
-Unlike Ethereum, there is **no traditional mempool**. Transactions are not gossiped between nodes, do not sit in a public pending pool, and are not reordered by gas price. The Sequencer receives transactions directly into an in-memory queue and processes them on a first-come, first-served basis.
+Unlike Ethereum, there is **no public mempool**. Transactions are not gossiped between nodes and never sit in a public pending pool. The Sequencer receives them directly into its own in-memory structures, which stay private no matter which ordering policy the chain runs.
 
 ### Ordering policies
 
@@ -72,7 +72,7 @@ Arbitrum One used <Term id="timeboost">Timeboost</Term> from April 2025 until PG
 
 The heart of the intake path is a bounded, in-memory queue, sized by `--execution.sequencer.queue-size` (default `1024`) ([`sequencer.go#L461`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L461)). Its behavior has three distinct zones:
 
-- **Inside the queue**: transactions are ordered strictly **FIFO**. Whatever enters the queue first gets sequenced first.
+- **Inside the queue**: under FCFS, transactions are ordered strictly **FIFO**, so whatever enters the queue first gets sequenced first. Under PGA, the queue is an unordered waiting list, and the priority fee decides the order when a round promotes it.
 - **At the queue boundary, when the queue is full**: a transaction has "reached the Sequencer but is not yet queued." The Sequencer holds the submission open and waits for a slot to free up ([`sequencer.go#L731-L735`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/execution/gethexec/sequencer.go#L731-L735)). Ordering among these waiting transactions is **not guaranteed**: when a slot frees up, which waiting transaction claims it depends on runtime scheduling, not arrival order.
 - **Rejected**: if a transaction cannot be queued and sequenced before its deadline (see below), it is rejected and never executes.
 
@@ -128,6 +128,8 @@ Suppose 100,000 transactions arrive at effectively the same moment, with default
 2. Every <code><Var name="l2BlockTimeMs" />ms</code> or more, the Sequencer drains a batch of queued transactions into a block, executing them sequentially. Freed slots are claimed by waiting transactions.
 3. Any transaction that cannot make it through the queue and into a block within its 12-second deadline fails with `context deadline exceeded`.
 
+Under PGA, the same backpressure applies, but the priority fee decides who gets through it. Each round promotes whatever is waiting and drains the highest-paying transactions first, so a surge raises the fee needed to land early rather than stretching one arrival queue. The anti-starvation boost still bounds the wait for low-fee transactions, and any transaction that cannot reach a block within its 12-second deadline fails the same way.
+
 The queue is deliberately a short buffer, not a mempool: with default settings it never holds more than about 12 seconds' worth of work. Everything beyond what the chain can execute in that window is shed back to the submitter, who is expected to retry. This keeps latency bounded and predictable for the transactions that do get in, at the cost of pushing burst-absorption out to the edges (RPC clients, or an operator-run relayer, described below).
 
 ## From block to the rest of the network
@@ -145,6 +147,8 @@ For chains with different traffic profiles than Arbitrum One, the queue paramete
 - `--execution.sequencer.queue-size` (default `1024`): raising it lets the Sequencer absorb larger instantaneous bursts without making submitters wait at the queue boundary. The limit to keep in mind: the queue-timeout deadline keeps counting while a transaction sits in the queue, so a queue deeper than what the chain can execute within `queue-timeout` only moves rejections from enqueue time to dequeue time. Size the queue to roughly what your chain can drain in one timeout window.
 - `--execution.sequencer.queue-timeout` (default `12s`): raising it lets transactions ride out longer spikes at the cost of slower failure feedback and longer-held connections; lowering it makes overload fail fast. Whatever you choose, communicate it to integration partners so their client timeouts and retry logic stay consistent with it.
 - `--execution.sequencer.max-block-speed` (default <code><Var name="l2BlockTimeMs" />ms</code>): lowering it raises the block production cap and reduces best-case latency; it does not increase execution throughput, which stays bounded by sequential execution and the per-block gas limit.
+
+If you run PGA, the rounds-per-block count `K` is a fourth tuning surface. Raising `K` shortens each round, which lowers the latency between a transaction arriving and a round promoting it, and raises the ceiling on blocks per second under load. It also makes the anti-starvation boost smaller per round, because the boost is `p / (2K)`. See [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/chain-config/sequencer/pga) for the configuration steps.
 
 If you run PGA, the rounds-per-block count `K` is a fourth tuning surface. Raising `K` shortens each round, which lowers the latency between a transaction arriving and a round promoting it, and raises the ceiling on blocks per second under load. It also makes the anti-starvation boost smaller per round, because the boost is `p / (2K)`. See [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/chain-config/sequencer/pga) for the configuration steps.
 

@@ -1,6 +1,8 @@
 import { Accordions } from 'fumadocs-ui/components/accordion';
+import { Callout as FumadocsCallout } from 'fumadocs-ui/components/callout';
 import { ImageZoom, type ImageZoomProps } from 'fumadocs-ui/components/image-zoom';
-import { Tab, type TabProps, Tabs } from 'fumadocs-ui/components/tabs';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Tabs } from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import type { ComponentProps, ElementType } from 'react';
@@ -8,6 +10,7 @@ import type { ComponentProps, ElementType } from 'react';
 import { InLink } from '@/components/HoverPopover/in-link';
 import { Accordion } from '@/components/mdx/Accordion';
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
+import { Tab } from '@/components/mdx/FindableTab';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
 import { Var } from '@/components/mdx/Var';
@@ -23,12 +26,52 @@ import {
 import { VendingMachine } from '@/components/widgets/VendingMachine';
 import { cn } from '@/lib/cn';
 
+/**
+ * The words a screen reader hears for an untitled callout, whose type is otherwise only its colour
+ * and an `aria-hidden` icon. Keyed by every spelling Fumadocs accepts, so `tip` reads as a tip even
+ * though Fumadocs draws it as `info`.
+ */
+const calloutLabels: Record<string, string> = {
+  info: 'Note',
+  tip: 'Tip',
+  idea: 'Tip',
+  warn: 'Warning',
+  warning: 'Warning',
+  error: 'Danger',
+  success: 'Success',
+};
+
+/**
+ * Fumadocs' `Callout` with its type exposed to assistive technology: `role="note"` (`alert` for
+ * `error`), and a visually hidden label such as "Warning:" when the callout has no title. A titled
+ * callout already says what it is, so it gets the role only.
+ */
+function Callout({
+  type = 'info',
+  title,
+  children,
+  ...props
+}: ComponentProps<typeof FumadocsCallout>) {
+  return (
+    <FumadocsCallout
+      type={type}
+      title={title}
+      role={type === 'error' ? 'alert' : 'note'}
+      {...props}
+    >
+      {title ? null : <span className="sr-only">{calloutLabels[type] ?? 'Note'}: </span>}
+      {children}
+    </FumadocsCallout>
+  );
+}
+
 export function getMDXComponents(components?: MDXComponents) {
   const merged = {
     ...defaultMdxComponents,
     Accordion,
     Accordions,
     AEL: AddressExplorerLink,
+    Callout,
     EdgeChallengeFlow,
     FlowChart,
     ImageZoom,
@@ -38,8 +81,9 @@ export function getMDXComponents(components?: MDXComponents) {
       <ImageZoom {...(props as ImageZoomProps)} className={cn('rounded-lg', props.className)} />
     ),
     ReferenceList,
-    // Inactive panels stay in the server HTML (hidden by CSS) so their text is indexed and findable.
-    Tab: (props: TabProps) => <Tab forceMount {...props} />,
+    Step,
+    Steps,
+    Tab,
     Tabs,
     Term,
     ChecklistItem,

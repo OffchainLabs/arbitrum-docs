@@ -7,7 +7,13 @@ import { visit } from 'unist-util-visit';
 import { VFile } from 'vfile';
 
 import { mdxOptions } from '../../lib/mdx-options.ts';
-import type { DocIndex } from './doc-links.ts';
+import {
+  type DocIndex,
+  expandRefUrl,
+  extractRefs,
+  findMissingIncludes,
+  lineAt,
+} from './doc-links.ts';
 
 /** Where a node was written: the file it came from (a partial, for an included node) and its line. */
 export interface AnchorSource {
@@ -27,9 +33,12 @@ export interface CompiledPage {
   links: AnchorLink[];
 }
 
-/** A fragment link whose target page renders no element with that id. */
+/**
+ * A fragment link whose target page renders no element with that id. `page` is the page the link
+ * was checked on; a glossary entry renders on every page that uses the term, so it has none.
+ */
 export interface BrokenAnchor extends AnchorLink {
-  page: string;
+  page?: string;
   reason: 'missing anchor';
 }
 
@@ -258,15 +267,50 @@ function messageOf(error: unknown): unknown {
     : undefined;
 }
 
-/** Validate local fragments against compiled ids, in each including page's URL context. */
+/**
+ * The `id` frontmatter of every entry in each reference collection under `content/<collection>/`,
+ * keyed by collection name. Only `glossary` exists today (`lib/references.ts`).
+ */
+function referenceCollectionIds(index: Pick<DocIndex, 'sharedFiles'>): Map<string, Set<string>> {
+  const out = new Map<string, Set<string>>();
+  for (const file of index.sharedFiles) {
+    const collection = /^content\/([^/]+)\//.exec(file.rel)?.[1];
+    if (collection === undefined || collection === 'partials') continue;
+    const fm = /^---\r?\n([\s\S]*?)\r?\n---/.exec(file.content)?.[1] ?? '';
+    const id = /^id:[ \t]*['"]?([^'"\n]+?)['"]?[ \t]*$/m.exec(fm)?.[1];
+    if (id === undefined) continue;
+    if (!out.has(collection)) out.set(collection, new Set());
+    out.get(collection)?.add(id);
+  }
+  return out;
+}
+
+/**
+ * Validate local fragments against compiled ids, in each including page's URL context. A page that
+ * cannot compile because an `<include>` target is missing is skipped: `findMissingIncludes` reports
+ * that include with its line, and the rest of the tree is still checked. Root-absolute fragment links
+ * in glossary entries are checked against the target page's ids as well.
+ */
 export async function findBrokenAnchors(index: DocIndex): Promise<BrokenAnchor[]> {
   const compile = await createAnchorCompiler(index.repoRoot);
+  const referenceIds = referenceCollectionIds(index);
+  const missingIncludes = new Set(findMissingIncludes(index).map((m) => m.targetAbs));
   const pages = new Map<string, CompiledPage>();
   for (const file of index.files) {
     if (!file.url) continue;
     try {
-      pages.set(file.url, await compile(file.abs));
+      const page = await compile(file.abs);
+      // `<ReferenceList collection="x" />` renders one section per entry, `id` = the entry's id, at
+      // request time, so the compiled tree cannot show them.
+      for (const m of file.content.matchAll(
+        /<ReferenceList\b[^>]*\bcollection=["']([^"']+)["']/g,
+      )) {
+        for (const id of referenceIds.get(m[1]) ?? []) page.ids.add(id);
+      }
+      pages.set(file.url, page);
     } catch (error) {
+      const unread = /failed to read file (.+)/.exec(String(messageOf(error)))?.[1]?.trim();
+      if (unread !== undefined && missingIncludes.has(unread)) continue;
       throw new Error(`Cannot validate anchors in ${file.rel}: ${messageOf(error)}`, {
         cause: error,
       });
@@ -275,26 +319,51 @@ export async function findBrokenAnchors(index: DocIndex): Promise<BrokenAnchor[]
 
   const broken: BrokenAnchor[] = [];
   const origin = 'https://docs.invalid';
+  const targetIds = (link: string, from: string): { id: string; target: CompiledPage } | null => {
+    // Absolute and scheme-relative links belong to the external-link policy.
+    if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(link)) return null;
+    const url = new URL(link, origin + from);
+    if (!url.hash || url.hash === '#') return null;
+    const target = pages.get(url.pathname.replace(/\/$/, '') || '/');
+    // Missing pages remain the responsibility of the existing path checker; assets and
+    // non-doc routes do not have MDX heading ids.
+    if (!target) return null;
+    let id: string;
+    try {
+      id = decodeURIComponent(url.hash.slice(1));
+    } catch {
+      id = url.hash.slice(1);
+    }
+    // Chromium text fragments can follow a normal element fragment, or stand alone.
+    id = id.split(':~:')[0];
+    if (!id || target.ids.has(id) || id.toLowerCase() === 'top') return null;
+    return { id, target };
+  };
+
   for (const [pageUrl, { links }] of pages) {
     for (const link of links) {
-      // Absolute and scheme-relative links belong to the external-link policy.
-      if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(link.url)) continue;
-      const url = new URL(link.url, origin + pageUrl);
-      if (!url.hash || url.hash === '#') continue;
-      const target = pages.get(url.pathname.replace(/\/$/, '') || '/');
-      // Missing pages remain the responsibility of the existing path checker; assets and
-      // non-doc routes do not have MDX heading ids.
-      if (!target) continue;
-      let id: string;
-      try {
-        id = decodeURIComponent(url.hash.slice(1));
-      } catch {
-        id = url.hash.slice(1);
+      if (targetIds(link.url, pageUrl))
+        broken.push({ ...link, page: pageUrl, reason: 'missing anchor' });
+    }
+  }
+
+  // Partials are checked above, once per including page. A glossary entry has no page of its own,
+  // so only its root-absolute links can be resolved.
+  for (const file of index.sharedFiles) {
+    if (!file.rel.startsWith('content/glossary/')) continue;
+    for (const ref of extractRefs(file.content)) {
+      if (ref.range === null) continue;
+      const url = expandRefUrl(ref.rawUrl);
+      if (!url.startsWith('/') || !url.includes('#')) continue;
+      if (targetIds(url, '/')) {
+        broken.push({
+          file: file.abs,
+          rel: file.rel,
+          line: lineAt(file.content, ref.range[0]),
+          url: ref.rawUrl,
+          reason: 'missing anchor',
+        });
       }
-      // Chromium text fragments can follow a normal element fragment, or stand alone.
-      id = id.split(':~:')[0];
-      if (!id || target.ids.has(id) || id.toLowerCase() === 'top') continue;
-      broken.push({ ...link, page: pageUrl, reason: 'missing anchor' });
     }
   }
   return broken;

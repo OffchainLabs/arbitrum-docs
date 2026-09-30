@@ -108,6 +108,23 @@ test('move-doc --dry-run reports the redirect without writing it', (t) => {
   );
 });
 
+test('move-doc writes a quote or dollar sequence in a file name as a string, not as code', (t) => {
+  // Review 09.15: the entry was built by pasting the path between single quotes, so a `'` ended
+  // the string and left the rest of the name as TypeScript in redirects.config.ts.
+  const { root, redirectsPath, fromRel } = fixtureRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+
+  const toRel = "content/docs/example/it's-$&-new.mdx";
+  execFileSync('node', [MOVE_DOC, fromRel, toRel], { cwd: root, encoding: 'utf8' });
+  const after = readFileSync(redirectsPath, 'utf8');
+
+  assert.ok(
+    after.includes(`destination: "/docs/example/it's-$&-new"`),
+    `the destination is one string literal, with $& kept literally:\n${after}`,
+  );
+  assert.match(after, entry('/docs/example/older-name', '/docs/example/old-name'));
+});
+
 // --- `{var:name}` placeholder links ------------------------------------------------------------------
 
 test('move-doc warns about a placeholder link to the moved page and never rewrites one', (t) => {
@@ -173,4 +190,118 @@ test('move-doc warns about a placeholder link to the moved page and never rewrit
     moved.includes(`[Sibling](../${segment}/${segment}-sibling.mdx)`),
     'plain outbound link re-based from the new directory',
   );
+});
+
+// --- meta.json, git, redirect chaining and the URL hint ---------------------------------------------
+
+const readJson = (file: string): unknown => JSON.parse(readFileSync(file, 'utf8'));
+
+/** `git init` a fixture and commit everything, so move-doc takes its `git mv` path. */
+function gitInit(root: string): void {
+  const git = (...args: string[]) =>
+    execFileSync(
+      'git',
+      ['-c', 'user.name=t', '-c', 'user.email=t@t', '-c', 'commit.gpgsign=false', ...args],
+      { cwd: root },
+    );
+  git('init', '-q');
+  git('add', '-A');
+  git('commit', '-q', '-m', 'fixture');
+}
+
+test('a rename in place replaces the basename in meta.json and stages a git rename', (t) => {
+  const { root, fromRel, toRel } = fixtureRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const meta = path.join(root, 'content', 'docs', 'example', 'meta.json');
+  writeFileSync(meta, JSON.stringify({ title: 'Example', pages: ['unrelated', 'old-name'] }));
+  gitInit(root);
+
+  const run = spawnSync('node', [MOVE_DOC, fromRel, toRel], { cwd: root, encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.deepEqual(readJson(meta), { title: 'Example', pages: ['unrelated', 'new-name'] });
+  const status = execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' });
+  assert.match(
+    status,
+    /^R {2}content\/docs\/example\/old-name\.mdx -> content\/docs\/example\/new-name\.mdx$/m,
+  );
+  assert.doesNotMatch(run.stderr, /moved without git/);
+});
+
+test('a cross-directory move removes the page from one meta.json and appends it to the other', (t) => {
+  const { root, fromRel } = fixtureRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const srcMeta = path.join(root, 'content', 'docs', 'example', 'meta.json');
+  const dstMeta = path.join(root, 'content', 'docs', 'other', 'meta.json');
+  mkdirSync(path.dirname(dstMeta), { recursive: true });
+  writeFileSync(srcMeta, JSON.stringify({ pages: ['old-name', 'unrelated'] }));
+  writeFileSync(dstMeta, JSON.stringify({ pages: ['first'] }));
+  writeFileSync(path.join(root, 'content', 'docs', 'other', 'first.mdx'), PAGE_FRONTMATTER);
+
+  const run = spawnSync('node', [MOVE_DOC, fromRel, 'content/docs/other/moved.mdx'], {
+    cwd: root,
+    encoding: 'utf8',
+  });
+  assert.equal(run.status, 0, run.stderr);
+  assert.deepEqual(readJson(srcMeta), { pages: ['unrelated'] });
+  assert.deepEqual(readJson(dstMeta), { pages: ['first', 'moved'] });
+});
+
+test('a move into a directory whose meta.json ends in "..." leaves that meta.json alone', (t) => {
+  const { root, fromRel } = fixtureRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const dstMeta = path.join(root, 'content', 'docs', 'rest', 'meta.json');
+  mkdirSync(path.dirname(dstMeta), { recursive: true });
+  const before = JSON.stringify({ pages: ['first', '...'] });
+  writeFileSync(dstMeta, before);
+
+  const run = spawnSync('node', [MOVE_DOC, fromRel, 'content/docs/rest/moved.mdx'], {
+    cwd: root,
+    encoding: 'utf8',
+  });
+  assert.equal(run.status, 0, run.stderr);
+  assert.equal(readFileSync(dstMeta, 'utf8'), before);
+  assert.match(run.stdout, /dest dir uses '\.\.\.' rest-glob; 'moved' auto-included/);
+});
+
+test('--dry-run names every existing redirect that would chain through the new one', (t) => {
+  const { root, fromRel, toRel } = fixtureRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const run = spawnSync('node', [MOVE_DOC, fromRel, toRel, '--dry-run'], {
+    cwd: root,
+    encoding: 'utf8',
+  });
+  assert.equal(run.status, 0, run.stderr);
+  assert.match(run.stderr, /3 existing redirect\(s\) point at \/docs\/example\/old-name/);
+  for (const source of ['/docs/example/older-name', '/legacy/old-name', '/legacy/anchored']) {
+    assert.ok(run.stderr.includes(`    ${source} -> /docs/example/old-name`), source);
+  }
+  assert.ok(!run.stderr.includes('/legacy/unrelated'));
+});
+
+test('a site URL passed as a path gets a hint naming the file it is served from', (t) => {
+  const { root } = fixtureRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const run = spawnSync(
+    'node',
+    [MOVE_DOC, '/docs/example/old-name', 'content/docs/example/new-name.mdx', '--dry-run'],
+    { cwd: root, encoding: 'utf8' },
+  );
+  assert.equal(run.status, 1);
+  assert.match(run.stderr, /e\.g\. 'content\/docs\/example\/old-name\.mdx'/);
+});
+
+test('a root-absolute link in a partial or glossary entry is rewritten by the move', (t) => {
+  const { root, fromRel, toRel } = fixtureRepo();
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const partial = path.join(root, 'content', 'partials', '_note.mdx');
+  const entry = path.join(root, 'content', 'glossary', 'term.mdx');
+  mkdirSync(path.dirname(partial), { recursive: true });
+  mkdirSync(path.dirname(entry), { recursive: true });
+  writeFileSync(partial, 'See [it](/docs/example/old-name#a-section).\n');
+  writeFileSync(entry, "---\nid: term\ntitle: 'Term'\n---\n\nSee [it](/docs/example/old-name).\n");
+
+  const run = spawnSync('node', [MOVE_DOC, fromRel, toRel], { cwd: root, encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  assert.equal(readFileSync(partial, 'utf8'), 'See [it](/docs/example/new-name#a-section).\n');
+  assert.match(readFileSync(entry, 'utf8'), /\[it\]\(\/docs\/example\/new-name\)/);
 });

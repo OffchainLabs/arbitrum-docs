@@ -24,7 +24,7 @@ export function ChecklistItem({
   label: string;
   children?: ReactNode;
 }) {
-  const { checklist, labels } = useTroubleshooting();
+  const { checklist } = useTroubleshooting();
   const checked = checklist[id] ?? false;
   const inputId = useId();
 
@@ -32,10 +32,6 @@ export function ChecklistItem({
     // Registered from an effect, not during render, so the store is never written mid-render.
     registerChecklistLabel(id, label);
   }, [id, label]);
-
-  // `labels` is read so this item re-renders once its own label lands in the store; without the
-  // read the component would not depend on it and lint would flag the value as unused.
-  void labels;
 
   return (
     <div

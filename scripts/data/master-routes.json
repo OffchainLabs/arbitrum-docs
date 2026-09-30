@@ -1,0 +1,1178 @@
+{
+  "note": "Frozen list of every page route live on origin/master (Docusaurus, routeBasePath \"/\") before the Fumadocs cutover. Generated once; do not regenerate from a later master. scripts/lib/master-routes.test.ts asserts each route is still a page or a redirect source.",
+  "commit": "7600a50e9ebef81183c5ca0cea9c581f0f80a0d9",
+  "routes": [
+    {
+      "route": "/",
+      "file": "docs/get-started/overview.mdx"
+    },
+    {
+      "route": "/arbitrum-bridge/bridge-transaction-traceability",
+      "file": "docs/arbitrum-bridge/05-bridge-transaction-traceability.mdx"
+    },
+    {
+      "route": "/arbitrum-bridge/embedded-bridge-widget",
+      "file": "docs/arbitrum-bridge/04-embedded-bridge-widget.mdx"
+    },
+    {
+      "route": "/arbitrum-bridge/quickstart",
+      "file": "docs/arbitrum-bridge/01-quickstart.mdx"
+    },
+    {
+      "route": "/arbitrum-bridge/troubleshooting",
+      "file": "docs/arbitrum-bridge/03-troubleshooting.mdx"
+    },
+    {
+      "route": "/arbitrum-bridge/usdc-arbitrum-one",
+      "file": "docs/arbitrum-bridge/02-usdc-arbitrum-one.mdx"
+    },
+    {
+      "route": "/arbitrum-bridge/withdrawal-monitoring",
+      "file": "docs/arbitrum-bridge/06-withdrawal-monitoring.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time",
+      "file": "docs/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview",
+      "file": "docs/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management",
+      "file": "docs/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods",
+      "file": "docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support",
+      "file": "docs/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/configure-token-gateway/custom",
+      "file": "docs/arbitrum-essentials/bridging/configure-token-gateway/custom.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/configure-token-gateway/generic-custom",
+      "file": "docs/arbitrum-essentials/bridging/configure-token-gateway/generic-custom.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/configure-token-gateway/standard",
+      "file": "docs/arbitrum-essentials/bridging/configure-token-gateway/standard.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/cross-chain-messaging",
+      "file": "docs/arbitrum-essentials/bridging/cross-chain-messaging.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/custom-gas-token-chains",
+      "file": "docs/arbitrum-essentials/bridging/custom-gas-token-chains.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/deposit/eth-and-messages",
+      "file": "docs/arbitrum-essentials/bridging/deposit/eth-and-messages.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/deposit/tokens",
+      "file": "docs/arbitrum-essentials/bridging/deposit/tokens.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/l1-l3-teleportation",
+      "file": "docs/arbitrum-essentials/bridging/l1-l3-teleportation.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/overview",
+      "file": "docs/arbitrum-essentials/bridging/overview.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/withdraw/eth-and-messages",
+      "file": "docs/arbitrum-essentials/bridging/withdraw/eth-and-messages.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/bridging/withdraw/tokens",
+      "file": "docs/arbitrum-essentials/bridging/withdraw/tokens.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/how-to-estimate-gas",
+      "file": "docs/arbitrum-essentials/how-to-estimate-gas.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/how-to-get-l2block-on-l1",
+      "file": "docs/arbitrum-essentials/how-to-get-l2block-on-l1.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/nodeinterface/overview",
+      "file": "docs/arbitrum-essentials/nodeinterface/overview.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/nodeinterface/reference",
+      "file": "docs/arbitrum-essentials/nodeinterface/reference.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/oracles/overview-oracles",
+      "file": "docs/arbitrum-essentials/oracles/overview-oracles.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/precompiles/overview",
+      "file": "docs/arbitrum-essentials/precompiles/overview.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/precompiles/reference",
+      "file": "docs/arbitrum-essentials/precompiles/reference.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/public-chains",
+      "file": "docs/arbitrum-essentials/public-chains.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/chain-params",
+      "file": "docs/arbitrum-essentials/reference/chain-params.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/contract-addresses",
+      "file": "docs/arbitrum-essentials/reference/contract-addresses.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/debugging-tools",
+      "file": "docs/arbitrum-essentials/reference/debugging-tools.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/development-frameworks",
+      "file": "docs/arbitrum-essentials/reference/development-frameworks.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/mainnet-risks",
+      "file": "docs/arbitrum-essentials/reference/mainnet-risks.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/monitoring-tools-block-explorers",
+      "file": "docs/arbitrum-essentials/reference/monitoring-tools-block-explorers.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/node-providers",
+      "file": "docs/arbitrum-essentials/reference/node-providers.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/solidity-references",
+      "file": "docs/arbitrum-essentials/reference/solidity-references.mdx"
+    },
+    {
+      "route": "/arbitrum-essentials/reference/web3-libraries-tools",
+      "file": "docs/arbitrum-essentials/reference/web3-libraries-tools.mdx"
+    },
+    {
+      "route": "/audit-reports",
+      "file": "docs/audit-reports.mdx"
+    },
+    {
+      "route": "/build-decentralized-apps/machine-payments-protocol",
+      "file": "docs/build-decentralized-apps/machine-payments-protocol.mdx"
+    },
+    {
+      "route": "/build-decentralized-apps/quickstart-create-a-token",
+      "file": "docs/build-decentralized-apps/quickstart-create-a-token.mdx"
+    },
+    {
+      "route": "/build-decentralized-apps/quickstart-solidity-remix",
+      "file": "docs/build-decentralized-apps/01-quickstart-solidity-remix.mdx"
+    },
+    {
+      "route": "/for-devs/contribute",
+      "file": "docs/for-devs/contribute.mdx"
+    },
+    {
+      "route": "/for-devs/dev-tools-and-resources/chain-info",
+      "file": "docs/for-devs/dev-tools-and-resources/chain-info.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/api3",
+      "file": "docs/for-devs/oracles/api3/api3.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/chainlink",
+      "file": "docs/for-devs/oracles/chainlink/chainlink.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/chronicle",
+      "file": "docs/for-devs/oracles/chronicle/chronicle.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/DIA",
+      "file": "docs/for-devs/oracles/DIA/dia.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/ora",
+      "file": "docs/for-devs/oracles/ora/ora.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/oracles-content-map",
+      "file": "docs/for-devs/oracles/oracles-content-map.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/supra/supras-price-feed",
+      "file": "docs/for-devs/oracles/supra/use-supras-price-feed-oracle.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/supra/supras-vrf",
+      "file": "docs/for-devs/oracles/supra/use-supras-vrf.mdx"
+    },
+    {
+      "route": "/for-devs/oracles/trellor",
+      "file": "docs/for-devs/oracles/trellor/trellor.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Circle/usdc-paymaster-quickstart",
+      "file": "docs/for-devs/third-party-docs/Circle/usdc-paymaster-quickstart.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Circle/usdc-quickstart-guide",
+      "file": "docs/for-devs/third-party-docs/Circle/usdc-quickstart-guide.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Codex",
+      "file": "docs/for-devs/third-party-docs/Codex/codex.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/contribute",
+      "file": "docs/for-devs/third-party-docs/contribute.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Covalent",
+      "file": "docs/for-devs/third-party-docs/Covalent/covalent.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Crossmint",
+      "file": "docs/for-devs/third-party-docs/Crossmint/crossmint.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Envio",
+      "file": "docs/for-devs/third-party-docs/Envio/envio.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Flair",
+      "file": "docs/for-devs/third-party-docs/Flair/flair.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Gelato/gelato-vrf",
+      "file": "docs/for-devs/third-party-docs/Gelato/gelato-vrf.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/LayerZero",
+      "file": "docs/for-devs/third-party-docs/LayerZero/layerzero.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/MetaMask",
+      "file": "docs/for-devs/third-party-docs/MetaMask/metamask.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Moralis",
+      "file": "docs/for-devs/third-party-docs/Moralis/moralis.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/OKX",
+      "file": "docs/for-devs/third-party-docs/OKX/okx.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Openfort",
+      "file": "docs/for-devs/third-party-docs/Openfort/openfort.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Particle",
+      "file": "docs/for-devs/third-party-docs/Particle/particle.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/QuickNode/backfill-templates",
+      "file": "docs/for-devs/third-party-docs/QuickNode/backfill-templates.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Reactive",
+      "file": "docs/for-devs/third-party-docs/Reactive/reactive.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Reown",
+      "file": "docs/for-devs/third-party-docs/Reown/reown.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/TheGraph",
+      "file": "docs/for-devs/third-party-docs/TheGraph/thegraph.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Venly",
+      "file": "docs/for-devs/third-party-docs/Venly/venly.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Webacy",
+      "file": "docs/for-devs/third-party-docs/Webacy/webacy.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/Zerion",
+      "file": "docs/for-devs/third-party-docs/Zerion/zerion.mdx"
+    },
+    {
+      "route": "/for-devs/third-party-docs/ZeroDev/zero-dev",
+      "file": "docs/for-devs/third-party-docs/ZeroDev/zero-dev.mdx"
+    },
+    {
+      "route": "/for-devs/troubleshooting-building",
+      "file": "docs/for-devs/troubleshooting-building.mdx"
+    },
+    {
+      "route": "/get-started/arbitrum-introduction",
+      "file": "docs/get-started/arbitrum-introduction.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/bold/bold-economics-of-disputes",
+      "file": "docs/how-arbitrum-works/bold/bold-economics-of-disputes.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/bold/bold-faq",
+      "file": "docs/how-arbitrum-works/bold/bold-faq.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/bold/bold-technical-deep-dive",
+      "file": "docs/how-arbitrum-works/bold/bold-technical-deep-dive.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/bold/gentle-introduction",
+      "file": "docs/how-arbitrum-works/bold/gentle-introduction.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/bold/how-bold-bisection-works",
+      "file": "docs/how-arbitrum-works/bold/how-bold-bisection-works.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/anytrust-protocol",
+      "file": "docs/how-arbitrum-works/deep-dives/anytrust-protocol.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/arbos",
+      "file": "docs/how-arbitrum-works/deep-dives/arbos.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/assertions",
+      "file": "docs/how-arbitrum-works/deep-dives/assertions.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/batchposter",
+      "file": "docs/how-arbitrum-works/deep-dives/batchposter.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/finality",
+      "file": "docs/how-arbitrum-works/deep-dives/finality.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/gas-and-fees",
+      "file": "docs/how-arbitrum-works/deep-dives/gas-and-fees.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/l1-to-l2-messaging",
+      "file": "docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/l2-to-l1-messaging",
+      "file": "docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/sequencer",
+      "file": "docs/how-arbitrum-works/deep-dives/sequencer.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/sequencer-transaction-flow",
+      "file": "docs/how-arbitrum-works/deep-dives/sequencer-transaction-flow.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/stf",
+      "file": "docs/how-arbitrum-works/deep-dives/stf.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/token-bridging",
+      "file": "docs/how-arbitrum-works/deep-dives/token-bridging.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/deep-dives/transaction-lifecycle",
+      "file": "docs/how-arbitrum-works/deep-dives/transaction-lifecycle.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "file": "docs/how-arbitrum-works/01-inside-arbitrum-nitro.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/priority-gas-auction/fast-feed",
+      "file": "docs/how-arbitrum-works/priority-gas-auction/fast-feed.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/priority-gas-auction/pga",
+      "file": "docs/how-arbitrum-works/priority-gas-auction/pga.md"
+    },
+    {
+      "route": "/how-arbitrum-works/priority-gas-auction/use-fast-feed",
+      "file": "docs/how-arbitrum-works/priority-gas-auction/use-fast-feed.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/reference/arbos-reference",
+      "file": "docs/how-arbitrum-works/reference/arbos-reference.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/reference/finality-and-reorgs",
+      "file": "docs/how-arbitrum-works/reference/finality-and-reorgs.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/reference/geth",
+      "file": "docs/how-arbitrum-works/reference/geth.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/reference/stf-inputs",
+      "file": "docs/how-arbitrum-works/reference/stf-inputs.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/timeboost/gentle-introduction",
+      "file": "docs/how-arbitrum-works/timeboost/gentle-introduction.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/timeboost/how-to-use-timeboost",
+      "file": "docs/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/timeboost/timeboost-faq",
+      "file": "docs/how-arbitrum-works/timeboost/timeboost-faq.mdx"
+    },
+    {
+      "route": "/how-arbitrum-works/timeboost/troubleshoot-timeboost",
+      "file": "docs/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx"
+    },
+    {
+      "route": "/intro/glossary",
+      "file": "docs/intro/glossary.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/additional-configuration-parameters",
+      "file": "docs/launch-arbitrum-chain/chain-config/additional-configuration-parameters.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster",
+      "file": "docs/launch-arbitrum-chain/chain-config/batch-poster/config-batch-poster.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs",
+      "file": "docs/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning",
+      "file": "docs/launch-arbitrum-chain/chain-config/batch-poster/fee-tuning.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/chainConfig-reference",
+      "file": "docs/launch-arbitrum-chain/chain-config/chainConfig-reference.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/aep-overview",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/aep-overview.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/aep-router-contracts",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/aep-router-contracts.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/configure-native-mint-burn.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/dynamic-pricing",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/fee-management",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/fee-management.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/gas-optimization",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/gas-optimization.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/gas-target",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/gas-target.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/priority-fees",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/priority-fees.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/reporting-on-fees",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/reporting-on-fees.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/costs/revenue-routing",
+      "file": "docs/launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/config-data-availability",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/config-data-availability.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/configure-dac",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/configure-dac.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/dac-get-started",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/dac-get-started.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/das-docker-deployment.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/das-rpc-method-reference",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/das-rpc-method-reference.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/deploy-das",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/deploy-das.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das",
+      "file": "docs/launch-arbitrum-chain/chain-config/data-availability/deploy-mirror-das.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit",
+      "file": "docs/launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/sequencer/chain-finality",
+      "file": "docs/launch-arbitrum-chain/chain-config/sequencer/chain-finality.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering",
+      "file": "docs/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/sequencer/pga",
+      "file": "docs/launch-arbitrum-chain/chain-config/sequencer/pga.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference",
+      "file": "docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments",
+      "file": "docs/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/sequencer/timeboost",
+      "file": "docs/launch-arbitrum-chain/chain-config/sequencer/timeboost.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/validation/assertion-control",
+      "file": "docs/launch-arbitrum-chain/chain-config/validation/assertion-control.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/validation/bold",
+      "file": "docs/launch-arbitrum-chain/chain-config/validation/bold.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/validation/bond-and-validator",
+      "file": "docs/launch-arbitrum-chain/chain-config/validation/bond-and-validator.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/validation/challenge-period",
+      "file": "docs/launch-arbitrum-chain/chain-config/validation/challenge-period.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/validation/fast-withdrawals",
+      "file": "docs/launch-arbitrum-chain/chain-config/validation/fast-withdrawals.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/chain-config/validation/test-chain-configuration",
+      "file": "docs/launch-arbitrum-chain/chain-config/validation/test-chain-configuration.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/deploy/canonical-factory-contracts",
+      "file": "docs/launch-arbitrum-chain/deploy/canonical-factory-contracts.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/deploy/configure-node",
+      "file": "docs/launch-arbitrum-chain/deploy/configure-node.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/deploy/custom-genesis-state",
+      "file": "docs/launch-arbitrum-chain/deploy/custom-genesis-state.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/deploy/deploy-chain",
+      "file": "docs/launch-arbitrum-chain/deploy/deploy-chain.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/deploy/token-bridge",
+      "file": "docs/launch-arbitrum-chain/deploy/token-bridge.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/deploy/token-bridge-troubleshooting",
+      "file": "docs/launch-arbitrum-chain/deploy/token-bridge-troubleshooting.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/extend-the-protocol/arbos",
+      "file": "docs/launch-arbitrum-chain/extend-the-protocol/arbos.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/extend-the-protocol/da-api-guide",
+      "file": "docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/extend-the-protocol/precompiles",
+      "file": "docs/launch-arbitrum-chain/extend-the-protocol/precompiles.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/extend-the-protocol/stf",
+      "file": "docs/launch-arbitrum-chain/extend-the-protocol/stf.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/integrations/bp-kms-signing-services",
+      "file": "docs/launch-arbitrum-chain/integrations/bp-kms-signing-services.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/integrations/bridge-ui",
+      "file": "docs/launch-arbitrum-chain/integrations/bridge-ui.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/integrations/bridged-usdc",
+      "file": "docs/launch-arbitrum-chain/integrations/bridged-usdc.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/integrations/exchange-integration-checklist",
+      "file": "docs/launch-arbitrum-chain/integrations/exchange-integration-checklist.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/integrations/infrastructure-providers",
+      "file": "docs/launch-arbitrum-chain/integrations/infrastructure-providers.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/migrate/between-raases",
+      "file": "docs/launch-arbitrum-chain/migrate/between-raases.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/migrate/from-another-stack",
+      "file": "docs/launch-arbitrum-chain/migrate/from-another-stack.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/arbos-upgrade",
+      "file": "docs/launch-arbitrum-chain/operate/arbos-upgrade.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/batch-poster-troubleshooting",
+      "file": "docs/launch-arbitrum-chain/operate/batch-poster-troubleshooting.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/bold-upgrade-playbook",
+      "file": "docs/launch-arbitrum-chain/operate/bold-upgrade-playbook.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/bp-recovery",
+      "file": "docs/launch-arbitrum-chain/operate/bp-recovery.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/error-index",
+      "file": "docs/launch-arbitrum-chain/operate/error-index.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/key-rotation",
+      "file": "docs/launch-arbitrum-chain/operate/key-rotation.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/monitoring",
+      "file": "docs/launch-arbitrum-chain/operate/monitoring.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/ownership-and-access",
+      "file": "docs/launch-arbitrum-chain/operate/ownership-and-access.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/post-launch-deployments",
+      "file": "docs/launch-arbitrum-chain/operate/post-launch-deployments.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/sequencer-troubleshooting",
+      "file": "docs/launch-arbitrum-chain/operate/sequencer-troubleshooting.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/state-growth",
+      "file": "docs/launch-arbitrum-chain/operate/state-growth.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/upgrade-runbook",
+      "file": "docs/launch-arbitrum-chain/operate/upgrade-runbook.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/operate/validator-troubleshooting",
+      "file": "docs/launch-arbitrum-chain/operate/validator-troubleshooting.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/overview/faq",
+      "file": "docs/launch-arbitrum-chain/overview/faq.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/overview/introduction",
+      "file": "docs/launch-arbitrum-chain/overview/introduction.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/overview/license",
+      "file": "docs/launch-arbitrum-chain/overview/license.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/overview/public-preview",
+      "file": "docs/launch-arbitrum-chain/overview/public-preview.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch",
+      "file": "docs/launch-arbitrum-chain/quickstart/l3-rollup-from-scratch.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/quickstart/l3-rollup-testnet",
+      "file": "docs/launch-arbitrum-chain/quickstart/l3-rollup-testnet.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/quickstart/sdk-introduction",
+      "file": "docs/launch-arbitrum-chain/quickstart/sdk-introduction.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/run-a-node/batch-poster",
+      "file": "docs/launch-arbitrum-chain/run-a-node/batch-poster.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/run-a-node/high-availability-sequencer",
+      "file": "docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/run-a-node/run-full-node-with-helm",
+      "file": "docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm.mdx"
+    },
+    {
+      "route": "/launch-arbitrum-chain/run-a-node/split-validator-node",
+      "file": "docs/launch-arbitrum-chain/run-a-node/split-validator-node.mdx"
+    },
+    {
+      "route": "/learn-more/faq",
+      "file": "docs/learn-more/faq.mdx"
+    },
+    {
+      "route": "/node-running/faq",
+      "file": "docs/node-running/faq.mdx"
+    },
+    {
+      "route": "/node-running/sequencer-content-map",
+      "file": "docs/node-running/sequencer-content-map.mdx"
+    },
+    {
+      "route": "/notices/arbos51-upgrade-notice",
+      "file": "docs/notices/arbos51-upgrade-notice.mdx"
+    },
+    {
+      "route": "/notices/arbos61-upgrade-notice",
+      "file": "docs/notices/arbos61-upgrade-notice.mdx"
+    },
+    {
+      "route": "/notices/fusaka-upgrade-notice",
+      "file": "docs/notices/fusaka-upgrade-notice.mdx"
+    },
+    {
+      "route": "/Offchain-pattern-guide",
+      "file": "docs/Offchain-pattern-guide.md"
+    },
+    {
+      "route": "/run-arbitrum-node/arbos-releases/arbos11",
+      "file": "docs/run-arbitrum-node/arbos-releases/arbos11.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/arbos-releases/arbos20",
+      "file": "docs/run-arbitrum-node/arbos-releases/arbos20.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/arbos-releases/arbos32",
+      "file": "docs/run-arbitrum-node/arbos-releases/arbos32.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/arbos-releases/arbos40",
+      "file": "docs/run-arbitrum-node/arbos-releases/arbos40.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/arbos-releases/arbos51",
+      "file": "docs/run-arbitrum-node/arbos-releases/arbos51.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/arbos-releases/arbos61",
+      "file": "docs/run-arbitrum-node/arbos-releases/arbos61.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/arbos-releases/overview",
+      "file": "docs/run-arbitrum-node/arbos-releases/01-overview.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/assign-node-roles",
+      "file": "docs/run-arbitrum-node/assign-node-roles.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/beacon-nodes-historical-blobs",
+      "file": "docs/run-arbitrum-node/beacon-nodes-historical-blobs.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/data-availability",
+      "file": "docs/run-arbitrum-node/data-availability.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers",
+      "file": "docs/run-arbitrum-node/04-l1-ethereum-beacon-chain-rpc-providers.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/more-types/run-archive-node",
+      "file": "docs/run-arbitrum-node/more-types/01-run-archive-node.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/more-types/run-classic-node",
+      "file": "docs/run-arbitrum-node/more-types/03-run-classic-node.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/more-types/run-validator-node",
+      "file": "docs/run-arbitrum-node/more-types/02-run-validator-node.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro-support-policy",
+      "file": "docs/run-arbitrum-node/nitro-support-policy.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/build-nitro-locally",
+      "file": "docs/run-arbitrum-node/nitro/01-build-nitro-locally.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/cli-flags-reference",
+      "file": "docs/run-arbitrum-node/nitro/cli-flags-reference.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/configuration-system",
+      "file": "docs/run-arbitrum-node/nitro/configuration-system.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/da-tools-reference",
+      "file": "docs/run-arbitrum-node/nitro/da-tools-reference.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/docker-and-cli-binaries",
+      "file": "docs/run-arbitrum-node/nitro/docker-and-cli-binaries.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble",
+      "file": "docs/run-arbitrum-node/nitro/04-how-to-convert-databases-from-leveldb-to-pebble.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/migrate-state-and-history-from-classic",
+      "file": "docs/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/nitro-database-snapshots",
+      "file": "docs/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/nitro/node-tuning-and-monitoring",
+      "file": "docs/run-arbitrum-node/nitro/node-tuning-and-monitoring.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/overview",
+      "file": "docs/run-arbitrum-node/01-overview.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/run-feed-relay",
+      "file": "docs/run-arbitrum-node/run-feed-relay.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/run-full-node",
+      "file": "docs/run-arbitrum-node/02-run-full-node.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/run-local-full-chain-simulation",
+      "file": "docs/run-arbitrum-node/03-run-local-full-chain-simulation.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/run-nitro-dev-node",
+      "file": "docs/run-arbitrum-node/05-run-nitro-dev-node.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/sequencer/read-sequencer-feed",
+      "file": "docs/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/sequencer/run-sequencer-coordination-manager",
+      "file": "docs/run-arbitrum-node/sequencer/03-run-sequencer-coordination-manager.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/sequencer/run-sequencer-node",
+      "file": "docs/run-arbitrum-node/sequencer/04-run-sequencer-node.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/start-here",
+      "file": "docs/run-arbitrum-node/start-here.mdx"
+    },
+    {
+      "route": "/run-arbitrum-node/troubleshooting",
+      "file": "docs/run-arbitrum-node/06-troubleshooting.mdx"
+    },
+    {
+      "route": "/stylus-by-example/applications/erc20",
+      "file": "docs/stylus-by-example/applications/erc20.mdx"
+    },
+    {
+      "route": "/stylus-by-example/applications/erc721",
+      "file": "docs/stylus-by-example/applications/erc721.mdx"
+    },
+    {
+      "route": "/stylus-by-example/applications/multi_call",
+      "file": "docs/stylus-by-example/applications/multi_call.mdx"
+    },
+    {
+      "route": "/stylus-by-example/applications/vending_machine",
+      "file": "docs/stylus-by-example/applications/vending_machine.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/abi_decode",
+      "file": "docs/stylus-by-example/basic_examples/abi_decode.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/abi_encode",
+      "file": "docs/stylus-by-example/basic_examples/abi_encode.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/bytes_in_bytes_out",
+      "file": "docs/stylus-by-example/basic_examples/bytes_in_bytes_out.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/constants",
+      "file": "docs/stylus-by-example/basic_examples/constants.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/errors",
+      "file": "docs/stylus-by-example/basic_examples/errors.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/events",
+      "file": "docs/stylus-by-example/basic_examples/events.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/function",
+      "file": "docs/stylus-by-example/basic_examples/function.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/function_selector",
+      "file": "docs/stylus-by-example/basic_examples/function_selector.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/hashing",
+      "file": "docs/stylus-by-example/basic_examples/hashing.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/hello_world",
+      "file": "docs/stylus-by-example/basic_examples/hello_world.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/inheritance",
+      "file": "docs/stylus-by-example/basic_examples/inheritance.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/primitive_data_types",
+      "file": "docs/stylus-by-example/basic_examples/primitive_data_types.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/sending_ether",
+      "file": "docs/stylus-by-example/basic_examples/sending_ether.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/variables",
+      "file": "docs/stylus-by-example/basic_examples/variables.mdx"
+    },
+    {
+      "route": "/stylus-by-example/basic_examples/vm_affordances",
+      "file": "docs/stylus-by-example/basic_examples/vm_affordances.mdx"
+    },
+    {
+      "route": "/stylus/advanced/hostio-exports",
+      "file": "docs/stylus/advanced/hostio-exports.mdx"
+    },
+    {
+      "route": "/stylus/advanced/minimal-entrypoint-contracts",
+      "file": "docs/stylus/advanced/minimal-entrypoint-contracts.mdx"
+    },
+    {
+      "route": "/stylus/advanced/recommended-libraries",
+      "file": "docs/stylus/advanced/recommended-libraries.mdx"
+    },
+    {
+      "route": "/stylus/advanced/rust-to-solidity-differences",
+      "file": "docs/stylus/advanced/rust-to-solidity-differences.mdx"
+    },
+    {
+      "route": "/stylus/best-practices/gas-optimization",
+      "file": "docs/stylus/best-practices/gas-optimization.mdx"
+    },
+    {
+      "route": "/stylus/best-practices/security",
+      "file": "docs/stylus/best-practices/security.mdx"
+    },
+    {
+      "route": "/stylus/cli-tools/check-and-deploy",
+      "file": "docs/stylus/cli-tools/check-and-deploy.mdx"
+    },
+    {
+      "route": "/stylus/cli-tools/commands-reference",
+      "file": "docs/stylus/cli-tools/commands-reference.mdx"
+    },
+    {
+      "route": "/stylus/cli-tools/debugging-tx",
+      "file": "docs/stylus/cli-tools/debugging-tx.mdx"
+    },
+    {
+      "route": "/stylus/cli-tools/overview",
+      "file": "docs/stylus/cli-tools/overview.mdx"
+    },
+    {
+      "route": "/stylus/cli-tools/verify-contracts",
+      "file": "docs/stylus/cli-tools/verify-contracts.mdx"
+    },
+    {
+      "route": "/stylus/concepts/activation",
+      "file": "docs/stylus/concepts/activation.mdx"
+    },
+    {
+      "route": "/stylus/concepts/gas-metering",
+      "file": "docs/stylus/concepts/gas-metering.mdx"
+    },
+    {
+      "route": "/stylus/concepts/vm-differences",
+      "file": "docs/stylus/concepts/vm-differences.mdx"
+    },
+    {
+      "route": "/stylus/concepts/webassembly",
+      "file": "docs/stylus/concepts/webassembly.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/choose-your-path",
+      "file": "docs/stylus/fundamentals/choose-your-path.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/contracts",
+      "file": "docs/stylus/fundamentals/contracts.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/data-types/compound-types",
+      "file": "docs/stylus/fundamentals/data-types/compound-types.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/data-types/conversions-between-types",
+      "file": "docs/stylus/fundamentals/data-types/conversions-between-types.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/data-types/primitives",
+      "file": "docs/stylus/fundamentals/data-types/primitives.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/data-types/storage",
+      "file": "docs/stylus/fundamentals/data-types/storage.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/global-variables-and-functions",
+      "file": "docs/stylus/fundamentals/global-variables-and-functions.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/prerequisites",
+      "file": "docs/stylus/fundamentals/prerequisites.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/project-structure",
+      "file": "docs/stylus/fundamentals/project-structure.mdx"
+    },
+    {
+      "route": "/stylus/fundamentals/testing-contracts",
+      "file": "docs/stylus/fundamentals/testing-contracts.mdx"
+    },
+    {
+      "route": "/stylus/gentle-introduction",
+      "file": "docs/stylus/gentle-introduction.mdx"
+    },
+    {
+      "route": "/stylus/how-tos/caching-contracts",
+      "file": "docs/stylus/how-tos/caching-contracts.mdx"
+    },
+    {
+      "route": "/stylus/how-tos/deploying-non-rust-wasm-contracts",
+      "file": "docs/stylus/how-tos/deploying-non-rust-wasm-contracts.mdx"
+    },
+    {
+      "route": "/stylus/how-tos/exporting-abi",
+      "file": "docs/stylus/how-tos/exporting-abi.mdx"
+    },
+    {
+      "route": "/stylus/how-tos/importing-interfaces",
+      "file": "docs/stylus/how-tos/importing-interfaces.mdx"
+    },
+    {
+      "route": "/stylus/how-tos/optimizing-binaries",
+      "file": "docs/stylus/how-tos/optimizing-binaries.mdx"
+    },
+    {
+      "route": "/stylus/how-tos/trait-based-composition",
+      "file": "docs/stylus/how-tos/trait-based-composition.mdx"
+    },
+    {
+      "route": "/stylus/how-tos/using-constructors",
+      "file": "docs/stylus/how-tos/using-constructors.mdx"
+    },
+    {
+      "route": "/stylus/how-tos/verifying-contracts-arbiscan",
+      "file": "docs/stylus/how-tos/verifying-contracts-arbiscan.mdx"
+    },
+    {
+      "route": "/stylus/quickstart",
+      "file": "docs/stylus/quickstart.mdx"
+    },
+    {
+      "route": "/stylus/reference/opcode-hostio-pricing",
+      "file": "docs/stylus/reference/opcode-hostio-pricing.mdx"
+    },
+    {
+      "route": "/stylus/reference/overview",
+      "file": "docs/stylus/reference/overview.mdx"
+    },
+    {
+      "route": "/stylus/reference/rust-sdk-guide",
+      "file": "docs/stylus/reference/rust-sdk-guide.md"
+    },
+    {
+      "route": "/stylus/reference/stylus-toml-reference",
+      "file": "docs/stylus/reference/stylus-toml-reference.mdx"
+    },
+    {
+      "route": "/stylus/troubleshooting-building-stylus",
+      "file": "docs/stylus/troubleshooting-building-stylus.md"
+    },
+    {
+      "route": "/stylus/troubleshooting/common-issues",
+      "file": "docs/stylus/troubleshooting/common-issues.mdx"
+    }
+  ]
+}

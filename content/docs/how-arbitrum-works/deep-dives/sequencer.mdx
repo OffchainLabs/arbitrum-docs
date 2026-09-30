@@ -102,7 +102,7 @@ Censorship Timeout aims to limit the negative effects of:
 - Prolonged Sequencer censorship, or
 - Unexpected Sequencer outages
 
-### How the Censorship Timeout works
+## How the Censorship Timeout works
 
 To explain how this feature improves the security of chains settling to Arbitrum One, consider a scenario where an <Term id="layer-3-l3">L3</Term>’s parent chain Sequencer (the <Term id="L2">L2</Term> Sequencer) is censoring or offline. In such a case, every <Term id="assertion">assertion</Term> and/or sub-<Term id="challenge">challenge</Term> move would need to wait <Var name="arbOneForceIncludePeriodHours" /> hours before bypassing the L2 Sequencer (using the Sequencer Inbox’s <Term id="forceinclusion">`forceInclusion`</Term> method). In this scenario, a challenge resolution would be delayed by a time t where t = (<Var name="arbOneForceIncludePeriodHours" /> hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
 
@@ -110,7 +110,7 @@ The Censorship Timeout feature mitigates this by lowering the force inclusion th
 
 The force inclusion window is the lesser of `delayBuffer` and `delayBlocks`, where `delayBlocks` is a constant currently set to <Var name="arbOneForceIncludePeriodHours" /> hours, and `delayBuffer` ranges from 30 minutes to 48 hours.
 
-The `delayBuffer` value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message’s delay beyond the `threshold` and how long it has been delayed (i.e., when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the `threshold` is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
+The `delayBuffer` value “grows and shrinks” depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message’s delay beyond the `threshold` and how long it has been delayed (that is, when some delayed messages are delayed by more than the `threshold`, the difference between the messages’ delay and the `threshold` is removed from the buffer). For example, if the threshold is 30 minutes and a message was delayed by 32 minutes, the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
 
 The `delayBuffer` replenishes at a linear rate when the Sequencer is operating correctly at a nominal rate of one minute for every 20 minutes in which no messages are delayed beyond the `threshold`.
 
@@ -120,8 +120,8 @@ Below are the initial, proposed parameter values for the Censorship Timeout feat
 - `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 parent chain (Ethereum) blocks (one hour) for Arbitrum Nova
 - `replenish rate` = 5% (meaning one day is replenished every 20 days or roughly a 95% uptime)
 
-We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains—especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to utilize this feature for their chain and can also change the default parameters as they see fit for their use case.
+We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains—especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to use this feature for their chain and can also change the default parameters as they see fit for their use case.
 
-### Decentralized fair sequencing
+## Decentralized fair sequencing
 
 Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or <Term id="validator">validators</Term>) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with broader blockchain principles of enhanced security, transparency, and decentralization. A transaction ordering policy sits above this layer. Decentralized sequencing changes who enforces the ordering rules, not the rules themselves.

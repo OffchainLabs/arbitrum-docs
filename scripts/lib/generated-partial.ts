@@ -6,6 +6,7 @@
  *
  * Ported from arbitrum-docs `scripts/lib/generated-partial.ts`.
  */
+import { createProcessor } from '@mdx-js/mdx';
 import fs from 'node:fs';
 import path from 'node:path';
 import prettier from 'prettier';
@@ -135,9 +136,136 @@ export async function writeOrCheck(
  * output plumbing.
  */
 export function setOutput(name: string, value: string): void {
+  // The file is line-oriented: a newline in either half would end this pair early and start a
+  // second one of the value's choosing. Checked before the GITHUB_OUTPUT test so a local run
+  // fails the same way CI would.
+  for (const [label, text] of [
+    ['name', name],
+    ['value', value],
+  ]) {
+    if (/[\r\n]/.test(text)) {
+      throw new Error(
+        `setOutput: the ${label} of step output ${JSON.stringify(name)} may not contain a ` +
+          `newline, which would inject a second output line: ${JSON.stringify(text)}`,
+      );
+    }
+  }
   const outputFile = process.env.GITHUB_OUTPUT;
   if (!outputFile) return;
   fs.appendFileSync(outputFile, `${name}=${value}\n`);
+}
+
+/**
+ * Read a file from an upstream checkout, refusing one reached through a symlink.
+ *
+ * `git clone` and `tar` both check a symlink out as a symlink, so an upstream file (or a directory
+ * above it) could point at any file on the machine running the generator, and its text would be
+ * read as if upstream had written it. Used by the Stylus and CLI-reference generators. Resolving the real path and requiring it to be the same file, under the real
+ * root, catches a link at any depth below `root`.
+ */
+export function readRegularFile(file: string, root: string): string {
+  const realRoot = fs.realpathSync(root);
+  const expected = path.join(realRoot, path.relative(root, file));
+  if (fs.lstatSync(file).isSymbolicLink() || fs.realpathSync(file) !== expected) {
+    throw new Error(
+      `${path.relative(root, file) || file} is a symlink, or sits under one, in the upstream tree. The ` +
+        `generator reads only regular files, so a link cannot publish a file from outside the clone.`,
+    );
+  }
+  return fs.readFileSync(file, 'utf-8');
+}
+
+/** Options for {@link assertInertMdx}. */
+export interface InertMdxOptions {
+  /** The file the text becomes, for the error message. */
+  context: string;
+  /**
+   * JSX element names the generator writes itself. Each may carry only literal attributes; any
+   * `{…}` attribute is rejected even on an allowed element. Anything not listed is rejected.
+   */
+  allowedElements: readonly string[];
+  /** Added to every reported line, for text that sits below a stripped frontmatter block. */
+  lineOffset?: number;
+}
+
+/** The mdast node types that carry JavaScript: `import`/`export` and `{…}` in flow or text. */
+const CODE_NODE_TYPES = new Set(['mdxjsEsm', 'mdxFlowExpression', 'mdxTextExpression']);
+
+/** The subset of an mdast node {@link assertInertMdx} reads. */
+interface MdxNode {
+  type: string;
+  name?: string | null;
+  value?: string;
+  attributes?: Array<{ type: string; name?: string; value?: unknown }>;
+  children?: MdxNode[];
+  position?: { start: { line: number } };
+  data?: { estree?: { body: unknown[] } };
+}
+
+/**
+ * Throw unless `text` is MDX that compiles to static content: no `import` or `export`, no `{…}`
+ * expression, and no JSX element or attribute the generator did not write itself.
+ *
+ * Every generated page or partial that copies upstream text into MDX calls this on its output,
+ * because MDX is a program: an expression or an `export` in upstream text runs in the build, with
+ * the build's environment, and again in every reader's browser. Escaping at the point of
+ * interpolation is the first fence; this is the second, and the one that also covers text copied
+ * whole (the Stylus page bodies) where there is nothing to escape.
+ *
+ * A comment-only expression, `{/* … *\/}`, is allowed: it compiles to nothing, and it is how the
+ * generators write their do-not-edit markers. Fenced and inline code are not parsed as MDX, so
+ * `{` and `<` inside them pass. Text the MDX parser rejects outright also throws here, naming the
+ * same file, so a broken page fails the generator rather than the build.
+ */
+export function assertInertMdx(
+  text: string,
+  { context, allowedElements, lineOffset = 0 }: InertMdxOptions,
+): void {
+  let tree: MdxNode;
+  try {
+    tree = createProcessor().parse(text) as unknown as MdxNode;
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    throw new Error(`${context}: not valid MDX, so it would break the build: ${reason}`);
+  }
+
+  const allowed = new Set(allowedElements);
+  const problems: string[] = [];
+  const visit = (node: MdxNode): void => {
+    const line = (node.position?.start.line ?? 0) + lineOffset;
+    if (CODE_NODE_TYPES.has(node.type)) {
+      const commentOnly = node.type !== 'mdxjsEsm' && node.data?.estree?.body.length === 0;
+      if (!commentOnly) {
+        problems.push(`line ${line}: ${node.type} ${JSON.stringify(node.value ?? '')}`);
+      }
+    } else if (node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement') {
+      const name = node.name ?? '<>';
+      if (!allowed.has(name)) {
+        problems.push(`line ${line}: JSX element <${name}>, which the generator does not write`);
+      }
+      for (const attribute of node.attributes ?? []) {
+        const literal = attribute.value == null || typeof attribute.value === 'string';
+        if (attribute.type !== 'mdxJsxAttribute' || !literal) {
+          problems.push(
+            `line ${line}: an expression attribute on <${name}>` +
+              (attribute.name ? ` (${attribute.name})` : ''),
+          );
+        }
+      }
+    }
+    for (const child of node.children ?? []) visit(child);
+  };
+  visit(tree);
+
+  if (problems.length > 0) {
+    throw new Error(
+      `${context}: the generated text would compile to code, not content. MDX runs ` +
+        `\`import\`, \`export\`, \`{…}\` and JSX, in the build and in the browser, so the ` +
+        `generator refuses to write it. Fix it where it came from (upstream, or a data file in ` +
+        `this repo), or put it in a code fence there:\n` +
+        problems.map((problem) => `  - ${problem}`).join('\n'),
+    );
+  }
 }
 
 /**

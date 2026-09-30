@@ -35,8 +35,8 @@ helm repo update
 
 Then install, selecting the configuration for your chain:
 
-<Tabs items={["Arbitrum One, Nova, Sepolia", "Your Arbitrum chain"]}>
-  <Tab value="Arbitrum One, Nova, Sepolia">
+  <Tabs items={["Arbitrum One, Nova, Sepolia", "Your Arbitrum chain"]}>
+    <Tab value="Arbitrum One, Nova, Sepolia">
 
 The chart defaults to Arbitrum One (`chain.id` `42161`, `parent-chain.id` `1`), so an Arbitrum One node needs only three values:
 
@@ -93,7 +93,7 @@ If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-clie
   </Tab>
 </Tabs>
 
-<Callout type="warning" title="Defaults that commonly trip up operators">
+<Callout type="warn" title="Defaults that commonly trip up operators">
 
 - **Don't copy the chart README's init example verbatim.** It uses `nitro-genesis.tar`, which syncs from genesis — a huge, slow process on a chain with a long history, such as Arbitrum One. Where a pruned snapshot exists, prefer `configmap.data.init.latest=pruned` (default base `https://snapshot.arbitrum.foundation/`).
 - **The chart changes the RPC path prefix.** Defaults are `http.rpcprefix=/rpc` and `ws.rpcprefix=/ws`, so RPC is served at `http://host:8547/rpc`, not vanilla Nitro's `/`. Clients that omit `/rpc` get a 404.

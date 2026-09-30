@@ -31,6 +31,7 @@ Grounding rule: State only what you read in a file, and cite it as `file:line`. 
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # http://localhost:3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
+pnpm frontmatter:check # every page's frontmatter satisfies the schema in lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build
@@ -60,10 +61,13 @@ opens a PR that gets no CI run of its own.
 
 ## Frontmatter contract
 
-`source.config.ts` extends the Fumadocs page schema. Required: `title` (trimmed, not empty) and
-`description` (trimmed). Optional: `sidebar_label`, `content_type`, `author`, `sme`. `content_type`
+`arbitrumPageSchema` in `lib/page-schema.ts` extends the Fumadocs page schema; `source.config.ts`
+applies it to the `docs` collection. Required: `title` and `description` (both trimmed, not empty).
+Optional: `sidebar_label`, `content_type`, `author`, `sme`. `content_type`
 is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
-required field or an out-of-enum value fails `types:check` and the build. There is no
+required field or an out-of-enum value fails `pnpm frontmatter:check` and the build (`next build`
+and `next dev` apply the schema when they compile the page). `types:check` does not see
+frontmatter: it regenerates `.source/` and type-checks, and exits 0 on a page with none. There is no
 `user_story`, `draft` or date field; last-modified dates come from git. Partials and glossary
 entries do not carry this contract.
 
@@ -74,45 +78,71 @@ entries do not carry this contract.
 - **Node 22 only** (`>=22.18 <23`), pnpm 10. Run `nvm use 22`; never bypass `engines`. Every script
   is TypeScript run directly by Node, and a relative import carries its `.ts` extension.
 - **Never use `next/font/google`.** Fonts are self-hosted in `public/fonts/` and loaded with
-  `next/font/local`, so the build never fetches.
+  `next/font/local`, so the build never fetches. `pnpm test` greps for the import.
 - **Never import `lib/source` from a client component**, directly or through a module that imports
-  it. It pulls the compiled collection into the browser bundle, and no gate notices.
+  it. It pulls the compiled collection into the browser bundle. `pnpm test` walks the imports of
+  every `'use client'` module.
 - **A `<Var>` does not evaluate inside a fenced block or inline code.** It ships as the literal tag
   (`content:lint` rule `var-in-code`). In a link destination or `href`, write `{var:name}` instead
   (rule `var-in-link`). A `{var:name}` in prose fails the build.
 - **A remote markdown image renders broken.** Commit it under `public/img/`, or write
   `<ImageZoom><img src="https://…" alt="…" /></ImageZoom>` (rule `remote-image`).
 - **Callouts are `<Callout type="info|warn|error|idea|success">`.** A Docusaurus `:::` line renders
-  as text (rule `docusaurus-directive`).
+  as text (rule `docusaurus-directive`); another type fails `callout-type`; markdown in `title`
+  prints literally (`markdown-in-title`); a one-line Callout glued to the next paragraph breaks
+  hydration (`block-component-in-paragraph`). Put a Callout on its own lines.
+- **Docusaurus habits fail `content:lint`.** `@@name@@` (`docusaurus-var-token`),
+  `<a data-quicklook-from>` (`quicklook-anchor`), `import … from '@site/…'` (`site-import`), a JSX
+  tag that is neither registered in `components/mdx.tsx` nor imported (`unknown-component`), and
+  `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
+- **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check`
+  rule R3 only forbids ESM-importing such a partial, which no component does.
+- **No JSX component in a heading.** Fumadocs compiles heading text into the table of contents
+  with no component in scope, so a `<Var>` or `<Term>` there fails the build
+  (`component-in-heading`). Put the variable in the first sentence below the heading.
 - **No link in a heading, and no `<tr>` directly in `<table>`.** Both break React hydration (rules
   `link-in-heading`, `tr-in-table`).
 - **A plain `.css` import in a component registered in `components/mdx.tsx` adds a render-blocking
   stylesheet to every docs page.** Use Tailwind utilities or `app/global.css`, or put the component
   behind `next/dynamic` like the widgets in `components/widgets/`. A docs page loads three
-  stylesheets.
-- **`types:check` proves the schema, not the render.** Open changed pages on
-  `http://localhost:3000`; on `127.0.0.1` React does not hydrate.
+  stylesheets, and the HTTP smoke suite counts them.
+- **`frontmatter:check` proves the schema and `types:check` the types, not the render.** Open
+  changed pages on `http://localhost:3000`; on `127.0.0.1` React does not hydrate.
 
 ## Where things live
 
-- **Pipeline.** `source.config.ts` (collections and schema), `lib/source.ts` (the single
-  `loader()`, the only reader of `.source/`), `app/docs/[[...slug]]/page.tsx` (every page,
-  prerendered, `dynamicParams = false`). MDX options are in `lib/mdx-options.ts`.
+- **Pipeline.** `source.config.ts` (collections), `lib/page-schema.ts` (the frontmatter schema),
+  `lib/source.ts` (the single `loader()`, the only reader of `.source/`),
+  `app/docs/[[...slug]]/page.tsx` (every page, prerendered, `dynamicParams = false`). MDX options
+  are in `lib/mdx-options.ts`; `lib/llms-markdown.ts` decides how each component reads in the
+  markdown mirrors.
 - **Sidebar.** `meta.json` files only. The nine section folders set `"root": true`; `sidebar_label`
   renames a page. Never write a `[Label](/docs/…)` link entry for a page in this repo; use a
   `"../path"` entry. `scripts/sidebar.test.ts` checks the tree.
 - **Partials.** `content/partials/`, included with `<include cwd>content/partials/…</include>`
-  from a page and file-relative from another partial. Two are generated; edit their generators.
+  from a page and file-relative from another partial. Write links inside a partial root-absolute;
+  `check-links` checks those and reports a missing include with its line. Two are generated; edit
+  their generators.
 - **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
 - **Components.** `components/mdx.tsx` is the registry.
-- **Redirects.** `redirects.config.ts`. Never hand-edit between the `AUTO-GENERATED` markers.
-  `move-doc` appends one entry and touches no other; `pnpm test` names any entry left chaining.
-- **Routing.** `next.config.ts` rewrites `/docs/<slug>.md` to the `/llms.mdx/` mirror. `proxy.ts`
-  only records PostHog `llms_file_fetched` events, in production.
+- **Redirects.** `redirects.config.ts`, hand-maintained. Never hand-edit between the
+  `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
+  entry left chaining, and fails when a URL in `scripts/data/master-routes.json` is neither a page
+  nor a redirect source. `next.config.ts` derives a `.md` twin for every entry; never hand-write
+  one. A source that was a Docusaurus page route is `permanent: true`; the rest are
+  `permanent: false`.
+- **Routing.** `next.config.ts` rewrites `/docs/<slug>.md` to the `/llms.mdx/` mirror and sets the
+  response headers from `lib/http-headers.ts` (security headers, report-only CSP, `Link` on `/`,
+  CORS on the markdown surface).
+  The `og/` and `llms.mdx/` routes have `dynamicParams = false`. `proxy.ts` only records PostHog
+  `llms_file_fetched` events, in production.
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
   production build without `NEXT_PUBLIC_SITE_URL`.
-- **Theme.** Tokens are `--color-fd-*`; never `--ifm-*`. PostCSS config lives in `package.json`.
+- **Theme.** `app/global.css` only. Tokens are `--color-fd-*`, built on the `--color-arbitrum-*`
+  palette; never `--ifm-*`. Breakpoints are Tailwind's plus `nav-sm`. Prose images are capped at
+  600px with a `data-wide` escape. The navbar selectors depend on Fumadocs' header DOM. PostCSS
+  config lives in `package.json`.
 - **Generated pages.** `content/docs/stylus/stylus-by-example/` and
   `content/docs/run-a-node/nitro/cli-flags-reference.mdx`. Change their generators, not the pages.
 

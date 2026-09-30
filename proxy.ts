@@ -21,6 +21,13 @@ export const config = {
   matcher: ['/llms.txt', '/llms-full.txt', '/docs.md', '/docs/:path*\\.md', '/llms.mdx/:path*'],
 };
 
+/** Longest header value forwarded to PostHog; a client controls both headers. */
+const MAX_HEADER_LENGTH = 512;
+
+function truncate(value: string | null): string {
+  return (value ?? '').slice(0, MAX_HEADER_LENGTH);
+}
+
 function track(request: NextRequest, event: NextFetchEvent): void {
   const info = pathInfo(request.nextUrl.pathname);
   if (info.kind === 'ignored') return;
@@ -36,8 +43,8 @@ function track(request: NextRequest, event: NextFetchEvent): void {
     const payload = buildTrackingPayload({
       trackedPath: info.trackedPath,
       fileType: info.fileType,
-      userAgent: request.headers.get('user-agent') ?? '',
-      referrer: request.headers.get('referer') ?? '',
+      userAgent: truncate(request.headers.get('user-agent')),
+      referrer: truncate(request.headers.get('referer')),
       posthogKey,
       // The configured origin, so the `*.vercel.app` alias does not split a page into two series.
       siteUrl: getSiteUrl(),
