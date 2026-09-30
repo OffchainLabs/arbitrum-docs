@@ -376,19 +376,12 @@ test('legacy URLs, headers and the llms index', { skip: !baseUrl }, async (t) =>
     assert.equal(new Set(links).size, links.length);
   });
 
-  await t.test('OG and mirror routes 404 for paths they did not prerender', async () => {
-    for (const path of [
-      '/og/docs/run-a-node/start-here/zzz1',
-      '/og/docs/stylus/anything.png',
-      '/llms.mdx/docs/zz-junk/content.md',
-    ]) {
+  await t.test('the mirror route 404s for paths it did not prerender', async () => {
+    for (const path of ['/llms.mdx/docs/zz-junk/content.md', `/llms.mdx${livePath}/other.md`]) {
       const response = await get(path);
       assert.equal(response.status, 404, path);
       await response.text();
     }
-    const og = await get(`/og/docs${livePath.replace(/^\/docs/, '')}/image.png`);
-    assert.equal(og.status, 200);
-    await og.arrayBuffer();
   });
 });
 

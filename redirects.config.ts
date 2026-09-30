@@ -39,18 +39,6 @@ export const redirects: Redirect[] = [
   },
   // AUTO-GENERATED REDIRECTS END
 
-  // Master page URLs that lost their entry during the migration; both pages exist under /docs.
-  {
-    source: '/how-arbitrum-works/deep-dives/stf',
-    destination: '/docs/how-arbitrum-works/deep-dives/stf',
-    permanent: true,
-  },
-  {
-    source: '/launch-arbitrum-chain/deploy/custom-genesis-state',
-    destination: '/docs/launch-arbitrum-chain/deploy/custom-genesis-state',
-    permanent: true,
-  },
-
   // Docusaurus served the audit-report PDFs at content-hashed paths
   // (`/assets/files/<name>-<32 hex>.pdf`). The same files are in public/audit-reports/.
   {
@@ -1440,7 +1428,7 @@ export const redirects: Redirect[] = [
   {
     source: '/how-arbitrum-works/deep-dives/stf',
     destination: '/docs/how-arbitrum-works/deep-dives/stf',
-    permanent: false,
+    permanent: true,
   },
   {
     source: '/how-arbitrum-works/deep-dives/stf-gentle-intro',
@@ -1543,11 +1531,6 @@ export const redirects: Redirect[] = [
     permanent: true,
   },
   {
-    source: '/how-arbitrum-works/priority-gas-auction/use-fast-feed',
-    destination: '/docs/how-arbitrum-works/priority-gas-auction/use-fast-feed',
-    permanent: true,
-  },
-  {
     source: '/how-arbitrum-works/priority-gas-auction/pga',
     destination: '/docs/how-arbitrum-works/priority-gas-auction/pga',
     permanent: true,
@@ -1555,7 +1538,7 @@ export const redirects: Redirect[] = [
   {
     source: '/how-arbitrum-works/priority-gas-auction/use-fast-feed',
     destination: '/docs/how-arbitrum-works/priority-gas-auction/use-fast-feed',
-    permanent: false,
+    permanent: true,
   },
   {
     source: '/how-arbitrum-works/reference/arbos-reference',
@@ -2448,7 +2431,7 @@ export const redirects: Redirect[] = [
   {
     source: '/launch-arbitrum-chain/deploy/custom-genesis-state',
     destination: '/docs/launch-arbitrum-chain/deploy/custom-genesis-state',
-    permanent: false,
+    permanent: true,
   },
   {
     source: '/launch-arbitrum-chain/deploy/deploy-chain',

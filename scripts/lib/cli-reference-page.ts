@@ -101,7 +101,7 @@ export function codeCell(text: string): string {
   const longest = (text.match(/`+/g) ?? []).reduce((n, run) => Math.max(n, run.length), 0);
   const fence = '`'.repeat(longest + 1);
   const pad = text.startsWith('`') || text.endsWith('`') ? ' ' : '';
-  return `${fence}${pad}${text.replace(/\\/g, '\\\\').replace(/\|/g, '\\|')}${pad}${fence}`;
+  return `${fence}${pad}${text.replace(/\|/g, '\\|')}${pad}${fence}`;
 }
 
 /** An empty default renders as a dash: pflag omits zero-value defaults, and so does the page. */
