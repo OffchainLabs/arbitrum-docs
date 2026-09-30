@@ -91,7 +91,7 @@ There are two options to move revenue from the child chain to the parent chain:
 1. **Withdraw manually through the bridge.** If a collector is an EOA or multisig you control, initiate a standard child to parent withdrawal and execute it on the parent chain after the <Term id="challenge">challenge</Term> period.
 2. **Use the AEP fee router contracts.** Set your collector addresses to `ChildToParentRouter` contracts, which route received funds to a configurable parent chain address and can be triggered permissionlessly. This is the recommended setup for chains with [Arbitrum Expansion Program](/docs/launch-arbitrum-chain/chain-config/costs/aep-overview) obligations (see [AEP fee router contracts](/docs/launch-arbitrum-chain/chain-config/costs/aep-router-contracts)).
 
-<Callout type="warning" title="Custom gas token chains">
+<Callout type="warn" title="Custom gas token chains">
 
 On chains with a <Term id="custom-gas-token">custom gas token</Term>, fee collection is denominated in your gas token while the batch poster spends the parent chain's native token, so the reimbursement stream and the actual cost are in different assets. Such chains typically disable the parent chain base fee (set the price per unit to zero) and handle batch posting costs off-protocol. See [How to use a custom gas token](/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup) and the custom gas token scenario in [AEP fee reporting](/docs/launch-arbitrum-chain/chain-config/costs/reporting-on-fees).
 

@@ -73,7 +73,7 @@ MALLOC_ARENA_MAX=2
 
 Setting `MALLOC_ARENA_MAX=2` caps glibc to two arenas, reducing worst-case arena overhead from gigabytes to ~128 MB. In testing, this eliminated the slow memory growth with no measurable performance impact on RPC throughput.
 
-<Callout type="warning">Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.</Callout>
+<Callout type="warn">Without `MALLOC_ARENA_MAX`, a Nitro node on a large host can accumulate gigabytes of arena overhead that appears as a "memory leak" because RSS grows steadily while Go reports stable usage. This is the most common cause of unexplained memory growth in long-running Nitro nodes.</Callout>
 
 ### Thread stacks
 
@@ -143,7 +143,7 @@ You should use a safety margin of 300-500 MB to account for allocator overhead, 
 GOMEMLIMIT = 16,384 MB - 4,756 MB - 400 MB safety = ~11,228 MB ≈ 11 GB
 ```
 
-<Callout type="warning">If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.</Callout>
+<Callout type="warn">If `GOMEMLIMIT` is set too high (not accounting for non-Go memory), the Go garbage collector defers collection, expecting more room than actually exists. The OS then OOM-kills the process when total RSS (Go heap plus all non-Go allocations) exceeds the container limit.</Callout>
 
 ### Helm chart shortcut
 

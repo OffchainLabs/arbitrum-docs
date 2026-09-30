@@ -10,7 +10,7 @@ To configure gas behavior on an <Term id="arbitrum-chain">Arbitrum chain</Term> 
 
 Below is a breakdown of each specified parameter, including its role, typical defaults (based on <Term id="arbitrum-one">Arbitrum One</Term>), and how to configure it. Note that changes may require careful consideration to avoid impacting chain performance, user experience, or security. For example, setting limits too high could lead to state bloat or slower block processing.
 
-<Callout type="warning" title="Caution">
+<Callout type="warn" title="Caution">
 
 Always test changes on a devnet or testnet Arbitrum chain, as misconfiguration can lead to unexpected fee behavior or chain instability. Refer to the [`ArbOwnerPublic` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner) for reading current settings without modifications. If using a custom gas token, ensure configurations are compatible.
 
@@ -111,7 +111,7 @@ This setting is only available starting from [ArbOS 51 Dia](/docs/run-a-node/arb
   - If your L2 or L3 chain posts data to another parent chain, the parameter will have to be set based on the parent chain.
 - **Configuration**: Call the `setParentGasFloorPerToken(uint64 newFloor)` on the [`ArbOwner` precompile](/docs/arbitrum-essentials/precompiles/reference#arbowner) to set the value for `gasFloorPerToken`. This value should be adjusted based on the parent chain's EIP-7623 settings to ensure the data-posting costs are fully covered.
 
-<Callout type="warning">
+<Callout type="warn">
 
 Changing this value from the recommended default is not advised and should be left untouched in most circumstances, unless required by your parent chain.
 

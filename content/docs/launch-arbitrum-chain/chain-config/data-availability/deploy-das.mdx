@@ -50,13 +50,13 @@ A DAS can be configured to use one or more of three storage backends:
 - Files on local disk
 - (**EXPERIMENTAL**) [Google Cloud Storage](https://cloud.google.com/storage) bucket
 
-<Callout type="warning" title="Google Cloud Storage is experimental">
+<Callout type="warn" title="Google Cloud Storage is experimental">
 
 The Google Cloud Storage option (set with `google-cloud-storage`) is experimental and hasn't been tested thoroughly. It is recommended to not rely solely on this storage option and to use it alongside other storage options.
 
 </Callout>
 
-<Callout type="warning" title="Local Badger database removed">
+<Callout type="warn" title="Local Badger database removed">
 
 The local Badger DB storage option (previously set with `local-db-storage`) was deprecated and removed in Nitro v3.8.0, together with its `--data-availability.migrate-local-db-to-file-storage` migration parameter. If your DAS still stores data in a local Badger database, run a Nitro version prior to v3.8.0 with that parameter to migrate the data to the local files storage option (`local-file-storage`) before upgrading.
 
@@ -78,7 +78,7 @@ DA servers also have an optional REST aggregator which, when a data batch is not
 
 ## How to deploy the DAS
 
-<Callout type="warning" title="Binary and flag names changed in Nitro v3.10.0">
+<Callout type="warn" title="Binary and flag names changed in Nitro v3.10.0">
 
 As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `anytrustserver` and `anytrusttool`, and the parent chain flags moved: `--data-availability.parent-chain-node-url` is now `--parent-chain.node-url`, and `--data-availability.sequencer-inbox-address` is now `--parent-chain.sequencer-inbox-address`. Current Docker images (v3.11.2 and later) only ship the new binaries, so scripts using the old names fail. This guide uses the new names throughout.
 

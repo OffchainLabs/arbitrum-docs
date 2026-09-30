@@ -22,7 +22,7 @@ The mapping isn't a list of every bridgeable token. It holds only the tokens tha
 2. If it has no entry, fall back to `defaultGateway`—the <Term id="standarderc20-gateway">standard **ERC-20** gateway</Term>.
 3. If the resolved gateway is explicitly disabled, return the zero address.
 
-<Callout type="warning" title="Unregistered tokens fail silently, not loudly">
+<Callout type="warn" title="Unregistered tokens fail silently, not loudly">
 
 Step 2 is the reason misrouting is so hard to spot. A token you believe is registered to a custom gateway—but isn't—still bridges successfully through the standard gateway, minting a _different_ child chain token than the one you deployed. Nothing reverts and no event signals the mistake. If a bridge transfer succeeds but the tokens land at an unexpected address, suspect a missing registration before you suspect a bug.
 

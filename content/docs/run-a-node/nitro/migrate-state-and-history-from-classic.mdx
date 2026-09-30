@@ -28,7 +28,7 @@ To successfully migrate the state and history of the chain from a classic (pre-N
 
 Launch your classic node with the option `--node.rpc.nitroexport.enable=true`. All exported data will be written to directory "nitroexport" under the classic instance directory (e.g., `${HOME}/.arbitrum/mainnet/nitroexport`). Make sure the classic node has read the entire rollup state.
 
-<Callout type="warning" title="Caution">
+<Callout type="warn" title="Caution">
 
 Enabling the export options is only recommended for nodes with no public/external interfaces.
 
@@ -70,7 +70,7 @@ This data does not impact consensus and is optional. It allows a Nitro node to p
 - Place the `l2chaindata` and `classic-msg` (if exported) directories in Nitro's instance directory (e.g., `${HOME}/.arbitrum/arb1-nitro/`).
 - Launch the Nitro node with the argument `--init.import-file=/path/to/state/index.json`
 
-<Callout type="warning" title="Caution">
+<Callout type="warn" title="Caution">
 
 This state import operation requires more resources than a regular run of a Nitro node.
 

@@ -12,7 +12,7 @@ target_audience: 'Arbitrum chains owners and operators'
 
 ## Overview of the stack migration process
 
-<Callout type="warning">
+<Callout type="warn">
 
 This document is provided for informational purposes only and does not constitute an end-to-end guide for executing the migration. <Term id="offchain-labs">Offchain Labs</Term> doesn’t have special knowledge or a private “fast path.” This document provides the extent of our guidance. Your current <Term id="raas">RaaS</Term> provider owns and executes the migration. We can provide [introductions to RaaSes](/docs/launch-arbitrum-chain/integrations/infrastructure-providers#rollup-as-a-service-raas-providers).
 
@@ -74,7 +74,7 @@ True, zero-downtime is not realistic for a Rollup stack migration; however, you 
 
 Expect a freeze window of hours for snapshot integrity. The full project timeline is often set aside 4-8 weeks, including partner cutovers and audits.
 
-<Callout type="warning" title="Important">
+<Callout type="warn" title="Important">
 
 Pause withdrawals earlier than the main freeze window to ensure no funds get trapped in in-flight bridges (i.e., deposits paused at the start of the freeze and withdrawals paused earlier, as per bridge requirements).
 

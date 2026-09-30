@@ -47,7 +47,7 @@ On <Term id="arbitrum-one">Arbitrum One</Term>, a second stream runs alongside t
 
 #### 5. Posting to the parent chain [#posting-to-the-parent-chain]
 
-Independent of the loop above, the <Term id="batch-poster">batch poster</Term> reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive [compression levels](/docs/how-arbitrum-works/deep-dives/gas-and-fees#compression-levels), and posts them to the <Term id="sequencer-inbox">Sequencer Inbox</Term> using either calldata or EIP-4844 blobs. To configure this component, see [Run a batch poster](/docs/run-a-node/run-batch-poster). Once those batches are finalized on the parent chain, the transactions reach [<Term id="hard-finality">hard finality</Term>](/docs/how-arbitrum-works/reference/finality-and-reorgs#the-three-confirmation-levels).
+Independent of the loop above, the <Term id="batch-poster">batch poster</Term> reads sequenced messages from the TransactionStreamer, Brotli-compresses them with adaptive [compression levels](/docs/how-arbitrum-works/deep-dives/gas-and-fees#compression-levels), and posts them to the <Term id="sequencer-inbox">Sequencer Inbox</Term> using either calldata or EIP-4844 blobs. To configure this component, see [Run a batch poster](/docs/launch-arbitrum-chain/run-a-node/batch-poster). Once those batches are finalized on the parent chain, the transactions reach [<Term id="hard-finality">hard finality</Term>](/docs/how-arbitrum-works/reference/finality-and-reorgs#the-three-confirmation-levels).
 
 ## High availability: the Sequencer coordinator
 

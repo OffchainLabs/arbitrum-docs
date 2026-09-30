@@ -47,7 +47,7 @@ Before you change anything, find out which pricing model your chain runs. The mo
 
 Call `ArbGasInfo.getGasPricingConstraints()` first (available from ArbOS 51 onward; on earlier versions the call reverts and your chain always uses a single gas target). If it returns an empty array, your chain uses a single gas target and `setSpeedLimit` applies. If it returns one or more constraints, your chain uses multiple gas targets.
 
-<Callout type="warning">
+<Callout type="warn">
 
 From [ArbOS 51 Dia](/docs/run-a-node/arbos-releases/arbos51) onward, `setSpeedLimit` writes only the single gas target value. It does not change a multiple gas target configuration. On a chain with constraints configured, the call succeeds and the stored value changes, but gas prices do not respond. To move such a chain back to a single gas target, call `setGasPricingConstraints` with an empty array, then call `setSpeedLimit`.
 

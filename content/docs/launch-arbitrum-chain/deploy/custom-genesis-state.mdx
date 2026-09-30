@@ -172,7 +172,7 @@ jq '{blockHash, sendRoot}' genesis-result.json
 
 Store `genesis-result.json` with your deployment records. It ties the exact genesis file to the values committed on the parent chain.
 
-<Callout type="warning" title="Generate the genesis before deploying the chain">
+<Callout type="warn" title="Generate the genesis before deploying the chain">
 
 The Rollup contract commits to the genesis state during deployment. If you change an allocation or any genesis parameter afterward, the resulting block hash no longer matches the onchain genesis <Term id="assertion">assertion</Term>. Generate and review the final file before you call `createRollup`.
 
@@ -305,7 +305,7 @@ You still need to supply two values: `parentChainPublicClient`, a public client 
 
 Continue with [`createRollup` in the chain deployment guide](/docs/launch-arbitrum-chain/deploy/deploy-chain#2-deploy-the-arbitrum-chain), passing `createRollupConfig` as `params.config`. That guide documents these inputs, along with the batch poster and validator addresses.
 
-<Callout type="warning" title="Preserve the generated chain configuration and base fee">
+<Callout type="warn" title="Preserve the generated chain configuration and base fee">
 
 Pass the parsed `serializedChainConfig` without changing its values. Set `dataCostEstimate` to the generated `arbOSInit.initialL1BaseFee`, and keep it non-zero. Omitting `dataCostEstimate` is a common cause of failed custom-genesis deployments. If either value differs from the genesis file, validators can fail to find the onchain genesis assertion when they stake on the first assertion.
 

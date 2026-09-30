@@ -29,7 +29,7 @@ This how-to assumes that you're familiar with:
 - The DAC's role in the AnyTrust protocol. Refer to [Inside AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) for a refresher.
 - [Docker](https://docs.docker.com/) and Docker Compose.
 
-<Callout type="warning" title="Binary names changed in Nitro v3.10.0">
+<Callout type="warn" title="Binary names changed in Nitro v3.10.0">
 
 As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `anytrustserver` and `anytrusttool`, and the Docker image only ships the new names. The parent chain flags also moved: `--data-availability.parent-chain-node-url` is now `--parent-chain.node-url`, and `--data-availability.sequencer-inbox-address` is now `--parent-chain.sequencer-inbox-address`. If you're following older guides or scripts that use the legacy names with a recent image, the commands will fail. This guide uses the new names throughout.
 
@@ -56,7 +56,7 @@ mkdir -p das-server/bls_keys das-server/das-data
 cd das-server
 ```
 
-<Callout type="warning" title="Create mounted directories before starting the container">
+<Callout type="warn" title="Create mounted directories before starting the container">
 
 The DAS container runs as a non-root user with UID and GID `1000` (the first regular user on the image's Debian base). If a bind-mounted directory doesn't exist when the container starts, Docker creates it owned by `root`, and the server will fail with permission errors when writing to it. Always create the directories on the host first. On Linux, if your user's UID isn't `1000`, also make them writable for the container user: `sudo chown -R 1000:1000 bls_keys das-data`. Docker Desktop on macOS and Windows maps file ownership automatically, so this step isn't needed there.
 

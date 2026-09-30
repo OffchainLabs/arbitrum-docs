@@ -98,7 +98,7 @@ When a batch is posted, the <Term id="sequencer-inbox">Sequencer Inbox</Term> co
 
 The contract records these bounds (they are emitted in the `SequencerBatchDelivered` event and folded into the batch's data hash), but it **does not reject** a batch whose messages fall outside them. Enforcement happens later, off the parent chain, when the batch is replayed by the node's state-transition function: each message whose claimed block or timestamp is outside the recorded window is **clamped** to the nearest bound—pulled up to the minimum if it is too far in the past, or pulled down to the maximum if it is too far in the future.
 
-<Callout type="warning" title="Out-of-window messages are clamped, not rejected">
+<Callout type="warn" title="Out-of-window messages are clamped, not rejected">
 
 Because out-of-window messages are silently clamped rather than rejected, a message can be assigned a different parent-chain block or timestamp than the Sequencer originally computed locally. When the locally executed chain and the chain derived from onchain data disagree, the result is a child-chain reorg. `maxTimeVariation` therefore does not guard by blocking bad batches; it defines the window inside which the Sequencer and <Term id="batch-poster">batch poster</Term> must keep every message to avoid such reorgs.
 

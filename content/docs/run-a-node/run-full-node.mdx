@@ -46,7 +46,7 @@ Pick based on how you want to handle <Term id="state-pruning">pruning</Term> and
 
 On **<Term id="archive-node">archive</Term>** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/docs/run-a-node/more-types/run-archive-node).
 
-<Callout type="warning" title="PathDB and block validation">
+<Callout type="warn" title="PathDB and block validation">
 
 PathDB cannot validate blocks. If a node requires the block validator, Nitro exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required`.
 
@@ -56,13 +56,13 @@ A default full node is unaffected: it runs the watchtower strategy, which does n
 
 ## Putting it into practice: run a node
 
-<Callout type="warning" title="Caution">
+<Callout type="warn" title="Caution">
 
 If you are running more than one node, you should [run a feed relay](/docs/run-a-node/run-feed-relay).
 
 </Callout>
 
-<Callout type="warning" title="PathDB and `--init.latest`">
+<Callout type="warn" title="PathDB and `--init.latest`">
 
 `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and every snapshot it resolves for those kinds uses HashDB. Adding `--execution.caching.state-scheme=path` to the examples below fails, because the downloaded snapshot's scheme won't match.
 
@@ -70,7 +70,7 @@ PathDB snapshots are published under the separate `full-path` and `archive-path`
 
 </Callout>
 
-<Callout type="warning" title="Docker volume mount">
+<Callout type="warn" title="Docker volume mount">
 
 To ensure the database persists across restarts, mount an external volume to **`/home/user/.arbitrum`** inside the Docker container. Make sure to:
 

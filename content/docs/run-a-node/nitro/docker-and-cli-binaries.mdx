@@ -38,7 +38,7 @@ The `--validation.wasm.allowed-wasm-module-roots` flag tells the node which WASM
 - `/home/user/nitro-legacy/machines` — WASM roots from earlier Nitro versions, needed to validate historical blocks.
 - `/home/user/target/machines` — Current WASM roots shipped with this image version.
 
-<Callout type="warning">
+<Callout type="warn">
 
 If you override the entrypoint (for example, `--entrypoint relay`), the default flags are **not** applied. You must pass `--validation.wasm.allowed-wasm-module-roots` manually if the binary you are running requires validation support.
 
