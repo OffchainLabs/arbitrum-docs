@@ -125,6 +125,8 @@ The State Transition Function consists of the bottom Geth layer and a portion of
 
 ## Separating execution from proving
 
+Many transactions involve asset or data transfers between Ethereum and Arbitrum, which are managed through secure bridging protocols (see the [Token bridging deep dive](/docs/how-arbitrum-works/deep-dives/token-bridging) for the architecture overview). For parent-to-child transfers from Ethereum to Arbitrum, options include native token bridging for direct **ETH** [deposits](/docs/arbitrum-essentials/bridging/deposit/tokens), **ERC-20** transfers via the canonical <Term id="bridge">bridge</Term>, or support for [custom gas tokens](/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup).
+
 One of the challenges in designing a practical rollup system is the tension between wanting the system to perform well in ordinary execution and reliably verifying its results. Nitro resolves this tension by using the same source code for both execution and proving, but compiling it to different targets for the two cases.
 
 When compiling the Nitro node software for _execution_, the standard Go compiler produces native code for the target architecture, which, of course, will vary across node deployments. (The node software is distributed in source code form, and as a Docker image containing a compiled library.)

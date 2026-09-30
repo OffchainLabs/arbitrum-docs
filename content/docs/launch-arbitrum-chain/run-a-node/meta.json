@@ -1,10 +1,10 @@
 {
   "title": "Run a node for an Arbitrum chain",
   "pages": [
+    "batch-poster",
+    "high-availability-sequencer",
     "run-full-node-with-helm",
-    "../../run-a-node/run-batch-poster",
-    "../../run-a-node/run-split-validator-node",
-    "../../run-a-node/high-availability-sequencer-docs",
+    "split-validator-node",
     "..."
   ]
 }

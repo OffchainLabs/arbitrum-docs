@@ -1,12 +1,11 @@
 {
-  "title": "Integrations",
+  "title": "Ecosystem support",
   "pages": [
-    "bridge-ui",
-    "bridged-usdc-standard",
-    "../third-party-integrations",
     "bp-kms-signing-services",
+    "bridge-ui",
+    "bridged-usdc",
     "exchange-integration-checklist",
-    "layer-leap",
+    "infrastructure-providers",
     "..."
   ]
 }

@@ -1,22 +1,18 @@
 {
-  "title": "Run an Arbitrum chain",
+  "title": "Launch arbitrum chain",
   "icon": "Network",
-  "description": "Configure, deploy, and operate your own Arbitrum chain.",
   "root": true,
+  "description": "Configure, deploy, and operate your own Arbitrum chain.",
   "pages": [
-    "index",
-    "overview/a-gentle-introduction",
-    "overview/aep-license",
-    "troubleshooting-building-arbitrum-chain",
     "quickstart",
-    "configuration",
+    "chain-config",
     "deploy",
+    "extend-the-protocol",
     "integrations",
     "migrate",
     "operate",
-    "configuration/core",
+    "overview",
     "run-a-node",
-    "external:[Chain playbook](https://github.com/OffchainLabs/arbitrum-chain-playbook)",
     "..."
   ]
 }

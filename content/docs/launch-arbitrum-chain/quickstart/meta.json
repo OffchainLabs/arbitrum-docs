@@ -1,9 +1,4 @@
 {
   "title": "Quickstart",
-  "pages": [
-    "deploy-your-first-rollup",
-    "run-testnet-infrastructure-first-rollup",
-    "../overview/arbitrum-chain-sdk-introduction",
-    "..."
-  ]
+  "pages": ["l3-rollup-from-scratch", "l3-rollup-testnet", "sdk-introduction", "..."]
 }

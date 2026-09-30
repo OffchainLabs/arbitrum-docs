@@ -92,7 +92,7 @@ ArbOS 61 introduces a pluggable interface to the Arbitrum node software, allowin
 
 The interface is intended for Arbitrum chains that post data to a DA layer other than Ethereum, another Arbitrum L2, or an AnyTrust DAC. It is not intended for use by Arbitrum One or Nova, since both settle to Ethereum; it is included in ArbOS 61 to simplify the codebase and canonicalize the feature in Nitro.
 
-For implementation details, see [How to integrate with the DA API](/docs/launch-arbitrum-chain/integrations/da-api-integration-guide), which covers the JSON-RPC server methods a DA provider must expose (reading batch data by certificate, writing batch data, generating fraud-proof validation proofs) and the Solidity validator contract that validates those proofs onchain.
+For implementation details, see [How to integrate with the DA API](/docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide), which covers the JSON-RPC server methods a DA provider must expose (reading batch data by certificate, writing batch data, generating fraud-proof validation proofs) and the Solidity validator contract that validates those proofs onchain.
 
 ### Compliance transaction filtering
 
@@ -105,7 +105,7 @@ ArbOS 61 includes new optional components in the sequencer and the State Transit
 - The feature is gated behind an `ArbOwner` call, so only the chain owner can enable it.
 - A 7-day enable delay is built in: if a chain owner enables filtering on a live chain, it takes 7 days for the change to take effect.
 
-The feature is not enabled on Arbitrum One or Nova. It is included in ArbOS 61 to simplify the codebase and canonicalize the feature in the node software, and is intended for Arbitrum chains with compliance and regulatory obligations to restrict onchain activity from sanctioned entities or actors. You can learn more in our [compliance filtering explainer](/docs/launch-arbitrum-chain/configuration/sequencer/compliance-filtering).
+The feature is not enabled on Arbitrum One or Nova. It is included in ArbOS 61 to simplify the codebase and canonicalize the feature in the node software, and is intended for Arbitrum chains with compliance and regulatory obligations to restrict onchain activity from sanctioned entities or actors. You can learn more in our [compliance filtering explainer](/docs/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering).
 
 ### WASM compatibility changes
 
@@ -138,7 +138,7 @@ See also the [upgrade notice for ArbOS 61](/docs/notices/arbos61-upgrade-notice)
 - [Constitutional AIP: ArbOS61 Elara Upgrade, onchain vote](https://alt.gov.arbitrum.foundation/proposal/7191014407719621170610709569285477750369874509305441081488686529382763374426?govId=eip155:42161:0xf07DeD9dC292157749B6Fd268E37DF6EA38395B9), the executed onchain proposal; voting ran July 16 to July 30, 2026
 - [Arbitrum ArbOS upgrades](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695), background on ArbOS upgrades as hard forks
 - [Arbitrum DAO network upgrades](https://docs.arbitrum.foundation/network-upgrades), the canonical table of governance approval status and per-chain activation timestamps
-- [How to integrate with the DA API](/docs/launch-arbitrum-chain/integrations/da-api-integration-guide), the integration guide for building a custom DA provider against the new API
+- [How to integrate with the DA API](/docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide), the integration guide for building a custom DA provider against the new API
 - Priority fees, how to configure priority fee collection on an Arbitrum chain (page not yet ported to this site)
 - [`cargo stylus` overview](/docs/stylus/cli-tools/overview), the CLI that handles fragmented deployment for Stylus contracts above the 24 KB limit
 - [Trail of Bits ArbOS 60/61 code review, July 10, 2026](/audit-reports/2026_07_10_trail_of_bits_arbitrum_arbos_60_61_code_review_final_comprehensive_report.pdf)

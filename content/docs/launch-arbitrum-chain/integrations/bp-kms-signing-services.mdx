@@ -1,10 +1,11 @@
 ---
 title: 'Batch poster: External signing (KMS)'
-sidebar_label: 'KMS signing services'
+sidebar_label: 'KMS and signing services'
 description: "Learn how to integrate external signing—including AWS KMS—for your chain's batch poster."
 author: pete-vielhaber
 sme: jason-w123
-content_type: 'how-to'
+user_story: As an Arbitrum chain operator, I want to integrate KMS and signing services for my batch poster.
+content_type: how-to
 ---
 
 Nitro's batch poster (and staker) sign their parent chain transactions through the **DataPoster** component. By default, it signs locally with a private key, but it also supports **generic RPC-based external signing**: instead of holding the key, Nitro sends an unsigned transaction to a remote signer over (m)TLS, gets back a signed transaction, and independently verifies it.
@@ -55,7 +56,7 @@ This config is nested under both the batch poster and the staker, so the full CL
 
 **Staker** uses the same fields under `--node.staker.data-poster.external-signer.*`.
 
-When `external-signer.url` is empty, the batch poster requires a local key. **AnyTrust chains need a local key even when external signing is enabled**: the external signer covers the batch transactions posted to the parent chain, but the requests sent to the <Term id="data-availability-committee-dac">DA Committee</Term> are still signed with a local key. See [External signer support](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das#external-signer-support) for how to configure the separate key.
+When `external-signer.url` is empty, the batch poster requires a local key. **AnyTrust chains need a local key even when external signing is enabled**: the external signer covers the batch transactions posted to the parent chain, but the requests sent to the <Term id="data-availability-committee-dac">DA Committee</Term> are still signed with a local key. See [External signer support](/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-das#external-signer-support) for how to configure the separate key.
 
 ## What the signer service must implement
 

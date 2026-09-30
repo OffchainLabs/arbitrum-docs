@@ -2,7 +2,8 @@
 title: 'How to run a full node with Helm on Kubernetes'
 sidebar_label: 'Run a full node (Helm/Kubernetes)'
 description: 'Deploy an Arbitrum chain full node on Kubernetes with the community Helm chart, including memory configuration, monitoring, log signals, and network egress.'
-content_type: 'how-to'
+user_story: 'As a node operator, I want to deploy and reliably operate an full node for an Arbitrum chain on Kubernetes using the community Helm chart.'
+content_type: how-to
 author: 'Jason-W123'
 sme: 'Jason-W123'
 ---
@@ -34,9 +35,8 @@ helm repo update
 
 Then install, selecting the configuration for your chain:
 
-<div className="dynamic-content-tabs">
-  <Tabs items={["Arbitrum One, Nova, Sepolia", "Your Arbitrum chain"]}>
-    <Tab value="Arbitrum One, Nova, Sepolia">
+<Tabs items={["Arbitrum One, Nova, Sepolia", "Your Arbitrum chain"]}>
+  <Tab value="Arbitrum One, Nova, Sepolia">
 
 The chart defaults to Arbitrum One (`chain.id` `42161`, `parent-chain.id` `1`), so an Arbitrum One node needs only three values:
 
@@ -59,8 +59,8 @@ helm install arbsepolia-fullnode offchainlabs/nitro \
   --set configmap.data.chain.id=421614
 ```
 
-    </Tab>
-    <Tab value="Your Arbitrum chain">
+  </Tab>
+  <Tab value="Your Arbitrum chain">
 
 A node for your own Arbitrum chain needs its chain info, sequencer endpoint, and feed URL. Because `chain.info-json` is a large JSON string, supply these through a values file rather than `--set`:
 
@@ -90,12 +90,10 @@ helm install mychain-fullnode offchainlabs/nitro -f values-mychain.yaml
 
 If the parent chain is Ethereum, also set `configmap.data.parent-chain.blob-client.beacon-url`. AnyTrust chains additionally need a Data Availability configuration (`node.da.anytrust.*`, including a `rest-aggregator`); see [Data Availability](/docs/run-a-node/data-availability). The older `node.data-availability.*` flags still work but are deprecated in Nitro and will be removed in a future release.
 
-    </Tab>
+  </Tab>
+</Tabs>
 
-  </Tabs>
-</div>
-
-<Callout type="warn" title="Defaults that commonly trip up operators">
+<Callout type="warning" title="Defaults that commonly trip up operators">
 
 - **Don't copy the chart README's init example verbatim.** It uses `nitro-genesis.tar`, which syncs from genesis — a huge, slow process on a chain with a long history, such as Arbitrum One. Where a pruned snapshot exists, prefer `configmap.data.init.latest=pruned` (default base `https://snapshot.arbitrum.foundation/`).
 - **The chart changes the RPC path prefix.** Defaults are `http.rpcprefix=/rpc` and `ws.rpcprefix=/ws`, so RPC is served at `http://host:8547/rpc`, not vanilla Nitro's `/`. Clients that omit `/rpc` get a 404.
@@ -146,7 +144,7 @@ Once enabled, the node exposes Prometheus metrics at `http://<pod>:6070/debug/me
 
 ### Grafana dashboard
 
-The repository's README points to the Grafana dashboard's [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases). If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
+The repository’s README points to the Grafana dashboard's [Releases page](https://github.com/OffchainLabs/community-helm-charts/releases). If a release doesn't attach the dashboard JSON, pull the last published copy from the repository's git history and import it:
 
 ```shell
 git clone https://github.com/OffchainLabs/community-helm-charts
@@ -155,7 +153,7 @@ git -C community-helm-charts show 430a2cc~1:operations/grafana/dashboards/overvi
 
 Then in Grafana, go to **Dashboards → Import** and paste `overview.json`.
 
-<Callout type="warn">
+<Callout type="warning">
 
 This exported dashboard has no `__inputs` datasource prompt, and its `Source` variable is hard-pinned to an internal Mimir UID. After importing, you **must** repoint the `Source` variable to your own Prometheus instance, or every panel will read "No data." Then set `nitronodejob` to this node's scrape job, and leave `sequencerjob`, `validatorjob`, and `relayjob` empty so only the full-node rows render.
 
@@ -231,7 +229,7 @@ For **Arbitrum One**, those resolve to:
 | DB snapshot               | `https://snapshot.arbitrum.foundation/`                                                        |
 | Parent chain              | Your Ethereum L1 execution RPC + L1 beacon/blob endpoint                                       |
 
-<Callout type="warn" title="Firewall egress">
+<Callout type="warning" title="Firewall egress">
 
 For a default Arbitrum One full node, allow `*.arbitrum.io` (443 HTTPS + WSS), `snapshot.arbitrum.foundation` (443, init only), and your own L1 RPC + beacon hosts. For other chains, allow that chain's sequencer, feed, and snapshot hosts, plus your parent-chain endpoints. **Additional outbound paths exist only if you enable them:** the version alerter (off by default, queries an operator-set endpoint), the classic redirect, or DA/REST endpoints (AnyTrust chains such as Nova).
 
