@@ -435,6 +435,9 @@ Other things not to undo:
 - **The Inkeep chat widget** (`components/inkeep/inkeep-chat-button.tsx`) waits for `load` and then
   an idle callback before it loads its chunk, so it downloads after the resources that decide
   Largest Contentful Paint.
+- **The search dialog mounts on first open.** `app/layout.tsx` passes `preload: false` to
+  Fumadocs' search options; its default of `true` mounts the dialog at once, which fetches the
+  Inkeep bundle on every page load.
 - **Fonts are self-hosted** under `public/fonts/` and loaded with `next/font/local` in
   `app/layout.tsx`. Never add `next/font/google`: it makes the build fetch from Google. Only the two
   upright Aeonik faces preload. The italic is its own declaration so it can skip preloading, and
