@@ -1,7 +1,7 @@
 ---
 title: How to bridge from child chain to parent chain
+sidebar_label: ETH and messages
 description: 'Step-by-step guide to programmatically withdraw ETH and send messages from an Arbitrum child chain to Ethereum using ArbSys and the Outbox contract.'
-user_story: 'As a developer, I want to programmatically withdraw assets and messages from Arbitrum to Ethereum so I can build cross-chain functionality in my dApp.'
 content_type: 'how-to'
 author: gblanchemain
 sme: gblanchemain
@@ -92,11 +92,11 @@ const nodeInterface = new ethers.Contract('0x00000000000000000000000000000000000
 const proofData = await nodeInterface.constructOutboxProof(batchNumber, indexInBatch);
 ```
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 `NodeInterface` is a "virtual" contract accessible at `0x00000000000000000000000000000000000000C8`. It isn't a true precompile but provides Arbitrum-specific data without requiring a custom RPC.
 
-</VanillaAdmonition>
+</Callout>
 ### Step 2: Execute on the parent chain
 
 Call `Outbox.executeTransaction` with the proof data from Step 1:
@@ -169,7 +169,7 @@ const receipt = await tx.wait();
 
 The withdrawal process:
 
-<ImageZoom src="/img/apps-withdrawing-ether.svg" alt="Process that funds follow during a withdrawal operation" className="img-800px" />
+![Process that funds follow during a withdrawal operation](/img/apps-withdrawing-ether.svg)
 
 ## Withdrawing **ERC-20** tokens
 

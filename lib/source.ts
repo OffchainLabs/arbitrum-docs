@@ -9,6 +9,19 @@ export const source = loader({
   baseUrl: docsRoute,
   source: docs.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
+  pageTree: {
+    // The sidebar comes from the `meta.json` files under content/docs. This only lets a page's
+    // `sidebar_label` frontmatter replace its title as the sidebar name.
+    transformers: [
+      {
+        file(node, filePath) {
+          const file = filePath ? this.storage.read(filePath) : undefined;
+          const label = file?.format === 'page' ? file.data.sidebar_label : undefined;
+          return label ? { ...node, name: label } : node;
+        },
+      },
+    ],
+  },
 });
 
 export function getPageImage(page: (typeof source)['$inferPage']) {

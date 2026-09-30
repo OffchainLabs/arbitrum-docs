@@ -2,7 +2,6 @@
 title: 'How to deploy a Data Availability Server (DAS) with Docker'
 sidebar_label: 'Deploy DAS with Docker'
 description: 'Deploy a Data Availability Server (DAS) for your AnyTrust chain using Docker and Docker Compose, without Kubernetes: generate BLS keys in a container, run the server, and verify it.'
-user_story: 'As a Data Availability Committee member, I want to deploy a DAS with Docker and Docker Compose so that I can run a committee member server without a Kubernetes cluster.'
 content_type: 'how-to'
 author: 'Gowtham118'
 sme: 'Gowtham118'
@@ -27,11 +26,11 @@ This how-to assumes that you're familiar with:
 - The DAC's role in the AnyTrust protocol. Refer to [Inside AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) for a refresher.
 - [Docker](https://docs.docker.com/) and Docker Compose.
 
-<VanillaAdmonition type="warning" title="Binary names changed in Nitro v3.10.0">
+<Callout type="warn" title="Binary names changed in Nitro v3.10.0">
 
 As of Nitro v3.10.0, the `daserver` and `datool` binaries have been renamed to `anytrustserver` and `anytrusttool`, and the Docker image only ships the new names. The parent chain flags also moved: `--data-availability.parent-chain-node-url` is now `--parent-chain.node-url`, and `--data-availability.sequencer-inbox-address` is now `--parent-chain.sequencer-inbox-address`. If you're following older guides or scripts that use the legacy names with a recent image, the commands will fail. This guide uses the new names throughout.
 
-</VanillaAdmonition>
+</Callout>
 
 ## How to deploy the DAS
 
@@ -54,17 +53,22 @@ mkdir -p das-server/bls_keys das-server/das-data
 cd das-server
 ```
 
-<VanillaAdmonition type="warning" title="Create mounted directories before starting the container">
+<Callout type="warn" title="Create mounted directories before starting the container">
 
 The DAS container runs as a non-root user with UID and GID `1000` (the first regular user on the image's Debian base). If a bind-mounted directory doesn't exist when the container starts, Docker creates it owned by `root`, and the server will fail with permission errors when writing to it. Always create the directories on the host first. On Linux, if your user's UID isn't `1000`, also make them writable for the container user: `sudo chown -R 1000:1000 bls_keys das-data`. Docker Desktop on macOS and Windows maps file ownership automatically, so this step isn't needed there.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Step 1: Generate the BLS keypair
 
 We'll generate a BLS keypair. The private key will be used to sign the <Term id="data-availability-certificate">Data Availability Certificates (DACert)</Term> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
 
-The keypair is generated with the `anytrusttool keygen` utility, which ships in the same Docker image as the DAS, so you can run it with `docker run` and a volume mount to have the keys land on your host:
+The keypair is generated with the `anytrusttool keygen` utility, which ships in the same Docker image as the DAS (currently <Var name="latestNitroNodeImage" />), so you can run it with `docker run` and a volume mount to have the keys land on your host:
+
+{/* sync-with-var: latestNitroNodeImage */}
+{/* The docker run commands below hardcode the image tag, because variables do not evaluate inside a
+code fence. The marker above lets `pnpm nitro:check-release` rewrite them when it bumps the
+variable. Do not add it to a page that states a Nitro version as a historical fact. */}
 
 ```shell
 docker run --rm -v $(pwd)/bls_keys:/home/user/bls_keys --entrypoint anytrusttool \
@@ -126,11 +130,11 @@ All the configuration options available for a Kubernetes deployment apply here t
 - --data-availability.rest-aggregator.online-url-list=<URL TO LIST OF REST ENDPOINTS>
 ```
 
-<VanillaAdmonition type="note" title="Running a mirror DAS with Docker">
+<Callout type="info" title="Running a mirror DAS with Docker">
 
 A [mirror DAS](/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das) uses the same image and a subset of this configuration: remove `--enable-rpc`, `--rpc-addr`, and the `9876` port mapping (mirrors don't store data for the sequencer, so they need no RPC interface and no BLS key), and enable the REST aggregator with the `--data-availability.rest-aggregator.sync-to-storage.*` options so that it syncs data from your main DAS and other public mirrors.
 
-</VanillaAdmonition>
+</Callout>
 
 ### Step 3: Start the DAS
 
@@ -147,8 +151,8 @@ docker compose logs -f das-server
 You should see the hex-encoded BLS public key logged at startup (in the line `AnyTrust public key used for signing`), followed by lines similar to:
 
 ```shell
-INFO [...] Starting HTTP-RPC server    addr=0.0.0.0 port=9876 revision=v3.11.1-8512b8c
-INFO [...] Starting REST server        addr=0.0.0.0 port=9877 revision=v3.11.1-8512b8c
+INFO [...] Starting HTTP-RPC server    addr=0.0.0.0 port=9876 revision=v3.11.4-7d5ac27
+INFO [...] Starting REST server        addr=0.0.0.0 port=9877 revision=v3.11.4-7d5ac27
 ```
 
 ## Volumes and persistence
@@ -203,7 +207,7 @@ A healthy DAS answers `{"jsonrpc":"2.0","id":0,"result":null}`.
 
 By default, the DAS only accepts store requests signed by the sequencer's key (identified via the `SequencerInbox` contract). To send a test store request yourself, configure the DAS to also accept requests signed with an ECDSA key of your choosing.
 
-First, generate an ECDSA keypair (again, no local Nitro build needed):
+First, generate an ECDSA keypair using the same <Var name="latestNitroNodeImage" /> image (again, no local Nitro build needed):
 
 ```shell
 mkdir -p ecdsa_keys
@@ -259,11 +263,11 @@ Remove the extra signer configuration when you're done testing, or keep it (with
 
 A DAS signs and returns a DACert immediately for each store request it receives from the batch poster; there is no waiting period on the DAS side. How often those certificates (or, in fallback, full batches) are posted to the parent chain is governed by the batch poster's own limits — its maximum batch size and maximum delay parameters (`--node.batch-poster.max-delay`, and `--node.da.anytrust.max-batch-size` for AnyTrust batches) — so DAS costs are dominated by steady infrastructure, not per-batch fees.
 
-<VanillaAdmonition type="info" title="Approximate costs (as of July 2026)">
+<Callout type="info" title="Approximate costs (as of July 2026)">
 
 Typical operational cost for running an AnyTrust DAS node is roughly \$200/month (a small VM, storage, and egress). For comparison, posting data to Celestia costs roughly \$0.08/MB. These are rough estimates that change over time; validate them against current provider pricing before making decisions.
 
-</VanillaAdmonition>
+</Callout>
 
 ## What to do next?
 

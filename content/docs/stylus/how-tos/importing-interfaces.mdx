@@ -1,8 +1,7 @@
 ---
 title: 'Import and call external contract interfaces'
-description: 'Learn how to import Solidity interfaces and call external contracts from your Stylus smart contracts'
 sidebar_label: 'Importing interfaces'
-user_story: 'As a Rust developer building Stylus smart contracts, I want to interact with other contracts on the blockchain'
+description: 'Learn how to import Solidity interfaces and call external contracts from your Stylus smart contracts'
 content_type: 'how-to'
 author: 'anegg0'
 sme: 'anegg0'
@@ -27,13 +26,16 @@ Contract interfaces provide a type-safe way to communicate with other contracts 
 
 Before implementing interfaces, ensure you have:
 
-<CustomDetails summary="Rust toolchain">
+<Accordions>
+<Accordion title="Rust toolchain">
 
 Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v<Var name="stylusRustToolchain" /> or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="cargo stylus">
+<Accordions>
+<Accordion title="cargo stylus">
 
 In your terminal, run:
 
@@ -50,7 +52,8 @@ rustup target add wasm32-unknown-unknown --toolchain 1.91
 
 You can verify that `cargo stylus` is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ## Declaring interfaces with `sol_interface!`
 
@@ -223,7 +226,9 @@ impl MyContract {
 ```
 
 <Callout type="warning" title="Mutating calls require &mut self">
+
   When using `Call::new_mutating(self)`, your method must take `&mut self` as its first parameter. This ensures the Stylus runtime properly handles state changes and reentrancy protection.
+
 </Callout>
 
 ### Payable calls with `Call::new_payable(self, value)`

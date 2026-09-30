@@ -1,5 +1,6 @@
 ---
 title: 'Composition and trait-based routing model'
+sidebar_label: 'Composition, trait-based routing'
 description: 'Learn how to implement trait-based composition in your Stylus smart contracts'
 content_type: how-to
 author: anegg0
@@ -20,13 +21,16 @@ The Stylus SDK offers trait-based composition using traits and the `#[implements
 
 Before implementing trait-based composition, ensure you have:
 
-<CustomDetails summary="Rust toolchain">
+<Accordions>
+<Accordion title="Rust toolchain">
 
 Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v<Var name="stylusRustToolchain" /> or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
-<CustomDetails summary="cargo stylus">
+<Accordions>
+<Accordion title="cargo stylus">
 
 In your terminal, run:
 
@@ -43,7 +47,8 @@ rustup target add wasm32-unknown-unknown --toolchain 1.91
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ## Trait-based composition model
 
@@ -51,7 +56,8 @@ The recommended approach to inheritance in Stylus uses traits and the `#[impleme
 
 ### Basic example of trait-based composition
 
-<CustomDetails summary="Trait-Based Inheritance Example: ERC-20">
+<Accordions>
+<Accordion title="Trait-Based Inheritance Example: ERC-20">
 
 ```rust
 use stylus_sdk::{
@@ -151,7 +157,8 @@ impl IOwnable for Contract {
 }
 ```
 
-</CustomDetails>
+</Accordion>
+</Accordions>
 
 ### How trait-based composition works
 
@@ -167,6 +174,7 @@ This approach is aligned with Rust's composition patterns and offers better type
 ### Method overriding
 
 If both parent and child implement the same method, the one in the child will override the one in the parent. This allows for customizing inherited functionality.
+
 
 <Callout type="warning" title="No explicit override keywords">
   Stylus does not currently contain explicit override or virtual keywords for marking override functions. It is important to carefully ensure that contracts are only overriding the functions you intend to override.
@@ -215,7 +223,9 @@ impl Erc721 {
 </CustomDetails>
 
 <Callout type="info" title="ABI generation and inheritance">
-  The Stylus SDK generates ABIs based on the methods that are available at the entrypoint contract. When using trait-based composition, make sure that all methods you want exposed in the ABI are properly included through the #[implements] attribute.
+  The Stylus SDK generates ABIs based on the methods that are available at the entrypoint contract.
+  When using trait-based composition, make sure that all methods you want exposed in the ABI are
+  properly included through the #[implements] attribute.
 </Callout>
 
 ## Methods search order

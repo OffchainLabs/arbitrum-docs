@@ -1,5 +1,6 @@
 ---
 title: 'How to verify Stylus contracts on Arbiscan'
+sidebar_label: 'Verify contracts with Arbiscan'
 description: 'This page provides a step-by-step guide to verifying Stylus contracts on Arbiscan, including contract details, source code submission, and handling previously verified contracts.'
 content_type: how-to
 author: mahsamoosavi
@@ -26,7 +27,7 @@ You have two options to access the contract verification page on Arbiscan:
    - Go to the **Contract** tab.
    - Click on **Verify and Publish**.
 
-<ImageZoom src="/img/stylus-arbiscan-verification-1.png" alt="Verify through the contract page" className="img-600px" />
+![Verify through the contract page](/img/stylus-arbiscan-verification-1.png)
 
 Both methods will take you to the contract verification form, where you can proceed to the next step.
 
@@ -39,7 +40,7 @@ You will need to fill in the following fields on the contract verification page:
 - **Compiler version**: Choose the `cargo stylus` version that was used to deploy the contract.
 - **Open source license type**: Select the appropriate license for your contract.
 
-<ImageZoom src="/img/stylus-arbiscan-verification-2.png" alt="Enter contract details" className="img-600px" />
+![Enter contract details](/img/stylus-arbiscan-verification-2.png)
 
 ## Step 3: Submit source code
 
@@ -48,19 +49,19 @@ After entering the contract details, you’ll need to provide the contract's sou
 - **Manual submission**: Copy and paste the source code into the provided text box.
 - **Fetch from GitHub (Recommended)**: It's recommended to use the **Fetch from Git** option, as it's easier and helps automate the process. However, note that contracts located in subdirectories of the repository cannot be verified. Ensure that the contract's code is placed directly in the repository's root for verification to succeed.
 
-<ImageZoom src="/img/stylus-arbiscan-verification-3.png" alt="Fetch source code" className="img-600px" />
+![Fetch source code](/img/stylus-arbiscan-verification-3.png)
 
 ## Step 4: Set EVM version
 
 The **EVM Version to Target** can be left as default unless specific requirements dictate otherwise.
 
-<ImageZoom src="/img/stylus-arbiscan-verification-4.png" alt="Verify and publish" className="img-600px" />
+![Verify and publish](/img/stylus-arbiscan-verification-4.png)
 
 ## Step 5: Verify and publish
 
 Click **Verify and Publish**. The verification process will take a few seconds. Refresh the contract page, and if successful, the contract will be marked as verified.
 
-<ImageZoom src="/img/stylus-arbiscan-verification-5.png" alt="Verified" className="img-600px" />
+![Verified](/img/stylus-arbiscan-verification-5.png)
 
 ## Behavior when deploying a verified contract
 

@@ -1,18 +1,17 @@
 ---
-title: 'Oracles'
-description: 'Overview of blockchain oracles on Arbitrum — external data providers that supply offchain data to smart contracts. Learn how oracles work, their trust models, and available providers on Arbitrum.'
-sidebar_label: Oracles
-user_story: 'As a developer, I want to understand how oracles work on Arbitrum so I can integrate real-world data into my smart contracts.'
+title: 'How oracles work'
+sidebar_label: 'Oracles'
+description: 'Overview of blockchain oracles on Arbitrum: external data providers that supply offchain data to smart contracts. Covers oracle types, push and pull mechanics, trust models, and use cases.'
 content_type: 'concept'
 author: gblanchemain
 sme: gblanchemain
 ---
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 This is a conceptual overview of oracles. For more detailed information on how to use oracles in your applications, check out our [third-party oracles documentation](/docs/oracles).
 
-</VanillaAdmonition>
+</Callout>
 In this conceptual overview, we'll explore oracles, how they work, and some general applications. This overview will provide a foundational understanding and set expectations for developers who want to integrate oracles into their applications.
 
 ## What are oracles?
@@ -33,13 +32,13 @@ Oracles can be classified based on their source, direction of information, trust
 
 Push oracles proactively provide data to smart contracts without being explicitly requested. When a specified event or condition occurs, the push oracle triggers the smart contract with the relevant data. For example, a push oracle might send weather data to a smart contract once the temperature reaches a certain threshold.
 
-<ImageZoom src="/img/apps-push-oracle.svg" alt="Push oracle" className="img-600px" />
+![Push oracle](/img/apps-push-oracle.svg)
 
 ## How do pull oracles work?
 
 Pull oracles require smart contracts to request data explicitly. A smart contract sends a query to the oracle, retrieving and relaying the requested information to the contract. For example, a smart contract might request the current price of a specific digital asset from a pull oracle.
 
-<ImageZoom src="/img/apps-pull-oracle.svg" alt="Pull oracle" className="img-600px" />
+![Pull oracle](/img/apps-pull-oracle.svg)
 
 ## Use cases for oracles
 

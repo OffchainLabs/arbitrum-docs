@@ -1,12 +1,15 @@
 ---
 title: 'How to run a full node for an Arbitrum chain'
+sidebar_label: 'Run a full node'
 description: Learn how to run an Arbitrum node on your local machine
 content_type: 'how-to'
 author: gblanchemain
 sme: gblanchemain
 ---
 
-<VanillaAdmonition type="info" title="Prerequisites">
+{/* sync-with-var: latestNitroNodeImage */}
+
+<Callout type="info" title="Prerequisites">
 
 This page assumes you've completed the steps from the [Start here](/docs/run-a-node/start-here) page. If you haven't, you'll need to do so, as it gathers RPC endpoints, Nitro version, database snapshots, and other information required to run the node.
 
@@ -14,12 +17,12 @@ To view the short and long term support policy, visit the [Nitro support policy]
 
 If you're looking to run a node with a different role — <Term id="sequencer">sequencer</Term>, <Term id="batch-poster">batch poster</Term>, <Term id="validator">validator</Term>, archive node, or feed relay — see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles) for the flags that define each role.
 
-</VanillaAdmonition>
-<VanillaAdmonition type="tip" title="Running on Kubernetes or want a more reliable setup?">
+</Callout>
+<Callout type="idea" title="Running on Kubernetes or want a more reliable setup?">
 
 This page covers running a node with Docker. If you want to deploy on Kubernetes, or you want a more production-ready setup with monitoring, log signals, and network egress guidance, follow [How to run a full node with Helm on Kubernetes](/docs/launch-arbitrum-chain/run-a-node/run-full-node-with-helm) instead.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Choose a state scheme
 
@@ -44,37 +47,37 @@ Pick based on how you want to handle pruning and whether you need block validati
 
 On **archive** nodes the case for PathDB is stronger, because it cuts disk use substantially. See [How to run an archive node](/docs/run-a-node/more-types/run-archive-node).
 
-<VanillaAdmonition type="warning" title="PathDB and block validation">
+<Callout type="warn" title="PathDB and block validation">
 
 PathDB cannot validate blocks. If a node requires the block validator, Nitro exits at startup with `path cannot be used as execution.caching.state-scheme when validator is required`.
 
 A default full node is unaffected: it runs the watchtower strategy, which does not require the block validator. Nitro rejects `path` when you set `--node.block-validator.enable=true`, choose a staker strategy other than `Watchtower`, or enable fast confirmation.
 
-</VanillaAdmonition>
+</Callout>
 
 ## Putting it into practice: run a node
 
-<VanillaAdmonition type="warning" title="Caution">
+<Callout type="warn" title="Caution">
 
 If you are running more than one node, you should [run a feed relay](/docs/run-a-node/run-feed-relay).
 
-</VanillaAdmonition>
-<VanillaAdmonition type="warning" title="PathDB and --init.latest">
+</Callout>
+<Callout type="warn" title="PathDB and --init.latest">
 
 `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and every snapshot it resolves for those kinds uses HashDB. Adding `--execution.caching.state-scheme=path` to the examples below fails, because the downloaded snapshot's scheme won't match.
 
 PathDB snapshots are published under the separate `full-path` and `archive-path` kinds, which `--init.latest` does not accept. To initialize a PathDB database, pass the snapshot URL to `--init.url` instead. See [PathDB snapshots](/docs/run-a-node/nitro/nitro-database-snapshots#pathdb-snapshots).
 
-</VanillaAdmonition>
-<VanillaAdmonition type="warning" title="Docker volume mount">
+</Callout>
+<Callout type="warn" title="Docker volume mount">
 
 To ensure the database persists across restarts, mount an external volume to **`/home/user/.arbitrum`** inside the Docker container. Make sure to:
 
 - Create the host directory **before** running Docker (e.g., `mkdir -p /some/local/dir/arbitrum`), otherwise Docker may create it as `root`, and the container (which runs as UID 1000) won't be able to write to it.
 - If you encounter permission errors on Linux or macOS, run `chmod -fR 777 /some/local/dir/arbitrum` on the host directory.
 
-</VanillaAdmonition>
-<VanillaAdmonition type="note" title="Node config file">
+</Callout>
+<Callout type="info" title="Node config file">
 
 If using a `node-config.json` file with Docker to mount, use the following command:
 
@@ -82,7 +85,7 @@ If using a `node-config.json` file with Docker to mount, use the following comma
 docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/node-config.json:/home/user/.arbitrum/node-config.json -p 0.0.0.0:8450:8450 offchainlabs/nitro-node:v3.11.4-7d5ac27 --conf.file /home/user/.arbitrum/node-config.json
 ```
 
-</VanillaAdmonition>
+</Callout>
 - Here is an example of how to run `nitro-node`:
 
 <div className="dynamic-content-tabs">
@@ -150,11 +153,11 @@ When you leave `--execution.caching.state-history` unset, Nitro chooses the defa
 
 From v3.10.0, Nitro derives this default from the archive flag. On earlier versions the default was always 24 hours' worth of blocks, so an archive node needs an explicit `--execution.caching.state-history=0`.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The pruning process occurs when the node starts (upon initialization) and will not serve RPC requests during pruning.
 
-</VanillaAdmonition>
+</Callout>
 If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
 
 - `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:
@@ -171,7 +174,7 @@ Under heavy RPC load or during operations such as large `debug_traceBlockByNumbe
 
 For an in-depth breakdown of Nitro's memory allocators, cache tuning, and OOM mitigations, see [Nitro memory management](/docs/run-a-node/nitro/nitro-memory-management).
 
-<VanillaAdmonition type="tip">
+<Callout type="idea">
 
 For Docker deployments, you can set these in your `docker run` command:
 
@@ -179,7 +182,7 @@ For Docker deployments, you can set these in your `docker run` command:
 docker run ... -e GOMEMLIMIT=48GiB ... offchainlabs/nitro-node:... --node.resource-mgmt.mem-free-limit=4GiB ...
 ```
 
-</VanillaAdmonition>
+</Callout>
 ### Transaction prechecker
 
 - Enabling the transaction prechecker will add extra checks before your node forwards `eth_sendRawTransaction` to the Sequencer endpoint.

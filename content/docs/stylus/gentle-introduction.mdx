@@ -1,5 +1,6 @@
 ---
 title: 'A gentle introduction to Stylus'
+sidebar_label: 'A gentle introduction'
 description: 'An introduction to Stylus, which enables writing EVM-compatible smart contracts in programming languages that compile to WASM, such as Rust, C, and C++.'
 content_type: 'concept'
 author: amarrazza
@@ -16,7 +17,7 @@ sme: amarrazza
 
 Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](/docs/run-a-node/arbos-releases/arbos32), the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. This paradigm is called MultiVM because it is additive to existing functionality.
 
-<ImageZoom src="/img/stylus-multivm.jpg" alt="Stylus gives you MultiVM" className="img-800px" />
+![Stylus gives you MultiVM](/img/stylus-multivm.jpg)
 
 This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode. WASM is a binary format used in web standards and browsers for efficient computation. Its design is to be portable and human-readable, with sandboxed execution environments for security. Working with WASM is nothing new for Arbitrum chains. Ever since the [Nitro upgrade](https://medium.com/offchainlabs/arbitrum-nitro-one-small-step-for-l2-one-giant-leap-for-ethereum-bc9108047450), WASM has been a fundamental component of Arbitrum's fraud proofs.
 
@@ -42,8 +43,8 @@ Stylus measures computational costs using ink instead of gas. Ink works like gas
 
 <Callout type="info">
 
-Contract size: As of ArbOS61, Stylus contracts are not bound by the 24 KB EVM contract code limit. The maximum size of a Stylus contract is 96 KB — four times the limit for Solidity contracts on the EVM. This is enabled by a fragment-based deployment model; see [Deploying contracts larger than 24 KB](/docs/stylus/cli-tools/overview#deploying-contracts-larger-than-24-kb).
-
+Contract size: As of ArbOS 61, Stylus contracts are not bound by the 24 KB EVM contract code limit. The maximum size of a Stylus contract is 96 KB — four times the limit for Solidity contracts on the EVM. This is enabled by a fragment-based deployment model; see [Deploying contracts larger than 24 KB](/docs/stylus/cli-tools/overview#deploying-contracts-larger-than-24-kb).
+  
 Stylus contracts need to be reactivated once per year (365 days) or after any Stylus upgrade. You can do this using [`cargo-stylus`](/docs/stylus/cli-tools/commands-reference) or the [ArbWasm precompile](/docs/arbitrum-essentials/precompiles/reference#common-precompiles). If a contract isn't reactivated, it becomes uncallable. The 365-day expiry and a minimum age of about 31 days before a contract can be kept alive are both configurable chain parameters; these are the current defaults.
 
 </Callout>
