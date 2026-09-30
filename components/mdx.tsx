@@ -1,10 +1,12 @@
-import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+import { Accordions } from 'fumadocs-ui/components/accordion';
 import { ImageZoom, type ImageZoomProps } from 'fumadocs-ui/components/image-zoom';
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Tab, type TabProps, Tabs } from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import type { ComponentProps, ElementType } from 'react';
 
+import { InLink } from '@/components/HoverPopover/in-link';
+import { Accordion } from '@/components/mdx/Accordion';
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
@@ -36,7 +38,8 @@ export function getMDXComponents(components?: MDXComponents) {
       <ImageZoom {...(props as ImageZoomProps)} className={cn('rounded-lg', props.className)} />
     ),
     ReferenceList,
-    Tab,
+    // Inactive panels stay in the server HTML (hidden by CSS) so their text is indexed and findable.
+    Tab: (props: TabProps) => <Tab forceMount {...props} />,
     Tabs,
     Term,
     ChecklistItem,
@@ -53,14 +56,17 @@ export function getMDXComponents(components?: MDXComponents) {
 
   return {
     ...merged,
-    // Next's <Link> prefetches every same-origin href in the viewport, so a PDF under `public/`
-    // renders as a plain anchor to keep the browser from downloading it ahead of a click.
-    a: (props: ComponentProps<'a'>) =>
-      props.href?.startsWith('/') && /\.pdf$/i.test(props.href.split(/[?#]/)[0]) ? (
-        <a {...props} />
+    a: ({ children, ...props }: ComponentProps<'a'>) => {
+      // Plain text cannot hold a <Term>, so only element children pay for the client boundary.
+      const content = typeof children === 'string' ? children : <InLink>{children}</InLink>;
+      // Next's <Link> prefetches every same-origin href in the viewport, so a PDF under `public/`
+      // renders as a plain anchor to keep the browser from downloading it ahead of a click.
+      return props.href?.startsWith('/') && /\.pdf$/i.test(props.href.split(/[?#]/)[0]) ? (
+        <a {...props}>{content}</a>
       ) : (
-        <Link {...props} />
-      ),
+        <Link {...props}>{content}</Link>
+      );
+    },
   } satisfies MDXComponents;
 }
 

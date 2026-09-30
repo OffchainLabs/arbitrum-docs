@@ -5,7 +5,7 @@ import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
 import { X } from 'lucide-react';
 import { useState } from 'react';
 
-import { CIRCLE_RADIUS, coordinates, numberPaths } from './constants';
+import { type AuctionStepId, CIRCLE_RADIUS, coordinates, numberPaths } from './constants';
 import { AUCTION_STEPS } from './steps';
 import styles from './styles.module.css';
 
@@ -16,13 +16,18 @@ import styles from './styles.module.css';
  * `styles.module.css`. Radix supplies the focus trap, `Esc` handling and scroll lock, and its
  * `data-state` attributes drive the open and close animations.
  */
-export function AuctionStepMarker({ step, interactive }: { step: number; interactive?: boolean }) {
+export function AuctionStepMarker({
+  step,
+  interactive,
+}: {
+  step: AuctionStepId;
+  interactive?: boolean;
+}) {
   const [open, setOpen] = useState(false);
 
-  const coords = coordinates[step as keyof typeof coordinates];
-  const pathData = numberPaths[step as keyof typeof numberPaths];
+  const coords = coordinates[step];
+  const pathData = numberPaths[step];
   const content = AUCTION_STEPS[step];
-  if (!coords || !pathData || !content) return null;
 
   const offsetX = coords.circle.x - coords.path.x + (coords.offset?.x ?? 0);
   const offsetY = coords.circle.y - coords.path.y + (coords.offset?.y ?? 0);
