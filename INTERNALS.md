@@ -100,8 +100,8 @@ Generators that depend on a marker comment read the raw `.mdx` file from disk.
 
 ## `source` is a choke point
 
-Eight files under `app/` import `source`: the docs page and layout, the `llms.txt`,
-`llms-full.txt`, `llms.mdx` and `og` routes, the search route and the sitemap. The rules around it:
+Seven files under `app/` import `source`: the docs page and layout, the `llms.txt`,
+`llms-full.txt`, `llms.mdx` and `og` routes, and the sitemap. The rules around it:
 
 - `docs.toFumadocsSource()` is the only adapter for `.source/`. Never build a second read path.
 - `baseUrl` is an argument to the single `loader()` call. A second loader would restate it and let
