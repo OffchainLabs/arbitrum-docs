@@ -1,17 +1,27 @@
 {
-  "title": "Run a node",
+  "title": "Run an Arbitrum node",
   "icon": "Server",
-  "root": true,
   "description": "Run the machines that power Arbitrum chains.",
+  "root": true,
   "pages": [
     "index",
-    "run-batch-poster",
-    "run-split-validator-node",
-    "high-availability-sequencer-docs",
+    "overview",
+    "nitro-support-policy",
+    "start-here",
+    "run-full-node",
+    "assign-node-roles",
+    "run-local-full-chain-simulation",
+    "run-nitro-dev-node",
+    "l1-ethereum-beacon-chain-rpc-providers",
+    "data-availability",
+    "run-feed-relay",
+    "beacon-nodes-historical-blobs",
+    "arbos-releases",
+    "more-types",
+    "sequencer",
+    "...nitro",
+    "troubleshooting",
     "faq",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
+    "..."
   ]
 }

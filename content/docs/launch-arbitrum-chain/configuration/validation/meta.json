@@ -1,0 +1,12 @@
+{
+  "title": "Validation",
+  "pages": [
+    "../sequencer/batch-posting-assertion-control",
+    "../sequencer/bold-adoption-for-arbitrum-chains",
+    "stake-and-validator-configurations",
+    "customizable-challenge-period",
+    "fast-withdrawals",
+    "test-chain-configuration",
+    "..."
+  ]
+}

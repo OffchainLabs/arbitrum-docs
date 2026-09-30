@@ -1,18 +1,19 @@
 ---
 title: 'Arbitrum nodes: an overview'
+sidebar_label: 'Overview'
 description: Learn more about what types of Arbitrum nodes are available to run.
 content_type: 'concept'
 author: gblanchemain
 sme: gblanchemain
 ---
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 There is no protocol-level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain but don’t want to set up a node locally, see our [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers) to get RPC access to fully managed nodes hosted by a third-party provider.
 
-</VanillaAdmonition>
+</Callout>
 
-<VanillaAdmonition type="warning" title="API security disclaimer">
+<Callout type="warn" title="API security disclaimer">
 
 When exposing API endpoints to the Internet or any untrusted/hostile network, the following risks may arise:
 
@@ -23,14 +24,13 @@ When exposing API endpoints to the Internet or any untrusted/hostile network, th
 
 We strongly advise against exposing API endpoints publicly. Users considering such exposure should exercise caution and implement the right measures to enhance resilience.
 
-</VanillaAdmonition>
+</Callout>
 To be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
 
 - You can use [ third party node providers ](/docs/arbitrum-essentials/reference/node-providers) to get RPC access to fully-managed nodes
 - You can run your own Arbitrum node, especially if you want always to know the state of the Arbitrum chain
 
 The rest of this series focuses on the second approach: running your own Arbitrum node.
-
 
 To be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
 

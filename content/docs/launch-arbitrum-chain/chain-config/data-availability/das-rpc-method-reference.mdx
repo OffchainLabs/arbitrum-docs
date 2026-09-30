@@ -20,19 +20,19 @@ As of Nitro v3.10.0, the node-side AnyTrust configuration moved from `node.data-
 
 DAS servers exposed two interfaces for data storage and retrieval:
 
-| Interface | Port (typical) | Used by                                                | Purpose                                                             |
-| --------- | -------------- | ------------------------------------------------------ | ------------------------------------------------------------------- |
+| Interface | Port (typical) | Used by                                     | Purpose                                                  |
+| --------- | -------------- | ------------------------------------------- | -------------------------------------------------------- |
 | RPC       | `:9876`        | <Term id="batch-poster">Batch Poster</Term> | Store <Term id="batch">batch</Term> data, obtain DACerts |
-| REST      | `:9877`        | Nitro nodes                                            | Retrieve batch data by hash                                         |
+| REST      | `:9877`        | Nitro nodes                                 | Retrieve batch data by hash                              |
 
 The RPC interface supports two storage modes:
 
 1. **Single-shot store**: entire payload sent in one call (legacy, used when `enable-chunked-store: false`).
 2. **Chunked (streaming) store**: payload sent in chunks across multiple calls (default, enable by `enable-chunked-store: true`).
 
-## DAS RPC methods (legacy DAS interface)
+## DAS RPC methods (Legacy DAS interface)
 
-These methods are used by the **RPC aggregator** (`node.da.anytrust.rpc-aggregator.rpc-client`) when communicating with standalone DAS servers.
+These methods are usd by the **RPC aggregator** (`node.data-availability.rpc-aggregator.das-rpc-client`) when communicating with standalone DAS servers.
 
 ### `das_startChunkedStore`
 
@@ -67,6 +67,7 @@ Sends a single chunk of batch data within an active chunked store session.
 | Config key          | `stream-chunk`                                                                    |
 | Direction           | Client (batch poster) -> DAS server                                               |
 
+
 **Behavior:**
 
 - Called one or more times after `das_startChunkedStore` to transmit the payload in pieces
@@ -98,9 +99,9 @@ Finalizes a chunked store session, signaling that all chunks have been transmitt
 - The DAS server assembles the chunks, stores the complete payload, and returns a signed DACert component (the server's <Term id="bls-signature">BLS Signature</Term> over the data hash)
 - On success, the server commits the data to its configured storage backend
 
-## DAProvider RPC methods (newer interface)
+## DAProvider RPC Methods (newer interface)
 
-These methods are used by the DA provider client (`node.da.external-provider`)—the newer generalized data availability interface that can work with DAS or other DA backends.
+These methods are used by the DA provider client (`node.da-provider`)—the newer generalized data availability interface that can work with DAS or other DA backends.
 
 ### `daprovider_startChunkedStore`
 
@@ -124,7 +125,7 @@ Sends a chunk of data to the DA provider server.
 | Config path         | `node.da.external-provider.data-stream.rpc-methods.stream-chunk` |
 | Config key          | `stream-chunk`                                                   |
 
-Functionally equivalent to `das_sendChunk`. Max chunk body size is governed by `node.da.external-provider.data-stream.max-store-chunk-body-size` (default: 5,242,880 bytes / 5 MB).
+Functionally equivalent to `das_sendChunk`. Max chunk body size is goverend by `node.da-provider.data-stream.max-store-chunk-body-size` (default: 5,242,880 bytes / 5 MB).
 
 ### `daprovider_commitChunkedStore`
 
@@ -192,16 +193,14 @@ The `simple-explore-exploit` strategy alternates between:
 
 ## Configuration quick reference
 
-### AnyTrust RPC client (`rpc-client`, formerly `das-rpc-client`)
+### DAS RPC client (Legacy—`das-rpc-client`)
 
-Full config path: `node.da.anytrust.rpc-aggregator.rpc-client`
+Full config path: `node.data-availability.rpc-aggregator.das-rpc-client`
 
 ```typescript
-'rpc-client': {
+'das-rpc-client': {
   'enable-chunked-store': true,       // default: true
-  'rpc': {
-    'url': 'http://...',              // DAS server URL
-  },
+  'server-url': 'http://...',         // DAS server URL
   'data-stream': {
     'max-store-chunk-body-size': 5242880,  // 5 MB
     'rpc-methods': {
@@ -213,12 +212,12 @@ Full config path: `node.da.anytrust.rpc-aggregator.rpc-client`
 }
 ```
 
-### DAProvider client (newer—`external-provider`)
+### DAProvider client (newer—`da-provider`)
 
-Full config path: `node.da.external-provider`
+Full config path: `node.da-provider`
 
 ```typescript
-'external-provider': {
+'da-provider': {
   'enable': true,
   'store-rpc-method': 'daprovider_store',   // single-shot store
   'use-data-streaming': true,                // use chunked protocol
@@ -246,7 +245,7 @@ Full config path: `node.da.external-provider`
 
 ### RPC aggregator backend entry
 
-Full config path: `node.da.anytrust.rpc-aggregator.backends` (JSON string)
+Full config path: `node.data-availability.rpc-aggregator.backends` (JSON string)
 
 ```typescript
 // Type: NodeConfigDataAvailabilityRpcAggregatorBackendsJson
@@ -275,7 +274,7 @@ Full config path: `node.da.anytrust.rpc-aggregator.backends` (JSON string)
 | Single-shot store    | DAProvider | `daprovider_store`              | Store entire payload at once | `store-rpc-method` |
 | Get by hash          | REST       | N/A (HTTP GET)                  | Retrieve data by hash        | N/A                |
 
-### Related configuration
+### Related Configuration
 
 | Config Key                               | Default                  | Description                                                                                       |
 | ---------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------- |

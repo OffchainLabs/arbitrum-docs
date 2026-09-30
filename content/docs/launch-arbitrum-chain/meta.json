@@ -1,9 +1,13 @@
 {
-  "title": "Launch arbitrum chain",
+  "title": "Run an Arbitrum chain",
   "icon": "Network",
-  "root": true,
   "description": "Configure, deploy, and operate your own Arbitrum chain.",
+  "root": true,
   "pages": [
+    "index",
+    "overview/a-gentle-introduction",
+    "overview/aep-license",
+    "troubleshooting-building-arbitrum-chain",
     "quickstart",
     "chain-config",
     "deploy",

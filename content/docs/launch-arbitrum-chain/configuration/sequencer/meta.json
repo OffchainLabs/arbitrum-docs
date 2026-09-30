@@ -1,0 +1,12 @@
+{
+  "title": "Sequencing",
+  "pages": [
+    "../validation/arbitrum-chain-finality",
+    "compliance-filtering",
+    "sequencer-config-reference",
+    "config-sequencer-timing-adjustments",
+    "timeboost-for-arbitrum-chains",
+    "pga",
+    "..."
+  ]
+}

@@ -1,7 +1,6 @@
 ---
 title: Gas and fees
 description: 'Learn the fundamentals of how to calculate fees on Arbitrum, including parent chain pricing formulas and child chain gas mechanics.'
-user_story: As a current or prospective Arbitrum user, I need to learn more about gas/fee calculations on Arbitrum.
 content_type: 'concept'
 author: pete-vielhaber
 sme: TucksonDev
@@ -51,7 +50,7 @@ To overcome these challenges, Arbitrum Nitro implements a two-fold strategy:
 
 There are two types of parent chain costs: batch posting costs and rewards.
 
-Batch posting costs reflect the actual cost a [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) pays to post batch data on the parent chain. Whenever a batch is posted, the parent chain contract that records it will send a special "batch posting report" message to the child chain ArbOS, reporting who paid for the batch and the parent chain basefee at the time. This message is placed in the chain's [<Term id="delayed-inbox">delayed inbox</Term>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) so that it will be delivered to the child chain ArbOS after some delay.
+Batch posting costs reflect the actual cost a batch poster pays to post batch data on the parent chain. Whenever a batch is posted, the parent chain contract that records it will send a special "batch posting report" message to the child chain ArbOS, reporting who paid for the batch and the parent chain basefee at the time. This message is placed in the chain's [<Term id="delayed-inbox">delayed inbox</Term>](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox) so that it will be delivered to the child chain ArbOS after some delay.
 
 When a batch posting report message arrives at the child chain, ArbOS computes the cost of the referenced batch by multiplying the reported basefee by the batch's data cost. (ArbOS retrieves the batch's data from its inbox state and computes the parent chain gas the batch would have used by counting the number of zero bytes and non-zero bytes in the batch.) The pricer records the resulting cost as funds due to the party who is reported to have submitted the batch.
 
@@ -263,17 +262,17 @@ Post-Fusaka, the block gas limit and transaction filtering have changed. Instead
 
 ArbOS 51 also introduces a `MaxTxGasLimit`. The State Transition Function (STF) will be relaxed to allow the final transaction in a block to use up to the `MaxTxGasLimit` even if it would cause the block to exceed the `MaxBlockGasLimit`.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 The `MaxTxGasLimit` is set by implementing [EIP-7825](https://eips.ethereum.org/EIPS/eip-7825) from the Fusaka hard fork.
 
-</VanillaAdmonition>
+</Callout>
 This means that the "Effective Block Gas Limit" is really `MaxBlockGasLimit` + `MaxTxGasLimit` (64M for Arbitrum One). In previous versions of ArbOS, the STF would skip transactions from the sequencer feed if the transaction's `GasLimit` (set by the user) minus the L1 data posting gas exceeded the gas remaining in the block (without executing the transaction to see how much L2 gas it actually used).
 
 The new algorithm is more efficient because the STF doesn't need to continually search the transaction queue for one that fits in the remaining block gas, and can just keep adding transactions until the unused block gas is `0`.
 
-<VanillaAdmonition type="note">
+<Callout type="info">
 
 This change does not affect the `GasTarget`, and therefore does not affect how much overall gas per second the chain will use—only how transactions using that gas could be divided between different blocks.
 
-</VanillaAdmonition>
+</Callout>

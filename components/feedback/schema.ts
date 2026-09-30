@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // Payload contract shared by the client component and the server action. Validated on both
 // sides: the client parses what it restored from localStorage, the action re-parses what
-// arrived over the wire (a server action is a public endpoint — never trust its input).
+// arrived over the wire (a server action is a public endpoint).
 
 export const pageFeedback = z.object({
   opinion: z.enum(['good', 'bad']),

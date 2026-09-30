@@ -1,7 +1,7 @@
 ---
 title: How to bridge from parent chain to child chain
+sidebar_label: ETH and messages
 description: 'Step-by-step guide to programmatically bridge ETH and send messages from Ethereum to an Arbitrum using retryable tickets and the Inbox contract.'
-user_story: 'As a developer, I want to programmatically bridge assets and messages from Ethereum to Arbitrum so I can build cross-chain functionality in my dApp.'
 content_type: 'how-to'
 author: gblanchemain
 sme: gblanchemain
@@ -33,16 +33,16 @@ const tx = await inbox.depositEth(destinationAddress, {
 await tx.wait();
 ```
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 Depositing **ETH** directly via `depositEth` to a contract on a child chain **will not** invoke that contract's fallback function. If you need to trigger a fallback function, use retryable tickets instead.
 
-</VanillaAdmonition>
+</Callout>
 ### How **ETH** deposits work
 
 When you deposit **ETH**, the funds are held in the Arbitrum Bridge contract on the parent chain. The bridge then credits the deposited amount to your address on the child chain:
 
-<ImageZoom src="/img/apps-depositing-ether.svg" alt="Depositing Ether" className="img-600px" />
+![Depositing Ether](/img/apps-depositing-ether.svg)
 
 ### Address aliasing for contract depositors
 

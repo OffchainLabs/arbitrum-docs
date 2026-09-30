@@ -1,4 +1,8 @@
 {
-  "title": "Best practices",
-  "pages": ["security", "gas-optimization"]
+  "title": "Best Practices",
+  "pages": [
+    "security",
+    "gas-optimization",
+    "..."
+  ]
 }

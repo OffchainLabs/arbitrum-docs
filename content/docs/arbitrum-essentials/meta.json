@@ -1,18 +1,18 @@
 {
   "title": "Arbitrum essentials",
   "icon": "BookOpen",
-  "root": true,
   "description": "Language-agnostic guidance for building on Arbitrum.",
+  "root": true,
   "pages": [
     "index",
+    "how-to-estimate-gas",
+    "public-chains",
     "bridging",
     "arbitrum-vs-ethereum",
+    "../oracles/overview-oracles",
     "precompiles",
     "nodeinterface",
     "reference",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
+    "..."
   ]
 }

@@ -1,10 +1,13 @@
 ---
 title: 'How to run a validator'
+sidebar_label: 'Run a validator'
 description: Learn how to run an Arbitrum validator node
 content_type: 'how-to'
 author: jose-franco
 sme: jose-franco
 ---
+
+{/* sync-with-var: latestNitroNodeImage */}
 
 Validators are nodes that choose to participate in the rollup protocol to advance the state of the chain securely. Since the activation of <Term id="bold">BoLD</Term>, chains can now choose to make validation permissionless. You can learn more in the [BoLD introduction](/docs/how-arbitrum-works/bold/gentle-introduction).
 
@@ -14,7 +17,7 @@ This how-to assumes that you're familiar with the following:
 
 - How to run a full node (see instructions [here](/docs/run-a-node/run-full-node))
 - [How the Rollup protocol works](/docs/how-arbitrum-works/inside-arbitrum-nitro)
-- [How BoLD works](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#how-bold-leverages-ethereum), if you're running a validator for a chain that has BoLD activated
+- [How BoLD works](/docs/how-arbitrum-works/bold/bold-technical-deep-dive#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD activated
 - [Data availability](/docs/run-a-node/data-availability), for how Rollup-mode and AnyTrust-mode chains differ in the data your validator must reconstruct
 - [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles), for how the validator role relates to the other node roles and what converting a node to a validator involves
 
@@ -113,11 +116,11 @@ Additionally, keep in mind that some chains might not have BoLD activated yet, s
 
 ### Use Nitro to create a wallet for your validator
 
-<VanillaAdmonition type="warning" title="Clear passwords in the command line">
+<Callout type="warn" title="Clear passwords in the command line">
 
 This section shows how to manage a validator wallet using a password. Like any command that requires passing a password or private key, you should take extra precautions to secure your credentials. Failure to protect your password may compromise your validator wallet.
 
-</VanillaAdmonition>
+</Callout>
 Nitro includes a tool to create a validator wallet for a specific chain automatically. You can access it by using the option `--node.staker.parent-chain-wallet.only-create-key` and setting a password for the wallet with `--node.staker.parent-chain-wallet.password`.
 
 Here is an example of how to create a validator wallet for Arbitrum One and exit:
@@ -130,11 +133,11 @@ The wallet file will be created under the mounted directory inside the `<chain-n
 
 Once the wallet is created, you can instruct your validator to use it by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
 
-<VanillaAdmonition type="tip" title="Use environment variables">
+<Callout type="idea" title="Use environment variables">
 
 If you prefer not to include your password in the command line, you can use environment variables or a secure secrets management solution to supply the password at runtime.
 
-</VanillaAdmonition>
+</Callout>
 ### How to add new validators to the allowlist (Arbitrum chains)
 
 On permissioned validation setups, the set of validators that can act on a given chain is limited to the ones added to the allowlist of validators in the Rollup contract.

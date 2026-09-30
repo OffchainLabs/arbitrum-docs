@@ -1,20 +1,19 @@
 ---
 title: 'Block gas limit, numbers and time'
 description: 'Understand how Arbitrum handles block gas limits, block numbers, and transaction timing differently from Ethereum. Learn about parent chain gas components and block.number behavior on Arbitrum.'
-user_story: 'As a developer, I want to understand how block numbers, gas limits, and timing work on Arbitrum so I can write smart contracts that account for these differences.'
 content_type: 'concept'
 author: dzgoldman, jose-franco
 sme: jose-franco
 ---
 
-<VanillaAdmonition type="info" title="block number vs block.number">
+<Callout type="info" title="block number vs block.number">
 
 Throughout this and other pages, we note that the block number of a chain does not match the value obtained from `block.number`. When using `block.number` in a smart contract, the value obtained will be the block of the first non-Arbitrum ancestor chain. That is:
 
 - Ethereum, if the chain is a Layer 2 (L2) chain on top of Ethereum, or a Layer 3 (L3) chain on top of an Arbitrum chain
 - The parent chain, if it's not Ethereum or an Arbitrum chain (for example, a chain that settles to Base)
 
-</VanillaAdmonition>
+</Callout>
 As with Ethereum, Arbitrum clients submit transactions, and the system executes them later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) or via the chain's [Delayed Inbox](/docs/how-arbitrum-works/deep-dives/sequencer).
 
 Once in the chain's core inbox contract, transaction processing occurs in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
@@ -53,11 +52,11 @@ block.number // => returns the approximate block number of the first non-Arbitru
 
 As a general rule, any timing assumptions a contract makes about block numbers and timestamps should be considered generally reliable in the longer term (i.e., on the order of at least several hours) but unreliable in the shorter term (minutes). (These are generally the same assumptions one should operate under when using block numbers directly on Ethereum!) For how this affects specific Solidity operations like `block.number` and `block.timestamp`, see [Solidity support](/docs/arbitrum-essentials/arbitrum-vs-ethereum/solidity-support).
 
-<VanillaAdmonition type="info" title="EIP-2935 difference">
+<Callout type="info" title="EIP-2935 difference">
 
 [EIP-2935](https://eips.ethereum.org/EIPS/eip-2935) adds another way to retrieve block hashes by making a call to a contract. The contract is at the same address and has the same interface as the original. It was modified to have a larger buffer and different code, but it remains usable in the same way to retrieve past L2 block hashes.
 
-</VanillaAdmonition>
+</Callout>
 ### Arbitrum block numbers
 
 Arbitrum blocks have their own block numbers, starting at `0` at the Arbitrum genesis block and updating sequentially.
@@ -89,13 +88,13 @@ The following example illustrates timings on a chain that settles to Ethereum (s
 | Chain's `block.number` \*             | 1000     | 1000        | 1000        | 1000        | 1004     | 1004        |
 | Chain's block number (from RPCs) \*\* | 370000   | 370005      | 370006      | 370008      | 370012   | 370015      |
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
     txnReceipt.blockNumber => Arbitrum block number
 
 \_\* **The chain's `block.number`:** updated to sync with Ethereum's `block.number` every 13 to 15 seconds (occasionally longer).
 
-</VanillaAdmonition>
+</Callout>
 
 _\*\* **Chain's block number from RPCs:** note that this can be updated multiple times per Ethereum block (this lets the sequencer give sub-Ethereum-block-time transaction receipts.)_
 

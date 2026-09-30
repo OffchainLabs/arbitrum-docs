@@ -1,17 +1,17 @@
 ---
 title: 'ArbOS 40 Callisto'
+sidebar_label: 'Callisto (ArbOS 40)'
 description: 'Release notes for ArbOS 40 Callisto, shipped via Nitro v3.6.5, building upon ArbOS 32 Bianca with new features and requirements.'
-sidebar_label: 'ArbOS 40 Callisto'
 content_type: 'reference'
 author: dlee
 sme: dlee
 ---
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 [EIP-2537](https://eips.ethereum.org/EIPS/eip-2537) is not enabled in ArbOS 40 Callisto. This means that the precompiled contracts for certain operations on the BLS12-381 elliptic curve are not supported. However, these precompiles will be proposed for inclusion in the next ArbOS release.
 
-</VanillaAdmonition>
+</Callout>
 
 The minimum Nitro version that supports ArbOS 40 "Callisto" is [Nitro v3.6.5](https://github.com/OffchainLabs/nitro/releases/tag/v3.6.5), which is available on Docker Hub with the image tag `offchainlabs/nitro-node:v3.6.5-89cef87`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 40 "Callisto" upgrade required a governance vote to activate.
 
@@ -27,11 +27,11 @@ As a refresher, ArbOS upgrades get treated as Arbitrum's equivalent of a hard fo
 - [nitro-contracts v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0) or higher
 - WASM module root: `0xdb698a2576298f25448bc092e52cf13b1e24141c997135d70f217d674bbeb69a`
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 If your chain is not ready to activate BoLD, please use [nitro-contracts v2.1.3](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.3) instead; v3.0.0 or higher cannot be used without activating BoLD.
 
-</VanillaAdmonition>
+</Callout>
 ## High-level description of ArbOS 40 changes
 
 ArbOS 40 Callisto is an upgrade to enable Arbitrum's support for the parent chain Ethereum's [Pectra upgrade](https://ethereum.org/en/roadmap/pectra/) scheduled for [May 7, 2025 at epoch `364032`](https://blog.ethereum.org/en/2025/04/23/pectra-mainnet). As a result, the majority of the ArbOS-specific changes revolve around implementing the relevant [Prague EIPs](https://eips.ethereum.org/EIPS/eip-7600) on Arbitrum chains.
@@ -44,12 +44,12 @@ Please see below for the list of all changes included in ArbOS 40 Callisto:
 
 ### EIP-2537: Precompile for BLS12-381 curve operations
 
-<VanillaAdmonition type="warning">
+<Callout type="warn">
 
 This EIP and its specified precompiles are part of ArbOS 40 Callisto but are _not_ enabled. However, these precompiles will be proposed for inclusion in the next ArbOS release.
 
-</VanillaAdmonition>
-This EIP introduces precompiles for performing cryptographic operations on the BLS12-381 curve, focusing on enhancing the efficiency and security of these operations. This cryptographic primitive provides 120+ bits of security for operations over pairing-friendly curves, compared to the existing BN254 precompile, which offers only 80 bits of security. BLS signature verification is the primary use case for this EIP, although many other applications that rely on point additions, multiplications, and pairing operations stand to benefit from this proposal; examples include zkSNARKS, cross-chain interactions, randomness beacons, and vector commitments.
+</Callout>
+[EIP-2537](https://eips.ethereum.org/EIPS/eip-2537) introduces precompiles for performing cryptographic operations on the BLS12-381 curve, focusing on enhancing the efficiency and security of these operations. This cryptographic primitive provides 120+ bits of security for operations over pairing-friendly curves, compared to the existing BN254 precompile, which offers only 80 bits of security. BLS signature verification is the primary use case for this EIP, although many other applications that rely on point additions, multiplications, and pairing operations stand to benefit from this proposal; examples include zkSNARKS, cross-chain interactions, randomness beacons, and vector commitments.
 
 ### EIP-2935: Serve historical block hashes from state
 

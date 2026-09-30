@@ -1,5 +1,6 @@
 ---
 title: 'Run testnet infrastructure on your first rollup (product-level testnet)'
+sidebar_label: 'L3 rollup infrastructure'
 description: 'Step-by-step guide to run your Arbitrum chain infrastructure as a production-level testnet with high availability.'
 author: GreatSoshiant, jose-franco
 sme: GreatSoshiant, jose-franco
@@ -339,7 +340,6 @@ For proper high availability with automatic failover, add all 3 sequencers to th
 Do **not** add the batch poster to the priority list. The batch poster should never become the active sequencer.
 
 </Callout>
-
 Alternatively, you can press `a` to manually add a new sequencer by entering its URL. The URL must match the `my-url` configured for each sequencer (e.g., `http://sequencer-nitro-0.sequencer-nitro-headless.my-l3-chain.svc.cluster.local:8547/rpc`).
 
 ## Step 11: Expose RPC

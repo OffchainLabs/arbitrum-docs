@@ -1,9 +1,10 @@
 ---
 title: 'Using Stylus CLI'
+sidebar_label: 'Overview'
 description: 'Get started with Stylus CLI, a Rust toolkit for developing Stylus contracts'
 content_type: 'concept'
-author: anegg0
-sme: anegg0
+author: 'anegg0'
+sme: 'anegg0'
 ---
 
 This guide will get you started with [`cargo stylus`](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus) a CLI toolkit that helps developers manage, compile, deploy, and optimize their Stylus contracts efficiently.
@@ -74,7 +75,7 @@ rustup default 1.91
 rustup target add wasm32-unknown-unknown --toolchain 1.91
 ```
 
-You can verify the cargo stylus installation by running `cargo stylus -V` in your terminal, returning something like:<code>stylus <Var name="cargoStylusVersion" /></code>
+You can verify the cargo stylus installation by running `cargo stylus -V` in your terminal, returning something like:`stylus 0.10.7`
 
 ### Using `cargo stylus`
 
@@ -84,7 +85,7 @@ For the complete list of `cargo stylus` commands, flags, defaults, and aliases, 
 
 #### Deploying contracts larger than 24 KB
 
-Contracts whose compressed WASM exceeds the 24 KB single-contract code limit are deployed using fragmentation. No flags or special commands are required; `cargo stylus deploy` detects the size and handles fragmentation automatically.
+Contracts whose compressed WASM exceeds the 24 KB single-contract code limit are deployed using fragmentation. No flags or special commands are required — `cargo stylus deploy` detects the size and handles fragmentation automatically.
 
 When fragmentation is used, the deploy flow becomes:
 
@@ -102,14 +103,15 @@ Fragments are not reusable: Each fragment contract belongs to exactly one collec
 
 #### How-tos
 
-| Topic                                                                       | Description                                                                                                                                 |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Learn how to optimize WASM binaries](/docs/stylus/how-tos/optimizing-binaries)  | The `cargo-stylus` tool allows you to optimize WebAssembly (WASM) binaries, ensuring that your contracts are as efficient as possible.      |
-| [Debug Stylus transactions](/docs/stylus/cli-tools/debugging-tx)                 | A guide to debugging transactions, helping you identify and fix issues. Gain insights into your Stylus contracts by debugging transactions. |
-| [Verify contracts](/docs/stylus/cli-tools/verify-contracts)                      | Ensure that your Stylus contracts are correctly verified. Step-by-step instructions on how to verify your contracts using `cargo-stylus`.   |
-| [Run a Stylus dev node](/docs/run-a-node/run-local-full-chain-simulation) | Learn how to run a local Arbitrum dev node to test your Stylus contracts.                                                                   |
+| Topic                                                                           | Description                                                                                                                                 |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Learn how to optimize WASM binaries](/docs/stylus/how-tos/optimizing-binaries) | The `cargo-stylus` tool allows you to optimize WebAssembly (WASM) binaries, ensuring that your contracts are as efficient as possible.      |
+| [Debug Stylus transactions](/docs/stylus/cli-tools/debugging-tx)                | A guide to debugging transactions, helping you identify and fix issues. Gain insights into your Stylus contracts by debugging transactions. |
+| [Verify contracts](/docs/stylus/cli-tools/verify-contracts)                     | Ensure that your Stylus contracts are correctly verified. Step-by-step instructions on how to verify your contracts using `cargo-stylus`.   |
+| [Run a Stylus dev node](/docs/run-a-node/run-local-full-chain-simulation)       | Learn how to run a local Arbitrum dev node to test your Stylus contracts.                                                                   |
 
 #### Additional resources
 
-- [Troubleshooting](/docs/stylus/troubleshooting-building-stylus): solve the most common issues.
-- [cargo-stylus repository](https://github.com/OffchainLabs/cargo-stylus): consult cargo stylus' source code.
+#### Troubleshooting: solve the most common issues.
+
+#### cargo-stylus repository: consult cargo stylus' source code.

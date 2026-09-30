@@ -1,4 +1,10 @@
 {
   "title": "Concepts",
-  "pages": ["activation", "webassembly", "gas-metering", "vm-differences"]
+  "pages": [
+    "webassembly",
+    "activation",
+    "gas-metering",
+    "vm-differences",
+    "..."
+  ]
 }
