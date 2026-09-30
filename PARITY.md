@@ -60,6 +60,18 @@ pnpm parity --target http://localhost:3940 --label fumadocs+3601+3612 --prs 3601
 
 Resolve merge conflicts only enough to build. Record them in the PR comments, not here.
 
+### The `fumadocs+all-open` run
+
+This run projects every open PR against `fumadocs` merged together. Most of those PRs conflict with the base, so the projection is built mechanically, in this order:
+
+1. Merge the PRs with `git merge -X theirs`, so the PR side wins on conflicting hunks. For conflicts where one side deleted a file and the other edited it, keep the PR's side.
+2. Keep the code as it is on `fumadocs` (with #3616 merged): `app/`, `components/`, `package.json`, the lockfile and `redirects.config.ts`. Take only content from the refresh PRs. Rename detection maps the stale PRs' `redirects.config.mjs` onto `redirects.config.ts`, which would otherwise corrupt the redirect map.
+3. Delete the legacy redirect scripts (`redirects.*.mjs` and their generators) that stale PRs re-add.
+4. Where the hunk merge breaks MDX, take the whole file from the last PR that touched it.
+5. Convert components that exist only in Docusaurus so the pages render: `VanillaAdmonition` becomes `Callout`, `CustomDetails` becomes `details`, and `FAQStructuredData` is removed. Add `description: ""` to pages that lack one.
+
+Steps 4 and 5 hide build failures that the PRs themselves need to fix. The PR comments list them.
+
 ## Publish for everyone
 
 Commit only `public/parity/runs/` and push to this branch. Vercel redeploys the preview. In the
