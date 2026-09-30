@@ -40,7 +40,7 @@ A central concept in AnyTrust is the Data Availability Certificate (hereafter, a
 
 Because of the `2-of-N` trust assumption, a DACert constitutes proof that the block’s data (i.e., the preimage of the hash in the DACert) will be available from at least one honest DAC member, at least until the expiration time expires.
 
-In regular Arbitrum Nitro, the Arbitrum [<Term id="sequencer">Sequencer</Term>](/docs/how-arbitrum-works/deep-dives/sequencer) posts data blocks on the parent chain as [blobs or calldata](/docs/how-arbitrum-works/deep-dives/sequencer#1-receipt-and-admission). The hashes of the data blocks are committed to the parent chain Inbox contract, allowing the data to be reliably read by the child chain code.
+In regular Arbitrum Nitro, the Arbitrum [<Term id="sequencer">Sequencer</Term>](/docs/how-arbitrum-works/deep-dives/sequencer) posts data blocks on the parent chain as [blobs or calldata](/docs/how-arbitrum-works/deep-dives/sequencer#receipt-and-admission). The hashes of the data blocks are committed to the parent chain Inbox contract, allowing the data to be reliably read by the child chain code.
 
 AnyTrust gives the Sequencer two ways to post a data block on the parent chain: it can post the full data as above, or it can post a DACert proving availability of the data. The parent chain Inbox contract will reject any DACert that uses an invalid Keyset; the other aspects of DACert validity are checked by the child chain code.
 

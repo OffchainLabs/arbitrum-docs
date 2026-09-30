@@ -120,8 +120,8 @@ If your transaction doesn't get processed within <Var name="arbOneForceIncludePe
 
 The Arbitrum SDK simplifies Delayed Inbox interactions through the [`InboxTools`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L64C14-L64C24) class:
 
-| Method                                                                                                                                                   | Purpose                                                                      |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [`sendChildSignedTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L401C16-L401C33) | Submit transaction to Delayed Inbox                                          |
+| Method                                                                                                                                                   | Purpose                                                                              |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| [`sendChildSignedTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L401C16-L401C33) | Submit transaction to Delayed Inbox                                                  |
 | [`forceInclude`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L367)                 | Force transaction inclusion after <Var name="arbOneForceIncludePeriodHours" /> hours |
-| [`signChildTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L429)                  | Helper for transaction signing                                               |
+| [`signChildTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L429)                  | Helper for transaction signing                                                       |

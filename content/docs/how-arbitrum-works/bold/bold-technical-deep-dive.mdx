@@ -23,9 +23,9 @@ The current implementation of BoLD involves both onchain and offchain components
 2. New challenge management contracts deployed on Ethereum
 3. [Honest validator software](https://github.com/OffchainLabs/nitro) equipped to submit assertions and perform challenges on any assertions it disagrees with.
 
-2. New challenge management contracts to be deployed on Ethereum.
+### How BoLD leverages Ethereum
 
-3. [Honest validator software](https://github.com/OffchainLabs/nitro) equipped to submit assertions and perform challenge moves on any assertions it disagrees with. The honest <Term id="validator">validator</Term> is robust enough to win against malicious entities and always ensures honest assertions are the only ones confirmed onchain.
+To implement the BoLD protocol, it must be deployed on a credible, neutral, censorship-resistant backend to ensure fairness for all participants. Ethereum fits the requirements, as it's currently the most decentralized, secure, smart contract-enabled <Term id="blockchain">blockchain</Term> to which the full protocol can be deployed, with challenge moves performed as transactions to the protocol's smart contracts.
 
 A helpful mental model for understanding the system is: Ethereum itself is the referee for deciding assertion results. Participants in the <Term id="challenge-protocol">challenge protocol</Term> can disagree over the _results of the child-chain state transitions_ and provide proofs to the protocol's smart contracts on Ethereum to determine which result is correct. Because computation is deterministic, there will always be a single correct result.
 
@@ -33,7 +33,7 @@ A helpful mental model for understanding the system is: Ethereum itself is the r
 
 _From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. Parent chain blocks are “settled to the parent chain” after a <Var name="arbOneDisputeWindowDays" /> day period has elapsed and nobody has challenged their validity on Ethereum._
 
-In effect, there is a miniature Arbitrum state-transition VM [deployed as an Ethereum smart contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/osp/OneStepProofEntry.sol) to prove which assertions are correct. However, computation on Ethereum is expensive, which is why this mini-VM is built to handle “one-step proofs” consisting of a single step of WebAssembly (WASM) code. The Arbitrum state transition logic, written in Golang, is also compiled to WASM and will therefore obtain the same results as the VM found in the onchain smart contract. The soundness of the protocol depends on the assumptions that computation is deterministic and equivalent between the onchain VM and the Golang state transition compiled to WASM.
+In effect, a miniature Arbitrum state-transition VM is [deployed as an Ethereum smart contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/osp/OneStepProofEntry.sol) to prove which assertions are correct. However, computation on Ethereum is expensive, so this mini-VM is built to handle "one-step proofs" consisting of a single step of WebAssembly (<Term id="wasm">WASM</Term>) code. The Arbitrum state transition logic, written in Golang, is also compiled to WASM and will therefore obtain the same results as the VM found in the onchain smart contract. The protocol's soundness depends on the assumption that computation is deterministic and equivalent between the onchain VM and the Golang state transition compiled to WASM.
 
 All participants in the protocol have a local state from which they can produce valid proofs, and all honest parties will have the same local state. However, malicious entities can deviate from the honest parties in attempts to confirm invalid states through the protocol. The protocol and the <Term id="honest-validator">honest validator</Term> client's job is to ensure honest parties always win against any number of malicious participants by always claiming the absolute truth.
 
@@ -196,5 +196,4 @@ For example, if the upgrade happens at time `t`, then a withdrawal initiated at 
 
 </Callout>
 
-</Callout>
 The upgrade pattern for an existing Arbitrum Rollup to a BoLD-enabled one is tested extensively and run as part of each of our pull requests in the BoLD repository [upgrade workflow on GitHub](https://github.com/OffchainLabs/bold/blob/c4e068b568ff662f49ed191c5c3188ea7b6138b2/.github/workflows/go.yml#L209).

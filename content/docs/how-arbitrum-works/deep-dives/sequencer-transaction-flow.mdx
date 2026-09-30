@@ -50,11 +50,11 @@ Unlike Ethereum, there is **no traditional mempool**. Transactions are not gossi
 
 What the Sequencer does with a queued transaction depends on the chain's <Term id="transaction-ordering-policy">transaction ordering policy</Term>. Three exist, and a chain runs exactly one:
 
-| Policy                                                                                  | What decides the order                                                                      | Where it runs                        |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------ |
-| <Term id="first-come-first-serve-fcfs">First-come, first-serve (FCFS)</Term> | Arrival time at the Sequencer                                                               | The default for a new Arbitrum chain |
-| [Priority Gas Auctions (PGA)](/docs/how-arbitrum-works/priority-gas-auction/pga)          | The <Term id="priority-fee">priority fee</Term> each transaction pays            | Arbitrum One                         |
-| [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction)                      | An auctioned <Term id="express-lane">express lane</Term>, FCFS for everyone else | Available to any chain owner         |
+| Policy                                                                           | What decides the order                                                           | Where it runs                        |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------ |
+| <Term id="first-come-first-serve-fcfs">First-come, first-serve (FCFS)</Term>     | Arrival time at the Sequencer                                                    | The default for a new Arbitrum chain |
+| [Priority Gas Auctions (PGA)](/docs/how-arbitrum-works/priority-gas-auction/pga) | The <Term id="priority-fee">priority fee</Term> each transaction pays            | Arbitrum One                         |
+| [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction)              | An auctioned <Term id="express-lane">express lane</Term>, FCFS for everyone else | Available to any chain owner         |
 
 The FIFO behavior this page describes assumes FCFS. The two other policies change the order, not the intake path: the queue, the deadlines, and the `context deadline exceeded` behavior below apply the same way under all three.
 
@@ -146,7 +146,7 @@ For chains with different traffic profiles than Arbitrum One, the queue paramete
 - `--execution.sequencer.queue-timeout` (default `12s`): raising it lets transactions ride out longer spikes at the cost of slower failure feedback and longer-held connections; lowering it makes overload fail fast. Whatever you choose, communicate it to integration partners so their client timeouts and retry logic stay consistent with it.
 - `--execution.sequencer.max-block-speed` (default <code><Var name="l2BlockTimeMs" />ms</code>): lowering it raises the block production cap and reduces best-case latency; it does not increase execution throughput, which stays bounded by sequential execution and the per-block gas limit.
 
-If you run PGA, the rounds-per-block count `K` is a fourth tuning surface. Raising `K` shortens each round, which lowers the latency between a transaction arriving and a round promoting it, and raises the ceiling on blocks per second under load. It also makes the anti-starvation boost smaller per round, because the boost is `p / (2K)`. See [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/pga) for the configuration steps.
+If you run PGA, the rounds-per-block count `K` is a fourth tuning surface. Raising `K` shortens each round, which lowers the latency between a transaction arriving and a round promoting it, and raises the ceiling on blocks per second under load. It also makes the anti-starvation boost smaller per round, because the boost is `p / (2K)`. See [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/chain-config/sequencer/pga) for the configuration steps.
 
 ### Operator-run relayer cache
 

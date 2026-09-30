@@ -33,7 +33,12 @@ Nitro is a major upgrade to Arbitrum, improving over <Term id="arbitrum-classic"
 
 At the most basic level, an <Term id="arbitrum-chain">Arbitrum chain</Term> works like this:
 
-<ImageWithCaption caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten" src="/img/haw-eds-napkin-drawing.png" />
+<figure>
+
+![Original napkin sketch drawn by Arbitrum co-founder Ed Felten](/img/haw-eds-napkin-drawing.png)
+
+<figcaption>Original napkin sketch drawn by Arbitrum co-founder Ed Felten</figcaption>
+</figure>
 
 People and contracts put messages into the inbox. The chain reads the messages one at a time and processes each one. This updates the chain's state and produces outputs.
 
@@ -396,7 +401,7 @@ Because the Sequencer will be run by a trusted party at first and later decentra
 
 The Sequencer still controls transaction ordering, but the rule it follows is a configurable transaction ordering policy. Arbitrum One uses [Priority Gas Auctions (PGA)](/docs/how-arbitrum-works/priority-gas-auction/pga): you bid for ordering by setting `maxPriorityFeePerGas` on a standard <Term id="eip-1559">EIP-1559</Term> transaction, and the Sequencer sorts by that <Term id="priority-fee">priority fee</Term> in short rounds that run several times per block. On Arbitrum One, the block time is <Var name="l2BlockTimeMs" />ms and each block holds two rounds, so a round lasts 125ms. An anti-starvation boost raises the queue position of transactions still waiting at the end of a round, so a transaction that pays no priority fee is still included within a small number of blocks. The boost changes position only, never the fee charged.
 
-PGA replaces <Term id="timeboost">Timeboost</Term> on Arbitrum One. Timeboost auctioned a 60-second <Term id="express-lane">express lane</Term> to one controller per round and delayed every other transaction by 200ms. PGA removes that delay, so no transaction waits on another's lane. Other Arbitrum chains can still choose Timeboost, but a chain should enable one policy, not both. See [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/configuration/sequencer/pga).
+PGA replaces <Term id="timeboost">Timeboost</Term> on Arbitrum One. Timeboost auctioned a 60-second <Term id="express-lane">express lane</Term> to one controller per round and delayed every other transaction by 200ms. PGA removes that delay, so no transaction waits on another's lane. Other Arbitrum chains can still choose Timeboost, but a chain should enable one policy, not both. See [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/chain-config/sequencer/pga).
 
 An ordering policy has limits worth stating plainly. PGA allocates ordering through an open, per-transaction fee competition layered on top of the existing Sequencer. It is **not** a decentralized or "fair-ordering" Sequencer, and it does not, by itself, remove trust in the Sequencer operator. The Sequencer on Arbitrum One is still a single node run by Offchain Labs.
 
