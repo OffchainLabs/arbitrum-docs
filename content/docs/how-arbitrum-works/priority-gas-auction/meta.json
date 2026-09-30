@@ -4,6 +4,8 @@
     "pga",
     "fast-feed",
     "use-fast-feed",
+    "external:[Contracts and purchase bot: feed-ticket-contracts](https://github.com/OffchainLabs/feed-ticket-contracts)",
+    "external:[Relay source: transaction-feed-relay](https://github.com/OffchainLabs/transaction-feed-relay)",
     "..."
   ]
 }
