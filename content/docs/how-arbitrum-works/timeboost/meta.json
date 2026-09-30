@@ -1,13 +1,14 @@
 {
   "title": "Timeboost",
+  "root": true,
   "pages": [
     "gentle-introduction",
     "how-to-use-timeboost",
-    "timeboost-faq",
     "troubleshoot-timeboost",
-    "[Timeboost specification](https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md)",
-    "[Timeboost with decentralization sequencing specification](https://github.com/OffchainLabs/decentralized-timeboost-spec)",
-    "[Timeboost whitepaper](https://arxiv.org/abs/2306.02179)",
+    "timeboost-faq",
+    "external:[Specification: Timeboost](https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md)",
+    "external:[Specification: Timeboost with decentralized sequencing](https://github.com/OffchainLabs/decentralized-timeboost-spec)",
+    "external:[White paper: Timeboost](https://arxiv.org/abs/2306.02179)",
     "..."
   ]
 }

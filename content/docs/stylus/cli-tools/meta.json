@@ -1,10 +1,11 @@
 {
-  "title": "Cli tools",
+  "title": "CLI tools",
   "pages": [
-    "check-and-deploy",
-    "debugging-tx",
     "overview",
+    "check-and-deploy",
     "verify-contracts",
-    "commands-reference"
+    "debugging-tx",
+    "commands-reference",
+    "..."
   ]
 }

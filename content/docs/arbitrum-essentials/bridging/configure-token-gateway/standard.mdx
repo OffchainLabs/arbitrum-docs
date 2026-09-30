@@ -1,7 +1,7 @@
 ---
 title: Configure standard gateway bridging
+sidebar_label: Standard gateway
 description: "Guide to configuring ERC-20 token bridging using Arbitrum's standard gateway, which automatically creates a standard token representation on the child chain with no custom configuration required."
-user_story: 'As a developer, I want to set up standard gateway bridging for my ERC-20 token so it can be transferred between Ethereum and Arbitrum.'
 content_type: 'how-to'
 author: gblanchemain
 sme: gblanchemain
@@ -38,7 +38,7 @@ When using the standard gateway:
 3. **Escrow model**: Parent chain tokens are escrowed in the gateway; child chain tokens are minted and burned
 4. **Router handles routing**: The router automatically directs your token to the standard gateway
 
-For architectural details, see [Standard **ERC-20** bridging](/docs/how-arbitrum-works/deep-dives/token-bridging#the-standard-erc-20-gateway).
+For architectural details, see [Standard **ERC-20** bridging](/docs/how-arbitrum-works/deep-dives/token-bridging#default-standard-bridging).
 
 ## Step 1: Deploy your token (or use an existing one)
 
@@ -202,6 +202,6 @@ The gateway controls the automatically deployed child chain token—you can't mo
 ## Resources
 
 - [Token bridge conceptual overview](/docs/how-arbitrum-works/deep-dives/token-bridging)
-- [Standard **ERC-20** bridging details](/docs/how-arbitrum-works/deep-dives/token-bridging#the-standard-erc-20-gateway)
+- [Standard **ERC-20** bridging details](/docs/how-arbitrum-works/deep-dives/token-bridging#default-standard-bridging)
 - [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 - [Contract addresses](/docs/arbitrum-essentials/reference/contract-addresses)

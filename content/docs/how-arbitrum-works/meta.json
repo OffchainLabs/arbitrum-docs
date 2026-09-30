@@ -1,19 +1,16 @@
 {
   "title": "How Arbitrum works",
   "icon": "Cog",
-  "root": true,
   "description": "The protocols and mechanisms behind Arbitrum Nitro.",
+  "root": true,
   "pages": [
     "index",
+    "inside-arbitrum-nitro",
     "bold",
     "deep-dives",
     "priority-gas-auction",
     "reference",
     "timeboost",
-    "inside-arbitrum-nitro",
-    "...",
-    "[Chain info](/docs/chain-info)",
-    "[Audit reports](/docs/audit-reports)",
-    "[Contribute](/docs/contribute)"
+    "..."
   ]
 }

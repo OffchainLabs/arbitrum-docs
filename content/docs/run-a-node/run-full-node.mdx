@@ -1,5 +1,6 @@
 ---
 title: 'How to run a full node for an Arbitrum chain'
+sidebar_label: 'Run a full node'
 description: Learn how to run an Arbitrum node on your local machine
 content_type: 'how-to'
 author: gblanchemain
@@ -153,7 +154,6 @@ On **PathDB**, pruning is automatic and runs online. Nitro discards state older 
 The pruning process occurs when the node starts (upon initialization) and will not serve RPC requests during pruning.
 
 </Callout>
-
 If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
 
 - `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:

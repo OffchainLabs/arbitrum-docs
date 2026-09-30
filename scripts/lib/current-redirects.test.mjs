@@ -154,7 +154,7 @@ test('resolveDestination lets a hand-confirmed override win over every rule', ()
   assert.equal(result.rule, 'manual');
   assert.equal(
     result.destination,
-    '/docs/launch-arbitrum-chain/configuration/costs/gas-optimization-tools',
+    '/docs/launch-arbitrum-chain/chain-config/costs/gas-optimization',
   );
 });
 

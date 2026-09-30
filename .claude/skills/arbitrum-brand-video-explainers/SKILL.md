@@ -129,7 +129,7 @@ what `check_contrast.py` needs to sample the true backdrop.
 
 ## Diagram labels are prose
 
-`docs/Offchain-pattern-guide.md` governs text inside the video. Sentence case,
+`STYLE-GUIDE.md` at the repo root governs text inside the video. Sentence case,
 active voice, no "e.g.". All three baseline agents carried `HEAVY LOAD` and
 `skipped — block filled in round 1` straight through from the source. Restyling
 is the moment to fix that copy, not preserve it.

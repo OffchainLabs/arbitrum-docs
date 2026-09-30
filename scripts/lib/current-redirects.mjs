@@ -97,17 +97,17 @@ export const MANUAL_DESTINATIONS = new Map([
   // "Configure and optimize gas" (chain), not Stylus' "Gas optimization best practices".
   [
     '/launch-arbitrum-chain/chain-config/costs/gas-optimization',
-    '/docs/launch-arbitrum-chain/configuration/costs/gas-optimization-tools',
+    '/docs/launch-arbitrum-chain/chain-config/costs/gas-optimization',
   ],
   // "How to customize ArbOS on your Arbitrum chain", not the ArbOS concept page.
   [
     '/launch-arbitrum-chain/extend-the-protocol/arbos',
-    '/docs/launch-arbitrum-chain/configuration/core/customize-arbos',
+    '/docs/launch-arbitrum-chain/extend-the-protocol/arbos',
   ],
   // "How to customize your Arbitrum chain's behavior", not the State Transition Function concept.
   [
     '/launch-arbitrum-chain/extend-the-protocol/stf',
-    '/docs/launch-arbitrum-chain/configuration/core/customize-stf',
+    '/docs/launch-arbitrum-chain/extend-the-protocol/stf',
   ],
   // "Run a batch poster" (how-to), not "The batch poster" (concept).
   [

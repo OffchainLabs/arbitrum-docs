@@ -1,7 +1,7 @@
 ---
 title: 'Geth at the core: modified Geth on Arbitrum Nitro'
+sidebar_label: 'Geth'
 description: 'Learn the fundamentals of Nitro, Arbitrum stack.'
-user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
 content_type: 'concept'
 author: petevielhaber
 sme: Mehdi
@@ -13,11 +13,12 @@ We store ArbOS's state at an address within a Geth `statedb` (state database). I
 
 `0xA4B05FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF` is a fictional account representing ArbOS.
 
-<VanillaAdmonition type="info">
+<Callout type="info">
 
 Any links on this page may point to older versions of Nitro or our fork of Geth. While we try to keep this up to date, most of this should be stable. Check the latest releases of [Nitro](https://github.com/OffchainLabs/nitro/releases) and [Geth](https://github.com/OffchainLabs/go-ethereum/releases) for the most recent changes.
 
-</VanillaAdmonition>
+</Callout>
+
 ## Hooks
 
 <Term id="arbitrum">Arbitrum</Term> uses various hooks to modify Geth’s behavior during transaction processing. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152) function.
