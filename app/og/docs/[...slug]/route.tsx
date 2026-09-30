@@ -4,9 +4,11 @@ import { renderOgImage } from '@/lib/og';
 import { getPageImage, source } from '@/lib/source';
 
 export const revalidate = false;
+export const dynamicParams = false;
 
 export async function GET(_req: Request, { params }: RouteContext<'/og/docs/[...slug]'>) {
   const { slug } = await params;
+  if (slug.at(-1) !== 'image.png') notFound();
   const page = source.getPage(slug.slice(0, -1));
   if (!page) notFound();
 

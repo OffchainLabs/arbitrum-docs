@@ -124,7 +124,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             // `hotKey: false` disables Fumadocs' theme shortcut, a bare `d` that fires whenever
             // focus is outside a text field. The visible theme toggle is the intended path.
             theme={{ attribute: 'class', defaultTheme: 'light', hotKey: false }}
-            search={{ SearchDialog: InkeepSearchDialog }}
+            // Fumadocs preloads the dialog by default, which would fetch the Inkeep bundle on every
+            // page load instead of on the first open.
+            search={{ SearchDialog: InkeepSearchDialog, preload: false }}
           >
             {/* Announcement bar. Above the navbar because it is a sibling rendered before
               {children}, and every layout's header lives inside those.

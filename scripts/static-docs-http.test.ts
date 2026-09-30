@@ -7,8 +7,15 @@ import { appName, gitConfig } from '../lib/shared.ts';
 const baseUrl = process.env.STATIC_DOCS_TEST_URL;
 const livePath = '/docs/run-a-node/start-here';
 const liveMirror = `/llms.mdx${livePath}/content.md`;
-const documentOnly = (html: string): string =>
-  html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+const documentOnly = (html: string): string => {
+  let previous: string;
+  let current = html;
+  do {
+    previous = current;
+    current = current.replace(/<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/gi, '');
+  } while (current !== previous);
+  return current;
+};
 const get = (path: string, options?: RequestInit): Promise<Response> =>
   fetch(new URL(path, baseUrl), options);
 
@@ -102,6 +109,22 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
       `/llms.mdx${livePath}/not-content.md`,
       '/llms.mdx/docs/constructor/content.md',
       '/llms.mdx/docs/__proto__/content.md',
+    ]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
+  });
+
+  await t.test('a page has an open graph image and other image URLs 404', async () => {
+    const image = await get(`/og${livePath}/image.png`);
+    assert.equal(image.status, 200);
+    assert.match(image.headers.get('content-type') ?? '', /image\/png/);
+    await image.arrayBuffer();
+    for (const path of [
+      `/og${livePath}/other.png`,
+      `/og${livePath}/image.png/image.png`,
+      '/og/docs/does-not-exist/image.png',
     ]) {
       const response = await get(path);
       assert.equal(response.status, 404, path);

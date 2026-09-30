@@ -1397,6 +1397,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/how-arbitrum-works/deep-dives/stf',
+    destination: '/docs/how-arbitrum-works/deep-dives/stf',
+    permanent: false,
+  },
+  {
     source: '/how-arbitrum-works/deep-dives/stf-gentle-intro',
     destination: '/docs/how-arbitrum-works/deep-dives/stf',
     permanent: false,
@@ -1499,6 +1504,11 @@ export const redirects: Redirect[] = [
   {
     source: '/how-arbitrum-works/priority-gas-auction/pga',
     destination: '/docs/how-arbitrum-works/priority-gas-auction/pga',
+    permanent: false,
+  },
+  {
+    source: '/how-arbitrum-works/priority-gas-auction/use-fast-feed',
+    destination: '/docs/how-arbitrum-works/priority-gas-auction/use-fast-feed',
     permanent: false,
   },
   {
@@ -2411,6 +2421,11 @@ export const redirects: Redirect[] = [
   {
     source: '/launch-arbitrum-chain/deploy/configure-node',
     destination: '/docs/launch-arbitrum-chain/arbitrum-chain-sdk-preparing-node-config',
+    permanent: false,
+  },
+  {
+    source: '/launch-arbitrum-chain/deploy/custom-genesis-state',
+    destination: '/docs/launch-arbitrum-chain/deploy/custom-genesis-state',
     permanent: false,
   },
   {
