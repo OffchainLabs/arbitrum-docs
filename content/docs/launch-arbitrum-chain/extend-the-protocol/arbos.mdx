@@ -31,7 +31,7 @@ Below, you will find four examples of ArbOS-related code changes and, generally,
 
 ### 1. Add a new method to existing precompile on a specific ArbOS version
 
-After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile Option 1](/docs/launch-arbitrum-chain/extend-the-protocol/precompiles#option-1-add-new-methods-to-an-existing-precompile),
+After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile Option 1](./precompiles#option-1-add-new-methods-to-an-existing-precompile),
 you need to continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/@@nitroVersionTag@@/@@nitroPathToPrecompiles@@/precompile.go).
 
 For example, the original code is:
@@ -58,7 +58,7 @@ In this way, this method will be executed normally and return results only after
 
 ### 2. Create a new precompile contract on a specific ArbOS version
 
-After you add a new precompile named `ArbHi` according to the guide in [customize precompile Option 2](/docs/launch-arbitrum-chain/extend-the-protocol/precompiles#option-2-create-a-new-precompile) and make changes to [`precompile.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/@@nitroVersionTag@@/@@nitroPathToPrecompiles@@/precompile.go),
+After you add a new precompile named `ArbHi` according to the guide in [customize precompile Option 2](./precompiles#option-2-create-a-new-precompile) and make changes to [`precompile.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/@@nitroVersionTag@@/@@nitroPathToPrecompiles@@/precompile.go),
 you also need to make the following changes:
 
 ```go

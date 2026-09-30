@@ -35,7 +35,7 @@ Once initiated, it is not possible to cancel a withdrawal. However, you can clai
 
 ### Can I use a smart contract wallet in the bridge?
 
-Support for Smart Contract Wallets is currently limited to token deposits and withdrawals. Keep in mind that when withdrawing funds, the withdrawal may not show up in your [bridge](https://portal.arbitrum.io/bridge) transaction history unless you also control that address on L1. In that case, you can search for the withdrawal transaction hash in the [bridge transaction history](https://portal.arbitrum.io/bridge?tab=tx_history) to claim your funds on L1. Developers debugging a stuck transaction in this flow may also find [Bridge transaction traceability](/docs/arbitrum-bridge/bridge-transaction-traceability) useful.
+Support for Smart Contract Wallets is currently limited to token deposits and withdrawals. Keep in mind that when withdrawing funds, you won't be able to claim them on L1 using the [bridge](https://bridge.arbitrum.io/) (unless you also control that address on L1). In that case, you can use the [cross-chain dashboard](https://retryable-dashboard.arbitrum.io/tx) to claim your funds on L1. Developers debugging a stuck transaction in this flow may also find [Bridge transaction traceability](/docs/arbitrum-bridge/bridge-transaction-traceability) useful.
 
 **ETH** deposits and withdrawals using a Smart Contract Wallet are currently not supported, but will be available soon.
 

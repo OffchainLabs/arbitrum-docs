@@ -53,7 +53,7 @@ Similarly, Arbitrum-to-Ethereum transfers initiate via the router contract on th
 
 For any given gateway pairing, we require that calls initiate through the corresponding router (`L1GatewayRouter` or `L2GatewayRouter`), and that the gateways conform to the [`TokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
-## The standard **ERC-20** gateway
+## The standard **ERC-20** gateway [#default-standard-bridging]
 
 By default, any **ERC-20** token on a parent chain that isn't registered to a gateway can be bridged permissionlessly through the `StandardERC20Gateway`.
 
@@ -78,6 +78,7 @@ To help illustrate what this all looks like in practice, let's go through the st
 `arbSomeERC20Token` is an instance of [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
 
 </Callout>
+
 #### Withdrawals
 
 1. On Arbitrum, a user calls `L2GatewayRouter.outBoundTransfer`, which in turn calls `outBoundTransfer` on arbSomeERC20Token's gateway (i.e., `L2ERC20Gateway`).
@@ -123,6 +124,7 @@ After your token's registration to the generic-custom gateway is complete, have 
 If you have questions about your custom token needs, please feel free to reach out to us on our [Discord server](https://discord.gg/arbitrum).
 
 </Callout>
+
 ## Other flavors of gateways
 
 Note that in the system described above, one pair of gateway contracts handles the bridging of many **ERC-20**'s; i.e., many **ERC-20**'s on the parent chain are each paired with their own **ERC-20**'s on Arbitrum via a single gateway contract pairing. Other gateways may have different relationships with the contracts that they bridge.
