@@ -5,16 +5,14 @@ import dynamic from 'next/dynamic';
 /**
  * Lazy boundary for the Timeboost auction diagram.
  *
- * The artwork is a large inline SVG that one page renders, so `next/dynamic` keeps it out of the
- * bundle every other docs page loads. Server rendering stays on: the diagram is static markup until
- * a reader opens a step.
+ * `components/mdx.tsx` reaches every docs page, so anything it references statically lands in every
+ * page's client bundle. The artwork is an asset under `public/img/` and is not the weight here:
+ * `AuctionStepMarker` pulls in `@radix-ui/react-dialog` and `DynamicCodeBlock`, plus the five steps'
+ * prose and code samples, and one page renders all of it. `next/dynamic` keeps that in its own
+ * chunk. Server rendering stays on, so the diagram and its markers are in the HTML.
  */
 const FlowChartImpl = dynamic(() => import('./FlowChart').then((mod) => mod.FlowChart));
 
 export function FlowChart() {
-  // `group`, not `img`: `img` is a leaf role, so the accessibility tree would drop the dialog
-  // triggers inside it. As a group, the SVG reports its label and the buttons it contains. The
-  // artwork itself is `aria-hidden` in `FlowChart.tsx`, since the prose around the diagram already
-  // explains the flow it illustrates.
-  return <FlowChartImpl role="group" aria-label="Timeboost centralized auction flow" />;
+  return <FlowChartImpl />;
 }
