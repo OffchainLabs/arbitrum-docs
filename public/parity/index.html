@@ -205,15 +205,9 @@
     <h1>Docs migration parity</h1>
     <div class="controls">
       <label
-        >Run
+        >Run (compared against docs.arbitrum.io)
         <select id="run"></select
       ></label>
-      <label
-        >Compare to
-        <select id="base">
-          <option value="">none</option>
-        </select></label
-      >
       <label>Page <input id="q" placeholder="substring" /></label>
       <label
         >Show
@@ -233,7 +227,6 @@
         >Sort
         <select id="sort">
           <option value="overall">lowest overall</option>
-          <option value="delta">biggest drop vs compare</option>
           <option value="path">path</option>
         </select></label
       >
@@ -255,7 +248,7 @@
           /[&<>"']/g,
           (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
         );
-      const state = { runs: [], run: null, base: null, section: '', open: new Set() };
+      const state = { runs: [], run: null, section: '', open: new Set() };
       const cache = new Map();
 
       async function load(label) {
@@ -272,17 +265,13 @@
 
       function renderMeta() {
         const r = state.run,
-          s = r.summary,
-          b = state.base?.summary;
-        const delta = b
-          ? ` <span class="${s.health >= b.health ? 'g' : 'b'}">(${s.health - b.health >= 0 ? '+' : ''}${(s.health - b.health).toFixed(1)} vs ${esc(state.base.label)})</span>`
-          : '';
+          s = r.summary;
         const cats = Object.entries(s.categories)
           .map(([k, v]) => `${k} ${v}`)
           .join(' · ');
         $('meta').innerHTML = `
-    <dt>health</dt><dd><span class="health ${healthCls(s.health)}">${s.health}</span> / 100${delta}</dd>
-    <dt>triage</dt><dd>${s.triage} of ${s.checked} pages have a parameter below ${s.threshold}${b ? ` (was ${b.triage})` : ''}</dd>
+    <dt>health</dt><dd><span class="health ${healthCls(s.health)}">${s.health}</span> / 100</dd>
+    <dt>triage</dt><dd>${s.triage} of ${s.checked} pages have a parameter below ${s.threshold}</dd>
     <dt>resolution</dt><dd>${cats}</dd>
     <dt>broken links</dt><dd>${s.brokenLinksTargetOnly} only on target · ${s.brokenLinksAlsoProd} also broken on prod</dd>
     <dt>new-only pages</dt><dd>${s.newOnly}</dd>
@@ -349,7 +338,6 @@
           show = $('show').value,
           param = $('param').value,
           sort = $('sort').value;
-        const basePages = new Map((state.base?.pages ?? []).map((p) => [p.oldPath, p]));
         let pages = state.run.pages.filter(
           (p) =>
             (!state.section || p.section === state.section) &&
@@ -359,31 +347,23 @@
             (show === 'all' || (show === 'triage' ? p.triage : p.scores.resolves === 0)) &&
             (!param || p.scores[param] < t),
         );
-        const delta = (p) => {
-          const b = basePages.get(p.oldPath);
-          return b ? p.scores.overall - b.scores.overall : 0;
-        };
         pages.sort(
           sort === 'path'
             ? (a, b) => a.oldPath.localeCompare(b.oldPath)
-            : sort === 'delta'
-              ? (a, b) => delta(a) - delta(b)
-              : (a, b) => a.scores.overall - b.scores.overall,
+            : (a, b) => a.scores.overall - b.scores.overall,
         );
         $('count').textContent = `showing ${pages.length} of ${state.run.pages.length}`;
         $('head').innerHTML =
-          `<tr><th>page</th><th>overall</th>${state.base ? '<th>Δ</th>' : ''}${PARAMS.map((n) => `<th>${n}</th>`).join('')}</tr>`;
-        const cols = PARAMS.length + (state.base ? 3 : 2);
+          `<tr><th>page</th><th>overall</th>${PARAMS.map((n) => `<th>${n}</th>`).join('')}</tr>`;
+        const cols = PARAMS.length + 2;
         $('body').innerHTML = pages.length
           ? pages
               .map((p) => {
-                const d = delta(p),
-                  open = state.open.has(p.oldPath);
+                const open = state.open.has(p.oldPath);
                 const moved =
                   p.finalPath && p.finalPath !== '/docs' + p.oldPath && p.finalPath !== p.oldPath;
                 return `<tr class="row" data-p="${esc(p.oldPath)}"><td class="path">${esc(p.oldPath)}${moved ? `<div class="final">→ ${esc(p.finalPath)}</div>` : ''}</td>
       <td class="${cls(p.scores.overall, t)}"><b>${fmt(p.scores.overall)}</b></td>
-      ${state.base ? `<td class="${d > 0.0005 ? 'g' : d < -0.0005 ? 'b' : 'd'}">${Math.abs(d) < 0.0005 ? '-' : (d > 0 ? '+' : '') + d.toFixed(3)}</td>` : ''}
       ${PARAMS.map((n) => `<td class="${cls(p.scores[n], t)}">${fmt(p.scores[n])}</td>`).join('')}</tr>
       ${open ? `<tr class="detail"><td colspan="${cols}">${details(p)}</td></tr>` : ''}`;
               })
@@ -393,7 +373,6 @@
 
       async function select() {
         state.run = await load($('run').value);
-        state.base = $('base').value ? await load($('base').value) : null;
         renderMeta();
         render();
       }
@@ -404,16 +383,14 @@
         const opts = idx.runs
           .map(
             (r) =>
-              `<option value="${esc(r.label)}">${esc(r.label)} · ${r.health} · ${esc(r.generatedAt.slice(0, 16).replace('T', ' '))}</option>`,
+              `<option value="${esc(r.label)}">${esc(r.prs?.length ? `fumadocs + ${r.prs.length} open PRs` : r.label)} · health ${r.health} · ${esc(r.generatedAt.slice(0, 16).replace('T', ' '))}</option>`,
           )
           .join('');
         $('run').innerHTML = opts;
-        $('base').innerHTML += opts;
         $('param').innerHTML += PARAMS.map((n) => `<option>${n}</option>`).join('');
         const params = new URLSearchParams(location.search);
         if (params.get('run')) $('run').value = params.get('run');
-        if (params.get('base')) $('base').value = params.get('base');
-        ['run', 'base'].forEach((id) => $(id).addEventListener('change', select));
+        $('run').addEventListener('change', select);
         ['q', 'show', 'param', 'sort'].forEach((id) => $(id).addEventListener('input', render));
         $('sections').addEventListener('click', (e) => {
           const c = e.target.closest('.chip');
