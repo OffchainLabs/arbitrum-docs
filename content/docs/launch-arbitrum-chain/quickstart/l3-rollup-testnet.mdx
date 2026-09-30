@@ -163,7 +163,7 @@ NITRO_NODE_SEQ__COORDINATOR_MY__URL value:
 kubectl get pods -l app.kubernetes.io/name=nitro -w
 ```
 
-<Callout type="warning" title="Set sequencer priority after deployment">
+<Callout type="warn" title="Set sequencer priority after deployment">
 
 After deploying sequencers, you must set at least one sequencer in the priority list. Without this, no sequencer will be active, and your chain won’t produce blocks. Complete Step 10 to set priorities using the Sequencer Coordinator Manager, or set them directly in Redis.
 
@@ -255,7 +255,7 @@ configmap.data.node.batch-poster.parent-chain-wallet.private-key=batch-poster-ke
 rm batch-poster-key.txt
 ```
 
-<Callout type="warning" title="Do not add batch poster to sequencer priority">
+<Callout type="warn" title="Do not add batch poster to sequencer priority">
 
 Do **not** add the batch poster to the Sequencer Coordinator Manager's sequencer priority list. Otherwise, it could become the active sequencer unintentionally.
 
@@ -297,7 +297,7 @@ rm validator-key.txt
 
 ## Step 10: Set up Sequencer Coordinator Manager and set priority
 
-<Callout type="warning" title="Required for sequencer activation">
+<Callout type="warn" title="Required for sequencer activation">
 
 This step is **required**, not optional.
 
@@ -348,7 +348,7 @@ For proper high availability with automatic failover, add all 3 sequencers to th
 
 </Callout>
 
-<Callout type="warning">
+<Callout type="warn">
 
 Do **not** add the batch poster to the priority list. The batch poster should never become the active sequencer.
 

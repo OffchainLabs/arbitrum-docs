@@ -7,7 +7,7 @@ content_type: how-to
 sme: jose-franco
 ---
 
-<Callout type="warning" title="Running a regular DAS vs running a mirror DAS">
+<Callout type="warn" title="Running a regular DAS vs running a mirror DAS">
 
 The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to [How to deploy a DAS](/docs/launch-arbitrum-chain/chain-config/data-availability/deploy-das) if needed.
 
@@ -98,7 +98,7 @@ To enable caching, you can use the following parameters:
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
-<Callout type="warning" title="Local Badger database removed">
+<Callout type="warn" title="Local Badger database removed">
 
 The local Badger DB storage option (previously set with `local-db-storage`) was deprecated and removed in Nitro v3.8.0, together with its `--data-availability.migrate-local-db-to-file-storage` migration parameter. If your DAS still stores data in a local Badger database, run a Nitro version prior to v3.8.0 with that parameter to migrate the data to the local files storage option (`local-file-storage`) before upgrading.
 

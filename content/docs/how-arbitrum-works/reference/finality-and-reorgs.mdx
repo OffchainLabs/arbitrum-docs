@@ -124,7 +124,7 @@ When a parent-chain reorg does change the Sequencer Inbox or <Term id="delayed-i
 3. It rolls the chain back to that block. **State reverts to the state root at the common ancestor, and every transaction after that point is discarded.** Block explorers and RPC no longer return the discarded transactions.
 4. It re-derives the chain forward from the parent chain. Messages that were reorged out (within the re-sequencing window) may be re-sequenced, but block hashes, block numbers, and transaction ordering after the common ancestor can all differ from before.
 
-<Callout type="warning" title="Never key an index on block number alone across a reorg">
+<Callout type="warn" title="Never key an index on block number alone across a reorg">
 
 After a reorg, the same block _number_ can hold different transactions with a different block _hash_. Always store and compare block hashes and `parentHash` continuity, and rewind to the common ancestor rather than patching individual records. See [Reorg detection patterns](#reorg-detection-patterns).
 
@@ -187,7 +187,7 @@ The [Exchange integration checklist](/docs/launch-arbitrum-chain/integrations/ex
 
 You may encounter the node flag `--node.bold.rpc-block-number`. It is a **validator-side** setting: it selects which parent-chain block tag the <Term id="bold">BoLD</Term> validator reads onchain Rollup and assertion state from. It accepts `latest`, `safe`, or `finalized`, and defaults to `finalized`.
 
-<Callout type="warning" title="Not the tag your indexer reads">
+<Callout type="warn" title="Not the tag your indexer reads">
 
 `--node.bold.rpc-block-number` controls how the <Term id="bold">BoLD</Term> validator reads the _parent chain_ during dispute-protocol operations. It does **not** configure the `latest`/`safe`/`finalized` tags your indexer requests from the child-chain RPC. Do not set it expecting to change indexer-facing finality; use the block tags on your RPC queries instead.
 

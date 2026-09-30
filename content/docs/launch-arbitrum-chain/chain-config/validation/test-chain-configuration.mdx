@@ -10,7 +10,7 @@ sme: TBD
 
 On a production Arbitrum chain, an <Term id="assertion">assertion</Term> takes about a week to confirm (6.4 days). That delay is the security model working as intended, but it makes integration testing impractical. This page covers how to shorten it on a chain you do not need to secure. It also covers which parameters differ on a testnet.
 
-<Callout type="warning" title="These values are unsafe for production">
+<Callout type="warn" title="These values are unsafe for production">
 
 Every value on this page trades security for speed. A chain configured this way offers no meaningful dispute window, so an incorrect <Term id="assertion">assertion</Term> can be confirmed before anyone has time to dispute it — and if the validator allowlist is disabled, any address can trigger that confirmation. Use these settings only on chains that hold no value.
 

@@ -38,7 +38,7 @@ Call all four methods on the <Term id="precompile">precompile</Term> `ArbOwner` 
 
 The `160,000,000` default for equilibration units applies from ArbOS 6 onward. Chains initialized before ArbOS 6 used `96,000,000`.
 
-<Callout type="warning">
+<Callout type="warn">
 
 `setL1PricingInertia` and `setL1BaseFeeEstimateInertia` write the same stored value. To read it back, call `ArbGasInfo.getL1BaseFeeEstimateInertia()`.
 
@@ -82,7 +82,7 @@ cast call --rpc-url $ORBIT_RPC 0x000000000000000000000000000000000000006c "getL1
 
 Change one parameter at a time and watch the surplus across several batch posting cycles before you change another. Adjusting two at once makes it hard to attribute the resulting fee behavior.
 
-<Callout type="warning">
+<Callout type="warn">
 
 Test every change on a devnet or testnet chain first. A short equilibration horizon combined with low inertia makes data fees swing sharply between updates, which harms user experience even when the long-run average is correct.
 

@@ -84,7 +84,7 @@ The sequencer accepts <Term id="transaction">transactions</Term>, orders them, a
 | `arb/feed/backlog/messages` | Nitro metric (nodes with feed output enabled — the sequencer or a relay) | Messages retained by the broadcast server until it sees them covered by batches on the parent chain. Growth means batches aren't landing — not that a follower is lagging. | Sustained growth                             |
 | `eth_syncing` fields        | RPC (any node)                                                           | While a node is syncing, `eth_syncing` returns fields such as `batchSeen`, `batchProcessed`, `msgCount`, and `blockNum`. See caveats below.                                | `batchSeen` − `batchProcessed` keeps growing |
 
-<Callout type="warning">
+<Callout type="warn">
 
 `eth_syncing` returns `false` once a node is fully synced, so it is useful for tracking a node that is catching up, not for steady-state health. Its out-of-sync output is **not a stable API** and can change between Nitro versions, so do not build production alerting on the exact field shape. For a fully synced node, use the metrics above and an RPC liveness check (an `eth_chainId` call returning HTTP 200) instead. See [`eth_syncing`](/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods#eth_syncing) for the full field reference.
 
@@ -131,7 +131,7 @@ If you are relying on `arb/staker/action/last_success` and seeing it go stale fo
 | `arb/validator/validations/failed`                              | Nitro metric (any validator)   | Counter of failed block validations.                                                                           | Any sustained increase                   |
 | `NodeCreated` or `AssertionCreated` events                      | Parent chain (Rollup contract) | The onchain confirmation that assertions are being created. Watch alongside the metrics above.                 | No event over an extended period         |
 
-<Callout type="warning">
+<Callout type="warn">
 
 **Long periods of inactivity can disable the validator allowlist.** If the latest confirmed assertion (or its first child, once one exists) is older than `validatorAfkBlocks` parent-chain blocks, the Rollup contract's validator allowlist can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). `validatorAfkBlocks` is configured per chain — read it from your Rollup contract; a value of `0` disables this mechanism entirely. Alert on assertion inactivity well before this window elapses. For example, on Arbitrum One `validatorAfkBlocks` is set to `201600` (~28 days of parent-chain blocks).
 

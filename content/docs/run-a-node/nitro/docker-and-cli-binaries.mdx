@@ -3,13 +3,14 @@ title: 'Docker images and CLI binaries'
 description: 'Nitro Docker image variants, available CLI binaries, entrypoint usage, and Docker Compose examples'
 sidebar_label: 'Docker and CLI binaries'
 content_type: 'reference'
-author: gzeoneth
-sme: gzeoneth
+author: 'gzeoneth'
+sme: 'gzeoneth'
+# Content gap tracking:
+# - TW-692: Node operations runbook (partial — Docker setup)
+# - TW-695: Docker Compose examples
 ---
 
-{/* sync-with-var: latestNitroNodeImage */}
-
-The Nitro Docker images bundle multiple CLI binaries that serve different roles in the Arbitrum ecosystem. This page documents the image variants, the binaries they contain, and how to override entrypoints to run specific tools.
+The Nitro Docker images bundle multiple CLI binaries that serve different roles in the <Term id="arbitrum">Arbitrum</Term> ecosystem. This page documents the image variants, the binaries they contain, and how to override entrypoints to run specific tools.
 
 ## Docker image variants
 
@@ -175,7 +176,7 @@ docker run --rm \
 
 ## Docker Compose example
 
-The following `docker-compose.yml` runs an Arbitrum One full node. Replace the placeholder URLs with your actual parent chain and beacon endpoints.
+The following `docker-compose.yml` runs an <Term id="arbitrum-one">Arbitrum One</Term> full node. Replace the placeholder URLs with your actual <Term id="parent-chain">parent chain</Term> and beacon endpoints.
 
 ```yaml
 # Arbitrum One full node — Docker Compose

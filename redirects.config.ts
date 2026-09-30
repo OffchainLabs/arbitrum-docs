@@ -16,17 +16,32 @@ export const redirects: Redirect[] = [
   // AUTO-GENERATED REDIRECTS START
   {
     source: '/docs/launch-arbitrum-chain/run-a-node/run-batch-poster',
-    destination: '/docs/run-a-node/run-batch-poster',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
     permanent: true,
   },
   {
     source: '/docs/launch-arbitrum-chain/run-a-node/run-split-validator-node',
-    destination: '/docs/run-a-node/run-split-validator-node',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
     permanent: true,
   },
   {
     source: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer-docs',
-    destination: '/docs/run-a-node/high-availability-sequencer-docs',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
+    permanent: true,
+  },
+  {
+    source: '/docs/run-a-node/run-batch-poster',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
+    permanent: true,
+  },
+  {
+    source: '/docs/run-a-node/run-split-validator-node',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
+    permanent: true,
+  },
+  {
+    source: '/docs/run-a-node/high-availability-sequencer-docs',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
     permanent: true,
   },
   // AUTO-GENERATED REDIRECTS END
@@ -2716,12 +2731,12 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/run-a-node/batch-poster',
-    destination: '/docs/run-a-node/run-batch-poster',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/batch-poster',
     permanent: false,
   },
   {
     source: '/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
-    destination: '/docs/run-a-node/high-availability-sequencer-docs',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
     permanent: false,
   },
   {
@@ -2731,7 +2746,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/run-a-node/split-validator-node',
-    destination: '/docs/run-a-node/run-split-validator-node',
+    destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
     permanent: false,
   },
   {
@@ -3664,63 +3679,8 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
-    source: '/run-arbitrum-node/more-types/run-validator-node',
-    destination: '/docs/run-a-node/more-types/run-validator-node',
-    permanent: false,
-  },
-  {
     source: '/run-arbitrum-node/more-types/split-validator-node',
     destination: '/docs/launch-arbitrum-chain/run-a-node/split-validator-node',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro-support-policy',
-    destination: '/docs/run-a-node/nitro-support-policy',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/build-nitro-locally',
-    destination: '/docs/run-a-node/nitro/build-nitro-locally',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/cli-flags-reference',
-    destination: '/docs/run-a-node/nitro/cli-flags-reference',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/configuration-system',
-    destination: '/docs/run-a-node/nitro/configuration-system',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/da-tools-reference',
-    destination: '/docs/run-a-node/nitro/da-tools-reference',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/docker-and-cli-binaries',
-    destination: '/docs/run-a-node/nitro/docker-and-cli-binaries',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
-    destination: '/docs/run-a-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
-    destination: '/docs/run-a-node/nitro/migrate-state-and-history-from-classic',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/nitro-database-snapshots',
-    destination: '/docs/run-a-node/nitro/nitro-database-snapshots',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-    destination: '/docs/run-a-node/nitro/node-tuning-and-monitoring',
     permanent: false,
   },
   {
@@ -3766,11 +3726,6 @@ export const redirects: Redirect[] = [
   {
     source: '/run-arbitrum-node/sequencer/high-availability-sequencer-docs',
     destination: '/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
-    permanent: false,
-  },
-  {
-    source: '/run-arbitrum-node/sequencer/read-sequencer-feed',
-    destination: '/docs/run-a-node/sequencer/read-sequencer-feed',
     permanent: false,
   },
   {

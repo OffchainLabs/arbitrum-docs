@@ -3,25 +3,27 @@ title: 'Data availability tools reference'
 sidebar_label: 'DA tools reference'
 description: 'Reference for anytrusttool (keygen, dumpkeyset, client), anytrustserver, and daprovider CLI tools'
 content_type: 'reference'
-author: gzeoneth
-sme: gzeoneth
+author: 'gzeoneth'
+sme: 'gzeoneth'
 ---
 
-Nitro ships three binaries for operating [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) data availability (DA) infrastructure: `anytrusttool` for key management and testing, `anytrustserver` for running a DA committee member, and `daprovider` for running a DA provider server that exposes a unified JSON-RPC interface over different DA backends.
+Nitro ships three binaries for operating [AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) data availability (DA) infrastructure: `anytrusttool` for key management and testing, `anytrustserver` for running a <Term id="data-availability-committee-dac">DA committee</Term> member, and `daprovider` for running a DA provider server that exposes a unified JSON-RPC interface over different DA backends.
 
 ## anytrusttool
 
-`anytrusttool` is a command-line utility for generating cryptographic keys, computing keyset hashes, and interacting with DA committee members through RPC and REST endpoints. It has four subcommands:
+`anytrusttool` is a command-line utility for generating cryptographic keys, computing <Term id="keyset">keyset</Term> hashes, and interacting with DA committee members through RPC and REST endpoints. It has four subcommands:
 
 ```
 anytrusttool [keygen | dumpkeyset | client | generatehash] ...
 ```
 
 <Callout type="warn" title="Deprecation notice">
-  The `datool` binary name is deprecated. The Docker image still includes a `datool` symlink for backward compatibility, but running it logs a deprecation warning. Update your scripts to use `anytrusttool`.
+
+The `datool` binary name is deprecated, and current Docker images (v3.11.2 and later) no longer include it. Update your scripts to use `anytrusttool`.
+
 </Callout>
 
-### keygen
+### `keygen`
 
 Generate BLS or ECDSA keys for a Data Availability Server (DAS).
 
@@ -67,7 +69,7 @@ To store the ECDSA key in an encrypted wallet file instead of a plaintext file:
 anytrusttool keygen --dir /path/to/keystore --ecdsa --wallet
 ```
 
-You are prompted for a password to encrypt the wallet.
+You are prompted to enter a password to encrypt the wallet.
 
 #### Docker example
 
@@ -81,7 +83,7 @@ docker run --rm \
 
 ### dumpkeyset
 
-Compute the keyset bytes and keyset hash from a DA committee backend configuration. You need the keyset hash when configuring the `SequencerInbox` contract on the parent chain.
+Compute the keyset bytes and keyset hash from a DA committee backend configuration. You need the keyset hash when configuring the <Term id="sequencer-inbox">`SequencerInbox`</Term> contract on the <Term id="parent-chain">parent chain</Term>.
 
 #### Usage
 
@@ -109,7 +111,7 @@ Compute the keyset bytes and keyset hash from a DA committee backend configurati
 }
 ```
 
-The `assumed-honest` field (H) defines the trust assumption for the committee. With N backends, K = N + 1 - H valid responses are required for a store request to succeed. In the example above, H = 1 and N = 3, so K = 3 valid signatures are required.
+The `assumed-honest` field (H) defines the trust assumption for the committee. With `N` backends, `K = N + 1 - H` valid responses are required for a store request to succeed. In the example above, `H = 1 and N = 3`, so `K = 3` valid signatures are required.
 
 #### Running dumpkeyset
 
@@ -215,10 +217,12 @@ The argument is a positional parameter (not a flag).
 
 ## anytrustserver
 
-`anytrustserver` runs a DA committee member server that stores and serves batch data. It exposes RPC and REST interfaces for clients to store and retrieve data.
+`anytrustserver` runs a <Term id="data-availability-server-das">DA committee member server</Term> that stores and serves <Term id="batch">batch</Term> data. It exposes RPC and REST interfaces for clients to store and retrieve data.
 
 <Callout type="warn" title="Deprecation notice">
-  The `daserver` binary name is deprecated. The Docker image still installs a `daserver` symlink for backward compatibility, but invoking it logs a deprecation warning. Update your scripts to use `anytrustserver`.
+
+The `daserver` binary name is deprecated, and current Docker images (v3.11.2 and later) no longer include it. Update your scripts to use `anytrustserver`.
+
 </Callout>
 
 ### Key flags

@@ -17,7 +17,7 @@ The two failure modes every exchange must avoid are the same:
 
 The detection flow below is designed to make both failure modes structurally impossible: you examine every transaction in every block, validate each one against its receipt and traces rather than its calldata, and credit only after the block is final on the parent chain.
 
-<Callout type="warning" title="Re-verify on every upgrade">
+<Callout type="warn" title="Re-verify on every upgrade">
 
 ArbOS upgrades are Arbitrum's equivalent of a hard fork and can change trace output, gas accounting, and transaction-type handling. Treat the [Re-verification procedure](#re-verification-procedure) as mandatory before each upgrade activates on your chain, not as optional cleanup afterward.
 
@@ -32,7 +32,7 @@ ArbOS upgrades are Arbitrum's equivalent of a hard fork and can change trace out
 | The exact set of platform-controlled deposit addresses, plus supported token contract addresses with their decimals.                  | Every detection rule below keys off these two sets.                                                                      |
 | Confirmation of whether your chain supports the `finalized` and `safe` block tags.                                                    | These tags are available on Arbitrum One. On a Dedicated Blockchain, support depends on your parent-chain configuration. |
 
-<Callout type="warning" title="Run an archive or debug-capable node">
+<Callout type="warn" title="Run an archive or debug-capable node">
 
 `debug_traceBlockByHash` may not return traces beyond a pruned node's retention window. Index in near real time, or run an archive node when you need to backfill historical blocks.
 
@@ -125,7 +125,7 @@ For an internal token transfer, scan every entry in the receipt `logs`. Credit t
 
 For an internal **ETH** transfer, recursively scan the `callTracer` frames for the transaction — the top-level call and every entry in its nested `calls` arrays. Credit a frame when `to` is a platform user's address, `value` is not `0x0`, the frame's `type` is `CALL` (only `CALL` frames carry **ETH** value), the frame has no `error`, and the frame's `gasUsed` is less than or equal to its `gas`. Credit `value` divided by `10^18`.
 
-<Callout type="warning" title="Arbitrum-specific deposits to watch">
+<Callout type="warn" title="Arbitrum-specific deposits to watch">
 
 Besides ordinary externally owned account transactions, value can arrive through Arbitrum-native transaction types. When a user bridges directly to an exchange-controlled address, the credit appears as an `ArbitrumDepositTx` (type `0x64`), where ArbOS adds balance to the destination after the parent-chain bridge locks the same funds. Retryable-ticket execution (`ArbitrumRetryTx`, `0x68`, and `ArbitrumSubmitRetryableTx`, `0x69`) can also deliver value. System transactions of type `ArbitrumInternalTx` (`0x6A`) are ArbOS-generated bookkeeping and must never be credited. Classify by observed value movement, as in A through C, rather than assuming every credit is a standard transfer. See [Geth at the core](/docs/how-arbitrum-works/reference/geth) for the full list of transaction types.
 
@@ -141,7 +141,7 @@ The block tags carry different finality guarantees:
 - `safe` means the batch containing this block has been posted and reached finality on the parent chain. It is resistant to reorganizations but can still be reverted by a deep parent-chain reorganization.
 - `finalized` means the batch is finalized on the parent chain, and reversal is highly improbable. Credit occurs here.
 
-<Callout type="warning" title="Finality on Dedicated Blockchains">
+<Callout type="warn" title="Finality on Dedicated Blockchains">
 
 The `safe` and `finalized` tags are available on Arbitrum One. On a self-managed Dedicated Blockchain, support for these tags depends on your parent-chain configuration and on how your node tracks parent-chain finality. Confirm the behavior on your chain before relying on `finalized`, and document the expected confirmation latency for your integrators.
 

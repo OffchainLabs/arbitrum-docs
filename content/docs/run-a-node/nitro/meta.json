@@ -1,6 +1,7 @@
 {
   "title": "Nitro",
   "pages": [
+    "index",
     "build-nitro-locally",
     "migrate-state-and-history-from-classic",
     "nitro-database-snapshots",
@@ -9,7 +10,6 @@
     "configuration-system",
     "da-tools-reference",
     "cli-flags-reference",
-    "nitro-memory-management",
     "docker-and-cli-binaries",
     "..."
   ]

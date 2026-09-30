@@ -220,7 +220,7 @@ Two consequences follow from step 2:
 - **Order is priority.** The first entry that is healthy and synced wins. Put your preferred sequencer first.
 - **`my-url` must match its list entry exactly.** The comparison is a string match. A trailing slash, a different port form, or an IP address instead of a hostname all cause a silent mismatch.
 
-<Callout type="warning" title="Never register the batch poster">
+<Callout type="warn" title="Never register the batch poster">
 
 The batch poster runs with `node.seq-coordinator.enable=true` so it can follow coordination state, but it must stay out of `coordinator.priorities`. If it reaches the top of the list, it is selected as the active sequencer while having no sequencer to run, and the chain stops producing blocks. Nitro logs `myurl main sequencer, but no sequencer exists`.
 
@@ -250,7 +250,7 @@ Two log messages tell you the priority list is the problem:
 
 For a full diagnostic path, see [Sequencer troubleshooting](/docs/launch-arbitrum-chain/operate/sequencer-troubleshooting#1-no-sequencer-is-chosen).
 
-<Callout type="warning" title="Redis persistence">
+<Callout type="warn" title="Redis persistence">
 
 The priority list lives only in Redis. If you replace the Redis instance or lose its data, the key is gone and no sequencer becomes active until you repopulate it. Include `coordinator.priorities` in your backup and disaster recovery plan, and re-register after any Redis migration.
 
@@ -311,7 +311,7 @@ helm install batchposter offchainlabs/nitro \
   --set "configmap.data.node.batch-poster.parent-chain-wallet.private-key=<your-private-key>"
 ```
 
-<Callout type="warning" title="Important">
+<Callout type="warn" title="Important">
 
 Do not add the batch poster to the sequencer priority list in the Sequencer Coordination Manager (SQM) to prevent it from becoming the active sequencer unintentionally.
 

@@ -23,7 +23,7 @@ An upgrade touches five things that must stay mutually compatible:
 
 Most failed upgrades are a mismatch between two of these five, and the majority are mismatches between the onchain root (3) and the machines on validators (4). [Troubleshoot WASM module root failures](#troubleshoot-wasm-module-root-failures) covers those in detail.
 
-<Callout type="warning" title="ArbOS upgrades are one-way">
+<Callout type="warn" title="ArbOS upgrades are one-way">
 
 Once an ArbOS upgrade activates, you cannot downgrade the ArbOS version. Plan on rolling forward, not back. Read [Rollback options](#rollback-options) **before** you schedule an upgrade, so you know which parts of the process are reversible and which aren't.
 
@@ -121,7 +121,7 @@ Order matters within that window, though: stage the machine on each validator an
 | Building the Docker image from source                                                   | **Usually yes.** The `Dockerfile` only downloads the machines on its _uncommented_ `RUN ./download-machine.sh` lines |
 | Custom STF build                                                                        | **Yes**, and you must also rebuild the replay binary so the resulting module root matches what you set onchain       |
 
-<Callout type="warning" title="The Dockerfile only downloads recent machines">
+<Callout type="warn" title="The Dockerfile only downloads recent machines">
 
 In the Nitro repository's `Dockerfile`, the `RUN ./download-machine.sh` lines for older consensus versions are **commented out**—only the most recent few are active. If your chain's Rollup contract still points at an older module root, a from-source build produces an image with no machine for that root, and your validator fails to start.
 
@@ -153,13 +153,13 @@ Order matters. Each step assumes the previous one completed successfully.
 | 5    | [Schedule the ArbOS version upgrade](/docs/launch-arbitrum-chain/operate/arbos-upgrade#step-3-schedule-the-arbos-version-upgrade)                                                            | Pass the real version number and a UNIX timestamp. A timestamp of `0` upgrades immediately                                                                    |
 | 6    | [Enable release-specific configuration or feature flags](/docs/launch-arbitrum-chain/operate/arbos-upgrade#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) | Not always required; check the release page                                                                                                                   |
 
-<Callout type="warning" title="Stage machines and restart before you set the root onchain">
+<Callout type="warn" title="Stage machines and restart before you set the root onchain">
 
 A running validator adopts a new onchain root only if that root equals its **pending** root; anything else is refused with `unexpected wasmModuleRoot! cannot validate!`. The legacy staker then stops acting entirely, while <Term id="bold">BoLD</Term> only warns. Both the pending root and the machine list are read **once, at startup**, so staging a machine under a running validator does nothing—the validator must be restarted before step 3. See [Understand which roots your validator is required to have](#understand-which-roots-your-validator-is-required-to-have).
 
 </Callout>
 
-<Callout type="warning" title="Upgrade nodes before the activation timestamp">
+<Callout type="warn" title="Upgrade nodes before the activation timestamp">
 
 A node that is too old to process the newly active ArbOS version stops with a fatal `please upgrade to the latest version of the node software` error. Because the ArbOS upgrade activates in consensus at the scheduled timestamp, every node must already be running a compatible Nitro version when that timestamp passes. Leave yourself margin.
 
@@ -254,7 +254,7 @@ When these differ, both are required, and a missing machine for **either** produ
 
 By default, `pending` resolves through the `machines/latest` symlink, which `download-machine.sh` repoints to whatever it fetched last. If you'd rather not depend on that, pin it: `--node.block-validator.pending-upgrade-module-root=<target root>`. Either way the machine must be on disk, or startup fails with `cannot validate WasmModuleRoot`—pinning changes which root is required, not whether one is.
 
-<Callout type="warning" title="Clearing `pending-upgrade-module-root` is not a fix for a Rollup mismatch">
+<Callout type="warn" title="Clearing `pending-upgrade-module-root` is not a fix for a Rollup mismatch">
 
 Setting `--node.block-validator.pending-upgrade-module-root=` to an empty value only shrinks the set of roots required **at startup**. It has no effect on the runtime `wasmroot doesn't match rollup` error, which compares against the Rollup contract rather than against this flag.
 
@@ -277,7 +277,7 @@ The fix is to stage the machine for the root the Rollup contract expects, then r
 
 A related message, `block validation is still pending`, is not a mismatch—it means the block validator hasn't validated anything yet and has no roots to compare. Wait for validation to progress.
 
-<Callout type="warning" title="Don't suppress the mismatch check">
+<Callout type="warn" title="Don't suppress the mismatch check">
 
 `--node.staker.dangerous.ignore-rollup-wasm-module-root` downgrades this error to a warning and lets the validator make <Term id="assertion">assertions</Term> anyway. Its own help text describes it as dangerous, and for good reason: asserting against a module root the Rollup contract doesn't recognize risks producing assertions that can be challenged. Fix the machine, don't silence the check.
 
@@ -309,7 +309,7 @@ The ArbOS version cannot be lowered. Recovery means rolling forward:
 2. **Don't downgrade Nitro below the active ArbOS version.** A node too old for the active ArbOS version stops with a fatal out-of-date error, so downgrading to "get back to a working state" makes the outage worse.
 3. **Escalate rather than improvise.** If the chain is producing blocks but validation is broken, the chain is still live and withdrawals are the pressure point. Contact Offchain Labs support before attempting contract-level changes.
 
-<Callout type="warning" title="Reverting contracts after assertions exist">
+<Callout type="warn" title="Reverting contracts after assertions exist">
 
 Rolling `nitro-contracts` back is only remotely viable if no assertions have been posted that depend on the new contracts' behavior. Once they have, a revert can invalidate chain history or strand in-flight withdrawals. Treat a contracts rollback as an incident requiring support involvement, not a routine operation.
 

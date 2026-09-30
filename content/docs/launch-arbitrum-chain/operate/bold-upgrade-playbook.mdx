@@ -64,7 +64,7 @@ Three consequences follow, and together they resolve the conflict:
 
 What `perform` actually requires is narrower than the [base guide](/docs/launch-arbitrum-chain/chain-config/validation/bold) implies. Confirming another assertion after Step 4 is fine—what matters is that the lookup must contain an entry for whichever assertion is latest-confirmed **at the moment of execution**.
 
-<Callout type="warning">
+<Callout type="warn">
 
 Confirm this sequence with the Offchain Labs team before executing it on a production chain. The reasoning above is drawn from the contract source, but a mainnet BoLD upgrade is a high-consequence, one-way operation, and your chain may use customized contracts for which it does not hold.
 
@@ -152,7 +152,7 @@ To keep validation permissioned:
 - Set `validatorAfkBlocks` to `0`, which disables the escape hatch entirely. This is preferable to setting an artificially large value, which achieves the same intent less clearly and still leaves a finite window.
 - If you keep the escape hatch enabled, alert on assertion inactivity well before the window elapses. See the validator section of [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring) for the metrics to watch.
 
-<Callout type="warning">
+<Callout type="warn">
 
 Disabling the escape hatch with `validatorAfkBlocks: 0` is a deliberate trade-off. It removes the protection that lets a chain recover permissionlessly if every allowlisted validator becomes unavailable. Make this choice knowingly, and pair it with monitoring and an on-call rotation for your validator set.
 

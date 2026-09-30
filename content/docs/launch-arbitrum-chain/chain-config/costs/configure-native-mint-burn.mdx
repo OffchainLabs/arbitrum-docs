@@ -8,7 +8,7 @@ author: gblanchemain
 sme: gblanchemain
 ---
 
-<Callout type="warning" title="Bridge counterparty risk">
+<Callout type="warn" title="Bridge counterparty risk">
 
 While this feature allows an <Term id="arbitrum-chain">Arbitrum chain</Term> to use native interop tokens as gas tokens via third-party protocols, it introduces new trust assumptions. In a standard Arbitrum chain, the canonical bridge is the sole authority for minting the chain's gas token, inheriting the security of the <Term id="parent-chain">parent chain</Term>.
 
@@ -173,7 +173,7 @@ When the last native-token owner is removed, Nitro automatically re-opens canoni
 
 Filter event `OwnerActs(bytes4 indexed method, address indexed owner, bytes data)` with first index `0xbdb8f707` to get all results, and decode the latest result's data field to get the last valid timestamp. That timestamp would be the point after which `ArbOwner`'s can take action to `nativeTokenOwner` list.
 
-<Callout type="warning" title="Testing Responsibility">
+<Callout type="warn" title="Testing Responsibility">
 
 While Offchain Labs has conducted comprehensive [system tests](https://github.com/OffchainLabs/nitro/blob/master/system_tests/arbos_upgrade_test.go#L292)
 to verify the core ArbOS logic for native mint/burn functionality, this does not cover your specific

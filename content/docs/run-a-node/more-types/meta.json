@@ -1,6 +1,7 @@
 {
   "title": "More node types",
   "pages": [
+    "index",
     "run-archive-node",
     "run-validator-node",
     "run-classic-node",

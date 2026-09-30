@@ -1,6 +1,7 @@
 {
   "title": "Sequencer",
   "pages": [
+    "index",
     "run-sequencer-node",
     "read-sequencer-feed",
     "run-sequencer-coordination-manager",

@@ -134,7 +134,7 @@ Writes a 32-byte value to the storage cache. Equivalent to EVM's `SSTORE` opcode
 pub fn storage_cache_bytes32(key: *const u8, value: *const u8);
 ```
 
-<Callout type="warning">
+<Callout type="warn">
   
 Values are cached and must be persisted using `storage_flush_cache` before they're permanently written to storage.
 
@@ -342,7 +342,7 @@ pub fn delegate_call_contract(
 ) -> u8;
 ```
 
-<Callout type="warning">
+<Callout type="warn">
 
 Delegate calls execute code in the context of the current contract. Be extremely careful when delegate calling to untrusted contracts, as they have full access to your storage.
 
@@ -437,7 +437,7 @@ pub fn emit_log(data: *const u8, len: usize, topics: usize);
 - `len`: Total length of data, including topics
 - `topics`: Number of topics (0-4)
 
-<Callout type="warning">
+<Callout type="warn">
 
 Requesting more than 4 topics will cause a revert.
 

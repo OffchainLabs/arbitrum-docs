@@ -11,7 +11,7 @@ content_type: how-to
 
 This guide covers how to rotate keys for different roles in your Arbitrum Orbit chain: batch poster, validator/bonder, and Data Availability Servers (DAS).
 
-<Callout type="warning" title="Important Prerequisites">
+<Callout type="warn" title="Important Prerequisites">
 
 - **Backup**: Always back up your current configuration and private keys before starting
 - **Testing**: Test key rotation on a testnet environment first, if possible
@@ -161,7 +161,7 @@ After invalidating the old keyset, you **must** stop and restart the batch poste
 
 </Callout>
 
-<Callout type="warning">
+<Callout type="warn">
 
 - You can obtain the old keyset hash from the `SetValidKeyset` event that was emitted when the old keyset was originally registered
 - Do **not** invalidate the old keyset until the new keyset is fully verified and the batch poster is successfully posting with the new DAS servers — invalidating prematurely can disrupt data availability for your chain

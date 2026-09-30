@@ -2,13 +2,13 @@
 title: 'CLI flags reference'
 description: 'Complete reference of all Nitro node command-line flags with types, defaults, and descriptions'
 content_type: 'reference'
-author: gzeoneth
-sme: gzeoneth
+author: 'gzeoneth'
+sme: 'gzeoneth'
+# Content gap tracking:
+# - TW-693: Nitro CLI reference (primary deliverable)
 ---
 
 {/* The region between the GENERATED markers below is written by `pnpm cli:generate` from the Nitro source at the tag pinned as `nitroVersionTag` in content/vars.json. Do not edit it by hand. Prose outside the markers is preserved. */}
-
-{/* GENERATED:START */}
 
 <Callout type="info" title="Auto-generated reference">
 
@@ -201,7 +201,7 @@ Related guide: [Node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-a
 | `execution.secondary-forwarding-target`                                                        | strings  | -                                                                                                  | secondary transaction forwarding target URL                                                                                                                                                                                                                          |
 | `execution.sequencer.enable`                                                                   | bool     | -                                                                                                  | act and post to l1 as sequencer                                                                                                                                                                                                                                      |
 | `execution.sequencer.enable-profiling`                                                         | bool     | -                                                                                                  | enable CPU profiling and tracing                                                                                                                                                                                                                                     |
-| `execution.sequencer.expected-surplus-gas-price-mode`                                          | string   | `BlobPrice`                                                                                        | gas price setting to be used in calculating estimated surplus. Allowed values- CalldataPrice, BlobPrice and CalldataPrice7523                                                                                                                                        |
+| `execution.sequencer.expected-surplus-gas-price-mode`                                          | string   | `BlobPrice`                                                                                        | gas price setting to be used in calculating estimated surplus. Allowed values- CalldataPrice, BlobPrice and CalldataPrice7623                                                                                                                                        |
 | `execution.sequencer.expected-surplus-hard-threshold`                                          | string   | `default`                                                                                          | if expected surplus is lower than this value, new incoming transactions will be denied                                                                                                                                                                               |
 | `execution.sequencer.expected-surplus-soft-threshold`                                          | string   | `default`                                                                                          | if expected surplus is lower than this value, warnings are posted                                                                                                                                                                                                    |
 | `execution.sequencer.forwarder.connection-timeout`                                             | duration | `30s`                                                                                              | total time to wait before cancelling connection                                                                                                                                                                                                                      |

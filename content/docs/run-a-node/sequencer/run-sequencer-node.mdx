@@ -7,15 +7,14 @@ author: Jason Wan
 sme: Jason Wan
 ---
 
-{/* sync-with-var: latestNitroNodeImage */}
-
 <Callout type="warn">
 
 The following instructions are meant for Arbitrum chains only. This article only applies to test environments. If you need support spinning up a production Arbitrum chain, we recommend contacting a [provider](/docs/launch-arbitrum-chain/integrations/infrastructure-providers#rollup-as-a-service-raas-providers).
 
-We also provide a [guide for running a high-availability sequencer node for an Arbitrum chain](/docs/run-a-node/high-availability-sequencer-docs).
+We also provide a [guide for running a high-availability sequencer node for an Arbitrum chain](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer).
 
 </Callout>
+
 This how-to provides step-by-step instructions for running a sequencer node on your local machine.
 
 For background on how sequencers fit into Arbitrum's data flow (batch posting, the sequencer feed, and how full nodes consume sequencer output), see [Data availability](/docs/run-a-node/data-availability). For how the sequencer role relates to the other Nitro node roles and the flags that define them, see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles).
@@ -40,7 +39,7 @@ Even though there are alpha and beta versions of the Arbitrum Nitro software, on
 
 </Callout>
 
-Latest Docker image: <code><Var name="latestNitroNodeImage" /></code>
+Latest Docker image: <code>offchainlabs/nitro-node:v3.11.4-7d5ac27</code>
 
 ## Required parameters
 
@@ -114,7 +113,8 @@ This step is only required in Anytrust mode. For an explanation of AnyTrust mode
 As of Nitro v3.10.0, these settings live under `--node.da.anytrust.*` (the previous `--node.data-availability.*` namespace is deprecated), and the node no longer takes `sequencer-inbox-address` or `parent-chain-node-url` in this section — it uses the chain info and the `--parent-chain.connection.url` configuration instead.
 
 </Callout>
-Enable your node to send batches to DAS and get DACerts from them.
+
+Enable your node to send batches to a <Term id="data-availability-server-das">DAS</Term> and get DACerts from them.
 
 ```shell
 --node.da.anytrust.enable=true
@@ -173,7 +173,7 @@ Enable your node to send batches to DAS and get DACerts from them.
           "rpc-aggregator": {
             "enable": true,
             "assumed-honest": 1,
-            "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"}]"
+            "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\"}]"
           }
         }
       }

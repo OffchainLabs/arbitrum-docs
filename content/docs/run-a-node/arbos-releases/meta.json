@@ -1,6 +1,7 @@
 {
-  "title": "ArbOS software releases",
+  "title": "Arbos releases",
   "pages": [
+    "index",
     "overview",
     "arbos61",
     "arbos51",

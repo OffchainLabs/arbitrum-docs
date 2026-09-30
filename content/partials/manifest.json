@@ -518,7 +518,7 @@
     "summary": "When you leave --execution.caching.state-history unset, Nitro chooses the default at startup:",
     "scope": "neutral",
     "tags": ["run-a-node", "state", "history", "defaults"],
-    "usedIn": 1,
+    "usedIn": 2,
     "snippet": "<include cwd>content/partials/run-a-node/_state-history-defaults.mdx</include>"
   },
   {
@@ -532,7 +532,7 @@
   },
   {
     "path": "content/partials/run-a-node/_upgrade-cadence-recommendations-partial.mdx",
-    "title": "How often should I be upgrading my ArbOS version?",
+    "title": "Upgrade cadence recommendations",
     "summary": "It is strongly recommended to keep your Nitro's node software up-to-date as best you can to ensure you are benefting from the latest improvements to the Arbi…",
     "scope": "neutral",
     "tags": ["run-a-node", "upgrade", "cadence", "recommendations"],
