@@ -62,3 +62,6 @@ next-env.d.ts
 
 # PR replay run output
 /.pr-replay
+
+# parity-check cache and reports
+/.parity
