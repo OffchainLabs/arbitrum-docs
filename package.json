@@ -25,6 +25,9 @@
     "cli:generate": "node scripts/generate-cli-reference.ts",
     "contracts:generate": "node scripts/generate-contract-addresses.ts",
     "edge-challenge:fetch": "node scripts/fetch-edge-challenge-data.ts",
+    "faq:check": "node scripts/generate-faq.ts --check",
+    "faq:fetch": "node scripts/faq-fetch.ts",
+    "faq:generate": "node scripts/generate-faq.ts",
     "format": "prettier --write .",
     "move-doc": "node scripts/move-doc.ts",
     "nitro:check-release": "node scripts/check-nitro-release.ts",
@@ -67,6 +70,7 @@
   "devDependencies": {
     "@arbitrum/sdk": "4.1.0",
     "@mdx-js/mdx": "3.1.1",
+    "@notionhq/client": "5.27.0",
     "@offchainlabs/prettier-config": "0.3.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@trivago/prettier-plugin-sort-imports": "5.2.2",

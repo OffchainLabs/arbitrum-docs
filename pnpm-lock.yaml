@@ -84,6 +84,9 @@ importers:
       '@mdx-js/mdx':
         specifier: 3.1.1
         version: 3.1.1
+      '@notionhq/client':
+        specifier: 5.27.0
+        version: 5.27.0
       '@offchainlabs/prettier-config':
         specifier: 0.3.0
         version: 0.3.0(@trivago/prettier-plugin-sort-imports@5.2.2(prettier@3.9.6))(prettier@3.9.6)
@@ -755,6 +758,10 @@ packages:
   '@noble/hashes@1.8.0':
     resolution: {integrity: sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==}
     engines: {node: ^14.21.3 || >=16}
+
+  '@notionhq/client@5.27.0':
+    resolution: {integrity: sha512-JnkLtAzSDrEnvtZ8dQ5L4KO+xyL5g01xK5qmKTmhJ5KFY8LWsMyFG033vHCj0mFcsz9thAMjfcAQz/SWxiexag==}
+    engines: {node: '>=18'}
 
   '@offchainlabs/prettier-config@0.3.0':
     resolution: {integrity: sha512-MwSLK5saXkxlJMj1oj0Ow3JxI4O/F5zXkdWToWKnHbKT3Islto/jKVG7pawkSUkRseWxZoqHZewpTb4p6i9NQg==}
@@ -4362,6 +4369,8 @@ snapshots:
       '@noble/hashes': 1.8.0
 
   '@noble/hashes@1.8.0': {}
+
+  '@notionhq/client@5.27.0': {}
 
   '@offchainlabs/prettier-config@0.3.0(@trivago/prettier-plugin-sort-imports@5.2.2(prettier@3.9.6))(prettier@3.9.6)':
     dependencies:
