@@ -16,6 +16,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { readRegularFile } from './generated-partial.ts';
+
 /** A captured `name = expression` declaration: the raw right-hand side and the file it is in. */
 export interface GoAssignment {
   expr: string;
@@ -72,11 +74,26 @@ const SKIP_DIRS = new Set([
   'node_modules',
 ]);
 
-/** Every non-test `.go` file under `dir`. */
+/**
+ * Every non-test `.go` file under `dir`.
+ *
+ * A symlinked directory is not entered (a `Dirent` for a link is not a directory), and a symlink
+ * named `*.go` throws: `git clone` checks links out as links, and one could point at any file on
+ * the machine running the generator.
+ */
 export function goFiles(dir: string, out: string[] = []): string[] {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name.startsWith('.')) continue;
     const abs = path.join(dir, entry.name);
+    if (entry.isSymbolicLink()) {
+      if (entry.name.endsWith('.go') && !entry.name.endsWith('_test.go')) {
+        throw new Error(
+          `${abs} is a symlink. The Go reader reads only regular files from the checkout, so a ` +
+            `link cannot feed it a file from outside the tree.`,
+        );
+      }
+      continue;
+    }
     if (entry.isDirectory()) {
       if (SKIP_DIRS.has(entry.name)) continue;
       goFiles(abs, out);
@@ -279,7 +296,7 @@ export function indexGoTree(roots: readonly GoRoot[]): GoTree {
   for (const root of roots) {
     const absRoot = root.absDir;
     for (const file of goFiles(absRoot)) {
-      const src = stripComments(fs.readFileSync(file, 'utf8'));
+      const src = stripComments(readRegularFile(file, absRoot));
       const rel = path.relative(absRoot, path.dirname(file));
       const dir = root.dir ? path.join(root.dir, rel) : rel;
       const entry = dirEntry(dir);
