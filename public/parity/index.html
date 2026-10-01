@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Docs migration parity</title>
+    <style>
+      :root {
+        --bg: #161616;
+        --panel: #1f1f1f;
+        --line: #2c2c2c;
+        --fg: #e8e8e8;
+        --dim: #8a8a8a;
+        --good: #3fb27f;
+        --warn: #e0a526;
+        --bad: #ef5b4b;
+        --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 24px;
+        background: var(--bg);
+        color: var(--fg);
+        font: 13px/1.45 var(--mono);
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 16px;
+        font-family: system-ui, sans-serif;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: flex-end;
+        margin-bottom: 16px;
+      }
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--dim);
+      }
+      select,
+      input {
+        background: var(--panel);
+        color: var(--fg);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 5px 8px;
+        font: 12px var(--mono);
+        min-width: 120px;
+      }
+      .meta {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 12px 14px;
+        margin-bottom: 16px;
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 3px 20px;
+      }
+      .meta dt {
+        color: var(--dim);
+      }
+      .meta dd {
+        margin: 0;
+        word-break: break-all;
+      }
+      .health {
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .sections {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+      .chip {
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 3px 8px;
+        cursor: pointer;
+        background: var(--panel);
+      }
+      .chip.on {
+        outline: 1px solid var(--fg);
+      }
+      .count {
+        color: var(--dim);
+        margin: 0 0 8px;
+      }
+      .scroll {
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 900px;
+      }
+      th {
+        text-align: right;
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--dim);
+        padding: 6px 8px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      th:first-child,
+      td:first-child {
+        text-align: left;
+      }
+      td {
+        text-align: right;
+        padding: 5px 8px;
+        white-space: nowrap;
+      }
+      tr.row {
+        cursor: pointer;
+      }
+      tr.row:nth-child(4n + 1) {
+        background: #1b1b1b;
+      }
+      tr.row:hover {
+        background: #262626;
+      }
+      .path {
+        max-width: 520px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .final {
+        color: var(--dim);
+        font-size: 11px;
+      }
+      .g {
+        color: var(--good);
+      }
+      .w {
+        color: var(--warn);
+      }
+      .b {
+        color: var(--bad);
+      }
+      .d {
+        color: var(--dim);
+      }
+      .detail td {
+        text-align: left;
+        white-space: normal;
+        background: #121212;
+        padding: 10px 14px 16px;
+      }
+      .detail h4 {
+        margin: 10px 0 4px;
+        font-size: 11px;
+        color: var(--dim);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .detail ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+      .detail li {
+        margin: 2px 0;
+        word-break: break-word;
+      }
+      del {
+        background: #4a1f1b;
+        color: #ffb4aa;
+        text-decoration: line-through;
+      }
+      ins {
+        background: #17402c;
+        color: #a6f0c6;
+        text-decoration: none;
+      }
+      .old {
+        color: #ffb4aa;
+      }
+      .new {
+        color: #a6f0c6;
+      }
+      .empty {
+        color: var(--dim);
+        padding: 40px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Docs migration parity</h1>
+    <div class="controls">
+      <label
+        >Run (compared against docs.arbitrum.io)
+        <select id="run"></select
+      ></label>
+      <label>Page <input id="q" placeholder="substring" /></label>
+      <label
+        >Show
+        <select id="show">
+          <option value="triage">below threshold</option>
+          <option value="all">all pages</option>
+          <option value="notfound">not resolving</option>
+        </select></label
+      >
+      <label
+        >Parameter below threshold
+        <select id="param">
+          <option value="">any</option>
+        </select></label
+      >
+      <label
+        >Sort
+        <select id="sort">
+          <option value="overall">lowest overall</option>
+          <option value="path">path</option>
+        </select></label
+      >
+    </div>
+    <dl class="meta" id="meta"></dl>
+    <div class="sections" id="sections"></div>
+    <p class="count" id="count"></p>
+    <div class="scroll">
+      <table>
+        <thead id="head"></thead>
+        <tbody id="body"></tbody>
+      </table>
+    </div>
+    <script>
+      const PARAMS = ['resolves', 'text', 'headings', 'code', 'images', 'links'];
+      const $ = (id) => document.getElementById(id);
+      const esc = (s) =>
+        String(s ?? '').replace(
+          /[&<>"']/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
+        );
+      const state = { runs: [], run: null, section: '', open: new Set() };
+      const cache = new Map();
+
+      async function load(label) {
+        if (!cache.has(label))
+          cache.set(
+            label,
+            fetch(`runs/${encodeURIComponent(label)}.json`).then((r) => r.json()),
+          );
+        return cache.get(label);
+      }
+      const cls = (v, t) => (v >= t ? 'g' : v >= 0.8 ? 'w' : 'b');
+      const fmt = (v) => (v === 1 ? '1' : v.toFixed(3).replace(/^0/, '0'));
+      const healthCls = (h) => (h >= 97 ? 'g' : h >= 85 ? 'w' : 'b');
+
+      function renderMeta() {
+        const r = state.run,
+          s = r.summary;
+        const cats = Object.entries(s.categories)
+          .map(([k, v]) => `${k} ${v}`)
+          .join(' · ');
+        $('meta').innerHTML = `
+    <dt>health</dt><dd><span class="health ${healthCls(s.health)}">${s.health}</span> / 100</dd>
+    <dt>triage</dt><dd>${s.triage} of ${s.checked} pages have a parameter below ${s.threshold}</dd>
+    <dt>resolution</dt><dd>${cats}</dd>
+    <dt>broken links</dt><dd>${s.brokenLinksTargetOnly} only on target · ${s.brokenLinksAlsoProd} also broken on prod</dd>
+    <dt>new-only pages</dt><dd>${s.newOnly}</dd>
+    <dt>target</dt><dd>${esc(r.targetUrl)} @ ${esc(r.commit?.slice(0, 10))}${r.prs?.length ? ' + PRs ' + r.prs.map((p) => '#' + p).join(', ') : ''}</dd>
+    <dt>prod</dt><dd>${esc(r.prodUrl)}</dd>
+    <dt>generated</dt><dd>${esc(r.generatedAt)}</dd>`;
+        $('sections').innerHTML = [
+          ['', { score: s.health, pages: s.checked, triage: s.triage }],
+          ...Object.entries(s.sections),
+        ]
+          .map(
+            ([name, v]) =>
+              `<span class="chip ${state.section === name ? 'on' : ''}" data-s="${esc(name)}"><span class="${healthCls(v.score)}">${v.score}</span> ${esc(name || 'all sections')} <span class="d">${v.triage}/${v.pages}</span></span>`,
+          )
+          .join('');
+      }
+
+      function details(p) {
+        const it = p.items,
+          parts = [];
+        const list = (title, arr, f = esc) =>
+          arr.length &&
+          parts.push(`<h4>${title}</h4><ul>${arr.map((x) => `<li>${f(x)}</li>`).join('')}</ul>`);
+        if (p.redirectChain?.length)
+          parts.push(
+            `<h4>resolution: ${esc(p.category)}</h4><div class="d">${p.redirectChain.map((h) => `${h.status} ${esc(h.url)}`).join(' → ')}</div>`,
+          );
+        list('missing headings', it.headings);
+        list(
+          'missing code blocks',
+          it.code,
+          (c) => `<pre style="margin:0;white-space:pre-wrap">${esc(c)}</pre>`,
+        );
+        list('missing images', it.images);
+        list(
+          'links',
+          it.links,
+          (l) =>
+            `${esc(l.href)} <span class="${l.reason === 'broken' ? 'b' : 'w'}">${l.reason}</span>`,
+        );
+        list('text changes', it.text, (t) =>
+          t.ops
+            ? `<span class="d">${esc(t.kind)}:</span> ` +
+              t.ops
+                .map((o) =>
+                  o.op === 'equal'
+                    ? esc(o.text)
+                    : o.op === 'delete'
+                      ? `<del>${esc(o.text)}</del>`
+                      : `<ins>${esc(o.text)}</ins>`,
+                )
+                .join('')
+            : `<span class="d">${esc(t.kind)}:</span> <span class="old">${esc(t.old)}</span>${t.new === null ? ' <span class="b">(removed)</span>' : ` → <span class="new">${esc(t.new)}</span>`}`,
+        );
+        if (p.brokenLinks?.alsoBrokenOnProd?.length)
+          list('broken on prod too', p.brokenLinks.alsoBrokenOnProd);
+        return parts.join('') || '<span class="d">nothing below threshold</span>';
+      }
+
+      function render() {
+        if (!state.run) return;
+        const t = state.run.summary.threshold,
+          q = $('q').value.trim().toLowerCase(),
+          show = $('show').value,
+          param = $('param').value,
+          sort = $('sort').value;
+        let pages = state.run.pages.filter(
+          (p) =>
+            (!state.section || p.section === state.section) &&
+            (!q ||
+              p.oldPath.toLowerCase().includes(q) ||
+              (p.finalPath ?? '').toLowerCase().includes(q)) &&
+            (show === 'all' || (show === 'triage' ? p.triage : p.scores.resolves === 0)) &&
+            (!param || p.scores[param] < t),
+        );
+        pages.sort(
+          sort === 'path'
+            ? (a, b) => a.oldPath.localeCompare(b.oldPath)
+            : (a, b) => a.scores.overall - b.scores.overall,
+        );
+        $('count').textContent = `showing ${pages.length} of ${state.run.pages.length}`;
+        $('head').innerHTML =
+          `<tr><th>page</th><th>overall</th>${PARAMS.map((n) => `<th>${n}</th>`).join('')}</tr>`;
+        const cols = PARAMS.length + 2;
+        $('body').innerHTML = pages.length
+          ? pages
+              .map((p) => {
+                const open = state.open.has(p.oldPath);
+                const moved =
+                  p.finalPath && p.finalPath !== '/docs' + p.oldPath && p.finalPath !== p.oldPath;
+                return `<tr class="row" data-p="${esc(p.oldPath)}"><td class="path">${esc(p.oldPath)}${moved ? `<div class="final">→ ${esc(p.finalPath)}</div>` : ''}</td>
+      <td class="${cls(p.scores.overall, t)}"><b>${fmt(p.scores.overall)}</b></td>
+      ${PARAMS.map((n) => `<td class="${cls(p.scores[n], t)}">${fmt(p.scores[n])}</td>`).join('')}</tr>
+      ${open ? `<tr class="detail"><td colspan="${cols}">${details(p)}</td></tr>` : ''}`;
+              })
+              .join('')
+          : `<tr><td colspan="${cols}" class="empty">no pages match</td></tr>`;
+      }
+
+      async function select() {
+        state.run = await load($('run').value);
+        renderMeta();
+        render();
+      }
+
+      (async () => {
+        const idx = await fetch('runs/index.json').then((r) => r.json());
+        state.runs = idx.runs;
+        const opts = idx.runs
+          .map(
+            (r) =>
+              `<option value="${esc(r.label)}">${esc(r.prs?.length ? `fumadocs + ${r.prs.length} open PRs` : r.label)} · health ${r.health} · ${esc(r.generatedAt.slice(0, 16).replace('T', ' '))}</option>`,
+          )
+          .join('');
+        $('run').innerHTML = opts;
+        $('param').innerHTML += PARAMS.map((n) => `<option>${n}</option>`).join('');
+        const params = new URLSearchParams(location.search);
+        if (params.get('run')) $('run').value = params.get('run');
+        $('run').addEventListener('change', select);
+        ['q', 'show', 'param', 'sort'].forEach((id) => $(id).addEventListener('input', render));
+        $('sections').addEventListener('click', (e) => {
+          const c = e.target.closest('.chip');
+          if (c) {
+            state.section = c.dataset.s;
+            renderMeta();
+            render();
+          }
+        });
+        $('body').addEventListener('click', (e) => {
+          const r = e.target.closest('tr.row');
+          if (!r) return;
+          const k = r.dataset.p;
+          state.open.has(k) ? state.open.delete(k) : state.open.add(k);
+          render();
+        });
+        await select();
+      })().catch((err) => {
+        $('count').textContent = 'failed to load runs/index.json: ' + err;
+      });
+    </script>
+  </body>
+</html>

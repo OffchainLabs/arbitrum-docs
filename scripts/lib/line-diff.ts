@@ -17,7 +17,7 @@
  *
  * @returns matched `[indexInA, indexInB]` pairs, in order
  */
-function commonSubsequence(a: string[], b: string[]): Array<[number, number]> {
+export function commonSubsequence(a: string[], b: string[]): Array<[number, number]> {
   // lengths[i][j] is the LCS length of a.slice(i) and b.slice(j); the extra row and column of
   // zeroes let the recurrence run without bounds checks.
   const lengths = Array.from({ length: a.length + 1 }, () => new Uint32Array(b.length + 1));
