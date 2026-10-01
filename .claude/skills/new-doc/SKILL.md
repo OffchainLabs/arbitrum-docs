@@ -11,7 +11,7 @@ Scaffold a new MDX documentation page following all project conventions.
 ## Required input from user
 
 Only `title` and `description` are required by the frontmatter schema
-(`arbitrumPageSchema` in `source.config.ts`); everything else below is
+(`arbitrumPageSchema` in `lib/page-schema.ts`); everything else below is
 optional and the page is valid without it. Still ask for a **Section** up
 front, since it decides the file's path (it is not a frontmatter field).
 
