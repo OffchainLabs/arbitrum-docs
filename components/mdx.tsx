@@ -2,7 +2,7 @@ import { Accordions } from 'fumadocs-ui/components/accordion';
 import { Callout as FumadocsCallout } from 'fumadocs-ui/components/callout';
 import { ImageZoom, type ImageZoomProps } from 'fumadocs-ui/components/image-zoom';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
-import { Tab, type TabProps, Tabs } from 'fumadocs-ui/components/tabs';
+import { Tabs } from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 import type { ComponentProps, ElementType } from 'react';
@@ -10,6 +10,7 @@ import type { ComponentProps, ElementType } from 'react';
 import { InLink } from '@/components/HoverPopover/in-link';
 import { Accordion } from '@/components/mdx/Accordion';
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
+import { Tab } from '@/components/mdx/FindableTab';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
 import { Var } from '@/components/mdx/Var';
@@ -79,8 +80,7 @@ export function getMDXComponents(components?: MDXComponents) {
     ReferenceList,
     Step,
     Steps,
-    // Inactive panels stay in the server HTML (hidden by CSS) so their text is indexed and findable.
-    Tab: (props: TabProps) => <Tab forceMount {...props} />,
+    Tab,
     Tabs,
     Term,
     ChecklistItem,

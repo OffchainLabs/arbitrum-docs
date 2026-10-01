@@ -82,7 +82,10 @@ jobs:
 
       - run: pnpm build
 
-      - name: Built docs HTTP smoke tests
+      - name: Install Chromium for browser regression tests
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Built docs HTTP and browser tests
         run: |
           pnpm start --hostname 127.0.0.1 --port 3000 > /tmp/arbitrum-docs-next-start.log 2>&1 &
           server_pid=$!
@@ -101,3 +104,4 @@ jobs:
 
           curl --silent --show-error --fail http://127.0.0.1:3000/llms.txt > /dev/null
           STATIC_DOCS_TEST_URL=http://127.0.0.1:3000 node --test scripts/static-docs-http.test.ts
+          STATIC_DOCS_TEST_URL=http://localhost:3000 pnpm test:browser

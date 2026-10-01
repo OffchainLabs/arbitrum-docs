@@ -13,10 +13,12 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import { cn } from '@/lib/cn';
 
+import { useFindablePanel } from './use-findable-panel';
+
 /**
  * Fumadocs' `Accordion`, with the panel always rendered. Fumadocs unmounts a closed panel, so its
- * text is missing from the server HTML that search engines index and that Ctrl+F searches. Here a
- * closed panel stays in the document and CSS hides it; Radix still animates the open.
+ * text is missing from server HTML. A closed panel remains mounted and receives
+ * `hidden="until-found"` after hydration, so browser Find can open it.
  */
 export function Accordion({
   title,
@@ -28,13 +30,19 @@ export function Accordion({
   title: string | ReactNode;
   value?: string;
 }) {
+  const contentRef = useFindablePanel('closed');
+
   return (
     <AccordionItem value={value} {...props}>
       <AccordionHeader id={id} data-accordion-value={value}>
         <AccordionTrigger>{title}</AccordionTrigger>
         {id ? <CopyButton id={id} /> : null}
       </AccordionHeader>
-      <AccordionContent forceMount className="data-[state=closed]:hidden">
+      <AccordionContent
+        ref={contentRef}
+        forceMount
+        className="data-[state=closed]:h-0 data-[state=closed]:[content-visibility:hidden]"
+      >
         <div className="px-4 pb-2 text-[0.9375rem] prose-no-margin">{children}</div>
       </AccordionContent>
     </AccordionItem>
