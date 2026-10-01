@@ -36,6 +36,15 @@ describe('stripMarkdown', () => {
       'Head Use bold, it, code, label and <esc>. a b run me note h c',
     );
   });
+
+  it('keeps underscores and asterisks inside words', () => {
+    assert.equal(
+      stripMarkdown(
+        'Set `VALIDATOR_AFK_BLOCKS`, call `__init__` and `eth_call`, then *a*b*c* x*y*z.',
+      ),
+      'Set VALIDATOR_AFK_BLOCKS, call __init__ and eth_call, then a*b*c x*y*z.',
+    );
+  });
 });
 
 describe('faqJsonLd', () => {

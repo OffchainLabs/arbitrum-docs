@@ -37,21 +37,24 @@ export interface FaqPageJsonLd {
 
 /** Markdown and the MDX the renderer emits, reduced to one line of plain text. */
 export function stripMarkdown(md: string): string {
-  return md
-    .replace(/^```[^\n]*\n([\s\S]*?)^```\s*$/gm, '$1')
+  const code: string[] = [];
+  const text = md
+    .replace(/^```[^\n]*\n([\s\S]*?)^```\s*$|`([^`]*)`/gm, (_m, fenced, span) => {
+      code.push(fenced ?? span);
+      return `\0${code.length - 1}\0`;
+    })
     .replace(/<\/?Callout[^>]*>/g, '')
     .replace(/^\|\s*-{3,}(\s*\|\s*-{3,})*\s*\|\s*$/gm, '')
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^\s*(?:[-*]|\d+\.)\s+/gm, '')
     .replace(/^>\s?/gm, '')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/(\*\*|__|~~)(.*?)\1/g, '$2')
-    .replace(/(^|[^\\])[*_](.*?)[*_]/g, '$1$2')
-    .replace(/`([^`]*)`/g, '$1')
+    .replace(/(^|[^\w\\])(\*\*|__|~~)(?=\S)(.*?\S)\2(?!\w)/g, '$1$3')
+    .replace(/(^|[^\w\\])([*_])(?=\S)(.*?\S)\2(?!\w)/g, '$1$3')
     .replace(/\\([\\`*_{}[\]<~|])/g, '$1')
     .replace(/\|/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+    .replace(/\0(\d+)\0/g, (_m, i: string) => code[Number(i)] ?? '');
+  return text.replace(/\s+/g, ' ').trim();
 }
 
 const keyByPage = new Map(faqPages.map((p) => [p.page, p.key]));
