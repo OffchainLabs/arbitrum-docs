@@ -294,3 +294,35 @@ test('the contribute guide links back into this repository', { skip: !baseUrl },
     assert.ok(!html.includes('{var:'), 'a {var:…} placeholder reached the reader unexpanded');
   });
 });
+
+test('legacy URLs', { skip: !baseUrl }, async (t) => {
+  const location = async (path: string): Promise<[number, string | null]> => {
+    const response = await get(path, { redirect: 'manual' });
+    await response.text();
+    return [response.status, response.headers.get('location')];
+  };
+
+  await t.test('a master page URL and its .md mirror answer 308 into /docs', async () => {
+    for (const [path, target] of [
+      ['/how-arbitrum-works/deep-dives/stf', '/docs/how-arbitrum-works/deep-dives/stf'],
+      ['/how-arbitrum-works/deep-dives/stf.md', '/docs/how-arbitrum-works/deep-dives/stf.md'],
+      ['/index.md', '/docs.md'],
+    ]) {
+      const [status, to] = await location(path);
+      assert.equal(status, 308, path);
+      assert.equal(new URL(to ?? '', baseUrl).pathname, target, path);
+    }
+  });
+
+  await t.test('a hashed Docusaurus PDF URL lands on the audit report', async () => {
+    const [status, to] = await location(
+      '/assets/files/2022_03_14_trail_of_bits_security_audit_nitro_1_of_2-d777111730bd602222978f7d98713d40.pdf',
+    );
+    assert.equal(status, 308);
+    const target = new URL(to ?? '', baseUrl).pathname;
+    assert.equal(target, '/audit-reports/2022_03_14_trail_of_bits_security_audit_nitro_1_of_2.pdf');
+    const pdf = await get(target);
+    assert.equal(pdf.status, 200);
+    await pdf.arrayBuffer();
+  });
+});

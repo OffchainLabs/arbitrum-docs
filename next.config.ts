@@ -1,6 +1,7 @@
 import { createMDX } from 'fumadocs-mdx/next';
 import type { NextConfig } from 'next';
 
+import { markdownTwins } from './lib/markdown-redirects.ts';
 import { resolveSiteUrl } from './lib/site-url.ts';
 import { redirects } from './redirects.config.ts';
 
@@ -13,8 +14,9 @@ const withMDX = createMDX();
 const config: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
+  // The hand-maintained list, then the `.md` twin of every entry that lands under /docs.
   async redirects() {
-    return redirects;
+    return [...redirects, ...markdownTwins(redirects)];
   },
   async rewrites() {
     return [
