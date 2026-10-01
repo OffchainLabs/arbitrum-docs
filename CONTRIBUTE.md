@@ -313,7 +313,10 @@ block. Use `--dry-run` first to preview the changes, and confirm afterward with 
 `move-doc` touches no other redirect. If an older entry pointed at the old URL, it now chains, and
 `pnpm test` fails and names it. Retarget that entry by hand. The legacy `docs.arbitrum.io` entries
 after the markers are hand-maintained: add one by editing the file directly, in source order, and
-run `pnpm test`. Deleting a page is not a move, so write its redirect by hand in the same PR.
+run `pnpm test`. Deleting a page is not a move, so write its redirect by hand in the same PR. Never
+write a `.md` entry: the markdown twin of every redirect is derived at build.
+Next groups aliases with the same destination and permanence at build time to reduce its custom
+route count; keep writing individual entries in `redirects.config.ts`.
 
 ## Gates to run before you push
 
@@ -331,6 +334,9 @@ pnpm format            # prettier, in place (CI runs format:check)
 These are the ones a content change usually trips. The `Gates` job in `.github/workflows/ci.yml`
 runs them all, plus `contracts:check`. A second job runs `pnpm build`, serves the result, and checks
 it over HTTP. Both block. There is no pre-commit hook, so nothing runs on `git commit`.
+
+The build job also runs `pnpm test:browser` in Chromium to check tab and accordion reveal and
+manual selection. See [Commands](README.md#commands) for local browser test setup.
 
 If you touched MDX with components, imports or raw JSX, run `pnpm build` yourself before you push.
 It catches a page that compiles but throws while rendering, which no gate above does.
