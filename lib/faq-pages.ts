@@ -29,7 +29,11 @@ export const faqPages: readonly FaqPage[] = [
     notionSlug: 'troubleshooting-building',
     page: 'build-decentralized-apps/troubleshooting-building',
   },
-  { key: 'bridging', notionSlug: 'troubleshooting-bridging', page: 'arbitrum-bridge/troubleshooting' },
+  {
+    key: 'bridging',
+    notionSlug: 'troubleshooting-bridging',
+    page: 'arbitrum-bridge/troubleshooting',
+  },
   {
     key: 'arbitrum-chain',
     notionSlug: 'troubleshooting-building-orbit',
@@ -42,6 +46,7 @@ export const faqPages: readonly FaqPage[] = [
   },
 ];
 
-export const partialPathFor = (key: FaqKey): string => `content/partials/_troubleshooting-${key}-partial.mdx`;
+export const partialPathFor = (key: FaqKey): string =>
+  `content/partials/_troubleshooting-${key}-partial.mdx`;
 
 export const snapshotPathFor = (key: FaqKey): string => `content/faq/${key}.json`;
