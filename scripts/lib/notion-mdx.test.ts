@@ -210,6 +210,63 @@ describe('renderBlocks', () => {
       assert.throws(() => renderBlocks([b]), new RegExp(`${type}.*${b.id}`));
     }
   });
+
+  it('renders nested blocks in paragraph, quote and callout correctly', () => {
+    const callout = block(
+      'callout',
+      { rich_text: rt('note'), color: 'gray_background', icon: null },
+      [
+        block('numbered_list_item', { rich_text: rt('a'), color: 'default' }),
+        block('numbered_list_item', { rich_text: rt('b'), color: 'default' }),
+      ],
+    );
+    assert.equal(
+      renderBlocks([callout]),
+      '<Callout type="info">\n\nnote\n\n1. a\n2. b\n\n</Callout>',
+    );
+  });
+
+  it('renders quote with children preserving blank lines', () => {
+    const quote = block('quote', { rich_text: rt('q'), color: 'default' }, [para('r')]);
+    assert.equal(renderBlocks([quote]), '> q\n>\n> r');
+  });
+
+  it('renders code block with triple backticks using longer fence', () => {
+    const code = block('code', { rich_text: rt('````'), caption: [], language: 'text' });
+    assert.equal(renderBlocks([code]), '`````text\n````\n`````');
+  });
+
+  it('escapes leading Markdown syntax in paragraphs and list items', () => {
+    const para1 = para('# not a heading');
+    const li = block('bulleted_list_item', { rich_text: rt('- dash'), color: 'default' });
+    assert.equal(renderBlocks([para1]), '\\# not a heading');
+    assert.equal(renderBlocks([li]), '- \\- dash');
+  });
+
+  it('restarts numbered list at 1 after a paragraph', () => {
+    const para1 = para('text');
+    const ni1 = block('numbered_list_item', { rich_text: rt('a'), color: 'default' });
+    const ni2 = block('numbered_list_item', { rich_text: rt('b'), color: 'default' });
+    assert.equal(renderBlocks([ni1, ni2, para1, ni1, ni2]), '1. a\n2. b\n\ntext\n\n1. a\n2. b');
+  });
+
+  it('rejects a heading with children', () => {
+    const h = block(
+      'heading_2',
+      {
+        rich_text: rt('title'),
+        color: 'default',
+        is_toggleable: false,
+      },
+      [para('child')],
+    );
+    assert.throws(() => renderBlocks([h]), /heading_2.*children/);
+  });
+
+  it('rejects a divider with children', () => {
+    const d = block('divider', {}, [para('child')]);
+    assert.throws(() => renderBlocks([d]), /divider.*children/);
+  });
 });
 
 describe('renderAnswer', () => {

@@ -161,8 +161,54 @@ const textOf = (b: NotionBlock, opts?: { allowLinks?: boolean }): string =>
   renderRichText(payloadOf(b).rich_text ?? [], opts);
 const indent = (s: string, by: string): string => s.replace(/^(?!$)/gm, by);
 
+/**
+ * Prefix every line (including blank ones) with the given string. Used for quote blocks where
+ * blank lines must become `> ` (the prefix trimmed of trailing space), not remain blank.
+ */
+const prefixAllLines = (s: string, prefix: string): string => {
+  const trimmedPrefix = prefix.trimEnd();
+  return s
+    .split('\n')
+    .map((line) => (line === '' ? trimmedPrefix : prefix + line))
+    .join('\n');
+};
+
 /** Blocks that print one line each and chain without blank lines between siblings of a kind. */
 const LIST_TYPES = new Set(['bulleted_list_item', 'numbered_list_item']);
+
+/**
+ * Escape leading Markdown syntax in block text. After rendering text in a paragraph or list item,
+ * if it starts with a character that would be interpreted as Markdown structure (`#`, `-`, `+`,
+ * `*`, `>`, `|`, digit-period/paren, or the literal `---`), prefix a backslash. Already-escaped
+ * characters (starting with `\`) are left alone.
+ */
+function escapeLeadingSyntax(text: string): string {
+  if (!text.startsWith('\\') && /^(?:[#>|+-]|\d+[.)]|---)/.test(text)) {
+    return '\\' + text;
+  }
+  return text;
+}
+
+/**
+ * Text followed by rendered children, joined by one blank line. Extracts the common pattern for
+ * paragraph, quote, and callout blocks.
+ */
+function renderTextWithChildren(text: string, children: NotionBlock[]): string {
+  const childrenRendered = children.length ? renderBlocks(children) : '';
+  return [text, childrenRendered].filter(Boolean).join('\n\n');
+}
+
+/**
+ * Compute the fence length for a code block. The fence must be longer than any run of backticks
+ * in the content, with a minimum of three.
+ */
+function codeFenceLength(content: string): number {
+  const longestRun = (content.match(/`+/g) ?? []).reduce(
+    (max, run) => Math.max(max, run.length),
+    0,
+  );
+  return Math.max(3, longestRun + 1);
+}
 
 function renderOne(b: NotionBlock, ordinal: number): string | null {
   if (FAIL_BY_TYPE.has(b.type)) {
@@ -171,18 +217,21 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
   const children = b.children ?? [];
   switch (b.type) {
     case 'paragraph': {
-      const text = textOf(b);
+      const text = escapeLeadingSyntax(textOf(b));
       if (text === '' && children.length === 0) return null;
-      return [text, ...children.map((c) => renderBlocks([c]))].filter(Boolean).join('\n\n');
+      return renderTextWithChildren(text, children);
     }
     case 'heading_1':
     case 'heading_2':
     case 'heading_3':
+      if (children.length) {
+        throw new RenderError(`${b.type} block cannot have children (${b.id})`);
+      }
       return `#### ${textOf(b, { allowLinks: false })}`;
     case 'bulleted_list_item':
     case 'numbered_list_item': {
       const marker = b.type === 'bulleted_list_item' ? '- ' : `${ordinal}. `;
-      const body = textOf(b);
+      const body = escapeLeadingSyntax(textOf(b));
       const nested = children.length
         ? '\n' + indent(renderBlocks(children), ' '.repeat(marker.length))
         : '';
@@ -191,20 +240,21 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
     case 'code': {
       const { language = '', rich_text = [] } = payloadOf(b);
       const raw = rich_text.map((r) => r.plain_text).join('');
-      return `\`\`\`${language}\n${raw}\n\`\`\``;
+      const fence = '`'.repeat(codeFenceLength(raw));
+      return `${fence}${language}\n${raw}\n${fence}`;
     }
-    case 'quote':
-      return indent(
-        [textOf(b), ...children.map((c) => renderBlocks([c]))].filter(Boolean).join('\n\n'),
-        '> ',
-      );
+    case 'quote': {
+      const inner = renderTextWithChildren(textOf(b), children);
+      return prefixAllLines(inner, '> ');
+    }
     case 'callout': {
-      const inner = [textOf(b), ...children.map((c) => renderBlocks([c]))]
-        .filter(Boolean)
-        .join('\n\n');
+      const inner = renderTextWithChildren(textOf(b), children);
       return `<Callout type="info">\n\n${inner}\n\n</Callout>`;
     }
     case 'divider':
+      if (children.length) {
+        throw new RenderError(`divider block cannot have children (${b.id})`);
+      }
       return '---';
     case 'table': {
       const rows = children.filter((c) => c.type === 'table_row');
