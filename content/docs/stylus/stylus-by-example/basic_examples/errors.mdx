@@ -10,8 +10,6 @@ sme: gblanchemain
 
 {/* Begin Content */}
 
-# Errors
-
 In Rust Stylus contracts, error handling is a crucial aspect of writing robust and reliable smart contracts. Rust differentiates between recoverable and unrecoverable errors. Recoverable errors are represented using the `Result` type, which can either be `Ok`, indicating success, or `Err`, indicating failure. This allows developers to manage errors gracefully and maintain control over the flow of execution. Unrecoverable errors are handled with the `panic!` macro, which stops execution, unwinds the stack, and returns a dataless error.
 
 In Stylus contracts, error types are often explicitly defined, providing clear and structured ways to handle different failure scenarios. This structured approach promotes better error management, ensuring that contracts are secure, maintainable, and behave predictably under various conditions. Similar to Solidity and EVM, errors in Stylus will undo all changes made to the state during a transaction by reverting the transaction. Thus, there are two main types of errors in Rust Stylus contracts:

@@ -10,8 +10,6 @@ sme: gblanchemain
 
 {/* Begin Content */}
 
-# Variables
-
 In Solidity, there are 3 types of variables: local, state, and global. Local variables are not stored on the blockchain, while state variables are (and incur a much higher cost as a result). This is true of Arbitrum Stylus Rust smart contracts as well, although how they're defined is quite different.
 
 In Rust, **local variables** are just ordinary variables you assign with `let` or `let mut` statements. Local variables are far cheaper than state variables, even on the EVM, however, Stylus local variables are more than 100x cheaper to allocate in memory than their Solidity equivalents.
