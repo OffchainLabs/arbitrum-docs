@@ -5,14 +5,15 @@ user_story: As an Arbitrum node operator, I want to keep my nodes in sync with A
 content_type: notice
 ---
 
-<a data-quicklook-from="arbos">ArbOS</a> 61 "Elara" is active on Arbitrum Sepolia. The ArbitrumDAO approved it for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, where it activates on Thursday, August 20, 2026, at 17:00 UTC.
+<a data-quicklook-from="arbos">ArbOS</a> 61 "Elara" is active on Arbitrum Sepolia, <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>. It activated on Arbitrum One and Arbitrum Nova on Thursday, August 20, 2026.
 
 <VanillaAdmonition type="warning" title="Action required">
 
-Node operators **must upgrade** to Nitro **`v3.11`** or higher to continue syncing these chains.
+If you run a node on these chains, you **must run** Nitro **`v3.11.3`** or higher to sync.
 
-- **Docker image:** [offchainlabs/nitro-node:v3.11.0-a618155](https://hub.docker.com/layers/offchainlabs/nitro-node/v3.11.0-a618155/images/sha256-a34457bb9461acf12ea01cbf23a9850e15b20a44b499c64cf441051230231fe1)
-- **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/v3.11.0
+- **Docker image:** [offchainlabs/nitro-node:v3.11.3-beb2108](https://hub.docker.com/r/offchainlabs/nitro-node/tags?name=3.11.3)
+- **Release notes:** https://github.com/OffchainLabs/nitro/releases/tag/v3.11.3
+- **<a data-quicklook-from="wasm-module-root">WASM module root</a>:** `0xc10cd7ec6acaf1c441a3f6bd0900ad20f15855ba775a96f1939118cbc629dc97` ([consensus-v61](https://github.com/OffchainLabs/nitro/releases/tag/consensus-v61))
 
 </VanillaAdmonition>
 
@@ -24,9 +25,9 @@ ArbOS 61 activated on the Arbitrum Sepolia chain on Monday, June 29, 2026, at 15
 
 ### Arbitrum One and Arbitrum Nova
 
-The ArbitrumDAO approved [ArbOS 61](/run-arbitrum-node/arbos-releases/arbos61.mdx) for Arbitrum One and Arbitrum Nova in a Constitutional onchain vote. After the waiting periods and phases set out in the ArbitrumDAO Constitution, ArbOS 61 activates on both chains on Thursday, August 20, 2026, at 17:00 UTC.
+The ArbitrumDAO approved [ArbOS 61](/run-arbitrum-node/arbos-releases/arbos61.mdx) for Arbitrum One and Arbitrum Nova in a Constitutional onchain vote. After the waiting periods and phases set out in the ArbitrumDAO Constitution, ArbOS 61 activated on both chains on Thursday, August 20, 2026.
 
-Complete the upgrade before that date. The [Arbitrum DAO network upgrades table](https://docs.arbitrum.foundation/network-upgrades) records the exact activation time after the upgrade executes.
+The [Arbitrum DAO network upgrades table](https://docs.arbitrum.foundation/network-upgrades) records the exact activation time of each chain.
 
 ## Important dates
 
@@ -37,13 +38,31 @@ The following dates are relevant for Arbitrum chain operators.
 | Monday, June 29, 2026 at 15:00 UTC     | Arbitrum Sepolia upgrade to ArbOS 61  | Node operators running Arbitrum Sepolia  |
 | Thursday, August 20, 2026 at 17:00 UTC | Arbitrum One/Nova upgrade to ArbOS 61 | Node operators running Arbitrum One/Nova |
 
+## Actions for Arbitrum chain owners
+
+ArbOS 61 has run on Arbitrum One for more than 30 days. You can upgrade your <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> now.
+
+To upgrade, follow [How to upgrade ArbOS on your Arbitrum chain](/launch-arbitrum-chain/operate/arbos-upgrade.mdx) and the [nitro-contracts upgrade instructions](https://github.com/OffchainLabs/arbitrum-chain-actions?tab=readme-ov-file#nitro-contracts-upgrades). Use the Nitro version, Docker image, and WASM module root listed above.
+
+ArbOS 61 lets your chain collect priority fees. Do not enable <a data-quicklook-from="priority-gas-auction">Priority Gas Auctions (PGA)</a> or priority fee collection on your chain yet. Offchain Labs updates this notice when chain operators can enable them.
+
+<VanillaAdmonition type="danger" title="Do not enable multi-dimensional gas pricing">
+
+Do not call `setMultiGasPricingConstraints` on the `ArbOwner` precompile. ArbOS 61 ships multi-dimensional gas pricing in the node software, but a future Nitro version removes it. If your chain has it enabled when that version ships, your chain forks.
+
+You can now use multi-constraint pricing with a single gas dimension. To configure it, call `setGasPricingConstraints` as described in [Dynamic Pricing for Arbitrum chains](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing.mdx).
+
+</VanillaAdmonition>
+
 ## Context
 
 ArbOS 61 "Elara" builds upon [ArbOS 51 "Dia"](/run-arbitrum-node/arbos-releases/arbos51.mdx). It makes two changes to Arbitrum One and Nova: it raises the <a data-quicklook-from="stylus">Stylus</a> contract code size limit to 96 KB, and it adds a `BaseFeeManager` contract that manages the minimum L2 base fee.
 
-ArbOS 61 also ships two features that stay disabled on Arbitrum One and Nova, for the convenience of other Arbitrum chains: an Alternative Data Availability (AltDA) Layer API, and optional compliance transaction filtering. A <a data-quicklook-from="chain-owner">chain owner</a> must enable each one explicitly.
+ArbOS 61 also ships three optional features. A <a data-quicklook-from="chain-owner">chain owner</a> must enable each one explicitly:
 
-To learn how to build a custom DA provider against the new API, refer to [How to integrate with the DA API](/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx). To learn how transaction filtering works, refer to [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx).
+- **Alternative Data Availability (AltDA) Layer API.** Disabled on Arbitrum One and Nova. It requires [nitro-contracts v3.2.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.2.0) or higher. To learn how to build a custom DA provider against the new API, refer to [How to integrate with the DA API](/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx).
+- **Compliance transaction filtering.** Disabled on Arbitrum One and Nova. On a live chain, filtering takes effect seven days after the chain owner enables it. To learn how transaction filtering works, refer to [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering.mdx).
+- **Priority fee collection.** Enabled on Arbitrum One since September 23, 2026, together with PGA. Disabled on Nova. To learn how to enable it, refer to [Priority fee collection](/launch-arbitrum-chain/chain-config/costs/priority-fees.mdx).
 
 ArbOS 61 corrects two interacting bugs in the gas refund logic that were found while testing ArbOS 60 on Arbitrum Sepolia. The fixes change the State Transition Function (STF), so they required a new ArbOS version. ArbOS 60 never activated on Arbitrum One or Nova, so neither chain was affected.
 
