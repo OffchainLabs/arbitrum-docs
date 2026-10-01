@@ -1,6 +1,7 @@
 import { createMDX } from 'fumadocs-mdx/next';
 import type { NextConfig } from 'next';
 
+import { siteHeaders } from './lib/http-headers.ts';
 import { markdownTwins } from './lib/markdown-redirects.ts';
 import { resolveSiteUrl } from './lib/site-url.ts';
 import { redirects } from './redirects.config.ts';
@@ -15,6 +16,10 @@ const withMDX = createMDX();
 const config: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
+  poweredByHeader: false,
+  async headers() {
+    return siteHeaders({ isProduction: process.env.VERCEL_ENV === 'production' });
+  },
   // Only real documentation destinations receive markdown twins, excluding public files.
   async redirects() {
     return [
