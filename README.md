@@ -81,7 +81,7 @@ pnpm faq:check     # the FAQ partials match their Notion snapshots
 pnpm format        # prettier, in place
 ```
 
-CI runs eight blocking checks, then a `pnpm build` that serves the built site and checks it over
+CI runs nine blocking checks, then a `pnpm build` that serves the built site and checks it over
 HTTP. `pnpm build` runs the same link check first, so a broken link fails the Vercel deploy too. See
 [The gates](INTERNALS.md#the-gates) for the full list. There is no pre-commit hook, so run these
 yourself.
