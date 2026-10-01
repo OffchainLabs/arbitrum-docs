@@ -77,7 +77,12 @@ describe('renderRichText', () => {
       plain(' d', { strikethrough: true }),
       plain(' e<f>', { code: true }),
     ];
-    assert.equal(renderRichText(items), 'a **b**_ c_~~ d~~` e<f>`');
+    assert.equal(renderRichText(items), 'a **b** *c* ~~d~~` e<f>`');
+  });
+
+  it('keeps edge whitespace outside emphasis markers', () => {
+    const items = [plain(' x ', { bold: true }), plain('y')];
+    assert.equal(renderRichText(items), ' **x** y');
   });
 
   it('renders a link and rewrites its destination', () => {

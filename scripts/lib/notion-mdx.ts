@@ -76,10 +76,32 @@ export function renderRichText(
       }
       const { bold, italic, strikethrough, code } = item.annotations;
       const content = straightenQuotes(item.plain_text);
-      let out = code ? `\`${content}\`` : escapeMdxText(content);
-      if (bold) out = `**${out}**`;
-      if (italic) out = `_${out}_`;
-      if (strikethrough) out = `~~${out}~~`;
+
+      let out: string;
+      if (code) {
+        // Code spans: not affected by whitespace extraction rule - keep content as-is
+        out = `\`${content}\``;
+      } else {
+        // Other formatting: extract whitespace and apply markers to core only
+        const leadMatch = content.match(/^\s*/);
+        const trailMatch = content.match(/\s*$/);
+        const leadingWhitespace = leadMatch?.[0] ?? '';
+        const trailingWhitespace = trailMatch?.[0] ?? '';
+        const core = content.slice(
+          leadingWhitespace.length,
+          content.length - trailingWhitespace.length,
+        );
+
+        // Escape and apply formatting markers to core
+        let formatted = escapeMdxText(core);
+        if (core) {
+          // Only apply markers if there's non-whitespace content
+          if (bold) formatted = `**${formatted}**`;
+          if (italic) formatted = `*${formatted}*`;
+          if (strikethrough) formatted = `~~${formatted}~~`;
+        }
+        out = `${leadingWhitespace}${formatted}${trailingWhitespace}`;
+      }
 
       const url = item.text?.link?.url ?? item.href;
       if (url) {
