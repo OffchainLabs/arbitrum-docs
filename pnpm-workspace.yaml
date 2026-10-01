@@ -4,9 +4,12 @@
 # - esbuild: its postinstall checks the platform binary and downloads one from npm only when
 #   the matching @esbuild/<platform> optional dependency is missing. pnpm installs that
 #   package, so the script has nothing to do.
-# - core-js: its postinstall only prints a funding banner. Pulled in by posthog-js.
+# - core-js@3.50.0: its postinstall only prints a funding banner and skips it in CI.
+#   Approve this reviewed version because pnpm 10.29.3 retains cached ignored-build records
+#   even after a package is explicitly ignored. Approval clears that stale state.
+onlyBuiltDependencies:
+  - core-js@3.50.0
 ignoredBuiltDependencies:
-  - core-js
   - esbuild
 strictDepBuilds: true
 
