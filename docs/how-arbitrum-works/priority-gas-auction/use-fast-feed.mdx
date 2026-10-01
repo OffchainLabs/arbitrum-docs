@@ -1,0 +1,317 @@
+---
+title: 'How to use the Fast Feed'
+sidebar_label: 'Use the Fast Feed'
+description: 'Generate an API key, deposit USDG, buy a ticket each round from the Tickets contract, open an authenticated WebSocket to the Fast Feed on Arbitrum One, automate renewals with the reference bot, and troubleshoot reverts and rejected connections.'
+author: anegg0
+sme: gligneul
+user_story: As a developer who runs a latency-sensitive strategy on Arbitrum One, I want to buy Fast Feed tickets, connect my client, and keep it connected across rounds.
+content_type: how-to
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
+
+This guide is for searchers, propAMM operators, market makers, and anyone else who wants to read onchain data faster. It shows you how to subscribe to the <a data-quicklook-from="fast-feed">Fast Feed</a> on <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, open a connection to it, and keep that connection across rounds.
+
+It covers the full path: hash your API key, deposit USDG, read the round state, call `purchaseTickets`, open an authenticated WebSocket, and automate the purchase with the reference bot.
+
+<VanillaAdmonition type="note" title="If you don't know what the Fast Feed is">
+
+The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <a data-quicklook-from="sequencer">Sequencer</a> executes it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
+
+</VanillaAdmonition>
+
+The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid for one round. To keep a connection open, you buy a new ticket every round from the `Tickets` contract on Arbitrum One.
+
+## Prerequisites
+
+- You know how Fast Feed rounds and prices work. If not, read the [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) and the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga), which sets the round cadence.
+- An account on Arbitrum One that holds USDG to pay for tickets and ETH to pay for gas.
+- An Arbitrum One JSON-RPC endpoint.
+- [Foundry's `cast`](https://getfoundry.sh/), or any EVM client, to send transactions. The examples use `cast` and leave out `--rpc-url $RPC_URL --private-key $PRIVATE_KEY` to stay short.
+- A WebSocket client. The examples use [wscat](https://github.com/websockets/wscat) or [websocat](https://github.com/vi/websocat) on the command line, the `ws` package for Node.js, and the `websockets` package for Python.
+
+## Addresses and endpoints
+
+| Item               | Arbitrum One                                                                 |
+| ------------------ | ---------------------------------------------------------------------------- |
+| Fast Feed endpoint | `wss://arb1-txfeed.arbitrum.io/`                                             |
+| `Tickets` (proxy)  | <AEL address="0x451DD62C26b753d07d6104aaC6865AaE73a6A598" chainID={42161} /> |
+| USDG payment token | <AEL address="0x004B506865409877C9fA29bfb1ebA929984B9bbC" chainID={42161} /> |
+
+USDG has 6 decimals, so the 17 USD minimum price is `17000000` in the token's smallest unit. The first round started on September 23, 2026 at 17:00 UTC.
+
+The examples below use `$FEED_URL`, `$TICKETS`, and `$USDG` for these values:
+
+```shell
+export FEED_URL=wss://arb1-txfeed.arbitrum.io/
+export TICKETS=0x451DD62C26b753d07d6104aaC6865AaE73a6A598
+export USDG=0x004B506865409877C9fA29bfb1ebA929984B9bbC
+```
+
+## Step 1: Generate an API key and its hash
+
+Your API key never goes onchain. You register its Keccak-256 hash with the ticket purchase, and you present the raw key when you connect to the Fast Feed. Anyone who holds the key can use your tickets, so treat it like a password.
+
+1. Generate a random key and keep it private:
+
+   ```shell
+   openssl rand -hex 32
+   ```
+
+2. Hash it:
+
+   ```shell
+   cast keccak "<your-api-key>"
+   ```
+
+   Save the 32-byte output. You pass it as `apiKeyHash` in every purchase.
+
+The hash covers the UTF-8 bytes of the key string exactly as you send it in the `Authorization` header in [step 5](#step-5-connect). Hash the exact string you send, with no `0x` prefix and no surrounding whitespace.
+
+You can bind several tickets to one key, in the same round or across rounds. The Fast Feed allows as many open connections per key as that key has active tickets.
+
+## Step 2: Deposit USDG
+
+The contract debits ticket purchases from an internal balance, not from your wallet. Fund that balance before you buy.
+
+1. Approve the contract to pull USDG. `amount` is in the token's smallest unit, so 100 USDG is `100000000`, enough for five tickets at the 17 USDG minimum price:
+
+   ```shell
+   cast send $USDG "approve(address,uint256)" $TICKETS <amount>
+   ```
+
+2. Move the tokens into your internal balance:
+
+   ```shell
+   cast send $TICKETS "depositToken(uint256)" <amount>
+   ```
+
+3. Confirm the balance:
+
+   ```shell
+   cast call $TICKETS "tokenBalance(address)(uint256)" <your-address>
+   ```
+
+Deposit enough for several rounds. The price can rise by up to about two times between rounds, as the [rounds and pricing](/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) section explains. You can withdraw an unused balance at any time with `withdrawToken(amount)`.
+
+## Step 3: Read the round state
+
+A purchase must name the round and the price you expect. The contract reverts if either value has changed, so you never pay a new round's higher price by accident. Read the live values right before you buy:
+
+```shell
+cast call $TICKETS "roundNumber()(uint256)"
+cast call $TICKETS "currentPrice()(uint256)"
+cast call $TICKETS "roundEnd()(uint256)"
+cast call $TICKETS "grandfatherPeriodEnd()(uint256)"
+cast call $TICKETS "grandfatherCount(address)(uint256)" <your-address>
+```
+
+| View                   | What it tells you                                                                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `roundNumber`          | The current round. Pass it as `expectedRound`.                                                                                              |
+| `currentPrice`         | The price of every ticket in this round. Pass it as `expectedPrice`.                                                                        |
+| `roundEnd`             | Unix time when the round ends and the tickets you buy now become active.                                                                    |
+| `grandfatherPeriodEnd` | Unix time when the grandfather period ends. Before it, only buyers from the previous round can buy.                                         |
+| `grandfatherCount`     | How many tickets you can still buy during the grandfather period. It equals the tickets you held last round, minus those bought this round. |
+| `ticketsSoldThisRound` | Tickets sold so far. Compare it with `maxTicketsPerRound` to see how much room is left.                                                     |
+
+Round state updates lazily: the first state-changing call in a new round <a data-quicklook-from="roll-forward">rolls it forward</a>. View functions compute the rolled-forward values on the fly, so the values you read are current.
+
+## Step 4: Buy tickets
+
+Call `purchaseTickets` with the values from step 3:
+
+```shell
+cast send $TICKETS \
+  "purchaseTickets(uint256,uint256,uint256,bytes32)" \
+  <expectedRound> <expectedPrice> <numTicketsDesired> <apiKeyHash>
+```
+
+The contract fills up to `numTicketsDesired`, capped by the room left in the round, and debits `expectedPrice × filled` from your internal balance. If the round is close to its cap, you receive and pay for fewer tickets than you asked for. The call reverts only if the round is already sold out.
+
+Each purchase emits a `TicketsPurchased(buyer, round, apiKeyHash, price, numTickets, numTicketsDesired)` event. Read `numTickets` from the receipt to learn how many tickets you got.
+
+Your tickets become active when the round ends. Until then, tickets from the previous round stay active. If you hold tickets in both rounds under the same key, your connection stays open across the round boundary.
+
+## Step 5: Connect
+
+Once the round in which you bought has ended, open a WebSocket to the Fast Feed endpoint and send your raw API key, not its hash, as a bearer token in the `Authorization` header of the upgrade request:
+
+```text
+Authorization: Bearer <your-api-key>
+```
+
+The endpoint hashes the key with Keccak-256, compares it against the active tickets, and only then completes the upgrade. Messages start flowing at once. You open one connection per ticket, and each connection receives the full feed. Three rules apply to every client:
+
+- Complete the upgrade within 5 seconds, or the endpoint drops the socket.
+- Send only ping and pong frames.
+- Read as fast as the feed arrives. The endpoint drops a client that lags behind, so parse and process off the read loop.
+
+Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](/how-arbitrum-works/priority-gas-auction/fast-feed#what-the-fast-feed-publishes) section lists every field.
+
+<Tabs groupId="ws-client">
+<TabItem value="cli" label="Command line">
+
+```shell
+wscat -c "$FEED_URL" -H "Authorization: Bearer $API_KEY"
+```
+
+</TabItem>
+<TabItem value="node" label="Node.js">
+
+```typescript
+import WebSocket from 'ws';
+
+const ws = new WebSocket(process.env.FEED_URL, {
+  headers: { Authorization: `Bearer ${process.env.API_KEY}` },
+});
+
+ws.on('unexpected-response', (req, res) => {
+  // 401: unknown key or no active ticket. 429: every ticket already has a connection.
+  console.error(`Rejected: HTTP ${res.statusCode}`);
+  req.destroy(); // with a listener attached, ws leaves the request open
+});
+
+ws.on('message', (data) => {
+  const msg = JSON.parse(data.toString());
+  // msg.pga_round, msg.transaction.tx_hash, msg.transaction.receipt, ...
+});
+
+ws.on('close', (code, reason) => {
+  console.log('closed', code, reason.toString());
+});
+```
+
+</TabItem>
+<TabItem value="python" label="Python">
+
+```python
+import asyncio
+import json
+import os
+
+import websockets
+
+
+async def main():
+    headers = {"Authorization": f"Bearer {os.environ['API_KEY']}"}
+    try:
+        async with websockets.connect(os.environ["FEED_URL"], additional_headers=headers) as ws:
+            async for frame in ws:
+                msg = json.loads(frame)
+                # msg["pga_round"], msg["transaction"]["tx_hash"], msg["transaction"]["receipt"], ...
+    except websockets.InvalidStatus as e:
+        # 401: unknown key or no active ticket. 429: every ticket already has a connection.
+        print(f"Rejected: HTTP {e.response.status_code}")
+    except websockets.ConnectionClosed as e:
+        print(f"closed {e.rcvd.code} {e.rcvd.reason}")
+
+
+asyncio.run(main())
+```
+
+This example needs `websockets` 14 or later. Older versions use `extra_headers=` instead of `additional_headers=`.
+
+</TabItem>
+</Tabs>
+
+## Step 6: Keep the connection across rounds
+
+Tickets bought in round N are active for round N+1 only, so an uninterrupted connection needs a purchase in every round:
+
+1. Buy the next round's ticket before `roundEnd`, with the same `apiKeyHash`. During the grandfather period you can renew up to the number of tickets you held.
+2. Shortly after a round ends, the endpoint closes every connection whose key holds no ticket in the new round. A key with a ticket in both rounds keeps its connection.
+3. If your connection closes, reconnect and continue from the current head. The Fast Feed keeps no history, so the messages sent while you were away are gone.
+
+To make the purchase step automatic, run the reference bot described in the next section.
+
+## Automate the purchase with the reference bot
+
+Buying by hand every round does not scale. Offchain Labs publishes a TypeScript [purchase bot](https://github.com/OffchainLabs/feed-ticket-contracts/blob/main/bot/README.md) in the `feed-ticket-contracts` repository. Each round, the bot:
+
+1. Reads the price, round boundaries, and your grandfather count.
+2. Skips the round if the price exceeds `MAX_PRICE_PER_TICKET`.
+3. Buys up to your grandfather count during the grandfather period, then buys the rest after the period ends.
+4. Before each transaction, estimates gas and waits until `gas × maxFeePerGas` fits within `MAX_TRANSACTION_FEE`.
+5. Sleeps past the round boundary, with random jitter so that bots do not all act at once.
+
+Configure it with environment variables:
+
+| Variable                 | Required | Description                                                                                            |
+| ------------------------ | -------- | ------------------------------------------------------------------------------------------------------ |
+| `RPC_URL`                | Yes      | Arbitrum One JSON-RPC endpoint.                                                                        |
+| `PRIVATE_KEY`            | Yes      | `0x`-prefixed private key of the account that deposited USDG.                                          |
+| `TICKETS_ADDRESS`        | Yes      | `Tickets` contract address.                                                                            |
+| `TICKETS_PER_ROUND`      | Yes      | Number of tickets to buy each round.                                                                   |
+| `MAX_PRICE_PER_TICKET`   | Yes      | Highest price per ticket you accept, in the token's smallest unit.                                     |
+| `MAX_TRANSACTION_FEE`    | Yes      | Highest total gas fee per purchase, in wei.                                                            |
+| `API_KEY_HASH`           | Yes      | Keccak-256 hash of your API key, from step 1.                                                          |
+| `MAX_SCHEDULE_JITTER_MS` | No       | Upper bound of the random delay added at round boundaries. Default `30000`.                            |
+| `GAS_POLL_INTERVAL_MS`   | No       | How often to re-check gas while waiting for it to fit the budget. Default `10000`.                     |
+| `BOUNDARY_BUFFER_MS`     | No       | Delay after a round or grandfather boundary before acting, so the chain has passed it. Default `2000`. |
+| `PRIORITY_FEE_PER_GAS`   | No       | <a data-quicklook-from="eip-1559">EIP-1559</a> priority fee per gas, in wei. Default `0`.              |
+| `BASE_FEE_BOOST_PERCENT` | No       | Percentage added to the latest base fee when computing `maxFeePerGas`. Default `20`.                   |
+
+Run it with Docker:
+
+```shell
+git clone https://github.com/OffchainLabs/feed-ticket-contracts.git
+cd feed-ticket-contracts/bot
+docker build -t purchase-bot .
+docker run --rm \
+  -e RPC_URL=$RPC_URL \
+  -e PRIVATE_KEY=$PRIVATE_KEY \
+  -e TICKETS_ADDRESS=$TICKETS \
+  -e TICKETS_PER_ROUND=1 \
+  -e MAX_PRICE_PER_TICKET=<amount> \
+  -e MAX_TRANSACTION_FEE=<wei> \
+  -e API_KEY_HASH=<apiKeyHash> \
+  purchase-bot
+```
+
+Two behaviors to plan for:
+
+- **The bot does not deposit funds.** Keep the internal balance topped up with `depositToken`, as in step 2. A purchase that finds an empty balance reverts, and the bot skips that round.
+- **The bot exits on RPC or network errors.** It treats a contract revert as a skipped round and continues, but any transport failure ends the process. Run it under a supervisor that restarts it, such as Docker `--restart=always`, Kubernetes, or systemd.
+
+## Troubleshoot
+
+### Purchase reverts
+
+| Revert                                           | Cause                                                                                 | Fix                                                                                                              |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `RoundNumberMismatch(expected, actual)`          | The round advanced between your read and your transaction.                            | Re-read `roundNumber` and `currentPrice`, then retry.                                                            |
+| `IncorrectTicketPrice(expected, actual)`         | The price changed, which happens at a round boundary.                                 | Re-read `currentPrice` and decide whether the new price fits your budget.                                        |
+| `MaxTicketsSold()`                               | The round is sold out.                                                                | Wait for the next round. Buy earlier in the round, or hold tickets so you can buy during the grandfather period. |
+| `InsufficientTokenBalance(balance, required)`    | Your internal balance is below `expectedPrice × numTicketsDesired`.                   | Deposit more USDG with `depositToken`.                                                                           |
+| `NotEnoughGrandfatheredTickets(held, requested)` | You asked for more tickets than your grandfather count during the grandfather period. | Request at most `grandfatherCount`, or wait until `grandfatherPeriodEnd`.                                        |
+| `BeforeFirstRoundStart()`                        | The first round has not started.                                                      | Wait for the configured first round start.                                                                       |
+| `ZeroTicketsRequested()`                         | `numTicketsDesired` was `0`.                                                          | Request at least one ticket.                                                                                     |
+
+### Connection rejected or closed
+
+| Response                                  | Cause                                                                          | Fix                                                                                     |
+| ----------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `HTTP 401 Unauthorized`                   | The `Authorization` header is missing, or the key's hash has no active ticket. | Check the raw key and its hash. Tickets bought this round activate at `roundEnd`.       |
+| `HTTP 429 Too Many Requests`              | The key already has as many open connections as it has active tickets.         | Close a connection, or buy more tickets for the next round.                             |
+| `HTTP 426 Upgrade Required`               | The request was not a WebSocket upgrade, for example a plain HTTPS `GET`.      | Use a WebSocket client.                                                                 |
+| Close `1008`, `authentication expired`    | The round ended and your key holds no ticket in the new round.                 | Buy before `roundEnd` each round, then reconnect.                                       |
+| Close `1013`, `client lagged`             | Your client fell more than 2048 messages behind.                               | Drain the socket faster. Move parsing and processing off the read loop, then reconnect. |
+| Close `1003`, `unexpected client message` | Your client sent a data frame.                                                 | Send only ping and pong frames.                                                         |
+| Close `1011`, `server shutting down`      | The endpoint restarted.                                                        | Reconnect with a short backoff.                                                         |
+
+## FAQ
+
+**Which token pays for tickets?**
+USDG on Arbitrum One. The token is fixed when the contract is deployed and cannot change. On Arbitrum Sepolia, a test token is available on request.
+
+**When does my ticket start working?**
+At the end of the round in which you buy it. It stays active until the end of the next round.
+
+**What happens to money I do not spend?**
+It stays in your internal balance. Withdraw it at any time with `withdrawToken(amount)`.
+
+**Do I need a Nitro node?**
+No. The Fast Feed is a stream for your own client. To follow the chain, use the free [sequencer feed](/run-arbitrum-node/sequencer/read-sequencer-feed) instead.
