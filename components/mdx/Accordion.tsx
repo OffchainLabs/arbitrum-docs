@@ -41,7 +41,7 @@ export function Accordion({
       <AccordionContent
         ref={contentRef}
         forceMount
-        className="data-[state=closed]:h-0 data-[state=closed]:[content-visibility:hidden]"
+        className="data-[state=closed]:h-0 data-[find-reveal]:animate-none!"
       >
         <div className="px-4 pb-2 text-[0.9375rem] prose-no-margin">{children}</div>
       </AccordionContent>

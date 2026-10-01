@@ -358,11 +358,17 @@ plus one registry entry.
 `components/mdx.tsx` is the registry and the source of truth. It spreads Fumadocs' defaults (which
 include `Callout`, `Card`, `Cards` and code blocks) and adds:
 
-- Fumadocs' `Accordions`, `Tab`, `Tabs` and `ImageZoom`. Markdown images render through
+- Fumadocs' `Accordions`, `Tabs` and `ImageZoom`. Markdown images render through
   `ImageZoom` too.
 - `Accordion` from `components/mdx/Accordion.tsx`, Fumadocs' own with the panel force-mounted.
   Fumadocs unmounts a closed accordion panel and an inactive tab, so their text never reaches the
-  server HTML that search engines index. The registry force-mounts both and CSS hides them.
+  server HTML that search engines index. The registry force-mounts both (using the local
+  `FindableTab.tsx` wrapper for tabs). `use-findable-panel.ts` sets `hidden="until-found"` after
+  hydration and synchronously activates the panel on the browser's `beforematch` event. Search
+  reveals skip the accordion animation so the browser can immediately highlight and scroll to
+  the match. Let the browser apply `content-visibility` through `hidden="until-found"`; an explicit
+  closed-state `content-visibility: hidden` can prevent Chromium from discovering the text when
+  the hook adds the attribute. Browser tests exercise native text search and text-fragment reveal.
 - `AEL`, an address explorer link (`components/mdx/AddressExplorerLink.tsx`).
 - `Term`, `ReferenceList` and `Var` from `components/mdx/`.
 - Four widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`

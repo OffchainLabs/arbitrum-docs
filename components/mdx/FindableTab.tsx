@@ -15,7 +15,7 @@ export function Tab({ className, ...props }: TabProps) {
       ref={ref}
       forceMount
       className={cn(
-        'data-[state=inactive]:block data-[state=inactive]:h-0 data-[state=inactive]:p-0 data-[state=inactive]:[content-visibility:hidden]',
+        'data-[state=inactive]:block data-[state=inactive]:h-0 data-[state=inactive]:p-0',
         className,
       )}
     />

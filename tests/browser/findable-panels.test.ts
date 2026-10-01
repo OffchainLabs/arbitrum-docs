@@ -24,10 +24,69 @@ async function panelFor(trigger: Locator): Promise<Locator> {
 async function reveal(panel: Locator) {
   // Simulate Find's beforematch event and subsequent removal of hidden="until-found".
   // Dispatch on the panel itself even when it is not visible.
-  await panel.evaluate((element) => {
+  const revealed = await panel.evaluate((element) => {
     element.dispatchEvent(new Event('beforematch', { bubbles: true }));
     element.removeAttribute('hidden');
+    return {
+      contentVisibility: getComputedStyle(element).contentVisibility,
+      height: element.getBoundingClientRect().height,
+    };
   });
+  assert.notEqual(revealed.contentVisibility, 'hidden', 'Find can lay out its match immediately');
+  assert.ok(revealed.height > 0, 'Find can highlight its match before beforematch returns');
+}
+
+async function assertSearchablePanel(panel: Locator, text: string) {
+  assert.ok((await panel.textContent())?.includes(text));
+  const found = await panel.page().evaluate((text) => {
+    window.getSelection()?.removeAllRanges();
+    // Chromium's native text search, without manually dispatching beforematch.
+    const findWindow = window as unknown as {
+      find: (
+        text: string,
+        caseSensitive: boolean,
+        backwards: boolean,
+        wrapAround: boolean,
+      ) => boolean;
+    };
+    const found = findWindow.find(text, false, false, true);
+    window.getSelection()?.removeAllRanges();
+    return found;
+  }, text);
+  assert.ok(found, `browser text search discovers collapsed content: ${text}`);
+}
+
+async function revealWithTextFragment(panel: Locator, text: string) {
+  await panel.evaluate((element) => {
+    element.addEventListener(
+      'beforematch',
+      (event) => element.setAttribute('data-native-match', String(event.isTrusted)),
+      { once: true },
+    );
+  });
+  const page = panel.page();
+  await page.evaluate((text) => {
+    // A real link click gives Chromium the user activation required for text fragments.
+    const link = document.createElement('a');
+    link.id = 'native-find-test';
+    link.textContent = 'Find collapsed text';
+    link.href = `#:~:text=${encodeURIComponent(text)}`;
+    document.body.prepend(link);
+  }, text);
+  try {
+    await page.locator('#native-find-test').click();
+    const id = await panel.getAttribute('id');
+    assert.ok(id);
+    await page.waitForFunction(
+      (id) => document.getElementById(id)?.getAttribute('data-native-match') === 'true',
+      id,
+      { timeout: 10_000 },
+    );
+    assert.ok((await panel.locator(':scope :target').textContent())?.includes(text));
+  } finally {
+    await page.locator('#native-find-test').evaluate((element) => element.remove());
+    await panel.evaluate((element) => element.removeAttribute('data-native-match'));
+  }
 }
 
 async function assertVisiblePanel(panel: Locator, state: string) {
@@ -54,7 +113,7 @@ async function assertVisiblePanel(panel: Locator, state: string) {
   assert.notEqual(rendered.contentVisibility, 'hidden');
 }
 
-test('beforematch selects the matched tab and preserves manual selection', async () => {
+test('native text search reveals a collapsed tab and preserves manual selection', async () => {
   const page = await browser.newPage();
   try {
     await page.goto(new URL('/docs/run-a-node/start-here', baseUrl).href);
@@ -62,6 +121,8 @@ test('beforematch selects the matched tab and preserves manual selection', async
     const matchedTab = page.getByRole('tab', { name: 'Arbitrum chains', exact: true });
     const firstPanel = await panelFor(firstTab);
     const matchedPanel = await panelFor(matchedTab);
+    await firstTab.click();
+    await assertVisiblePanel(firstPanel, 'active');
     await page.waitForFunction(
       () =>
         document
@@ -70,7 +131,8 @@ test('beforematch selects the matched tab and preserves manual selection', async
     );
     assert.equal(await matchedTab.getAttribute('aria-selected'), 'false');
     assert.equal(await matchedPanel.getAttribute('hidden'), 'until-found');
-    await reveal(matchedPanel);
+    await assertSearchablePanel(matchedPanel, 'specifies a JSON string');
+    await revealWithTextFragment(matchedPanel, 'specifies a JSON string');
     await assertVisiblePanel(matchedPanel, 'active');
     assert.equal(await matchedTab.getAttribute('aria-selected'), 'true');
     assert.equal(await firstTab.getAttribute('aria-selected'), 'false');
@@ -87,7 +149,7 @@ test('beforematch selects the matched tab and preserves manual selection', async
   }
 });
 
-test('beforematch opens an accordion and manual closing still works', async () => {
+test('native text search opens an accordion and manual closing still works', async () => {
   const page = await browser.newPage();
   try {
     await page.goto(new URL('/docs/stylus/quickstart', baseUrl).href);
@@ -100,7 +162,8 @@ test('beforematch opens an accordion and manual closing still works', async () =
     );
     assert.equal(await panel.getAttribute('hidden'), 'until-found');
     assert.equal(await trigger.getAttribute('aria-expanded'), 'false');
-    await reveal(panel);
+    await assertSearchablePanel(panel, "Rust Lang's installation page");
+    await revealWithTextFragment(panel, "Rust Lang's installation page");
     await assertVisiblePanel(panel, 'open');
     assert.equal(await trigger.getAttribute('aria-expanded'), 'true');
     // A repeated event on an already-open panel must not toggle it closed.
@@ -109,6 +172,9 @@ test('beforematch opens an accordion and manual closing still works', async () =
     await trigger.click();
     assert.equal(await trigger.getAttribute('aria-expanded'), 'false');
     assert.equal(await panel.getAttribute('hidden'), 'until-found');
+    await assertSearchablePanel(panel, "Rust Lang's installation page");
+    await reveal(panel);
+    await assertVisiblePanel(panel, 'open');
   } finally {
     await page.close();
   }
