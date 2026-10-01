@@ -15,6 +15,10 @@
  * edit reaches it only when somebody bumps `repoRef`: stylus-by-example publishes no releases, so
  * the pin is a commit SHA. `--check` still needs the network (or `--source-path`), so it is not a
  * CI gate. Run it by hand.
+ *
+ * Each built page is checked before it is written: a body holding an `import`, `export`, `{…}`
+ * expression or JSX the generator did not write fails the run (`assertStaticBody`), because the
+ * build compiles and runs MDX.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
