@@ -10,7 +10,7 @@ sidebar_label: 'Envio'
 
 ## Envio HyperIndex
 
-[Envio](https://envio.dev/) HyperIndex is an indexing framework for real-time and historical onchain data. You define the contracts and events to index, write handlers that turn those events into entities, and query the result through a GraphQL API.
+[Envio](https://envio.dev/) HyperIndex is an indexing framework for real-time and historical onchain data. You define the contracts and events to index, write handlers that turn those events into entities, and query the results through a GraphQL API.
 
 HyperIndex supports Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia through HyperSync. It can also index any other EVM chain, including your own Arbitrum chain, by using an [RPC data source](https://docs.envio.dev/docs/HyperIndex/rpc-sync).
 
@@ -32,7 +32,7 @@ HyperSync requires an API token. You can create one in the [Envio app](https://e
 
 ## HyperIndex key features
 
-- **Contract import**: Generate an indexer from the address of a verified contract, or from a local ABI file.
+- **Contract import**: Generate an indexer from a verified contract address or a local ABI file.
 - **Multichain indexing**: Index several chains into one database and query them through one GraphQL API. See [multichain indexing](https://docs.envio.dev/docs/HyperIndex/multichain-indexing).
 - **Factory contracts**: Index contracts that are created by other contracts at runtime. See [dynamic contracts](https://docs.envio.dev/docs/HyperIndex/dynamic-contracts).
 - **Reorg handling**: Keep indexed data consistent with the chain when blocks are reorganized. This is on by default. See [reorg support](https://docs.envio.dev/docs/HyperIndex/reorgs-support).
@@ -51,19 +51,16 @@ This walkthrough creates an indexer and a GraphQL API from a contract that is al
 
 Run the following command in the folder of your choice:
 
-```bash
 pnpx envio init
 ```
 
 Enter a folder name for the project, or press Enter to use the current directory:
 
-```bash
 ? Specify a folder name (ENTER to skip):  (.)
 ```
 
 Select `Evm` as the blockchain ecosystem:
 
-```bash
 ? Choose blockchain ecosystem
 > Evm
   Svm
@@ -72,7 +69,6 @@ Select `Evm` as the blockchain ecosystem:
 
 Select `From Address - Lookup ABI from block explorer` as the initialization option:
 
-```bash
 ? Choose an initialization option
 > From Address - Lookup ABI from block explorer
   From ABI File - Use your own ABI file
@@ -82,13 +78,12 @@ Select `From Address - Lookup ABI from block explorer` as the initialization opt
   Feature: Factory Contract
 ```
 
-The `From Address` option fetches the contract ABI from a block explorer. If the CLI can't fetch the ABI, for example because the contract isn't verified, select `From ABI File` and enter the path to a JSON file that contains the ABI.
+The `From Address` option fetches the contract ABI from a block explorer. If the CLI can't fetch the ABI, for example, because the contract isn't verified, select `From ABI File` and enter the path to a JSON file that contains the ABI.
 
 ### Select the chain the contract is deployed on
 
-Select the chain, for example `arbitrum-one` or `arbitrum-sepolia`. You can type to filter the list:
+Select the chain, for example, `arbitrum-one` or `arbitrum-sepolia`. You can type to filter the list:
 
-```bash
 ? Which blockchain would you like to import a contract from?
   abstract
   amoy
@@ -102,7 +97,6 @@ v aurora
 
 ### Enter the contract address
 
-```bash
 ? What is the address of the contract?
 [Use the proxy address if your abi is a proxy implementation]
 ```
@@ -113,7 +107,6 @@ If your contract is a proxy, enter the proxy address, not the implementation add
 
 The CLI lists the events from the contract ABI and selects all of them by default:
 
-```bash
 ? Which events would you like to index?
 > [x] Approval(address indexed owner, address indexed spender, uint256 value)
   [x] Transfer(address indexed from, address indexed to, uint256 value)
@@ -122,7 +115,6 @@ The CLI lists the events from the contract ABI and selects all of them by defaul
 
 ### Finish or add more contracts
 
-```bash
 ? Would you like to add another contract?
 > I'm finished
   Add a new address for same contract on same network
@@ -144,7 +136,6 @@ The command generates the following files:
 
 You can also run contract import without prompts. For example, for a contract on Arbitrum One:
 
-```bash
 pnpx envio init contract-import explorer -b arbitrum-one -c <CONTRACT_ADDRESS> --single-contract --all-events -n my-indexer -d my-indexer
 ```
 
@@ -154,7 +145,6 @@ For more detail, see the [HyperIndex quickstart](https://docs.envio.dev/docs/Hyp
 
 Make sure Docker is running, then start the indexer from the project folder:
 
-```bash
 pnpm dev
 ```
 
