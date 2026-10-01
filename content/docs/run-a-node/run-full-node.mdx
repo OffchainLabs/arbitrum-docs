@@ -62,7 +62,7 @@ If you are running more than one node, you should [run a feed relay](/run-a-node
 
 </Callout>
 
-<Callout type="warn" title="PathDB and `--init.latest`">
+<Callout type="warn" title="PathDB and --init.latest">
 
 `--init.latest` accepts only `archive`, `pruned`, and `genesis`, and every snapshot it resolves for those kinds uses HashDB. Adding `--execution.caching.state-scheme=path` to the examples below fails, because the downloaded snapshot's scheme won't match.
 
@@ -91,7 +91,6 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
 
 - Here is an example of how to run `nitro-node`:
 
-<div className="dynamic-content-tabs">
   <Tabs items={['Arbitrum One, Nova, Sepolia', 'Arbitrum chains']}>
     <Tab value="Arbitrum One, Nova, Sepolia">
       <include cwd>content/partials/run-a-node/_dao-chains-example.mdx</include>
@@ -100,7 +99,6 @@ docker run --rm -it -v /Path/to/mount/arbitrum:/home/user/.arbitrum -v /Path/to/
       <include cwd>content/partials/run-a-node/_orbit-chains-example.mdx</include>
     </Tab>
   </Tabs>
-</div>
 
 - Note that it is important that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the Docker container won't be able to write to it.
 - Note that if you are running a node for the parent chain (e.g., Ethereum for Arbitrum One or Nova) on localhost, you may need to add `--network host` right after `docker run` to use Docker host-based networking
@@ -154,6 +152,7 @@ On **PathDB**, pruning is automatic and runs online. Nitro discards state older 
 The pruning process occurs when the node starts (upon initialization) and will not serve RPC requests during pruning.
 
 </Callout>
+
 If you are using the default storage scheme (HashDB), then you can activate pruning by using the parameter:
 
 - `--init.prune <pruning mode>`, where `<pruning mode>` can be one of:

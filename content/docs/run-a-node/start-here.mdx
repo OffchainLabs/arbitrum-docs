@@ -44,7 +44,7 @@ Although there are beta and release candidate versions of the Arbitrum Nitro sof
 
 </Callout>
 
-Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code>offchainlabs/nitro-node:v3.11.4-7d5ac27</code>
+Latest [Docker image](https://hub.docker.com/r/offchainlabs/nitro-node/tags): <code><Var name="latestNitroNodeImage" /></code>
 
 ### Database snapshots
 
@@ -105,16 +105,14 @@ If you're running a beacon node, historical data will now be in <Term id="blob">
 
 The following list contains all the parameters needed to configure your node. Select the appropriate option depending on the chain you want to run your node for.
 
-<div className="dynamic-content-tabs">
-  <Tabs items={['Arbitrum One, Nova, Sepolia', 'Arbitrum chains']}>
-    <Tab value="Arbitrum One, Nova, Sepolia">
-      <include cwd>content/partials/run-a-node/_dao-chains-parameters.mdx</include>
-    </Tab>
-    <Tab value="Arbitrum chains">
-      <include cwd>content/partials/run-a-node/_orbit-chains-parameters.mdx</include>
-    </Tab>
-  </Tabs>
-</div>
+<Tabs items={['Arbitrum One, Nova, Sepolia', 'Arbitrum chains']}>
+  <Tab value="Arbitrum One, Nova, Sepolia">
+    <include cwd>content/partials/run-a-node/_dao-chains-parameters.mdx</include>
+  </Tab>
+  <Tab value="Arbitrum chains">
+    <include cwd>content/partials/run-a-node/_orbit-chains-parameters.mdx</include>
+  </Tab>
+</Tabs>
 
 ## Run a full node
 
