@@ -1,0 +1,17 @@
+{
+  "title": "Arbitrum bridge",
+  "icon": "ArrowLeftRight",
+  "root": true,
+  "description": "Move ETH and ERC-20 tokens between Ethereum and Arbitrum.",
+  "root": true,
+  "pages": [
+    "index",
+    "quickstart",
+    "usdc-arbitrum-one",
+    "embedded-bridge-widget",
+    "bridge-transaction-traceability",
+    "withdrawal-monitoring",
+    "troubleshooting",
+    "..."
+  ]
+}

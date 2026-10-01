@@ -1,0 +1,6 @@
+---
+id: activation
+title: 'Activation'
+---
+
+The step that prepares a deployed [Stylus](/docs/glossary#stylus) contract to be called. Activation registers the program with [ArbOS](/docs/glossary#arbos), validates the [WASM](/docs/glossary#wasm) bytecode, and primes the per-node compiled-artifact cache so subsequent calls can execute the program at native speed. Activation costs gas proportional to program size, and re-activation is required after the cache entry expires (365 days by default) or after an ArbOS upgrade that changes the [WASM module root](/docs/glossary#wasm-module-root).

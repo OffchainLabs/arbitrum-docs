@@ -1,229 +1,273 @@
-Thank you for considering contributing to the Arbitrum documentation! We're excited to have you on board.
+# Contributing to the Arbitrum docs
 
-The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
+Thank you for considering a contribution to the Arbitrum documentation portal. This repo is a
+Next.js 16 / Fumadocs site. It replaced the Docusaurus site at
+[`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs), which is archived, and
+the content model, tooling and gates are different enough that this document is a rewrite, not a
+port, of that repo's `CONTRIBUTE.md`. If something here
+conflicts with [README.md](README.md) or [INTERNALS.md](INTERNALS.md), those two are canonical.
+This file exists to get a new contributor from zero to an open PR.
 
-This document shows you how to craft and publish Arbitrum documentation. There is an expectation to have familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs).
+## Setup
 
-### Add a new core document
-
-If a document isn't in a `Third-party content` sidebar node, it's a **core document**. To contribute a new core doc:
-
-1.  Begin by creating a branch (internal) or fork (external) of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs).
-2.  Issue a `Draft` pull request into `master`. Pull requests into `master` will generate a preview of your changes via a PR-specific Docusaurus deployment; this preview will update as you push commits to your remote.
-3.  Include answers to the following questions in your PR description:
-    ```markdown
-    1. Audience: Who am I writing for?
-    2. Problem: What specific problem are they trying to solve?
-    3. Discovery: How are they looking for a solution to this problem? What search terms are they using?
-    4. Document type: Which document type is most suitable?
-    5. Policy acknowledgment (Third-party docs only): Do you agree to the third-party content policy outlined within "Contribute docs"?
-    ```
-4.  As you craft your contribution, refer to the [document types](#document-type-conventions), [Style guidance](#style-conventions), and other conventions below.
-5.  Mark your PR as `Open` when it's ready for review.
-
-### Add a new third-party document
-
-**Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
-
-See [Contribute third-party docs](https://docs.arbitrum.io/for-devs/third-party-docs/contribute) for detailed instructions.
-
-### Request an update
-
-If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
-
-### Add a new translation page
-
-If you would like to participate in translating the Arbitrum docs, you can:
-
-1. Check if `i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
-
-```
-npm run write-translations -- --locale fr
+```bash
+pnpm install      # runs a postinstall that generates .source/
+pnpm dev          # http://localhost:3000
 ```
 
-It will help generate folder `i18n/fr`.
+Node `22.x` (`>=22.18 <23`, enforced by `engines`; every script is a `.ts` file Node runs directly) and pnpm 10. Other Node majors are rejected.
 
-2. Create the folders `current` and `translated` under the newly generated folder `i18n/fr/docusaurus-plugin-content-docs`:
+**Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
+component looks broken, which is a common false alarm when checking a content change.
 
-```
-mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/translated
-```
+## Add or edit a page
 
-3. Translate one of more docs files located in `docs/`.
+Every page needs a `title` and a `description` in its frontmatter. A missing one fails the build:
 
-4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`. For example, if you translated `/arbitrum-docs/how-arbitrum-works/arbos/introduction.md`, then its path in `i18n` should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/how-arbitrum-works/arbos/introduction.md`.
-
-Test run:
-
-1. Check that the `i18n` settings in `docusaurus.config.js` have included your new language:
-
-```
-i18n: {
-    defaultLocale: 'en',
-    // locales: ['en', 'ja', 'zh'],
-    locales: ['en'], // You can add your new language to this array
-  },
-```
-
-2. Check whether the `locale Dropdown` component exists in navbar, if not, add it:
-
-```
-navbar: {
-    title: 'Arbitrum Docs',
-    logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
-        href: '/get-started/arbitrum-introduction',
-    },
-    items: [
-        // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
-        //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
-        //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
-        {
-        type: 'localeDropdown',
-        position: 'right',
-        }
-    ],
-},
-```
-
-2. Build translation and docs:
-
-```
-yarn build-translation && yarn build
-```
-
-6. Start docs:
-
-```
-npm run serve
-```
-
-<br />
-
+```mdx
 ---
-
-### Document type conventions
-
-Every document should be a specific _type_ of document. Each type of document has its own purpose:
-
-| Document type       | Purpose                                                                            |
-| ------------------- | ---------------------------------------------------------------------------------- |
-| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             |
-| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions |
-| How-to              | Provide task-oriented procedural guidance                                          |
-| Concept             | Explain what things are and how they work                                          |
-| FAQ                 | Address frequently asked questions                                                 |
-| Troubleshooting     | List common troubleshooting scenarios and solutions                                |
-| Reference           | Lists and tables of things, such as API endpoints and developer resources          |
-
-This isn't an exhaustive list, but it includes most of the document types that we use.
-
-:::info About Promotional Content
-
-While it is acceptable to include conceptual and how-to content that links to products, services, and protocols in the third party section, we do not accept promotional content in our core docs.
-
-Feature pieces that are primarily promotional and do not provide actionable guidance to readers are not accepted as third-party docs, either.
-
-:::
-
-### Style conventions
-
-The following style guidelines provide recommendations that help us deliver **a consistent content experience** across our docs:
-
-1.  **Casing**
-    - Sentence-case "content labels": document titles, sidebar titles, menu items, section headers, etc.
-2.  **Linking**
-    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, link to the document's title verbatim.
-3.  **Titling**
-    - Titles should balance brevity with precision— _Node running overview_ is preferred to _Overview_. This format helps with SEO and reader UX.
-4.  **Separate procedural from conceptual (most of the time)**
-    - Avoid including too much conceptual content within procedural docs like how-tos and quickstarts. Provide only the conceptual information that the target reader _needs_ to complete the task. Otherwise, organize conceptual information within conceptual docs and link to them "just in case" from other docs.
-5.  **Voice**
-    - Address the reader as "you".
-    - Write like you'd speak to a really smart friend who's in a rush.
-    - Opt for short, clear sentences that use translation-friendly, plain language.
-    - Use contractions wherever they feel natural. This approach can help convey a friendly and conversational tone.
-6.  **Formality**
-    - Don't worry too much about formality. The most valuable writing provides value to readers, and readers generally want to "flow" through guidance.
-    - Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
-7.  **Targeting**
-    - Don't try to write for everyone; write for a _specific reader persona_ (also referred to as "audience" in this document) with a _specific need_.
-    - Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit at the beginning of your document.
-8.  **Flow**
-    - **Set expectations**: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
-    - **Value upfront**: Lead with what matters most to your target reader persona. Then, progressively build a bridge that carries them toward task completion as efficiently as possible.
-9.  **Cross-linking**
-    - We want to maintain both **high discoverability** and **high relevance**. Generally, links to other docs should be "very likely useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
-10. **Things to avoid**
-    - **Symbols where words will do**: Minimize usage of `&` and `/`—spell out words like "_and_" and "_or_".
-    - **Jargon**: precise technical terminology is ok if your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
-
-Don't stress too much about checking off all these boxes; we periodically review and edit our most heavily trafficked docs, bringing them up to spec with the latest style guidelines.
-
-Some important disclaimers:
-
-- **This isn't an exhaustive list**. These are just the minimum guidelines applicable to all new content moving forward.
-- **Many of our docs don't yet follow this guidance**. Our team is working on it! If you notice an obvious content bug, feel free to submit an [issue](https://github.com/OffchainLabs/arbitrum-docs/issues) or [PR](https://github.com/OffchainLabs/arbitrum-docs/pulls).
-
-### Banner conventions
-
-You can use banners (Docusaurus refers to them as ["admonitions"](https://docusaurus.io/docs/markdown-features/admonitions)) to set expectations for your readers and to emphasize important callouts. Use these conservatively, as they interrupt the flow of the document.
-
-#### Under construction banner
-
-Example:
-
-:::caution UNDER CONSTRUCTION
-
-The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click this document's `Request an update` button if you have any feedback.
-
-:::
-
-Usage:
-
-```
-:::caution UNDER CONSTRUCTION
-
-The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click this document's `Request an update` button if you have any feedback.
-
-:::
+title: 'How to run a full node'
+description: One-line summary shown in search results and social cards.
+content_type: how-to
+author: your-github-handle
+sme: reviewing-sme-handle
+---
 ```
 
-<br />
+The other fields are optional. `content_type`, when set, must be exactly one of `how-to`,
+`concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq`. Pick the type that
+matches what the reader is trying to do, not just what feels closest. See
+[Document type conventions](#document-type-conventions) below. `author` and `sme` name the writer
+and the subject-matter reviewer. `sidebar_label` replaces the title as the page's name in the
+sidebar.
 
-#### Community member contribution banner
+Callouts use Fumadocs' `<Callout>` component, with `type` set to `info`, `warn`, `error`, `idea`
+or `success`. A Docusaurus `:::note` line renders as plain text and fails `pnpm content:lint`.
 
-Example:
-
-:::info Community member contribution
-
-The following document was contributed by @todo-twitter-handle. Give them a shoutout if you find it useful!
-
-:::
-
-Usage:
-
-```
-:::info Community member contribution
-
-The following document was contributed by @todo-twitter-handle. Give them a shoutout if you find it useful!
-
-:::
+```mdx
+<Callout type="info" title="Optional title">
+  The callout body.
+</Callout>
 ```
 
-### Frequently asked questions
+**If you are porting the page a legacy redirect is waiting for, retarget the redirect.** One legacy
+`docs.arbitrum.io` URL in `redirects.config.ts` points at a section landing because the page it
+asked for, upstream's "Sequencer" page, was never ported. It carries a comment saying so. Nothing
+automated notices when the page lands, so if yours is that page, point its entry at your page in
+the same PR. If yours merely shares the title, leave the redirect alone: sending readers to a page
+that is not the one they asked for is worse than the landing page they reach today.
 
-#### Can I point to my product from core docs? For example—if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) section?
+### Place your page in the sidebar
 
-These types of contributions are generally **not merged** unless they're submitted by employees of Offchain Labs.
+**A page's directory is its place in the sidebar, and that directory's `meta.json` orders it.**
+Nothing else decides the sidebar.
 
-Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable scrutiny.
+Each of the nine sections is a top-level directory under `content/docs` whose `meta.json` sets
+`"root": true`. The navbar picks the section, and the sidebar shows the tree of the section folder
+the current page sits in. A subdirectory is a collapsible group in that tree, titled by the
+`title` in its own `meta.json`. A subdirectory's `index.mdx` is what opens when a reader clicks the
+group's name.
 
-#### How long does it take to review my third-party content contribution?
+To add a page, put the `.mdx` file in the directory where it belongs and add its basename to the
+`pages` array of that directory's `meta.json`, in the position you want:
 
-Our team continuously balances competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. We process them in the order received, generally within a week or two.
+```json
+{
+  "title": "Sequencer",
+  "pages": ["run-sequencer-node", "read-sequencer-feed", "your-new-page", "..."]
+}
+```
 
-#### Is there any way to expedite third-party content contribution reviews?
+`"..."` lists every page and folder the array does not name yet, pages before folders, each sorted
+by file name. Most directories end with it, so a page you forget to list still appears, at the end
+of its group.
 
-The most effective way to expedite processing is to ensure that your PR incorporates the conventions outlined in this document. Please don't ask for status updates—if you've submitted a PR, it's on our radar!
+The `pages` array also accepts these entries:
+
+- **A subdirectory name**, such as `"sequencer"`, places that whole group.
+- **A path into another directory**, such as `"../oracles/overview-oracles"`, shows that page
+  here without moving it or changing its URL. List each page in exactly one `meta.json`. When two
+  files list the same page, the one Fumadocs reads first silently wins.
+- **`"...nitro"`** lists the pages of the `nitro` subdirectory directly, without a group.
+- **`"external:[Label](https://example.com)"`** adds a link to another site.
+- **`"---Heading---"`** adds a heading between entries.
+
+The sidebar name is the page's `sidebar_label`, or its `title` when it has none.
+
+Never write a `[Label](/docs/...)` link entry for a page in this repository. It puts the page in
+the tree a second time, and the reader lands in whichever section Fumadocs finds first. Use a path
+entry instead. Links to other sections are not needed at all, because the navbar lists every section
+and the sidebar footer pins Chain info, Glossary and Contribute under every section.
+
+A new top-level directory needs `"root": true` in its `meta.json` and an entry in
+`content/docs/meta.json`. A new page at the top of `content/docs`, beside `chain-info.mdx`, needs a
+`"../your-page"` entry in the `meta.json` of the section that should show it.
+
+`pnpm test` fails when a page is on no sidebar node, is on two, or sits outside every section. Open
+the page at `http://localhost:3000` to see where it landed.
+
+## Reuse a partial before you write new prose
+
+Reusable `_`-prefixed fragments live in `content/partials/`, outside the routed doc tree so they
+can never be served as their own page. **Before writing a banner, note, config table, or
+troubleshooting block, look in `content/partials/`** and reuse a partial instead of duplicating the
+prose. File names say what each one holds.
+
+```mdx
+<!-- From a doc page: root-anchored, so moving the page later never breaks the include -->
+
+<include cwd>content/partials/_hardware-requirements.mdx</include>
+```
+
+```mdx
+<!-- From another partial: file-relative -->
+
+<include>../_hardware-requirements.mdx</include>
+```
+
+If nothing fits, create `content/partials/<area>/_your-partial.mdx` with no frontmatter and include
+it. `pnpm check-links` validates the include path and the links inside the partial, once for every
+page that includes it.
+
+## Use a variable, don't hardcode a value
+
+Values that move on a release cadence (version tags, chain parameters, node image names) live
+once in [`content/vars.json`](content/vars.json) and render via `<Var name="..." />`, which needs
+no import:
+
+```mdx
+The current Nitro release is <Var name="nitroVersionTag" />.
+```
+
+Inside a link destination, use a `{var:name}` placeholder rather than the component. A destination
+may not contain a space, `<Var name="…" />` contains two, and the result is that the link does not
+parse and the reader sees the literal `[text](…)` brackets:
+
+```mdx
+[Interface](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/precompiles/ArbSys.go)
+```
+
+The same form works in an `href`, `to` or `src` attribute and in an internal `/docs/…`
+destination. Everywhere else, prose and link text included, use the component: a placeholder in
+prose fails the build. `pnpm content:lint` (rule `var-in-link`) fails on a `<Var>` left in a
+destination.
+After you edit a value in `vars.json`, restart `pnpm dev` or a link keeps showing the old one.
+
+A link to a file in this repository takes the same treatment, with `docsRepositoryUrl` and
+`docsRepositoryBranch`: write
+`[Contribute]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/CONTRIBUTE.md)` rather than
+the URL. Those two values also build the edit link and the "Request an update" button, so one edit
+moves every link home together, and `pnpm check-links` never resolves an external URL that would
+catch a hardcoded one gone dead.
+
+To change a value or add a new one, edit `vars.json` and run `pnpm vars:check`. No other file
+changes. The check fails on a name that `vars.json` does not hold, which would otherwise render the
+literal string `undefined`.
+
+## Move or rename a page
+
+```bash
+pnpm move-doc <from> <to>
+```
+
+This rewrites every internal link that pointed at the old path (in whatever form it was written:
+absolute, relative, `.mdx`-suffixed, `<include>`), moves the file with `git mv`, updates the
+surrounding `meta.json`, and records the redirect in `redirects.config.ts` for you. **Never
+hand-edit between the `AUTO-GENERATED` markers in `redirects.config.ts`**, since `move-doc` owns that
+block. Use `--dry-run` first to preview the changes, and confirm afterward with `pnpm check-links`.
+
+`move-doc` touches no other redirect. If an older entry pointed at the old URL, it now chains, and
+`pnpm test` fails and names it. Retarget that entry by hand. The legacy `docs.arbitrum.io` entries
+after the markers are hand-maintained: add one by editing the file directly, in source order, and
+run `pnpm test`. Deleting a page is not a move, so write its redirect by hand in the same PR.
+
+## Gates to run before you push
+
+```bash
+pnpm types:check       # regenerates .source/, generates Next types, tsc --noEmit (the main gate)
+pnpm test              # tooling tests, including the sidebar tree and redirects
+pnpm vars:check        # every <Var name> and {var:name} resolves
+pnpm references:check  # every <Term id> resolves
+pnpm check-links       # broken internal doc links and MDX fragments
+pnpm content:lint      # MDX that compiles but renders wrong
+pnpm format            # prettier, in place (CI runs format:check)
+```
+
+These are the ones a content change usually trips. The `Gates` job in `.github/workflows/ci.yml`
+runs them all, plus `contracts:check`. A second job runs `pnpm build`, serves the result, and checks
+it over HTTP. Both block. There is no pre-commit hook, so nothing runs on `git commit`.
+
+If you touched MDX with components, imports or raw JSX, run `pnpm build` yourself before you push.
+It catches a page that compiles but throws while rendering, which `types:check` does not.
+
+A green PR does not by itself mean the content renders correctly: `types:check` proves the
+frontmatter schema, not the render, and it exits 0 on a page that serves a literal `:::` or the
+string `undefined`. **Always open a changed page on `http://localhost:3000` and confirm it looks
+right**, in light and dark mode if you touched styling.
+
+## Document type conventions
+
+Pick the type that matches what the reader is trying to do:
+
+| Content type    | Frontmatter value | Purpose                                                                            |
+| --------------- | ----------------- | ---------------------------------------------------------------------------------- |
+| How-to          | `how-to`          | Task-oriented procedural guidance                                                  |
+| Concept         | `concept`         | Explains what something is and how it works                                        |
+| Quickstart      | `quickstart`      | Fast onboarding with hands-on, step-by-step instructions for one specific audience |
+| Tutorial        | `tutorial`        | A comprehensive, guided learning experience                                        |
+| Reference       | `reference`       | Lists and tables of things, such as API endpoints, developer resources and flags   |
+| Troubleshooting | `troubleshooting` | Common problem/solution scenarios                                                  |
+| FAQ             | `faq`             | Frequently asked questions                                                         |
+
+These seven types are the whole enum, so the schema accepts nothing else. The shape guidance here
+isn't exhaustive: if you're unsure, look at an existing page of the type you think you're writing
+and match its shape.
+
+A gentle introduction is a `concept` page for readers who need foundational context before a task.
+Use it when several audiences need the same starting point, as in the Arbitrum introduction.
+
+## Style conventions
+
+These are the minimum guidelines for new content going forward; a lot of existing content
+predates them and gets brought up to spec incrementally, not all at once.
+
+1. **Sentence case.** Capitalize titles, headers, and sidebar labels like a sentence: "Deploy your
+   smart contract", not "Deploy Your Smart Contract".
+2. **Descriptive link text.** Never anchor a link to "here" or "this". Link text should describe
+   the destination, so a reader skimming links alone still understands the page. When linking to
+   another doc, use that doc's title verbatim.
+3. **Separate procedural from conceptual.** A how-to or quickstart should carry only the
+   conceptual detail the reader needs to finish the task at hand; put broader conceptual material
+   in a `concept` page and link to it "just in case."
+4. **Write for a specific reader.** Don't try to write for everyone. State your assumptions about
+   the reader's prior knowledge near the top of the page.
+5. **Lead with what matters.** Put the outcome or the value to the reader first, then build toward
+   task completion. Don't bury the point.
+6. **American English, plain language, short sentences.** Address the reader as "you"; contractions
+   are fine; avoid jargon your target reader won't recognize.
+7. **Never put a link in a heading.** Fumadocs wraps every heading in its own anchor, so a link
+   inside one renders an anchor inside an anchor and breaks React hydration on the page. Keep the
+   heading as plain text and put the link in the prose under it. `pnpm content:lint` rule
+   `link-in-heading` is a blocking gate on this, alongside `tr-in-table` (a `<tr>` outside a
+   `<thead>`/`<tbody>`) and `var-in-link` (a `<Var>` in a link destination, which leaves no link at
+   all). See [The content-lint rules](INTERNALS.md#the-content-lint-rules).
+
+The long version lives in [STYLE-GUIDE.md](STYLE-GUIDE.md), at the root of this repo: the
+plain-language rules in testable form, the words and phrases to replace or cut, the
+one-term-one-meaning table, the terminology table, and the glossary-linking convention. It is the
+house editorial standard, it is maintained here, and it is the file to read before a first draft
+and before a review.
+
+## Opening a pull request
+
+Fill in the [PR template](.github/pull_request_template.md). It asks for a description, the
+document type, and a checklist mirroring the gates above. Branch from `master` and open the PR
+against `master`. Every push runs CI; check both jobs before requesting review.
+
+## Third-party content
+
+Docs that help readers use another product, service, or protocol alongside Arbitrum (rather than
+docs about Arbitrum itself) are third-party content. We generally don't accept promotional
+material. A page needs to give the reader actionable guidance, not just describe a product. If
+you're not sure whether your contribution counts as third-party content, ask before you write a
+full draft.

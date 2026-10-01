@@ -1,0 +1,15 @@
+{
+  "title": "The BoLD dispute protocol",
+  "root": true,
+  "pages": [
+    "gentle-introduction",
+    "bold-faq",
+    "bold-technical-deep-dive",
+    "how-bold-bisection-works",
+    "bold-economics-of-disputes",
+    "external:[Deploy a validator on testnet](https://github.com/offchainlabs/bold-validator-starter-kit)",
+    "external:[BoLD Whitepaper](https://arxiv.org/abs/2404.10491)",
+    "external:[Specification on GitHub](https://github.com/OffchainLabs/bold)",
+    "..."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "title": "Applications",
+  "pages": [
+    "erc20",
+    "erc721",
+    "vending_machine",
+    "multi_call",
+    "..."
+  ]
+}

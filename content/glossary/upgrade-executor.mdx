@@ -1,0 +1,6 @@
+---
+id: upgrade-executor
+title: 'Upgrade Executor'
+---
+
+The single privileged contract—deployed once per [Arbitrum chain](/docs/glossary#arbitrum-chain) by the rollup creator—that authorizes protocol upgrades and admin actions. The Upgrade Executor owns both the chain's rollup contracts and its `ProxyAdmin`, so every privileged call to the core contracts is routed through it. Its admin role is typically held by the [chain owner](/docs/glossary#chain-owner).

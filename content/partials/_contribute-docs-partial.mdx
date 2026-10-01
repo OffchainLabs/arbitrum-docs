@@ -1,0 +1,192 @@
+---
+partial_type: content
+title: 'Documentation Contribution Guide'
+description: 'Guidelines and instructions for contributing to Arbitrum documentation'
+author: anegg0
+last_reviewed: 2025-01-15
+---
+
+Thank you for considering to contribute to the Arbitrum documentation! We're excited to have you on board.
+
+The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
+
+This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax and Github is expected.
+
+### Add a new core document
+
+If a document isn't in a `Third-party content` sidebar node, it's a **core document**. To contribute a new core doc:
+
+1.  Begin by creating a branch (internal) or fork (external) of the [Arbitrum docs repo]({var:docsRepositoryUrl}).
+2.  Issue a `Draft` pull request into `main`. A pull request from a branch in that repository gets a Vercel preview deployment of your changes, and the preview updates as you push commits. A pull request from a fork gets one once a maintainer authorizes the deployment.
+3.  Include answers to the following questions in your PR description:
+    - Audience: Who am I writing for?
+    - Problem: What specific problem are they trying to solve?
+    - Discovery: How are they looking for a solution to this problem? What search terms are they using?
+    - Document type: Which document type is most suitable?
+    - Policy acknowledgment (Third-party docs only): Do you agree to the third-party content policy outlined within "Contribute docs"?
+4.  As you craft your contribution, refer to the [document types](#document-type-conventions), [Style guidance](#style-conventions), and other conventions below.
+5.  Mark your PR as `Open` when it's ready for review.
+
+### Add a new third-party document
+
+**Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
+
+See [Contribute third-party docs](/docs/third-party-docs/contribute) for detailed instructions.
+
+### Request an update
+
+If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
+
+### Document type conventions
+
+Every document should be a specific _type_ of document, set in its frontmatter as `content_type`. Each type has its own purpose:
+
+| Document type   | Frontmatter value | Purpose                                                                             |
+| --------------- | ----------------- | ----------------------------------------------------------------------------------- |
+| How-to          | `how-to`          | Provide task-oriented procedural guidance                                           |
+| Concept         | `concept`         | Explain what things are and how they work                                           |
+| Quickstart      | `quickstart`      | Onboard a specific reader audience with step-by-step "learn by doing" instructions  |
+| Tutorial        | `tutorial`        | Walk a specific reader audience through a comprehensive, guided learning experience |
+| Reference       | `reference`       | Lists and tables of things, such as API endpoints and developer resources           |
+| Troubleshooting | `troubleshooting` | List common troubleshooting scenarios and solutions                                 |
+| FAQ             | `faq`             | Address frequently asked questions                                                  |
+
+`content_type` must be exactly one of the seven frontmatter values above, spelled in lowercase, or the build fails. See [Document type conventions]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/CONTRIBUTE.md#document-type-conventions) in CONTRIBUTE.md for more on what each type owes the reader.
+
+<Callout type="info" title="About Promotional Content">
+
+While it is acceptable to include conceptual and how-to content that links to products, services, and protocols in the third party section, we do not accept promotional content in our core docs.
+Feature pieces that are primarily promotional and do not provide actionable guidance to readers are not accepted as third-party docs, either.
+
+</Callout>
+### Style conventions
+
+The following style guidelines provide a number of loose recommendations that help us deliver **a consistent content experience** across our docs:
+
+#### 1. Casing
+
+Sentence-case "content labels": document titles, sidebar titles, menu items, section headers, etc.
+
+#### 2. Linking
+
+Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, try to link to the document's title verbatim.
+
+#### 3. Titling
+
+Titles should balance brevity with precision—_Node running overview_ is preferred to _Overview_. This helps with SEO and reader UX.
+
+#### 4. Separate procedural from conceptual (most of the time)
+
+Within procedural docs like how-tos and quickstarts, avoid including too much conceptual content. Provide only the conceptual information that the target reader _needs_ in order to complete the task at hand. Otherwise, organize conceptual information within conceptual docs, and link to them "just in case" from other docs.
+
+#### 5. Voice
+
+- Address the reader as "you".
+- Write like you'd speak to a really smart friend who's in a rush.
+- Opt for short, clear sentences that use translation-friendly, plain language.
+- Use contractions wherever it feels natural—this can help convey a friendly and conversational tone.
+
+#### 6. Formality
+
+- Don't worry too much about formality. The most valuable writing is writing that provides value to readers, and readers generally want to "flow" through guidance.
+- Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
+
+#### 7. Targeting
+
+- Don't try to write for everyone; write for a _specific reader persona_ (also referred to as "audience" in this document) who has a _specific need_.
+- Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit in the beginning of your document.
+
+#### 8. Flow
+
+- Set expectations: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
+- Value up front: Lead with what matters most to the reader persona you're targeting. Then, progressively build a bridge that carries them towards task completion as efficiently as possible.
+
+#### 9. Cross-linking
+
+We want to maintain both **high discoverability** and **high relevance**. As a general rule of thumb, links to other docs should be "very likely to be useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
+
+#### 10. Things to avoid
+
+- Symbols where words will do: Minimize usage of `&` and `/`—spell out words like "_and_" and "_or_".
+- Jargon: Using precise technical terminology is ok, as long as your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
+
+Don't stress too much about checking off all of these boxes; we periodically review and edit our most heavily-trafficked docs, bringing them up to spec with the latest style guidelines.
+
+Some important disclaimers:
+
+- This isn't an exhaustive list. These are just the min-bar guidelines that will be applied to all new content moving forward.
+- Many of our docs don't yet follow this guidance. Our team is working on it! If you notice an obvious content bug, feel free to submit an [issue]({var:docsRepositoryUrl}/issues) or [PR]({var:docsRepositoryUrl}/pulls).
+
+### Banner conventions
+
+Use banners to set expectations for your readers or emphasize an important callout, but use them conservatively, since they interrupt the flow of the document. This site renders a banner with the `<Callout>` component; the same callout-syntax rule appears in [STYLE-GUIDE.md]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/STYLE-GUIDE.md#what-is-not-here). Docusaurus `:::` directives do not render here and fail the `content:lint` `docusaurus-directive` rule, so never write one. The `type` prop is one of `info` (the default), `idea`, `warn`, `error`, or `success`; pick the type that matches the message, not the page's subject. `title` is optional; without it the callout shows no heading, and its icon and color carry the type.
+
+**Before writing a new banner, look through [`content/partials/`]({var:docsRepositoryUrl}/tree/{var:docsRepositoryBranch}/content/partials) for one that already says what you need**, and reuse it instead of duplicating the prose. A partial is pulled into a page with an include directive:
+
+```mdx
+<include cwd>content/partials/launch-arbitrum-chain/_raas-providers-notice.mdx</include>
+```
+
+The `cwd` flag anchors the path at the repo root, so moving your page later never breaks the include. Inside another partial, drop the flag and write the path relative to the file you are editing. CONTRIBUTE.md's [partial-reuse guide]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/CONTRIBUTE.md#reuse-a-partial-before-you-write-new-prose) covers both forms and how to add a partial of your own.
+
+Two banners come up often enough to be worth naming directly.
+
+#### Under construction banner
+
+Use `type="warn"` when a page's steps are incomplete or likely to change soon, so readers know to expect gaps.
+
+Example:
+
+<Callout type="warn" title="UNDER CONSTRUCTION">
+
+The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an update** at the top of this document if you have any feedback along the way.
+
+</Callout>
+
+Usage:
+
+```mdx
+<Callout type="warn" title="UNDER CONSTRUCTION">
+
+The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the **Request an update** at the top of this document if you have any feedback along the way.
+
+</Callout>
+```
+
+#### Community member contribution banner
+
+Use `type="info"` at the top of a third-party or community-submitted document to credit the author.
+
+Example:
+
+<Callout type="info" title="Community member contribution">
+
+Shoutout to [@handle](https://github.com/handle) for contributing the following [third-party document](/docs/third-party-docs/contribute)!
+
+</Callout>
+
+Usage:
+
+```mdx
+<Callout type="info" title="Community member contribution">
+
+Shoutout to [@handle](https://github.com/handle) for contributing the following [third-party document](/docs/third-party-docs/contribute)!
+
+</Callout>
+```
+
+### Frequently asked questions
+
+#### Can I point to my product from core docs? For example—if my product hosts a public RPC endpoint, can I add it to your RPC endpoints and providers page?
+
+These types of contributions, such as adding an endpoint to the [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers) page, are generally **not merged** unless they're submitted by employees of Offchain Labs.
+
+Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable scrutiny.
+
+#### How long does it take for my third-party content contribution to be reviewed?
+
+Our team is continuously balancing competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. They're processed in the order in which they're received, generally within a week or two.
+
+#### Is there any way to expedite third-party content contribution reviews?
+
+The most effective way to expedite processing is to ensure that your PR incorporates the conventions outlined in this document. Please don't ask for status updates—if you've submitted a PR, it's on our radar!

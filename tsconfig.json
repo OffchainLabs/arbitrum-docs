@@ -1,31 +1,45 @@
 {
-  // This file is not used in compilation. It is here just for a nice editor experience.
-  "extends": "@tsconfig/docusaurus/tsconfig.json",
   "compilerOptions": {
-    // Silence TS5101 for the deprecated `baseUrl` (still used by the @/ and @site/ path aliases below).
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
-    "moduleResolution": "bundler",
-    "allowJs": false,
-    "esModuleInterop": true,
-    "jsx": "react",
-    "lib": ["ESNext", "DOM"],
-    "noEmit": true,
-    "target": "ES2020",
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
-    "types": ["node", "@docusaurus/module-type-aliases"],
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // The three options below are what let Node run a `.ts` file in `scripts/` or `lib/` directly,
+    // with its own type stripping (Node 22.18+) and no build step. Node strips types and compiles
+    // nothing else, so `erasableSyntaxOnly` rejects enums, namespaces and parameter properties
+    // here rather than at runtime; `verbatimModuleSyntax` makes a type-only import say `import
+    // type`, because Node would otherwise keep the import and throw on a missing runtime export;
+    // and `allowImportingTsExtensions` permits the `./x.ts` specifiers Node requires (legal only
+    // with `noEmit`, which is set). Turbopack resolves the same specifiers in app code.
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "jsx": "react-jsx",
+    "incremental": true,
     "paths": {
       "@/*": ["./*"],
-      "@site/*": ["./*"]
-    }
+      "collections/*": ["./.source/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "allowJs": true
   },
-  "exclude": [
-    "submodules",
-    "stylus-by-example",
-    "node_modules",
-    "build",
-    ".docusaurus",
-    "*.js",
-    "middleware.ts"
-  ]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
 }

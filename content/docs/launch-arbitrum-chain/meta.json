@@ -1,0 +1,18 @@
+{
+  "title": "Launch arbitrum chain",
+  "icon": "Network",
+  "root": true,
+  "description": "Configure, deploy, and operate your own Arbitrum chain.",
+  "pages": [
+    "quickstart",
+    "chain-config",
+    "deploy",
+    "extend-the-protocol",
+    "integrations",
+    "migrate",
+    "operate",
+    "overview",
+    "run-a-node",
+    "..."
+  ]
+}

@@ -1,322 +1,277 @@
 /**
- * Generates the Nitro CLI flags reference page from structured flag data.
+ * generate-cli-reference: regenerate content/docs/run-a-node/nitro/cli-flags-reference.mdx.
  *
  * Usage:
- *   tsx scripts/generate-cli-reference.ts
- *   tsx scripts/generate-cli-reference.ts --check
- *   tsx scripts/generate-cli-reference.ts --output path/to/output.mdx
- *   tsx scripts/generate-cli-reference.ts --nitro-path ../nitro
+ *   pnpm cli:generate                        # clone the pinned Nitro tag and write the page
+ *   pnpm cli:generate --nitro-path ../nitro  # read an existing Nitro clone instead
+ *   pnpm cli:generate --verbose              # also name every flag the exclusion rules dropped
+ *   pnpm cli:check                           # exit 1 with a diff summary when the page is stale
+ *
+ * `--nitro-path` also reads from `NITRO_REPO_PATH`, so a shell that always has a Nitro clone
+ * around can export it once; the flag wins when both are set.
+ *
+ * The flags come from the Nitro source at the tag pinned as `nitroVersionTag` in
+ * content/vars.json, read straight from the Go that registers them. Two alternatives were
+ * rejected:
+ *
+ * - Running `nitro --help`, which is what the flag list really is, needs a Go toolchain plus the
+ *   Rust arbitrator artifacts. That is a heavy CI job for a documentation refresh, and it is the
+ *   reason the workflow step added for this generator needs no toolchain at all.
+ * - Committing a JSON dump of the flags, which is what arbitrum-docs does. Nothing regenerates
+ *   that file, so it is only ever as fresh as the last person who remembered.
+ *
+ * `--nitro-path` still reads the tree at the pinned tag (via `git archive`), not the checkout's
+ * working state, so a local run and a CI run see the same source.
+ *
+ * Ported from arbitrum-docs `scripts/generate-cli-reference.ts`.
  */
+import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import type { Options as PrettierOptions } from 'prettier';
 
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import { execSync } from 'node:child_process';
+import {
+  customFlagTypes,
+  defaultNamespaceLink,
+  defaultOverrides,
+  entryPoint,
+  exclusions,
+  introLinks,
+  namespaceLinks,
+} from './data/nitro-cli-reference.data.ts';
+import type { ExclusionRule } from './data/nitro-cli-reference.data.ts';
+import { renderGeneratedRegion, splicePage } from './lib/cli-reference-page.ts';
+import {
+  StaleFileError,
+  type WriteOrCheckOptions,
+  isCheckMode,
+  runScript,
+  writeOrCheck,
+} from './lib/generated-partial.ts';
+import { indexGoTree } from './lib/go-source.ts';
+import { diffSummary } from './lib/line-diff.ts';
+import { type CliFlag, extractFlags } from './lib/nitro-cli-flags.ts';
 
-interface CliFlag {
-  flag: string;
-  type: string;
-  default: string;
-  description: string;
-}
+const OUTPUT_PATH = path.join('content', 'docs', 'run-a-node', 'nitro', 'cli-flags-reference.mdx');
+const VARS_PATH = path.join('content', 'vars.json');
+const NITRO_URL = 'https://github.com/OffchainLabs/nitro.git';
 
-interface NamespaceGroup {
-  namespace: string;
-  flags: CliFlag[];
-}
+/** Go module paths of the two trees the flags live in. */
+const NITRO_MODULE = 'github.com/offchainlabs/nitro';
+const GETH_MODULE = 'github.com/ethereum/go-ethereum';
 
-const DEFAULT_OUTPUT = 'docs/run-arbitrum-node/nitro/cli-flags-reference.mdx';
-const DATA_FILE = 'scripts/data/nitro-cli-flags.json';
-
-/**
- * Map top-level namespaces to related curated guide pages.
- * Namespaces not listed here get the generic configuration-system link.
- */
-const NAMESPACE_LINKS: Record<string, { label: string; href: string }> = {
-  'execution': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-  },
-  'node': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-  },
-  'validation': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-  },
-  'init': {
-    label: 'Docker and CLI binaries',
-    href: '/run-arbitrum-node/nitro/docker-and-cli-binaries',
-  },
-  'persistent': {
-    label: 'Docker and CLI binaries',
-    href: '/run-arbitrum-node/nitro/docker-and-cli-binaries',
-  },
-  'parent-chain': {
-    label: 'Configuration system',
-    href: '/run-arbitrum-node/nitro/configuration-system',
-  },
-  'chain': {
-    label: 'Configuration system',
-    href: '/run-arbitrum-node/nitro/configuration-system',
-  },
-  'conf': {
-    label: 'Configuration system',
-    href: '/run-arbitrum-node/nitro/configuration-system',
-  },
-  'http': {
-    label: 'Configuration system',
-    href: '/run-arbitrum-node/nitro/configuration-system',
-  },
-  'ws': {
-    label: 'Configuration system',
-    href: '/run-arbitrum-node/nitro/configuration-system',
-  },
-  'auth': {
-    label: 'Configuration system',
-    href: '/run-arbitrum-node/nitro/configuration-system',
-  },
-  'metrics': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-  },
-  'metrics-server': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-  },
-  'pprof': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-  },
-  'pprof-cfg': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-  },
-  'file-logging': {
-    label: 'Node tuning and monitoring',
-    href: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-  },
+/** See MDX_FORMAT in generate-precompile-tables.ts: the generator owns this file's shape. */
+const MDX_FORMAT: PrettierOptions = {
+  parser: 'mdx',
+  printWidth: 9999,
+  proseWrap: 'preserve',
+  plugins: [],
 };
 
-const DEFAULT_LINK = {
-  label: 'Configuration system',
-  href: '/run-arbitrum-node/nitro/configuration-system',
-};
-
-function parseArgs(): { check: boolean; output: string; nitroPath: string } {
-  const args = process.argv.slice(2);
-  let check = false;
-  let output = DEFAULT_OUTPUT;
-  let nitroPath = process.env.NITRO_REPO_PATH ?? '../nitro';
-
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--check') {
-      check = true;
-    } else if (args[i] === '--output' && args[i + 1]) {
-      output = args[++i];
-    } else if (args[i] === '--nitro-path' && args[i + 1]) {
-      nitroPath = args[++i];
-    }
-  }
-
-  return { check, output, nitroPath };
+interface Args {
+  check: boolean;
+  nitroPath: string | null;
+  verbose: boolean;
 }
 
-function loadFlags(): CliFlag[] {
-  const dataPath = path.resolve(process.cwd(), DATA_FILE);
-  if (!fs.existsSync(dataPath)) {
-    throw new Error(`Flag data file not found: ${dataPath}`);
+function parseArgs(argv: string[]): Args {
+  const args: Args = {
+    check: isCheckMode(),
+    nitroPath: process.env.NITRO_REPO_PATH ?? null,
+    verbose: false,
+  };
+  for (let i = 0; i < argv.length; i++) {
+    const value = argv[i + 1];
+    if (argv[i] === '--nitro-path' && value) {
+      args.nitroPath = value;
+      i++;
+    } else if (argv[i] === '--verbose') args.verbose = true;
   }
-  const raw = fs.readFileSync(dataPath, 'utf8');
-  return JSON.parse(raw) as CliFlag[];
+  return args;
 }
 
-interface ExclusionRule {
-  reason: string;
-  matches: (flag: CliFlag) => boolean;
+function git(args: string[], cwd?: string): string {
+  return execFileSync('git', args, { cwd, encoding: 'utf-8', maxBuffer: 64 * 1024 * 1024 });
+}
+
+/** Extract `ref`'s tree from `repo` into `dest` without touching the repo's working state. */
+function extractTree(repo: string, ref: string, dest: string): void {
+  fs.mkdirSync(dest, { recursive: true });
+  const archive = execFileSync('git', ['archive', ref], {
+    cwd: repo,
+    maxBuffer: 512 * 1024 * 1024,
+  });
+  execFileSync('tar', ['-x', '-C', dest], { input: archive, maxBuffer: 512 * 1024 * 1024 });
 }
 
 /**
- * Flags omitted from the generated reference. Each rule documents why its
- * matched flags are excluded. Add an entry here to exclude more flags.
+ * Put the Nitro tree at `tag`, plus its pinned go-ethereum submodule, under `workDir`.
+ *
+ * go-ethereum is not optional: Nitro registers the whole `execution.rpc.*` namespace by calling
+ * into go-ethereum's `arbitrum` package, so without the submodule those flags vanish from the
+ * page with no error.
  */
-const EXCLUSIONS: ExclusionRule[] = [
-  {
-    reason:
-      'dangerous: flags under a `dangerous` namespace segment (superset of "DANGEROUS!" descriptions)',
-    matches: (flag) => /(^|\.)dangerous(\.|$)/.test(flag.flag),
-  },
-  {
-    reason: 'experimental: marked experimental by flag name or description',
-    matches: (flag) => /experimental/i.test(flag.flag) || /experimental/i.test(flag.description),
-  },
-  {
-    reason: 'blocks-reexecutor: block re-execution tooling namespace',
-    matches: (flag) => /(^|\.)blocks-reexecutor(\.|$)/.test(flag.flag),
-  },
-  {
-    reason: 'conf.reload-interval: periodic config reload knob',
-    matches: (flag) => flag.flag === 'conf.reload-interval',
-  },
-];
+function materializeNitro({
+  tag,
+  nitroPath,
+  workDir,
+}: {
+  tag: string;
+  nitroPath: string | null;
+  workDir: string;
+}): string {
+  const treeDir = path.join(workDir, 'nitro');
 
-function isExcluded(flag: CliFlag): boolean {
-  return EXCLUSIONS.some((rule) => rule.matches(flag));
-}
-
-function groupByNamespace(flags: CliFlag[]): NamespaceGroup[] {
-  const groups = new Map<string, CliFlag[]>();
-
-  for (const flag of flags) {
-    const dotIdx = flag.flag.indexOf('.');
-    const namespace = dotIdx === -1 ? flag.flag : flag.flag.slice(0, dotIdx);
-
-    if (!groups.has(namespace)) {
-      groups.set(namespace, []);
-    }
-    groups.get(namespace)!.push(flag);
-  }
-
-  return Array.from(groups.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([namespace, nsFlags]) => ({ namespace, flags: nsFlags }));
-}
-
-function escapeMarkdownTable(text: string): string {
-  return text
-    .replace(/\\/g, '\\\\')
-    .replace(/\|/g, '\\|')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\{/g, '\\{')
-    .replace(/\}/g, '\\}');
-}
-
-function formatDefault(value: string): string {
-  if (value === '') return '-';
-  return `\`${escapeMarkdownTable(value)}\``;
-}
-
-function generateMdx(groups: NamespaceGroup[]): string {
-  const totalFlags = groups.reduce((sum, g) => sum + g.flags.length, 0);
-  const lines: string[] = [];
-
-  lines.push(`---
-title: 'CLI flags reference'
-sidebar_label: 'CLI flags reference'
-description: 'Complete reference of all Nitro node command-line flags with types, defaults, and descriptions'
-user_story: 'As a node operator, I want a single page where I can look up any Nitro CLI flag'
-content_type: 'reference'
-author: 'gzeoneth'
-sme: 'gzeoneth'
-# Content gap tracking:
-# - TW-693: Nitro CLI reference (primary deliverable)
----
-
-import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
-
-{/* This page is auto-generated by scripts/generate-cli-reference.ts. Do not edit manually. */}
-
-<VanillaAdmonition type="info" title="Auto-generated reference">
-
-This page lists every CLI flag accepted by the Nitro node binary. For explanations, examples, and recommended configurations, see the curated guides:
-
-- [Configuration system](/run-arbitrum-node/nitro/configuration-system)
-- [Docker and CLI binaries](/run-arbitrum-node/nitro/docker-and-cli-binaries)
-- [Node tuning and monitoring](/run-arbitrum-node/nitro/node-tuning-and-monitoring)
-- [DA tools reference](/run-arbitrum-node/nitro/da-tools-reference)
-
-**Total flags:** ${totalFlags} across ${groups.length} namespaces.
-
-</VanillaAdmonition>
-
-Pass flags on the command line with \`--\` prefix:
-
-\`\`\`shell
-nitro --http.addr=0.0.0.0 --http.port=8547 --node.feed.input.url=wss://arb1.arbitrum.io/feed
-\`\`\`
-
-Or set them in a JSON configuration file:
-
-\`\`\`shell
-nitro --conf.file=/path/to/config.json
-\`\`\`
-`);
-
-  for (const group of groups) {
-    const link = NAMESPACE_LINKS[group.namespace] ?? DEFAULT_LINK;
-
-    lines.push(`## ${group.namespace}
-`);
-    lines.push(`Related guide: [${link.label}](${link.href})`);
-    lines.push('');
-    lines.push('<details>');
-    lines.push(`<summary>${group.namespace} flags (${group.flags.length})</summary>`);
-    lines.push('');
-    lines.push('| Flag | Type | Default | Description |');
-    lines.push('|------|------|---------|-------------|');
-
-    for (const flag of group.flags) {
-      const escapedDesc = escapeMarkdownTable(flag.description);
-      const escapedFlag = escapeMarkdownTable(flag.flag);
-      const defaultStr = formatDefault(flag.default);
-      lines.push(`| \`${escapedFlag}\` | ${flag.type} | ${defaultStr} | ${escapedDesc} |`);
-    }
-
-    lines.push('');
-    lines.push('</details>');
-    lines.push('');
-  }
-
-  return lines.join('\n');
-}
-
-function main(): void {
-  const { check, output } = parseArgs();
-
-  const flags = loadFlags().filter((flag) => !isExcluded(flag));
-  const groups = groupByNamespace(flags);
-  const mdx = generateMdx(groups);
-
-  const outputPath = path.resolve(process.cwd(), output);
-
-  if (check) {
-    if (!fs.existsSync(outputPath)) {
-      console.error(`Check failed: output file does not exist at ${outputPath}`);
-      process.exit(1);
-    }
-    const existing = fs.readFileSync(outputPath, 'utf8');
-
-    // Write to a temp file and run Prettier so the comparison accounts
-    // for table padding, asterisk escaping, and other formatting changes
-    // that Prettier applies to markdown tables.
-    const tmpPath = path.join(path.dirname(outputPath), '.cli-flags-check-tmp.mdx');
+  if (nitroPath) {
+    const repo = path.resolve(nitroPath);
     try {
-      fs.writeFileSync(tmpPath, mdx);
-      execSync(`npx prettier --write --config ./.prettierrc.js "${tmpPath}"`, {
-        stdio: 'pipe',
-      });
-      const formatted = fs.readFileSync(tmpPath, 'utf8');
-      if (existing !== formatted) {
-        console.error('Check failed: generated output differs from committed file.');
-        console.error('Run "yarn generate-cli-reference" to update.');
-        process.exit(1);
-      }
-    } finally {
-      if (fs.existsSync(tmpPath)) fs.unlinkSync(tmpPath);
+      git(['rev-parse', '--verify', `${tag}^{commit}`], repo);
+    } catch {
+      throw new Error(
+        `${repo} has no tag ${tag}. Run \`git -C ${repo} fetch --tags\`, or drop ` +
+          `--nitro-path to clone the tag instead.`,
+      );
     }
-    console.log('Check passed: output is up to date.');
-    return;
+    extractTree(repo, tag, treeDir);
+
+    const gitlink = git(['ls-tree', tag, 'go-ethereum'], repo).trim();
+    const sha = /^\d+\s+commit\s+([0-9a-f]{40})/.exec(gitlink)?.[1];
+    if (!sha) throw new Error(`cannot read the go-ethereum submodule pin of ${tag} in ${repo}`);
+    const gethRepo = path.join(repo, 'go-ethereum');
+    try {
+      git(['cat-file', '-e', `${sha}^{commit}`], gethRepo);
+    } catch {
+      throw new Error(
+        `${gethRepo} does not have commit ${sha}, the go-ethereum pin of ${tag}. Run ` +
+          `\`git -C ${gethRepo} fetch\`, or drop --nitro-path to clone the tag instead.`,
+      );
+    }
+    extractTree(gethRepo, sha, path.join(treeDir, 'go-ethereum'));
+  } else {
+    console.log(`cloning ${NITRO_URL} at ${tag} (shallow)`);
+    // Cloning a tag lands on a detached HEAD, and git's advice about it is several lines of
+    // workflow guidance aimed at someone about to commit. Nothing here commits.
+    const quiet = ['-c', 'advice.detachedHead=false'];
+    git([...quiet, 'clone', '--depth', '1', '--branch', tag, '--quiet', NITRO_URL, treeDir]);
+    git(['submodule', 'update', '--init', '--depth', '1', '--quiet', 'go-ethereum'], treeDir);
   }
 
-  const dir = path.dirname(outputPath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+  if (!fs.existsSync(path.join(treeDir, 'go-ethereum', 'arbitrum'))) {
+    throw new Error(
+      `the go-ethereum submodule is missing from the extracted ${tag} tree; the ` +
+        `execution.rpc.* flags are registered there and would be silently dropped`,
+    );
   }
-
-  fs.writeFileSync(outputPath, mdx);
-  console.log(`Generated ${outputPath}`);
-  console.log(`  ${flags.length} flags in ${groups.length} namespaces`);
+  return treeDir;
 }
 
-main();
+/** The pinned Nitro tag, read off content/vars.json. */
+function readNitroVersionTag(): string {
+  const vars: unknown = JSON.parse(fs.readFileSync(VARS_PATH, 'utf-8'));
+  const tag =
+    typeof vars === 'object' && vars !== null && 'nitroVersionTag' in vars
+      ? vars.nitroVersionTag
+      : undefined;
+  if (typeof tag !== 'string') {
+    throw new Error(`${VARS_PATH} has no string nitroVersionTag`);
+  }
+  return tag;
+}
+
+async function main(): Promise<void> {
+  const { check, nitroPath, verbose } = parseArgs(process.argv.slice(2));
+  const tag = readNitroVersionTag();
+
+  const workDir = fs.mkdtempSync(path.join(os.tmpdir(), 'nitro-cli-'));
+  let content: string;
+  try {
+    const treeDir = materializeNitro({ tag, nitroPath, workDir });
+
+    const { dirs, fileImports } = indexGoTree([
+      { modulePath: NITRO_MODULE, dir: '', absDir: treeDir },
+      {
+        modulePath: GETH_MODULE,
+        dir: 'go-ethereum',
+        absDir: path.join(treeDir, 'go-ethereum'),
+      },
+    ]);
+
+    const { flags, problems } = extractFlags({
+      dirs,
+      fileImports,
+      entryPoint,
+      customTypes: customFlagTypes,
+      defaultOverrides,
+    });
+    if (problems.length > 0) {
+      throw new Error(
+        `generate-cli-reference: ${problems.length} flag(s) could not be read from Nitro ${tag}.\n` +
+          problems.map((p) => `  - ${p}`).join('\n'),
+      );
+    }
+    if (flags.length === 0) {
+      throw new Error(
+        `generate-cli-reference: no flags found in Nitro ${tag}; the walk entry ` +
+          `point ${entryPoint.dir}.${entryPoint.func} has probably moved`,
+      );
+    }
+
+    // Group the dropped flags by the first rule that matched, rather than filtering in one pass,
+    // so the log can say *why* each one left. One rule matches on the flag's description
+    // (`/experimental/i`), so a Nitro release that reworks a docstring can drop a flag off the
+    // page with nothing in the diff to explain it, and a missing flag reads to a node operator as
+    // "Nitro does not have this". First-match grouping keeps the per-rule counts summing to the
+    // total, which a "matches any rule" grouping would not.
+    const excludedBy = new Map<ExclusionRule, string[]>(exclusions.map((rule) => [rule, []]));
+    const published: CliFlag[] = [];
+    for (const flag of flags) {
+      const rule = exclusions.find((candidate) => candidate.matches(flag));
+      if (rule) excludedBy.get(rule)?.push(flag.flag);
+      else published.push(flag);
+    }
+
+    const generated = renderGeneratedRegion(published, {
+      introLinks,
+      namespaceLinks,
+      defaultNamespaceLink,
+      nitroVersionTag: tag,
+    });
+    const existing = fs.existsSync(OUTPUT_PATH) ? fs.readFileSync(OUTPUT_PATH, 'utf-8') : '';
+    content = splicePage(existing, generated);
+
+    console.log(
+      `nitro ${tag}: ${flags.length} flag(s) read, ` +
+        `${flags.length - published.length} excluded, ${published.length} published.`,
+    );
+    for (const rule of exclusions) {
+      const names = excludedBy.get(rule) ?? [];
+      console.log(`  ${String(names.length).padStart(3)} excluded -- ${rule.reason}`);
+      if (verbose) for (const name of names) console.log(`        ${name}`);
+    }
+    if (!verbose && flags.length > published.length) {
+      console.log('  (re-run with --verbose to name them)');
+    }
+  } finally {
+    fs.rmSync(workDir, { recursive: true, force: true });
+  }
+
+  try {
+    await writeOrCheck(OUTPUT_PATH, content, { check, overrides: MDX_FORMAT });
+  } catch (error) {
+    // "The page is stale" does not say whether a flag or a default moved or only whitespace did,
+    // which is what a reviewer of the regenerated file needs to know. `writeOrCheck`
+    // hands back the text it formatted, so this prints the diff without formatting it again.
+    // `formatted` is optional on the error's type but always set in check mode, the only mode
+    // that throws it.
+    if (error instanceof StaleFileError && error.formatted !== undefined) {
+      const current = fs.existsSync(OUTPUT_PATH) ? fs.readFileSync(OUTPUT_PATH, 'utf-8') : '';
+      console.error(diffSummary(current, error.formatted));
+    }
+    throw error;
+  }
+
+  console.log(check ? 'cli flags reference: up to date.' : 'cli flags reference: written.');
+}
+
+runScript(main);

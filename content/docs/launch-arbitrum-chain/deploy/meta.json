@@ -1,0 +1,12 @@
+{
+  "title": "Deploy an arbitrum chain",
+  "pages": [
+    "canonical-factory-contracts",
+    "configure-node",
+    "custom-genesis-state",
+    "deploy-chain",
+    "token-bridge-troubleshooting",
+    "token-bridge",
+    "..."
+  ]
+}

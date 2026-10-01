@@ -1,0 +1,14 @@
+{
+  "title": "Guides",
+  "pages": [
+    "using-constructors",
+    "trait-based-composition",
+    "importing-interfaces",
+    "exporting-abi",
+    "optimizing-binaries",
+    "caching-contracts",
+    "verifying-contracts-arbiscan",
+    "deploying-non-rust-wasm-contracts",
+    "..."
+  ]
+}

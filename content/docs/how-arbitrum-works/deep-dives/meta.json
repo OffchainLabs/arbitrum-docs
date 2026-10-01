@@ -1,0 +1,19 @@
+{
+  "title": "Deep dives",
+  "root": true,
+  "pages": [
+    "anytrust-protocol",
+    "arbos",
+    "assertions",
+    "finality",
+    "batchposter",
+    "l1-to-l2-messaging",
+    "l2-to-l1-messaging",
+    "transaction-lifecycle",
+    "sequencer-transaction-flow",
+    "token-bridging",
+    "gas-and-fees",
+    "stf",
+    "..."
+  ]
+}
