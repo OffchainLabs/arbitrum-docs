@@ -13,10 +13,10 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { VAR_PLACEHOLDER } from '../lib/var-links.ts';
 import { checkAnnouncementLink } from './lib/announcement-link.ts';
 import { buildIndex } from './lib/doc-links.ts';
 import { toPosix, walk } from './lib/partials.ts';
+import { checkVarReferences } from './lib/vars-check.ts';
 
 const repoRoot = process.cwd();
 const vars: Record<string, unknown> = JSON.parse(
@@ -26,20 +26,7 @@ const errors: string[] = [];
 
 for (const abs of walk(path.join(repoRoot, 'content'), (p) => /\.mdx?$/i.test(p))) {
   const rel = toPosix(path.relative(repoRoot, abs));
-  for (const [i, line] of readFileSync(abs, 'utf8').split('\n').entries()) {
-    const names: (string | undefined)[] = [
-      ...[...line.matchAll(/<Var\b([^>]*)>/g)].map(
-        (m) => m[1].match(/\bname\s*=\s*["']([^"']+)["']/)?.[1],
-      ),
-      ...[...line.matchAll(VAR_PLACEHOLDER)].map((m) => m[1]),
-    ];
-    for (const name of names) {
-      if (name === undefined) errors.push(`${rel}:${i + 1}  <Var> without a static name`);
-      else if (!Object.hasOwn(vars, name)) {
-        errors.push(`${rel}:${i + 1}  "${name}" is not a key in content/vars.json`);
-      }
-    }
-  }
+  errors.push(...checkVarReferences(rel, readFileSync(abs, 'utf8'), vars));
 }
 
 if ('announcementId' in vars) {
