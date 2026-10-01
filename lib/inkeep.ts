@@ -1,5 +1,3 @@
-'use client';
-
 import type {
   InkeepAIChatSettings,
   InkeepBaseSettings,
@@ -61,11 +59,16 @@ function handleInkeepEvent(event: InkeepCallbackEvent, posthog: PostHog): void {
 
 const baseSettings = {
   apiKey: process.env.NEXT_PUBLIC_INKEEP_API_KEY,
-  primaryBrandColor: '#213147',
+  // The brand navy, `--color-arbitrum-navy` in app/global.css. Inkeep takes a literal, not a token.
+  primaryBrandColor: '#05163d',
   organizationDisplayName: 'Arbitrum',
   // Keep Inkeep's visitor ID in memory and its functional state in sessionStorage.
   // Both options are required by cxkit-primitives: they control separate storage paths.
   privacyPreferences: { optOutAnalyticalCookies: true, optOutFunctionalCookies: true },
+  // Without this, cxkit-primitives' theme provider injects an `@import` of Inter from Google Fonts
+  // into each Inkeep shadow root, which sends every visitor's IP address to Google. The widget
+  // falls back to its system font stack instead.
+  theme: { disableLoadingDefaultFont: true },
   // Follow the class next-themes sets on <html>. A selector rather than an element, because
   // Inkeep resolves it in an effect and this module is also evaluated during the server render.
   colorMode: {
