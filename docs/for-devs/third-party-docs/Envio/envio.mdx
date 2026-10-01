@@ -51,24 +51,30 @@ This walkthrough creates an indexer and a GraphQL API from a contract that is al
 
 Run the following command in the folder of your choice:
 
+```
 pnpx envio init
 ```
 
+```
 Enter a folder name for the project, or press Enter to use the current directory:
 
 ? Specify a folder name (ENTER to skip):  (.)
+
 ```
 
 Select `Evm` as the blockchain ecosystem:
 
+```
 ? Choose blockchain ecosystem
+
 > Evm
-  Svm
-  Fuel
+> Svm
+> Fuel
 ```
 
 Select `From Address - Lookup ABI from block explorer` as the initialization option:
 
+```
 ? Choose an initialization option
 > From Address - Lookup ABI from block explorer
   From ABI File - Use your own ABI file
@@ -84,19 +90,22 @@ The `From Address` option fetches the contract ABI from a block explorer. If the
 
 Select the chain, for example, `arbitrum-one` or `arbitrum-sepolia`. You can type to filter the list:
 
+```
 ? Which blockchain would you like to import a contract from?
-  abstract
-  amoy
-  arbitrum-nova
+abstract
+amoy
+arbitrum-nova
+
 > arbitrum-one
-  arbitrum-sepolia
-  arbitrum-testnet
-v aurora
-[↑↓ to move, enter to select, type to filter]
+> arbitrum-sepolia
+> arbitrum-testnet
+> v aurora
+> [↑↓ to move, enter to select, type to filter]
 ```
 
 ### Enter the contract address
 
+```
 ? What is the address of the contract?
 [Use the proxy address if your abi is a proxy implementation]
 ```
@@ -107,14 +116,17 @@ If your contract is a proxy, enter the proxy address, not the implementation add
 
 The CLI lists the events from the contract ABI and selects all of them by default:
 
+```
 ? Which events would you like to index?
+
 > [x] Approval(address indexed owner, address indexed spender, uint256 value)
-  [x] Transfer(address indexed from, address indexed to, uint256 value)
-[↑↓ to move, space to select one, → to all, ← to none, type to filter]
+> [x] Transfer(address indexed from, address indexed to, uint256 value)
+> [↑↓ to move, space to select one, → to all, ← to none, type to filter]
 ```
 
 ### Finish or add more contracts
 
+```
 ? Would you like to add another contract?
 > I'm finished
   Add a new address for same contract on same network
@@ -128,15 +140,19 @@ You can add more addresses for the same contract, the same contract on another c
 
 The CLI then asks you to add an Envio API token to the project's `.env` file. You can create a new token or add an existing one.
 
+```
 The command generates the following files:
 
 - `config.yaml`: the chains, contracts, and events to index
 - `schema.graphql`: the entities stored in the database
 - `src/handlers/`: the event handlers
+```
 
 You can also run contract import without prompts. For example, for a contract on Arbitrum One:
 
+```
 pnpx envio init contract-import explorer -b arbitrum-one -c <CONTRACT_ADDRESS> --single-contract --all-events -n my-indexer -d my-indexer
+
 ```
 
 For more detail, see the [HyperIndex quickstart](https://docs.envio.dev/docs/HyperIndex/quickstart).
@@ -145,6 +161,7 @@ For more detail, see the [HyperIndex quickstart](https://docs.envio.dev/docs/Hyp
 
 Make sure Docker is running, then start the indexer from the project folder:
 
+```
 pnpm dev
 ```
 
