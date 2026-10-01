@@ -6,9 +6,12 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
 import {
+  type NotionBlock,
   type NotionRichText,
   RenderError,
   escapeMdxText,
+  renderAnswer,
+  renderBlocks,
   renderRichText,
   rewriteLink,
 } from './notion-mdx.ts';
@@ -105,5 +108,117 @@ describe('renderRichText', () => {
       () => renderRichText([linked('x', 'https://a.b')], { allowLinks: false }),
       /link/,
     );
+  });
+});
+
+const rt = (content: string): NotionRichText[] => [plain(content)];
+
+const block = (
+  type: string,
+  payload: Record<string, unknown>,
+  children?: NotionBlock[],
+): NotionBlock => ({
+  id: `${type}-${Math.random().toString(36).slice(2, 8)}`,
+  type,
+  has_children: Boolean(children?.length),
+  ...(children ? { children } : {}),
+  [type]: payload,
+});
+
+const para = (text: string, children?: NotionBlock[]) =>
+  block('paragraph', { rich_text: rt(text), color: 'default' }, children);
+
+describe('renderBlocks', () => {
+  it('renders paragraphs separated by one blank line', () => {
+    assert.equal(renderBlocks([para('one'), para('two')]), 'one\n\ntwo');
+  });
+
+  it('skips an empty paragraph', () => {
+    const empty = block('paragraph', { rich_text: [], color: 'default' });
+    assert.equal(renderBlocks([para('one'), empty, para('two')]), 'one\n\ntwo');
+  });
+
+  it('demotes every heading level to h4', () => {
+    const h = (level: 1 | 2 | 3, text: string) =>
+      block(`heading_${level}`, { rich_text: rt(text), color: 'default', is_toggleable: false });
+    assert.equal(renderBlocks([h(1, 'A'), h(2, 'B'), h(3, 'C')]), '#### A\n\n#### B\n\n#### C');
+  });
+
+  it('rejects a link inside a heading', () => {
+    const h = block('heading_2', {
+      rich_text: [linked('x', 'https://a.b')],
+      color: 'default',
+      is_toggleable: false,
+    });
+    assert.throws(() => renderBlocks([h]), /link not allowed/);
+  });
+
+  it('keeps list items tight and separates adjacent lists', () => {
+    const li = (text: string, children?: NotionBlock[]) =>
+      block('bulleted_list_item', { rich_text: rt(text), color: 'default' }, children);
+    const ni = (text: string) =>
+      block('numbered_list_item', { rich_text: rt(text), color: 'default' });
+    assert.equal(
+      renderBlocks([li('a'), li('b', [li('b1')]), ni('c'), ni('d')]),
+      '- a\n- b\n  - b1\n\n1. c\n2. d',
+    );
+  });
+
+  it('renders code with the Notion language as the fence info', () => {
+    const code = block('code', { rich_text: rt('echo "<x>"'), caption: [], language: 'bash' });
+    assert.equal(renderBlocks([code]), '```bash\necho "<x>"\n```');
+  });
+
+  it('renders quote, callout and divider', () => {
+    const quote = block('quote', { rich_text: rt('q'), color: 'default' });
+    const callout = block('callout', {
+      rich_text: rt('note'),
+      color: 'gray_background',
+      icon: null,
+    });
+    const divider = block('divider', {});
+    assert.equal(
+      renderBlocks([quote, callout, divider]),
+      '> q\n\n<Callout type="info">\n\nnote\n\n</Callout>\n\n---',
+    );
+  });
+
+  it('renders a table with a header row and escaped pipes', () => {
+    const row = (cells: string[]) => block('table_row', { cells: cells.map((c) => rt(c)) });
+    const table = block(
+      'table',
+      { has_column_header: true, has_row_header: false, table_width: 2 },
+      [row(['Flag', 'Meaning']), row(['--a', 'x | y'])],
+    );
+    assert.equal(renderBlocks([table]), '| Flag | Meaning |\n| --- | --- |\n| --a | x \\| y |');
+  });
+
+  it('rejects media and structural blocks by type with the block id', () => {
+    for (const type of [
+      'image',
+      'video',
+      'file',
+      'embed',
+      'bookmark',
+      'link_to_page',
+      'child_page',
+      'synced_block',
+      'toggle',
+      'column_list',
+    ]) {
+      const b = block(type, {});
+      assert.throws(() => renderBlocks([b]), new RegExp(`${type}.*${b.id}`));
+    }
+  });
+});
+
+describe('renderAnswer', () => {
+  it('uses the body when present and the short answer otherwise', () => {
+    assert.equal(renderAnswer([para('body')], rt('short')), 'body');
+    assert.equal(renderAnswer([], rt('short')), 'short');
+  });
+
+  it('rejects an answer with neither', () => {
+    assert.throws(() => renderAnswer([], []), /empty/);
   });
 });

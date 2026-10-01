@@ -112,3 +112,140 @@ export function renderRichText(
     })
     .join('');
 }
+
+/**
+ * A block as the API returns it, with `children` attached by the fetch step for every block whose
+ * `has_children` is true. The payload sits under the key named by `type`.
+ */
+export interface NotionBlock {
+  id: string;
+  type: string;
+  has_children?: boolean;
+  children?: NotionBlock[];
+  [payload: string]: unknown;
+}
+
+const FAIL_BY_TYPE = new Set([
+  'image',
+  'video',
+  'file',
+  'pdf',
+  'audio',
+  'embed',
+  'bookmark',
+  'link_preview',
+  'link_to_page',
+  'child_page',
+  'child_database',
+  'synced_block',
+  'toggle',
+  'column_list',
+  'column',
+  'template',
+  'breadcrumb',
+  'table_of_contents',
+  'equation',
+  'to_do',
+  'unsupported',
+]);
+
+type Payload = {
+  rich_text?: NotionRichText[];
+  language?: string;
+  cells?: NotionRichText[][];
+  has_column_header?: boolean;
+};
+
+const payloadOf = (b: NotionBlock): Payload => (b[b.type] as Payload | undefined) ?? {};
+const textOf = (b: NotionBlock, opts?: { allowLinks?: boolean }): string =>
+  renderRichText(payloadOf(b).rich_text ?? [], opts);
+const indent = (s: string, by: string): string => s.replace(/^(?!$)/gm, by);
+
+/** Blocks that print one line each and chain without blank lines between siblings of a kind. */
+const LIST_TYPES = new Set(['bulleted_list_item', 'numbered_list_item']);
+
+function renderOne(b: NotionBlock, ordinal: number): string | null {
+  if (FAIL_BY_TYPE.has(b.type)) {
+    throw new RenderError(`unsupported block ${b.type} (${b.id})`);
+  }
+  const children = b.children ?? [];
+  switch (b.type) {
+    case 'paragraph': {
+      const text = textOf(b);
+      if (text === '' && children.length === 0) return null;
+      return [text, ...children.map((c) => renderBlocks([c]))].filter(Boolean).join('\n\n');
+    }
+    case 'heading_1':
+    case 'heading_2':
+    case 'heading_3':
+      return `#### ${textOf(b, { allowLinks: false })}`;
+    case 'bulleted_list_item':
+    case 'numbered_list_item': {
+      const marker = b.type === 'bulleted_list_item' ? '- ' : `${ordinal}. `;
+      const body = textOf(b);
+      const nested = children.length
+        ? '\n' + indent(renderBlocks(children), ' '.repeat(marker.length))
+        : '';
+      return `${marker}${body}${nested}`;
+    }
+    case 'code': {
+      const { language = '', rich_text = [] } = payloadOf(b);
+      const raw = rich_text.map((r) => r.plain_text).join('');
+      return `\`\`\`${language}\n${raw}\n\`\`\``;
+    }
+    case 'quote':
+      return indent(
+        [textOf(b), ...children.map((c) => renderBlocks([c]))].filter(Boolean).join('\n\n'),
+        '> ',
+      );
+    case 'callout': {
+      const inner = [textOf(b), ...children.map((c) => renderBlocks([c]))]
+        .filter(Boolean)
+        .join('\n\n');
+      return `<Callout type="info">\n\n${inner}\n\n</Callout>`;
+    }
+    case 'divider':
+      return '---';
+    case 'table': {
+      const rows = children.filter((c) => c.type === 'table_row');
+      const cells = rows.map((r) =>
+        (payloadOf(r).cells ?? []).map((c) => renderRichText(c).replace(/\|/g, '\\|')),
+      );
+      if (cells.length === 0) return null;
+      const width = Math.max(...cells.map((r) => r.length));
+      const header = payloadOf(b).has_column_header
+        ? cells.shift()!
+        : Array<string>(width).fill('');
+      const line = (r: string[]) => `| ${r.join(' | ')} |`;
+      return [line(header), line(Array<string>(width).fill('---')), ...cells.map(line)].join('\n');
+    }
+    default:
+      throw new RenderError(`unsupported block ${b.type} (${b.id})`);
+  }
+}
+
+/** Render a sequence of sibling blocks to MDX, one blank line between non-list neighbours. */
+export function renderBlocks(blocks: NotionBlock[]): string {
+  const parts: string[] = [];
+  let ordinal = 0;
+  let previousType: string | null = null;
+  for (const b of blocks) {
+    ordinal =
+      b.type === 'numbered_list_item' && previousType === 'numbered_list_item' ? ordinal + 1 : 1;
+    const rendered = renderOne(b, ordinal);
+    if (rendered === null) continue;
+    const tight = LIST_TYPES.has(b.type) && previousType === b.type;
+    parts.push((parts.length ? (tight ? '\n' : '\n\n') : '') + rendered);
+    previousType = b.type;
+  }
+  return parts.join('');
+}
+
+/** The page body, or the `Short answer (HTML)` property when the body is empty. */
+export function renderAnswer(blocks: NotionBlock[], shortAnswer: NotionRichText[]): string {
+  const body = renderBlocks(blocks);
+  if (body !== '') return body;
+  const short = renderRichText(shortAnswer);
+  if (short !== '') return short;
+  throw new RenderError('answer is empty: no body blocks and no short answer');
+}
