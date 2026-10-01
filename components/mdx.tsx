@@ -1,5 +1,7 @@
 import { Accordions } from 'fumadocs-ui/components/accordion';
+import { Callout as FumadocsCallout } from 'fumadocs-ui/components/callout';
 import { ImageZoom, type ImageZoomProps } from 'fumadocs-ui/components/image-zoom';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Tab, type TabProps, Tabs } from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
@@ -23,12 +25,49 @@ import {
 import { VendingMachine } from '@/components/widgets/VendingMachine';
 import { cn } from '@/lib/cn';
 
+/**
+ * The words a screen reader hears for an untitled callout, whose type is otherwise only its colour
+ * and an `aria-hidden` icon. Keyed by every spelling Fumadocs accepts, so `tip` reads as a tip even
+ * though Fumadocs draws it as `info`.
+ */
+const calloutLabels: Record<string, string> = {
+  info: 'Note',
+  tip: 'Tip',
+  idea: 'Tip',
+  warn: 'Warning',
+  warning: 'Warning',
+  error: 'Danger',
+  success: 'Success',
+};
+
+/**
+ * Fumadocs' `Callout` with its type exposed to assistive technology: `role="note"`, and a visually
+ * hidden label such as "Warning:" when the callout has no title. A titled callout already says what
+ * it is, so it gets the role only. Every type is a note, never an `alert`: an alert is a live region
+ * that screen readers announce when it appears, and a static error callout would be announced on
+ * every client-side navigation to its page.
+ */
+function Callout({
+  type = 'info',
+  title,
+  children,
+  ...props
+}: ComponentProps<typeof FumadocsCallout>) {
+  return (
+    <FumadocsCallout type={type} title={title} role="note" {...props}>
+      {title ? null : <span className="sr-only">{calloutLabels[type] ?? 'Note'}: </span>}
+      {children}
+    </FumadocsCallout>
+  );
+}
+
 export function getMDXComponents(components?: MDXComponents) {
   const merged = {
     ...defaultMdxComponents,
     Accordion,
     Accordions,
     AEL: AddressExplorerLink,
+    Callout,
     EdgeChallengeFlow,
     FlowChart,
     ImageZoom,
@@ -38,6 +77,8 @@ export function getMDXComponents(components?: MDXComponents) {
       <ImageZoom {...(props as ImageZoomProps)} className={cn('rounded-lg', props.className)} />
     ),
     ReferenceList,
+    Step,
+    Steps,
     // Inactive panels stay in the server HTML (hidden by CSS) so their text is indexed and findable.
     Tab: (props: TabProps) => <Tab forceMount {...props} />,
     Tabs,
