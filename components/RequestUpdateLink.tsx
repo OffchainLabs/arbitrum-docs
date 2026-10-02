@@ -17,7 +17,11 @@ export function RequestUpdateLink({ pageUrl, className }: { pageUrl: string; cla
 
   const query = new URLSearchParams({
     title: `Docs update request: ${pageUrl}`,
-    body: [`Source: ${sourceUrl}`, 'Request: (how can we help?)'].join('\n\n'),
+    body: [
+      `Source: ${sourceUrl}`,
+      'Request: (how can we help?)',
+      "Psst, this issue will be closed with a templated response if it isn't a documentation update request.",
+    ].join('\n\n'),
   });
   const href = `${gitConfig.url}/issues/new?${query}`;
 
