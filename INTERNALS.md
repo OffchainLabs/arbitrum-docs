@@ -637,6 +637,7 @@ Never bypass `engines`.
 | `vars:check`       | Every variable reference resolves; the banner keys are valid                 |
 | `references:check` | Every glossary id resolves                                                   |
 | `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file       |
+| `faq:check`        | The six FAQ partials match their `content/faq/*.json` snapshots              |
 | `check-links`      | Internal links and their `#fragments` resolve, using the real MDX transforms |
 | `content:lint`     | MDX that compiles but renders wrong (below)                                  |
 | `format:check`     | Prettier                                                                     |
@@ -672,7 +673,7 @@ another.
 
 ### Hand-run tools
 
-None of these is a CI gate. Two workflows run some of them (below):
+Only `faq:check` is also a CI gate. Three workflows run some of them (below):
 
 | Command                                 | Does                                                                                                                                                                                                                                                                                                                               |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -683,6 +684,8 @@ None of these is a CI gate. Two workflows run some of them (below):
 | `pnpm cli:generate` / `:check`          | The Nitro CLI flags page from the pinned tag's Go source                                                                                                                                                                                                                                                                           |
 | `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example`                                                                                                                                                                                                                                                                  |
 | `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                  |
+| `pnpm faq:fetch`                        | The FAQ snapshots in `content/faq/` from the Notion "FAQ CMS" database (needs `NOTION_TOKEN`)                                                                                                                                                                                                                                      |
+| `pnpm faq:generate` / `:check`          | The six `_troubleshooting-*-partial.mdx` partials from the snapshots; offline                                                                                                                                                                                                                                                      |
 
 `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` every Monday at 08:00
 UTC. It never writes `content/vars.json`. It opens `automated/upstream-refresh` as a maintenance
@@ -692,6 +695,10 @@ bump checklist. A stale submodule pin is only reported in the job log; a human r
 the agreed version, runs `nitro:check-release --to <tag>` plus both generators, and opens
 `automated/nitro-bump` as a PR. A PR opened with `GITHUB_TOKEN` triggers no CI run, so review
 either PR's diff and run the gates locally.
+
+`faq-refresh.yml` runs `faq:fetch` and `faq:generate` every Monday at 08:00 UTC with the
+`NOTION_TOKEN` repository secret, and opens `automated/faq-refresh` as a PR when a snapshot or a
+partial changed. It is the only place the token is used; `faq:check` in CI is offline.
 
 ### Generated pages
 
@@ -707,6 +714,14 @@ either PR's diff and run the gates locally.
   sidebar order and follows upstream's teaching sequence. The parent `meta.json` is hand-owned.
   Upstream's `metadata` export is parsed, never evaluated. A relative link to a slug this site does
   not publish stops the run. Nothing upstream is pinned, so `stylus:check` is not a CI gate.
+- **`content/partials/_troubleshooting-{users,nodes,building,bridging,arbitrum-chain,stylus}-partial.mdx`**
+  are written by `pnpm faq:generate` from `content/faq/<key>.json`, which `pnpm faq:fetch` reads
+  from the Notion "FAQ CMS" database: rows that are `Publishable` and `4 - Continuously
+publishing`, routed by `Target document slugs` and ordered by `FAQ order index`. The mapping is
+  `lib/faq-pages.ts`. Edit a question in Notion, never in the partial; `faq:check` fails on a hand
+  edit. Answers carry literal values, no `<Var>`, and no `<Term>`. A block the renderer does not
+  support, a Notion link, or a link to no page fails the fetch and names the Notion page. The same
+  snapshots feed the `FAQPage` JSON-LD that `lib/faq.ts` emits on those six pages.
 
 Generated `meta.json` files are not formatted: `.prettierignore` excludes `content/**/meta.json`,
 and the generators write them with `format: false`.
