@@ -50,11 +50,11 @@ Unlike Ethereum, there is **no traditional mempool**. Transactions are not gossi
 
 What the Sequencer does with a queued transaction depends on the chain's <Term id="transaction-ordering-policy">transaction ordering policy</Term>. Three exist, and a chain runs exactly one:
 
-| Policy                                                                           | What decides the order                                                           | Where it runs                        |
-| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------ |
-| <Term id="first-come-first-serve-fcfs">First-come, first-serve (FCFS)</Term>     | Arrival time at the Sequencer                                                    | The default for a new Arbitrum chain |
-| [Priority Gas Auctions (PGA)](/how-arbitrum-works/priority-gas-auction/pga) | The <Term id="priority-fee">priority fee</Term> each transaction pays            | Arbitrum One                         |
-| [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction)              | An auctioned <Term id="express-lane">express lane</Term>, FCFS for everyone else | Available to any chain owner         |
+| Policy                                                                       | What decides the order                                                           | Where it runs                        |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------ |
+| <Term id="first-come-first-serve-fcfs">First-come, first-serve (FCFS)</Term> | Arrival time at the Sequencer                                                    | The default for a new Arbitrum chain |
+| [Priority Gas Auctions (PGA)](/how-arbitrum-works/priority-gas-auction/pga)  | The <Term id="priority-fee">priority fee</Term> each transaction pays            | Arbitrum One                         |
+| [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction)               | An auctioned <Term id="express-lane">express lane</Term>, FCFS for everyone else | Available to any chain owner         |
 
 The FIFO behavior this page describes assumes FCFS. The two other policies change the order, not the intake path: the queue, the deadlines, and the `context deadline exceeded` behavior below apply the same way under all three.
 

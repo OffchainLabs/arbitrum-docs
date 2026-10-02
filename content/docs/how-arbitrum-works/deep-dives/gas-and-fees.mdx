@@ -209,10 +209,10 @@ Whether a tip does anything depends on the chain's <Term id="transaction-orderin
 
 That gives three outcomes:
 
-| Chain configuration                                                      | What a tip does                                                        |
-| ------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| <Term id="first-come-first-serve-fcfs">FCFS</Term>, tips not collected   | Nothing. Arrival time sets the order, and the sender pays the basefee. |
-| [PGA](/how-arbitrum-works/priority-gas-auction/pga), tips collected | The tip sets the ordering position and the chain collects it.          |
+| Chain configuration                                                    | What a tip does                                                        |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| <Term id="first-come-first-serve-fcfs">FCFS</Term>, tips not collected | Nothing. Arrival time sets the order, and the sender pays the basefee. |
+| [PGA](/how-arbitrum-works/priority-gas-auction/pga), tips collected    | The tip sets the ordering position and the chain collects it.          |
 
 Under PGA, the sequencer keys its priority queue on the <Term id="priority-fee">priority fee</Term>, computed per <Term id="eip-1559">EIP-1559</Term> as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`. Paying more moves a transaction up the queue; it never lowers the basefee the transaction owes. A transaction that pays no tip still gets included, because the anti-starvation boost raises its position each round.
 
