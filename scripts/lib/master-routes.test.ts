@@ -5,8 +5,10 @@
  * gate sees it (`redirects-config.test.ts` checks only the entries that exist).
  *
  * `scripts/data/master-routes.json` is frozen: it was generated once from `origin/master` at the
- * commit it names. Master served pages at the root (`routeBasePath: '/'`), so a route like
- * `/how-arbitrum-works/x` needs a redirect even when `/docs/how-arbitrum-works/x` exists.
+ * commit it names. Master served pages at the root (`routeBasePath: '/'`) and so does this site,
+ * so an unchanged route is answered by its page and only a moved or retired route needs an entry.
+ * `redirects-config.test.ts` asserts that no redirect source is a live page, so a route this gate
+ * passes is served by exactly one of the two.
  *
  * Matching uses Next's own path matcher, case-insensitive like Next's redirect matching.
  */
@@ -41,6 +43,9 @@ test('the frozen master route list is present and non-trivial', () => {
 test('every page route live on master is a page or a redirect source', () => {
   const lost = fixture.routes
     .filter(({ route }) => !answers(route))
-    .map(({ route, file }) => `${route} (master ${file}): add a redirect in redirects.config.ts`);
+    .map(
+      ({ route, file }) =>
+        `${route} (master ${file}): restore the page or add a redirect in redirects.config.ts`,
+    );
   assert.deepEqual(lost, []);
 });
