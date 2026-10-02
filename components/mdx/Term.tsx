@@ -22,8 +22,21 @@ export function Term({ id, children }: { id: string; children: ReactNode }) {
 
   const Definition = entry.body;
   return (
-    <HoverPopover title={entry.title} content={<Definition components={getMDXComponents()} />}>
+    <HoverPopover
+      title={entry.title}
+      content={<Definition components={getMDXComponents({ Term: PlainTerm })} />}
+    >
       {children}
     </HoverPopover>
   );
+}
+
+/**
+ * A `<Term>` inside a definition renders as its plain text. A popover inside a popover is a
+ * trigger nobody can reach, and two entries that cite each other would otherwise recurse without
+ * bound at prerender. The glossary page renders the same entries with the full map, so their
+ * cross-references still hover there.
+ */
+function PlainTerm({ children }: { id: string; children: ReactNode }) {
+  return <>{children}</>;
 }
