@@ -1,6 +1,7 @@
 import { createMDX } from 'fumadocs-mdx/next';
 import type { NextConfig } from 'next';
 
+import { compactRedirects } from './lib/compact-redirects.ts';
 import { siteHeaders } from './lib/http-headers.ts';
 import { markdownTwins } from './lib/markdown-redirects.ts';
 import { resolveSiteUrl } from './lib/site-url.ts';
@@ -20,12 +21,13 @@ const config: NextConfig = {
   async headers() {
     return siteHeaders({ isProduction: process.env.VERCEL_ENV === 'production' });
   },
-  // Only real documentation destinations receive markdown twins, excluding public files.
+  // Only real documentation destinations receive markdown twins, excluding public files. Exact
+  // aliases that share a destination and status are then grouped to reduce the route count.
   async redirects() {
-    return [
+    return compactRedirects([
       ...redirects,
       ...markdownTwins(redirects, new Set(buildIndex(process.cwd()).byUrl.keys())),
-    ];
+    ]);
   },
   async rewrites() {
     return [
