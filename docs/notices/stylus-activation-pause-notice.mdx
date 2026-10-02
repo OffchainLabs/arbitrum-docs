@@ -16,8 +16,6 @@ The [Arbitrum Security Council](https://docs.arbitrum.foundation/concepts/securi
 
 </VanillaAdmonition>
 
-Read the Security Council action: **[SC action post]**
-
 ## What is paused
 
 The pause applies to the activation step only. Activation is the step that makes a Stylus contract callable. To learn how deployment and activation work, refer to [Activation](/stylus/concepts/activation.mdx).
@@ -25,14 +23,6 @@ The pause applies to the activation step only. Activation is the step that makes
 - You cannot activate a new Stylus contract. You also cannot reactivate a Stylus contract that has expired.
 - Stylus contracts that are active keep running until they expire. An activation lasts 365 days by default. To read the time left, call [`programTimeLeft`](/stylus/concepts/activation.mdx#programtimeleft).
 - You can renew an active Stylus contract before it expires. Call [`codehashKeepalive`](/stylus/concepts/activation.mdx#codehashkeepalive). By default, the contract must be at least 31 days old.
-
-## Why the Security Council paused activations
-
-Known Stylus findings concern chain liveness, that is, denial of service. To date, no known or reported Stylus bug has affected or put user funds at risk.
-
-These findings involve hand-crafted <a data-quicklook-from="wasm">WASM</a> that falls outside the code the standard Stylus compiler produces. Ordinary Stylus contracts built with the standard compiler toolchain are not a current concern.
-
-AI-assisted tooling is making it easier to discover and construct adversarial programs that exercise unusual parts of the WASM execution surface. The pause reduces exposure to these vectors while the evaluation continues.
 
 ## What comes next
 
