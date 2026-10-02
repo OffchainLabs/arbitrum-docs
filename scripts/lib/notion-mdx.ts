@@ -7,6 +7,7 @@
  * per question and reports them with the Notion page URL. Nothing here touches the network or
  * the filesystem.
  */
+import { docsRoute } from '../../lib/shared.ts';
 
 /** A block or rich-text item that has no faithful MDX rendering. */
 export class RenderError extends Error {
@@ -44,8 +45,9 @@ const CURLY_QUOTES: Record<string, string> = { '“': '"', '”': '"', '‘': "'
 const straightenQuotes = (s: string): string => s.replace(/[“”‘’]/g, (c) => CURLY_QUOTES[c] ?? c);
 
 /**
- * A `docs.arbitrum.io` URL becomes site-relative so `check-links` validates it. A Notion URL is
- * rejected because readers cannot open it. Every other URL passes through.
+ * A `docs.arbitrum.io` URL becomes a site path under `docsRoute` so `check-links` validates it; a
+ * legacy `/docs` prefix is dropped. A Notion URL is rejected because readers cannot open it. Every
+ * other URL passes through.
  */
 export function rewriteLink(url: string): string {
   let parsed: URL;
@@ -61,7 +63,8 @@ export function rewriteLink(url: string): string {
   if (host !== 'docs.arbitrum.io') return url;
 
   const pathname = parsed.pathname.replace(/^\/docs(?=\/|$)/, '').replace(/\/$/, '');
-  return `/docs${pathname}${parsed.search}${parsed.hash}`;
+  const sitePath = `${docsRoute}${pathname}` || '/';
+  return `${sitePath}${parsed.search}${parsed.hash}`;
 }
 
 /** Render a rich-text array to inline MDX. */

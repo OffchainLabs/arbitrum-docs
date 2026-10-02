@@ -12,7 +12,7 @@ describe('stripMarkdown', () => {
     const md = [
       '#### Head',
       '',
-      'Use **bold**, _it_, `code`, [label](/docs/x) and \\<esc>.',
+      'Use **bold**, _it_, `code`, [label](/x) and \\<esc>.',
       '',
       '- a',
       '1. b',

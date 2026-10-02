@@ -9,7 +9,7 @@
     {
       "id": "e824e7c4-89a1-43bb-bb17-82be63336410",
       "question": "How to verify the integrity of the Nitro database I currently have?",
-      "answer": "We use an accumulator hash for all messages, ensuring that a new message doesn't get added to the database without the preceding message being valid.\n\nTo verify that everything is functioning correctly, you can check if it is [syncing](/docs/run-a-node/faq#how-can-i-verify-that-my-node-is-fully-synced) and confirm that the latest block is consistent with other Arbitrum nodes. For instance, you might compare it with information on [Arbiscan](https://arbiscan.io/) (please note that the search function on Arbiscan does not support searches by block hash)."
+      "answer": "We use an accumulator hash for all messages, ensuring that a new message doesn't get added to the database without the preceding message being valid.\n\nTo verify that everything is functioning correctly, you can check if it is [syncing](/run-a-node/faq#how-can-i-verify-that-my-node-is-fully-synced) and confirm that the latest block is consistent with other Arbitrum nodes. For instance, you might compare it with information on [Arbiscan](https://arbiscan.io/) (please note that the search function on Arbiscan does not support searches by block hash)."
     },
     {
       "id": "93ad1b0d-db15-4238-a4ad-508f4c7d1cd0",
@@ -29,12 +29,12 @@
     {
       "id": "06141709-af8a-4c85-a6a5-c14c04f89884",
       "question": "How do I read messages from the Sequencer feed?",
-      "answer": "Running an Arbitrum relay locally as a [Feed Relay](/docs/run-a-node/run-feed-relay) lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions offchain. Refer to [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed) for a detailed guide."
+      "answer": "Running an Arbitrum relay locally as a [Feed Relay](/run-a-node/run-feed-relay) lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions offchain. Refer to [How to read the sequencer feed](/run-a-node/sequencer/read-sequencer-feed) for a detailed guide."
     },
     {
       "id": "b8847110-7a7f-46ad-89ba-f8a3781e3788",
       "question": "How do I run a node locally for development?",
-      "answer": "See instructions in our  [our guide about running a local devnet node](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).\n\nWe recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](/docs/run-a-node/nitro/build-nitro-locally)."
+      "answer": "See instructions in our  [our guide about running a local devnet node](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).\n\nWe recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](/run-a-node/nitro/build-nitro-locally)."
     },
     {
       "id": "5b4b7b4a-268b-43bc-8704-1ce090e33ba8",
@@ -49,12 +49,12 @@
     {
       "id": "1ec2e452-7411-4c99-b0c6-aa1c2f35ac30",
       "question": "How can I verify that my node is fully synced?",
-      "answer": "You can make an `eth_syncing` RPC call to your node. Once a Nitro node is fully synced, `eth_syncing` returns the value `false` (just like a normal Geth node).\n\nWhen a Nitro node is still syncing, `eth_syncing` returns a map of values to help understand why the node is not syncing. Nitro execution and bottlenecks differ from those of a normal Geth node, so the `eth_syncing` output is unique to Nitro.\n\nYou can find information to understand the output of `eth_syncing` in the [RPC methods](/docs/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods#eth_syncing) page."
+      "answer": "You can make an `eth_syncing` RPC call to your node. Once a Nitro node is fully synced, `eth_syncing` returns the value `false` (just like a normal Geth node).\n\nWhen a Nitro node is still syncing, `eth_syncing` returns a map of values to help understand why the node is not syncing. Nitro execution and bottlenecks differ from those of a normal Geth node, so the `eth_syncing` output is unique to Nitro.\n\nYou can find information to understand the output of `eth_syncing` in the [RPC methods](/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods#eth_syncing) page."
     },
     {
       "id": "f44b5a20-ef0a-4306-b8e1-8a4e674860e9",
       "question": "Is there an alternative to Docker when running a node?",
-      "answer": "We recommend running Nitro nodes using Docker, following [the guide](/docs/run-a-node/run-full-node) provided in our documentation. However, you can compile the code directly by following the steps described in [this guide](https://developer.arbitrum.io/node-running/how-tos/build-nitro-locally). "
+      "answer": "We recommend running Nitro nodes using Docker, following [the guide](/run-a-node/run-full-node) provided in our documentation. However, you can compile the code directly by following the steps described in [this guide](https://developer.arbitrum.io/node-running/how-tos/build-nitro-locally). "
     },
     {
       "id": "bcc40cab-09f6-4659-b595-d4d2956ede78",
@@ -69,7 +69,7 @@
     {
       "id": "11fd021d-82c5-4105-8102-e5eddec2162c",
       "question": "When querying Classic transactions from a Nitro node, I sometimes get incorrect data, like the zero address as the sender. Why is that?",
-      "answer": "Some old Nitro genesis database snapshots didn't properly set the retry sender for Classic blocks and contained this error. If you need to access that information, you can either resync your Nitro node with one of the [current snapshots](https://snapshot.arbitrum.foundation/index.html) or [run a Classic node](/docs/run-a-node/more-types/run-classic-node) alongside your Nitro node and configure a redirection for requests to Classic blocks. Please note that this only happens on Arbitrum One."
+      "answer": "Some old Nitro genesis database snapshots didn't properly set the retry sender for Classic blocks and contained this error. If you need to access that information, you can either resync your Nitro node with one of the [current snapshots](https://snapshot.arbitrum.foundation/index.html) or [run a Classic node](/run-a-node/more-types/run-classic-node) alongside your Nitro node and configure a redirection for requests to Classic blocks. Please note that this only happens on Arbitrum One."
     }
   ]
 }

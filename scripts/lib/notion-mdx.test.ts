@@ -52,13 +52,13 @@ describe('escapeMdxText', () => {
 });
 
 describe('rewriteLink', () => {
-  it('turns a docs.arbitrum.io URL into a site-relative /docs path', () => {
-    assert.equal(rewriteLink('https://docs.arbitrum.io/run-a-node/faq'), '/docs/run-a-node/faq');
+  it('turns a docs.arbitrum.io URL into a site-relative root path', () => {
+    assert.equal(rewriteLink('https://docs.arbitrum.io/run-a-node/faq'), '/run-a-node/faq');
     assert.equal(
       rewriteLink('https://docs.arbitrum.io/docs/run-a-node/faq#x'),
-      '/docs/run-a-node/faq#x',
+      '/run-a-node/faq#x',
     );
-    assert.equal(rewriteLink('https://docs.arbitrum.io/'), '/docs');
+    assert.equal(rewriteLink('https://docs.arbitrum.io/'), '/');
   });
 
   it('rejects a Notion URL', () => {
@@ -91,7 +91,7 @@ describe('renderRichText', () => {
   it('renders a link and rewrites its destination', () => {
     assert.equal(
       renderRichText([plain('see '), linked('the FAQ', 'https://docs.arbitrum.io/run-a-node/faq')]),
-      'see [the FAQ](/docs/run-a-node/faq)',
+      'see [the FAQ](/run-a-node/faq)',
     );
   });
 
