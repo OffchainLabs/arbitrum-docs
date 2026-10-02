@@ -94,7 +94,7 @@ The `pages` array also accepts these entries:
 
 The sidebar name is the page's `sidebar_label`, or its `title` when it has none.
 
-Never write a `[Label](/docs/...)` link entry for a page in this repository. It puts the page in
+Never write a `[Label](/section/page)` link entry for a page in this repository. It puts the page in
 the tree a second time, and the reader lands in whichever section Fumadocs finds first. Use a path
 entry instead. Links to other sections are not needed at all, because the navbar lists every section
 and the sidebar footer pins Chain info, Glossary and Contribute under every section.
@@ -147,7 +147,7 @@ parse and the reader sees the literal `[text](…)` brackets:
 [Interface](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/precompiles/ArbSys.go)
 ```
 
-The same form works in an `href`, `to` or `src` attribute and in an internal `/docs/…`
+The same form works in an `href`, `to` or `src` attribute and in an internal `/<slug>`
 destination. Everywhere else, prose and link text included, use the component: a placeholder in
 prose fails the build. `pnpm content:lint` (rule `var-in-link`) fails on a `<Var>` left in a
 destination.

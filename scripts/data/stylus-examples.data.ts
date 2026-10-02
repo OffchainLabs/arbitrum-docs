@@ -35,7 +35,7 @@ export const sourceRoot: string = 'src/app';
 
 /** Where the generated pages land, and the URL prefix the same pages serve at. */
 export const outputDir: string = 'content/docs/stylus/stylus-by-example';
-export const outputUrl: string = '/docs/stylus/stylus-by-example';
+export const outputUrl: string = '/stylus/stylus-by-example';
 
 /**
  * The partial spliced in ahead of the first Rust snippet on every page.

@@ -18,31 +18,31 @@ interface Guidance {
 
 const FULL_NODE_BY_NETWORK: Record<string, Guidance> = {
   'arb-one-nitro': {
-    href: '/docs/run-a-node/run-full-node',
+    href: '/run-a-node/run-full-node',
     title: 'How to run a full node (Nitro)',
   },
   'arb-one-classic': {
-    href: '/docs/run-a-node/more-types/run-classic-node',
+    href: '/run-a-node/more-types/run-classic-node',
     title: 'How to run a full node (Classic, pre-Nitro)',
   },
-  'arb-nova': { href: '/docs/run-a-node/run-full-node', title: 'How to run a full node (Nitro)' },
+  'arb-nova': { href: '/run-a-node/run-full-node', title: 'How to run a full node (Nitro)' },
   'arb-sepolia': {
-    href: '/docs/run-a-node/run-full-node',
+    href: '/run-a-node/run-full-node',
     title: 'How to run a full node (Nitro)',
   },
   'localhost': {
-    href: '/docs/run-a-node/run-nitro-dev-node',
+    href: '/run-a-node/run-nitro-dev-node',
     title: 'How to run a local Nitro dev node',
   },
 };
 
 const BY_NODE_TYPE: Record<string, Guidance> = {
   'archive-node': {
-    href: '/docs/run-a-node/more-types/run-archive-node',
+    href: '/run-a-node/more-types/run-archive-node',
     title: 'How to run an archive node',
   },
   'validator-node': {
-    href: '/docs/run-a-node/more-types/run-validator-node',
+    href: '/run-a-node/more-types/run-validator-node',
     title: 'How to run a validator',
   },
 };

@@ -52,11 +52,11 @@ pnpm nitro:check-release  # bump the pinned Nitro release in content/vars.json
 
 ## Architecture
 
-**Build → render pipeline** (understanding it requires reading `source.config.ts`, `lib/source.ts`, and `app/docs/[[...slug]]/page.tsx` together):
+**Build → render pipeline** (understanding it requires reading `source.config.ts`, `lib/source.ts`, and `app/(docs)/[...slug]/page.tsx` together):
 
 1. `fumadocs-mdx` scans `content/docs/**`, validates every page's frontmatter against the Zod schema in `source.config.ts`, and emits the `.source/` collection.
 2. `lib/source.ts` runs Fumadocs `loader()` over that collection with the icons plugin → the exported `source` object.
-3. Route handlers read `source`: `app/docs/[[...slug]]/page.tsx` renders pages; the `llms.txt`, `llms-full.txt`, `llms.mdx/`, and `og/` routes all derive from the same `source`. Change the content model in one place and every consumer follows.
+3. Route handlers read `source`: `app/(docs)/[...slug]/page.tsx` renders pages; the `llms.txt`, `llms-full.txt`, `llms.mdx/`, and `og/` routes all derive from the same `source`. Change the content model in one place and every consumer follows.
 
 **`source` is a deliberate choke point — treat `source.config.ts` + `lib/source.ts` as one unit.** Seven files under `app/` import it (five routes, the docs page, the docs layout) and nothing else reads content:
 
@@ -78,7 +78,7 @@ pnpm nitro:check-release  # bump the pinned Nitro release in content/vars.json
 
 Design: [`.claude/docs/superpowers/specs/2026-07-09-partials-registry-design.md`](.claude/docs/superpowers/specs/2026-07-09-partials-registry-design.md).
 
-**Routing.** Single locale, no i18n: pages live directly under `content/docs/...` and serve at `/docs/...`. There is no `[lang]` route segment and no locale middleware — `lib/i18n.ts` was deleted 2026-08-18 along with the `ja` and `zh-CN` trees. `proxy.ts` now does exactly two things: (1) an explicit **bypass list** of routes served verbatim (`/_next/`, `/img/`, `/favicon.ico`, `/llms*`, `/og/`, `/api/`), and (2) `.md`-suffix rewrites plus `Accept: text/markdown` content negotiation to the markdown route. **A new top-level route still belongs in that bypass list** or markdown negotiation will try to rewrite it. Re-adding localization means restoring `defineI18n`, the `i18n` argument to `loader()`, a `[lang]` segment, and `createI18nMiddleware`.
+**Routing.** Single locale, no i18n: articles live under `content/docs/...` and serve at `/<slug>`. The URL-neutral `app/(docs)/[...slug]/` route uses a non-optional catch-all so `app/(home)/page.tsx` owns `/`. `docsRoute` is an empty link prefix; the single loader uses `/` as its `baseUrl`. `content/docs/index.mdx` remains the root markdown overview, excluded from the sidebar with `!index` and from the article route's static parameters. The sitemap lists `/` once. `next.config.ts` rewrites `/<slug>.md` and `/index.md` after static/public files to the existing `/llms.mdx/docs` endpoint. `/og/docs` is also a machine endpoint, not an article prefix. There is no `Accept` negotiation. `proxy.ts` only tracks markdown and LLM fetches in production. Static technical routes and public files take precedence over the article catch-all.
 
 **Global variables.** Writer-edited values live in `content/vars.json`, validated by the Zod schema in `content/vars.ts`, and rendered in MDX via `<Var name="..." />`. A bad value fails at module load.
 
@@ -92,15 +92,15 @@ Design: [`.claude/docs/superpowers/specs/2026-07-09-partials-registry-design.md`
 
 **Sidebar ordering** is controlled by `meta.json` in each content directory, not by file names.
 
-## Known trade-off (not a bug)
+## Static routing
 
-`app/docs/[[...slug]]/page.tsx` has `generateStaticParams` return `[]`, deliberately disabling static prerendering (ISR-on-first-request) to work around a Next 16.2.6 prerender crash — hence `build` uses `--experimental-build-mode=compile`. The inline comment documents the restore path; don't "fix" it without addressing that.
+`app/(docs)/[...slug]/page.tsx` prerenders every nonempty documentation slug with `generateStaticParams` and exports `dynamicParams = false`. The homepage owns the empty slug. Unknown article URLs serve the prerendered 404; do not introduce request-time inputs that turn the article route dynamic. See [INTERNALS](INTERNALS.md#static-routing-at-the-site-root).
 
 ## Conventions
 
 - Theme tokens are `--color-fd-*` (Fumadocs). Never use `--ifm-*` (legacy Docusaurus).
 - `lib/shared.ts` holds route constants (`docsRoute`, `docsImageRoute`, `docsContentRoute`) and the git config used for edit links — reference these rather than hardcoding paths.
-- **Redirects.** All of them live in `redirects.config.mjs`, consumed by `next.config.mjs`. Both blocks in it are generated — `pnpm move-doc` writes moved-page entries between the `AUTO-GENERATED` markers, `pnpm redirects:legacy` writes `redirects.legacy.mjs` — so never hand-edit it. Next's `redirects()` runs **before** `proxy.ts`, so a redirected URL gets markdown negotiation on the destination, not the first hop. Unresolvable legacy URLs are parked in `redirects.legacy.todo.json` rather than pointed at a plausible page: a redirect to the wrong page is worse than a 404, and `redirects:check` cannot catch one because the destination exists. **That file reached `[]` on 2026-08-31 and is now a tripwire, not a backlog** — a non-empty todo after `pnpm redirects:legacy` means upstream added a redirect this site cannot resolve, so map it in `MANUAL_DESTINATIONS` (confirm the upstream page's frontmatter title against the local candidates) instead of leaving it parked. See [INTERNALS](INTERNALS.md#redirects).
+- **Redirects.** All active entries live in `redirects.config.ts`, consumed by `next.config.ts`. `pnpm move-doc` appends moved-page entries between the `AUTO-GENERATED` markers; the remaining legacy aliases and asset redirects are hand-maintained. Unchanged root-level article URLs serve directly and must not be redirect sources. Next's `redirects()` runs before routing, so a redirect source that is a live page shadows it. Markdown twins are derived only for aliases that land on actual documentation pages; public assets and external destinations get none. `/index.md` serves directly. Tests require valid destinations, unique sources and no chains, loops or live-page sources. See [INTERNALS](INTERNALS.md#redirects).
 - **Image zoom.** `<ImageZoom>` resolves to the wrapper in `components/mdx/ImageZoom/` (plain `<img>` child; supports `caption`; no dimensions needed; no Next image optimization). To use Fumadocs' native component instead — for `_next/image` optimization — import it per file: `import { ImageZoom } from 'fumadocs-ui/components/image-zoom'` (shadows the wrapper for that file). The native component then requires `width`/`height` or the build fails; add `style={{ width: '100%', height: 'auto' }}` for responsiveness and drop `caption`. Live example: `content/docs/en/get-started/arbitrum-introduction.mdx`.
 
 - Always get your fumadocs-related information on https://www.fumadocs.dev/llms.txt

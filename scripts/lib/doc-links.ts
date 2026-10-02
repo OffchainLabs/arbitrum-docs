@@ -3,7 +3,7 @@
  *
  * Maps doc files to the URLs Fumadocs serves them at, extracts every internal link occurrence with
  * its source offsets, resolves each to the file it points at, and re-renders a link in its written
- * form. Content lives under `content/docs/` (baseUrl `/docs`); a slug is the path minus extension
+ * form. Content lives under `content/docs/` (baseUrl `/`); a slug is the path minus extension
  * with a trailing `index` dropped; navigation order lives in per-directory `meta.json` `pages`.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
@@ -163,7 +163,7 @@ function computeSlug(pathSegs: string[]): string {
 
 /** The site URL for a slug. */
 function buildUrl(slug: string): string {
-  return normalizeUrl('/docs' + (slug ? '/' + slug : ''));
+  return normalizeUrl('/' + slug);
 }
 
 /**
@@ -335,6 +335,9 @@ export function resolveRefToFile(
   const { pathPart } = splitSuffix(expandRefUrl(rawUrl));
   if (isExternalOrFragment(pathPart)) return null;
 
+  // The root overview's markdown mirror has a named URL while its HTML identity is `/`.
+  if (pathPart === '/index.md') return index.byUrl.get('/') ?? null;
+
   if (!pathPart.startsWith('/')) {
     if (fromAbs === null) return null;
     if (/\.mdx?$/i.test(pathPart)) {
@@ -347,9 +350,8 @@ export function resolveRefToFile(
     return index.byUrl.get(target) ?? null;
   }
 
-  if (!/^\/docs(?=\/|$)/.test(pathPart)) return null;
   const slug = pathPart
-    .replace(/^\/docs\/?/, '')
+    .replace(/^\//, '')
     .replace(/\.mdx?$/i, '')
     .replace(/\/$/, '');
   return index.byUrl.get(buildUrl(slug)) ?? null;

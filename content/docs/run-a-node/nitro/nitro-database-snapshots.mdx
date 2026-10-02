@@ -9,7 +9,7 @@ sme: gligneul
 
 Nitro stores the <Term id="chain-state">chain state</Term> and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from Genesis. It takes a long time for the node to sync from Genesis, so starting from a <Term id="database-snapshot">database snapshot</Term> is advisable instead. Moreover, for the <Term id="arbitrum-one">Arbitrum One</Term> chain, you must start from a snapshot because Nitro cannot process transactions from the <Term id="arbitrum-classic">Classic</Term> Arbitrum node.
 
-For an overview of snapshots in the context of initial node setup, see the [Database snapshots section of Prepare to run a node](/docs/run-a-node/start-here#database-snapshots).
+For an overview of snapshots in the context of initial node setup, see the [Database snapshots section of Prepare to run a node](/run-a-node/start-here#database-snapshots).
 
 ## Supply the snapshot URL to Nitro
 
@@ -78,7 +78,7 @@ Before downloading terabytes, confirm you have the right snapshot. Each director
 curl https://snapshot.arbitrum.foundation/arb1/2026-08-01-a78755ba/metadata.json
 ```
 
-Your node's `--execution.caching.state-scheme` must match the snapshot's `state_scheme`. See [Choose a state scheme](/docs/run-a-node/run-full-node#choose-a-state-scheme).
+Your node's `--execution.caching.state-scheme` must match the snapshot's `state_scheme`. See [Choose a state scheme](/run-a-node/run-full-node#choose-a-state-scheme).
 
 ## Downloading the snapshot manually
 

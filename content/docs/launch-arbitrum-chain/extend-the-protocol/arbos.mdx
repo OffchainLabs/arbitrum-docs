@@ -9,7 +9,7 @@ content_type: how-to
 
 <include cwd>content/partials/launch-arbitrum-chain/_arbitrum-chain-customize-caution-banner-partial.mdx</include>
 
-Customizing the [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos) version involves modifying the Nitro codebase to introduce a new, version-controlled iteration of ArbOS (<Term id="arbitrum">Arbitrum</Term>'s operating system-like layer). This lets you activate custom behaviors, features, or state changes while maintaining backward compatibility and determinism for fraud proofs.
+Customizing the [ArbOS](/how-arbitrum-works/deep-dives/arbos) version involves modifying the Nitro codebase to introduce a new, version-controlled iteration of ArbOS (<Term id="arbitrum">Arbitrum</Term>'s operating system-like layer). This lets you activate custom behaviors, features, or state changes while maintaining backward compatibility and determinism for fraud proofs.
 
 This is an advanced customization primarily for live chains, allowing developers to extend or alter the <Term id="state-transition-function">State Transition Function</Term> (STF)—the core logic for block production and state updates—while ensuring safe, non-disruptive upgrades. Unlike standard upgrades (e.g., to canonical versions like ArbOS 20 "Atlas"), customization involves creating intermediate or project-specific versions (e.g., ArbOS 32, a fork of 31). This lets you incorporate bespoke elements such as new precompiles, EVM opcodes, or state variables without conflicting with official releases.
 
@@ -17,7 +17,7 @@ This customization is recommended for teams with expertise or partners (e.g., Ro
 
 ## Cases where you may want to consider customizing your own ArbOS upgrade
 
-1. When you want to make changes to your Nitro code that affect the State Transition Function, or STF (you may refer to the [Customize STF docs](/docs/launch-arbitrum-chain/extend-the-protocol/stf#introduction)), and
+1. When you want to make changes to your Nitro code that affect the State Transition Function, or STF (you may refer to the [Customize STF docs](/launch-arbitrum-chain/extend-the-protocol/stf#introduction)), and
 
 2. If your desired changes need to be made to a live and operational Arbitrum chain
 
@@ -75,7 +75,7 @@ In this way, `ArbHi` and all its methods will be activated after the ArbOS versi
 
 ### 3. Create a new ArbOS state on a specific ArbOS version
 
-After you add a new state `myNumber` according to the guide in [customize precompile Option 5](/docs/launch-arbitrum-chain/extend-the-protocol/precompiles#option-5-call-and-modify-state), you also need to rewrite [`UpgradeArbosVersion`](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/v3.1.0/arbos/@@nitroPathToArbosState@@/arbosstate.go#L253) in [`arbosstate.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/v3.1.0/@@nitroPathToArbosState@@/arbosstate.go):
+After you add a new state `myNumber` according to the guide in [customize precompile Option 5](/launch-arbitrum-chain/extend-the-protocol/precompiles#option-5-call-and-modify-state), you also need to rewrite [`UpgradeArbosVersion`](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/v3.1.0/arbos/@@nitroPathToArbosState@@/arbosstate.go#L253) in [`arbosstate.go`](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/v3.1.0/@@nitroPathToArbosState@@/arbosstate.go):
 Add your expected ArbOS version to the switch case statement of `nextArbosVersion`. Here we will take ArbOS V21 as an example:
 
 ```go
@@ -106,14 +106,14 @@ Here, we will ensure that the initial value of $(a random number) after ArbOS is
 
 <Callout type="warn">
 
-It should be noted that when you initialize the state (initial code is in [customize precompile Option 5](/docs/launch-arbitrum-chain/extend-the-protocol/precompiles#option-5-call-and-modify-state)), you need to initialize it to `0` or `null` value first to avoid a potential re-org on your chain.
+It should be noted that when you initialize the state (initial code is in [customize precompile Option 5](/launch-arbitrum-chain/extend-the-protocol/precompiles#option-5-call-and-modify-state)), you need to initialize it to `0` or `null` value first to avoid a potential re-org on your chain.
 
 </Callout>
 
 Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions that may change the value of `myNumber` before ArbOS v21.
-To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](/docs/launch-arbitrum-chain/extend-the-protocol/arbos#1-add-a-new-method-to-existing-precompile-on-a-specific-arbos-version) or
-[point 2](/docs/launch-arbitrum-chain/extend-the-protocol/arbos#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
-If your nitro code needs to call this method to change the state, you can continue reading [Step 4](/docs/launch-arbitrum-chain/extend-the-protocol/arbos#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result-arbos-version-control).
+To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](/launch-arbitrum-chain/extend-the-protocol/arbos#1-add-a-new-method-to-existing-precompile-on-a-specific-arbos-version) or
+[point 2](/launch-arbitrum-chain/extend-the-protocol/arbos#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
+If your nitro code needs to call this method to change the state, you can continue reading [Step 4](/launch-arbitrum-chain/extend-the-protocol/arbos#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result-arbos-version-control).
 
 ### 4. Any changes in the STF logic that will affect the final execution result (ArbOS version control)
 
@@ -148,10 +148,10 @@ Wasm module roots are backward compatible, so upgrading them before an ArbOS ver
 ## Upgrade WASM Module Root on the parent chain
 
 After you have made your custom ArbOS changes, you will need to update the WASM Module root recorded on the parent chain. This is because an Arbitrum chain may execute the validation and fraud proofs on the parent chain.
-Please continue reading [Customize STF](/docs/launch-arbitrum-chain/extend-the-protocol/stf#step-3-run-the-node) for follow-up operations.
+Please continue reading [Customize STF](/launch-arbitrum-chain/extend-the-protocol/stf#step-3-run-the-node) for follow-up operations.
 
 ## Schedule ArbOS upgrade
 
-After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the [ArbOS upgrade](/docs/launch-arbitrum-chain/operate/arbos-upgrade) document to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
+After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the [ArbOS upgrade](/launch-arbitrum-chain/operate/arbos-upgrade) document to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
 It should be noted that if you set a higher ArbOS version as the upgrade target, all the features added between the current and target versions will be activated.
 For example, if your current version is ArbOS v18 and you set the target version to v25, all the features between v18 and v25 will be loaded.

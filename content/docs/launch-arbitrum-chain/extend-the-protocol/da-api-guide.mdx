@@ -21,7 +21,7 @@ The DA API is an extensibility feature in Arbitrum Nitro that allows external da
 
 - **No forking required**: Integrate your DA system without modifying Nitro or contracts
 - **Pluggable architecture**: Define your own certificate formats and validation logic
-- **Fraud-proof compatible**: Full support for [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction) <Term id="challenge">challenge</Term> protocol and fraud proofs
+- **Fraud-proof compatible**: Full support for [BoLD](/how-arbitrum-works/bold/gentle-introduction) <Term id="challenge">challenge</Term> protocol and fraud proofs
 - **Multi-provider support**: Multiple DA systems can coexist on the same chain
 
 ### Architecture overview
@@ -35,7 +35,7 @@ The DA API has four main components:
 
 These components work together to enable:
 
-- **Normal execution**: [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) stores data -> generates certificate -> posts to <Term id="L1">L1</Term>
+- **Normal execution**: [Batch Poster](/how-arbitrum-works/deep-dives/assertions) stores data -> generates certificate -> posts to <Term id="L1">L1</Term>
 - **Validation**: Node reads certificate -> recovers data -> executes
 - **Fraud proofs**: Prover generates proof -> enhances with DA data -> validates onchain
 
@@ -122,7 +122,7 @@ Your JSON-RPC server must implement three Reader methods that Nitro nodes call t
 
 ### Method 1: `daprovider_getSupportedHeaderBytes`
 
-Returns the header byte that identifies your DA provider in [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer) messages.
+Returns the header byte that identifies your DA provider in [Sequencer](/how-arbitrum-works/deep-dives/sequencer) messages.
 
 **Parameters**: None
 
@@ -1415,7 +1415,7 @@ Nitro contracts v3.2 have not been publicly released yet and is not supported in
 
 </Callout>
 
-You can deploy a RollupCreator factory contract following the instructions in [How to deploy new factory contracts](/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts#deploying-a-rollupcreator).
+You can deploy a RollupCreator factory contract following the instructions in [How to deploy new factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts#deploying-a-rollupcreator).
 
 Before creating the Arbitrum chain, you must have the onchain custom validator contract and the OneStepProof (OSP) contracts deployed on the <Term id="parent-chain">parent chain</Term>. Deploy the onchain validator contract first, and then use the script available at `scripts/deployOsp.ts` to deploy the OSP contracts. Specify the address of the custom validator contract in a `CUSTOM_DA_VALIDATOR` env variable and use hardhat to run the script:
 

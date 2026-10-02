@@ -13,7 +13,7 @@ It covers the full path: hash your API key, deposit USDG, read the round state, 
 
 <Callout type="info" title="If you don't know what the Fast Feed is">
 
-The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <Term id="sequencer">Sequencer</Term> executes it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
+The Fast Feed is a paid WebSocket stream that publishes each transaction as soon as the <Term id="sequencer">Sequencer</Term> executes it, before its block reaches the free sequencer feed. The [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) explains what it publishes, who it serves, and how rounds and prices work.
 
 </Callout>
 
@@ -21,7 +21,7 @@ The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid 
 
 ## Prerequisites
 
-- You know how Fast Feed rounds and prices work. If not, read the [introduction to the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) and the [introduction to PGA](/docs/how-arbitrum-works/priority-gas-auction/pga), which sets the round cadence.
+- You know how Fast Feed rounds and prices work. If not, read the [introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) and the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga), which sets the round cadence.
 - An account on Arbitrum One that holds USDG to pay for tickets and ETH to pay for gas.
 - An Arbitrum One JSON-RPC endpoint.
 - [Foundry's `cast`](https://getfoundry.sh/), or any EVM client, to send transactions. The examples use `cast` and leave out `--rpc-url $RPC_URL --private-key $PRIVATE_KEY` to stay short.
@@ -89,7 +89,7 @@ The contract debits ticket purchases from an internal balance, not from your wal
    cast call $TICKETS "tokenBalance(address)(uint256)" <your-address>
    ```
 
-Deposit enough for several rounds. The price can rise by up to about two times between rounds, as the [rounds and pricing](/docs/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) section explains. You can withdraw an unused balance at any time with `withdrawToken(amount)`.
+Deposit enough for several rounds. The price can rise by up to about two times between rounds, as the [rounds and pricing](/how-arbitrum-works/priority-gas-auction/fast-feed#rounds-and-pricing) section explains. You can withdraw an unused balance at any time with `withdrawToken(amount)`.
 
 ## Step 3: Read the round state
 
@@ -144,7 +144,7 @@ The endpoint hashes the key with Keccak-256, compares it against the active tick
 - Send only ping and pong frames.
 - Read as fast as the feed arrives. The endpoint drops a client that lags behind, so parse and process off the read loop.
 
-Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](/docs/how-arbitrum-works/priority-gas-auction/fast-feed#what-the-fast-feed-publishes) section lists every field.
+Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](/how-arbitrum-works/priority-gas-auction/fast-feed#what-the-fast-feed-publishes) section lists every field.
 
 <Tabs groupId="ws-client" items={["Command line", "Node.js", "Python"]}>
 <Tab value="Command line">
@@ -309,4 +309,4 @@ At the end of the round in which you buy it. It stays active until the end of th
 It stays in your internal balance. Withdraw it at any time with `withdrawToken(amount)`.
 
 **Do I need a Nitro node?**
-No. The Fast Feed is a stream for your own client. To follow the chain, use the free [sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed) instead.
+No. The Fast Feed is a stream for your own client. To follow the chain, use the free [sequencer feed](/run-a-node/sequencer/read-sequencer-feed) instead.

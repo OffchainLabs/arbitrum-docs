@@ -49,7 +49,7 @@ Pausing has no impact on users. The <Term id="sequencer">sequencer</Term> keeps 
 
 Glamsterdam raises the parent chain gas cost of each batch post. Your chain uses the `perBatchGasCharge` parameter to calculate how much it reimburses the batch poster. The current value reflects pre-Glamsterdam costs, so after activation the batch poster can receive less in reimbursements than it spends on each batch.
 
-On Sepolia, the difference is a small amount of testnet ETH. **Do not change `perBatchGasCharge` on Sepolia.** Offchain Labs will publish the value to use before Ethereum mainnet activates Glamsterdam. To learn how the parameter works, refer to [Configure and optimize gas](/docs/launch-arbitrum-chain/chain-config/costs/gas-optimization).
+On Sepolia, the difference is a small amount of testnet ETH. **Do not change `perBatchGasCharge` on Sepolia.** Offchain Labs will publish the value to use before Ethereum mainnet activates Glamsterdam. To learn how the parameter works, refer to [Configure and optimize gas](/launch-arbitrum-chain/chain-config/costs/gas-optimization).
 
 ## Blob configuration
 
@@ -60,7 +60,7 @@ If your chain posts <Term id="blob">blobs</Term> to Ethereum Sepolia, turn off t
 --node.batch-poster.ignore-blob-price=true
 ```
 
-Chains that post calldata need no change. To learn more about these flags, refer to [Enabling blob transactions for Arbitrum batch poster](/docs/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs).
+Chains that post calldata need no change. To learn more about these flags, refer to [Enabling blob transactions for Arbitrum batch poster](/launch-arbitrum-chain/chain-config/batch-poster/enable-4844-blobs).
 
 ## Important dates
 

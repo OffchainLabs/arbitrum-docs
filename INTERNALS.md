@@ -21,7 +21,7 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 - [Page weight and what loads late](#page-weight-and-what-loads-late)
 - [Redirects](#redirects)
 - [Routing and `proxy.ts`](#routing-and-proxyts)
-- [Static routing under `/docs`](#static-routing-under-docs)
+- [Static routing at the site root](#static-routing-at-the-site-root)
 - [Analytics](#analytics)
 - [Scripts are TypeScript, run by Node](#scripts-are-typescript-run-by-node)
 - [The gates](#the-gates)
@@ -52,11 +52,12 @@ Four concepts carry the site:
   app queries: `getPage(slug)`, `getPages()`, the page tree, and URLs derived from `baseUrl`.
 - **The page tree.** The structure behind the sidebar, breadcrumbs and previous/next links, built
   from the directory layout and the `meta.json` in each directory.
-- **The catch-all route.** `app/docs/[[...slug]]/page.tsx` renders every docs page. Adding an
+- **The catch-all route.** `app/(docs)/[...slug]/page.tsx` renders every docs article. Adding an
   `.mdx` file creates a route with no wiring.
 
 A slug is the file path minus the extension, with a trailing `index` dropped:
-`content/docs/stylus/quickstart.mdx` serves at `/docs/stylus/quickstart`.
+`content/docs/stylus/quickstart.mdx` serves at `/stylus/quickstart`. The `content/docs` directory
+stores content; its name contributes no URL prefix.
 
 The action row under a page's title holds the copy-markdown button, the view-options menu (with the
 edit link) and `RequestUpdateLink`, which opens a prefilled GitHub issue.
@@ -78,7 +79,7 @@ mistakes:
 
 ## The pipeline
 
-Read `source.config.ts`, `lib/source.ts` and `app/docs/[[...slug]]/page.tsx` together. Nothing else
+Read `source.config.ts`, `lib/source.ts` and `app/(docs)/[...slug]/page.tsx` together. Nothing else
 reads the `docs` collection. The `glossary` collection has one reader, `lib/references.ts`.
 
 1. `fumadocs-mdx` scans `content/docs/**` and `content/glossary/**`, validates every docs page's
@@ -161,7 +162,7 @@ Dates are formatted in UTC, so a prerendered page reads the same wherever it was
   `"root": true`. The navbar (`lib/layout.shared.tsx`) links into each section. Two entries do
   not point at a landing page: Stylus goes to `stylus/quickstart`, and the Build menu carries an
   extra entry for `build-decentralized-apps/machine-payments-protocol`.
-- `tabs={false}` in `app/docs/layout.tsx` turns off the root switcher. Fumadocs resolves the current
+- `tabs={false}` in `app/(docs)/layout.tsx` turns off the root switcher. Fumadocs resolves the current
   URL to its node in the tree and renders the nearest `root: true` folder above it. A page outside
   every root folder gets the whole tree.
 - A subdirectory is a collapsible group titled by its own `meta.json`. Its `index.mdx` opens when a
@@ -176,12 +177,13 @@ Dates are formatted in UTC, so a prerendered page reads the same wherever it was
   (`components/sidebar-resource-links.tsx`, links from `sidebarResourceLinks` in `lib/shared.ts`).
   It sits outside the page tree, so it cannot claim a page for another section.
 
-**Never write a `[Label](/docs/…)` link entry for a page in this repo.** It puts the page on a
+**Never write a `[Label](/section/page)` link entry for a page in this repo.** It puts the page on a
 second node, and the reader lands in whichever section Fumadocs finds first. Use a path entry.
 
 `scripts/sidebar.test.ts` builds the real tree with Fumadocs' loader and fails when a page is on no
-node, on more than one, or outside every root folder. The docs index, `/docs`, is exempt from the
-root-folder check. It runs under `pnpm test`.
+node, on more than one, or outside every root folder. The root overview (`content/docs/index.mdx`)
+is excluded with `!index`: it supplies `/index.md` and the LLM overview, while the homepage owns
+HTML at `/`. It runs under `pnpm test`.
 
 ## Page metadata
 
@@ -193,15 +195,15 @@ root-folder check. It runs under `pnpm test`.
   canonical, the page image from the `og/` route, and `modifiedTime` when a date is known;
 - a `summary_large_image` Twitter card with `site: @arbitrum`.
 
-`og:type` is `article` for everything under `/docs`, the landing pages included. The site root
+`og:type` is `article` for every docs article, the section landing pages included. The site root
 publishes its own title, description and card from `app/(home)/page.tsx`, built on `siteTitle` and
-`siteDescription` in `lib/shared.ts`. Those are deliberately not the docs index's "Arbitrum docs",
-so `/` and `/docs` do not compete for the same query. The root's card is
+`siteDescription` in `lib/shared.ts`. There is one HTML homepage and no separate `/docs` index.
+The root's card is
 `app/(home)/opengraph-image.tsx`, Next's file convention. Both cards come from `renderOgImage` in
 `lib/og.tsx`, so they cannot drift.
 
-**Do not add a `title.template` to `app/layout.tsx`.** `/docs` is titled "Arbitrum docs", so a
-`%s | Arbitrum docs` template would double the suffix.
+**Do not add a `title.template` to `app/layout.tsx`.** Keep page titles as written in frontmatter,
+without an automatic suffix.
 
 ### The site URL rule
 
@@ -281,7 +283,7 @@ parses as a link. Write `{var:name}` in the destination instead:
 
 `remarkVarLinks` in `lib/var-links.ts` expands placeholders in link and image URLs, link titles,
 definitions, and JSX `href`, `to` and `src` attributes. `check-links` expands them before it
-resolves an internal `/docs/…` link. Two limits:
+resolves an internal `/<slug>` link. Two limits:
 
 - A placeholder in prose fails the build, because MDX reads the braces as an expression.
 - A local image path is imported before the plugin runs, so write it in full.
@@ -434,7 +436,7 @@ or as Tailwind utilities.
 A docs page loads three stylesheets. Check after any component change:
 
 ```bash
-curl -s http://localhost:3000/docs/stylus | grep -o '<link rel="stylesheet"' | wc -l
+curl -s http://localhost:3000/stylus | grep -o '<link rel="stylesheet"' | wc -l
 ```
 
 Use `grep -o … | wc -l`, not `grep -c`: every stylesheet link sits on the document's first line.
@@ -471,8 +473,12 @@ The file has two blocks:
 
 - **Between the `AUTO-GENERATED` markers**, one entry per moved page, appended by
   `pnpm move-doc`. Never hand-edit between the markers.
-- **After them**, hand-maintained entries: two site-local ones for the retired pattern guide,
-  then legacy `docs.arbitrum.io` paths mapped to `/docs/…`.
+- **After them**, hand-maintained entries for genuine legacy aliases, retired pages and assets.
+  Unchanged paths serve directly, with no redirect merely to add a `/docs` prefix.
+
+`next.config.ts` also derives a `.md` twin for each alias whose destination is a documentation
+page. External destinations and public assets get no markdown twin. The root overview is served
+directly at `/index.md`.
 
 `pnpm move-doc <from> <to>` rewrites every internal link that resolves to the page (keeping each
 link's written form), moves the file with `git mv`, re-bases its relative links, updates
@@ -486,7 +492,7 @@ is listed twice.
 **Choosing a legacy destination**, in order:
 
 1. A destination verified by hand, by comparing the old page's title with the candidates.
-2. The same path under `/docs`, when it names a live page.
+2. If the same path names a live page, no redirect is needed.
 3. A whole-section rename, such as `/run-arbitrum-node` to `/run-a-node`.
 4. The one local page with the same title.
 5. The one local page with the same basename, when the basename was unique upstream too.
@@ -502,11 +508,17 @@ Deleting a page is not a move. Write its redirect by hand in the same commit.
 ## Routing and `proxy.ts`
 
 There is one locale and no `[lang]` segment. Pages live under `content/docs/` and serve at
-`/docs/…`.
+`/<slug>`, preserving existing root-level article URLs. `app/(docs)/[...slug]/page.tsx` uses a
+URL-neutral route group and a non-optional catch-all, leaving `/` to `app/(home)/page.tsx`.
+`docsRoute` is an empty prefix for links; the loader uses `/` as its `baseUrl`. Avoid joining `/`
+with a path that already starts with `/`, which would create a protocol-relative URL.
 
 **Markdown mirrors.** `app/llms.mdx/docs/[[...slug]]/route.ts` serves every page as markdown at
-`/llms.mdx/docs/<slug>/content.md`. `next.config.ts` rewrites `/docs/<slug>.md` (and `/docs.md`)
-onto it. There is no `Accept` header negotiation: a `/docs` URL always serves HTML.
+`/llms.mdx/docs/<slug>/content.md`. `next.config.ts` rewrites `/<slug>.md` (and `/index.md`)
+onto it after checking static routes and public files. There is no `Accept` header negotiation:
+an article URL always serves HTML. `content/docs/index.mdx` provides the root markdown overview;
+it is excluded from the sidebar and the article route's static parameters. The sitemap lists `/`
+only once. `/og/docs` and `/llms.mdx/docs` remain machine endpoints.
 `/llms.txt` lists every page and `/llms-full.txt` concatenates them.
 
 **`/.well-known/`** holds the MCP discovery card, `public/.well-known/mcp/server-card.json`. It
@@ -516,12 +528,13 @@ regenerates it; the HTTP smoke suite checks that it is served.
 ### Request tracking
 
 `proxy.ts` records a PostHog `llms_file_fetched` event for `/llms.txt`, `/llms-full.txt`,
-`/docs/<slug>.md` and the `/llms.mdx/` mirror. Its `config.matcher` lists exactly those paths, so
-no other request runs the proxy.
+`/<slug>.md`, `/index.md` and the `/llms.mdx/` mirror. Its `config.matcher` selects markdown and
+LLM requests; HTML navigation does not run the proxy.
 
 - **Production only**: it checks `VERCEL_ENV === 'production'`, so nothing fires locally or on a
   preview, and no key is needed to run the app.
-- **Both markdown shapes count as `/docs/<slug>.md`**, so one page is one series. The matcher sees
+- **Both markdown shapes count as `/<slug>.md`** (or `/index.md` for the root), so one page is one
+  series. The matcher sees
   the request before the rewrite, and a rewrite does not re-enter the proxy, so each request counts
   once.
 - **Each event gets a random `distinct_id`** and `$process_person_profile: false`. The series
@@ -536,10 +549,11 @@ no other request runs the proxy.
 Classification lives in `lib/llms-tracking.ts`, which imports only `lib/shared.ts`, so
 `scripts/lib/llms-tracking.test.ts` tests the real module.
 
-## Static routing under `/docs`
+## Static routing at the site root
 
-`app/docs/[[...slug]]/page.tsx` exports `generateStaticParams()` over `source.generateParams()` and
-`dynamicParams = false`. Every page is prerendered at build, and any other slug under `/docs` gets
+`app/(docs)/[...slug]/page.tsx` exports `generateStaticParams()` over the nonempty slugs from
+`source.generateParams()` and `dynamicParams = false`. Every article is prerendered at build,
+and any other slug gets
 the prerendered 404 page from `app/not-found.tsx` with status 404, without rendering the docs page.
 The `og/` and `llms.mdx/` routes prerender one entry per page as well.
 
@@ -558,7 +572,7 @@ To check the 404 by hand:
 
 ```bash
 pnpm build && pnpm start
-curl -sS -D - -o body.html http://localhost:3000/docs/does-not-exist
+curl -sS -D - -o body.html http://localhost:3000/does-not-exist
 ```
 
 Strip `<script>` blocks before grepping the body: a 200 page also carries the 404 copy in its

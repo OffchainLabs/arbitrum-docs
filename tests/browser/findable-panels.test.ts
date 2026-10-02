@@ -116,7 +116,7 @@ async function assertVisiblePanel(panel: Locator, state: string) {
 test('native text search reveals a collapsed tab and preserves manual selection', async () => {
   const page = await browser.newPage();
   try {
-    await page.goto(new URL('/docs/run-a-node/start-here', baseUrl).href);
+    await page.goto(new URL('/run-a-node/start-here', baseUrl).href);
     const firstTab = page.getByRole('tab', { name: 'Arbitrum One, Nova, Sepolia', exact: true });
     const matchedTab = page.getByRole('tab', { name: 'Arbitrum chains', exact: true });
     const firstPanel = await panelFor(firstTab);
@@ -152,7 +152,7 @@ test('native text search reveals a collapsed tab and preserves manual selection'
 test('native text search opens an accordion and manual closing still works', async () => {
   const page = await browser.newPage();
   try {
-    await page.goto(new URL('/docs/stylus/quickstart', baseUrl).href);
+    await page.goto(new URL('/stylus/quickstart', baseUrl).href);
     const trigger = page.getByRole('button', { name: 'Rust toolchain', exact: true });
     const panel = await panelFor(trigger);
     await page.waitForFunction(

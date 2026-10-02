@@ -364,11 +364,11 @@ describe('page rendering', () => {
   ];
   const options = {
     introLinks: [
-      { label: 'Configuration system', href: '/docs/x' },
-      { label: 'DA tools reference', href: '/docs/da' },
+      { label: 'Configuration system', href: '/x' },
+      { label: 'DA tools reference', href: '/da' },
     ],
-    namespaceLinks: { http: { label: 'Configuration system', href: '/docs/x' } },
-    defaultNamespaceLink: { label: 'Fallback', href: '/docs/y' },
+    namespaceLinks: { http: { label: 'Configuration system', href: '/x' } },
+    defaultNamespaceLink: { label: 'Fallback', href: '/y' },
     nitroVersionTag: 'v9.9.9',
   };
 
@@ -419,12 +419,12 @@ describe('page rendering', () => {
 
   it('falls back to the default guide link for an unlisted namespace', () => {
     const out = renderGeneratedRegion(flags, options);
-    assert.match(out, /Related guide: \[Fallback\]\(\/docs\/y\)/);
+    assert.match(out, /Related guide: \[Fallback\]\(\/y\)/);
   });
 
   it('lists the curated intro guides, including one that is no namespace', () => {
     const out = renderGeneratedRegion(flags, options);
-    assert.ok(out.includes('- [Configuration system](/docs/x)\n- [DA tools reference](/docs/da)'));
+    assert.ok(out.includes('- [Configuration system](/x)\n- [DA tools reference](/da)'));
   });
 
   it('keeps the existing frontmatter and the prose outside the markers', () => {

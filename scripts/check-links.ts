@@ -4,7 +4,7 @@
  * Fumadocs has no broken-link check of its own. This walks every `content/docs/**` `.md(x)` file
  * and asserts that each internal link (markdown, JSX `href`/`to`, `<include>`) resolves to an
  * existing file. Partials under `content/partials/` and glossary entries under `content/glossary/`
- * have no URL of their own, so only their root-absolute (`/docs/...`) links are checked. An
+ * have no URL of their own, so only their root-absolute (`/<slug>`) links are checked. An
  * `<include>` whose target is missing is reported with its line, and the rest is still checked.
  * Fragments are checked against the site's MDX pipeline, including nested partials and custom
  * heading ids. External links and JSX expression attributes are skipped.

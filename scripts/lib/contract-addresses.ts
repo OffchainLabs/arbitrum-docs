@@ -294,7 +294,7 @@ ${miscTable}
 
 ## Canonical factory contracts
 
-The following factory contracts are deployed on the corresponding chain and are used to deploy new Arbitrum chains (\`RollupCreator\`) and their token bridges (\`TokenBridgeCreator\`). For factory contracts on additional chains (Ethereum, Base, and testnets) and deployment instructions, see [Canonical factory contracts](/docs/launch-arbitrum-chain/deploy/canonical-factory-contracts).
+The following factory contracts are deployed on the corresponding chain and are used to deploy new Arbitrum chains (\`RollupCreator\`) and their token bridges (\`TokenBridgeCreator\`). For factory contracts on additional chains (Ethereum, Base, and testnets) and deployment instructions, see [Canonical factory contracts](/launch-arbitrum-chain/deploy/canonical-factory-contracts).
 
 ${factoriesTable}
 `;

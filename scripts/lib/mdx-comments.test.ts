@@ -3,7 +3,7 @@
  * run the real `@mdx-js/mdx` processor with the real `remarkLLMs` behind the plugin, in the order
  * `fumadocs-mdx` composes them (`buildJSMDX`: remarkInclude, the site's plugins, then the
  * postprocess pass that calls `remarkLLMs`). What they assert is therefore the string a reader gets
- * at `/docs/<slug>.md`, not the shape of a tree.
+ * at `/<slug>.md`, not the shape of a tree.
  */
 import { createProcessor } from '@mdx-js/mdx';
 import { remarkLLMs } from 'fumadocs-core/mdx-plugins/remark-llms';

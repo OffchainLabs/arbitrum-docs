@@ -19,7 +19,7 @@ import { HomeHeader } from '@/components/home-header';
 import { baseOptions } from '@/lib/layout.shared';
 import { docsRoute } from '@/lib/shared';
 
-// Root 404 for both `/anything` and `/docs/anything`. It sits outside every route group, so
+// Root 404 for missing pages. It sits outside every route group, so
 // HomeLayout supplies the navbar; DocsLayout would need a page tree. Next adds `noindex`.
 
 export const metadata: Metadata = {
@@ -96,7 +96,7 @@ export default function NotFound() {
 
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
             <FullSearchTrigger className="w-full sm:w-80" />
-            <BrandButton href={docsRoute} mode="secondary">
+            <BrandButton href={docsRoute || '/'} mode="secondary">
               Browse all docs
             </BrandButton>
           </div>

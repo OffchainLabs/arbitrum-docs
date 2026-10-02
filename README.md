@@ -96,7 +96,7 @@ yourself.
 | `content/partials/`     | Reusable `_`-prefixed fragments, included into pages       |
 | `content/glossary/`     | Glossary terms for `<Term>` (hand-written)                 |
 | `content/vars.json`     | Global variables                                           |
-| `app/docs/[[...slug]]/` | Docs route                                                 |
+| `app/(docs)/[...slug]/` | Docs route                                                 |
 | `components/mdx.tsx`    | The MDX component registry                                 |
 | `components/widgets/`   | The four interactive widgets, each used by one page        |
 | `lib/source.ts`         | Fumadocs source adapter                                    |
@@ -187,7 +187,7 @@ never parses and the reader is served the literal `[text](…)` brackets. Write 
 ```
 
 Use as many placeholders as the URL needs. The same form works in an `href`, `to` or `src`
-attribute, in a link title, and in an internal `/docs/…` destination, which `pnpm check-links`
+attribute, in a link title, and in an internal `/<slug>` destination, which `pnpm check-links`
 expands before it resolves. Everywhere else on the page, the link text included, keep using
 `<Var name="…" />`: a placeholder written in prose is read as a JavaScript expression and fails the
 build with an acorn parse error. The one destination it cannot do is a local image path

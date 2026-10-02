@@ -15,7 +15,7 @@ Customizing your chain's precompiles involves modifying or extending the built-i
 
 The guidance in this document will only work if you use `eth_call` to call the new precompiles. If you call them from other contracts or add non-view/pure methods, this approach will break the block validation.
 
-To support these additional use cases, follow the instructions described in [How to customize your Arbitrum chain's behavior](/docs/launch-arbitrum-chain/extend-the-protocol/stf).
+To support these additional use cases, follow the instructions described in [How to customize your Arbitrum chain's behavior](/launch-arbitrum-chain/extend-the-protocol/stf).
 
 </Callout>
 
@@ -53,7 +53,7 @@ Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the pre
 function sayHi() external view returns(string memory);
 ```
 
-Next, follow the steps in [How to customize your Arbitrum chain's behavior](/docs/launch-arbitrum-chain/extend-the-protocol/stf#step-3-run-the-node) to build a modified Arbitrum Nitro node Docker image and run it.
+Next, follow the steps in [How to customize your Arbitrum chain's behavior](/launch-arbitrum-chain/extend-the-protocol/stf#step-3-run-the-node) to build a modified Arbitrum Nitro node Docker image and run it.
 
 Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -139,7 +139,7 @@ interface ArbHi {
 }
 ```
 
-Next, follow the steps in [How to customize your Arbitrum chain's behavior](/docs/launch-arbitrum-chain/extend-the-protocol/stf#step-3-run-the-node) to build a modified Arbitrum Nitro node Docker image and run it.
+Next, follow the steps in [How to customize your Arbitrum chain's behavior](/launch-arbitrum-chain/extend-the-protocol/stf#step-3-run-the-node) to build a modified Arbitrum Nitro node Docker image and run it.
 
 Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -230,7 +230,7 @@ Our function now emits an event, which means that when calling it, the state wil
 function sayHi() external returns(string memory);
 ```
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/docs/run-a-node/nitro/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following the instructions in [How to build Nitro locally](/run-a-node/nitro/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro with the following command:
 
@@ -308,7 +308,7 @@ func (con ArbInfo) GetBalanceCustom(c ctx, evm mech, account addr) (huge, error)
 
 To register this new precompile method, refer to Option 1 above.
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/docs/run-a-node/nitro/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following the instructions in [How to build Nitro locally](/run-a-node/nitro/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro with the following command:
 
@@ -393,7 +393,7 @@ The two responses will look like this, respectively:
 
 Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
 
-To learn more about the gas cost model, see [how to estimate gas](/docs/arbitrum-essentials/how-to-estimate-gas).
+To learn more about the gas cost model, see [how to estimate gas](/arbitrum-essentials/how-to-estimate-gas).
 
 ## Option 5: Call and modify state
 
@@ -531,4 +531,4 @@ You should see something like this:
 
 ## Incorporate your changes to precompile into the ArbOS upgrade
 
-If you do not customize the precompile before launching your Arbitrum chain network, please continue to follow the instructions on [Customize ArbOS](/docs/launch-arbitrum-chain/extend-the-protocol/arbos) to perform an ArbOS version control to avoid blockchain reorg.
+If you do not customize the precompile before launching your Arbitrum chain network, please continue to follow the instructions on [Customize ArbOS](/launch-arbitrum-chain/extend-the-protocol/arbos) to perform an ArbOS version control to avoid blockchain reorg.
