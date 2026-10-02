@@ -3,8 +3,10 @@ import type { MetadataRoute } from 'next';
 import { getSiteUrl } from '@/lib/shared';
 
 /**
- * `/robots.txt`. No `Disallow` lines: Fumadocs generates no category index pages and the one hosted
- * PDF is served from `public/nitro-whitepaper.pdf`, so there is nothing to keep crawlers out of.
+ * `/robots.txt`. No `Disallow` lines: Fumadocs generates no category index pages (the old
+ * `/category/*` URLs redirect), and the hosted PDFs (`public/nitro-whitepaper.pdf` and the audit
+ * reports in `public/audit-reports/`) are meant to be indexed, so there is nothing to keep crawlers
+ * out of.
  *
  * `Content-Signal` goes through `other`. It is not part of RFC 9309 but
  * draft-romm-aipref-contentsignals (https://contentsignals.org/), and `other` is Next's escape
