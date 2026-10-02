@@ -107,6 +107,11 @@ const displayFace = localFont({
   src: [{ path: '../public/fonts/fk-screamer-upright.otf', weight: '400', style: 'normal' }],
 });
 
+// With no Inkeep key, neither Inkeep component renders and search is disabled: the site has no
+// search route of its own for Fumadocs' default dialog to call. `NEXT_PUBLIC_*` is inlined at build
+// time, so this is a constant in every build rather than a per-request branch.
+const inkeepEnabled = Boolean(process.env.NEXT_PUBLIC_INKEEP_API_KEY);
+
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html
@@ -125,8 +130,13 @@ export default function Layout({ children }: { children: ReactNode }) {
             // focus is outside a text field. The visible theme toggle is the intended path.
             theme={{ attribute: 'class', defaultTheme: 'light', hotKey: false }}
             // Fumadocs preloads the dialog by default, which would fetch the Inkeep bundle on every
-            // page load instead of on the first open.
-            search={{ SearchDialog: InkeepSearchDialog, preload: false }}
+            // page load instead of on the first open. Without a key there is no search: the Orama
+            // route Fumadocs' own dialog would call is not part of this site.
+            search={
+              inkeepEnabled
+                ? { SearchDialog: InkeepSearchDialog, preload: false }
+                : { enabled: false }
+            }
           >
             {/* Announcement bar. Above the navbar because it is a sibling rendered before
               {children}, and every layout's header lives inside those.
@@ -187,7 +197,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             {/* Fumadocs exposes no footer slot, so the site footer is a sibling of
               the layout inside the flex column body. See components/footer.tsx. */}
             <Footer />
-            <InkeepChatButton />
+            {inkeepEnabled ? <InkeepChatButton /> : null}
           </RootProvider>
         </PostHogProvider>
       </body>
