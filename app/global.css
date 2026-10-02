@@ -36,6 +36,8 @@
 
   --shadow-button-glow: 0 0 14px 0 rgb(16 225 255 / 0.5);
   --shadow-card-hover: 0 0 20px 0 rgb(0 0 0 / 0.05);
+  /* The Term definition popover. */
+  --shadow-popover: 0 8px 30px rgb(0 0 0 / 0.12);
   --drop-shadow-hex-glow: 0 0 3px rgb(16 225 255);
   /* The cyan glow on footer links. */
   --text-shadow-cyan-glow: 0 0 6px rgb(16 225 255 / 0.8);

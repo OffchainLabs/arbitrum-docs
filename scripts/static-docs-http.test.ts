@@ -151,10 +151,21 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
   });
 });
 
+/** Fenced blocks and inline code removed: a code sample may show a component's source on purpose. */
+const prose = (markdown: string): string =>
+  markdown
+    .replace(/^([ \t]*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1\2[ \t]*$/gm, '')
+    .replace(/(`+)[^`\n][\s\S]*?\1/g, '');
+/** Components `lib/llms-markdown.ts` turns into markdown; none may reach a mirror as a tag. */
+const COMPONENT_TAG =
+  /<(Var|Term|Callout|AEL|Card|Cards|Accordion|Accordions|Tab|Tabs|ImageZoom)\b/;
+
 test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => {
   const noComments = (body: string, path: string): void => {
     assert.ok(body.length > 0, path);
     assert.equal(body.includes('{/*'), false, `${path} still serves an MDX comment`);
+    const leak = prose(body).match(COMPONENT_TAG)?.[0];
+    assert.equal(leak, undefined, `${path} still serves the component tag ${leak}`);
   };
 
   await t.test('a page mirror is clean and still carries its prose', async () => {
@@ -165,6 +176,13 @@ test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => 
       noComments(body, path);
       assert.match(body, /Arbitrum documentation/, path);
     }
+  });
+
+  await t.test('a mirror with variables and glossary terms prints values and words', async () => {
+    const path = '/arbitrum-essentials/reference/chain-params.md';
+    const response = await get(path);
+    assert.equal(response.status, 200, path);
+    noComments(await response.text(), path);
   });
 
   await t.test('llms-full.txt is clean site-wide', async () => {
@@ -354,5 +372,36 @@ test('response headers', { skip: !baseUrl }, async (t) => {
     await response.text();
     assert.ok([200, 308].includes(response.status), String(response.status));
     assert.equal(response.headers.get('access-control-allow-origin'), '*');
+  });
+});
+
+test('the llms index and the mirror route', { skip: !baseUrl }, async (t) => {
+  await t.test('the index and a mirror declare charset=utf-8', async () => {
+    for (const path of ['/llms.txt', `${livePath}.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 200, path);
+      assert.match(response.headers.get('content-type') ?? '', /charset=utf-8/i, path);
+      await response.text();
+    }
+  });
+
+  await t.test('llms.txt has master title and summary and links each mirror once', async () => {
+    const body = await (await get('/llms.txt')).text();
+    assert.match(body, /^# Arbitrum Documentation\n\n> Official documentation/);
+    const links = [...body.matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1]);
+    assert.ok(links.length > 100);
+    assert.deepEqual(
+      links.filter((l) => !l.endsWith('.md')),
+      [],
+    );
+    assert.equal(new Set(links).size, links.length);
+  });
+
+  await t.test('the mirror route 404s for paths it did not prerender', async () => {
+    for (const path of ['/llms.mdx/docs/zz-junk/content.md', `/llms.mdx${livePath}/other.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
   });
 });
