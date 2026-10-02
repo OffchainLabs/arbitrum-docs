@@ -326,3 +326,33 @@ test('legacy URLs', { skip: !baseUrl }, async (t) => {
     await pdf.arrayBuffer();
   });
 });
+
+test('response headers', { skip: !baseUrl }, async (t) => {
+  await t.test('the root sends the discovery Link header and no X-Powered-By', async () => {
+    const response = await get('/');
+    await response.text();
+    assert.match(response.headers.get('link') ?? '', /<\/llms\.txt>; rel="service-doc"/);
+    assert.equal(response.headers.get('x-powered-by'), null);
+    assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(response.headers.get('x-frame-options'), 'DENY');
+    assert.ok(response.headers.get('content-security-policy-report-only'));
+  });
+
+  await t.test('the markdown surface is readable cross-origin', async () => {
+    for (const path of ['/llms.txt', '/llms-full.txt', '/index.md', `${livePath}.md`, liveMirror]) {
+      const response = await get(path);
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get('access-control-allow-origin'), '*', path);
+      await response.text();
+    }
+  });
+
+  await t.test('a root-level .md URL answers with the CORS header too', async () => {
+    // Served by the mirror rewrite, or redirected to the /docs twin: either way the first answer
+    // must carry the header, or a cross-origin fetch fails before it can follow a redirect.
+    const response = await get('/how-arbitrum-works/deep-dives/stf.md', { redirect: 'manual' });
+    await response.text();
+    assert.ok([200, 308].includes(response.status), String(response.status));
+    assert.equal(response.headers.get('access-control-allow-origin'), '*');
+  });
+});
