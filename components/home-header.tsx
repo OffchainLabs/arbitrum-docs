@@ -111,7 +111,7 @@ function NavbarLinkItemMenu({ item }: { item: Extract<LinkItemType, { type: 'men
       }}
     >
       <PopoverTrigger
-        className="inline-flex items-center gap-1.5 p-1 text-sm text-fd-muted-foreground transition-colors has-data-[active=true]:text-fd-primary data-[state=open]:text-fd-accent-foreground focus-visible:outline-none"
+        className="inline-flex items-center gap-1.5 p-1 text-sm text-fd-muted-foreground transition-colors has-data-[active=true]:text-fd-primary data-[state=open]:text-fd-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring rounded-md"
         onPointerEnter={onPointerEnter}
         onPointerLeave={onPointerLeave}
       >
