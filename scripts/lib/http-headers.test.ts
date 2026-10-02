@@ -70,17 +70,50 @@ test('the markdown and llms routes are readable cross-origin, and match the prox
   assert.deepEqual(tracked, [...LLM_SURFACE_SOURCES]);
 });
 
-test('the CSP allows the origins the site talks to, and the toolbar only off production', () => {
-  const csp = contentSecurityPolicy(true);
-  for (const origin of [
+// Compare complete CSP source expressions within their directives, not URL substrings.
+const directivesOf = (csp: string): Map<string, string[]> =>
+  new Map(
+    csp.split(';').map((entry) => {
+      const [directive, ...sources] = entry.trim().split(/\s+/);
+      return [directive, sources];
+    }),
+  );
+
+test('the CSP allows the origins the site talks to', () => {
+  const directives = directivesOf(contentSecurityPolicy(true));
+  assert.deepEqual(directives.get('connect-src'), [
+    "'self'",
     'https://us.i.posthog.com',
     'https://us-assets.i.posthog.com',
     'https://api.inkeep.com',
-  ]) {
-    assert.ok(csp.includes(origin), origin);
+    'https://api.io.inkeep.com',
+  ]);
+  assert.deepEqual(directives.get('script-src'), [
+    "'self'",
+    "'unsafe-inline'",
+    'https://us-assets.i.posthog.com',
+  ]);
+  assert.deepEqual(directives.get('frame-ancestors'), ["'none'"]);
+  assert.deepEqual(directives.get('style-src'), ["'self'", "'unsafe-inline'"]);
+});
+
+test('the CSP adds the preview toolbar only off production', () => {
+  const production = directivesOf(contentSecurityPolicy(true));
+  const preview = directivesOf(contentSecurityPolicy(false));
+  const toolbarDirectives = new Set([
+    'script-src',
+    'style-src',
+    'font-src',
+    'connect-src',
+    'frame-src',
+  ]);
+  assert.deepEqual([...preview.keys()], [...production.keys()]);
+  for (const [directive, sources] of production) {
+    assert.ok(!new Set(sources).has('https://vercel.live'), directive);
+    assert.deepEqual(
+      preview.get(directive),
+      toolbarDirectives.has(directive) ? [...sources, 'https://vercel.live'] : sources,
+      directive,
+    );
   }
-  assert.match(csp, /frame-ancestors 'none'/);
-  assert.match(csp, /style-src 'self' 'unsafe-inline'/);
-  assert.ok(!csp.includes('vercel.live'));
-  assert.ok(contentSecurityPolicy(false).includes('https://vercel.live'));
 });
