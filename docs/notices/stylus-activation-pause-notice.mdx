@@ -10,7 +10,8 @@ The [Arbitrum Security Council](https://docs.arbitrum.foundation/concepts/securi
 <VanillaAdmonition type="warning" title="What this means for you">
 
 - You cannot activate new or expired Stylus contracts on Arbitrum One or Arbitrum Nova while the pause is in effect.
-- Already activated Stylus contracts keep running. Calling them remains permissionless.
+- Already activated Stylus contracts keep running until they [expire](/stylus/concepts/activation.mdx#programtimeleft). Calling them remains permissionless.
+- You can renew an active Stylus contract before it expires with the [keepalive mechanism](/stylus/concepts/activation.mdx#expiration-and-keepalive).
 - Solidity and EVM contract deployment and execution are unaffected.
 
 </VanillaAdmonition>
@@ -21,7 +22,9 @@ Read the Security Council action: **[SC action post]**
 
 The pause applies to the activation step only. Activation is the step that makes a Stylus contract callable. To learn how deployment and activation work, refer to [Activation](/stylus/concepts/activation.mdx).
 
-Contracts activated before the pause are not affected. Users and other contracts can call them as before.
+- You cannot activate a new Stylus contract. You also cannot reactivate a Stylus contract that has expired.
+- Stylus contracts that are active keep running until they expire. An activation lasts 365 days by default. To read the time left, call [`programTimeLeft`](/stylus/concepts/activation.mdx#programtimeleft).
+- You can renew an active Stylus contract before it expires. Call [`codehashKeepalive`](/stylus/concepts/activation.mdx#codehashkeepalive). By default, the contract must be at least 31 days old.
 
 ## Why the Security Council paused activations
 
@@ -34,4 +37,3 @@ AI-assisted tooling is making it easier to discover and construct adversarial pr
 ## What comes next
 
 We remain confident in Stylus, which lets chain owners customize their networks and developers optimize key contracts. The Arbitrum Foundation will work with the <a data-quicklook-from="arbitrum-dao">ArbitrumDAO</a> on next steps for reopening activations in a way that preserves these uses while restricting hand-crafted WASM programs.
-
