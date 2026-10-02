@@ -12,6 +12,7 @@ import path from 'node:path';
 import { after, before, describe, it } from 'node:test';
 
 import {
+  UnrepresentableCellError,
   codeCell,
   escapeCell,
   groupByNamespace,
@@ -385,6 +386,39 @@ describe('page rendering', () => {
 
   it('escapes only the pipe inside a code span, where the rest would be literal text', () => {
     assert.equal(codeCell('a|b <c> {d}'), '`a\\|b <c> {d}`');
+  });
+
+  it('escapes a bare pipe in a code cell: `a|b`', () => {
+    assert.equal(codeCell('a|b'), '`a\\|b`');
+  });
+
+  it('refuses a backslash before a pipe, which no code cell can hold (review 09.5, 08.8)', () => {
+    assert.throws(
+      () => codeCell('a\\|b'),
+      (error: unknown) =>
+        error instanceof UnrepresentableCellError &&
+        error.name === 'UnrepresentableCellError' &&
+        error.message.includes('scripts/data/nitro-cli-reference.data.ts') &&
+        error.message.includes('defaultOverrides'),
+    );
+    // The review's proof of concept: the default that split the cell and ran the expression.
+    assert.throws(
+      () => codeCell('x\\|{globalThis.pwned = "from-default", "LIVE"}'),
+      UnrepresentableCellError,
+    );
+  });
+
+  it('refuses a line break, which ends the table row and publishes the rest as MDX', () => {
+    assert.throws(
+      () => codeCell('x\n{globalThis.pwned = 1}'),
+      (error: unknown) =>
+        error instanceof UnrepresentableCellError && /contains a line break/.test(error.message),
+    );
+    assert.throws(() => codeCell('a\rb'), UnrepresentableCellError);
+  });
+
+  it('keeps a backslash that is not before a pipe', () => {
+    assert.equal(codeCell('C:\\dir | x\\'), '`C:\\dir \\| x\\`');
   });
 
   it('widens the fence around a value that contains backticks', () => {
