@@ -34,6 +34,28 @@ const CUPCAKE_VISIBLE_MS = 5500;
  */
 const RECEIPT_TIMEOUT_MS = 90_000;
 
+const ARBITRUM_SEPOLIA_CHAIN_ID = 421614;
+/**
+ * Local devnets the tutorial can be followed on: Anvil and Hardhat (31337), Ganache (1337) and the
+ * Nitro test node (412346). Any other chain is refused, so a wallet left on a mainnet never pays
+ * real gas for a cupcake.
+ */
+const LOCAL_DEVNET_CHAIN_IDS = new Set([31337, 1337, 412346]);
+
+/**
+ * Why the wallet's current chain is wrong for this widget, or null when it is right. The Sepolia
+ * widget needs Arbitrum Sepolia. The localhost widget needs one of the local devnet ids above.
+ */
+function chainProblem(type: VendingMachineMode, chainId: number): string | null {
+  if (type === 'web3-arb-sepolia' && chainId !== ARBITRUM_SEPOLIA_CHAIN_ID) {
+    return `Switch your wallet to Arbitrum Sepolia (chain ID ${ARBITRUM_SEPOLIA_CHAIN_ID}) and try again. It is on chain ID ${chainId}.`;
+  }
+  if (type === 'web3-localhost' && !LOCAL_DEVNET_CHAIN_IDS.has(chainId)) {
+    return `Your wallet is on chain ID ${chainId}. Switch it to your local devnet (chain ID 31337 for the Anvil node this tutorial starts) and try again.`;
+  }
+  return null;
+}
+
 function truncateAddress(text: string) {
   if (!text) return 'no name';
   if (text.length < 10) return text;
@@ -191,6 +213,9 @@ export function VendingMachine({ id, type = 'web2' }: { id?: string; type?: Vend
         // Prompts the wallet to connect if it has not been connected yet.
         const [signer] = await walletClient.requestAddresses();
         if (!signer) throw new Error('No account selected in the wallet.');
+        // Checked before any write, so a wallet left on a mainnet never pays real gas for a demo.
+        const problem = chainProblem(type, await walletClient.getChainId());
+        if (problem) throw new Error(problem);
 
         const before = Number(
           await publicClient.readContract({
@@ -202,8 +227,7 @@ export function VendingMachine({ id, type = 'web2' }: { id?: string; type?: Vend
         );
         const hash = await walletClient.writeContract({
           account: signer,
-          // The reader picks the network in their wallet (local devnet, then Arbitrum Sepolia), so
-          // there is no chain to assert against here.
+          // The reader picks the network in their wallet; `chainProblem` above has vetted it.
           chain: null,
           address: contract,
           abi: vendingMachineAbi,
@@ -254,7 +278,7 @@ export function VendingMachine({ id, type = 'web2' }: { id?: string; type?: Vend
     } finally {
       setBusy(false);
     }
-  }, [identity, isWeb3, requireProvider, requireWeb3Inputs, showCupcake]);
+  }, [identity, isWeb3, requireProvider, requireWeb3Inputs, showCupcake, type]);
 
   const inputClass =
     'w-full rounded border border-fd-border bg-fd-background px-2 py-2 font-mono text-[11px] text-fd-foreground placeholder:text-fd-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring';
