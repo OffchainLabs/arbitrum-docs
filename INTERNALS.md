@@ -489,6 +489,13 @@ That test asserts that every internal destination names a page under `content/do
 (case-sensitively), that no source is a live page, that nothing chains or loops, and that no source
 is listed twice.
 
+`scripts/lib/master-routes.test.ts` covers the entries that are missing.
+`scripts/data/master-routes.json` is a frozen list of the 294 page routes docs.arbitrum.io served
+before the cutover, and the test fails when one of them is neither a page under `content/docs` nor
+matched by a redirect source. Never regenerate the list from a later master; if master publishes a
+page before the cutover, add its route by hand, as was done for
+`/notices/glamsterdam-sepolia-notice`.
+
 **Choosing a legacy destination**, in order:
 
 1. A destination verified by hand, by comparing the old page's title with the candidates.
@@ -713,5 +720,7 @@ and the generators write them with `format: false`.
 - **A client component importing `lib/source`.** It bloats every bundle that loads it.
 - **A new plain `.css` import in a registered component.** Recount the stylesheets.
 - **A redirect to the wrong page that exists.**
-- **A page deleted without a redirect.** Every gate passes while its URL starts to 404.
+- **A page added since the cutover and deleted without a redirect.** `master-routes.test.ts`
+  knows only the routes master published; for a newer page, every gate passes while its URL starts
+  to 404.
 - **A remote image that has rotted.** Nothing requests third-party images.
