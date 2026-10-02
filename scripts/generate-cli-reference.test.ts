@@ -23,6 +23,7 @@ import {
 } from './lib/cli-reference-page.ts';
 import {
   type GoTree,
+  goFiles,
   indexGoTree,
   literalFields,
   splitArgs,
@@ -157,6 +158,28 @@ function readFixtureFlags() {
     },
   });
 }
+
+describe('go-source symlinks (review 09.16)', () => {
+  it('refuses a symlinked .go file and skips a symlinked directory', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'go-symlink-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'go-symlink-outside-'));
+    t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+    fs.writeFileSync(path.join(outside, 'secret.go'), 'package secret\n');
+    fs.mkdirSync(path.join(root, 'pkg'));
+    fs.writeFileSync(path.join(root, 'pkg', 'real.go'), 'package pkg\n');
+    fs.symlinkSync(outside, path.join(root, 'linked-dir'));
+
+    assert.deepEqual(goFiles(root), [path.join(root, 'pkg', 'real.go')]);
+
+    fs.symlinkSync(path.join(outside, 'secret.go'), path.join(root, 'pkg', 'linked.go'));
+    assert.throws(() => goFiles(root), /pkg\/linked\.go is a symlink/);
+    assert.throws(
+      () => indexGoTree([{ modulePath: MODULE, dir: '', absDir: root }]),
+      /linked\.go is a symlink/,
+    );
+  });
+});
 
 describe('go-source', () => {
   it('strips comments without letting an apostrophe open a literal', () => {

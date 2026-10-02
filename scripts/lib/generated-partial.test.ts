@@ -6,10 +6,11 @@
  */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 
-import { assertInertMdx, generatedMarker } from './generated-partial.ts';
+import { assertInertMdx, generatedMarker, readRegularFile } from './generated-partial.ts';
 import { NODE_INTERFACE_MARKER, PRECOMPILE_MARKER } from './precompile-tables.ts';
 
 const PRECOMPILE_DIR = path.join('content', 'partials', 'precompile-tables');
@@ -177,5 +178,29 @@ describe('assertInertMdx', () => {
 
   it('turns an MDX parse error into one naming the file', () => {
     assert.throws(() => check('returns x if a<b\n'), /^Error: fixture\.mdx: not valid MDX/);
+  });
+});
+
+describe('readRegularFile', () => {
+  it('reads a regular file and refuses a symlinked file or directory', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'read-regular-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'read-regular-outside-'));
+    t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+    fs.writeFileSync(path.join(outside, 'secret'), 'SECRET');
+    fs.mkdirSync(path.join(root, 'real'));
+    fs.writeFileSync(path.join(root, 'real', 'page.mdx'), 'ok');
+    fs.symlinkSync(path.join(outside, 'secret'), path.join(root, 'real', 'linked.mdx'));
+    fs.symlinkSync(outside, path.join(root, 'linked-dir'));
+
+    assert.equal(readRegularFile(path.join(root, 'real', 'page.mdx'), root), 'ok');
+    assert.throws(
+      () => readRegularFile(path.join(root, 'real', 'linked.mdx'), root),
+      /real\/linked\.mdx is a symlink/,
+    );
+    assert.throws(
+      () => readRegularFile(path.join(root, 'linked-dir', 'secret'), root),
+      /linked-dir\/secret is a symlink, or sits under one/,
+    );
   });
 });
