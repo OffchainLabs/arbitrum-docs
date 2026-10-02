@@ -1921,11 +1921,6 @@ const sidebars = {
   noticeSidebar: [
     {
       type: 'doc',
-      id: 'notices/stylus-activation-pause-notice',
-      label: 'Temporary pause on new Stylus activations',
-    },
-    {
-      type: 'doc',
       id: 'notices/glamsterdam-sepolia-notice',
       label: 'Glamsterdam notice for Arbitrum Sepolia',
     },
