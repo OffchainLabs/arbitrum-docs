@@ -7,13 +7,18 @@
  *   pnpm stylus:generate --source-path ../sbe       # read an existing clone instead
  *   pnpm stylus:check                               # exit 1 with a diff summary when stale
  *
- * `--source-path` also reads from `STYLUS_REPO_PATH`; the flag wins when both are set.
+ * `--source-path` also reads from `STYLUS_REPO_PATH`; the flag wins when both are set. Either
+ * way the pages come from the commit pinned as `repoRef` in `scripts/data/stylus-examples.data.ts`,
+ * so a local clone must contain that commit.
  *
- * Without it, an edit to `offchainlabs/stylus-by-example` never reaches this site.
+ * Without it, an edit to `offchainlabs/stylus-by-example` never reaches this site. An upstream
+ * edit reaches it only when somebody bumps `repoRef`: stylus-by-example publishes no releases, so
+ * the pin is a commit SHA. `--check` still needs the network (or `--source-path`), so it is not a
+ * CI gate. Run it by hand.
  *
- * Unlike `generate-cli-reference.ts` this pins no upstream ref: stylus-by-example publishes no
- * releases, and the site tracks its default branch. That makes `--check` depend on the network and
- * on someone else's branch, so it is not a CI gate. Run it by hand.
+ * Each built page is checked before it is written: a body holding an `import`, `export`, `{…}`
+ * expression or JSX the generator did not write fails the run (`assertStaticBody`), because the
+ * build compiles and runs MDX.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -26,6 +31,7 @@ import {
   notForProductionInclude,
   outputDir,
   outputUrl,
+  repoRef,
   repoUrl,
   sections,
   sourceRoot,
@@ -86,20 +92,44 @@ function materializeSource({
   workDir: string;
 }): string {
   const treeDir = path.join(workDir, 'stylus-by-example');
+  if (!/^[0-9a-f]{40}$/.test(repoRef)) {
+    throw new Error(
+      `repoRef in scripts/data/stylus-examples.data.ts must be a full 40-character commit SHA, ` +
+        `not a branch or tag: ${JSON.stringify(repoRef)}`,
+    );
+  }
 
   if (sourcePath) {
     const repo = path.resolve(sourcePath);
     fs.mkdirSync(treeDir, { recursive: true });
-    const archive = execFileSync('git', ['archive', 'HEAD'], {
-      cwd: repo,
-      maxBuffer: 256 * 1024 * 1024,
-    });
+    let archive: Buffer;
+    try {
+      archive = execFileSync('git', ['archive', `${repoRef}^{commit}`], {
+        cwd: repo,
+        maxBuffer: 256 * 1024 * 1024,
+        stdio: ['ignore', 'pipe', 'pipe'],
+      });
+    } catch {
+      throw new Error(
+        `${repo} does not contain the pinned commit ${repoRef}. Run \`git fetch origin\` there, ` +
+          `or bump repoRef in scripts/data/stylus-examples.data.ts to the commit you mean.`,
+      );
+    }
     execFileSync('tar', ['-x', '-C', treeDir], { input: archive, maxBuffer: 256 * 1024 * 1024 });
   } else {
-    console.log(`cloning ${repoUrl} (shallow)`);
-    execFileSync('git', ['clone', '--depth', '1', '--quiet', repoUrl, treeDir], {
-      encoding: 'utf-8',
-    });
+    // `git clone --branch` takes only branch and tag names, so fetch the one commit by SHA
+    // (GitHub serves any reachable commit this way) and check it out detached.
+    console.log(`fetching ${repoUrl} at ${repoRef} (shallow)`);
+    const git = (args: string[]) =>
+      execFileSync('git', args, { cwd: treeDir, encoding: 'utf-8' }).trim();
+    fs.mkdirSync(treeDir, { recursive: true });
+    git(['init', '--quiet']);
+    git(['fetch', '--depth', '1', '--quiet', repoUrl, repoRef]);
+    git(['checkout', '--quiet', '--detach', 'FETCH_HEAD']);
+    const head = git(['rev-parse', 'HEAD']);
+    if (head !== repoRef) {
+      throw new Error(`fetched ${head} from ${repoUrl}, expected the pinned ${repoRef}`);
+    }
   }
 
   const appDir = path.join(treeDir, sourceRoot);

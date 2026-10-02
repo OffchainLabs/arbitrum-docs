@@ -6,10 +6,13 @@
  *
  * Ported from arbitrum-docs `scripts/lib/generated-partial.ts`.
  */
+import { createProcessor } from '@mdx-js/mdx';
+import { remarkGfm } from 'fumadocs-core/mdx-plugins';
 import fs from 'node:fs';
 import path from 'node:path';
 import prettier from 'prettier';
 import type { Options as PrettierOptions } from 'prettier';
+import remarkMath from 'remark-math';
 
 /** Thrown by {@link writeOrCheck} in check mode when the on-disk file is stale. */
 export class StaleFileError extends Error {
@@ -135,9 +138,138 @@ export async function writeOrCheck(
  * output plumbing.
  */
 export function setOutput(name: string, value: string): void {
+  // The file is line-oriented: a newline in either half would end this pair early and start a
+  // second one of the value's choosing. Checked before the GITHUB_OUTPUT test so a local run
+  // fails the same way CI would.
+  for (const [label, text] of [
+    ['name', name],
+    ['value', value],
+  ]) {
+    if (/[\r\n]/.test(text)) {
+      throw new Error(
+        `setOutput: the ${label} of step output ${JSON.stringify(name)} may not contain a ` +
+          `newline, which would inject a second output line: ${JSON.stringify(text)}`,
+      );
+    }
+  }
   const outputFile = process.env.GITHUB_OUTPUT;
   if (!outputFile) return;
   fs.appendFileSync(outputFile, `${name}=${value}\n`);
+}
+
+/** Options for {@link assertInertMdx}. */
+export interface InertMdxOptions {
+  /** The file the text becomes, for the error message. */
+  context: string;
+  /**
+   * JSX element names the generator writes itself. Each may carry only literal attributes; any
+   * `{…}` attribute is rejected even on an allowed element. Anything not listed is rejected.
+   */
+  allowedElements: readonly string[];
+  /**
+   * When set, every allowed element must be written exactly as one of these strings (the whole
+   * tag, source text). The generator's own `<include cwd>…</include>` is the case: `<include>`
+   * reads and embeds any file the build machine can open, so the element name alone is no guard.
+   */
+  exactSources?: readonly string[];
+  /** Added to every reported line, for text that sits below a stripped frontmatter block. */
+  lineOffset?: number;
+}
+
+/** The mdast node types that carry JavaScript: `import`/`export` and `{…}` in flow or text. */
+const CODE_NODE_TYPES = new Set(['mdxjsEsm', 'mdxFlowExpression', 'mdxTextExpression']);
+
+/** The subset of an mdast node {@link assertInertMdx} reads. */
+interface MdxNode {
+  type: string;
+  name?: string | null;
+  value?: string;
+  attributes?: Array<{ type: string; name?: string; value?: unknown }>;
+  children?: MdxNode[];
+  position?: { start: { line: number; offset: number }; end: { offset: number } };
+  data?: { estree?: { body: unknown[] } };
+}
+
+/**
+ * Throw unless `text` is MDX that compiles to static content: no `import` or `export`, no `{…}`
+ * expression, and no JSX element or attribute the generator did not write itself.
+ *
+ * Every generated page or partial that copies upstream text into MDX calls this on its output,
+ * because MDX is a program: an expression or an `export` in upstream text runs in the build, with
+ * the build's environment, and again in every reader's browser. Escaping at the point of
+ * interpolation is the first fence; this is the second, and the one that also covers text copied
+ * whole (the Stylus page bodies) where there is nothing to escape.
+ *
+ * A comment-only expression, `{/* … *\/}`, is allowed: it compiles to nothing, and it is how the
+ * generators write their do-not-edit markers. Fenced and inline code are not parsed as MDX, so
+ * `{` and `<` inside them pass. Text the MDX parser rejects outright also throws here, naming the
+ * same file, so a broken page fails the generator rather than the build.
+ *
+ * The parse uses the syntax extensions the build uses (GFM through the Fumadocs preset, maths
+ * through `lib/mdx-options.ts`), because they move the boundaries of inline content: without GFM a
+ * code span may run across a table row, and the `{…}` inside it would hide from this check and
+ * run in the build.
+ */
+export function assertInertMdx(
+  text: string,
+  { context, allowedElements, exactSources, lineOffset = 0 }: InertMdxOptions,
+): void {
+  let tree: MdxNode;
+  try {
+    tree = createProcessor({ remarkPlugins: [remarkGfm, remarkMath] }).parse(
+      text,
+    ) as unknown as MdxNode;
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    throw new Error(`${context}: not valid MDX, so it would break the build: ${reason}`);
+  }
+
+  const allowed = new Set(allowedElements);
+  const exact = exactSources === undefined ? undefined : new Set(exactSources);
+  const problems: string[] = [];
+  const visit = (node: MdxNode): void => {
+    const line = (node.position?.start.line ?? 0) + lineOffset;
+    if (CODE_NODE_TYPES.has(node.type)) {
+      const commentOnly = node.type !== 'mdxjsEsm' && node.data?.estree?.body.length === 0;
+      if (!commentOnly) {
+        problems.push(`line ${line}: ${node.type} ${JSON.stringify(node.value ?? '')}`);
+      }
+    } else if (node.type === 'mdxJsxFlowElement' || node.type === 'mdxJsxTextElement') {
+      const name = node.name ?? '<>';
+      if (!allowed.has(name)) {
+        problems.push(`line ${line}: JSX element <${name}>, which the generator does not write`);
+      } else if (exact !== undefined && node.position !== undefined) {
+        const written = text.slice(node.position.start.offset, node.position.end.offset);
+        if (!exact.has(written)) {
+          problems.push(
+            `line ${line}: <${name}> written as ${JSON.stringify(written)}, which the generator ` +
+              `does not write`,
+          );
+        }
+      }
+      for (const attribute of node.attributes ?? []) {
+        const literal = attribute.value == null || typeof attribute.value === 'string';
+        if (attribute.type !== 'mdxJsxAttribute' || !literal) {
+          problems.push(
+            `line ${line}: an expression attribute on <${name}>` +
+              (attribute.name ? ` (${attribute.name})` : ''),
+          );
+        }
+      }
+    }
+    for (const child of node.children ?? []) visit(child);
+  };
+  visit(tree);
+
+  if (problems.length > 0) {
+    throw new Error(
+      `${context}: the generated text would compile to code, not content. MDX runs ` +
+        `\`import\`, \`export\`, \`{…}\` and JSX, in the build and in the browser, so the ` +
+        `generator refuses to write it. Fix it where it came from (upstream, or a data file in ` +
+        `this repo), or put it in a code fence there:\n` +
+        problems.map((problem) => `  - ${problem}`).join('\n'),
+    );
+  }
 }
 
 /**

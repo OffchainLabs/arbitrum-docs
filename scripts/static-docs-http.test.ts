@@ -5,8 +5,8 @@ import test from 'node:test';
 import { appName, gitConfig } from '../lib/shared.ts';
 
 const baseUrl = process.env.STATIC_DOCS_TEST_URL;
-const livePath = '/docs/run-a-node/start-here';
-const liveMirror = `/llms.mdx${livePath}/content.md`;
+const livePath = '/run-a-node/start-here';
+const liveMirror = `/llms.mdx/docs${livePath}/content.md`;
 const documentOnly = (html: string): string => {
   let previous: string;
   let current = html;
@@ -78,7 +78,7 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
   });
 
   await t.test('the docs index has a direct markdown URL', async () => {
-    const response = await get('/docs.md');
+    const response = await get('/index.md');
     assert.equal(response.status, 200);
     assert.match(response.headers.get('content-type') ?? '', /text\/markdown/);
     await response.text();
@@ -92,7 +92,7 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
 
   await t.test('unknown docs slugs serve the visible 404 page', async () => {
     // The copy is checked with scripts stripped, because a 200 page carries it in its flight payload.
-    for (const path of ['/docs/does-not-exist', '/docs/does/not/exist/deep', `${livePath}/v1`]) {
+    for (const path of ['/does-not-exist', '/does/not/exist/deep', `${livePath}/v1`]) {
       const response = await get(path);
       assert.equal(response.status, 404, path);
       const doc = documentOnly(await response.text());
@@ -103,10 +103,10 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
 
   await t.test('unknown markdown URLs 404', async () => {
     for (const path of [
-      '/docs/does-not-exist.md',
+      '/does-not-exist.md',
       `${livePath}/v1.md`,
-      `/llms.mdx${livePath}/v1/content.md`,
-      `/llms.mdx${livePath}/not-content.md`,
+      `/llms.mdx/docs${livePath}/v1/content.md`,
+      `/llms.mdx/docs${livePath}/not-content.md`,
       '/llms.mdx/docs/constructor/content.md',
       '/llms.mdx/docs/__proto__/content.md',
     ]) {
@@ -117,13 +117,13 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
   });
 
   await t.test('a page has an open graph image and other image URLs 404', async () => {
-    const image = await get(`/og${livePath}/image.png`);
+    const image = await get(`/og/docs${livePath}/image.png`);
     assert.equal(image.status, 200);
     assert.match(image.headers.get('content-type') ?? '', /image\/png/);
     await image.arrayBuffer();
     for (const path of [
-      `/og${livePath}/other.png`,
-      `/og${livePath}/image.png/image.png`,
+      `/og/docs${livePath}/other.png`,
+      `/og/docs${livePath}/image.png/image.png`,
       '/og/docs/does-not-exist/image.png',
     ]) {
       const response = await get(path);
@@ -132,8 +132,8 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
     }
   });
 
-  await t.test('the docs 404 is the same response as the root 404', async () => {
-    const [root, docs] = await Promise.all([get('/does-not-exist'), get('/docs/does-not-exist')]);
+  await t.test('unknown shallow and deep paths share the visible 404 response', async () => {
+    const [root, docs] = await Promise.all([get('/does-not-exist'), get('/does/not/exist/deep')]);
     assert.equal(root.status, 404);
     assert.equal(docs.status, 404);
     assert.equal(await docs.text(), await root.text());
@@ -151,20 +151,38 @@ test('built static docs routing', { skip: !baseUrl }, async (t) => {
   });
 });
 
+/** Fenced blocks and inline code removed: a code sample may show a component's source on purpose. */
+const prose = (markdown: string): string =>
+  markdown
+    .replace(/^([ \t]*)(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1\2[ \t]*$/gm, '')
+    .replace(/(`+)[^`\n][\s\S]*?\1/g, '');
+/** Components `lib/llms-markdown.ts` turns into markdown; none may reach a mirror as a tag. */
+const COMPONENT_TAG =
+  /<(Var|Term|Callout|AEL|Card|Cards|Accordion|Accordions|Tab|Tabs|ImageZoom)\b/;
+
 test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => {
   const noComments = (body: string, path: string): void => {
     assert.ok(body.length > 0, path);
     assert.equal(body.includes('{/*'), false, `${path} still serves an MDX comment`);
+    const leak = prose(body).match(COMPONENT_TAG)?.[0];
+    assert.equal(leak, undefined, `${path} still serves the component tag ${leak}`);
   };
 
   await t.test('a page mirror is clean and still carries its prose', async () => {
-    for (const path of ['/docs/contribute.md', '/llms.mdx/docs/contribute/content.md']) {
+    for (const path of ['/contribute.md', '/llms.mdx/docs/contribute/content.md']) {
       const response = await get(path);
       assert.equal(response.status, 200, path);
       const body = await response.text();
       noComments(body, path);
       assert.match(body, /Arbitrum documentation/, path);
     }
+  });
+
+  await t.test('a mirror with variables and glossary terms prints values and words', async () => {
+    const path = '/arbitrum-essentials/reference/chain-params.md';
+    const response = await get(path);
+    assert.equal(response.status, 200, path);
+    noComments(await response.text(), path);
   });
 
   await t.test('llms-full.txt is clean site-wide', async () => {
@@ -233,12 +251,6 @@ test('home page metadata', { skip: !baseUrl }, async (t) => {
     assert.match(response.headers.get('content-type') ?? '', /image\/png/);
     assert.ok((await response.arrayBuffer()).byteLength > 1024);
   });
-
-  await t.test('the root and the docs landing page do not share a title', async () => {
-    const [root, docs] = await Promise.all([head('/'), head('/docs')]);
-    assert.notEqual(title(root), title(docs));
-    assert.notEqual(meta(root, 'description'), meta(docs, 'description'));
-  });
 });
 
 test('docs page open graph tags', { skip: !baseUrl }, async (t) => {
@@ -254,12 +266,6 @@ test('docs page open graph tags', { skip: !baseUrl }, async (t) => {
       assert.ok(meta(html, 'og:image'), 'no og:image on a docs page');
     },
   );
-
-  await t.test('the docs landing page is typed like every other page under /docs', async () => {
-    const docs = await head('/docs');
-    assert.equal(meta(docs, 'og:type'), 'article');
-    assert.equal(meta(docs, 'og:site_name'), appName);
-  });
 });
 
 test('the contribute guide links back into this repository', { skip: !baseUrl }, async (t) => {
@@ -267,7 +273,7 @@ test('the contribute guide links back into this repository', { skip: !baseUrl },
   // `scripts/lib/contribute-repo-links.test.ts` checks the source.
   // Placeholder profile in the community-contribution banner example.
   const allowed = new Set(['https://github.com/handle']);
-  const html = documentOnly(await head('/docs/contribute'));
+  const html = documentOnly(await head('/contribute'));
   const hrefs = [...html.matchAll(/href="(https:\/\/github\.com\/[^"]*)"/g)].map((m) => m[1]);
 
   await t.test('every GitHub link belongs to the repository gitConfig names', () => {
@@ -280,9 +286,7 @@ test('the contribute guide links back into this repository', { skip: !baseUrl },
   });
 
   await t.test('the "know more tools?" box offers this repository\'s issue tracker', async () => {
-    const page = documentOnly(
-      await head('/docs/arbitrum-essentials/reference/web3-libraries-tools'),
-    );
+    const page = documentOnly(await head('/arbitrum-essentials/reference/web3-libraries-tools'));
     assert.ok(
       page.includes(`href="${gitConfig.url}/issues/new"`),
       "the know-more box does not link to this repository's issue tracker",
@@ -292,5 +296,112 @@ test('the contribute guide links back into this repository', { skip: !baseUrl },
 
   await t.test('no placeholder survived into the rendered page', () => {
     assert.ok(!html.includes('{var:'), 'a {var:…} placeholder reached the reader unexpanded');
+  });
+});
+
+test('legacy URLs', { skip: !baseUrl }, async (t) => {
+  const location = async (path: string): Promise<[number, string | null]> => {
+    const response = await get(path, { redirect: 'manual' });
+    await response.text();
+    return [response.status, response.headers.get('location')];
+  };
+
+  await t.test('unchanged master page routes and markdown mirrors answer directly', async () => {
+    for (const path of [
+      '/how-arbitrum-works/deep-dives/stf',
+      '/how-arbitrum-works/deep-dives/stf.md',
+      '/index.md',
+    ]) {
+      const [status, to] = await location(path);
+      assert.equal(status, 200, path);
+      assert.equal(to, null, path);
+    }
+  });
+
+  await t.test('a genuinely moved page and its markdown mirror retain their 308', async () => {
+    for (const suffix of ['', '.md']) {
+      const path = `/run-a-node/run-batch-poster${suffix}`;
+      const target = `/launch-arbitrum-chain/run-a-node/batch-poster${suffix}`;
+      const [status, to] = await location(path);
+      assert.equal(status, 308, path);
+      assert.equal(new URL(to ?? '', baseUrl).pathname, target, path);
+      const response = await get(target, { redirect: 'manual' });
+      assert.equal(response.status, 200, target);
+      assert.equal(response.headers.get('location'), null, target);
+      await response.text();
+    }
+  });
+
+  await t.test('a hashed Docusaurus PDF URL lands on the audit report', async () => {
+    const [status, to] = await location(
+      '/assets/files/2022_03_14_trail_of_bits_security_audit_nitro_1_of_2-d777111730bd602222978f7d98713d40.pdf',
+    );
+    assert.equal(status, 308);
+    const target = new URL(to ?? '', baseUrl).pathname;
+    assert.equal(target, '/audit-reports/2022_03_14_trail_of_bits_security_audit_nitro_1_of_2.pdf');
+    const pdf = await get(target);
+    assert.equal(pdf.status, 200);
+    await pdf.arrayBuffer();
+  });
+});
+
+test('response headers', { skip: !baseUrl }, async (t) => {
+  await t.test('the root sends the discovery Link header and no X-Powered-By', async () => {
+    const response = await get('/');
+    await response.text();
+    assert.match(response.headers.get('link') ?? '', /<\/llms\.txt>; rel="service-doc"/);
+    assert.equal(response.headers.get('x-powered-by'), null);
+    assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(response.headers.get('x-frame-options'), 'DENY');
+    assert.ok(response.headers.get('content-security-policy-report-only'));
+  });
+
+  await t.test('the markdown surface is readable cross-origin', async () => {
+    for (const path of ['/llms.txt', '/llms-full.txt', '/index.md', `${livePath}.md`, liveMirror]) {
+      const response = await get(path);
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers.get('access-control-allow-origin'), '*', path);
+      await response.text();
+    }
+  });
+
+  await t.test('a root-level .md URL answers with the CORS header too', async () => {
+    // Served by the mirror rewrite, or redirected to the /docs twin: either way the first answer
+    // must carry the header, or a cross-origin fetch fails before it can follow a redirect.
+    const response = await get('/how-arbitrum-works/deep-dives/stf.md', { redirect: 'manual' });
+    await response.text();
+    assert.ok([200, 308].includes(response.status), String(response.status));
+    assert.equal(response.headers.get('access-control-allow-origin'), '*');
+  });
+});
+
+test('the llms index and the mirror route', { skip: !baseUrl }, async (t) => {
+  await t.test('the index and a mirror declare charset=utf-8', async () => {
+    for (const path of ['/llms.txt', `${livePath}.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 200, path);
+      assert.match(response.headers.get('content-type') ?? '', /charset=utf-8/i, path);
+      await response.text();
+    }
+  });
+
+  await t.test('llms.txt has master title and summary and links each mirror once', async () => {
+    const body = await (await get('/llms.txt')).text();
+    assert.match(body, /^# Arbitrum Documentation\n\n> Official documentation/);
+    const links = [...body.matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1]);
+    assert.ok(links.length > 100);
+    assert.deepEqual(
+      links.filter((l) => !l.endsWith('.md')),
+      [],
+    );
+    assert.equal(new Set(links).size, links.length);
+  });
+
+  await t.test('the mirror route 404s for paths it did not prerender', async () => {
+    for (const path of ['/llms.mdx/docs/zz-junk/content.md', `/llms.mdx${livePath}/other.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
   });
 });

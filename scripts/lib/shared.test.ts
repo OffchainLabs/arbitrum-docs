@@ -13,7 +13,7 @@
  * `redirects.config.ts` but not a `.tsx` file. Without this test, deleting or renaming one of the
  * three pages would leave a silent 404 in the footer of every section sidebar. Same ungated shape
  * `announcementLinkHref` has, which is why `buildIndex` (the content-tree walk every other tool
- * resolves URLs against) is reused here rather than writing another copy of "map a /docs/... URL
+ * resolves URLs against) is reused here rather than writing another copy of "map a /... URL
  * to a file".
  */
 import assert from 'node:assert/strict';

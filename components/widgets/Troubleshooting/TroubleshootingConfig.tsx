@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { cn } from '@/lib/cn';
 
@@ -15,8 +15,8 @@ import {
 
 /**
  * The OS / Network / Node type selector that drives the rest of the troubleshooting page.
- * Each dimension is a labelled radio group, so the control is reachable by keyboard and announced
- * correctly by screen readers.
+ * Each dimension is a native radio group in a `<fieldset>`, so the browser supplies the radio
+ * keyboard pattern: one Tab stop per group, arrow keys to move the selection.
  */
 
 function Row({
@@ -30,51 +30,54 @@ function Row({
   value: string;
   onSelect: (id: string) => void;
 }) {
+  const name = useId();
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="text-sm font-medium text-fd-muted-foreground min-w-32">{label}</span>
-      <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-1.5">
-        {options.map((option) => {
-          const selected = option.id === value;
-          return (
-            <button
-              key={option.id}
-              type="button"
-              role="radio"
-              aria-checked={selected}
-              onClick={() => onSelect(option.id)}
-              className={cn(
-                'rounded-md border px-3 py-1.5 text-sm transition-colors cursor-pointer',
-                selected
-                  ? 'border-fd-primary bg-fd-primary text-fd-primary-foreground font-medium'
-                  : 'border-fd-border text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-accent-foreground',
-              )}
-            >
-              {option.label}
-            </button>
-          );
-        })}
+    <fieldset className="flex flex-wrap items-center gap-2">
+      <legend className="float-left me-2 min-w-32 text-sm font-medium text-fd-muted-foreground">
+        {label}
+      </legend>
+      <div className="flex flex-wrap gap-1.5">
+        {options.map((option) => (
+          <label
+            key={option.id}
+            className={cn(
+              'cursor-pointer rounded-md border px-3 py-1.5 text-sm transition-colors',
+              'has-focus-visible:ring-2 has-focus-visible:ring-fd-ring has-focus-visible:ring-offset-2 has-focus-visible:ring-offset-fd-card',
+              'border-fd-border text-fd-muted-foreground hover:bg-fd-accent hover:text-fd-accent-foreground',
+              'has-checked:border-fd-primary has-checked:bg-fd-primary has-checked:font-medium has-checked:text-fd-primary-foreground',
+            )}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option.id}
+              checked={option.id === value}
+              onChange={() => onSelect(option.id)}
+              className="sr-only"
+            />
+            {option.label}
+          </label>
+        ))}
       </div>
-    </div>
+    </fieldset>
   );
 }
 
 export function TroubleshootingConfig() {
   const { os, network, nodeType } = useTroubleshooting();
   const [updated, setUpdated] = useState(false);
-  // Skip the flash on first paint (and on the re-render that restores a saved config).
-  const mounted = useRef(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-      return;
-    }
-    // "Content updated!" tells readers that guidance elsewhere on the page just changed.
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  // Announced from the change handler rather than an effect on the selection, so neither the first
+  // paint nor the store restoring a saved config after hydration says "Content updated!".
+  function select(dimension: 'os' | 'network' | 'nodeType', id: string) {
+    setDimension(dimension, id);
     setUpdated(true);
-    const timer = setTimeout(() => setUpdated(false), 2000);
-    return () => clearTimeout(timer);
-  }, [os, network, nodeType]);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setUpdated(false), 2000);
+  }
 
   return (
     <div className="not-prose my-6 rounded-lg border border-fd-border bg-fd-card p-4">
@@ -83,29 +86,25 @@ export function TroubleshootingConfig() {
           label="Operating system:"
           options={OS_OPTIONS}
           value={os}
-          onSelect={(id) => setDimension('os', id)}
+          onSelect={(id) => select('os', id)}
         />
         <Row
           label="Network:"
           options={NETWORK_OPTIONS}
           value={network}
-          onSelect={(id) => setDimension('network', id)}
+          onSelect={(id) => select('network', id)}
         />
         <Row
           label="Node type:"
           options={NODE_TYPE_OPTIONS}
           value={nodeType}
-          onSelect={(id) => setDimension('nodeType', id)}
+          onSelect={(id) => select('nodeType', id)}
         />
       </div>
-      <p
-        aria-live="polite"
-        className={cn(
-          'mt-3 mb-0 text-sm text-fd-primary transition-opacity duration-300',
-          updated ? 'opacity-100' : 'opacity-0',
-        )}
-      >
-        Content updated!
+      {/* The region stays mounted and empty; text inserted into it is what a screen reader
+          announces. It tells readers that guidance elsewhere on the page just changed. */}
+      <p aria-live="polite" className="mt-3 mb-0 min-h-5 text-sm text-fd-primary">
+        {updated ? 'Content updated!' : null}
       </p>
     </div>
   );

@@ -26,7 +26,7 @@ const lastModifiedFormat = new Intl.DateTimeFormat('en-US', {
   timeZone: 'UTC',
 });
 
-export default async function Page({ params }: { params: Promise<{ slug?: string[] }> }) {
+export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
   const page = source.getPage(slug);
   if (!page) notFound();
@@ -79,14 +79,17 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
 // Every page is prerendered, and any other slug gets the prerendered 404 page instead of rendering.
 export const dynamicParams = false;
 
-export function generateStaticParams(): { slug?: string[] }[] {
-  return source.generateParams().map(({ slug }) => ({ slug }));
+export function generateStaticParams(): { slug: string[] }[] {
+  return source
+    .generateParams()
+    .filter(({ slug }) => slug.length > 0)
+    .map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const page = source.getPage(slug);

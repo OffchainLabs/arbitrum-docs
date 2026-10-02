@@ -162,8 +162,8 @@ describe('buildContent', () => {
     assert.match(content, /\| `ResourceConstraintManager` \|\s*\|/);
   });
 
-  it('links canonical factory contracts at this site’s /docs-prefixed URL', () => {
-    assert.match(content, /\(\/docs\/launch-arbitrum-chain\/deploy\/canonical-factory-contracts\)/);
+  it('links canonical factory contracts at this site’s root URL', () => {
+    assert.match(content, /\(\/launch-arbitrum-chain\/deploy\/canonical-factory-contracts\)/);
   });
 });
 

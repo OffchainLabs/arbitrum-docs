@@ -3,11 +3,11 @@ import { test } from 'node:test';
 
 import { type AnnouncementLinkIndex, checkAnnouncementLink } from './announcement-link.ts';
 
-// Minimal stand-in for buildIndex()'s return value: `/docs/...` resolution reads `byUrl` only.
+// Minimal stand-in for buildIndex()'s return value: `/...` resolution reads `byUrl` only.
 const index: AnnouncementLinkIndex = {
   byUrl: new Map([
-    ['/docs/stylus/gentle-introduction', '/abs/content/docs/stylus/gentle-introduction.mdx'],
-    ['/docs', '/abs/content/docs/index.mdx'],
+    ['/stylus/gentle-introduction', '/abs/content/docs/stylus/gentle-introduction.mdx'],
+    ['/', '/abs/content/docs/index.mdx'],
   ]),
   urlByAbs: new Map(),
   byAbs: new Set(),
@@ -21,20 +21,20 @@ test('accepts an https URL', () => {
 });
 
 test('accepts an internal docs path', () => {
-  assert.deepEqual(checkAnnouncementLink('/docs/stylus/gentle-introduction', index, repoRoot), {
+  assert.deepEqual(checkAnnouncementLink('/stylus/gentle-introduction', index, repoRoot), {
     ok: true,
   });
 });
 
 test('accepts an internal docs path carrying an anchor', () => {
   assert.deepEqual(
-    checkAnnouncementLink('/docs/stylus/gentle-introduction#activation', index, repoRoot),
+    checkAnnouncementLink('/stylus/gentle-introduction#activation', index, repoRoot),
     { ok: true },
   );
 });
 
 test('rejects an internal path with no page behind it', () => {
-  const result = checkAnnouncementLink('/docs/stylus/does-not-exist', index, repoRoot);
+  const result = checkAnnouncementLink('/stylus/does-not-exist', index, repoRoot);
   assert.equal(result.ok, false);
   assert.match(result.reason, /does not resolve/);
 });
@@ -68,7 +68,7 @@ test('rejects an empty or non-string value', () => {
 });
 
 test('rejects a {var:name} placeholder, which the banner would render literally', () => {
-  const result = checkAnnouncementLink('/docs/{var:x}/gentle-introduction', index, repoRoot);
+  const result = checkAnnouncementLink('/{var:x}/gentle-introduction', index, repoRoot);
   assert.equal(result.ok, false);
   assert.match(result.reason, /placeholder/);
 });

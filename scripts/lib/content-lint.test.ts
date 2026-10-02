@@ -7,7 +7,7 @@ const rules = (source: string): RuleId[] => lintSource(source).map((f) => f.rule
 const lines = (...rows: string[]): string => rows.join('\n');
 
 test('clean prose reports nothing', () => {
-  assert.deepEqual(rules('## Heading\n\nSome [link](/docs/x) and <Var name="a" />.\n'), []);
+  assert.deepEqual(rules('## Heading\n\nSome [link](/x) and <Var name="a" />.\n'), []);
 });
 
 test('a ::: directive line is reported, and one inside a fence is not', () => {
@@ -34,7 +34,7 @@ test('a <Var> inside a fence or an inline code span is reported with its line', 
 test('a <Var> in a link destination or href is reported; in link text it is fine', () => {
   assert.deepEqual(rules('[x](https://h/<Var name="a" />)\n'), ['var-in-link']);
   assert.deepEqual(rules('<a href="https://h/<Var name="a" />">x</a>\n'), ['var-in-link']);
-  assert.deepEqual(rules('[<Var name="a" />](/docs/x)\n'), []);
+  assert.deepEqual(rules('[<Var name="a" />](/x)\n'), []);
   assert.deepEqual(rules('[x](https://h/{var:a})\n'), []);
 });
 
@@ -43,7 +43,7 @@ test('a placeholder whose name is not an identifier is reported', () => {
 });
 
 test('a link, <a> or bare URL in a heading is reported', () => {
-  assert.deepEqual(rules('## See [x](/docs/x)\n'), ['link-in-heading']);
+  assert.deepEqual(rules('## See [x](/x)\n'), ['link-in-heading']);
   assert.deepEqual(rules('## See [x][ref]\n'), ['link-in-heading']);
   assert.deepEqual(rules('## See <a href="/x">x</a>\n'), ['link-in-heading']);
   assert.deepEqual(rules('## See https://example.com\n'), ['link-in-heading']);

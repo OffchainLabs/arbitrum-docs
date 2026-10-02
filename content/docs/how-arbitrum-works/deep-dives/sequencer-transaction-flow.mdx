@@ -12,12 +12,12 @@ This deep dive follows a <Term id="transaction">transaction</Term> through a sin
 
 Two companion pages cover the surrounding context, and this page assumes you have read them:
 
-- [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer) explains the Sequencer's role, the real-time feed, batch posting, and finality.
-- [Transaction lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle) explains the different ways to submit a transaction, including bypassing the Sequencer entirely.
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer) explains the Sequencer's role, the real-time feed, batch posting, and finality.
+- [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle) explains the different ways to submit a transaction, including bypassing the Sequencer entirely.
 
 <Callout type="info" title="Scope of this page">
 
-This page describes the internals of a single Sequencer instance. For the behavior of <Term id="arbitrum-one">Arbitrum One</Term>'s public sequencer endpoint (latency expectations, retries, and fallback patterns), see [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers). For running multiple redundant Sequencers with Redis-based coordination, see [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer) and [How to run a Sequencer Coordinator Manager](/docs/run-a-node/sequencer/run-sequencer-coordination-manager).
+This page describes the internals of a single Sequencer instance. For the behavior of <Term id="arbitrum-one">Arbitrum One</Term>'s public sequencer endpoint (latency expectations, retries, and fallback patterns), see [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers). For running multiple redundant Sequencers with Redis-based coordination, see [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer) and [How to run a Sequencer Coordinator Manager](/run-a-node/sequencer/run-sequencer-coordination-manager).
 
 </Callout>
 
@@ -36,7 +36,7 @@ All code references below point to [Nitro `v3.11.0`](https://github.com/Offchain
 
 <Callout type="info" title="Validators do not accept user transactions">
 
-Validators only read the ordered transactions from the parent chain and re-execute them locally to compute the chain's state. They have no transaction queue and no way to accept, order, or process a user transaction directly. The only ingestion point for user transactions is the Sequencer, and RPC nodes exist to forward transactions to it. (The one exception, submitting through the <Term id="delayed-inbox">delayed inbox</Term> on the parent chain, is covered in [Transaction lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle).)
+Validators only read the ordered transactions from the parent chain and re-execute them locally to compute the chain's state. They have no transaction queue and no way to accept, order, or process a user transaction directly. The only ingestion point for user transactions is the Sequencer, and RPC nodes exist to forward transactions to it. (The one exception, submitting through the <Term id="delayed-inbox">delayed inbox</Term> on the parent chain, is covered in [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle).)
 
 </Callout>
 
@@ -50,15 +50,15 @@ Unlike Ethereum, there is **no traditional mempool**. Transactions are not gossi
 
 What the Sequencer does with a queued transaction depends on the chain's <Term id="transaction-ordering-policy">transaction ordering policy</Term>. Three exist, and a chain runs exactly one:
 
-| Policy                                                                           | What decides the order                                                           | Where it runs                        |
-| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------ |
-| <Term id="first-come-first-serve-fcfs">First-come, first-serve (FCFS)</Term>     | Arrival time at the Sequencer                                                    | The default for a new Arbitrum chain |
-| [Priority Gas Auctions (PGA)](/docs/how-arbitrum-works/priority-gas-auction/pga) | The <Term id="priority-fee">priority fee</Term> each transaction pays            | Arbitrum One                         |
-| [Timeboost](/docs/how-arbitrum-works/timeboost/gentle-introduction)              | An auctioned <Term id="express-lane">express lane</Term>, FCFS for everyone else | Available to any chain owner         |
+| Policy                                                                       | What decides the order                                                           | Where it runs                        |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------ |
+| <Term id="first-come-first-serve-fcfs">First-come, first-serve (FCFS)</Term> | Arrival time at the Sequencer                                                    | The default for a new Arbitrum chain |
+| [Priority Gas Auctions (PGA)](/how-arbitrum-works/priority-gas-auction/pga)  | The <Term id="priority-fee">priority fee</Term> each transaction pays            | Arbitrum One                         |
+| [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction)               | An auctioned <Term id="express-lane">express lane</Term>, FCFS for everyone else | Available to any chain owner         |
 
 The FIFO behavior this page describes assumes FCFS. The two other policies change the order, not the intake path: the queue, the deadlines, and the `context deadline exceeded` behavior below apply the same way under all three.
 
-Under PGA, the queue described in the next section is the first stage of a two-stage mempool. Each ordering round moves the whole queue into a priority queue keyed on the priority fee, which <Term id="eip-1559">EIP-1559</Term> computes as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`. Ties break on arrival time, and a transaction left waiting gains an anti-starvation boost each round, so a zero-fee transaction still lands within a small number of blocks. [Introduction to PGA](/docs/how-arbitrum-works/priority-gas-auction/pga) covers the rounds and the boost.
+Under PGA, the queue described in the next section is the first stage of a two-stage mempool. Each ordering round moves the whole queue into a priority queue keyed on the priority fee, which <Term id="eip-1559">EIP-1559</Term> computes as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`. Ties break on arrival time, and a transaction left waiting gains an anti-starvation boost each round, so a zero-fee transaction still lands within a small number of blocks. [Introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) covers the rounds and the boost.
 
 Under Timeboost, transactions from the current <Term id="express-lane-controller">express lane controller</Term> are sequenced as soon as they arrive, while every other transaction has its arrival timestamp delayed (by default, <Var name="timeboostNonExpressDelayMs" /> milliseconds) before taking its place in the queue.
 
@@ -132,11 +132,11 @@ The queue is deliberately a short buffer, not a mempool: with default settings i
 
 ## From block to the rest of the network
 
-As soon as a block is created, the transaction streamer hands the new message to the broadcaster, which publishes it over WebSocket on the <Term id="sequencer-feed">sequencer feed</Term> ([`transaction_streamer.go#L1307`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbnode/transaction_streamer.go#L1307)). Full nodes and [feed relays](/docs/run-a-node/run-feed-relay) consume the feed to give sub-second <Term id="soft-confirmation">soft confirmations</Term>; see [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed).
+As soon as a block is created, the transaction streamer hands the new message to the broadcaster, which publishes it over WebSocket on the <Term id="sequencer-feed">sequencer feed</Term> ([`transaction_streamer.go#L1307`](https://github.com/OffchainLabs/nitro/blob/a618155919315241665356fe60f3cd00d66d5e46/arbnode/transaction_streamer.go#L1307)). Full nodes and [feed relays](/run-a-node/run-feed-relay) consume the feed to give sub-second <Term id="soft-confirmation">soft confirmations</Term>; see [How to read the sequencer feed](/run-a-node/sequencer/read-sequencer-feed).
 
-On Arbitrum One, the [Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed) publishes each transaction inside its PGA round, before the block closes and before the standard feed carries it. It is a paid, authenticated stream aimed at latency-sensitive readers, and a Nitro node cannot consume it. Soft confirmation still comes from the standard feed.
+On Arbitrum One, the [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) publishes each transaction inside its PGA round, before the block closes and before the standard feed carries it. It is a paid, authenticated stream aimed at latency-sensitive readers, and a Nitro node cannot consume it. Soft confirmation still comes from the standard feed.
 
-Independently, the [batch poster](/docs/how-arbitrum-works/deep-dives/batchposter) compresses the sequenced transactions and posts them to the <Term id="sequencer-inbox">sequencer inbox</Term> on the parent chain, at which point they inherit the parent chain's finality. Validators then re-execute the posted sequence and assert the resulting state. [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer#persistence-and-broadcast) covers the feed, batch posting, and the finality trade-offs in detail, and [Assertions](/docs/how-arbitrum-works/deep-dives/assertions) covers validation.
+Independently, the [batch poster](/how-arbitrum-works/deep-dives/batchposter) compresses the sequenced transactions and posts them to the <Term id="sequencer-inbox">sequencer inbox</Term> on the parent chain, at which point they inherit the parent chain's finality. Validators then re-execute the posted sequence and assert the resulting state. [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer#persistence-and-broadcast) covers the feed, batch posting, and the finality trade-offs in detail, and [Assertions](/how-arbitrum-works/deep-dives/assertions) covers validation.
 
 ## Tuning guidance for chain operators
 
@@ -146,7 +146,7 @@ For chains with different traffic profiles than Arbitrum One, the queue paramete
 - `--execution.sequencer.queue-timeout` (default `12s`): raising it lets transactions ride out longer spikes at the cost of slower failure feedback and longer-held connections; lowering it makes overload fail fast. Whatever you choose, communicate it to integration partners so their client timeouts and retry logic stay consistent with it.
 - `--execution.sequencer.max-block-speed` (default <code><Var name="l2BlockTimeMs" />ms</code>): lowering it raises the block production cap and reduces best-case latency; it does not increase execution throughput, which stays bounded by sequential execution and the per-block gas limit.
 
-If you run PGA, the rounds-per-block count `K` is a fourth tuning surface. Raising `K` shortens each round, which lowers the latency between a transaction arriving and a round promoting it, and raises the ceiling on blocks per second under load. It also makes the anti-starvation boost smaller per round, because the boost is `p / (2K)`. See [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/chain-config/sequencer/pga) for the configuration steps.
+If you run PGA, the rounds-per-block count `K` is a fourth tuning surface. Raising `K` shortens each round, which lowers the latency between a transaction arriving and a round promoting it, and raises the ceiling on blocks per second under load. It also makes the anti-starvation boost smaller per round, because the boost is `p / (2K)`. See [PGA for Arbitrum chains](/launch-arbitrum-chain/chain-config/sequencer/pga) for the configuration steps.
 
 ### Operator-run relayer cache
 
@@ -156,13 +156,13 @@ This pattern complements rather than replaces queue tuning: `queue-size` and `qu
 
 ## Related resources
 
-- [The Sequencer and censorship resistance](/docs/how-arbitrum-works/deep-dives/sequencer): feed, batch posting, finality, and the <Term id="delayed-inbox">delayed inbox</Term> escape hatch
-- [Introduction to PGA](/docs/how-arbitrum-works/priority-gas-auction/pga): the two-stage mempool, ordering rounds, and the anti-starvation boost
-- [Introduction to the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed): the paid per-transaction stream that publishes inside a PGA round
-- [Finality](/docs/how-arbitrum-works/deep-dives/finality): what soft and <Term id="hard-finality">hard finality</Term> guarantee, and which one to wait for
-- [The batch poster](/docs/how-arbitrum-works/deep-dives/batchposter): what happens after sequencing, from segment building to the parent chain transaction
-- [Transaction lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle): all submission pathways, including bypassing the Sequencer
-- [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers): public endpoint behavior, retries, and fallback patterns
-- [How to set up a high-availability sequencer](/docs/launch-arbitrum-chain/run-a-node/high-availability-sequencer): redundant Sequencers with Redis-based coordination
-- [How to run a Sequencer Coordinator Manager](/docs/run-a-node/sequencer/run-sequencer-coordination-manager): managing the sequencer priority list
-- [How to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed) and [How to run a feed relay](/docs/run-a-node/run-feed-relay)
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer): feed, batch posting, finality, and the <Term id="delayed-inbox">delayed inbox</Term> escape hatch
+- [Introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga): the two-stage mempool, ordering rounds, and the anti-starvation boost
+- [Introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed): the paid per-transaction stream that publishes inside a PGA round
+- [Finality](/how-arbitrum-works/deep-dives/finality): what soft and <Term id="hard-finality">hard finality</Term> guarantee, and which one to wait for
+- [The batch poster](/how-arbitrum-works/deep-dives/batchposter): what happens after sequencing, from segment building to the parent chain transaction
+- [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle): all submission pathways, including bypassing the Sequencer
+- [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers): public endpoint behavior, retries, and fallback patterns
+- [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer): redundant Sequencers with Redis-based coordination
+- [How to run a Sequencer Coordinator Manager](/run-a-node/sequencer/run-sequencer-coordination-manager): managing the sequencer priority list
+- [How to read the sequencer feed](/run-a-node/sequencer/read-sequencer-feed) and [How to run a feed relay](/run-a-node/run-feed-relay)

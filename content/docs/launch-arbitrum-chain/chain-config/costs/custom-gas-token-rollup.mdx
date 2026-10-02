@@ -6,9 +6,9 @@ sme: allan-gulley
 content_type: how-to
 ---
 
-When deploying an <Term id="arbitrum-chain">Arbitrum chain</Term> in [Rollup mode](/docs/run-a-node/data-availability#rollup-mode), you can use a custom **ERC-20** token as the native gas token. This token is usable for <Term id="transaction">Transaction</Term> fees on that specific Arbitrum chain and reimbursing the [Batch Poster](/docs/how-arbitrum-works/deep-dives/assertions) for data posted to Ethereum. An example would be an <Term id="L2">L2</Term> Rollup that uses **USDC** as its custom gas token but pays **ETH** to post data to <Term id="L1">L1</Term> Ethereum.
+When deploying an <Term id="arbitrum-chain">Arbitrum chain</Term> in [Rollup mode](/run-a-node/data-availability#rollup-mode), you can use a custom **ERC-20** token as the native gas token. This token is usable for <Term id="transaction">Transaction</Term> fees on that specific Arbitrum chain and reimbursing the [Batch Poster](/how-arbitrum-works/deep-dives/assertions) for data posted to Ethereum. An example would be an <Term id="L2">L2</Term> Rollup that uses **USDC** as its custom gas token but pays **ETH** to post data to <Term id="L1">L1</Term> Ethereum.
 
-Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/docs/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
+Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 
 ## Requirements of the custom gas token
 
@@ -85,7 +85,7 @@ Here are the steps you should take to deploy your Arbitrum chain with a custom g
    - `FEE_TOKEN_ADDRESS` = your **ERC-20** gas token
    - `FEE_TOKEN_PRICER_ADDRESS` = your deployed pricer
    - `ROLLUP_CREATOR_ADDRESS` = the Rollup creator contract on L1
-   - `STAKE_TOKEN_ADDRESS` = token used for bonding (see [BoLD docs](/docs/launch-arbitrum-chain/chain-config/validation/bold#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
+   - `STAKE_TOKEN_ADDRESS` = token used for bonding (see [BoLD docs](/launch-arbitrum-chain/chain-config/validation/bold#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
    - The script will deploy and initialize the Rollup accordingly.
 
 You can refer to the source files for more details on:
@@ -93,6 +93,6 @@ You can refer to the source files for more details on:
 - [`fee-token-pricers`](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
 - [`createERC20Rollup.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
 
-You can also find more info about how Nitro manages [gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with <Term id="offchain-labs">Offchain Labs</Term> or your chain’s deployment provider.
+You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with <Term id="offchain-labs">Offchain Labs</Term> or your chain’s deployment provider.
 
 <include cwd>content/partials/launch-arbitrum-chain/_custom-gas-token-note.mdx</include>

@@ -9,7 +9,8 @@ import { type SyntheticEvent, useEffect, useState, useTransition } from 'react';
 
 import { cn } from '@/lib/cn';
 
-import { type PageFeedback, pageFeedback } from './schema';
+import { FEEDBACK_MESSAGE_MAX_LENGTH } from './limits';
+import type { PageFeedback } from './schema';
 
 type Opinion = PageFeedback['opinion'];
 
@@ -58,7 +59,7 @@ export function Feedback({
 
     startTransition(async () => {
       const feedback: PageFeedback = {
-        url: location.href,
+        pathname,
         opinion,
         message,
       };
@@ -132,11 +133,12 @@ export function Feedback({
             <textarea
               autoFocus
               value={message}
+              maxLength={FEEDBACK_MESSAGE_MAX_LENGTH}
               onChange={(e) => {
                 setFailed(false);
                 setMessage(e.target.value);
               }}
-              className="border rounded-lg bg-fd-secondary text-fd-secondary-foreground p-3 resize-none focus-visible:outline-none placeholder:text-fd-muted-foreground"
+              className="border rounded-lg bg-fd-secondary text-fd-secondary-foreground p-3 resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring placeholder:text-fd-muted-foreground"
               placeholder="Leave your feedback..."
               onKeyDown={(e) => {
                 if (!e.shiftKey && e.key === 'Enter') {
@@ -165,6 +167,21 @@ export function Feedback({
   );
 }
 
+/**
+ * Checks a record restored from localStorage. A plain guard rather than the zod schema, which would
+ * put zod in the chunk every docs page loads. A record from before `url` became `pathname` fails
+ * and is dropped, so the reader sees the form again.
+ */
+function isPageFeedback(value: unknown): value is PageFeedback {
+  if (typeof value !== 'object' || value === null) return false;
+  const record = value as Record<string, unknown>;
+  return (
+    (record.opinion === 'good' || record.opinion === 'bad') &&
+    typeof record.pathname === 'string' &&
+    typeof record.message === 'string'
+  );
+}
+
 function useSubmissionStorage(key: string) {
   const storageKey = `docs-feedback-${key}`;
   const [value, setValue] = useState<PageFeedback | null>(null);
@@ -183,8 +200,7 @@ function useSubmissionStorage(key: string) {
       return;
     }
 
-    const result = pageFeedback.safeParse(parsed);
-    if (result.success) setValue(result.data);
+    if (isPageFeedback(parsed)) setValue(parsed);
     else localStorage.removeItem(storageKey);
   }, [storageKey]);
 

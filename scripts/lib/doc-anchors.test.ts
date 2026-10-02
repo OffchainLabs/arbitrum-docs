@@ -80,25 +80,25 @@ test('fragment URLs use browser resolution and preserve case and percent encodin
       '[text](#:~:text=anything)',
       '[text with id](#here:~:text=anything)',
       '[relative](../target?search=x#caf%C3%A9)',
-      '[absolute](/docs/target/#CaseSensitive)',
+      '[absolute](/target/#CaseSensitive)',
       '[reference][ref]',
-      '[ref]: /docs/target#caf%C3%A9',
-      '[ref]: /docs/target#ignored-duplicate-definition',
-      '<a href="/docs/target#native">HTML</a>',
-      '<Card href="/docs/target#CaseSensitive">JSX</Card>',
+      '[ref]: /target#caf%C3%A9',
+      '[ref]: /target#ignored-duplicate-definition',
+      '<a href="/target#native">HTML</a>',
+      '<Card href="/target#CaseSensitive">JSX</Card>',
       '[external](https://example.com/docs/no-page#no-id)',
       '[scheme-relative](//example.com/#no-id)',
       '[asset](/report.pdf#page=3)',
       '[bad local](#missing)',
-      '[bad case](/docs/target#casesensitive)',
-      '[bad escape](/docs/target#%ZZ)',
+      '[bad case](/target#casesensitive)',
+      '[bad escape](/target#%ZZ)',
     ].join('\n'),
     'content/docs/target.mdx': '## Café\n\n## Named [#CaseSensitive]\n\n<div id="native" />',
   });
   const broken = await findBrokenAnchors(buildIndex(root));
   assert.deepEqual(
     broken.map(({ url }) => url),
-    ['#missing', '/docs/target#casesensitive', '/docs/target#%ZZ'],
+    ['#missing', '/target#casesensitive', '/target#%ZZ'],
   );
 });
 
@@ -112,7 +112,7 @@ test('partial links are checked per containing page, with their actual source li
   assert.equal(broken.length, 1);
   assert.equal(broken[0].rel, 'content/partials/_shared.mdx');
   assert.equal(broken[0].line, 5);
-  assert.equal(broken[0].page, '/docs/two');
+  assert.equal(broken[0].page, '/two');
 });
 
 test('section includes and repeated includes follow the Fumadocs include plugin', async (t) => {
@@ -142,6 +142,13 @@ test('check-links blocks missing fragments and fails on compilation errors', (t)
   writeFileSync(path.join(root, 'content/docs/page.mdx'), '## Existing\n\n[good](#existing)');
   assert.equal(run().status, 0);
   writeFileSync(path.join(root, 'content/docs/page.mdx'), '<include>./missing.mdx</include>');
+  const missing = run();
+  assert.equal(missing.status, 1);
+  assert.match(
+    missing.stderr,
+    /content\/docs\/page.mdx:1: include target not found: .\/missing.mdx/,
+  );
+  writeFileSync(path.join(root, 'content/docs/page.mdx'), '<div>\n\nunclosed');
   const invalid = run();
   assert.equal(invalid.status, 1);
   assert.match(invalid.stderr, /Cannot validate anchors in content\/docs\/page.mdx/);

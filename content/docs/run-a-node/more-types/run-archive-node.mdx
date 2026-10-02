@@ -9,7 +9,7 @@ sme: jason-wanxt
 
 An Arbitrum **archive node** is an <Term id="arbitrum-full-node">Arbitrum full node</Term> that maintains an archive of historical <Term id="chain-state">chain states</Term>. This how-to walks you through the process of configuring an archive node on your local machine so that you can query both pre-Nitro and post-Nitro state data.
 
-For how archive mode relates to the other Nitro node roles, see [How to assign roles to a Nitro node](/docs/run-a-node/assign-node-roles).
+For how archive mode relates to the other Nitro node roles, see [How to assign roles to a Nitro node](/run-a-node/assign-node-roles).
 
 <Callout type="warn">
 
@@ -19,17 +19,17 @@ For how archive mode relates to the other Nitro node roles, see [How to assign r
 
 ## Before we begin
 
-Before the Nitro upgrade, <Term id="arbitrum-one">Arbitrum One</Term> ran on the <Term id="arbitrum-classic">Classic</Term> stack for a year (before block height 22207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state, **the Nitro stack can serve all but six RPC requests for pre-Nitro blocks. Full details are outlined in [Do you need to run a Classic node?](/docs/run-a-node/more-types/run-classic-node#do-you-need-to-run-a-classic-node).**
+Before the Nitro upgrade, <Term id="arbitrum-one">Arbitrum One</Term> ran on the <Term id="arbitrum-classic">Classic</Term> stack for a year (before block height 22207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state, **the Nitro stack can serve all but six RPC requests for pre-Nitro blocks. Full details are outlined in [Do you need to run a Classic node?](/run-a-node/more-types/run-classic-node#do-you-need-to-run-a-classic-node).**
 
 Running an Arbitrum One **full node** in **archive mode** lets you access both pre-Nitro and post-Nitro blocks, but it requires you to run **both Classic and Nitro nodes** together. You may not need to do this, depending on your use case:
 
-| Use case                                                                        | Required node type(s)                                     | Docs                                                                                        |
-| ------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Access the **Arbitrum network** without running your own node                   | Fully managed by third-parties, exposed via RPC endpoints | [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers)           |
-| Run an **archive node** for **Arbitrum Sepolia (testnet)** or **Arbitrum Nova** | Full node (Nitro)                                         | [How to run a full node (Nitro)](/docs/run-a-node/run-full-node)                            |
-| Send **post-Nitro** archive requests                                            | Full node (Nitro)                                         | [How to run a full node (Nitro)](/docs/run-a-node/run-full-node)                            |
-| Send **pre-Nitro** archive requests                                             | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](/docs/run-a-node/more-types/run-classic-node) |
-| Send **post-Nitro** _and_ **pre-Nitro** archive requests                        | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                                  |
+| Use case                                                                        | Required node type(s)                                     | Docs                                                                                   |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Access the **Arbitrum network** without running your own node                   | Fully managed by third-parties, exposed via RPC endpoints | [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers)           |
+| Run an **archive node** for **Arbitrum Sepolia (testnet)** or **Arbitrum Nova** | Full node (Nitro)                                         | [How to run a full node (Nitro)](/run-a-node/run-full-node)                            |
+| Send **post-Nitro** archive requests                                            | Full node (Nitro)                                         | [How to run a full node (Nitro)](/run-a-node/run-full-node)                            |
+| Send **pre-Nitro** archive requests                                             | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](/run-a-node/more-types/run-classic-node) |
+| Send **post-Nitro** _and_ **pre-Nitro** archive requests                        | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                             |
 
 ## Use PathDB for archive nodes
 
@@ -62,7 +62,7 @@ Before v3.10.0 it defaulted to 24 hours' worth of blocks even in archive mode. N
 
 </Callout>
 
-For cache sizing and memory tuning that applies to archive nodes generally, see [node tuning and monitoring](/docs/run-a-node/nitro/node-tuning-and-monitoring).
+For cache sizing and memory tuning that applies to archive nodes generally, see [node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring).
 
 ### Initialize a PathDB archive node
 
@@ -118,8 +118,8 @@ The minimum storage requirements will change as the Nitro chains grow (see the g
 
 | Arbitrum Nitro                                             | Arbitrum Classic                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | ---------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` | `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide a standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers))                                                                                                                                                                                                                                                                                      |
-| `--chain.id=<L2 chain ID>`                                 | `--l2.chain-id=<L2 Chain ID>`               | See [RPC endpoints and providers](/docs/arbitrum-essentials/reference/node-providers) for a list of Arbitrum chains and the respective child chain IDs                                                                                                                                                                                                                                                                                                                         |
+| `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` | `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide a standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers))                                                                                                                                                                                                                                                                                           |
+| `--chain.id=<L2 chain ID>`                                 | `--l2.chain-id=<L2 Chain ID>`               | See [RPC endpoints and providers](/arbitrum-essentials/reference/node-providers) for a list of Arbitrum chains and the respective child chain IDs                                                                                                                                                                                                                                                                                                                              |
 | `--execution.caching.archive`                              | `--node.caching.archive`                    | Required for running an **Arbitrum One Nitro** archival node and retains past block state                                                                                                                                                                                                                                                                                                                                                                                      |
 | `--execution.caching.state-scheme`                         | -                                           | Default: `hash`. Sets the scheme Nitro uses to store its state trie, inherited from Geth. Set it to `path` to enable PathDB. PathDB cannot validate blocks.                                                                                                                                                                                                                                                                                                                    |
 | `--execution.caching.state-history`                        | -                                           | PathDB only. Number of recent blocks of state history to retain on disk. On an archive node, leave it unset: from Nitro v3.10.0 onward, `--execution.caching.archive` makes it default to `0`, which retains the entire chain. Before v3.10.0, the default was 345,600 blocks (24 hours), so set `--execution.caching.state-history=0` explicitly.                                                                                                                             |
@@ -174,4 +174,4 @@ Both Nitro and Classic have multiple other parameters that can be used to config
 
 ## Troubleshooting
 
-If you run into any issues, visit the [node-running troubleshooting guide](/docs/run-a-node/troubleshooting).
+If you run into any issues, visit the [node-running troubleshooting guide](/run-a-node/troubleshooting).

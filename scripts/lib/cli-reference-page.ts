@@ -8,6 +8,9 @@
  * Ported from arbitrum-docs `scripts/generate-cli-reference.ts`, which rewrote the whole file
  * and so had no way to keep a local edit.
  */
+import { gfmTableToMarkdown } from 'mdast-util-gfm-table';
+import { toMarkdown } from 'mdast-util-to-markdown';
+
 import type { CliFlag } from './nitro-cli-flags.ts';
 
 /** A link to a curated guide: the text the page shows and the site-relative href. */
@@ -64,20 +67,51 @@ export function escapeCell(text: string): string {
 }
 
 /**
- * Wrap a value in a code span, escaping only what a code span needs.
+ * Thrown by {@link codeCell} for a value a table code cell cannot hold: a backslash directly
+ * before a pipe, or a line break. The fix is editorial, not a code change here.
+ */
+export class UnrepresentableCellError extends Error {
+  constructor(text: string, reason: string) {
+    super(
+      `codeCell: ${JSON.stringify(text)} ${reason}, ` +
+        `which a markdown table code cell cannot represent: it would split the cell and publish ` +
+        `the rest of the value as MDX. If this is a flag's default, add the flag to ` +
+        `defaultOverrides in scripts/data/nitro-cli-reference.data.ts with a hand-declared ` +
+        `default that has no backslash before a pipe and no line break. If it is a flag name, ` +
+        `exclude the flag in that file.`,
+    );
+    this.name = 'UnrepresentableCellError';
+  }
+}
+
+/**
+ * Serialize a value as a GFM table code span using the Markdown serializer.
  *
  * `escapeCell` is for the prose columns and would be wrong here: inside a code span a backslash
  * escape and an HTML entity are both literal text, so a default of `<?INVALID-URL?>` would reach
  * the reader spelled `&lt;?INVALID-URL?&gt;`. A pipe is the exception and still needs its
  * backslash, because GFM splits a table row on unescaped pipes before any inline parsing happens.
- * The fence widens past any backtick run in the value, and a value that starts or ends with a
- * backtick gets the padding space CommonMark strips back off.
+ * The serializer chooses a safe backtick fence and the padding CommonMark requires to preserve
+ * backticks and leading/trailing spaces. The table-cell context enables GFM pipe escaping.
+ *
+ * A backslash directly before a pipe has no safe spelling here. Written as `\\|`, GFM reads an
+ * escaped backslash and then a bare pipe, which splits the cell and parses the rest of the value
+ * as MDX, outside the code span. Doubling the backslash does not help, because inside a code span
+ * a backslash is literal. So the value is refused with {@link UnrepresentableCellError}.
  */
 export function codeCell(text: string): string {
-  const longest = (text.match(/`+/g) ?? []).reduce((n, run) => Math.max(n, run.length), 0);
-  const fence = '`'.repeat(longest + 1);
-  const pad = text.startsWith('`') || text.endsWith('`') ? ' ' : '';
-  return `${fence}${pad}${text.replace(/\\/g, '\\\\').replace(/\|/g, '\\|')}${pad}${fence}`;
+  // A line break ends the GFM table row, so the rest of the value would land outside the code
+  // span, as plain MDX. `\|` is the one escape a code span cannot hold.
+  if (/[\r\n]/.test(text)) throw new UnrepresentableCellError(text, 'contains a line break');
+  if (text.includes('\\|')) {
+    throw new UnrepresentableCellError(text, 'contains a backslash directly before a pipe (\\|)');
+  }
+  const cell = toMarkdown(
+    { type: 'tableCell', children: [{ type: 'inlineCode', value: text }] },
+    { extensions: [gfmTableToMarkdown()] },
+  );
+  // toMarkdown appends a document newline; the caller supplies the rest of the table row.
+  return cell.slice(0, -1);
 }
 
 /** An empty default renders as a dash: pflag omits zero-value defaults, and so does the page. */

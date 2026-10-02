@@ -64,7 +64,7 @@ export const AUCTION_STEPS: Record<AuctionStepId, AuctionStep> = {
   signature: "0x..."
 }`,
     },
-    readMore: '/docs/how-arbitrum-works/timeboost/how-to-use-timeboost#step-2-submit-bids',
+    readMore: '/how-arbitrum-works/timeboost/how-to-use-timeboost#step-2-submit-bids',
   },
   3: {
     title: 'Step 3: Auctioneer response',
@@ -82,7 +82,7 @@ export const AUCTION_STEPS: Record<AuctionStepId, AuctionStep> = {
 }`,
     },
     readMore:
-      '/docs/how-arbitrum-works/timeboost/how-to-use-timeboost#step-3-find-out-the-winner-of-the-auction',
+      '/how-arbitrum-works/timeboost/how-to-use-timeboost#step-3-find-out-the-winner-of-the-auction',
   },
   4: {
     title: (

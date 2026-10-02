@@ -19,7 +19,7 @@
 > INTERNALS.md and CONTRIBUTE.md). Change one and check the other two.
 
 Arbitrum documentation portal on Next.js 16 and Fumadocs 16, with Tailwind 4 and TypeScript. English
-MDX docs under `content/docs/`, served at `/docs/…`, deployed on Vercel.
+MDX docs under `content/docs/`, served at `/<slug>`, deployed on Vercel.
 
 ## Grounding rule
 
@@ -99,10 +99,10 @@ entries do not carry this contract.
 ## Where things live
 
 - **Pipeline.** `source.config.ts` (collections and schema), `lib/source.ts` (the single
-  `loader()`, the only reader of `.source/`), `app/docs/[[...slug]]/page.tsx` (every page,
+  `loader()`, the only reader of `.source/`), `app/(docs)/[...slug]/page.tsx` (every page,
   prerendered, `dynamicParams = false`). MDX options are in `lib/mdx-options.ts`.
 - **Sidebar.** `meta.json` files only. The nine section folders set `"root": true`; `sidebar_label`
-  renames a page. Never write a `[Label](/docs/…)` link entry for a page in this repo; use a
+  renames a page. Never write a `[Label](/section/page)` link entry for a page in this repo; use a
   `"../path"` entry. `scripts/sidebar.test.ts` checks the tree.
 - **Partials.** `content/partials/`, included with `<include cwd>content/partials/…</include>`
   from a page and file-relative from another partial. Two are generated; edit their generators.
@@ -111,7 +111,7 @@ entries do not carry this contract.
 - **Components.** `components/mdx.tsx` is the registry.
 - **Redirects.** `redirects.config.ts`. Never hand-edit between the `AUTO-GENERATED` markers.
   `move-doc` appends one entry and touches no other; `pnpm test` names any entry left chaining.
-- **Routing.** `next.config.ts` rewrites `/docs/<slug>.md` to the `/llms.mdx/` mirror. `proxy.ts`
+- **Routing.** `next.config.ts` rewrites `/<slug>.md` and `/index.md` to the `/llms.mdx/` mirror. `proxy.ts`
   only records PostHog `llms_file_fetched` events, in production.
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
   production build without `NEXT_PUBLIC_SITE_URL`.

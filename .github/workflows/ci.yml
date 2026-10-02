@@ -36,6 +36,11 @@ jobs:
       - name: Type check (regenerates .source/, then tsc)
         run: pnpm types:check
 
+      # types:check never applies the page schema; only compiling a page does. This applies it to
+      # every page, so a frontmatter mistake fails here instead of in the build job.
+      - name: Page frontmatter matches the schema
+        run: pnpm frontmatter:check
+
       - name: Script test suites
         run: pnpm test
 

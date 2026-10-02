@@ -14,7 +14,7 @@ An Arbitrum node is a deterministic machine: feed it the same ordered inputs, an
 
 #### 1. Two doors, one source of truth
 
-Inputs reach a node through two doors. The fast door is the [Sequencer feed](/docs/how-arbitrum-works/deep-dives/sequencer)—a real-time broadcast of newly ordered messages, so nodes feel the chain advance within milliseconds. The slow, trustworthy door is Ethereum itself: the <Term id="sequencer">Sequencer</Term> periodically posts compressed batches to the parent-chain inbox, emitting a `SequencerBatchDelivered` event. When the two disagree, the feed yields—the <Term id="parent-chain">parent chain</Term> is the canonical record (Ethereum for Arbitrum), and a node will <Term id="reorg">reorg</Term> its optimistic feed-derived state to match what was actually settled on Ethereum.
+Inputs reach a node through two doors. The fast door is the [Sequencer feed](/how-arbitrum-works/deep-dives/sequencer)—a real-time broadcast of newly ordered messages, so nodes feel the chain advance within milliseconds. The slow, trustworthy door is Ethereum itself: the <Term id="sequencer">Sequencer</Term> periodically posts compressed batches to the parent-chain inbox, emitting a `SequencerBatchDelivered` event. When the two disagree, the feed yields—the <Term id="parent-chain">parent chain</Term> is the canonical record (Ethereum for Arbitrum), and a node will <Term id="reorg">reorg</Term> its optimistic feed-derived state to match what was actually settled on Ethereum.
 
 #### 2. The envelope (`L1IncomingMessage`)
 
@@ -22,7 +22,7 @@ Whatever the door, every input lands as one `L1IncomingMessage`: a header plus a
 
 #### 3. One byte decides the path
 
-The header’s `Kind` routes the message. A handful of kinds are system messages that the protocol mints: `Initialize` (kind 11) is the genesis message that sets the chain ID and base fee, `EthDeposit` (kind 12) bridges the native token, `SubmitRetryable` (kind 9) carries the <Term id="retryable-ticket">retryable-ticket</Term> mechanism behind robust parent-to-child chain messaging, and `BatchPostingReport` (kind 13) lets the STF charge the <Term id="batch-poster">batch poster</Term> for the parent-chain data it consumes. The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity. For every kind, its value, and the name the bridge contracts use for it, see the [message type reference](/docs/how-arbitrum-works/reference/stf-inputs#message-types).
+The header’s `Kind` routes the message. A handful of kinds are system messages that the protocol mints: `Initialize` (kind 11) is the genesis message that sets the chain ID and base fee, `EthDeposit` (kind 12) bridges the native token, `SubmitRetryable` (kind 9) carries the <Term id="retryable-ticket">retryable-ticket</Term> mechanism behind robust parent-to-child chain messaging, and `BatchPostingReport` (kind 13) lets the STF charge the <Term id="batch-poster">batch poster</Term> for the parent-chain data it consumes. The workhorse, though, is `L2Message` (kind 3)—the envelope for ordinary user activity. For every kind, its value, and the name the bridge contracts use for it, see the [message type reference](/how-arbitrum-works/reference/stf-inputs#message-types).
 
 #### 4. The envelope inside the envelope
 
@@ -42,7 +42,7 @@ A modified version of <Term id="geth">Geth</Term> that recognizes and processes 
 
 ## Execution in a WASM runtime
 
-Stylus transactions execute in [<Term id="arbos">ArbOS</Term>](/docs/how-arbitrum-works/deep-dives/arbos)'s <Term id="wasm">WASM</Term> runtime instead of the EVM, enabling faster execution and more efficient computation.
+Stylus transactions execute in [<Term id="arbos">ArbOS</Term>](/how-arbitrum-works/deep-dives/arbos)'s <Term id="wasm">WASM</Term> runtime instead of the EVM, enabling faster execution and more efficient computation.
 
 ## Stylus gas accounting and pricing
 
@@ -54,4 +54,4 @@ Stylus contracts can interact with Solidity contracts, enabling hybrid applicati
 
 These Stylus-related changes aim to maintain compatibility with Ethereum’s execution model while introducing a more efficient, flexible, and scalable alternative for smart contract development.
 
-The following sections cover [STF inputs](/docs/how-arbitrum-works/reference/stf-inputs), node processing, and implementation rules, highlighting [differences between Ethereum and Arbitrum](/docs/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview), and Stylus execution environments. [Stylus-specific execution tasks handled within ArbOS](/docs/how-arbitrum-works/deep-dives/arbos) will be covered separately, focusing on host I/O operations, caching, and WASM memory management.
+The following sections cover [STF inputs](/how-arbitrum-works/reference/stf-inputs), node processing, and implementation rules, highlighting [differences between Ethereum and Arbitrum](/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview), and Stylus execution environments. [Stylus-specific execution tasks handled within ArbOS](/how-arbitrum-works/deep-dives/arbos) will be covered separately, focusing on host I/O operations, caching, and WASM memory management.

@@ -12,15 +12,30 @@ export interface StylusSection extends SectionPages {
   title: string;
 }
 
-/** The upstream repository. Cloned shallow, at its default branch, on every run. */
+/** The upstream repository. Fetched shallow, at {@link repoRef}, on every run. */
 export const repoUrl: string = 'https://github.com/offchainlabs/stylus-by-example.git';
+
+/**
+ * The upstream commit the published pages are generated from: a full 40-character SHA, never a
+ * branch or tag, so that what reaches this site changes only through a reviewed diff to this line.
+ * stylus-by-example publishes no releases, so there is no tag to pin instead.
+ *
+ * To bump it, resolve the current default-branch head, paste it here, then regenerate and review
+ * the page diff as you would a code change (the page bodies are MDX, which the build runs):
+ *
+ *   git ls-remote https://github.com/offchainlabs/stylus-by-example.git HEAD
+ *   pnpm stylus:generate
+ *
+ * Resolved from the default-branch head on 2026-09-29.
+ */
+export const repoRef: string = '4bd4fb02f04fa11a2297732149038b02fc361fce';
 
 /** Where the Next.js app router pages live inside that clone. */
 export const sourceRoot: string = 'src/app';
 
 /** Where the generated pages land, and the URL prefix the same pages serve at. */
 export const outputDir: string = 'content/docs/stylus/stylus-by-example';
-export const outputUrl: string = '/docs/stylus/stylus-by-example';
+export const outputUrl: string = '/stylus/stylus-by-example';
 
 /**
  * The partial spliced in ahead of the first Rust snippet on every page.

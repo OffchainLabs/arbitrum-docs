@@ -8,6 +8,7 @@
  * Ported from the content-transformation half of arbitrum-docs `scripts/sync-stylus-content.js`.
  */
 import { extractRefs } from './doc-links.ts';
+import { assertInertMdx } from './generated-partial.ts';
 
 /** What {@link parseObjectLiteral} can return: JSON's value space, nothing more. */
 export type JsonValue = string | number | boolean | null | JsonValue[] | JsonObject;
@@ -80,9 +81,14 @@ const NUMBER = /-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/y;
  * Every other token stops the run: an identifier that is not a keyword, a template literal, a
  * parenthesis, an operator, a comment. There is no fallback to evaluation.
  *
- * The literal comes out of a third-party repository that this generator clones unpinned, on a
- * maintainer's own machine whenever they run `pnpm stylus:generate`. Cloning a repository copies bytes; evaluating one of them runs them, at
+ * The literal comes out of a third-party repository, cloned at the commit pinned in
+ * `scripts/data/stylus-examples.data.ts`, on a maintainer's own machine whenever they run
+ * `pnpm stylus:generate`. Cloning a repository copies bytes; evaluating one of them runs them, at
  * whatever privilege the run has. Reading them as data is the whole point here.
+ *
+ * That covers the metadata only. The rest of the page is published as MDX, which the site's build
+ * compiles and runs, so {@link buildPage} refuses a body that holds any `import`, `export`, `{…}`
+ * expression or JSX element other than the generator's own `<include>` (see `assertInertMdx`).
  *
  * @param text the literal, starting at `{` or `[`
  * @param context a path, for the error message
@@ -417,7 +423,37 @@ export function buildPage({
   content = rewriteRelativeLinks(content, { sections, baseUrl, context });
 
   const banner = insertNotForProductionBanner(content, include);
+  assertStaticBody(banner.content, { context, include });
   return { content: banner.content, metadata, banner: banner.inserted };
+}
+
+/** The frontmatter block {@link renderFrontmatter} writes, at the top of a built page. */
+const FRONTMATTER_BLOCK = /^---\n[\s\S]*?\n---\n/;
+
+/**
+ * Throw unless a built page's MDX body is content rather than code.
+ *
+ * Upstream's body is copied through verbatim, and an `export`, an `{expression}` or a component in
+ * it would run in this site's build and in every reader's browser. The upstream pages are plain
+ * markdown with Rust in code fences, so the rule costs nothing today. The allowed JSX is exactly
+ * the element the generator inserts itself (the `<include>` directive, and only written exactly as
+ * the generator writes it, since `<include>` embeds whatever file it names); comment-only expressions
+ * such as the do-not-edit marker and upstream's `{/* Begin Content *\/}` compile to nothing and
+ * pass. The frontmatter is YAML, not MDX, so it is split off first and the reported line numbers
+ * count from the top of the generated page.
+ */
+export function assertStaticBody(
+  content: string,
+  { context, include }: { context: string; include: string },
+): void {
+  const frontmatter = FRONTMATTER_BLOCK.exec(content)?.[0] ?? '';
+  const includeElement = /^<([A-Za-z][\w.-]*)/.exec(include)?.[1];
+  assertInertMdx(content.slice(frontmatter.length), {
+    context: `${context} (line numbers are in the generated page)`,
+    allowedElements: includeElement ? [includeElement] : [],
+    exactSources: [include],
+    lineOffset: frontmatter.split('\n').length - 1,
+  });
 }
 
 /**

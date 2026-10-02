@@ -41,10 +41,14 @@ function EdgeChallengeFlowLoader() {
   }, []);
 
   if (error) {
-    return <div className="ecf-error">Failed to load data: {error}</div>;
+    return <div className="p-5 text-center text-ecf-rival">Failed to load data: {error}</div>;
   }
   if (!data) {
-    return <div className="ecf-loading">Loading edge challenge data...</div>;
+    return (
+      <div className="p-10 text-center text-fd-muted-foreground">
+        Loading edge challenge data...
+      </div>
+    );
   }
 
   return <EdgeChallengeFlowLoaded data={data} />;
@@ -77,7 +81,7 @@ function EdgeChallengeFlowLoaded({ data }: { data: EdgeChallengeData }) {
   const challengeManager = data.meta.challengeManager;
 
   return (
-    <div className="ecf-page">
+    <div className="ecf-page not-prose">
       <div className="ecf-header-info">
         <p>
           Replay of real logs from Arbitrum Sepolia for ChallengeManager{' '}

@@ -31,8 +31,8 @@ Arbitrum runs the same EVM as Ethereum, so any smart contract that works on Ethe
 
 If you want to build on Arbitrum, check out the smart contract quickstart pages:
 
-- [Solidity](/docs/build-decentralized-apps/quickstart-solidity-remix)
-- [Stylus](/docs/stylus/quickstart)
+- [Solidity](/build-decentralized-apps/quickstart-solidity-remix)
+- [Stylus](/stylus/quickstart)
 
 #### Why does Ethereum need help scaling? Is there something wrong?
 
@@ -42,7 +42,7 @@ Rather than weaken Ethereum's security or decentralization, the roadmap pushes e
 
 A Rollup aggregates (sequencing on Arbitrum) thousands of transactions into batches. Then it executes them on its own infrastructure, and posts compressed data and a state commitment back to Ethereum. Users still inherit Ethereum's security, but throughput goes up by orders of magnitude and fees drop dramatically.
 
-If you want to learn more about Arbitrum, refer to the [How it works](/docs/how-arbitrum-works/inside-arbitrum-nitro) section.
+If you want to learn more about Arbitrum, refer to the [How it works](/how-arbitrum-works/inside-arbitrum-nitro) section.
 
 #### Why does Ethereum have low TPS?
 
@@ -73,7 +73,7 @@ As long as Ethereum remains secure, anyone can view these transactions. This dat
 
 In reality, billions of dollars have flowed through Arbitrum without a single successful instance of fraud.
 
-If you want to learn more about BoLD—the dispute protocol (fraud proofs), check out the [BoLD gentle introduction](/docs/how-arbitrum-works/bold/gentle-introduction).
+If you want to learn more about BoLD—the dispute protocol (fraud proofs), check out the [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction).
 
 #### But who does the work and challenges?
 
@@ -81,7 +81,7 @@ Any party can validate Arbitrum's chain state. Anyone who chooses to do so is ca
 
 The beauty of the fraud-proof system on Arbitrum is that it takes only a single honest validator to keep the chain secure. A single honest validator can catch multiple malicious actors. This makes the system trustless—users aren't relying on any single or designated party to keep their funds secure.
 
-To learn more about validators and the different types of validators, refer to the [Run a validator node](/docs/run-a-node/more-types/run-validator-node) page.
+To learn more about validators and the different types of validators, refer to the [Run a validator node](/run-a-node/more-types/run-validator-node) page.
 
 #### So how is fraud proven? It sounds complicated...
 
@@ -91,7 +91,7 @@ In practice, re-executing every single transaction would be incredibly expensive
 
 An arbiter, such as Ethereum, is used to declare a winner. How? The batches posted by Arbitrum to Ethereum are the source of truth—and can be validated and proven through this challenge process, called BoLD.
 
-If you want to learn more about BoLD—the dispute protocol (fraud proofs), check out the [BoLD gentle introduction](/docs/how-arbitrum-works/bold/gentle-introduction).
+If you want to learn more about BoLD—the dispute protocol (fraud proofs), check out the [BoLD gentle introduction](/how-arbitrum-works/bold/gentle-introduction).
 
 #### This must take time, does this impose a delay on transactions?
 
@@ -105,7 +105,7 @@ There is a delay—but it's more nuanced than "every transaction takes seven day
 
 So yes, the dispute protocol imposes a delay, but it's based on trust-boundary actions (withdrawing back to L1/Ethereum), not on day-to-day activity.
 
-To learn more about bridging, refer to the [Token bridging](/docs/how-arbitrum-works/deep-dives/token-bridging) page. If you want to learn how to bridge tokens, refer to the [Arbitrum bridge quickstart](/docs/arbitrum-bridge/quickstart) page.
+To learn more about bridging, refer to the [Token bridging](/how-arbitrum-works/deep-dives/token-bridging) page. If you want to learn how to bridge tokens, refer to the [Arbitrum bridge quickstart](/arbitrum-bridge/quickstart) page.
 
 #### So this optimistic part, is how and why Arbitrum is able to offer lower fees?
 
@@ -119,7 +119,7 @@ The low fees actually come from:
 4. **No global re-execution**: Ethereum doesn't need to re-execute Arbitrum transactions.
 5. **L2 execution gas pricing**: A single sequencer is active at any given time, which means computation occurs on one machine, instead of replicated across thousands of nodes (like Ethereum).
 
-If you want to learn about Arbitrum, refer to the [How it works](/docs/how-arbitrum-works/inside-arbitrum-nitro) section.
+If you want to learn about Arbitrum, refer to the [How it works](/how-arbitrum-works/inside-arbitrum-nitro) section.
 
 #### As far as using Arbitrum, it's similar to Ethereum?
 
@@ -127,15 +127,15 @@ If you want to learn about Arbitrum, refer to the [How it works](/docs/how-arbit
 
 Different L2 protocols emphasize and optimize for different things; Arbitrum was created with Ethereum compatibility as a top priority. This means users can use Arbitrum with all their favorite Ethereum wallets; developers can build and deploy contracts with all their favorite Ethereum libraries and tooling; in fact, most of the time, the experience of using Arbitrum will feel identical to that of using Ethereum (with the important exception of it being much cheaper and faster).
 
-Much development went into achieving this level of Ethereum compatibility. But at its core, Arbitrum itself uses a fork of [Geth](/docs/how-arbitrum-works/reference/geth)—the most widely used Ethereum implementation — with modifications to transform it into a trustless layer 2. This means that most of the code running on Arbitrum is identical to the code running on Ethereum. We call this cutting-edge approach Nitro (developers can see the [Nitro codebase](https://github.com/OffchainLabs/nitro)).
+Much development went into achieving this level of Ethereum compatibility. But at its core, Arbitrum itself uses a fork of [Geth](/how-arbitrum-works/reference/geth)—the most widely used Ethereum implementation — with modifications to transform it into a trustless layer 2. This means that most of the code running on Arbitrum is identical to the code running on Ethereum. We call this cutting-edge approach Nitro (developers can see the [Nitro codebase](https://github.com/OffchainLabs/nitro)).
 
-If you want to know more about the differences between Arbitrum and Ethereum, refer to the [Comparison overview](/docs/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview).
+If you want to know more about the differences between Arbitrum and Ethereum, refer to the [Comparison overview](/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview).
 
 #### So builders can do the same stuff on Arbitrum as Ethereum; can they do more?
 
-They can; the latest version of the Arbitrum tech stack, called Stylus, maintains Nitro's Ethereum compatibility while adding powerful new features, including the ability to write highly performant smart contracts in programming languages like Rust, C++, and more. Stylus is currently on public testnet; you can read more about it in the [Stylus documentation](/docs/stylus/quickstart).
+They can; the latest version of the Arbitrum tech stack, called Stylus, maintains Nitro's Ethereum compatibility while adding powerful new features, including the ability to write highly performant smart contracts in programming languages like Rust, C++, and more. Stylus is currently on public testnet; you can read more about it in the [Stylus documentation](/stylus/quickstart).
 
-You can also create your own Arbitrum chain with custom gas tokens. For example, you could create a chain that uses USDC for gas. Arbitrum chains are endlessly customizable beyond the gas token. You can learn more about [Arbitrum chains](/docs/launch-arbitrum-chain/overview/introduction).
+You can also create your own Arbitrum chain with custom gas tokens. For example, you could create a chain that uses USDC for gas. Arbitrum chains are endlessly customizable beyond the gas token. You can learn more about [Arbitrum chains](/launch-arbitrum-chain/overview/introduction).
 
 #### It sounds like Arbitrum is an ideal solution that solves all scaling problems?
 
@@ -153,7 +153,7 @@ In the case of a challenge, an AnyTrust chain reverts to "Rollup mode"; the secu
 
 For applications that require high transaction throughput and don't require the full decentralization provided by Rollups, AnyTrust could be a sensible tradeoff.
 
-If you want to learn more about AnyTrust, refer to the [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) page.
+If you want to learn more about AnyTrust, refer to the [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol) page.
 
 #### So there's more than one Arbitrum chain?
 
@@ -179,7 +179,7 @@ Check out the [Arbitrum Portal](https://portal.arbitrum.io/orbit/ecosystem) for 
 
 Users and developers can pick whatever suits their security and transaction cost needs.
 
-If you want to create your own chain, check out the [Arbitrum chain introduction](/docs/launch-arbitrum-chain/overview/introduction).
+If you want to create your own chain, check out the [Arbitrum chain introduction](/launch-arbitrum-chain/overview/introduction).
 
 #### Who makes decisions about the future of Arbitrum?
 
