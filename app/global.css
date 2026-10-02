@@ -207,12 +207,6 @@ body {
   :where(tbody tr) {
     @apply border-b border-fd-border/50;
   }
-  /* Images are capped at 600px, the size most screenshots were authored at. `data-wide` on the
-     image, or on any wrapper around a markdown image, lets a wide diagram use the full column.
-     The zoomed copy is portaled to `<body>`, outside `.prose`, so it is unaffected. */
-  :where(img):not(:where([data-wide], [data-wide] *, .not-prose, .not-prose *)) {
-    max-width: min(100%, 600px);
-  }
   /* Dense scenario tables (`<table className="small-table">`). */
   :where(table.small-table) {
     @apply text-[0.8125rem]/[1.4];
