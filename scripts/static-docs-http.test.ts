@@ -339,7 +339,7 @@ test('response headers', { skip: !baseUrl }, async (t) => {
   });
 
   await t.test('the markdown surface is readable cross-origin', async () => {
-    for (const path of ['/llms.txt', '/llms-full.txt', '/docs.md', `${livePath}.md`, liveMirror]) {
+    for (const path of ['/llms.txt', '/llms-full.txt', '/index.md', `${livePath}.md`, liveMirror]) {
       const response = await get(path);
       assert.equal(response.status, 200, path);
       assert.equal(response.headers.get('access-control-allow-origin'), '*', path);
