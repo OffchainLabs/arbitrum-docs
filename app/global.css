@@ -63,8 +63,18 @@
   --color-fd-danger: hsl(0 91% 71%);
 }
 
-@custom-variant phone (@media (max-width: 736px));
-@custom-variant nav-md (@media (max-width: 1280px));
+/* Fumadocs' neutral preset sets its own greys on `.dark #nd-sidebar`, which outranks `.dark`
+   above. `inherit` hands the three tokens back to the brand values the sidebar's ancestors carry,
+   so a change to `.dark` reaches the sidebar too. */
+.dark #nd-sidebar {
+  --color-fd-muted: inherit;
+  --color-fd-secondary: inherit;
+  --color-fd-muted-foreground: inherit;
+}
+
+/* The narrowest navbar band before its links collapse into the sidebar at `lg` (1024px), where the
+   search trigger drops to an icon. No Tailwind breakpoint sits there. Everything else uses
+   Tailwind's own `max-md:` (the Fumadocs mobile layout switch) and `max-xl:`. */
 @custom-variant nav-sm (@media (max-width: 1104px));
 
 /* Hairlines every sixth of the width, for the home and 404 pages. */
@@ -89,6 +99,15 @@ html {
 html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
+}
+
+/* A focus ring for every control that sets none of its own, as master had. In the base layer, so a
+   component's `focus-visible:outline-none` plus `ring-*` utilities still replace it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-fd-ring);
+    outline-offset: 2px;
+  }
 }
 
 /* Aeonik ships 400 and 500 only, so any heavier weight resolves to the real 500 face. */
@@ -126,32 +145,34 @@ body {
 .prose {
   --tw-prose-quote-borders: var(--color-fd-primary);
   --tw-prose-captions: var(--color-fd-muted-foreground);
-  @apply text-[1rem]/[1.75] phone:text-[0.9375rem]/[1.7];
+  @apply text-[1rem]/[1.75] max-md:text-[0.9375rem]/[1.7];
 
   :where(h1, h2, h3, h4, h5, h6) {
     /* Clears the header and the mobile TOC bar. */
     scroll-margin-top: calc(var(--fd-docs-row-3, 56px) + 24px);
     @apply font-medium text-balance;
   }
-  :where(h1) {
-    @apply mb-4 text-[2.5rem]/[1.1] phone:text-[1.875rem];
+  /* The size rules below skip `not-prose` islands (widgets, the accordion trigger), whose headings
+     are controls or panel labels styled by their own component. */
+  :where(h1):not(:where(.not-prose, .not-prose *)) {
+    @apply mb-4 text-[2.5rem]/[1.1] max-md:text-[1.875rem];
   }
-  :where(h1:first-child) {
-    @apply text-[2.25rem] phone:text-[1.75rem];
+  :where(h1:first-child):not(:where(.not-prose, .not-prose *)) {
+    @apply text-[2.25rem] max-md:text-[1.75rem];
   }
-  :where(h2) {
-    @apply mt-[2.5em] mb-[1em] border-b pb-2 text-[1.625rem]/[1.25] phone:mt-[2em] phone:text-[1.375rem];
+  :where(h2):not(:where(.not-prose, .not-prose *)) {
+    @apply mt-[2.5em] mb-[1em] border-b pb-2 text-[1.625rem]/[1.25] max-md:mt-[2em] max-md:text-[1.375rem];
   }
-  :where(h3) {
-    @apply mt-[2em] mb-[0.75em] text-[1.375rem]/[1.4] phone:mt-[1.5em] phone:mb-[0.5em] phone:text-[1.25rem];
+  :where(h3):not(:where(.not-prose, .not-prose *)) {
+    @apply mt-[2em] mb-[0.75em] text-[1.375rem]/[1.4] max-md:mt-[1.5em] max-md:mb-[0.5em] max-md:text-[1.25rem];
   }
-  :where(h4) {
-    @apply mt-[1.75em] mb-[0.5em] text-[1.125rem]/[1.5] phone:text-[1.0625rem];
+  :where(h4):not(:where(.not-prose, .not-prose *)) {
+    @apply mt-[1.75em] mb-[0.5em] text-[1.125rem]/[1.5] max-md:text-[1.0625rem];
   }
-  :where(h5, h6) {
+  :where(h5, h6):not(:where(.not-prose, .not-prose *)) {
     @apply mt-[1.5em] mb-[0.5em] text-[0.875rem]/[1.5] tracking-[0.05em] uppercase;
   }
-  :where(h6) {
+  :where(h6):not(:where(.not-prose, .not-prose *)) {
     @apply text-fd-muted-foreground;
   }
   :where(a):not(:where([data-card], .not-prose, .not-prose *)) {
@@ -172,16 +193,16 @@ body {
     @apply px-[0.375em] py-[0.125em] text-[0.875em];
   }
   :where(table) {
-    @apply phone:text-[0.8125rem];
+    @apply max-md:text-[0.8125rem];
   }
   :where(thead) {
     background: color-mix(in oklab, var(--color-fd-primary) 8%, var(--color-fd-muted));
   }
   :where(thead th) {
-    @apply px-4 py-3 text-[0.8125rem] font-medium phone:px-3 phone:py-2.5;
+    @apply px-4 py-3 text-[0.8125rem] font-medium max-md:px-3 max-md:py-2.5;
   }
   :where(tbody td) {
-    @apply px-4 py-3 align-top phone:px-3 phone:py-2.5;
+    @apply px-4 py-3 align-top max-md:px-3 max-md:py-2.5;
   }
   :where(tbody tr) {
     @apply border-b border-fd-border/50;
@@ -195,14 +216,6 @@ body {
   }
 }
 
-/* A heading inside a `not-prose` island (the accordion trigger is an `<h3>`) is a control, not
-   document structure, so it drops the scale above. */
-.prose :where(h1, h2, h3, h4, h5, h6):is(.not-prose, .not-prose *) {
-  font-size: inherit;
-  line-height: inherit;
-  @apply my-0;
-}
-
 /* Fumadocs' accordion trigger has no pointer and no hover state. */
 h3:has(> button[data-state]) {
   @apply transition-colors duration-150 ease-[ease] *:cursor-pointer hover:bg-fd-accent;
@@ -211,6 +224,12 @@ h3:has(> button[data-state]) {
 /* The TOC links carry `prose`, and the sidebar is `text-sm`; both rails are 13px. */
 :is(#nd-toc .prose, [data-toc-popover-content] .prose, #nd-sidebar) {
   @apply text-[0.8125rem]/[1.5];
+}
+
+/* Fumadocs tints the current page `bg-fd-primary/10`, which leaves the 13px blue label at 4.31:1
+   in light mode. A 5% tint measures 4.63:1 and keeps the brand blue. Dark mode is 11.66:1 as is. */
+:root:not(.dark) :is(#nd-sidebar, #nd-sidebar-mobile) a[data-active='true'] {
+  background-color: color-mix(in oklab, var(--color-fd-primary) 5%, transparent);
 }
 
 /* Navbar (the notebook header on docs pages, components/home-header.tsx elsewhere): logo left,
@@ -224,10 +243,10 @@ h3:has(> button[data-state]) {
     @apply order-1 w-auto max-w-60 nav-sm:gap-0 nav-sm:px-2 nav-sm:text-[0px];
   }
   & > [data-search-full] kbd {
-    @apply nav-md:hidden;
+    @apply max-xl:hidden;
   }
   & > div:last-child > div:first-child {
-    @apply mx-auto nav-md:gap-3 nav-sm:gap-2;
+    @apply mx-auto max-xl:gap-3 nav-sm:gap-2;
   }
   & :is(a, button) {
     @apply whitespace-nowrap;

@@ -142,6 +142,13 @@ test('check-links blocks missing fragments and fails on compilation errors', (t)
   writeFileSync(path.join(root, 'content/docs/page.mdx'), '## Existing\n\n[good](#existing)');
   assert.equal(run().status, 0);
   writeFileSync(path.join(root, 'content/docs/page.mdx'), '<include>./missing.mdx</include>');
+  const missing = run();
+  assert.equal(missing.status, 1);
+  assert.match(
+    missing.stderr,
+    /content\/docs\/page.mdx:1: include target not found: .\/missing.mdx/,
+  );
+  writeFileSync(path.join(root, 'content/docs/page.mdx'), '<div>\n\nunclosed');
   const invalid = run();
   assert.equal(invalid.status, 1);
   assert.match(invalid.stderr, /Cannot validate anchors in content\/docs\/page.mdx/);

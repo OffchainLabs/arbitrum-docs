@@ -15,7 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 
-import { outputDir, sections } from './data/stylus-examples.data.ts';
+import { outputDir, repoRef, sections } from './data/stylus-examples.data.ts';
 import {
   buildPage,
   buildSectionMeta,
@@ -384,6 +384,10 @@ describe('buildSectionMeta', () => {
 });
 
 describe('stylus-examples.data.ts', () => {
+  it('pins upstream to a full commit SHA, not a branch or tag', () => {
+    assert.match(repoRef, /^[0-9a-f]{40}$/);
+  });
+
   it('names a page that exists for every allowlist entry', () => {
     for (const section of sections) {
       for (const slug of section.pages) {

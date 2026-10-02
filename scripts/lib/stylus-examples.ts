@@ -80,8 +80,9 @@ const NUMBER = /-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?/y;
  * Every other token stops the run: an identifier that is not a keyword, a template literal, a
  * parenthesis, an operator, a comment. There is no fallback to evaluation.
  *
- * The literal comes out of a third-party repository that this generator clones unpinned, on a
- * maintainer's own machine whenever they run `pnpm stylus:generate`. Cloning a repository copies bytes; evaluating one of them runs them, at
+ * The literal comes out of a third-party repository, cloned at the commit pinned in
+ * `scripts/data/stylus-examples.data.ts`, on a maintainer's own machine whenever they run
+ * `pnpm stylus:generate`. Cloning a repository copies bytes; evaluating one of them runs them, at
  * whatever privilege the run has. Reading them as data is the whole point here.
  *
  * @param text the literal, starting at `{` or `[`
