@@ -5,6 +5,8 @@
  * one example of each shape the reader has to understand, so a regression shows up as a named
  * failing case rather than as a diff in an 800-row page nobody reads line by line.
  */
+import { createProcessor } from '@mdx-js/mdx';
+import { remarkGfm } from 'fumadocs-core/mdx-plugins/remark-gfm';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -419,6 +421,57 @@ describe('page rendering', () => {
 
   it('keeps a backslash that is not before a pipe', () => {
     assert.equal(codeCell('C:\\dir | x\\'), '`C:\\dir \\| x\\`');
+  });
+
+  it('round-trips accepted values as one literal code span in an MDX table', () => {
+    const processor = createProcessor({ remarkPlugins: [remarkGfm] });
+    const values = [
+      'a|b|c',
+      'C:\\dir | x\\',
+      'a\\\\b|c',
+      'a\\`b|c',
+      '`x`',
+      '```x```|``y``|`z`',
+      ' x ',
+      '  ',
+      '|{globalThis.pwned = 1}|<Injected />|',
+      '&lt;script&gt; {value}',
+    ];
+    for (const value of values) {
+      const tree = processor.parse(
+        `| Before | Value | After |\n| --- | --- | --- |\n| before | ${codeCell(value)} | after |`,
+      );
+      assert.equal(tree.children.length, 1, value);
+      const table = tree.children[0];
+      if (table.type !== 'table') assert.fail(`Expected a table for ${JSON.stringify(value)}`);
+      assert.equal(table.children.length, 2, value);
+      const row = table.children[1];
+      assert.equal(row.children.length, 3, value);
+      assert.deepEqual(
+        row.children[1].children.map((node) => ({
+          type: node.type,
+          value: 'value' in node ? node.value : undefined,
+        })),
+        [{ type: 'inlineCode', value }],
+        value,
+      );
+      const after = row.children[2].children[0];
+      if (after.type !== 'text') assert.fail(`Expected trailing text for ${JSON.stringify(value)}`);
+      assert.equal(after.value, 'after', value);
+    }
+  });
+
+  it('refuses adversarial backslash runs before pipes and all Markdown line endings', () => {
+    for (const value of [
+      ...[1, 2, 3, 4].map((length) => `x${'\\'.repeat(length)}|{globalThis.pwned = 1}`),
+      ...['\n', '\r', '\r\n'].map((ending) => `x${ending}{globalThis.pwned = 1}`),
+    ]) {
+      assert.throws(() => codeCell(value), UnrepresentableCellError);
+      assert.throws(
+        () => renderGeneratedRegion([{ ...flags[0], default: value }], options),
+        UnrepresentableCellError,
+      );
+    }
   });
 
   it('widens the fence around a value that contains backticks', () => {
