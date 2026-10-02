@@ -2,11 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 
-const buildAppsSections = [
-  '/docs/build-decentralized-apps',
-  '/docs/stylus',
-  '/docs/arbitrum-essentials',
-];
+const buildAppsSections = ['/build-decentralized-apps', '/stylus', '/arbitrum-essentials'];
 
 export function BuildAppsNavLabel() {
   const pathname = usePathname();

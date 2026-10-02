@@ -11,7 +11,7 @@ content_type: how-to
 
 This runbook is the operational wrapper around an <Term id="arbitrum-chain">Arbitrum chain</Term> upgrade: what to validate before you start, what order to execute in, how to confirm the upgrade succeeded, and what you can undo if it doesn't.
 
-It complements [ArbOS upgrade](/docs/launch-arbitrum-chain/operate/arbos-upgrade), which remains the canonical reference for how each individual step works. This page does not restate those mechanics—it links to them at each step and focuses on the coordination, verification, and failure-recovery work around them.
+It complements [ArbOS upgrade](/launch-arbitrum-chain/operate/arbos-upgrade), which remains the canonical reference for how each individual step works. This page does not restate those mechanics—it links to them at each step and focuses on the coordination, verification, and failure-recovery work around them.
 
 An upgrade touches five things that must stay mutually compatible:
 
@@ -37,7 +37,7 @@ Every version-specific value comes from the reference page for the ArbOS release
 
 | Input                     | Where to get it                                                                                                                                                                                                                  |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Target ArbOS version      | The [list of available ArbOS releases](/docs/run-a-node/arbos-releases/overview#list-of-available-arbos-releases)                                                                                                                |
+| Target ArbOS version      | The [list of available ArbOS releases](/run-a-node/arbos-releases/overview#list-of-available-arbos-releases)                                                                                                                |
 | Minimum Nitro version     | The requirements section of the targeted ArbOS release page                                                                                                                                                                      |
 | `nitro-contracts` version | The targeted ArbOS release page. Not every ArbOS upgrade requires a contracts upgrade                                                                                                                                            |
 | WASM module root          | The targeted ArbOS release page                                                                                                                                                                                                  |
@@ -55,7 +55,7 @@ Complete every check in this section before scheduling anything onchain.
 
 ### Confirm your current ArbOS version
 
-Call `ArbSys.ArbOSVersion()` on your chain. This function returns the ArbOS version **plus 55**—a chain running ArbOS 40 returns `95`. When you later schedule the upgrade, you pass the real version number, not the offset one. See [Obtaining the current ArbOS version](/docs/launch-arbitrum-chain/operate/arbos-upgrade#step-3-schedule-the-arbos-version-upgrade) for details.
+Call `ArbSys.ArbOSVersion()` on your chain. This function returns the ArbOS version **plus 55**—a chain running ArbOS 40 returns `95`. When you later schedule the upgrade, you pass the real version number, not the offset one. See [Obtaining the current ArbOS version](/launch-arbitrum-chain/operate/arbos-upgrade#step-3-schedule-the-arbos-version-upgrade) for details.
 
 ### Confirm your current contracts version and upgrade path
 
@@ -71,7 +71,7 @@ Every administrative action in this runbook is executed by the <Term id="upgrade
 - That account is funded on the parent chain.
 - You can reach the child chain upgrade executor, which owns the `ArbOwner` <Term id="precompile">precompile</Term> actions.
 
-See [Ownership and access](/docs/launch-arbitrum-chain/operate/ownership-and-access) to confirm which account holds which role.
+See [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access) to confirm which account holds which role.
 
 ### Confirm the target machine is present on every validator
 
@@ -138,7 +138,7 @@ cd /home/user/.arbitrum/machines
 
 The script creates a directory named after the module root, writes `module-root.txt` inside it, repoints the `latest` symlink at it, and downloads `machine.v2.wavm.br` (plus `replay.wasm`, if that release published one).
 
-If you maintain a custom STF, downloading a published machine is not sufficient—see [Customize your chain's behavior](/docs/launch-arbitrum-chain/extend-the-protocol/stf) to learn how to build and register your own.
+If you maintain a custom STF, downloading a published machine is not sufficient—see [Customize your chain's behavior](/launch-arbitrum-chain/extend-the-protocol/stf) to learn how to build and register your own.
 
 ## Execution order
 
@@ -146,12 +146,12 @@ Order matters. Each step assumes the previous one completed successfully.
 
 | Step | Action                                                                                                                                                                                       | Notes                                                                                                                                                         |
 | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | [Update Nitro on nodes and validators](/docs/launch-arbitrum-chain/operate/arbos-upgrade#step-1-update-nitro-on-nodes-and-validators)                                                        | Validators first, then remaining nodes. **Must** complete before the ArbOS upgrade deadline                                                                   |
+| 1    | [Update Nitro on nodes and validators](/launch-arbitrum-chain/operate/arbos-upgrade#step-1-update-nitro-on-nodes-and-validators)                                                        | Validators first, then remaining nodes. **Must** complete before the ArbOS upgrade deadline                                                                   |
 | 2    | Stage the target WAVM machine on every validator, then restart the validator                                                                                                                 | **Must** precede step 3. The block validator resolves its pending root at startup, so stage the machine before the step 1 restart and one restart covers both |
-| 3    | [Set the new WASM module root](/docs/launch-arbitrum-chain/operate/arbos-upgrade#step-2-upgrade-the-wasm-module-root--your-chains-nitro-contracts)                                           | Safe to do early, as long as every validator has been restarted with the target machine and its startup log shows `pending=<target root>`                     |
+| 3    | [Set the new WASM module root](/launch-arbitrum-chain/operate/arbos-upgrade#step-2-upgrade-the-wasm-module-root--your-chains-nitro-contracts)                                           | Safe to do early, as long as every validator has been restarted with the target machine and its startup log shows `pending=<target root>`                     |
 | 4    | Upgrade `nitro-contracts`, if the release requires it                                                                                                                                        | Follow [Nitro contracts upgrades](https://github.com/OffchainLabs/chain-actions?tab=readme-ov-file#nitro-contracts-upgrades)                                  |
-| 5    | [Schedule the ArbOS version upgrade](/docs/launch-arbitrum-chain/operate/arbos-upgrade#step-3-schedule-the-arbos-version-upgrade)                                                            | Pass the real version number and a UNIX timestamp. A timestamp of `0` upgrades immediately                                                                    |
-| 6    | [Enable release-specific configuration or feature flags](/docs/launch-arbitrum-chain/operate/arbos-upgrade#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) | Not always required; check the release page                                                                                                                   |
+| 5    | [Schedule the ArbOS version upgrade](/launch-arbitrum-chain/operate/arbos-upgrade#step-3-schedule-the-arbos-version-upgrade)                                                            | Pass the real version number and a UNIX timestamp. A timestamp of `0` upgrades immediately                                                                    |
+| 6    | [Enable release-specific configuration or feature flags](/launch-arbitrum-chain/operate/arbos-upgrade#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) | Not always required; check the release page                                                                                                                   |
 
 <Callout type="warn" title="Stage machines and restart before you set the root onchain">
 
@@ -194,15 +194,15 @@ The `current` value should match the onchain `wasmModuleRoot()`. A `validator ch
 
 Confirm the validator is still advancing <Term id="assertion">assertions</Term> and posting bonds after the upgrade. A validator that started cleanly can still be unable to act if the Rollup contract's root doesn't match what the validator actually validated with—that produces the runtime mismatch described in [The validator starts but can't advance its bond](#the-validator-starts-but-cant-advance-its-bond).
 
-If your chain has <Term id="fast-withdrawals">fast withdrawals</Term> enabled, re-check them specifically after the upgrade—see [Fast withdrawals](/docs/launch-arbitrum-chain/chain-config/validation/fast-withdrawals).
+If your chain has <Term id="fast-withdrawals">fast withdrawals</Term> enabled, re-check them specifically after the upgrade—see [Fast withdrawals](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals).
 
 ### Verify the batch poster is still posting
 
-Confirm the <Term id="batch-poster">batch poster</Term> is submitting <Term id="batch">batches</Term> to the <Term id="sequencer-inbox">sequencer inbox</Term> at its usual cadence, and that no backlog is accumulating. See [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring) for what to watch.
+Confirm the <Term id="batch-poster">batch poster</Term> is submitting <Term id="batch">batches</Term> to the <Term id="sequencer-inbox">sequencer inbox</Term> at its usual cadence, and that no backlog is accumulating. See [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring) for what to watch.
 
 <Callout type="info" title="Batch poster log noise after an upgrade">
 
-New Nitro versions probe for contract features that older `nitro-contracts` deployments don't implement, so a version-skewed window between steps 1 and 4 can produce `eth_call` errors in the <Term id="batch-poster">batch poster</Term> log that are benign. Confirm batches are still landing onchain before treating any of them as an incident. To diagnose messages that persist after the upgrade completes, see [Batch poster troubleshooting](/docs/launch-arbitrum-chain/operate/batch-poster-troubleshooting) and [Batch poster recovery](/docs/launch-arbitrum-chain/operate/bp-recovery).
+New Nitro versions probe for contract features that older `nitro-contracts` deployments don't implement, so a version-skewed window between steps 1 and 4 can produce `eth_call` errors in the <Term id="batch-poster">batch poster</Term> log that are benign. Confirm batches are still landing onchain before treating any of them as an incident. To diagnose messages that persist after the upgrade completes, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting) and [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery).
 
 </Callout>
 
@@ -317,10 +317,10 @@ Rolling `nitro-contracts` back is only remotely viable if no assertions have bee
 
 ## Related documents
 
-- [ArbOS upgrade](/docs/launch-arbitrum-chain/operate/arbos-upgrade)—step-by-step mechanics for each upgrade action
-- [ArbOS releases](/docs/run-a-node/arbos-releases/overview)—per-release requirements, WASM module roots, and Nitro versions
-- [Ownership and access](/docs/launch-arbitrum-chain/operate/ownership-and-access)—which account holds which administrative role
-- [Monitoring tools and considerations](/docs/launch-arbitrum-chain/operate/monitoring)—what to watch during and after an upgrade
-- [Batch poster troubleshooting](/docs/launch-arbitrum-chain/operate/batch-poster-troubleshooting)—diagnosing batch poster errors
-- [Customize your chain's behavior](/docs/launch-arbitrum-chain/extend-the-protocol/stf)—building a custom STF and its replay binary
-- [Nitro CLI flags reference](/docs/run-a-node/nitro/cli-flags-reference)—reference for the Nitro configuration flags named here (`dangerous` flags are not listed)
+- [ArbOS upgrade](/launch-arbitrum-chain/operate/arbos-upgrade)—step-by-step mechanics for each upgrade action
+- [ArbOS releases](/run-a-node/arbos-releases/overview)—per-release requirements, WASM module roots, and Nitro versions
+- [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access)—which account holds which administrative role
+- [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring)—what to watch during and after an upgrade
+- [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting)—diagnosing batch poster errors
+- [Customize your chain's behavior](/launch-arbitrum-chain/extend-the-protocol/stf)—building a custom STF and its replay binary
+- [Nitro CLI flags reference](/run-a-node/nitro/cli-flags-reference)—reference for the Nitro configuration flags named here (`dangerous` flags are not listed)

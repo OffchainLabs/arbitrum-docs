@@ -36,7 +36,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  // The marketing home page at `/` is not part of the doc collection, so it has to be added by
-  // hand. It is the site root and the entry point every crawler starts from.
-  return [{ url: new URL('/', siteUrl).toString() }, ...pages];
+  // The root overview already contributes `/`, whose HTML is the home page.
+  return pages;
 }

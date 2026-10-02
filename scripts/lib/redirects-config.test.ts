@@ -29,13 +29,14 @@ const { match, compile } = createRequire(import.meta.url)(
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const { byUrl } = buildIndex(repoRoot);
-const all = [...redirects, ...markdownTwins(redirects)];
+const all = [...redirects, ...markdownTwins(redirects, new Set(byUrl.keys()))];
 const isExternal = (value: string): boolean => /^https?:\/\//.test(value);
 const pageOf = (destination: string): string => destination.split('#')[0];
 /** A destination Next fills from the source's named parameters. */
 const isPattern = (value: string): boolean => /:[A-Za-z_]/.test(value);
-/** `/docs/x.md` and `/docs.md` are served by the mirror rewrite whenever `/docs/x` is a page. */
-const pageOfMarkdown = (destination: string): string => pageOf(destination).replace(/\.md$/, '');
+/** Root page mirrors use `/index.md`; every other page appends `.md`. */
+const pageOfMarkdown = (destination: string): string =>
+  pageOf(destination) === '/index.md' ? '/' : pageOf(destination).replace(/\.md$/, '');
 const isPublicFile = (destination: string): boolean => {
   const file = path.join(repoRoot, 'public', pageOf(destination));
   return (
@@ -106,4 +107,38 @@ test('no redirect source is listed twice', () => {
   const seen = new Set<string>();
   const dupes = all.map((r) => r.source).filter((s) => seen.size === seen.add(s).size);
   assert.deepEqual(dupes, []);
+});
+
+test('unchanged master page routes have no redirects, while genuine moves retain theirs', () => {
+  for (const source of [
+    '/',
+    '/index.md',
+    '/how-arbitrum-works/deep-dives/stf',
+    '/how-arbitrum-works/deep-dives/stf.md',
+  ]) {
+    assert.equal(
+      all.some((redirect) => redirect.source === source),
+      false,
+      source,
+    );
+  }
+  assert.ok(byUrl.has('/how-arbitrum-works/deep-dives/stf'));
+  assert.ok(byUrl.has('/'));
+  for (const suffix of ['', '.md']) {
+    assert.deepEqual(
+      all.find((redirect) => redirect.source === `/run-a-node/run-batch-poster${suffix}`),
+      {
+        source: `/run-a-node/run-batch-poster${suffix}`,
+        destination: `/launch-arbitrum-chain/run-a-node/batch-poster${suffix}`,
+        permanent: true,
+      },
+    );
+  }
+});
+
+test('redirects use root page paths without the migration-only docs prefix', () => {
+  const prefixed = all.filter((redirect) =>
+    [redirect.source, redirect.destination].some((url) => /^\/docs(?:[/.#]|$)/.test(url)),
+  );
+  assert.deepEqual(prefixed, []);
 });

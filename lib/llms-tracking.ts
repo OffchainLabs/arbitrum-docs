@@ -48,7 +48,7 @@ const MIRROR_PREFIX = `${docsContentRoute}/`;
 const MIRROR_SUFFIX = '/content.md';
 
 /**
- * Classifies a request path. Both markdown shapes are tracked as `/docs/<slug>.md`, so one page is
+ * Classifies a request path. Both markdown shapes are tracked as `/<slug>.md`, so one page is
  * one series; a rewrite does not re-enter the proxy, so each request is counted once.
  */
 export function pathInfo(pathname: string): PathInfoResult {
@@ -62,11 +62,11 @@ export function pathInfo(pathname: string): PathInfoResult {
 
   if (pathname.startsWith(MIRROR_PREFIX) && pathname.endsWith(MIRROR_SUFFIX)) {
     const slug = pathname.slice(MIRROR_PREFIX.length, -MIRROR_SUFFIX.length);
-    const trackedPath = slug === '' ? `${docsRoute}.md` : `${docsRoute}/${slug}.md`;
+    const trackedPath = slug === '' ? '/index.md' : `${docsRoute}/${slug}.md`;
     return { kind: 'markdown-mirror', trackedPath, fileType: 'page' };
   }
 
-  if (pathname === `${docsRoute}.md` || pathname.startsWith(`${docsRoute}/`)) {
+  if (!pathname.startsWith('/llms.mdx/')) {
     return { kind: 'markdown-direct', trackedPath: pathname, fileType: 'page' };
   }
 

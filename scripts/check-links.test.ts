@@ -9,9 +9,28 @@ import {
   buildIndex,
   expandRefUrl,
   extractRefs,
+  findBrokenLinks,
   resolveRefToFile,
   resolvesToPublicAsset,
 } from './lib/doc-links.ts';
+
+test('the root markdown mirror resolves to the overview but remains an invalid HTML content link', () => {
+  const root = mkdtempSync(path.join(tmpdir(), 'doc-links-root-mirror-'));
+  const docsRoot = path.join(root, 'content', 'docs');
+  mkdirSync(docsRoot, { recursive: true });
+  const overview = path.join(docsRoot, 'index.mdx');
+  writeFileSync(overview, '# Documentation\n');
+  writeFileSync(path.join(docsRoot, 'article.mdx'), '[overview](/index.md)\n');
+  const index = buildIndex(root);
+
+  assert.equal(resolveRefToFile('/index.md', null, index), overview);
+  assert.equal(resolveRefToFile('/index.md#overview', null, index), overview);
+  assert.equal(resolveRefToFile('/', null, index), overview);
+  assert.deepEqual(
+    findBrokenLinks(index).map((link) => link.url),
+    ['/index.md'],
+  );
+});
 
 test('link extraction preserves source ranges after Unicode frontmatter and prose', () => {
   const source =
@@ -73,7 +92,7 @@ test('a root-absolute path with no matching file does not resolve', () => {
 test('a relative path never resolves to public/', () => {
   const root = fixture();
   // Relative links resolve against the page's own URL inside the docs route tree, not against the
-  // static root, so `audit-reports/report.pdf` written on /docs/audit-reports is a genuine 404 and
+  // static root, so `audit-reports/report.pdf` written on /audit-reports is a genuine 404 and
   // must keep being reported.
   assert.equal(resolvesToPublicAsset('audit-reports/report.pdf', root), false);
   assert.equal(resolvesToPublicAsset('./audit-reports/report.pdf', root), false);
@@ -105,14 +124,11 @@ function varFixture(segment: string): { root: string; fromAbs: string } {
 
 test('expandRefUrl substitutes a placeholder and leaves everything else alone', () => {
   const vars = readVars();
-  assert.equal(
-    expandRefUrl('/docs/a/{var:nitroVersionTag}/b'),
-    `/docs/a/${vars.nitroVersionTag}/b`,
-  );
-  assert.equal(expandRefUrl('/docs/a/b'), '/docs/a/b');
+  assert.equal(expandRefUrl('/a/{var:nitroVersionTag}/b'), `/a/${vars.nitroVersionTag}/b`);
+  assert.equal(expandRefUrl('/a/b'), '/a/b');
   // A URL documenting a path template keeps its braces: only the `var:` prefix is a placeholder.
-  assert.equal(expandRefUrl('/docs/a/{chainId}/b'), '/docs/a/{chainId}/b');
-  assert.equal(expandRefUrl('/docs/a/{var:noSuchVariable}/b'), '/docs/a/{var:noSuchVariable}/b');
+  assert.equal(expandRefUrl('/a/{chainId}/b'), '/a/{chainId}/b');
+  assert.equal(expandRefUrl('/a/{var:noSuchVariable}/b'), '/a/{var:noSuchVariable}/b');
 });
 
 test('an internal link written with a placeholder resolves to the page it expands to', () => {
@@ -120,7 +136,7 @@ test('an internal link written with a placeholder resolves to the page it expand
   const { root, fromAbs } = varFixture(segment);
   const index = buildIndex(root);
   const target = path.join(root, 'content', 'docs', segment, 'target.mdx');
-  assert.equal(resolveRefToFile('/docs/{var:nitroRepositorySlug}/target', fromAbs, index), target);
+  assert.equal(resolveRefToFile('/{var:nitroRepositorySlug}/target', fromAbs, index), target);
   // And an expansion that names no page is still reported, so the gate stays honest.
-  assert.equal(resolveRefToFile('/docs/{var:nitroRepositorySlug}/missing', fromAbs, index), null);
+  assert.equal(resolveRefToFile('/{var:nitroRepositorySlug}/missing', fromAbs, index), null);
 });

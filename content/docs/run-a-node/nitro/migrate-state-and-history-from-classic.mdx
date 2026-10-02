@@ -7,7 +7,7 @@ author: jose-franco
 sme: jose-franco
 ---
 
-When running a Nitro node for the first time on a chain that produced [classic blocks](/docs/arbitrum-essentials/public-chains#classic-deprecated) in the past (like <Term id="arbitrum-one">Arbitrum One</Term>), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a <Term id="database-snapshot">database snapshot</Term> using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/docs/run-a-node/run-full-node)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.
+When running a Nitro node for the first time on a chain that produced [classic blocks](/arbitrum-essentials/public-chains#classic-deprecated) in the past (like <Term id="arbitrum-one">Arbitrum One</Term>), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a <Term id="database-snapshot">database snapshot</Term> using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/run-a-node/run-full-node)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.
 
 <Callout type="info" title="Is this How-to for you?">
 
@@ -21,8 +21,8 @@ Keep in mind that this process only applies to Arbitrum One. Other <Term id="arb
 
 To successfully migrate the state and history of the chain from a classic (pre-Nitro) node to a Nitro node, you'll need:
 
-- A fully synced classic node: you can find instructions on how to run a classic node in [this page](/docs/run-a-node/more-types/run-classic-node).
-- A clean, uninitialized Nitro node: you can find instructions on how to set up a Nitro node in [this page](/docs/run-a-node/run-full-node).
+- A fully synced classic node: you can find instructions on how to run a classic node in [this page](/run-a-node/more-types/run-classic-node).
+- A clean, uninitialized Nitro node: you can find instructions on how to set up a Nitro node in [this page](/run-a-node/run-full-node).
 
 ## Step 1: Enable export options in your classic node
 
@@ -85,5 +85,5 @@ This state import operation requires more resources than a regular run of a Nitr
 
 ## See also
 
-- [How to run a full node (Nitro)](/docs/run-a-node/run-full-node)
-- [How to run a full node (Classic, pre-Nitro)](/docs/run-a-node/more-types/run-classic-node)
+- [How to run a full node (Nitro)](/run-a-node/run-full-node)
+- [How to run a full node (Classic, pre-Nitro)](/run-a-node/more-types/run-classic-node)

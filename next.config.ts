@@ -4,6 +4,7 @@ import type { NextConfig } from 'next';
 import { markdownTwins } from './lib/markdown-redirects.ts';
 import { resolveSiteUrl } from './lib/site-url.ts';
 import { redirects } from './redirects.config.ts';
+import { buildIndex } from './scripts/lib/doc-links.ts';
 
 // Fails a production build that has no usable `NEXT_PUBLIC_SITE_URL`. This file is the first thing
 // a build evaluates, so the check fires even when no prerendered route calls `getSiteUrl()`.
@@ -14,14 +15,18 @@ const withMDX = createMDX();
 const config: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
-  // The hand-maintained list, then the `.md` twin of every entry that lands under /docs.
+  // Only real documentation destinations receive markdown twins, excluding public files.
   async redirects() {
-    return [...redirects, ...markdownTwins(redirects)];
+    return [
+      ...redirects,
+      ...markdownTwins(redirects, new Set(buildIndex(process.cwd()).byUrl.keys())),
+    ];
   },
   async rewrites() {
     return [
-      { source: '/docs.md', destination: '/llms.mdx/docs/content.md' },
-      { source: '/docs/:path*\\.md', destination: '/llms.mdx/docs/:path*/content.md' },
+      { source: '/index.md', destination: '/llms.mdx/docs/content.md' },
+      // Direct machine mirrors already own `/llms.mdx/**`; leave their dynamic route intact.
+      { source: '/:path((?!llms\\.mdx/).+)\\.md', destination: '/llms.mdx/docs/:path/content.md' },
     ];
   },
 };

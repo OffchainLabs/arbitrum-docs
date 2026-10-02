@@ -9,10 +9,10 @@ sme: TucksonDev
 
 <Callout type="info" title="Looking for Stylus guidance?">
 
-Head over to [the Stylus gas docs](/docs/stylus/reference/opcode-hostio-pricing) for Stylus-specific guidance.
+Head over to [the Stylus gas docs](/stylus/reference/opcode-hostio-pricing) for Stylus-specific guidance.
 
 </Callout>
-This how-to covers how gas operates in <Term id="arbitrum">Arbitrum</Term>, how it's calculated, and how to estimate it before submitting transactions. For a deeper understanding of the underlying pricing mechanisms, see the [Gas and Fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees) concept page.
+This how-to covers how gas operates in <Term id="arbitrum">Arbitrum</Term>, how it's calculated, and how to estimate it before submitting transactions. For a deeper understanding of the underlying pricing mechanisms, see the [Gas and Fees](/how-arbitrum-works/deep-dives/gas-and-fees) concept page.
 
 ## Quick start: use `eth_estimateGas`
 
@@ -20,9 +20,9 @@ If you don't need to understand the formula, you can rely on the standard gas es
 
 Multiplying the value from `eth_estimateGas` by the child chain gas price gives you the total **ETH** required for the transaction to succeed. Note that for a given operation, the `eth_estimateGas` value may vary over time as the <Term id="parent-chain">parent chain</Term> calldata price fluctuates.
 
-Alternatively, call `NodeInterface.gasEstimateComponents()` and use the first result (`gasEstimate`) as your gas limit. Multiply by the third result (`baseFee`) to get the total cost. For background on `NodeInterface` itself, see the [NodeInterface overview](/docs/arbitrum-essentials/nodeinterface/overview).
+Alternatively, call `NodeInterface.gasEstimateComponents()` and use the first result (`gasEstimate`) as your gas limit. Multiply by the third result (`baseFee`) to get the total cost. For background on `NodeInterface` itself, see the [NodeInterface overview](/arbitrum-essentials/nodeinterface/overview).
 
-Note that when working with [parent to child chain messages](/docs/arbitrum-essentials/bridging/cross-chain-messaging) (also known as [retryable tickets](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging)), you can use the function [`ParentToChildMessageGasEstimator.estimateAll()`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/message/ParentToChildMessageGasEstimator.ts) of the Arbitrum SDK or [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/@@nitroVersionTag@@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
+Note that when working with [parent to child chain messages](/arbitrum-essentials/bridging/cross-chain-messaging) (also known as [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging)), you can use the function [`ParentToChildMessageGasEstimator.estimateAll()`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/packages/sdk/src/lib/message/ParentToChildMessageGasEstimator.ts) of the Arbitrum SDK or [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug@@/blob/@@nitroVersionTag@@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
 
 ## The fee formula
 
@@ -39,7 +39,7 @@ Arbitrum uses a [two-dimensional fee model](https://medium.com/offchainlabs/unde
 Transaction fees (TXFEES) = L2 Gas Price (P) * Gas Limit (G)
 ```
 
-The gas limit includes the gas for child chain computation plus an additional buffer to cover the parent chain gas the <Term id="sequencer">Sequencer</Term> pays when [posting the batch](/docs/how-arbitrum-works/deep-dives/sequencer):
+The gas limit includes the gas for child chain computation plus an additional buffer to cover the parent chain gas the <Term id="sequencer">Sequencer</Term> pays when [posting the batch](/how-arbitrum-works/deep-dives/sequencer):
 
 ```
 Gas Limit (G) = Gas used on L2 (L2G) + Extra Buffer for L1 cost (B)
@@ -70,7 +70,7 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 
 ## Where to get each variable
 
-You can use the [`NodeInterface`](/docs/arbitrum-essentials/nodeinterface/reference) to retrieve the fee components:
+You can use the [`NodeInterface`](/arbitrum-essentials/nodeinterface/reference) to retrieve the fee components:
 
 - **P** (L2 Gas Price): Price per gas unit. Starts at a gas floor price and increases with demand.
   - Call `NodeInterface.gasEstimateComponents()` and get the third element, `baseFee`.
@@ -80,7 +80,7 @@ You can use the [`NodeInterface`](/docs/arbitrum-essentials/nodeinterface/refere
   - Call `NodeInterface.gasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
 - **L1S** (Size of data to be posted on L1, in bytes): Depends on the transaction data. Arbitrum adds a fixed amount (~140 bytes) for the static part of the transaction.
   - Call `NodeInterface.gasEstimateComponents()`, take the second element `gasEstimateForL1` (this is `B` in the formula), multiply by `P` and divide by `L1P`.
-  - For <Term id="arbitrum-nova">Arbitrum Nova</Term> (AnyTrust), the data size is a fixed value since only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/docs/how-arbitrum-works/deep-dives/anytrust-protocol#data-availability-certificates-dacert).
+  - For <Term id="arbitrum-nova">Arbitrum Nova</Term> (AnyTrust), the data size is a fixed value since only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/how-arbitrum-works/deep-dives/anytrust-protocol#data-availability-certificates-dacert).
 
 <Callout type="info">For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`.</Callout>
 ## Code example

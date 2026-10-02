@@ -33,17 +33,17 @@ const PAGE_FRONTMATTER = [
 
 const REDIRECTS_FIXTURE = `export const redirects = [
   // AUTO-GENERATED REDIRECTS START
-  { source: '/docs/example/older-name', destination: '/docs/example/old-name', permanent: true },
+  { source: '/example/older-name', destination: '/example/old-name', permanent: true },
   // AUTO-GENERATED REDIRECTS END
 
   // Legacy docs.arbitrum.io URLs
-  { source: '/legacy/old-name', destination: '/docs/example/old-name', permanent: false },
+  { source: '/legacy/old-name', destination: '/example/old-name', permanent: false },
   {
     source: '/legacy/anchored',
-    destination: '/docs/example/old-name#a-section',
+    destination: '/example/old-name#a-section',
     permanent: false,
   },
-  { source: '/legacy/unrelated', destination: '/docs/example/unrelated', permanent: false },
+  { source: '/legacy/unrelated', destination: '/example/unrelated', permanent: false },
 ];
 `;
 
@@ -80,12 +80,11 @@ test('move-doc moves the file and appends one redirect, leaving other entries as
   execFileSync('node', [MOVE_DOC, fromRel, toRel], { cwd: root, encoding: 'utf8' });
   const after = readFileSync(redirectsPath, 'utf8');
 
-  assert.match(after, entry('/docs/example/old-name', '/docs/example/new-name'));
-  assert.match(after, entry('/docs/example/older-name', '/docs/example/old-name'));
-  assert.match(after, entry('/legacy/old-name', '/docs/example/old-name'));
+  assert.match(after, entry('/example/old-name', '/example/new-name'));
+  assert.match(after, entry('/example/older-name', '/example/old-name'));
+  assert.match(after, entry('/legacy/old-name', '/example/old-name'));
   assert.ok(
-    after.indexOf("source: '/docs/example/old-name'") <
-      after.indexOf('AUTO-GENERATED REDIRECTS END'),
+    after.indexOf("source: '/example/old-name'") < after.indexOf('AUTO-GENERATED REDIRECTS END'),
     'the new entry lands inside the AUTO-GENERATED block',
   );
   assert.ok(existsSync(path.join(root, toRel)) && !existsSync(path.join(root, fromRel)));
@@ -104,7 +103,7 @@ test('move-doc --dry-run reports the redirect without writing it', (t) => {
   assert.ok(existsSync(path.join(root, fromRel)), 'dry-run must not move');
   assert.match(
     output,
-    /redirect: \{ source: '\/docs\/example\/old-name', destination: '\/docs\/example\/new-name'/,
+    /redirect: \{ source: '\/example\/old-name', destination: '\/example\/new-name'/,
   );
 });
 
@@ -134,11 +133,11 @@ test('move-doc warns about a placeholder link to the moved page and never rewrit
 
   // Inbound: another page links to the moved page, once through a placeholder and once plainly.
   const linkerAbs = path.join(root, 'content', 'docs', 'example', 'linker.mdx');
-  const inboundPlaceholder = '[Old](/docs/{var:nitroRepositorySlug}/old-name)';
+  const inboundPlaceholder = '[Old](/{var:nitroRepositorySlug}/old-name)';
   writeFileSync(
     linkerAbs,
     PAGE_FRONTMATTER.replace('Old name', 'Linker') +
-      `${inboundPlaceholder}\n\nAnd plainly: [Old](/docs/${segment}/old-name)\n`,
+      `${inboundPlaceholder}\n\nAnd plainly: [Old](/${segment}/old-name)\n`,
   );
 
   const toRel = 'content/docs/other/new-name.mdx';
@@ -151,17 +150,14 @@ test('move-doc warns about a placeholder link to the moved page and never rewrit
   // Inbound: the placeholder resolves to the moved page, so it is reported with the other links that
   // cannot be auto-rewritten, under the form the writer typed rather than an "(expression)" fallback.
   assert.match(run.stderr, /1 reference\(s\) resolve to the move but can't be auto-rewritten/);
-  assert.match(run.stderr, /linker\.mdx: \/docs\/\{var:nitroRepositorySlug\}\/old-name/);
+  assert.match(run.stderr, /linker\.mdx: \/\{var:nitroRepositorySlug\}\/old-name/);
   const linker = readFileSync(linkerAbs, 'utf8');
   assert.ok(
     linker.includes(inboundPlaceholder),
     'inbound placeholder link left exactly as written',
   );
-  assert.ok(linker.includes('[Old](/docs/other/new-name)'), 'plain inbound link rewritten');
-  assert.ok(
-    !linker.includes(`/docs/${segment}/old-name)`),
-    'no plain link still names the old page',
-  );
+  assert.ok(linker.includes('[Old](/other/new-name)'), 'plain inbound link rewritten');
+  assert.ok(!linker.includes(`/${segment}/old-name)`), 'no plain link still names the old page');
 
   // Outbound: re-basing the placeholder link would write the variable's current value into the file.
   const moved = readFileSync(path.join(root, toRel), 'utf8');

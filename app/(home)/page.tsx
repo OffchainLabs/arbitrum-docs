@@ -32,7 +32,7 @@ import {
 } from '@/lib/shared';
 
 /**
- * The same metadata set `app/docs/[[...slug]]/page.tsx` emits per page. `og:image` comes from
+ * The same metadata set `app/(docs)/[...slug]/page.tsx` emits per page. `og:image` comes from
  * `opengraph-image.tsx` beside this file.
  */
 export const metadata: Metadata = {
@@ -150,27 +150,25 @@ export default function HomePage() {
               icon={<BookOpen />}
               title="A gentle introduction"
               description="Understand Arbitrum chains' value proposition and use cases."
-              href={docs('/launch-arbitrum-chain/overview/a-gentle-introduction')}
+              href={docs('/launch-arbitrum-chain/overview/introduction')}
             />
             <Card
               icon={<Rocket />}
               title="Deploy a chain"
               description="Use the Arbitrum chain SDK to configure and deploy your chain's core contracts."
-              href={docs('/launch-arbitrum-chain/overview/arbitrum-chain-sdk-introduction')}
+              href={docs('/launch-arbitrum-chain/quickstart/sdk-introduction')}
             />
             <Card
               icon={<Settings />}
               title="Configure your chain"
               description="Set up throughput, gas tokens, data availability, governance, and more."
-              href={docs(
-                '/launch-arbitrum-chain/configuration/core/additional-configuration-parameters',
-              )}
+              href={docs('/launch-arbitrum-chain/chain-config/additional-configuration-parameters')}
             />
             <Card
               icon={<ArrowRightLeft />}
               title="Migrate from another stack"
               description="Move an existing chain to Arbitrum technology."
-              href={docs('/launch-arbitrum-chain/migrate/migrate-from-another-stack')}
+              href={docs('/launch-arbitrum-chain/migrate/from-another-stack')}
             />
           </Cards>
         </section>
@@ -200,7 +198,7 @@ export default function HomePage() {
               icon={<HardDrive />}
               title="Configure a DAC"
               description="Run a Data Availability Server for AnyTrust chains."
-              href={docs('/launch-arbitrum-chain/configuration/data-availability')}
+              href={docs('/launch-arbitrum-chain/chain-config/data-availability/dac-get-started')}
             />
           </Cards>
         </section>

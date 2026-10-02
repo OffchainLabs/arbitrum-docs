@@ -60,6 +60,6 @@
   "announcementEnabled": true,
   "announcementText": "Reactivate your Stylus contracts to ensure they remain callable",
   "announcementLinkText": "here's how to do it.",
-  "announcementLinkHref": "/docs/stylus/gentle-introduction#activation",
+  "announcementLinkHref": "/stylus/gentle-introduction#activation",
   "announcementId": "stylus-reactivation-2026-09"
 }

@@ -3,15 +3,16 @@ import { localSiteUrl, resolveSiteUrl } from './site-url.ts';
 
 export const appName = 'Arbitrum docs';
 /**
- * The site root's own title and description, for `app/(home)/page.tsx` and its social card. Not the
- * docs index's "Arbitrum docs": `/` and `/docs` are separately indexable and should not compete.
+ * The home page title and description, used for its HTML metadata and social card.
+ * The root markdown overview retains its own title from `content/docs/index.mdx`.
  */
 export const siteTitle = 'Arbitrum documentation';
 export const siteDescription =
   'Arbitrum is the finance-native platform for applications, tokenization, and dedicated chains. These docs cover the protocols, chains, services, and SDKs.';
 /** The brand's X handle, for the `twitter:site` card tag on every docs page. */
 export const socialHandle = '@arbitrum';
-export const docsRoute = '/docs';
+/** Empty prefix: documentation articles are served directly at the site root. */
+export const docsRoute = '';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
 
@@ -29,9 +30,9 @@ export const gitConfig = {
 
 /** Sidebar footer links; `scripts/lib/shared.test.ts` asserts each `url` is a real page. */
 export const sidebarResourceLinks = [
-  { text: 'Chain info', url: '/docs/chain-info' },
-  { text: 'Glossary', url: '/docs/glossary' },
-  { text: 'Contribute', url: '/docs/contribute' },
+  { text: 'Chain info', url: '/chain-info' },
+  { text: 'Glossary', url: '/glossary' },
+  { text: 'Contribute', url: '/contribute' },
 ];
 
 /**

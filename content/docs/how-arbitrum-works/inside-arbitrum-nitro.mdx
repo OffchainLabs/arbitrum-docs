@@ -55,7 +55,7 @@ All the technical details in this document are related to this diagram. To get f
 - How are **ETH** and tokens transferred into and out of Arbitrum chains, and how are they managed while on the chain?
 - How can I run my own Arbitrum node or <Term id="validator">validator</Term>?
 
-For foundational concepts about the STF, see the [State Transition Function deep dive](/docs/how-arbitrum-works/deep-dives/stf).
+For foundational concepts about the STF, see the [State Transition Function deep dive](/how-arbitrum-works/deep-dives/stf).
 
 ## Nitro's design: the four big ideas
 
@@ -64,7 +64,7 @@ The essence of Nitro, and its key innovations, lie in four big ideas. We'll list
 - **Sequencing, followed by deterministic execution**: Nitro processes transactions with a two-phase strategy. First, the transactions are organized into a single ordered sequence, and Nitro commits to that sequence. Then the transactions are processed, in that sequence, by a deterministic <Term id="state-transition-function">State Transition Function</Term>.
 - **Geth at the core**: Nitro supports Ethereum's data structures, formats, and virtual machine by compiling them into the core code of the popular go-ethereum ("Geth") Ethereum node software. Using Geth as a library in this way ensures a very high degree of compatibility with Ethereum.
 - **Separating execution from proving**: Nitro compiles the same source code twice, once to native code for execution on a Nitro node, optimized for speed, and again to <Term id="wasm">WASM</Term> for proving, optimized for portability and security.
-- **Optimistic Rollup with interactive <Term id="fraud-proof">fraud proofs</Term>**: Nitro settles transactions on the Layer 1 Ethereum chain using an Optimistic Rollup protocol that includes interactive fraud proofs, pioneered by Arbitrum. The current dispute system, [BoLD](/docs/how-arbitrum-works/bold/gentle-introduction), extends this with an all-vs-all, <Term id="permissionless-validation">permissionless validation</Term> protocol that resolves disputes with a bounded delay (See "Resolving disputes using interactive fraud proofs").
+- **Optimistic Rollup with interactive <Term id="fraud-proof">fraud proofs</Term>**: Nitro settles transactions on the Layer 1 Ethereum chain using an Optimistic Rollup protocol that includes interactive fraud proofs, pioneered by Arbitrum. The current dispute system, [BoLD](/how-arbitrum-works/bold/gentle-introduction), extends this with an all-vs-all, <Term id="permissionless-validation">permissionless validation</Term> protocol that resolves disputes with a bounded delay (See "Resolving disputes using interactive fraud proofs").
 
 ## Sequencing, followed by deterministic execution
 
@@ -72,9 +72,9 @@ This diagram summarizes how transactions are processed in Nitro.
 
 <Term id="arbitrum">Arbitrum</Term> is an <Term id="L2">L2</Term> scaling solution for Ethereum, offering a unique combination of benefits:
 
-Let's [follow a user's transaction](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle) through this process.
+Let's [follow a user's transaction](/how-arbitrum-works/deep-dives/transaction-lifecycle) through this process.
 
-First, the user creates a transaction, signs it with their <Term id="wallet">wallet</Term>, and sends it to the Nitro chain's [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer). The <Term id="sequencer">Sequencer</Term>'s job, as its name implies, is to take the arriving transactions, put them into an ordered sequence, and publish that sequence.
+First, the user creates a transaction, signs it with their <Term id="wallet">wallet</Term>, and sends it to the Nitro chain's [Sequencer](/how-arbitrum-works/deep-dives/sequencer). The <Term id="sequencer">Sequencer</Term>'s job, as its name implies, is to take the arriving transactions, put them into an ordered sequence, and publish that sequence.
 
 Once the transactions are sequenced, they are run through the _state transition function_, one by one. The state transition function (STF) takes as input the current state of the chain (account balances, contract code, and so on) along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
 
@@ -93,7 +93,7 @@ So how do nodes get the sequence? The Sequencer publishes it in two ways:
 
 The real-time feed is published by the Sequencer, so anyone who subscribes receives instant notifications of each transaction as it is sequenced. Nitro nodes can subscribe to the feed directly from the Sequencer or via a <Term id="feed-relay">relay</Term> that forwards it. The feed represents the Sequencer's promise to record transactions in a particular order. If the Sequencer is honest and doesn't have a long downtime, this promise will be kept. So anyone who trusts the Sequencer to keep its promises can rely on the feed to get instant information about the transaction sequence—and they can run the sequenced transactions through the State Transition Function to learn the results of each transaction immediately. This is "<Term id="soft-confirmation">soft finality</Term>" for transactions; it's "soft" because it depends on the Sequencer keeping its promises.
 
-On Arbitrum One, a second stream runs alongside the real-time feed. The [Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed) is a paid, authenticated WebSocket stream that publishes each transaction as soon as the Sequencer orders and executes it, inside the <Term id="priority-gas-auction">Priority Gas Auction (PGA)</Term> round and before the block closes. The Sequencer publishes to the Fast Feed before it stores the transaction, so the block number each message carries is tentative. A Nitro node cannot follow the chain from the Fast Feed, and soft finality still comes from the real-time feed. The Fast Feed serves latency-sensitive readers, such as <Term id="searcher">searchers</Term> and market makers, who want ordered transactions sooner.
+On Arbitrum One, a second stream runs alongside the real-time feed. The [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) is a paid, authenticated WebSocket stream that publishes each transaction as soon as the Sequencer orders and executes it, inside the <Term id="priority-gas-auction">Priority Gas Auction (PGA)</Term> round and before the block closes. The Sequencer publishes to the Fast Feed before it stores the transaction, so the block number each message carries is tentative. A Nitro node cannot follow the chain from the Fast Feed, and soft finality still comes from the real-time feed. The Fast Feed serves latency-sensitive readers, such as <Term id="searcher">searchers</Term> and market makers, who want ordered transactions sooner.
 
 The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically—perhaps every few minutes in production—the Sequencer concatenates the next group of transactions in the feed, compresses them for efficiency, and posts the results to Ethereum— as <Term id="eip-4844">EIP-4844</Term> blobs when the chain operator has enabled them, the <Term id="parent-chain">parent chain</Term> supports them, and they are priced efficiently—otherwise as calldata. This is the final and official record of the transaction sequence. As soon as this Ethereum transaction reaches finality, the Layer 2 Nitro transactions it records will also have finality. These transactions are final because their positions in the sequence are final, and their outcomes are deterministic and knowable to any party. This is "<Term id="hard-finality">hard finality</Term>."
 
@@ -101,7 +101,7 @@ The Sequencer's batches are compressed using the general-purpose Brotli data com
 
 ## Geth at the core
 
-The second key design idea in Nitro is "Geth at the core." Here, "Geth" refers to [go-ethereum](/docs/how-arbitrum-works/reference/geth), the most common node software for Ethereum. As its name would suggest, go-ethereum is written in the Go programming language, as is almost all of Nitro.
+The second key design idea in Nitro is "Geth at the core." Here, "Geth" refers to [go-ethereum](/how-arbitrum-works/reference/geth), the most common node software for Ethereum. As its name would suggest, go-ethereum is written in the Go programming language, as is almost all of Nitro.
 
 <Callout type="info">
   In Ethereum's post-Merge architecture, Geth is an **execution <Term id="client">client</Term>**: it runs the EVM and maintains state, working alongside a separate consensus client. Nitro doesn't run Geth as a standalone client—it compiles in Geth's execution core as a library (the "Geth sandwich" described below). Nitro also has no consensus client; the Sequencer and the Layer 1 Rollup protocol handle sequencing and finality instead.
@@ -113,12 +113,12 @@ The second key design idea in Nitro is "Geth at the core." Here, "Geth" refers t
 The software that makes up a Nitro node can be thought of as built in three main layers, which are shown above:
 
 - The base layer is the core of Geth—the parts that emulate the execution of EVM contracts and maintain the data structures that comprise the Ethereum state. Nitro compiles in this code as a library, with a few minor modifications to add necessary hooks.
-- The middle layer, which we call [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos), is custom software that provides additional functions associated with Layer 2 functionality, such as decompressing and parsing the Sequencer's data batches, accounting for Layer 1 gas costs and collecting fees to reimburse for them, and supporting cross-chain <Term id="bridge">bridge</Term> functionalities such as deposits of Ether (**ETH**) and tokens from L1 and withdrawals of the same back to L1. We'll dig into the details of <Term id="arbos">ArbOS</Term> below.
+- The middle layer, which we call [ArbOS](/how-arbitrum-works/deep-dives/arbos), is custom software that provides additional functions associated with Layer 2 functionality, such as decompressing and parsing the Sequencer's data batches, accounting for Layer 1 gas costs and collecting fees to reimburse for them, and supporting cross-chain <Term id="bridge">bridge</Term> functionalities such as deposits of Ether (**ETH**) and tokens from L1 and withdrawals of the same back to L1. We'll dig into the details of <Term id="arbos">ArbOS</Term> below.
 - The top layer consists of node software, mostly drawn from Geth. This handles connections and incoming RPC requests from clients and provides the other top-level functionality required to operate an Ethereum-compatible <Term id="blockchain">blockchain</Term> node.
 
 Because the top and bottom layers rely heavily on code from Geth, this structure has been dubbed a "Geth sandwich." Strictly speaking, Geth plays the role of the bread in the sandwich, and ArbOS is the filling, but this sandwich is named for the bread.
 
-The State Transition Function consists of the bottom Geth layer and a portion of the middle ArbOS layer. In particular, the STF is a designated function in the source code and implicitly includes all code that it calls. The STF takes as input the [bytes of a transaction received in the inbox](/docs/how-arbitrum-works/reference/stf-inputs) and has access to a modifiable copy of the Ethereum state tree. Executing the STF may modify the state and, upon completion, emit the header of a new block (in Ethereum's block header format), which will be appended to the Nitro chain.
+The State Transition Function consists of the bottom Geth layer and a portion of the middle ArbOS layer. In particular, the STF is a designated function in the source code and implicitly includes all code that it calls. The STF takes as input the [bytes of a transaction received in the inbox](/how-arbitrum-works/reference/stf-inputs) and has access to a modifiable copy of the Ethereum state tree. Executing the STF may modify the state and, upon completion, emit the header of a new block (in Ethereum's block header format), which will be appended to the Nitro chain.
 
 ## Separating execution from proving
 
@@ -219,11 +219,11 @@ The parties that participate in the protocol are called _validators_. Some valid
 
 With the deployment of <Term id="bold">BoLD</Term>, validation is permissionless: anyone can post an assertion, bond, and defend the chain. (A chain may still keep an optional validator allowlist enabled as a safety measure during early stages; this is a toggle in the rollup contracts, not a requirement of the protocol.) "<Term id="watchtower-validator">Watchtower validators</Term>," who monitor the chain but don't take any onchain actions, can be run permissionlessly (see "validators" below).
 
-The key security property of the rollup protocol is that any one <Term id="honest-validator">honest validator</Term> can force the correct execution of the chain to be confirmed. This means that executing an Arbitrum chain is as trustless as executing an Ethereum chain. You, and you alone (or someone you hire), can ensure your transactions are processed correctly. And this is true no matter how many malicious people are trying to stop you. Under BoLD, this guarantee comes with a [_bounded delay_](/docs/how-arbitrum-works/bold/bold-technical-deep-dive): a single honest party can force <Term id="confirmation">confirmation</Term> of the correct outcome with a known, fixed amount of time, regardless of how many adversaries participate or how much they place as bond.
+The key security property of the rollup protocol is that any one <Term id="honest-validator">honest validator</Term> can force the correct execution of the chain to be confirmed. This means that executing an Arbitrum chain is as trustless as executing an Ethereum chain. You, and you alone (or someone you hire), can ensure your transactions are processed correctly. And this is true no matter how many malicious people are trying to stop you. Under BoLD, this guarantee comes with a [_bounded delay_](/how-arbitrum-works/bold/bold-technical-deep-dive): a single honest party can force <Term id="confirmation">confirmation</Term> of the correct outcome with a known, fixed amount of time, regardless of how many adversaries participate or how much they place as bond.
 
 ### The Rollup chain
 
-The rollup protocol tracks a chain of claims about the L2 state—we'll call these [assertions](/docs/how-arbitrum-works/deep-dives/assertions). They're not the same as Layer 1 Ethereum blocks, and also not the same as Layer 2 (Nitro) blocks. You can think of these assertions as forming a tree of claims about the chain's history, which the <Term id="arbitrum-rollup-protocol">Arbitrum Rollup Protocol</Term> manages and oversees.
+The rollup protocol tracks a chain of claims about the L2 state—we'll call these [assertions](/how-arbitrum-works/deep-dives/assertions). They're not the same as Layer 1 Ethereum blocks, and also not the same as Layer 2 (Nitro) blocks. You can think of these assertions as forming a tree of claims about the chain's history, which the <Term id="arbitrum-rollup-protocol">Arbitrum Rollup Protocol</Term> manages and oversees.
 
 Validators can propose assertions. A new assertion is initially unresolved. Eventually, every assertion will be _resolved_ by being either _confirmed_ or _rejected_. The confirmed assertions constitute the chain's confirmed history.
 
@@ -242,7 +242,7 @@ In the normal case, only correct assertions are proposed. If an assertion has no
 
 ### Bonding
 
-At any given time, some validators will be bonders, and some will not. To propose an assertion, a validator must put up a [bond held by the Arbitrum Layer 1 contracts](/docs/how-arbitrum-works/bold/bold-economics-of-disputes), which will be confiscated if the assertion is proven false. The bond is denominated in an **ERC-20** token configured for the chain—on Arbitrum One, this is **WETH**—so, in practice, stakers post **ETH**-denominated value.
+At any given time, some validators will be bonders, and some will not. To propose an assertion, a validator must put up a [bond held by the Arbitrum Layer 1 contracts](/how-arbitrum-works/bold/bold-economics-of-disputes), which will be confiscated if the assertion is proven false. The bond is denominated in an **ERC-20** token configured for the chain—on Arbitrum One, this is **WETH**—so, in practice, stakers post **ETH**-denominated value.
 
 A validator who agrees with the current confirmed history and proposes a correct successor assertion stays bonded on it until it is confirmed, at which point the bond can be withdrawn. A validator whose assertion is rejected forfeits its bond.
 
@@ -270,7 +270,7 @@ Suppose two (or more) rival assertions have been posted, sharing the same predec
 
 Whenever rival assertions exist, anyone—not just the proposers—can open a challenge. The rollup protocol records the challenge and mediates it via the **Edge Challenge Manager**, eventually confirming the correct side and allowing the losing side's bond to be confiscated.
 
-A challenge is played over the _edges_. An edge is a claim that the machine can advance from one state to another over some range of steps. Each participant who wants to defend a position creates a _layer-zero edge_ (posting a mini-stake) and then [**bisects**](/docs/how-arbitrum-works/bold/how-bold-bisection-works) it by posting the claimed midpoint state, splitting the edge into two half-size child edges. Rivals do the same to their own edges. Because the protocol is all-vs-all, many edges can be developed in parallel, and, crucially, the honest participant only needs to keep bisecting towards the truth—it does not need a specific opponent to "take a turn." Each edge accumulates time only while it is _unrivaled_; an edge whose unrivaled <Term id="timer">timer</Term> reaches the challenge period is confirmable. This is how BoLD bounds the total delay: an adversary can create rivals, but doing so does not buy unbounded time.
+A challenge is played over the _edges_. An edge is a claim that the machine can advance from one state to another over some range of steps. Each participant who wants to defend a position creates a _layer-zero edge_ (posting a mini-stake) and then [**bisects**](/how-arbitrum-works/bold/how-bold-bisection-works) it by posting the claimed midpoint state, splitting the edge into two half-size child edges. Rivals do the same to their own edges. Because the protocol is all-vs-all, many edges can be developed in parallel, and, crucially, the honest participant only needs to keep bisecting towards the truth—it does not need a specific opponent to "take a turn." Each edge accumulates time only while it is _unrivaled_; an edge whose unrivaled <Term id="timer">timer</Term> reaches the challenge period is confirmable. This is how BoLD bounds the total delay: an adversary can create rivals, but doing so does not buy unbounded time.
 
 <Term id="dissection">Dissection</Term> proceeds across several levels—first over Layer 2 blocks, then over progressively finer ranges of WAVM instructions (a block level, one or more big-step levels, and a small-step level)—until an edge represents a single step of execution. The final edge is confirmed by a **one-step proof**, checked onchain by the one-step proof entry contract, which determines who was telling the truth about that one instruction.
 
@@ -399,9 +399,9 @@ Because the Sequencer will be run by a trusted party at first and later decentra
 
 ### Transaction ordering: PGA, and the road to decentralized sequencing
 
-The Sequencer still controls transaction ordering, but the rule it follows is a configurable transaction ordering policy. Arbitrum One uses [Priority Gas Auctions (PGA)](/docs/how-arbitrum-works/priority-gas-auction/pga): you bid for ordering by setting `maxPriorityFeePerGas` on a standard <Term id="eip-1559">EIP-1559</Term> transaction, and the Sequencer sorts by that <Term id="priority-fee">priority fee</Term> in short rounds that run several times per block. On Arbitrum One, the block time is <Var name="l2BlockTimeMs" />ms and each block holds two rounds, so a round lasts 125ms. An anti-starvation boost raises the queue position of transactions still waiting at the end of a round, so a transaction that pays no priority fee is still included within a small number of blocks. The boost changes position only, never the fee charged.
+The Sequencer still controls transaction ordering, but the rule it follows is a configurable transaction ordering policy. Arbitrum One uses [Priority Gas Auctions (PGA)](/how-arbitrum-works/priority-gas-auction/pga): you bid for ordering by setting `maxPriorityFeePerGas` on a standard <Term id="eip-1559">EIP-1559</Term> transaction, and the Sequencer sorts by that <Term id="priority-fee">priority fee</Term> in short rounds that run several times per block. On Arbitrum One, the block time is <Var name="l2BlockTimeMs" />ms and each block holds two rounds, so a round lasts 125ms. An anti-starvation boost raises the queue position of transactions still waiting at the end of a round, so a transaction that pays no priority fee is still included within a small number of blocks. The boost changes position only, never the fee charged.
 
-PGA replaces <Term id="timeboost">Timeboost</Term> on Arbitrum One. Timeboost auctioned a 60-second <Term id="express-lane">express lane</Term> to one controller per round and delayed every other transaction by 200ms. PGA removes that delay, so no transaction waits on another's lane. Other Arbitrum chains can still choose Timeboost, but a chain should enable one policy, not both. See [PGA for Arbitrum chains](/docs/launch-arbitrum-chain/chain-config/sequencer/pga).
+PGA replaces <Term id="timeboost">Timeboost</Term> on Arbitrum One. Timeboost auctioned a 60-second <Term id="express-lane">express lane</Term> to one controller per round and delayed every other transaction by 200ms. PGA removes that delay, so no transaction waits on another's lane. Other Arbitrum chains can still choose Timeboost, but a chain should enable one policy, not both. See [PGA for Arbitrum chains](/launch-arbitrum-chain/chain-config/sequencer/pga).
 
 An ordering policy has limits worth stating plainly. PGA allocates ordering through an open, per-transaction fee competition layered on top of the existing Sequencer. It is **not** a decentralized or "fair-ordering" Sequencer, and it does not, by itself, remove trust in the Sequencer operator. The Sequencer on Arbitrum One is still a single node run by Offchain Labs.
 
@@ -415,11 +415,11 @@ The L1 and L2 chains run asynchronously, so it is not possible to make a <Term i
 
 ### L1 contracts can submit L2 transactions
 
-An L1 contract can [submit an L2 transaction](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging), just like a user would, by calling the Nitro chain's inbox contract on Ethereum. This L2 transaction will run later, producing results that will not be available to the L1 caller. The transaction will execute at L2, but the L1 caller won't be able to see any results from the L2 transaction.
+An L1 contract can [submit an L2 transaction](/how-arbitrum-works/deep-dives/l1-to-l2-messaging), just like a user would, by calling the Nitro chain's inbox contract on Ethereum. This L2 transaction will run later, producing results that will not be available to the L1 caller. The transaction will execute at L2, but the L1 caller won't be able to see any results from the L2 transaction.
 
 The advantage of this method is that it is simple and has relatively low latency. The disadvantage compared to the other method we'll describe soon is that the L2 transaction might revert if the L1 caller doesn't set the L2 gas price and max gas amount correctly. Because the L1 caller can't see the result of its transaction, it can't be absolutely sure that its L2 transaction will succeed.
 
-This would introduce a serious problem for certain types of L1-to-L2 interactions. Consider a transaction that [deposits a token on L1](/docs/how-arbitrum-works/deep-dives/token-bridging) and makes it available at some address on L2. If the L1 side succeeds, but the L2 side reverts, you've just sent some tokens to the inbox contract that are unrecoverable on either L2 or L1. Not good.
+This would introduce a serious problem for certain types of L1-to-L2 interactions. Consider a transaction that [deposits a token on L1](/how-arbitrum-works/deep-dives/token-bridging) and makes it available at some address on L2. If the L1 side succeeds, but the L2 side reverts, you've just sent some tokens to the inbox contract that are unrecoverable on either L2 or L1. Not good.
 
 ### L1-to-L2 message-based transactions
 
@@ -439,7 +439,7 @@ This mechanism is a bit more cumbersome than ordinary L1-to-L2 transactions, but
 
 ### L2-to-L1 message-based calls
 
-Calls from L2-to-L1 operate similarly, using a message-based system. An L2 contract can call a method of the precompiled ArbSys contract to [send a transaction to L1](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging). When the execution of the L2 transaction containing the submission is confirmed at L1 (some days later), a message is created in the L1 <Term id="outbox">outbox</Term> contract. That message can be triggered by anyone who calls a certain L1 outbox method and submits the `L2-to-L1 message proof`. The message is only marked as redeemed if the L1 transaction does not revert.
+Calls from L2-to-L1 operate similarly, using a message-based system. An L2 contract can call a method of the precompiled ArbSys contract to [send a transaction to L1](/how-arbitrum-works/deep-dives/l2-to-l1-messaging). When the execution of the L2 transaction containing the submission is confirmed at L1 (some days later), a message is created in the L1 <Term id="outbox">outbox</Term> contract. That message can be triggered by anyone who calls a certain L1 outbox method and submits the `L2-to-L1 message proof`. The message is only marked as redeemed if the L1 transaction does not revert.
 
 These L2-to-L1 messages have an unlimited lifetime, until they're successfully redeemed. No rent is required, as the messages (actually a Merkle hash of the messages) are stored on the Ethereum blockchain, which does not require rent. (The cost of allocating storage for the message Merkle roots is covered by L2 transaction fees.)
 
@@ -457,7 +457,7 @@ Setting the speed limit accurately depends on estimating the time required to va
 
 ### Fees
 
-User transactions pay [fees to cover the chain's operating costs](/docs/how-arbitrum-works/deep-dives/gas-and-fees). These fees are assessed and collected by ArbOS at the L2 level. They are denominated in **ETH**.
+User transactions pay [fees to cover the chain's operating costs](/how-arbitrum-works/deep-dives/gas-and-fees). These fees are assessed and collected by ArbOS at the L2 level. They are denominated in **ETH**.
 
 Fees are charged for two resources that a transaction can use:
 
@@ -492,7 +492,7 @@ The total fee charged to a transaction is the L2 basefee, multiplied by the sum 
 
 ## Inside AnyTrust
 
-[AnyTrust](/docs/how-arbitrum-works/deep-dives/anytrust-protocol) is a variant of the Arbitrum Nitro technology that reduces costs by accepting a weaker trust assumption.
+[AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol) is a variant of the Arbitrum Nitro technology that reduces costs by accepting a weaker trust assumption.
 
 The Arbitrum protocol requires that all Arbitrum nodes, including validators (nodes that verify the correctness of the chain and are prepared to stake on correct results), have access to the data of every L2 transaction in the Arbitrum chain’s inbox. An Arbitrum rollup provides data access by posting the data (in batched, compressed form) on L1 Ethereum as blobs or calldata. The Ethereum gas to pay for this is the largest component of the cost in Arbitrum.
 
@@ -566,31 +566,31 @@ In this overview, you've learned about the complete transaction journey through 
 
 ### Deep dives
 
-- [Transaction Lifecycle](/docs/how-arbitrum-works/deep-dives/transaction-lifecycle): Detailed transaction lifecycle from submission to finality
-- [Sequencer](/docs/how-arbitrum-works/deep-dives/sequencer): How the Sequencer orders, batches, and posts transactions
-- [Gas and fees](/docs/how-arbitrum-works/deep-dives/gas-and-fees): Gas pricing, fee calculations, and adaptive pricing algorithm
-- [State Transition Function: Gentle Introduction](/docs/how-arbitrum-works/deep-dives/stf): Foundational concepts of the STF
-- [Geth](/docs/how-arbitrum-works/reference/geth): Geth core and EVM compatibility
-- [ArbOS](/docs/how-arbitrum-works/deep-dives/arbos): Arbitrum Operating System features and capabilities
-- [State Transition Function inputs](/docs/how-arbitrum-works/reference/stf-inputs): Message types and STF processing mechanics
-- [Assertions](/docs/how-arbitrum-works/deep-dives/assertions): Rollup assertions and validation structure
-- [Parent-to-child messaging](/docs/how-arbitrum-works/deep-dives/l1-to-l2-messaging): L1 to L2 messaging and bridging
-- [Child-to-parent messaging](/docs/how-arbitrum-works/deep-dives/l2-to-l1-messaging): L2 to L1 messaging and withdrawals
-- [Token bridging](/docs/how-arbitrum-works/deep-dives/token-bridging): Canonical bridge architecture, gateways, and routers
-- [AnyTrust protocol](/docs/how-arbitrum-works/deep-dives/anytrust-protocol): Data availability committee and cost optimization
+- [Transaction Lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle): Detailed transaction lifecycle from submission to finality
+- [Sequencer](/how-arbitrum-works/deep-dives/sequencer): How the Sequencer orders, batches, and posts transactions
+- [Gas and fees](/how-arbitrum-works/deep-dives/gas-and-fees): Gas pricing, fee calculations, and adaptive pricing algorithm
+- [State Transition Function: Gentle Introduction](/how-arbitrum-works/deep-dives/stf): Foundational concepts of the STF
+- [Geth](/how-arbitrum-works/reference/geth): Geth core and EVM compatibility
+- [ArbOS](/how-arbitrum-works/deep-dives/arbos): Arbitrum Operating System features and capabilities
+- [State Transition Function inputs](/how-arbitrum-works/reference/stf-inputs): Message types and STF processing mechanics
+- [Assertions](/how-arbitrum-works/deep-dives/assertions): Rollup assertions and validation structure
+- [Parent-to-child messaging](/how-arbitrum-works/deep-dives/l1-to-l2-messaging): L1 to L2 messaging and bridging
+- [Child-to-parent messaging](/how-arbitrum-works/deep-dives/l2-to-l1-messaging): L2 to L1 messaging and withdrawals
+- [Token bridging](/how-arbitrum-works/deep-dives/token-bridging): Canonical bridge architecture, gateways, and routers
+- [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol): Data availability committee and cost optimization
 
 ### BoLD (Bounded Liquidity Delay)
 
-- [BoLD: Gentle introduction](/docs/how-arbitrum-works/bold/gentle-introduction): Overview of permissionless validation
-- [BoLD technical deep dive](/docs/how-arbitrum-works/bold/bold-technical-deep-dive): Implementation details of the dispute protocol
-- [How BoLD bisection works](/docs/how-arbitrum-works/bold/how-bold-bisection-works): Narrowing disputes to a single execution step
-- [Economics of disputes](/docs/how-arbitrum-works/bold/bold-economics-of-disputes): Bonding, incentives, and cost considerations
+- [BoLD: Gentle introduction](/how-arbitrum-works/bold/gentle-introduction): Overview of permissionless validation
+- [BoLD technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive): Implementation details of the dispute protocol
+- [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works): Narrowing disputes to a single execution step
+- [Economics of disputes](/how-arbitrum-works/bold/bold-economics-of-disputes): Bonding, incentives, and cost considerations
 
 ### Priority Gas Auctions (PGA)
 
-- [Introduction to PGA](/docs/how-arbitrum-works/priority-gas-auction/pga): How priority-fee ordering, rounds, and the anti-starvation boost work
-- [Introduction to the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/fast-feed): Per-round transaction stream for latency-sensitive participants
+- [Introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga): How priority-fee ordering, rounds, and the anti-starvation boost work
+- [Introduction to the Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed): Per-round transaction stream for latency-sensitive participants
 
 ### Timeboost
 
-- [Timeboost: Gentle Introduction](/docs/how-arbitrum-works/timeboost/gentle-introduction): MEV capture and transaction ordering
+- [Timeboost: Gentle Introduction](/how-arbitrum-works/timeboost/gentle-introduction): MEV capture and transaction ordering

@@ -12,7 +12,7 @@ The Fast Feed is a paid, authenticated WebSocket stream that publishes each tran
 
 On <Term id="arbitrum-one">Arbitrum One</Term>, Priority Gas Auction (PGA) rounds run every 125ms inside a 250ms block. The Fast Feed publishes within those rounds, so you see ordered transactions without waiting for the block to close.
 
-PGA rounds set the cadence of the Fast Feed. To understand the rounds themselves, read the [introduction to PGA](/docs/how-arbitrum-works/priority-gas-auction/pga) first.
+PGA rounds set the cadence of the Fast Feed. To understand the rounds themselves, read the [introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) first.
 
 ## What the Fast Feed does not do
 
@@ -79,7 +79,7 @@ Access runs on tickets sold by the `Tickets` contract, an audited contract on Ar
 
 Your access starts at the end of the round in which you buy the ticket. You can rotate your credential only when you buy a ticket for a new round.
 
-For the contract calls, the WebSocket handshake, the reference purchase bot, and the errors you can hit, see [how to use the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/use-fast-feed).
+For the contract calls, the WebSocket handshake, the reference purchase bot, and the errors you can hit, see [how to use the Fast Feed](/how-arbitrum-works/priority-gas-auction/use-fast-feed).
 
 ### Rounds and pricing
 
@@ -112,11 +112,11 @@ This split follows the framework that Timeboost established, which keeps Arbitru
 
 <Callout type="info">
 
-The Arbitrum Treasury Management (ATM) Council and OAT selected USDG as the stablecoin. The `Tickets` and USDG addresses are listed in [how to use the Fast Feed](/docs/how-arbitrum-works/priority-gas-auction/use-fast-feed#addresses-and-endpoints).
+The Arbitrum Treasury Management (ATM) Council and OAT selected USDG as the stablecoin. The `Tickets` and USDG addresses are listed in [how to use the Fast Feed](/how-arbitrum-works/priority-gas-auction/use-fast-feed#addresses-and-endpoints).
 
 </Callout>
 
-Trail of Bits audited both contracts before deployment. The `Tickets` contract is audited under the name "Sequencer Feed Ticketing", so read the [Sequencer Feed Ticketing report](/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf) for that contract, and the [Reward Distributor Fixes report](/audit-reports/2026_06_16_trail_of_bits_security_audit_reward_distributor_fixes_summary_report.pdf) for the RewardDistributor. The [security audit reports page](/docs/audit-reports) lists every Arbitrum audit.
+Trail of Bits audited both contracts before deployment. The `Tickets` contract is audited under the name "Sequencer Feed Ticketing", so read the [Sequencer Feed Ticketing report](/audit-reports/2026_07_31_sequencer_feed_ticketing_summary_report.pdf) for that contract, and the [Reward Distributor Fixes report](/audit-reports/2026_06_16_trail_of_bits_security_audit_reward_distributor_fixes_summary_report.pdf) for the RewardDistributor. The [security audit reports page](/audit-reports) lists every Arbitrum audit.
 
 ## Fast Feed compared with the sequencer feed
 
@@ -127,8 +127,8 @@ The two feeds serve different jobs. Running one does not replace the other.
 | Cost            | Free                                                        | Paid subscription                     |
 | Authentication  | None                                                        | API key against an onchain credential |
 | Granularity     | Per block                                                   | Per transaction, within a PGA round   |
-| Client          | Nitro node or [feed relay](/docs/run-a-node/run-feed-relay) | Your own client                       |
+| Client          | Nitro node or [feed relay](/run-a-node/run-feed-relay) | Your own client                       |
 | Follows a chain | Yes                                                         | No                                    |
 | Availability    | Every Arbitrum chain                                        | Arbitrum One                          |
 
-To work with the standard feed, see [how to read the sequencer feed](/docs/run-a-node/sequencer/read-sequencer-feed).
+To work with the standard feed, see [how to read the sequencer feed](/run-a-node/sequencer/read-sequencer-feed).

@@ -15,10 +15,10 @@ export default function proxy(request: NextRequest, event: NextFetchEvent) {
   return NextResponse.next();
 }
 
-// Only the tracked paths reach the proxy. `/docs/<slug>.md` is matched before the rewrite in
+// Only the tracked paths reach the proxy. `/<slug>.md` is matched before the rewrite in
 // next.config.ts maps it onto `/llms.mdx/`, so each request is counted once.
 export const config = {
-  matcher: ['/llms.txt', '/llms-full.txt', '/docs.md', '/docs/:path*\\.md', '/llms.mdx/:path*'],
+  matcher: ['/llms.txt', '/llms-full.txt', '/index.md', '/:path+\\.md', '/llms.mdx/:path*'],
 };
 
 function track(request: NextRequest, event: NextFetchEvent): void {

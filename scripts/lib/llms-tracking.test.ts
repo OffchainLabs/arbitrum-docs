@@ -133,46 +133,46 @@ test('pathInfo: /llms.txt and /llms-full.txt are indexes, tracked as-is', () => 
   }
 });
 
-test('pathInfo: /docs/<slug>.md is a markdown page, tracked as-is', () => {
-  assert.deepEqual(pathInfo('/docs/get-started/faq.md'), {
+test('pathInfo: /<slug>.md is a markdown page, tracked as-is', () => {
+  assert.deepEqual(pathInfo('/get-started/faq.md'), {
     kind: 'markdown-direct',
-    trackedPath: '/docs/get-started/faq.md',
+    trackedPath: '/get-started/faq.md',
     fileType: 'page',
   });
 });
 
-test('pathInfo: /docs.md is the docs-index markdown page', () => {
-  assert.deepEqual(pathInfo('/docs.md'), {
+test('pathInfo: /index.md is the docs-index markdown page', () => {
+  assert.deepEqual(pathInfo('/index.md'), {
     kind: 'markdown-direct',
-    trackedPath: '/docs.md',
+    trackedPath: '/index.md',
     fileType: 'page',
   });
 });
 
-test('pathInfo: the mirror route canonicalises to the /docs/<slug>.md form', () => {
+test('pathInfo: the mirror route canonicalises to the /<slug>.md form', () => {
   assert.deepEqual(pathInfo('/llms.mdx/docs/get-started/faq/content.md'), {
     kind: 'markdown-mirror',
-    trackedPath: '/docs/get-started/faq.md',
+    trackedPath: '/get-started/faq.md',
     fileType: 'page',
   });
 });
 
-test('pathInfo: the mirror route for the docs index is /docs.md, not /docs/.md', () => {
-  assert.equal(pathInfo('/llms.mdx/docs/content.md').trackedPath, '/docs.md');
+test('pathInfo: the mirror route for the docs index is /index.md, not /.md', () => {
+  assert.equal(pathInfo('/llms.mdx/docs/content.md').trackedPath, '/index.md');
 });
 
 test('pathInfo: both request shapes for one page agree on the tracked path', () => {
   assert.equal(
     pathInfo('/llms.mdx/docs/stylus/quickstart/content.md').trackedPath,
-    pathInfo('/docs/stylus/quickstart.md').trackedPath,
+    pathInfo('/stylus/quickstart.md').trackedPath,
   );
 });
 
-test('pathInfo: HTML pages, static files and .md outside /docs are ignored', () => {
+test('pathInfo: HTML pages, static files and unrelated machine mirrors are ignored', () => {
   for (const path of [
-    '/docs/get-started',
-    '/docs',
-    '/anytrust.md',
+    '/get-started',
+    '/',
+    '/llms.mdx/unrelated.md',
     '/_next/static/chunk.js',
     '/img/logo.svg',
     '/sitemap.xml',

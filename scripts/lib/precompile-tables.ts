@@ -136,7 +136,7 @@ export const toRawUrl = (url: string): string =>
 
 /**
  * The four GitHub blob base URLs every `<a href>` in the sixteen partials derives from. Pure so
- * the URL shape is pinned offline: `check-links` walks internal `/docs` links only, so a wrong
+ * the URL shape is pinned offline: `check-links` walks internal `/` links only, so a wrong
  * commit or path here would otherwise be visible to nothing but the network-bound
  * `pnpm precompiles:check`.
  *

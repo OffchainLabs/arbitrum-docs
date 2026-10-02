@@ -6,7 +6,7 @@
  * flags out of Nitro) lives in `scripts/lib/nitro-cli-flags.ts` and needs no curation.
  *
  * Ported from arbitrum-docs `scripts/generate-cli-reference.ts`, with the hrefs rewritten for
- * this site's `/docs`-prefixed routes.
+ * this site's `/`-prefixed routes.
  */
 import type { GuideLink } from '../lib/cli-reference-page.ts';
 import type { CliFlag, CustomFlagType, EntryPoint } from '../lib/nitro-cli-flags.ts';
@@ -22,19 +22,19 @@ export const entryPoint: EntryPoint = { dir: 'cmd/nitro/config', func: 'NodeConf
 
 const CONFIGURATION: GuideLink = {
   label: 'Configuration system',
-  href: '/docs/run-a-node/nitro/configuration-system',
+  href: '/run-a-node/nitro/configuration-system',
 };
 const BINARIES: GuideLink = {
   label: 'Docker and CLI binaries',
-  href: '/docs/run-a-node/nitro/docker-and-cli-binaries',
+  href: '/run-a-node/nitro/docker-and-cli-binaries',
 };
 const TUNING: GuideLink = {
   label: 'Node tuning and monitoring',
-  href: '/docs/run-a-node/nitro/node-tuning-and-monitoring',
+  href: '/run-a-node/nitro/node-tuning-and-monitoring',
 };
 const DA_TOOLS: GuideLink = {
   label: 'DA tools reference',
-  href: '/docs/run-a-node/nitro/da-tools-reference',
+  href: '/run-a-node/nitro/da-tools-reference',
 };
 
 /**

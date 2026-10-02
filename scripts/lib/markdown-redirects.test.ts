@@ -9,31 +9,45 @@ const entry = (source: string, destination: string, permanent = false) => ({
   permanent,
 });
 
-test('a redirect into /docs gets a .md twin with the same permanence', () => {
-  assert.deepEqual(markdownTwins([entry('/stylus/quickstart', '/docs/stylus/quickstart', true)]), [
-    entry('/stylus/quickstart.md', '/docs/stylus/quickstart.md', true),
-    entry('/index.md', '/docs.md', true),
+const docUrls = new Set(['/', '/stylus/quickstart', '/a/b', '/a', '/x']);
+
+test('a redirect into a known doc page gets a .md twin with the same permanence', () => {
+  assert.deepEqual(markdownTwins([entry('/old-quickstart', '/stylus/quickstart', true)], docUrls), [
+    entry('/old-quickstart.md', '/stylus/quickstart.md', true),
   ]);
 });
 
 test('the docs landing and a fragment destination map to the mirror URL', () => {
-  assert.equal(markdownUrl('/docs'), '/docs.md');
-  assert.equal(markdownUrl('/docs/a/b#section'), '/docs/a/b.md');
-  assert.equal(markdownUrl('/docs/a/'), '/docs/a.md');
+  assert.equal(markdownUrl('/'), '/index.md');
+  assert.equal(markdownUrl('/a/b#section'), '/a/b.md');
+  assert.equal(markdownUrl('/a/'), '/a.md');
+  assert.deepEqual(markdownTwins([entry('/old-home', '/')], docUrls), [
+    entry('/old-home.md', '/index.md'),
+  ]);
+  assert.deepEqual(markdownTwins([entry('/old-section', '/a/b#section')], docUrls), [
+    entry('/old-section.md', '/a/b.md'),
+  ]);
 });
 
-test('external, non-docs, pattern and .md sources get no twin', () => {
-  const twins = markdownTwins([
-    entry('/aep', 'https://docs.arbitrum.foundation/calculate-aep-fees'),
-    entry('/img/a.png', '/img/a.svg'),
-    entry('/docsish', '/docsfoo'),
-    entry('/assets/files/:name([^/]+)-:hash([0-9a-f]{32}).pdf', '/docs/audit-reports'),
-    entry('/already.md', '/docs/x'),
-    entry('/', '/docs'),
-  ]);
-  assert.deepEqual(twins, [entry('/index.md', '/docs.md', true)]);
+test('external, unknown, asset, pattern and .md sources get no twin', () => {
+  const twins = markdownTwins(
+    [
+      entry('/aep', 'https://docs.arbitrum.foundation/calculate-aep-fees'),
+      entry('/img/a.png', '/img/a.svg'),
+      entry('/not-a-doc', '/unknown'),
+      entry('/assets/files/:name([^/]+)-:hash([0-9a-f]{32}).pdf', '/a'),
+      entry('/already.md', '/x'),
+      entry('/', '/x'),
+    ],
+    docUrls,
+  );
+  assert.deepEqual(twins, []);
+});
+
+test('an empty redirect list adds no redirect for the live root mirror', () => {
+  assert.deepEqual(markdownTwins([], docUrls), []);
 });
 
 test('a trailing slash on the source does not produce "/.md"', () => {
-  assert.equal(markdownTwins([entry('/a/', '/docs/a')])[0].source, '/a.md');
+  assert.equal(markdownTwins([entry('/old-a/', '/a')], docUrls)[0].source, '/old-a.md');
 });

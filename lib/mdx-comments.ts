@@ -1,6 +1,6 @@
 /**
  * mdx-comments: drop `{/* … *\/}` comments from the compiled tree. They render as nothing in the
- * HTML, but the markdown mirrors (`/docs/<slug>.md`, `/llms.mdx/**`, `/llms-full.txt`) are
+ * HTML, but the markdown mirrors (`/<slug>.md`, `/llms.mdx/**`, `/llms-full.txt`) are
  * stringified from the same mdast, and an expression node is written out verbatim. Every comment in
  * `content/` is maintainer-facing, and every generator reads its marker from the raw `.mdx`.
  *
