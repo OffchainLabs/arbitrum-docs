@@ -312,6 +312,11 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-arbitrum-chain/chain-config/data-availability/anytrust-trust-model',
+                  label: `Trust model`,
+                },
+                {
+                  type: 'doc',
                   id: 'launch-arbitrum-chain/chain-config/data-availability/dac-configuration-defaults',
                   label: `DAC defaults`,
                 },
