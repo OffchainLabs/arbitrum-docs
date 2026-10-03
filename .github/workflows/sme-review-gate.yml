@@ -1,0 +1,94 @@
+name: SME review gate
+run-name: SME review gate (report-only)
+
+# Phase 0: report-only. Publishes a `sme-review-gate` check run with a NEUTRAL
+# conclusion (never blocks merges) so the diff -> region/path -> required-team
+# logic can be validated on real PRs. Phase 1 flips `reportOnly` to false in
+# .github/sme-config.json and adds the check to the branch ruleset to enforce.
+#
+# SECURITY — why `pull_request_target`:
+# External contributors open PRs from forks. A plain `pull_request` run on a fork
+# gets a read-only token, no secrets (no App token), and no checks:write — so
+# the gate could neither read team membership nor post its check. `pull_request_target`
+# runs in the BASE repo context (full token + secrets) for fork PRs too. It is safe
+# here ONLY because this job checks out the trusted base ref (never the PR head) and
+# the script reads PR file content over the API — it never executes untrusted PR code.
+# Do not add a step that checks out or runs the PR's code.
+
+on:
+  pull_request_target:
+    branches:
+      - master
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted, dismissed, edited]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'PR number to evaluate'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: read
+
+jobs:
+  # Job name MUST differ from the published check-run context (`sme-review-gate`),
+  # or the job's own always-green check collides with the script's verdict and a
+  # ruleset could match the wrong one — making the gate silently bypassable.
+  evaluate:
+    name: 'evaluate'
+    runs-on: ubuntu-latest
+    # `secrets` cannot be used in a step-level `if`; surface presence as an env flag.
+    env:
+      HAS_SME_APP: ${{ secrets.SME_GATE_APP_ID != '' }}
+    steps:
+      - name: Resolve PR number
+        id: resolve
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_PR: ${{ inputs.pr }}
+          EVENT_PR: ${{ github.event.pull_request.number }}
+        run: |
+          PR="${INPUT_PR:-$EVENT_PR}"
+          if [ -z "$PR" ]; then echo "No PR number to evaluate"; exit 1; fi
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+
+      # Trusted base checkout only — provides the script + sme-config.json. The PR's
+      # own content is fetched over the API by the script, never checked out here.
+      - name: Checkout base
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        uses: OffchainLabs/actions/node-modules/install@main
+        with:
+          install-command: yarn install --frozen-lockfile
+
+      # The gate token must read org team membership AND post the check run. Only a
+      # GitHub App can hold both `members: read` (org) and `checks: write` — no PAT,
+      # classic or fine-grained, can create check runs. Mint a short-lived installation
+      # token when the App secrets exist; if they don't, this step is skipped and the
+      # run degrades to GITHUB_TOKEN (report-only neutral check, teams "unverifiable").
+      - name: Mint SME gate token (GitHub App)
+        id: app-token
+        if: ${{ env.HAS_SME_APP == 'true' }}
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.SME_GATE_APP_ID }}
+          private-key: ${{ secrets.SME_GATE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Run SME review gate (report-only)
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.resolve.outputs.pr }}
+        run: yarn tsx scripts/sme-review-gate.ts

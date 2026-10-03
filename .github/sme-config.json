@@ -1,0 +1,11 @@
+{
+  "_README": "Drives scripts/sme-review-gate.ts. team keys are GitHub team slugs under `org` and must have write access for Phase 1 enforcement; Phase 0 runs report-only. `paths` are gitignore-style globs (prefix/** supported). Region markers in MDX ({/* sme:start team=<slug> */} ... {/* sme:end */}) reference these same slugs.",
+  "org": "OffchainLabs",
+  "editorialTeam": "technical-writing",
+  "reportOnly": true,
+  "smeTeams": {
+    "protocol-sme": ["docs/how-arbitrum-works/**"],
+    "stylus-sme": ["docs/stylus/**", "docs/stylus-by-example/**"],
+    "chain-sme": ["docs/launch-arbitrum-chain/**"]
+  }
+}

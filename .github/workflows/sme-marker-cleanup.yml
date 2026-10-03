@@ -1,0 +1,84 @@
+name: SME marker cleanup
+run-name: SME marker cleanup (post-merge of #${{ github.event.pull_request.number }})
+
+# After a PR merges to master, strip the transient {/* sme:* */} markers it
+# introduced. SME tags are per-PR signals, not durable content — see
+# .github/SME_REVIEW_GATE.md and the design spec.
+#
+# SECURITY — why pull_request_target: it runs in the BASE repo context, so it has
+# a token (SME_CLEANUP_TOKEN) that can push to master. It checks out the trusted
+# base (master), never the PR head, and only runs the in-repo stripper over file
+# paths. Do NOT add a step that builds or executes PR code.
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [master]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: sme-marker-cleanup-master
+  cancel-in-progress: false
+
+jobs:
+  strip:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+          token: ${{ secrets.SME_CLEANUP_TOKEN }}
+          persist-credentials: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        uses: OffchainLabs/actions/node-modules/install@main
+        with:
+          install-command: yarn install --frozen-lockfile
+
+      - name: Collect merged PR's markdown files
+        id: files
+        env:
+          GH_TOKEN: ${{ secrets.SME_CLEANUP_TOKEN }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh api "repos/$REPO/pulls/$PR/files" --paginate --jq '.[].filename' \
+            | grep -E '\.mdx?$' > "$RUNNER_TEMP/sme-files.txt" || true
+          echo "count=$(wc -l < "$RUNNER_TEMP/sme-files.txt" | tr -d ' ')" >> "$GITHUB_OUTPUT"
+
+      - name: Strip SME markers
+        if: steps.files.outputs.count != '0'
+        run: |
+          mapfile -t FILES < "$RUNNER_TEMP/sme-files.txt"
+          yarn tsx scripts/strip-sme-markers.ts "${FILES[@]}"
+
+      - name: Commit and push if changed
+        if: steps.files.outputs.count != '0'
+        env:
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          if git diff --quiet; then
+            echo "No SME markers to strip."
+            exit 0
+          fi
+          git config user.name "arbitrum-docs-sme-bot"
+          git config user.email "sme-bot@users.noreply.github.com"
+          git commit -am "chore: strip transient SME markers (post-merge of #${PR})"
+          for attempt in 1 2 3; do
+            if git push origin master; then exit 0; fi
+            echo "push rejected, rebasing (attempt $attempt)"
+            git pull --rebase origin master
+          done
+          echo "Failed to push after 3 attempts" >&2
+          exit 1
