@@ -1,0 +1,152 @@
+---
+title: 'Quickstart: Stream Arbitrum data with Firehose and Substreams'
+description: 'Learn how to stream Arbitrum blocks with Firehose and run parallelized Substreams modules against Arbitrum One and Arbitrum Sepolia using Pinax endpoints'
+content_type: quickstart
+author: chillsauce
+sme: chillsauce
+third_party_content_owner: chillsauce
+sidebar_label: 'Pinax'
+---
+
+## Firehose and Substreams
+
+[Firehose](https://firehose.streamingfast.io/) and [Substreams](https://docs.substreams.dev/) are
+open-source blockchain data technologies maintained by [StreamingFast](https://www.streamingfast.io/)
+and [Pinax](https://pinax.network/).
+
+**Firehose** extracts blocks once and persists them as flat files, then streams them to consumers
+over gRPC. Because the same files serve both historical and live reads, one integration covers
+backfill and tail — you don't pair a websocket subscription with batched `eth_getLogs` calls for
+history.
+
+**Substreams** runs on top of Firehose. You write modules in Rust, compile them to WebAssembly, and
+the server executes them in parallel across historical block ranges, then switches to live as it
+reaches the chain head. Output can be streamed to a consumer, written to PostgreSQL or ClickHouse,
+or used as a subgraph data source.
+
+The difference from a JSON-RPC indexing loop is where the work happens. Decoding runs server-side,
+next to the data, and parallelizes across ranges — so a backfill is bounded by how much parallelism
+the server allocates rather than by your request rate.
+
+## Arbitrum endpoints
+
+| Network          | Chain ID | Firehose                                | Substreams                                |
+| ---------------- | -------- | --------------------------------------- | ----------------------------------------- |
+| Arbitrum One     | 42161    | `arbone.firehose.pinax.network:443`     | `arbone.substreams.pinax.network:443`     |
+| Arbitrum Sepolia | 421614   | `arbsepolia.firehose.pinax.network:443` | `arbsepolia.substreams.pinax.network:443` |
+
+Both are gRPC endpoints on port 443 and require an API key. Arbitrum Nova is not currently served.
+
+Blocks for both networks come from Nitro nodes running the Firehose execution tracer, so they carry
+full execution detail — call traces, internal transfers, balance changes, and storage diffs — rather
+than only what a JSON-RPC poller can observe. Modules that depend on state changes work as a result;
+the example below is one of them.
+
+## Prerequisites
+
+- The [Substreams CLI](https://docs.substreams.dev/how-to-guides/installing-the-cli)
+- A free Pinax API key from [app.pinax.network](https://app.pinax.network/)
+
+## Authenticate
+
+Substreams reads its key from the `SUBSTREAMS_API_KEY` environment variable:
+
+```bash
+export SUBSTREAMS_API_KEY="<your-api-key>"
+```
+
+If you call Firehose directly over gRPC rather than through Substreams, pass the key in an
+`X-Api-Key` header instead.
+
+## Run a Substreams package
+
+Substreams packages are distributed as `.spkg` files, so you can run one without writing any Rust.
+Inspect a package first to see its modules and the shape of their output:
+
+```bash
+substreams info https://github.com/streamingfast/substreams-erc20-balance-changes/releases/download/v1.4.0/erc20-balance-changes-v1.4.0.spkg
+```
+
+Then stream it against Arbitrum One. This follows ERC-20 balance changes from a thousand blocks
+behind the chain head:
+
+```bash
+substreams run \
+  -e arbone.substreams.pinax.network:443 \
+  https://github.com/streamingfast/substreams-erc20-balance-changes/releases/download/v1.4.0/erc20-balance-changes-v1.4.0.spkg \
+  map_balance_changes \
+  --start-block -1000
+```
+
+A negative `--start-block` is resolved by the server relative to the chain head. The command prints
+each block's decoded output as JSON, then follows the head until you stop it. An invalid or missing
+API key fails here, before any streaming starts.
+
+To process a fixed historical range instead, give absolute bounds. With a positive start block, a
+`+` prefix on `--stop-block` means "relative to the start block":
+
+```bash
+substreams run \
+  -e arbone.substreams.pinax.network:443 \
+  https://github.com/streamingfast/substreams-erc20-balance-changes/releases/download/v1.4.0/erc20-balance-changes-v1.4.0.spkg \
+  map_balance_changes \
+  --start-block 250000000 \
+  --stop-block +10000
+```
+
+Browse [substreams.dev](https://substreams.dev/) for other packages.
+
+## Build a module for your own contract
+
+To decode your own contract's events and calls, initialize a project:
+
+```bash
+substreams init
+```
+
+The CLI walks you through choosing a code generator, the network, and your contract address, and
+generates a Rust module from the contract's ABI. Build it and run it against the same endpoint:
+
+```bash
+substreams build
+substreams run -e arbone.substreams.pinax.network:443 substreams.yaml map_events --start-block -1000
+```
+
+Use the module name that `substreams init` generated — `substreams info substreams.yaml` lists them.
+
+The [Substreams developer documentation](https://docs.substreams.dev/) covers module types, stores
+for stateful aggregation, and the Rust API in full.
+
+## Consume Firehose directly
+
+If you want raw blocks rather than a module's output, stream Firehose over gRPC. Each block arrives
+as a protobuf message with transaction traces, logs, and balance changes already extracted:
+
+```bash
+grpcurl \
+  -H "X-Api-Key: $PINAX_API_KEY" \
+  -d '{"start_block_num": -10, "final_blocks_only": false}' \
+  arbone.firehose.pinax.network:443 \
+  sf.firehose.v2.Stream/Blocks
+```
+
+Client libraries are available in Go, Rust, and TypeScript. See the
+[Firehose documentation](https://firehose.streamingfast.io/) for the block model and for cursors,
+which are how you resume a stream exactly where it stopped after a restart or a reorg.
+
+## Sink the output
+
+Substreams output is designed to be written somewhere rather than read in a terminal:
+
+- [Substreams:SQL](https://docs.substreams.dev/how-to-guides/sinks/sql) — PostgreSQL and ClickHouse
+- [Files](https://docs.substreams.dev/how-to-guides/sinks/files) — Parquet, JSONL, CSV
+- [Substreams:Stream](https://docs.substreams.dev/how-to-guides/sinks/stream) — consume the stream directly from your own service
+
+The [Consuming Substreams](https://docs.substreams.dev/how-to-guides/sinks) overview lists the rest, including community sinks.
+
+## Next steps
+
+- [Substreams documentation](https://docs.substreams.dev/) — modules, stores, and the Rust API
+- [Firehose documentation](https://firehose.streamingfast.io/) — block model and cursors
+- [substreams.dev](https://substreams.dev/) — the package registry
+- [Pinax documentation](https://app.pinax.network/docs) — endpoints, authentication, and limits
