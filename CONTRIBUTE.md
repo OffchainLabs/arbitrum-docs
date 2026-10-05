@@ -20,6 +20,10 @@ Node `22.x` (`>=22.18 <23`, enforced by `engines`; every script is a `.ts` file 
 **Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken, which is a common false alarm when checking a content change.
 
+If you write with Claude Code, expect its first edit to a page or partial in a session to be
+refused: a project hook (`.claude/settings.json`) returns `STYLE-GUIDE.md` as the reason so the
+guide is in context, and every later edit in that session goes through.
+
 ## Add or edit a page
 
 Every page needs a `title` and a `description` in its frontmatter. A missing one fails
@@ -81,7 +85,12 @@ To add a page, put the `.mdx` file in the directory where it belongs and add its
 
 `"..."` lists every page and folder the array does not name yet, pages before folders, each sorted
 by file name. Most directories end with it, so a page you forget to list still appears, at the end
-of its group.
+of its group. Not all do: a page dropped into a directory whose `meta.json` has no `"..."` is
+absent from the sidebar, and only `pnpm test` says so. To see which directories those are:
+
+```bash
+grep -L '"\.\.\."' $(find content/docs -name meta.json)
+```
 
 The `pages` array also accepts these entries:
 
@@ -104,8 +113,9 @@ A new top-level directory needs `"root": true` in its `meta.json` and an entry i
 `content/docs/meta.json`. A new page at the top of `content/docs`, beside `chain-info.mdx`, needs a
 `"../your-page"` entry in the `meta.json` of the section that should show it.
 
-`pnpm test` fails when a page is on no sidebar node, is on two, or sits outside every section. Open
-the page at `http://localhost:3000` to see where it landed.
+`pnpm test` fails when a page is on no sidebar node, is on two, or sits outside every section, and
+names the page and the change to make. The page renders at its URL either way, so a browser check
+means looking for it in the sidebar, not opening it.
 
 ## Reuse a partial before you write new prose
 
@@ -166,6 +176,127 @@ catch a hardcoded one gone dead.
 To change a value or add a new one, edit `vars.json` and run `pnpm vars:check`. No other file
 changes. The check fails on a name that `vars.json` does not hold, which would otherwise render the
 literal string `undefined`.
+
+## Components
+
+Every component below is registered globally in `components/mdx.tsx`, so a page never needs an
+`import` line. Copy the form you need; each is written the way the lint rules expect it (a
+component on its own lines, with a blank line before and after, and markdown inside it separated
+by blank lines).
+
+| Need                     | Write                                                                 | Notes                                                                                             |
+| ------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Note or warning box      | `<Callout type="info" title="…">`                                     | `type` is `info`, `warn`, `error`, `idea` or `success`; the title is plain text, no markdown      |
+| Glossary hover           | `<Term id="dapp">decentralized app</Term>`                            | `id` is the glossary entry's id; once per file, first mention. Works inside partials              |
+| A value from `vars.json` | `<Var name="nitroVersionTag" />`, or `{var:nitroVersionTag}` in a URL | See [Use a variable](#use-a-variable-dont-hardcode-a-value)                                       |
+| Reusable fragment        | `<include cwd>content/partials/_x.mdx</include>`                      | See [Reuse a partial](#reuse-a-partial-before-you-write-new-prose)                                |
+| Card grid                | `<Cards><Card title href description /></Cards>`                      | `href` is a root-absolute path (`/get-started`) or an external URL                                |
+| Tabs                     | `<Tabs items={['A', 'B']}><Tab value="A">…</Tab></Tabs>`              | `value` must match an entry in `items`; never `defaultValue={null}`                               |
+| Collapsible              | `<Accordions><Accordion title="…">…</Accordion></Accordions>`         | The Docusaurus `<details>` form                                                                   |
+| Numbered steps           | `<Steps><Step>…</Step></Steps>`                                       | Registered globally; no import                                                                    |
+| Explorer-linked address  | `<AEL address="0x…" chainID={42161} />`                               | The address must be EIP-55 checksummed or the page throws                                         |
+| Image with caption       | `<figure>` + markdown image + `<figcaption>`                          | See the example below                                                                             |
+| Wide image               | `data-wide` on the image                                              | Prose images are capped at 600px; see [Image sizing](#image-sizing)                               |
+| Remote image             | `<ImageZoom><img src="https://…" alt="…" /></ImageZoom>`              | A markdown image with a remote src renders broken; prefer committing the file under `public/img/` |
+| Dense table              | `<table className="small-table">` with `<thead>` and `<tbody>`        | Smaller type and padding; a `<tr>` directly in `<table>` breaks hydration                         |
+| Math                     | `$$ … $$`                                                             | KaTeX, unchanged from Docusaurus                                                                  |
+
+Callout:
+
+```mdx
+<Callout type="warn" title="Before you start">
+  Fund the batch poster account first.
+</Callout>
+```
+
+Tabs, with markdown inside each tab separated by blank lines:
+
+```mdx
+<Tabs items={['Arbitrum One', 'Your Arbitrum chain']}>
+<Tab value="Arbitrum One">
+
+The chart defaults to Arbitrum One, so a node needs only three values.
+
+</Tab>
+<Tab value="Your Arbitrum chain">
+
+Set `chain.id` and `parent-chain.id` to your chain's values.
+
+</Tab>
+</Tabs>
+```
+
+Accordion:
+
+```mdx
+<Accordions>
+<Accordion title="Rust toolchain">
+
+Follow the instructions on the Rust installation page.
+
+</Accordion>
+</Accordions>
+```
+
+Steps:
+
+```mdx
+<Steps>
+<Step>
+
+**Learn Rust basics.** Work through the first ten chapters of the Rust book.
+
+</Step>
+<Step>
+
+**Write a contract.** Start from the quickstart.
+
+</Step>
+</Steps>
+```
+
+Cards:
+
+```mdx
+<Cards>
+  <Card title="Get started" href="/get-started" description="Quickstarts and guides." />
+  <Card title="Run a node" href="/run-a-node" description="Node operator docs." />
+</Cards>
+```
+
+Address explorer link, in a table cell or in prose:
+
+```mdx
+<AEL address="0xB90e53fd945Cd28Ec4728cBfB566981dD571eB8b" chainID={42161} />
+```
+
+Image with a caption. The image sits on its own line between blank lines so MDX reads it as
+markdown rather than as JSX text:
+
+```mdx
+<figure>
+
+![Nitro support windows](/img/nitro-support-policy.png)
+
+<figcaption>Nitro support windows</figcaption>
+</figure>
+```
+
+### Image sizing
+
+A markdown image renders through `ImageZoom` at its file's intrinsic size, capped by
+`app/global.css` at 600px wide inside prose, so a phone screenshot no longer fills the column. That
+cap replaces the Docusaurus `img-400px`, `img-600px` and `img-900px` classes, which no stylesheet
+defines here. For a diagram that needs the full column, add `data-wide` to the image:
+
+```mdx
+<ImageZoom>
+  <img src="/img/haw-transaction-lifecycle.svg" alt="Transaction lifecycle" data-wide />
+</ImageZoom>
+```
+
+There is no per-image width. If a diagram is unreadable at 600px, it is a wide image; if it is
+unreadable at the full column, redraw it.
 
 ## Move or rename a page
 
