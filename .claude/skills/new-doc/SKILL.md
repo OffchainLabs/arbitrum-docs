@@ -28,9 +28,11 @@ Optional (omit the key entirely if not provided, rather than leaving it blank):
   `reference`, `troubleshooting`, `faq`; an editorial label, nothing renders it
 - `author`: GitHub username
 - `sme`: subject matter expert GitHub username (can be same as author)
+- `target_audience`: intended readers and their assumed knowledge
+- `user_story`: the reader's goal, for example "As a chain operator, I want to rotate node keys so I can keep my chain secure"
 
-There is no `user_story` field and no `draft` field in this schema; never add
-either when scaffolding a page.
+Preserve existing `target_audience` and `user_story` values when editing a page. Neither renders
+on the site. There is no `draft` field in this schema; never add it when scaffolding a page.
 
 ## File creation
 

@@ -41,6 +41,11 @@ matches what the reader is trying to do, not just what feels closest. See
 and the subject-matter reviewer. `sidebar_label` replaces the title as the page's name in the
 sidebar.
 
+`target_audience` and `user_story` are optional authoring metadata. Use `target_audience` to
+describe the intended readers and their assumed knowledge, and `user_story` to record the
+reader's goal (for example, "As a chain operator, I want to rotate node keys so I can keep my
+chain secure"). Preserve existing values when editing a page. Neither field renders on the site.
+
 Callouts use Fumadocs' `<Callout>` component, with `type` set to `info`, `warn`, `error`, `idea`
 or `success`. A Docusaurus `:::note` line renders as plain text and fails `pnpm content:lint`.
 

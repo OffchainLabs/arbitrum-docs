@@ -10,6 +10,7 @@ import { z } from 'zod';
  *
  * Every page needs a title and a description; `sidebar_label` and `content_type` are optional.
  * `content_type` is an editorial label nothing renders, kept to one enum so values stay comparable.
+ * `target_audience` and `user_story` preserve optional authoring context; neither renders.
  */
 export const arbitrumPageSchema = pageSchema.extend({
   title: z.string().trim().min(1),
@@ -20,4 +21,6 @@ export const arbitrumPageSchema = pageSchema.extend({
     .optional(),
   author: z.string().optional(),
   sme: z.string().optional(),
+  target_audience: z.string().optional(),
+  user_story: z.string().optional(),
 });
