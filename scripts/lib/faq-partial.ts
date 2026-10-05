@@ -8,7 +8,12 @@ import type { Options as PrettierOptions } from 'prettier';
 
 import { type FaqPage, faqPages, partialPathFor, snapshotPathFor } from '../../lib/faq-pages.ts';
 import type { FaqSnapshot } from './faq-snapshot.ts';
-import { StaleFileError, generatedMarker, writeOrCheck } from './generated-partial.ts';
+import {
+  StaleFileError,
+  assertInertMdx,
+  generatedMarker,
+  writeOrCheck,
+} from './generated-partial.ts';
 import { diffSummary } from './line-diff.ts';
 import { escapeMdxText } from './notion-mdx.ts';
 
@@ -22,11 +27,21 @@ export const MDX_FORMAT: PrettierOptions = {
   plugins: [],
 };
 
-export function buildPartial(snapshot: FaqSnapshot): string {
+function assertInertFaq(content: string, context: string): void {
+  assertInertMdx(content, {
+    context,
+    allowedElements: ['Callout'],
+    allowedElementAttributes: { Callout: { type: 'info' } },
+  });
+}
+
+export function buildPartial(snapshot: FaqSnapshot, context = 'FAQ partial'): string {
   const sections = snapshot.items.map(
     (item) => `### ${escapeMdxText(item.question)}\n\n${item.answer.trim()}\n`,
   );
-  return [`${FAQ_MARKER}\n`, ...sections].join('\n');
+  const content = [`${FAQ_MARKER}\n`, ...sections].join('\n');
+  assertInertFaq(content, context);
+  return content;
 }
 
 export function readSnapshot(filePath: string): FaqSnapshot {
@@ -56,9 +71,13 @@ export async function generateFaq({
       throw new Error(`${snapshotPathFor(page.key)} is missing. Run \`pnpm faq:fetch\` first.`);
     }
     const partialPath = path.join(root, partialPathFor(page.key));
-    const content = buildPartial(readSnapshot(snapshotPath));
+    const content = buildPartial(readSnapshot(snapshotPath), partialPath);
     try {
-      await writeOrCheck(partialPath, content, { check, overrides: MDX_FORMAT });
+      await writeOrCheck(partialPath, content, {
+        check,
+        overrides: MDX_FORMAT,
+        validate: (formatted) => assertInertFaq(formatted, partialPath),
+      });
     } catch (error) {
       if (error instanceof StaleFileError && error.formatted !== undefined) {
         const current = fs.existsSync(partialPath) ? fs.readFileSync(partialPath, 'utf-8') : '';

@@ -956,7 +956,12 @@ partial changed. It is the only place the token is used; `faq:check` in CI is of
 publishing`, routed by `Target document slugs` and ordered by `FAQ order index`. The mapping is
   `lib/faq-pages.ts`. Edit a question in Notion, never in the partial; `faq:check` fails on a hand
   edit. Answers carry literal values, no `<Var>`, and no `<Term>`. A block the renderer does not
-  support, a Notion link, or a link to no page fails the fetch and names the Notion page. The same
+  support, a Notion link, an unsupported link protocol, or a link to no page fails the fetch and
+  names the Notion page. Inline-code delimiters are longer than embedded backtick runs, and link
+  destinations encode Markdown and MDX delimiters. Before formatting and again before writing
+  or checking a partial, `assertInertMdx` rejects executable MDX and permits only the renderer's
+  `<Callout type="info">` elements with that single literal attribute. Rejected content leaves
+  the destination partial untouched; fix the answer in Notion or put the example in code. The same
   snapshots feed the `FAQPage` JSON-LD that `lib/faq.ts` emits on those six pages.
 
 Generated `meta.json` files are not formatted: `.prettierignore` excludes `content/**/meta.json`,

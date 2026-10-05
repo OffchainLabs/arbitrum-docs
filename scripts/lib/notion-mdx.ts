@@ -47,7 +47,7 @@ const straightenQuotes = (s: string): string => s.replace(/[“”‘’]/g, (c)
 /**
  * A `docs.arbitrum.io` URL becomes a site path under `docsRoute` so `check-links` validates it; a
  * legacy `/docs` prefix is dropped. A Notion URL is rejected because readers cannot open it. Every
- * other URL passes through.
+ * other HTTP(S) or mailto URL passes through. Other protocols are not publishable links.
  */
 export function rewriteLink(url: string): string {
   let parsed: URL;
@@ -55,6 +55,9 @@ export function rewriteLink(url: string): string {
     parsed = new URL(url);
   } catch {
     throw new RenderError(`link is not an absolute URL: ${url}`);
+  }
+  if (!['https:', 'http:', 'mailto:'].includes(parsed.protocol)) {
+    throw new RenderError(`link has an unsupported protocol: ${parsed.protocol}`);
   }
   const host = parsed.hostname.toLowerCase();
   if (host === 'www.notion.so' || host === 'notion.so' || host === 'app.notion.com') {
@@ -67,12 +70,51 @@ export function rewriteLink(url: string): string {
   return `${sitePath}${parsed.search}${parsed.hash}`;
 }
 
+/** Keep the destination inside its Markdown delimiters, even when a URL contains MDX syntax. */
+function linkDestination(url: string): string {
+  return rewriteLink(url).replace(/[\\\s()<>{}"`]/g, (c) =>
+    Array.from(
+      new TextEncoder().encode(c),
+      (byte) => `%${byte.toString(16).padStart(2, '0')}`,
+    ).join(''),
+  );
+}
+
+/** A delimiter longer than every backtick run, padded so edge backticks cannot merge with it. */
+function inlineCode(content: string): string {
+  if (content === '') return '';
+  const fence = '`'.repeat(longestBacktickRun(content) + 1);
+  const pad =
+    content.startsWith('`') ||
+    content.endsWith('`') ||
+    (content.startsWith(' ') && content.endsWith(' ') && /[^ ]/.test(content));
+  return `${fence}${pad ? ' ' : ''}${content}${pad ? ' ' : ''}${fence}`;
+}
+
 /** Render a rich-text array to inline MDX. */
 export function renderRichText(
   items: NotionRichText[],
   { allowLinks = true }: { allowLinks?: boolean } = {},
 ): string {
-  return items
+  // Notion can split one code span across multiple rich-text items. Fence the combined value
+  // once so neighbouring delimiters cannot merge into a different run of backticks.
+  const spans: NotionRichText[] = [];
+  const urlOf = (item: NotionRichText) => item.text?.link?.url ?? item.href;
+  for (const item of items) {
+    const previous = spans.at(-1);
+    if (
+      previous?.type === 'text' &&
+      item.type === 'text' &&
+      previous.annotations.code &&
+      item.annotations.code &&
+      urlOf(previous) === urlOf(item)
+    ) {
+      previous.plain_text += item.plain_text;
+    } else {
+      spans.push({ ...item });
+    }
+  }
+  return spans
     .map((item) => {
       if (item.type !== 'text') {
         throw new RenderError(`unsupported rich text: ${item.type} "${item.plain_text}"`);
@@ -82,8 +124,7 @@ export function renderRichText(
 
       let out: string;
       if (code) {
-        // Code spans: not affected by whitespace extraction rule - keep content as-is
-        out = `\`${content}\``;
+        out = inlineCode(content);
       } else {
         // Other formatting: extract whitespace and apply markers to core only
         const leadMatch = content.match(/^\s*/);
@@ -106,10 +147,10 @@ export function renderRichText(
         out = `${leadingWhitespace}${formatted}${trailingWhitespace}`;
       }
 
-      const url = item.text?.link?.url ?? item.href;
+      const url = urlOf(item);
       if (url) {
         if (!allowLinks) throw new RenderError(`link not allowed here: ${url}`);
-        out = `[${out}](${rewriteLink(url)})`;
+        out = `[${out}](${linkDestination(url)})`;
       }
       return out;
     })
@@ -202,15 +243,10 @@ function renderTextWithChildren(text: string, children: NotionBlock[]): string {
 }
 
 /**
- * Compute the fence length for a code block. The fence must be longer than any run of backticks
- * in the content, with a minimum of three.
+ * Find the longest run so inline and block code can choose a delimiter longer than the content.
  */
-function codeFenceLength(content: string): number {
-  const longestRun = (content.match(/`+/g) ?? []).reduce(
-    (max, run) => Math.max(max, run.length),
-    0,
-  );
-  return Math.max(3, longestRun + 1);
+function longestBacktickRun(content: string): number {
+  return (content.match(/`+/g) ?? []).reduce((max, run) => Math.max(max, run.length), 0);
 }
 
 function renderOne(b: NotionBlock, ordinal: number): string | null {
@@ -243,7 +279,7 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
     case 'code': {
       const { language = '', rich_text = [] } = payloadOf(b);
       const raw = rich_text.map((r) => r.plain_text).join('');
-      const fence = '`'.repeat(codeFenceLength(raw));
+      const fence = '`'.repeat(Math.max(3, longestBacktickRun(raw) + 1));
       return `${fence}${language}\n${raw}\n${fence}`;
     }
     case 'quote': {
@@ -261,10 +297,10 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
       return '---';
     case 'table': {
       const rows = children.filter((c) => c.type === 'table_row');
+      // GFM consumes the backslash protecting a pipe, including inside inline code. Leave other
+      // escapes alone: doubling an MDX escape would expose its brace or tag to the parser.
       const cells = rows.map((r) =>
-        (payloadOf(r).cells ?? []).map((c) =>
-          renderRichText(c).replace(/\\/g, '\\\\').replace(/\|/g, '\\|'),
-        ),
+        (payloadOf(r).cells ?? []).map((c) => renderRichText(c).replace(/\|/g, '\\|')),
       );
       if (cells.length === 0) return null;
       const width = Math.max(...cells.map((r) => r.length));
