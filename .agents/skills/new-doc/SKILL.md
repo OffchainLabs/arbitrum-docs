@@ -10,40 +10,46 @@ Scaffold a new MDX documentation page following all project conventions.
 
 ## Required input from user
 
-Ask for these before creating the file:
+Only `title` and `description` are required by the frontmatter schema
+(`arbitrumPageSchema` in `source.config.ts`); everything else below is
+optional and the page is valid without it. Still ask for a **Section** up
+front, since it decides the file's path (it is not a frontmatter field).
 
-| Field            | Example                     | Notes                                                                                 |
-| ---------------- | --------------------------- | ------------------------------------------------------------------------------------- |
-| **Title**        | "Bridge tokens to Arbitrum" | Sentence case, appears as H1                                                          |
-| **Section**      | `build-decentralized-apps`  | Must match an existing `docs/` subdirectory                                           |
-| **Content type** | `how-to`                    | One of: `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting` |
-| **Author**       | `github-username`           | GitHub username                                                                       |
-| **SME**          | `github-username`           | Subject matter expert (can be same as author)                                         |
+| Field           | Example                     | Notes                                                                         |
+| --------------- | --------------------------- | ----------------------------------------------------------------------------- |
+| **Title**       | "Bridge tokens to Arbitrum" | Sentence case, appears as H1. Required.                                       |
+| **Description** | one-sentence summary        | Required.                                                                     |
+| **Section**     | `build-decentralized-apps`  | Must match an existing `content/docs/` subdirectory. Not a frontmatter field. |
 
-Optional (will generate defaults if not provided):
+Optional (omit the key entirely if not provided, rather than leaving it blank):
 
-- `sidebar_label` — defaults to shortened title
-- `description` — generate from title
-- `user_story` — generate from content type and title
+- `sidebar_label`: the page's name in the sidebar; defaults to `title` if omitted
+- `content_type`: one of `how-to`, `concept`, `quickstart`, `tutorial`,
+  `reference`, `troubleshooting`, `faq`; an editorial label, nothing renders it
+- `author`: GitHub username
+- `sme`: subject matter expert GitHub username (can be same as author)
+
+There is no `user_story` field and no `draft` field in this schema; never add
+either when scaffolding a page.
 
 ## File creation
 
 ### 1. Determine file path
 
 ```
-docs/{section}/{slug}.mdx
+content/docs/{section}/{slug}.mdx
 ```
 
-Slug: lowercase title, spaces to hyphens, no special chars. For ordered sections, check existing files for numeric prefixes (e.g., `01-`, `02-`) and use the next number.
+Slug: lowercase title, spaces to hyphens, no special chars. File names carry no ordering — the
+sidebar order comes from `meta.json` in the same directory (step 4).
 
 ### 2. Write frontmatter + skeleton
 
 ```mdx
 ---
 title: '{title}'
-sidebar_label: '{sidebar_label}'
 description: '{description}'
-user_story: 'As a {role}, I want to {goal}'
+sidebar_label: '{sidebar_label}'
 content_type: '{content_type}'
 author: '{author}'
 sme: '{sme}'
@@ -51,6 +57,9 @@ sme: '{sme}'
 
 {skeleton based on content_type}
 ```
+
+Drop any of `sidebar_label`, `content_type`, `author`, `sme` the user did not give you rather than
+writing an empty string: they are optional fields, not required-but-blank ones.
 
 ### 3. Content type skeletons
 
@@ -140,15 +149,23 @@ This quickstart will get you {outcome} in under {time}.
 **Solution:** {fix}
 ```
 
-### 4. Register in sidebar
+### 4. Register in the sidebar
 
-Open `sidebars.js` and find the correct sidebar array for the section. Add the new doc ID (path relative to `docs/` without extension):
+Sidebar order is controlled per directory by `meta.json`, not by file names. Open
+`content/docs/{section}/meta.json` and add the slug (file name, no extension) to `pages`:
 
-```js
-'{section}/{slug}',
+```json
+{
+  "title": "Get started",
+  "pages": ["index", "arbitrum-introduction", "{slug}"]
+}
 ```
 
-Place it in logical order within the existing items.
+Place it in logical order within the existing entries. A `"..."` entry means "everything else, in
+file order", so a new page appears automatically wherever `"..."` sits — add it explicitly only when
+it needs a specific position. To list a page that lives in another directory, use a relative path
+entry such as `"../other-dir/page"`. Never write a `"[Label](/docs/path)"` entry for a page in this
+repo: it puts the page on two sidebar nodes and `pnpm test` fails.
 
 ## Terminology enforcement
 
@@ -171,7 +188,16 @@ Before writing any content, apply these substitutions:
 
 After creating the file:
 
-1. Verify sidebar entry renders: `yarn start --no-open` and check navigation
-2. Run `yarn lint:markdown` on the new file
-3. Confirm no broken links: all `[text](link)` targets exist
-4. If referencing globalVars, use `@@variableName=value@@` syntax
+1. Verify the sidebar entry and the page render: `pnpm dev`, then browse
+   `http://localhost:3000/{section}/{slug}`. Use `localhost`, not `127.0.0.1` — on
+   `127.0.0.1` React does not hydrate and every component looks broken.
+2. Run `pnpm content:lint`, `pnpm frontmatter:check`, and `pnpm types:check`.
+   `frontmatter:check` validates every page against `lib/page-schema.ts`: a missing `title` or
+   `description` fails this gate (the other fields are optional). `types:check` regenerates the
+   collection and checks TypeScript; it does not validate every page's frontmatter.
+3. Confirm no broken links: `pnpm check-links`. It also validates `#anchor` fragments against the
+   compiled heading ids; only anchors that exist at runtime alone are outside its reach.
+4. To reference a global variable, use `<Var name="variableName" />`; the value must exist in
+   `content/vars.json`. Verify with `pnpm vars:check`.
+5. Before writing a banner, note or config table, browse `content/partials/` (there is no catalog;
+   the partials themselves are the index) and reuse an existing one instead of duplicating prose.

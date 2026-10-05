@@ -6,7 +6,7 @@ description: >-
   palette/style source. Use when asked to "make a diagram more efficient",
   replace a bloated haw-*.svg (draw.io PNG-in-SVG exports), replace an ASCII /
   box-drawing diagram in an MDX page with a real image, author a new concept
-  diagram for docs/how-arbitrum-works or similar, or build a diagram from the
+  diagram for content/docs/how-arbitrum-works or similar, or build a diagram from the
   Arbitrum brand assets. Hand-authored lean vector SVG — not Mermaid, not a
   full Excalidraw/draw.io pipeline.
 ---
@@ -19,22 +19,22 @@ scales perfectly; the draw.io exports it replaces are often >1MB.
 
 ## When to use
 
-- "This diagram is too heavy / make it more efficient" — a `static/img/*.svg`
+- "This diagram is too heavy / make it more efficient" — a `public/img/*.svg`
   that is really a draw.io export with a base64 PNG inside (often 1–2 MB).
 - Replacing an **ASCII / box-drawing diagram** in an MDX page with a real image.
   These often carry a `{/* TODO: replace with an SVG diagram asset */}` marker
   and a `<div className="ascii-diagram">` wrapper — remove both.
 - Creating a new **conceptual** diagram (layers, boxes, flows, brackets) for a
-  docs page, especially `docs/how-arbitrum-works/**`.
+  docs page, especially `content/docs/how-arbitrum-works/**`.
 - You have the Arbitrum brand asset kit as a source and want palette/style
   consistency.
 
 ## When NOT to use
 
 - **Complex or interactive diagrams** (animated flows, clickable nodes, the
-  transaction-lifecycle visualizers). Those use the ReactFlow /
-  `DrawioReactFlow` component pipeline (Excalidraw → draw.io → SVG). This skill
-  is for **static concept art only**.
+  transaction-lifecycle visualizers). Those are React widgets under
+  `components/widgets/` (see `EdgeChallengeFlow` and `CentralizedAuction`). This
+  skill is for **static concept art only**.
 - Photographic / screenshot content — keep as PNG/WebP.
 - Never propose Mermaid or any text-DSL diagram tool (standing preference).
 
@@ -115,7 +115,7 @@ bold** — an 18px regular sublabel does _not_ qualify, so hold it to 4.5:1.
 Drive round-trip needed:
 
 ```text
-.Codex/skills/arbitrum-brand-svg-diagrams/assets/
+.claude/skills/arbitrum-brand-svg-diagrams/assets/
   background.svg       79 KB   Inkscape source
   background.min.svg   44 KB   minified, standalone
   bg-frag.svg          44 KB   ready-to-inline <g> fragment   <- use this one
@@ -130,12 +130,15 @@ decode with `base64.b64decode(...)`).
 
 ## The one gotcha that dictates the whole design
 
-Both `ImageWithCaption` (`src/components/ImageCaptions/index.jsx`) and
-`ImageZoom` render a plain `<img src=…>`. Consequences:
+`ImageZoom` (Fumadocs' own component, `fumadocs-ui/components/image-zoom`,
+registered globally in `components/mdx.tsx`, with no
+`components/mdx/ImageZoom/` wrapper and no `ImageWithCaption` alias; a markdown
+`![alt](/img/x.svg)` also renders through it, via the `img:` mapping in that
+same registry) renders the image as a plain `<img src=…>`. Consequences:
 
-1. The Docusaurus dark-mode class lives on `<html>` and **cannot reach inside**
-   an `<img>`-embedded SVG. `@media (prefers-color-scheme)` tracks the OS, not
-   the site toggle. **So you cannot theme the SVG to the page.**
+1. The dark-mode class lives on `<html>` and **cannot reach inside** an
+   `<img>`-embedded SVG. `@media (prefers-color-scheme)` tracks the OS, not the
+   site toggle. **So you cannot theme the SVG to the page.**
 2. Therefore: build the diagram from **opaque, self-contained shapes** with
    their own contrast. No text floating on transparency. Navy fill + white
    text and cyan fill + dark text both read on any page background.
@@ -268,7 +271,7 @@ Steps 1, 3, 4 and 6 are common to both jobs; steps 2 and 5 differ.
 
 The inlined background is one 44 KB line, so `Write`-ing the SVG by hand is not
 practical. Put a small assembler in the scratchpad that reads `bg-frag.svg`,
-emits your geometry, and writes `static/img/NAME.svg`. Only the **SVG** is
+emits your geometry, and writes `public/img/NAME.svg`. Only the **SVG** is
 committed; the script is disposable, but keep it for the session so you can
 iterate on coordinates and re-run instead of hand-patching a 44 KB file.
 
@@ -283,44 +286,50 @@ overwrites the rounded corners, so the rounding step is never optional.
 
 Keep the exact filename/path so the MDX reference needs no edit. The old file is
 often too big to `Read`; move it to Trash (`trash …`) then write fresh. No
-`yarn build` needed: the link graph is untouched.
+`pnpm build` needed: the link graph is untouched.
 
 ### Path B — new diagram (also: retiring an ASCII diagram)
 
 1. **Name it for its section**, matching neighbours in the same folder
    (`arb-chain-*` under `launch-arbitrum-chain`, `haw-*` under
    `how-arbitrum-works`).
-2. **Add the MDX tag yourself.** `<ImageZoom>` and `<ImageWithCaption>` are
-   registered globally in `src/theme/MDXComponents.js` — **no import needed.**
-3. **Use a `className` that exists.** `src/css/custom.css` defines only
-   `img-20px`, `img-50px`, `img-100px`, `img-200px`, `img-400px`, `img-500px`,
-   `img-600px`, `img-900px`. Several pages pass `img-800px`, which is **not
-   defined** and silently falls back to intrinsic width — don't copy that.
-   For a 1600×900 diagram use `img-900px`.
+2. **Add the MDX tag yourself.** `<ImageZoom>` is registered globally in
+   `components/mdx.tsx`, so **no import needed.** A plain markdown
+   `![alt](/img/NAME.svg)` also renders through it (same registry's `img:`
+   mapping), so either form works.
+3. **Don't reach for an `img-*px` className.** Those came from Docusaurus'
+   `src/css/custom.css` and are now defined nowhere, so every one of them —
+   including the `img-900px` this skill used to recommend — silently falls back
+   to intrinsic width. Size with `style={{ width: '100%', height: 'auto' }}`.
 4. **Write the `alt` text in full** (see gotcha 3) and keep it in the diagram's
    `<desc>` too.
 5. **Check the page still compiles and lints:**
 
 ```bash
-npx prettier --write docs/path/to/page.mdx
-./node_modules/.bin/markdownlint --config .markdownlint.json docs/path/to/page.mdx
+npx prettier --write content/docs/path/to/page.mdx
+pnpm content:lint
 node --input-type=module -e "
 import {compile} from '@mdx-js/mdx'; import {readFileSync} from 'node:fs';
-await compile(readFileSync('docs/path/to/page.mdx','utf8').replace(/^---[\s\S]*?\n---\n/,''));
+await compile(readFileSync('content/docs/path/to/page.mdx','utf8').replace(/^---[\s\S]*?\n---\n/,''));
 console.log('MDX compiles ok');"
 ```
 
-The MDX compile is much cheaper than `yarn build` and catches the failure mode
+The MDX compile is much cheaper than `pnpm build` and catches the failure mode
 a new JSX tag actually introduces. A full build is still unnecessary unless
-you changed a doc **link**. 6. **Check what the removal orphaned.** Retiring an ASCII diagram can strip the
-last consumer of a helper CSS class (`.ascii-diagram` in
-`src/css/partials/_misc-classes.scss` is the known case). Grep for it and
-_report_ it — don't delete shared CSS unasked.
+you changed a doc **link**.
 
-### Diagram labels are prose — the pattern guide applies
+6. **Check what the removal orphaned.** Retiring an ASCII diagram can strip the
+   last consumer of a helper CSS class. Grep for it and _report_ it — don't
+   delete shared CSS unasked. (The known Docusaurus case, `.ascii-diagram` in
+   `src/css/partials/_misc-classes.scss`, no longer applies: this tree has no
+   `src/`, and the class is defined nowhere.)
 
-`docs/Offchain-pattern-guide.md` governs text inside the diagram, not just the
-page. An editorial hook enforces it on the MDX and will block your write.
+### Diagram labels are prose: the style guide applies
+
+`STYLE-GUIDE.md` at the repo root governs text inside the diagram, not just the
+page. `.claude/hooks/require-pattern-guide.sh` fires on a write to a
+`content/docs/*.mdx` or `content/partials/*.mdx` file and denies the first one
+per session, returning the guide's text so it lands in context.
 
 **Read the guide before you draft labels and `alt` text, not after.** The hook
 fires on the **MDX** write, not on the SVG — so you can generate, round, and
@@ -409,7 +418,7 @@ Bézier (~12px radius) at each corner. It skips 2-point straight arrows, icon
 curves (`A`/`C`), and paths without a marker.
 
 ```bash
-python3 .Codex/skills/arbitrum-brand-svg-diagrams/tools/round_arrows.py static/img/NAME.svg
+python3 .claude/skills/arbitrum-brand-svg-diagrams/tools/round_arrows.py public/img/NAME.svg
 ```
 
 Only single-path elbows round — T-junction fans (a trunk that branches) are not
@@ -453,7 +462,7 @@ Everything else in the table degrades harmlessly to "stayed square".
 that is your only signal the tool matched anything:
 
 ```text
-static/img/NAME.svg: rounded 2 elbow arrow(s)
+public/img/NAME.svg: rounded 2 elbow arrow(s)
 ```
 
 `rounded 0` is the **correct** result for a diagram whose connectors are all
@@ -468,7 +477,7 @@ second run on an unchanged file reports 0. Don't read that as a regression —
 count the baked-in corners instead:
 
 ```bash
-grep -o ' Q[0-9]' static/img/NAME.svg | wc -l   # quadratic corners present
+grep -o ' Q[0-9]' public/img/NAME.svg | wc -l   # quadratic corners present
 ```
 
 Because arrow styling has to be inline for this tool, don't try to factor arrows
@@ -534,7 +543,7 @@ detail you are checking. Rewrite the `viewBox` on a throwaway copy instead:
 
 ```bash
 sed 's|viewBox="0 0 1360 1340" width="1360" height="1340"|viewBox="760 600 560 400" width="1120" height="800"|' \
-  static/img/NAME.svg > /tmp/crop.svg
+  public/img/NAME.svg > /tmp/crop.svg
 rsvg-convert -b '#ffffff' /tmp/crop.svg -o /tmp/crop.png
 ```
 
@@ -617,9 +626,9 @@ tweak layout/labels, and bring it back — or sketch in Excalidraw and get a
 docs-ready SVG.
 
 ```bash
-T=.Codex/skills/arbitrum-brand-svg-diagrams/tools/excalidraw_bridge.py
-python3 "$T" export static/img/NAME.svg /tmp/NAME.excalidraw   # SVG  -> Excalidraw (edit on excalidraw.com)
-python3 "$T" import  /tmp/NAME.excalidraw static/img/NAME.svg  # Excalidraw -> brand SVG (docs-ready)
+T=.claude/skills/arbitrum-brand-svg-diagrams/tools/excalidraw_bridge.py
+python3 "$T" export public/img/NAME.svg /tmp/NAME.excalidraw   # SVG  -> Excalidraw (edit on excalidraw.com)
+python3 "$T" import  /tmp/NAME.excalidraw public/img/NAME.svg  # Excalidraw -> brand SVG (docs-ready)
 ```
 
 Scenes use `roughness: 0`, so Excalidraw renders the clean (non hand-drawn)
@@ -639,7 +648,7 @@ keep a diagram fully round-trippable:
 ## Verification (do all five)
 
 ```bash
-S=static/img/NAME.svg
+S=public/img/NAME.svg
 # 1. well-formed XML
 python3 -c "import xml.dom.minidom as m; m.parse('$S'); print('XML ok')"
 # 2. size win
@@ -670,7 +679,7 @@ each label to learn its true background. That works identically for text on an
 opaque box and text on the gradient, where the backdrop varies with position.
 
 ```bash
-python3 .Codex/skills/arbitrum-brand-svg-diagrams/tools/check_contrast.py static/img/NAME.svg
+python3 .claude/skills/arbitrum-brand-svg-diagrams/tools/check_contrast.py public/img/NAME.svg
 ```
 
 It prints a ratio per label, applies the correct threshold (3:1 only for genuinely
@@ -732,70 +741,64 @@ used anyway.
 A diagram with **no edge labels needs none of this** — bare connectors on an
 opaque backdrop have no contrast requirement, and the file lands ~35% smaller.
 
-No `yarn build` is needed for either path — the link graph is untouched by an
+No `pnpm build` is needed for either path — the link graph is untouched by an
 image swap. For a **new** diagram, run the MDX compile check from Path B instead;
 that is where a new JSX tag can actually break the site.
 
 ## Caption styling
 
-Caption text is the component's job, not the SVG's. Styling lives in
-`src/components/ImageCaptions/styles.module.scss` (`.figure`/`.image`/`.caption`,
-centered, muted via `var(--ifm-color-emphasis-600)`). Edit there for all
-captions; don't bake caption text into the diagram.
+`<ImageZoom>` (`fumadocs-ui/components/image-zoom`) has no `caption` prop and
+renders no `<figure>`/`<figcaption>`. Caption an image with a `<figure>` block
+in the MDX, with the markdown image between blank lines so it parses as
+markdown rather than JSX text (see "Image captions" in INTERNALS.md):
+
+```mdx
+<figure>
+
+![Transaction lifecycle](/img/haw-transaction-lifecycle.svg)
+
+<figcaption>Transaction lifecycle</figcaption>
+</figure>
+```
+
+Never bake the caption into the diagram. Theme tokens are `--color-fd-*`;
+never use the legacy Docusaurus `--ifm-*` ones.
 
 ## Reference examples
 
-**These live on unmerged branches, not on `master`.** Check before you trust a
-working-tree copy — on `master` and most feature branches `static/img/haw-*.svg`
-are still the multi-MB draw.io rasters, so opening one teaches you nothing:
+Every exemplar below is committed under `public/img/` on this branch, so open the working-tree
+file directly. Check the size first: a hand-authored diagram is tens of KB, while a draw.io export
+that still embeds a raster is measured in MB.
 
 ```bash
-stat -f%z static/img/haw-l1-to-l2.svg      # ~6 MB -> you are looking at the raster
-
-# Fetch a real exemplar from origin (works for any clone of this repo):
-git fetch origin haw-tier1-svg-diagrams
-git show origin/haw-tier1-svg-diagrams:static/img/haw-l1-to-l2.svg | head -c 2000
+stat -f%z public/img/haw-l1-to-l2.svg      # ~56 KB -> hand-authored
 ```
 
-| Diagram                       | Raster | Hand-authored | On origin branch                 | Shows                                                        |
-| ----------------------------- | -----: | ------------: | -------------------------------- | ------------------------------------------------------------ |
-| `haw-l1-to-l2`                | 6.2 MB |     **53 KB** | `haw-tier1-svg-diagrams`         | baked background, labeled lanes, code blocks, rounded elbows |
-| `haw-aliasing`                | 284 KB |     **50 KB** | `haw-tier1-svg-diagrams`         | baked background, address-aliasing math                      |
-| `haw-submit-tx-to-sequencer`  | 6.2 MB |     **50 KB** | `haw-tier1-svg-diagrams`         | baked background flow                                        |
-| `haw-bypassing-the-sequencer` | 6.2 MB |     **49 KB** | `haw-tier1-svg-diagrams`         | baked background flow                                        |
-| `haw-geth-sandwich`           | 1.5 MB |    **2.7 KB** | `inside-arbitrum-nitro-revision` | transparent canvas, opaque layers, bracket, legend chip      |
-
-Note that `haw-geth-sandwich` is on a _different_ branch —
-`haw-tier1-svg-diagrams` still carries its 1.5 MB raster.
+| Diagram                       | Hand-authored | Shows                                                        |
+| ----------------------------- | ------------: | ------------------------------------------------------------ |
+| `haw-l1-to-l2`                |     **56 KB** | baked background, labeled lanes, code blocks, rounded elbows |
+| `haw-aliasing`                |     **50 KB** | baked background, address-aliasing math                      |
+| `haw-submit-tx-to-sequencer`  |     **50 KB** | baked background flow                                        |
+| `haw-bypassing-the-sequencer` |     **49 KB** | baked background flow                                        |
+| `haw-geth-sandwich`           |    **2.7 KB** | transparent canvas, opaque layers, bracket, legend chip      |
 
 Note the floor: a baked-background diagram lands at **~50 KB regardless of
 complexity**, because ~44 KB of it is the background. Judge a baked-background
-diagram against that number and a gradient-backdrop one against ~2 KB — they are
+diagram against that number and a gradient-backdrop one against ~2 KB; they are
 different budgets, not a good and a bad result.
 
-Their color choices predate the measured contrast table above — copy their
+Their color choices predate the measured contrast table above. Copy their
 **layout and structure**, not their white-on-cyan text.
 
 ### Current-generation exemplars
 
-Copy these for colour and type; they all pass `check_contrast.py` clean. The
-three on `update-diagram-arbitrum-intro` sit on one page, so they also show how
-a small and a large diagram stay in the same family:
+Copy these for colour and type; both pass `check_contrast.py` clean and both sit in `public/img/`.
+No gradient-backdrop exemplar is committed on this branch.
 
-| Diagram                       |   Size | Canvas   | Backdrop         | Shows                                                       |
-| ----------------------------- | -----: | -------- | ---------------- | ----------------------------------------------------------- |
-| `arb-chain-fee-lifecycle.svg` |  52 KB | 1600×900 | baked background | two labeled lanes, three-role color key                     |
-| `arbitrum-chains-diagram.svg` |  53 KB | 1600×900 | baked background | **inlined brand logomarks**, per-chain colors, tier gutter  |
-| `scalability-trilemma.svg`    | 2.1 KB | 800×480  | brand gradient   | triangle, colour-as-argument, dark text low on the gradient |
-| `arbitrum-chain-naming.svg`   | 1.9 KB | 800×300  | brand gradient   | smallest useful shape: two boxes and a labeled connector    |
-
-`arb-chain-fee-lifecycle.svg` arrives with
-`tw-792-document-network-revenue-routing-and-feecollector-flow`; the other three
-with `update-diagram-arbitrum-intro`. If a file is absent on your branch:
-
-```bash
-git show origin/update-diagram-arbitrum-intro:static/img/arbitrum-chains-diagram.svg | head -c 2000
-```
+| Diagram                       |  Size | Canvas   | Backdrop         | Shows                                                      |
+| ----------------------------- | ----: | -------- | ---------------- | ---------------------------------------------------------- |
+| `arb-chain-fee-lifecycle.svg` | 53 KB | 1600×900 | baked background | two labeled lanes, three-role color key                    |
+| `arbitrum-chains-diagram.svg` | 54 KB | 1600×900 | baked background | **inlined brand logomarks**, per-chain colors, tier gutter |
 
 ## Tooling: FOSS options considered (not yet adopted)
 
@@ -817,17 +820,21 @@ regex. Researched replacements, if this graduates to a `tools/diagram_kit.py`:
 
 In this repo:
 
-- `docs/Offchain-pattern-guide.md` — editorial rules that govern diagram labels
-  and `alt` text (see "Diagram labels are prose" above).
-- `src/theme/MDXComponents.js` — the globally registered `<ImageZoom>` /
-  `<ImageWithCaption>` components.
-- `src/css/custom.css` — the `img-*px` width classes.
+- `STYLE-GUIDE.md`: editorial rules that govern diagram labels and `alt` text
+  (see "Diagram labels are prose" above).
+- `components/mdx.tsx`: the component registry, where `<ImageZoom>` is
+  registered for all MDX.
+- The `img-*px` width classes are **no longer defined anywhere** — they came from
+  Docusaurus' `src/css/custom.css`, which this tree does not have. Content still
+  passes them (`className="img-600px"`), but they style nothing; images render at
+  intrinsic width. Size with `style={{ width: '100%', height: 'auto' }}` instead,
+  and don't add new `img-*px` classes.
 - **Finding the next candidate.** Raster-in-SVG files declare themselves in the
   first few KB. As of `origin/master` this finds **26 files totalling 101.5 MB**
   — the backlog this skill exists to work through:
 
 ```bash
-for f in static/img/*.svg; do
+for f in public/img/*.svg; do
   head -c 4000 "$f" | grep -q 'image/png;base64' && stat -f'%z %N' "$f"
 done | sort -rn
 ```
@@ -839,8 +846,5 @@ Standing team conventions this skill assumes:
 
 - **Static concept art is hand-authored SVG. Never Mermaid or any text-DSL
   diagram tool** — that is a standing preference, not a default.
-- **Complex or interactive diagrams** use the ReactFlow / `DrawioReactFlow`
-  pipeline (Excalidraw → draw.io → SVG) instead of this skill.
-- The `DrawioReactFlow` component applies its own glassmorphic theme and
-  **ignores source draw.io `fillColor`/`strokeColor`** — don't try to pass brand
-  colors through it.
+- **Complex or interactive diagrams** are React widgets under
+  `components/widgets/`, not this skill.

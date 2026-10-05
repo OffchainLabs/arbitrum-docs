@@ -175,10 +175,10 @@ Check your rule against these criteria:
 ### Step 5: Place the File
 
 ```text
-.Codex/skills/arbitrum-best-practices/rules/{section}-{concept}.md
+.agents/skills/arbitrum-best-practices/rules/{section}-{concept}.md
 ```
 
-Update `.Codex/skills/arbitrum-best-practices/AGENTS.md` to include the new rule in the appropriate section.
+Update the rules table in `.agents/skills/arbitrum-best-practices/SKILL.md` to include the new rule in the appropriate section.
 
 ## Examples
 

@@ -9,6 +9,11 @@ Use this skill when the user asks to run the migrated source command `sync-sme-s
 
 ## Command Template
 
+This legacy integration is retained for contributor-local setups. Before running it, verify
+that the contributor's checkout has `scripts/update-sme-status.js` and the required Notion
+tools. That script is absent from this repository; report the missing integration rather than
+running the template or changing Notion data when its prerequisites are unavailable.
+
 Sync SME review statuses from GitHub to the Notion PR tracking table.
 
 Steps:
