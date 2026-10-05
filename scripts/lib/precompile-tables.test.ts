@@ -11,6 +11,7 @@
  * contain today: a real source change should show up as a diff in the generated partial, never as
  * a red test here.
  */
+import { createProcessor } from '@mdx-js/mdx';
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
@@ -23,6 +24,7 @@ import {
   PRECOMPILE_MARKER,
   assertResolved,
   buildSourceUrls,
+  escapeJsxText,
   extractDocComment,
   lowercaseKeys,
   renderEventsInTable,
@@ -325,6 +327,93 @@ describe('renderPrecompilePartial', () => {
     const content = render();
     assert.match(content, /<th>Method<\/th>/);
     assert.match(content, /<th>Event<\/th>/);
+  });
+});
+
+describe('escapeJsxText', () => {
+  it('writes braces, angle brackets and bare ampersands as character references', () => {
+    assert.equal(
+      escapeJsxText('{globalThis.x = 1} if a < b && c > d'),
+      '&#123;globalThis.x = 1&#125; if a &lt; b &amp;&amp; c &gt; d',
+    );
+  });
+
+  it('leaves an existing character reference alone', () => {
+    assert.equal(escapeJsxText('&lt; &amp; &#123; &#x7B;'), '&lt; &amp; &#123; &#x7B;');
+  });
+
+  it('leaves ordinary comment text byte for byte', () => {
+    const text = "Constructs an outbox proof of an l2 send's existence (ArbOS 20)";
+    assert.equal(escapeJsxText(text), text);
+  });
+});
+
+describe('upstream text in a partial stays text (review finding 09.4)', () => {
+  // A Go doc comment and a Solidity event comment carrying an expression and a bare `<`: the
+  // review's proof of concept ran the expression at build time and in the browser.
+  const HOSTILE = '{globalThis.x = 1} returns a < b';
+  const iface =
+    'interface ArbFoo {\n' +
+    '    function bar() external view returns (uint256);\n' +
+    `    // ${HOSTILE}\n` +
+    '    event Baz(uint256 value);\n' +
+    '}\n';
+  const impl =
+    `// ${HOSTILE}\n` +
+    'func (con ArbFoo) Bar(c ctx) (uint256, error) {\n}\n' +
+    'func (con ArbFoo) Emit(c ctx) error {\n\tcon.Baz(c)\n}\n';
+  const render = () =>
+    renderPrecompilePartial({
+      marker: PRECOMPILE_MARKER,
+      interfaceCode: iface,
+      implementationCode: impl,
+      interfaceUrl: INTERFACE_URL,
+      implementationUrl: IMPLEMENTATION_URL,
+    });
+
+  /** Every node of the parsed partial, flattened. */
+  const nodes = (text: string) => {
+    type Node = { type: string; value?: string; children?: Node[] };
+    const out: Node[] = [];
+    const walk = (node: Node) => {
+      out.push(node);
+      for (const child of node.children ?? []) walk(child);
+    };
+    walk(createProcessor().parse(text) as unknown as Node);
+    return out;
+  };
+
+  it('parses with no expression or ESM node beyond the marker comment', () => {
+    const code = nodes(render()).filter((node) =>
+      ['mdxjsEsm', 'mdxFlowExpression', 'mdxTextExpression'].includes(node.type),
+    );
+    assert.deepEqual(
+      code.map((node) => node.value),
+      [PRECOMPILE_MARKER.slice(1, -1)],
+      'only the do-not-edit comment may be an expression',
+    );
+  });
+
+  it('shows the literal text in both the method and the event description', () => {
+    const texts = nodes(render())
+      .filter((node) => node.type === 'text')
+      .map((node) => node.value);
+    assert.equal(texts.filter((value) => value === HOSTILE).length, 2);
+  });
+
+  it('refuses a partial that still holds code, as a second fence behind the escaping', () => {
+    assert.throws(
+      () =>
+        renderPrecompilePartial({
+          marker: PRECOMPILE_MARKER,
+          interfaceCode: iface,
+          implementationCode: impl,
+          interfaceUrl: INTERFACE_URL,
+          implementationUrl: IMPLEMENTATION_URL,
+          methodOverrides: { bar: { description: '<Script>{x}</Script>' } },
+        }),
+      /would compile to code, not content[\s\S]*JSX element <Script>[\s\S]*mdx(Flow|Text)Expression "x"/,
+    );
   });
 });
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300" role="img" aria-labelledby="nmtitle nmdesc">
+<title id="nmtitle">Two names for each chain</title>
+<desc id="nmdesc">The docs use two names for each chain. An Arbitrum chain is the child chain, also called layer 2. It settles to Ethereum, which is the parent chain, also called layer 1.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0.5 1 L9.5 5 L0.5 9 Z" fill="#9dcced"/></marker>
+<linearGradient id="brandbg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#152c4e"/>
+<stop offset="0.55" stop-color="#1b4add"/>
+<stop offset="1" stop-color="#12aaff"/>
+</linearGradient>
+</defs>
+<rect x="0" y="0" width="800" height="300" fill="url(#brandbg)"/>
+<g font-family="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+<rect x="110" y="16" width="580" height="100" rx="14" fill="#12aaff"/>
+<text x="400" y="58" text-anchor="middle" font-size="26" font-weight="700" fill="#0b1b2e">Arbitrum chain</text>
+<text x="400" y="92" text-anchor="middle" font-size="20" font-weight="400" fill="#0b2438" xml:space="preserve">child chain  =  layer 2</text>
+
+<path d="M400 116 L400 176" fill="none" stroke="#9dcced" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="424" y="130" width="140" height="34" rx="10" fill="#213147"/>
+<text x="494" y="153" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">settles to</text>
+
+<rect x="110" y="184" width="580" height="100" rx="14" fill="#213147"/>
+<text x="400" y="226" text-anchor="middle" font-size="26" font-weight="700" fill="#ffffff">Ethereum</text>
+<text x="400" y="260" text-anchor="middle" font-size="20" font-weight="400" fill="#c9dcef" xml:space="preserve">parent chain  =  layer 1</text>
+</g>
+</svg>

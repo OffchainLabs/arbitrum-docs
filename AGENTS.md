@@ -49,6 +49,7 @@ pnpm start             # serve the production build
 pnpm vars:check        # every <Var name> and {var:name} resolves; banner keys are valid
 pnpm references:check  # every <Term id> resolves to a content/glossary entry
 pnpm contracts:check   # the contract-address partial is current
+pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
 pnpm content:lint      # MDX that compiles but renders wrong
 pnpm format:check      # prettier (pnpm format writes)
@@ -61,6 +62,8 @@ pnpm contracts:generate                # contract-address partial
 pnpm cli:generate                      # Nitro CLI flags page (:check compares)
 pnpm stylus:generate                   # Stylus by Example pages (:check compares)
 pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
+pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN); then faq:generate
+pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
 ```
 
 ## Skills

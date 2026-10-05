@@ -78,10 +78,11 @@ pnpm frontmatter:check # every documentation page satisfies the frontmatter sche
 pnpm test          # tooling tests, including the sidebar and redirect checks
 pnpm check-links   # broken internal links and MDX fragments
 pnpm content:lint  # MDX that compiles but renders wrong
+pnpm faq:check     # the FAQ partials match their Notion snapshots
 pnpm format        # prettier, in place
 ```
 
-CI runs nine blocking checks, then a `pnpm build` that serves the built site and checks it over
+CI runs ten blocking checks, then a `pnpm build` that serves the built site and checks it over
 HTTP. `pnpm build` runs the same link check first, so a broken link fails the Vercel deploy too. See
 [The gates](INTERNALS.md#the-gates) for the full list. There is no pre-commit hook, so run these
 yourself.
@@ -277,6 +278,7 @@ pnpm check-links         # broken internal doc links and MDX fragments
 pnpm vars:check          # every <Var name> and {var:name} resolves; banner keys are valid
 pnpm references:check    # every <Term id> resolves
 pnpm contracts:check     # the contract-address partial is current
+pnpm faq:check           # the six FAQ partials match content/faq/*.json
 pnpm content:lint        # MDX structural defects
 pnpm format:check        # prettier (pnpm format writes)
 
