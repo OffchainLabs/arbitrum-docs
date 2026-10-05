@@ -1,6 +1,6 @@
 ---
 name: content-audit
-description: Run full documentation quality audit, covering MDX structure, internal links, glossary references, contract addresses, variables, formatting, tests, and types. Triggers on "audit docs", "check docs quality", "find problems", "content audit".
+description: Run full documentation quality audit, covering sidebar orphans, unused-file review, MDX structure, internal links, glossary references, contract addresses, variables, formatting, frontmatter, tests, and types. Triggers on "audit docs", "check docs quality", "find problems", "content audit".
 disable-model-invocation: true
 ---
 
@@ -20,7 +20,35 @@ Reports structural MDX defects: stray `:::` fences left by the old Docusaurus si
 admonitions, and other hydration-breaking or parser-ambiguous MDX shapes (see the content-lint rules
 in the project's `CLAUDE.md`). Not auto-fixable: each finding is an edit.
 
-### 2. Internal links
+### 2. Orphan pages
+
+```shell
+node --test scripts/sidebar.test.ts
+```
+
+Builds the Fumadocs sidebar from `content/docs/**/meta.json` and checks that every article
+appears on exactly one sidebar node and belongs to a section. The root overview is intentionally
+hidden. Failures name the page and the `meta.json` entry to fix. This replaces the old
+`yarn find-orphan-pages` check; it also runs as part of `pnpm test`.
+
+### 3. Orphaned files
+
+The legacy `scripts/find-orphaned-files.js` is absent from this checkout. Keep this audit step,
+but report it as a manual review; the link and sidebar gates do not prove assets or partials are used.
+
+1. Inventory images and partials with `rg --files public/img content/partials`.
+2. For each candidate, search its filename and repository/URL path with `rg -n -F` across
+   `content`, `components`, `app`, `lib`, `scripts`, and `public`. Exclude the candidate's own
+   contents from its reference count. Follow references from CSS, SVGs, components, and generators,
+   including paths assembled at runtime; a basename search alone is not proof of non-use.
+3. Report unreferenced candidates with the searches performed and any unresolved dynamic consumers.
+   Public URLs and contributor-local configurations can have consumers outside the repository.
+   Do not delete files as part of this audit or mark the check PASS from a text search alone.
+
+If the inventory or reference review is not completed, report NOT RUN with the reason. The
+image-debt scanner can help identify heavy images, but is not a complete unused-file audit.
+
+### 4. Internal links
 
 ```shell
 pnpm check-links 2>&1
@@ -31,7 +59,7 @@ Every internal doc link resolves to a real page. This is the gate that supplies 
 deploy. It also validates `#anchor` fragments against the compiled heading ids, so a dead anchor
 fails; only anchors created at runtime are outside its reach.
 
-### 3. Glossary and inline references
+### 5. Glossary and inline references
 
 ```shell
 pnpm references:check 2>&1
@@ -39,7 +67,7 @@ pnpm references:check 2>&1
 
 Every `<Term>` / `<ReferenceList>` target resolves to a real `content/glossary/` entry.
 
-### 4. Contract addresses
+### 6. Contract addresses
 
 ```shell
 pnpm contracts:check 2>&1
@@ -49,7 +77,7 @@ Regenerates the contract-address partial (`content/partials/_reference-arbitrum-
 from `@arbitrum/sdk` and `scripts/data/contract-addresses.data.ts`, and exits 1 with a line diff if
 the committed partial is stale. Never hand-edit that partial; edit the generator or its data file.
 
-### 5. Variables
+### 7. Variables
 
 ```shell
 pnpm vars:check 2>&1
@@ -58,7 +86,7 @@ pnpm vars:check 2>&1
 Every `<Var name="…" />` and `{var:name}` resolves to a key in `content/vars.json`, and the banner
 keys (`announcementId`, `announcementLinkHref`) are valid.
 
-### 6. Formatting
+### 8. Formatting
 
 ```shell
 pnpm format:check 2>&1
@@ -66,7 +94,7 @@ pnpm format:check 2>&1
 
 Prettier across content and app code without modifying files. `pnpm format` writes the fixes.
 
-### 7. Tests
+### 9. Tests
 
 ```shell
 pnpm test 2>&1
@@ -76,7 +104,7 @@ pnpm test 2>&1
 resolution, redirects, variable expansion, and so on), plus `scripts/sidebar.test.ts`, which
 builds the real sidebar tree and fails when a page is on no `meta.json` node or on two.
 
-### 8. TypeScript
+### 10. TypeScript
 
 ```shell
 pnpm types:check 2>&1
@@ -87,7 +115,7 @@ TypeScript; it does not validate every page's frontmatter or prove a page render
 in a browser on `http://localhost:3000` (on `127.0.0.1` React does not hydrate and every component
 looks broken).
 
-### 9. Frontmatter
+### 11. Frontmatter
 
 ```shell
 pnpm frontmatter:check 2>&1
@@ -97,7 +125,7 @@ Validates every documentation page against `lib/page-schema.ts`. Required: `titl
 `description`; `sidebar_label`, `content_type`, `author`, and `sme` are optional. Run this gate
 explicitly: `types:check` does not apply the schema to every page.
 
-### 10. Build
+### 12. Build
 
 ```shell
 pnpm build 2>&1
@@ -124,6 +152,8 @@ Produce a summary table first, then details per check:
 | Check              | Status    | Issues          |
 |--------------------|-----------|-----------------|
 | MDX structure      | PASS/FAIL | N defects       |
+| Orphan pages       | PASS/FAIL | N orphans       |
+| Orphaned files     | REVIEW/NOT RUN | N candidates |
 | Internal links     | PASS/FAIL | N broken        |
 | References         | PASS/FAIL | N missing       |
 | Contract addresses | PASS/FAIL | N stale         |
@@ -135,7 +165,7 @@ Produce a summary table first, then details per check:
 | Build              | PASS/FAIL | N errors        |
 ```
 
-Then for each FAIL, list:
+Then for each FAIL or REVIEW, list:
 
 - File path and line number
 - Issue description
@@ -143,6 +173,6 @@ Then for each FAIL, list:
 
 ## Arguments
 
-- No args: run all checks
+- No args: run all checks, including the manual unused-file review
 - `--fix`: auto-fix what's possible (`pnpm format`), then report remaining
 - `--quick`: skip `types:check` and `build` (faster, covers content only)

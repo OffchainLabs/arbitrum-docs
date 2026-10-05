@@ -1,6 +1,7 @@
 ---
 name: new-doc
 description: Scaffold a new documentation page with correct frontmatter, terminology, and sidebar registration. Triggers on "new doc", "create page", "add doc", "scaffold doc".
+disable-model-invocation: true
 ---
 
 # New Doc
