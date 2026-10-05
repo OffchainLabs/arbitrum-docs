@@ -20,4 +20,5 @@ export const arbitrumPageSchema = pageSchema.extend({
     .optional(),
   author: z.string().optional(),
   sme: z.string().optional(),
+  third_party_content_owner: z.string().optional(),
 });

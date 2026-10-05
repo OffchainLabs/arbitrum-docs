@@ -122,13 +122,14 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 
 `source.config.ts` extends the Fumadocs page schema:
 
-| Field           | Rule                                                                                                  |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| `title`         | Required, trimmed, not empty                                                                          |
-| `description`   | Required, trimmed                                                                                     |
-| `sidebar_label` | Optional; replaces the title as the page's sidebar name                                               |
-| `content_type`  | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
-| `author`, `sme` | Optional strings                                                                                      |
+| Field                       | Rule                                                                                                  |
+| --------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `title`                     | Required, trimmed, not empty                                                                          |
+| `description`               | Required, trimmed                                                                                     |
+| `sidebar_label`             | Optional; replaces the title as the page's sidebar name                                               |
+| `content_type`              | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
+| `author`, `sme`             | Optional strings                                                                                      |
+| `third_party_content_owner` | Optional string; GitHub username of the designated third-party content maintainer                     |
 
 A missing title or description, or a `content_type` outside the enum, fails `frontmatter:check`
 and the build. `types:check` does not validate every page's frontmatter. Nothing renders

@@ -39,7 +39,8 @@ The other fields are optional. `content_type`, when set, must be exactly one of 
 matches what the reader is trying to do, not just what feels closest. See
 [Document type conventions](#document-type-conventions) below. `author` and `sme` name the writer
 and the subject-matter reviewer. `sidebar_label` replaces the title as the page's name in the
-sidebar.
+sidebar. For third-party pages, set `third_party_content_owner` to the GitHub username of the
+designated maintainer.
 
 Callouts use Fumadocs' `<Callout>` component, with `type` set to `info`, `warn`, `error`, `idea`
 or `success`. A Docusaurus `:::note` line renders as plain text and fails `pnpm content:lint`.
