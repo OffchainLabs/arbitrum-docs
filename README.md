@@ -287,6 +287,7 @@ pnpm build               # production build (runs check-links first)
 pnpm start               # serve the production build
 
 pnpm test                # tooling test suites, including the sidebar and redirects
+pnpm test:browser        # Chromium interactions against a running production server
 pnpm check-links         # broken internal doc links and MDX fragments
 pnpm vars:check          # every <Var name> and {var:name} resolves; banner keys are valid
 pnpm references:check    # every <Term id> resolves
@@ -300,6 +301,12 @@ pnpm move-doc <from> <to>
 
 Nitro, precompile, contract, CLI, Stylus and edge-challenge tooling runs by hand only. See
 [Hand-run tools](INTERNALS.md#hand-run-tools).
+
+For browser tests, run `pnpm exec playwright install chromium`, `pnpm build`, and `pnpm start`.
+In another terminal, run `pnpm test:browser`. It uses `http://localhost:3000` by default; set
+`STATIC_DOCS_TEST_URL` to use another server. The suite checks native text search and text-fragment
+reveal on hidden tab and accordion panels, simulates repeated `beforematch` events, and checks
+manual selection.
 
 ## Conventions
 

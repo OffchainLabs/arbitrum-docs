@@ -115,8 +115,9 @@ entries do not carry this contract.
 
 - **Pipeline.** `source.config.ts` (collections), `lib/page-schema.ts` (the frontmatter schema),
   `lib/source.ts` (the single `loader()`, the only reader of `.source/`),
-  `app/(docs)/[...slug]/page.tsx` (every page,
-  prerendered, `dynamicParams = false`). MDX options are in `lib/mdx-options.ts`.
+  `app/(docs)/[...slug]/page.tsx` (every page, prerendered, `dynamicParams = false`). MDX options
+  are in `lib/mdx-options.ts`; `lib/llms-markdown.ts` decides how each component reads in the
+  markdown mirrors.
 - **Sidebar.** `meta.json` files only. The nine section folders set `"root": true`; `sidebar_label`
   renames a page. Never write a `[Label](/section/page)` link entry for a page in this repo; use a
   `"../path"` entry. `scripts/sidebar.test.ts` checks the tree.
@@ -133,13 +134,15 @@ entries do not carry this contract.
   `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
   entry left chaining, and fails when a URL in `scripts/data/master-routes.json` is neither a page
   nor a redirect source. `next.config.ts` derives a `.md` twin for every entry that lands on a
-  documentation page. Former canonical Docusaurus page routes, published files and this site's
+  documentation page; never hand-write one. It then groups exact aliases with the same destination
+  and permanence through `lib/compact-redirects.ts` to reduce Next's custom route count. Keep editing
+  individual entries. Former canonical Docusaurus page routes, published files and this site's
   moved URLs use `permanent: true`; `/welcome/get-started` keeps master's 308. Other legacy
   aliases use `permanent: false`. See [INTERNALS.md](INTERNALS.md#redirects) for the full rule.
 - **Routing.** `next.config.ts` rewrites `/<slug>.md` and `/index.md` to the `/llms.mdx/` mirror
-  and sets the response headers (security headers, report-only CSP, `Link` on `/`, CORS on the
-  markdown surface). The `og/` and `llms.mdx/` routes have `dynamicParams = false`. `proxy.ts` only
-  records PostHog `llms_file_fetched` events, in production.
+  and sets the response headers from `lib/http-headers.ts` (security headers, report-only CSP,
+  `Link` on `/`, CORS on the markdown surface). The `og/` and `llms.mdx/` routes have
+  `dynamicParams = false`. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
   production build without `NEXT_PUBLIC_SITE_URL`.
 - **Theme.** `app/global.css` only. Tokens are `--color-fd-*`, built on the `--color-arbitrum-*`
