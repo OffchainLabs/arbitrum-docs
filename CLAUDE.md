@@ -29,7 +29,7 @@ Grounding rule: State only what you read in a file, and cite it as `file:line`. 
 
 ```bash
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
-pnpm dev               # http://localhost:3000
+pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
 pnpm frontmatter:check # every documentation page satisfies lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts

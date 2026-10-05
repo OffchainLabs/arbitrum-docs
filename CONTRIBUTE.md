@@ -13,7 +13,7 @@ Create your contribution branch from `master` and open pull requests against `ma
 
 ```bash
 pnpm install      # runs a postinstall that generates .source/
-pnpm dev          # http://localhost:3000
+pnpm dev          # install, clean, then http://localhost:3000 with hot reload
 ```
 
 Node `22.x` (`>=22.18 <23`, enforced by `engines`; every script is a `.ts` file Node runs directly) and pnpm 10. Other Node majors are rejected.
@@ -171,7 +171,6 @@ The same form works in an `href`, `to` or `src` attribute and in an internal `/<
 destination. Everywhere else, prose and link text included, use the component: a placeholder in
 prose fails the build. `pnpm content:lint` (rule `var-in-link`) fails on a `<Var>` left in a
 destination.
-After you edit a value in `vars.json`, restart `pnpm dev` or a link keeps showing the old one.
 
 A link to a file in this repository takes the same treatment, with `docsRepositoryUrl` and
 `docsRepositoryBranch`: write

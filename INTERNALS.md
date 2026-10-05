@@ -31,8 +31,10 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 ## What Fumadocs is
 
 Fumadocs is a set of libraries on top of a Next.js App Router app that we own. There is no
-`fumadocs build`, no plugin system and no theme to eject from. `pnpm dev` is `next dev`, and every
-route under `app/` is ordinary Next code. We get full control, and in exchange we own the pieces a
+`fumadocs build`, no plugin system and no theme to eject from. `pnpm dev` runs `pnpm install`, then
+`pnpm clean` (deletes `.next/` and `.source/`), then `next dev`: the same sequence as master's
+`yarn start`, so the first page compiles cold on every start. Every route under `app/` is ordinary
+Next code. We get full control, and in exchange we own the pieces a
 monolithic docs framework would supply. Most of this document describes those pieces.
 
 | Package         | Responsible for                                                          |
@@ -310,8 +312,8 @@ resolves an internal `/<slug>` link. Two limits:
 - A local image path is imported before the plugin runs, so write it in full.
 
 `content:lint` rule `var-in-link` fails on a `<Var>` in a destination or URL attribute, and on a
-placeholder whose name is not an identifier. The plugin reads `vars.json` once, so after editing a
-value, restart `pnpm dev` to see it in a placeholder.
+placeholder whose name is not an identifier. The plugin rereads `vars.json` on each compile and registers it
+as a dependency of the page, so `pnpm dev` hot-reloads a placeholder after an edit.
 
 ### This repository's own URL has one owner
 

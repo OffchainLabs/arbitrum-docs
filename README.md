@@ -21,7 +21,7 @@ Create your contribution branch from `master` and open pull requests against `ma
 
 ```bash
 pnpm install      # runs a postinstall that generates .source/
-pnpm dev          # http://localhost:3000
+pnpm dev          # install, clean, then http://localhost:3000 with hot reload
 ```
 
 Node 22 (`>=22.18 <23`) · pnpm 10. Other Node majors are rejected by `engines`.
@@ -200,10 +200,6 @@ build with an acorn parse error. The one destination it cannot do is a local ima
 full. `pnpm content:lint` (rule `var-in-link`) fails on a `<Var>` left in a destination, and `pnpm vars:check`
 reads placeholders too, so a mistyped name is caught the way a mistyped `<Var>` name is.
 
-**After editing a value in `vars.json`, restart `pnpm dev` to see it in a placeholder.** A `<Var>`
-in prose updates on the next reload, but the placeholders are expanded by a cached MDX processor
-that reads the file once, so a link keeps the old value until the server is restarted.
-
 **To update a value:** edit [`content/vars.json`](content/vars.json), then run `pnpm vars:check`.
 
 **To add a new variable:** add the key to `content/vars.json`. No other file changes.
@@ -270,7 +266,8 @@ owns that block. ([Details](INTERNALS.md#redirects).)
 ## Commands
 
 ```bash
-pnpm dev                 # http://localhost:3000
+pnpm dev                 # pnpm install, pnpm clean, next dev on http://localhost:3000
+pnpm clean               # delete .next/ and .source/ (next dev regenerates .source/)
 pnpm types:check         # regenerate .source/, generate Next types, tsc --noEmit
 pnpm frontmatter:check   # every page's frontmatter satisfies lib/page-schema.ts
 pnpm build               # production build (runs check-links first)
