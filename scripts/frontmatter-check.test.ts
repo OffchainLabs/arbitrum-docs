@@ -29,6 +29,29 @@ test('a page that matches the schema passes', (t) => {
   assert.equal(result.status, 0, result.stderr);
 });
 
+test('audience and reader goals survive parsing and remain optional', () => {
+  const required = { title: 'Rotate keys', description: 'Keep node keys secure.' };
+  const metadata = {
+    target_audience: 'Chain operators',
+    user_story: 'As a chain operator, I want to rotate node keys so I can keep my chain secure.',
+  };
+  assert.deepEqual(arbitrumPageSchema.parse({ ...required, ...metadata }), {
+    ...required,
+    ...metadata,
+  });
+  assert.equal(arbitrumPageSchema.safeParse(required).success, true);
+});
+
+test('the frontmatter gate rejects non-string authoring metadata', (t) => {
+  const result = run(t, {
+    'audience.mdx': GOOD.replace('content_type: how-to', 'target_audience: [operators]'),
+    'goal.mdx': GOOD.replace('content_type: how-to', 'user_story: false'),
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /content\/docs\/audience\.mdx: target_audience:/);
+  assert.match(result.stderr, /content\/docs\/goal\.mdx: user_story:/);
+});
+
 test('user_story is optional and survives schema parsing', () => {
   const metadata = { title: 'Good', description: 'A page.' };
   assert.ok(arbitrumPageSchema.safeParse(metadata).success);

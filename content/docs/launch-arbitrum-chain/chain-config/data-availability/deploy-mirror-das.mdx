@@ -1,11 +1,13 @@
 ---
 title: 'How to deploy a mirror Data Availability Server (DAS)'
 description: This how-to will help you deploy a mirror Data Availability Server (DAS)
+content_type: 'how-to'
 author: jose-franco
 sidebar_position: 3
-content_type: how-to
 sme: jose-franco
 ---
+
+{/* sync-with-var: latestNitroNodeImage */}
 
 <Callout type="warn" title="Running a regular DAS vs running a mirror DAS">
 
@@ -13,9 +15,7 @@ The main use-case for running a mirror DAS is to complement your setup as a Data
 
 </Callout>
 
-<p>
-  [AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol) chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <Term id="parent-chain">parent chain</Term> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
-</p>
+[AnyTrust](/how-arbitrum-works/deep-dives/anytrust-protocol) chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <Term id="parent-chain">parent chain</Term> as the Data Availability (DA) layer. The members of the DAC run a Data Availability Server (DAS) to handle these operations.
 
 In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the [Introduction](/launch-arbitrum-chain/chain-config/data-availability/dac-get-started).
 
@@ -104,19 +104,17 @@ The local Badger DB storage option (previously set with `local-db-storage`) was 
 
 </Callout>
 
-<div className="dynamic-content-tabs">
-  <Tabs items={['AWS S3 bucket', 'Local files', '(Experimental) Google Cloud Storage']}>
-    <Tab value="AWS S3 bucket">
-      <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_s3-parameters.mdx</include>
-    </Tab>
-    <Tab value="Local files">
-      <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_local-files-parameters.mdx</include>
-    </Tab>
-    <Tab value="(Experimental) Google Cloud Storage">
-      <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_gcs-parameters.mdx</include>
-    </Tab>
-  </Tabs>
-</div>
+<Tabs items={['AWS S3 bucket', 'Local files', '(Experimental) Google Cloud Storage']}>
+  <Tab value="AWS S3 bucket">
+    <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_s3-parameters.mdx</include>
+  </Tab>
+  <Tab value="Local files">
+    <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_local-files-parameters.mdx</include>
+  </Tab>
+  <Tab value="(Experimental) Google Cloud Storage">
+    <include cwd>content/partials/launch-arbitrum-chain/config-snippets/_gcs-parameters.mdx</include>
+  </Tab>
+</Tabs>
 
 Here's an example `anytrustserver` command for a mirror DAS that:
 
