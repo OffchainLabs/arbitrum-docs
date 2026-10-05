@@ -16,6 +16,7 @@ import {
   generatedMarker,
   readRegularFile,
   setOutput,
+  writeOrCheck,
 } from './generated-partial.ts';
 import { NODE_INTERFACE_MARKER, PRECOMPILE_MARKER } from './precompile-tables.ts';
 
@@ -139,6 +140,26 @@ describe('assertInertMdx', () => {
     assert.throws(() => check('<a {...x}>y</a>\n', ['a']), /expression attribute on <a>/);
   });
 
+  it('requires the exact allowed literal attributes when specified', () => {
+    const options = {
+      context: 'fixture.mdx',
+      allowedElements: ['Callout'],
+      allowedElementAttributes: { Callout: { type: 'info' } },
+    };
+    assertInertMdx('<Callout type="info">Note.</Callout>', options);
+    for (const opening of [
+      '<Callout>',
+      '<Callout type="warn">',
+      '<Callout type="info" title="extra">',
+      '<Callout type="info" type="info">',
+    ]) {
+      assert.throws(
+        () => assertInertMdx(`${opening}Note.</Callout>`, options),
+        /must have exactly/,
+      );
+    }
+  });
+
   it('rejects an allowed element written differently from its exact source', () => {
     const exactSources = ['<include cwd>content/partials/_x.mdx</include>'];
     assertInertMdx(`${exactSources[0]}\n`, {
@@ -185,6 +206,29 @@ describe('assertInertMdx', () => {
   it('turns an MDX parse error into one naming the file', () => {
     assert.throws(() => check('returns x if a<b\n'), /^Error: fixture\.mdx: not valid MDX/);
   });
+});
+
+describe('writeOrCheck final-content validation', () => {
+  for (const check of [false, true]) {
+    it(`validates after formatting and before accessing output (check=${check})`, async (t) => {
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'validated-partial-'));
+      t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+      const file = path.join(dir, 'page.mdx');
+      fs.writeFileSync(file, 'Existing safe content.\n');
+      await assert.rejects(
+        writeOrCheck(file, '# Title', {
+          check,
+          overrides: { parser: 'mdx', plugins: [] },
+          validate: (formatted) => {
+            assert.equal(formatted, '# Title\n');
+            throw new Error('validation rejected');
+          },
+        }),
+        /validation rejected/,
+      );
+      assert.equal(fs.readFileSync(file, 'utf8'), 'Existing safe content.\n');
+    });
+  }
 });
 
 describe('readRegularFile', () => {

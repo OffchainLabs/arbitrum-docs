@@ -83,6 +83,8 @@ export interface WriteOrCheckOptions {
   overrides?: PrettierOptions;
   /** `false` skips Prettier and writes `content` byte for byte. */
   format?: boolean;
+  /** Validate the final bytes before either writing or comparing them. */
+  validate?: (formatted: string) => void;
 }
 
 /**
@@ -108,7 +110,7 @@ export interface WriteOrCheckOptions {
 export async function writeOrCheck(
   filePath: string,
   content: string,
-  { check, overrides = {}, format = true }: WriteOrCheckOptions,
+  { check, overrides = {}, format = true, validate }: WriteOrCheckOptions,
 ): Promise<boolean> {
   const formatted = format
     ? await prettier.format(content, {
@@ -117,6 +119,7 @@ export async function writeOrCheck(
         ...overrides,
       })
     : content;
+  validate?.(formatted);
   const current = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf-8') : '';
 
   if (check) {
@@ -166,6 +169,8 @@ export interface InertMdxOptions {
    * `{…}` attribute is rejected even on an allowed element. Anything not listed is rejected.
    */
   allowedElements: readonly string[];
+  /** When provided for an element, require exactly these literal attributes and values. */
+  allowedElementAttributes?: Readonly<Record<string, Readonly<Record<string, string | null>>>>;
   /**
    * When set, every allowed element must be written exactly as one of these strings (the whole
    * tag, source text). The generator's own `<include cwd>…</include>` is the case: `<include>`
@@ -212,7 +217,13 @@ interface MdxNode {
  */
 export function assertInertMdx(
   text: string,
-  { context, allowedElements, exactSources, lineOffset = 0 }: InertMdxOptions,
+  {
+    context,
+    allowedElements,
+    allowedElementAttributes,
+    exactSources,
+    lineOffset = 0,
+  }: InertMdxOptions,
 ): void {
   let tree: MdxNode;
   try {
@@ -253,6 +264,22 @@ export function assertInertMdx(
           problems.push(
             `line ${line}: an expression attribute on <${name}>` +
               (attribute.name ? ` (${attribute.name})` : ''),
+          );
+        }
+      }
+      const expectedAttributes = allowedElementAttributes?.[name];
+      if (expectedAttributes !== undefined) {
+        const expected = Object.entries(expectedAttributes);
+        const attributes = node.attributes ?? [];
+        if (
+          attributes.length !== expected.length ||
+          !expected.every(([key, value]) => {
+            const matching = attributes.filter((attribute) => attribute.name === key);
+            return matching.length === 1 && matching[0].value === value;
+          })
+        ) {
+          problems.push(
+            `line ${line}: <${name}> must have exactly ${JSON.stringify(expectedAttributes)} literal attributes`,
           );
         }
       }
