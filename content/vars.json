@@ -57,9 +57,9 @@
   "stylusSdkVersion": "0.10.7",
   "aepRevenueSharePercent": 10,
 
-  "announcementEnabled": true,
-  "announcementText": "Reactivate your Stylus contracts to ensure they remain callable",
-  "announcementLinkText": "here's how to do it.",
-  "announcementLinkHref": "/stylus/gentle-introduction#activation",
-  "announcementId": "stylus-reactivation-2026-09"
+  "announcementEnabled": false,
+  "announcementText": null,
+  "announcementLinkText": null,
+  "announcementLinkHref": null,
+  "announcementId": null
 }

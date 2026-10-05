@@ -251,6 +251,10 @@ h3:has(> button[data-state]) {
   background-color: color-mix(in oklab, var(--color-fd-primary) 5%, transparent);
 }
 
+#nd-subnav {
+  z-index: 30;
+}
+
 /* Navbar (the notebook header on docs pages, components/home-header.tsx elsewhere): logo left,
    links centred on one line, search at the far right. At the narrowest width the search
    trigger's bare "Search" text node is hidden with `font-size: 0`. */
