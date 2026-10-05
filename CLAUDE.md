@@ -67,8 +67,8 @@ opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mo
 
 `source.config.ts` extends the Fumadocs page schema. Required: `title` (trimmed, not empty) and
 `description` (trimmed). Optional: `sidebar_label`, `content_type`, `author`, `sme`,
-`target_audience`, `user_story`. The last two are authoring metadata; preserve existing values.
-`content_type`
+`third_party_content_owner` (the third-party maintainer's GitHub username), `target_audience`,
+`user_story`. The last two are authoring metadata; preserve existing values. `content_type`
 is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
 required field or an out-of-enum value fails `frontmatter:check` and the build. There is no
 `draft` or date field; last-modified dates come from git. Partials and glossary
@@ -113,6 +113,8 @@ entries do not carry this contract.
   from a page and file-relative from another partial. Two are generated; edit their generators.
 - **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
+  The canonical branch is `master`, including after migration. Keep the variable and PR
+  template links aimed at `master`, regardless of the current development branch.
 - **Components.** `components/mdx.tsx` is the registry.
 - **Redirects.** `redirects.config.ts`. Never hand-edit between the `AUTO-GENERATED` markers.
   `move-doc` appends one entry and touches no other; `pnpm test` names any entry left chaining.

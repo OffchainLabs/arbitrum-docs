@@ -122,15 +122,16 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 
 `source.config.ts` extends the Fumadocs page schema:
 
-| Field             | Rule                                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------- |
-| `title`           | Required, trimmed, not empty                                                                          |
-| `description`     | Required, trimmed                                                                                     |
-| `sidebar_label`   | Optional; replaces the title as the page's sidebar name                                               |
-| `content_type`    | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
-| `author`, `sme`   | Optional strings                                                                                      |
-| `target_audience` | Optional string describing the intended readers and their assumed knowledge                           |
-| `user_story`      | Optional string describing the reader's goal and why it matters                                       |
+| Field                       | Rule                                                                                                  |
+| --------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `title`                     | Required, trimmed, not empty                                                                          |
+| `description`               | Required, trimmed                                                                                     |
+| `sidebar_label`             | Optional; replaces the title as the page's sidebar name                                               |
+| `content_type`              | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
+| `author`, `sme`             | Optional strings                                                                                      |
+| `third_party_content_owner` | Optional string; GitHub username of the designated third-party content maintainer                     |
+| `target_audience`           | Optional string describing the intended readers and their assumed knowledge                           |
+| `user_story`                | Optional string describing the reader's goal and why it matters                                       |
 
 A missing title or description, or a `content_type` outside the enum, fails `frontmatter:check`
 and the build. `types:check` does not validate every page's frontmatter. Nothing renders
@@ -312,6 +313,10 @@ link, and the contribute partials write their links home as
 writes a docs-repository URL in full. `_know-more-tools-box-partial.mdx` also uses the placeholders
 and is covered only by that last check.
 `.github/pull_request_template.md` stays hardcoded because GitHub renders it, not this site.
+
+The canonical documentation branch is `master`, including after the Fumadocs migration.
+Keep `docsRepositoryBranch` and the PR template's file links aimed at `master`; development
+branches do not change this value.
 
 ### Announcement banner
 

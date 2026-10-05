@@ -29,6 +29,18 @@ test('a page that matches the schema passes', (t) => {
   assert.equal(result.status, 0, result.stderr);
 });
 
+test('the schema preserves third-party ownership independently of the SME', () => {
+  const page = { title: 'Partner guide', description: 'A page.', sme: 'reviewer' };
+  assert.equal(arbitrumPageSchema.parse(page).third_party_content_owner, undefined);
+  const parsed = arbitrumPageSchema.parse({ ...page, third_party_content_owner: 'partner' });
+  assert.equal(parsed.third_party_content_owner, 'partner');
+  assert.equal(parsed.sme, 'reviewer');
+  assert.equal(
+    arbitrumPageSchema.safeParse({ ...page, third_party_content_owner: 123 }).success,
+    false,
+  );
+});
+
 test('audience and reader goals survive parsing and remain optional', () => {
   const required = { title: 'Rotate keys', description: 'Keep node keys secure.' };
   const metadata = {
