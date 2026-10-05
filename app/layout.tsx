@@ -113,6 +113,9 @@ const displayFace = localFont({
 const inkeepEnabled = Boolean(process.env.NEXT_PUBLIC_INKEEP_API_KEY);
 
 export default function Layout({ children }: { children: ReactNode }) {
+  const announcementId = vars.announcementId ?? undefined;
+  const announcementLinkHref: string = vars.announcementLinkHref ?? '';
+
   return (
     <html
       lang="en"
@@ -148,7 +151,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               banner has that id written to localStorage, so a new message
               needs a new id or it stays hidden from everyone who dismissed
               the last one. */}
-            {vars.announcementEnabled ? (
+            {vars.announcementEnabled && announcementId && announcementLinkHref ? (
               <>
                 {/* Banner puts `height` in an inline style AND in
                   --fd-banner-height, which the docs layout feeds to calc() and
@@ -168,20 +171,20 @@ export default function Layout({ children }: { children: ReactNode }) {
                   1.5:1. The `[&>button]` utilities restyle that one button in the banner's
                   foreground colour, which clears 4.5:1 in both themes. */}
                 <Banner
-                  id={vars.announcementId}
+                  id={announcementId}
                   height="var(--fd-announcement-height)"
                   className="bg-fd-primary text-fd-primary-foreground [&>button]:text-fd-primary-foreground [&>button]:hover:bg-fd-primary-foreground/15 [&>button]:hover:text-fd-primary-foreground [&>button]:focus-visible:ring-fd-primary-foreground"
                 >
                   <span className="pe-8 text-balance">
                     {vars.announcementText}{' '}
                     <Link
-                      href={vars.announcementLinkHref}
+                      href={announcementLinkHref}
                       // vars:check permits an https target as well as an internal
                       // path, so the href may leave the site. `rel` is set only
                       // then, because Next already omits it for internal routes
                       // and an unconditional one would be noise on every page.
                       rel={
-                        vars.announcementLinkHref.startsWith('https://')
+                        announcementLinkHref.startsWith('https://')
                           ? 'noopener noreferrer'
                           : undefined
                       }
