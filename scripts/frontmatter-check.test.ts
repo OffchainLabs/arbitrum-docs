@@ -7,6 +7,8 @@ import path from 'node:path';
 import { type TestContext, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { arbitrumPageSchema } from '../lib/page-schema.ts';
+
 const SCRIPT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'frontmatter-check.ts');
 
 function run(t: TestContext, pages: Record<string, string>) {
@@ -25,6 +27,21 @@ const GOOD = "---\ntitle: 'Good'\ndescription: 'A page.'\ncontent_type: how-to\n
 test('a page that matches the schema passes', (t) => {
   const result = run(t, { 'good.mdx': GOOD });
   assert.equal(result.status, 0, result.stderr);
+});
+
+test('user_story is optional and survives schema parsing', () => {
+  const metadata = { title: 'Good', description: 'A page.' };
+  assert.ok(arbitrumPageSchema.safeParse(metadata).success);
+  const user_story = 'As a developer, I want to deploy my first Stylus contract';
+  assert.equal(arbitrumPageSchema.parse({ ...metadata, user_story }).user_story, user_story);
+});
+
+test('user_story must be a string when present', (t) => {
+  const result = run(t, {
+    'bad.mdx': GOOD.replace('content_type: how-to', 'user_story: 123'),
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /content\/docs\/bad\.mdx: user_story:/);
 });
 
 test('each broken field is reported as path: field: message, and the run fails', (t) => {
