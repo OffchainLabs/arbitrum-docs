@@ -35,8 +35,8 @@ AGENTS.md
 # sample on the node-config page. Both were restored from 27f230fcd^ and now have a blank line
 # after the tag. Edit these files by hand. content:lint and the build catch broken MDX, not code
 # that was altered inside a fence.
-content/docs/launch-arbitrum-chain/arbitrum-chain-sdk-preparing-node-config.mdx
-content/docs/launch-arbitrum-chain/integrations/da-api-integration-guide.mdx
+content/docs/launch-arbitrum-chain/deploy/configure-node.mdx
+content/docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx
 content/docs/stylus/how-tos/trait-based-composition.mdx
 content/partials/run-a-node/_dao-chains-parameters.mdx
 content/partials/run-a-node/_orbit-chains-parameters.mdx
