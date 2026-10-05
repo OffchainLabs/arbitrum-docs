@@ -7,11 +7,11 @@ author: leeederek
 sme: leeederek
 ---
 
-This introduction is for those who want to learn about <Term id="bold">BoLD</Term>: a new dispute protocol for optimistic Rollups that enables permissionless validation for <Term id="arbitrum">Arbitrum</Term> chains. BoLD stands for Bounded Liquidity Delay and is active on <Term id="arbitrum-one">Arbitrum One</Term>, <Term id="arbitrum-nova">Arbitrum Nova</Term>, and Arbitrum Sepolia.
+<Term id="bold">BoLD</Term> is a new dispute protocol for optimistic Rollups that enables permissionless validation for <Term id="arbitrum">Arbitrum</Term> chains. BoLD stands for Bounded Liquidity Delay and is active on <Term id="arbitrum-one">Arbitrum One</Term>, <Term id="arbitrum-nova">Arbitrum Nova</Term>, and Arbitrum Sepolia.
 
 ## What exactly is BoLD?
 
-BoLD upgraded Arbitrum's former dispute protocol. Specifically, BoLD changed some of the rules used by validators to open and resolve disputes about Arbitrum’s state, ensuring that only valid states receive confirmation on an Arbitrum chain’s <Term id="parent-chain">parent chain</Term> (Ethereum).
+The previous dispute protocol used fraud proofs for challenges and was limited to a set of allowlisted validators.
 
 When BoLD upgraded Arbitrum's previous dispute protocol, it changed some of the rules used by validators to open and resolve disputes about Arbitrum's state, ensuring only valid states receive confirmation on an Arbitrum chain's <Term id="parent-chain">parent chain</Term> (Ethereum). It also allows anyone to participate in validating chain state (including challenges) and enhances security around child-to-parent chain messaging (including withdrawals).
 
@@ -23,25 +23,19 @@ Under BoLD, a bonded validator's responsibilities are to:
 
 BoLD ensures that disputes are resolved within a fixed period (currently equivalent to two <Term id="challenge-period">challenge periods</Term>, plus a two-day grace period for the Security Council to intervene if necessary, and a small delta for computation), effectively removing the risk of delay attacks and making withdrawals to a parent chain more secure.
 
-## Why did Arbitrum need a new dispute protocol?
+BoLD uniquely offers time-bound, permissionless validation because a correct state <Term id="assertion">assertion</Term> isn't tied to the validator that bonds their capital to a claim. This feature, coupled with the fact that the <Term id="child-chain">child chain</Term> states are entirely deterministic, can be proven on Ethereum, meaning that any number of honest parties can rely on BoLD to prove that their claim is correct. Lastly, BoLD does not change the fact that only a single honest party is required to defend Arbitrum.
 
-In the past, working fraud proofs were limited to allowlisted validators, who could assert the state of the chain. BoLD further decentralizes the protocol by allowing **anyone** to challenge and win disputes, all within a fixed time period. Arbitrum chains will continue to use an interactive proving game between validators and fraud proofs for security, with the added benefit that it is completely permissionless and time-bounded to the same length as a single challenge period (6.4 days by default).
+## BoLD enables Arbitrum to become a Stage 2 Rollup
 
-BoLD can uniquely offer time-bound, permissionless validation because a correct state <Term id="assertion">assertion</Term> isn't tied to the validator that bonds their capital to a claim. This feature, coupled with the fact that the <Term id="child-chain">child chain</Term> states are entirely deterministic, can be proven on Ethereum, meaning that any number of honest parties can rely on BoLD to prove that their claim is correct. Lastly, BoLD does not change the fact that only a single honest party is required to defend Arbitrum.
-
-### BoLD enables Arbitrum to become a Stage 2 rollup
-
-Inspired by [Vitalik’s proposed milestones](https://ethereum-magicians.org/t/proposed-milestones-for-rollups-taking-off-training-wheels/11571), the team over at L2BEAT has assembled a widely recognized framework for evaluating the development of Ethereum Rollups. Both Vitalik and the [L2BEAT framework](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe) refer to the final stage of Rollup development as "**Stage 2: No Training Wheels**”. A critical criterion for being considered a Stage 2 Rollup is the ability to allow anyone to validate the child chain state and post fraud proofs to Ethereum without restrictions. This step is a key requirement for Stage 2 because it ensures [“that a limited set of entities does not control the system and instead is subject to the collective scrutiny of the entire community”](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe).
-
-BoLD enabled permissionless validation by allowing anyone to challenge incorrect Arbitrum state assertions, unlocking new avenues for participation in securing the network and fostering greater inclusivity and resilience. BoLD achieves this by guaranteeing that a single, honest entity, whose capital is bonded to the correct Arbitrum state assertion, will always prevail against malicious adversaries.
+Inspired by [Vitalik’s proposed milestones](https://ethereum-magicians.org/t/proposed-milestones-for-rollups-taking-off-training-wheels/11571), the team over at L2BEAT has assembled a widely recognized framework for evaluating the development of Ethereum Rollups. Both Vitalik and the [L2BEAT framework](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe) refer to the final stage of Rollup development as “**Stage 2: No Training Wheels**”. A critical criterion for being considered a Stage 2 Rollup is the ability to allow anyone to validate the child chain state and post fraud proofs to Ethereum without restrictions. This step is a key requirement for Stage 2 because it ensures [“that a limited set of entities does not control the system and instead is subject to the collective scrutiny of the entire community”](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe).
 
 ![Pie slice](/img/bold-l2beat-pie-chart.png)
 
 With BoLD at its core, Arbitrum charts a course toward Stage 2 Rollup recognition by addressing the currently yellow (above) State Validation wedge in [L2BEAT's risk analysis pie chart](https://l2beat.com/scaling/summary). BoLD contributes to a more permissionless, efficient, and robust rollup ecosystem.
 
-### BoLD makes withdrawals safer to the parent chain
+## BoLD makes withdrawals safer to the parent chain
 
-In the past, there was a period following a state assertion, known as the “challenge period,” during which any validator could open a dispute over the validity of a given child chain state root. If no disputes occurred during the challenge period, the protocol would confirm the state root as valid.
+![BoLD safer withdrawals](/img/bold-safer-withdrawals-with-bold-2.png)
 
 BoLD introduces a time limit on the existing Rollup protocol for resolving disputes, effectively ensuring that challenges conclude within a <Var name="arbOneDisputeWindowDays" />-day window (the DAO can change this window for Arbitrum One and Nova). This conclusion is possible due to two reasons:
 
@@ -74,16 +68,17 @@ Let’s dive into an overview of how BoLD actually works.
    - **One-step challenge:** Within that range of 2^23 instructions, the back-and-forth bisecting continues until all parties arrive at a single step of instruction that they disagree on. At this point, the parties agree on the initial state of Arbitrum before the step, but disagree on the end state immediately after. Remember that since Arbitrum’s state is entirely deterministic, there is only one correct end state.
 4. **One-step proof:** Once a challenge is isolated down to a dispute about a single step, both parties run that step to produce, and then submit, a one-step proof to the `OneStepProof` <Term id="smart-contract">smart contract</Term> on the parent chain (e.g., Ethereum). A one-step proof is a proof that a single step of computation results in a particular state. The smart contract on the parent chain will execute the disputed step to validate the correctness of the submitted proof from both parties. It is at this point that the honest party's proof will be deemed valid and its tree of edges will be confirmed by time, whereas the dishonest party's edges will be rejected due to a timeout.
 5. **Confirmation:** Once the honest one-step edge is confirmed, the protocol will work on confirming or rejecting the parent edges until it reaches the level-zero edge of the honest party. With the honest party’s level-zero edge now confirmed, their assertion bond is refundable. Meanwhile, the dishonest party has its bonds removed to ensure that dishonesty is always punished.
-   - There is another way that a level-zero edge can get confirmed: time. At each of the mini-stages of the challenge (block challenge, big-step challenge, one-step challenge), a timer increments upwards towards some challenge period, T, defined by BoLD. This timer begins ticking for a party when they submit their bisected history commitment, and it continues until their challenger submits their bisected history commitment in response. An edge is automatically confirmed if the timer reaches T.
+   - There is another way that a level-zero edge can get confirmed: time. At each of the mini-stages of the challenge (block challenge, big-step challenge, one-step challenge), a timer increments upwards towards some challenge period, `T`, defined by BoLD. This timer begins ticking for a party when they submit their bisected history commitment, and it continues until their challenger submits their bisected history commitment in response. An edge is automatically confirmed if the timer reaches `T`.
 6. Reimbursements for the honest party's parent chain gas costs and mini-bonds made at the other challenge levels are handled by the Arbitrum Foundation.
 
 That’s it! We’ve now walked through each step that validators will take to dispute challenges under the BoLD protocol. One final note is that each of the steps explained above can run concurrently, which is one of the reasons why BoLD can guarantee a resolution to disputes within a fixed time frame.
 
 ## Related reading
 
-- [BoLD FAQ](/how-arbitrum-works/bold/bold-faq): Bonding, bond sizes, confiscated funds, Nova, and L3 challenge periods, answered question by question.
+- [BoLD Whitepaper](https://arxiv.org/abs/2404.10491)
 - [BoLD: a technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive): Implementation details of the dispute protocol, including assertions, edges, sub-challenges, and the one-step proof.
 - [How BoLD bisection works](/how-arbitrum-works/bold/how-bold-bisection-works): Interactive visualization that replays real onchain bisections across the block, bigstep, and smallstep levels.
 - [Economics of disputes](/how-arbitrum-works/bold/bold-economics-of-disputes): Bond sizes, the resource ratio, and spam prevention in BoLD.
 - [Assertions deep dive](/how-arbitrum-works/deep-dives/assertions): How assertions structure validation and disputes in the Rollup contracts.
 - [How to run a validator](/run-a-node/more-types/run-validator-node): Validation strategies (watchtower, defensive, makeNodes, etc.) for participating in BoLD.
+- [BoLD specification](https://github.com/OffchainLabs/bold)
