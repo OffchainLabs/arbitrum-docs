@@ -52,6 +52,21 @@ test('the frontmatter gate rejects non-string authoring metadata', (t) => {
   assert.match(result.stderr, /content\/docs\/goal\.mdx: user_story:/);
 });
 
+test('user_story is optional and survives schema parsing', () => {
+  const metadata = { title: 'Good', description: 'A page.' };
+  assert.ok(arbitrumPageSchema.safeParse(metadata).success);
+  const user_story = 'As a developer, I want to deploy my first Stylus contract';
+  assert.equal(arbitrumPageSchema.parse({ ...metadata, user_story }).user_story, user_story);
+});
+
+test('user_story must be a string when present', (t) => {
+  const result = run(t, {
+    'bad.mdx': GOOD.replace('content_type: how-to', 'user_story: 123'),
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /content\/docs\/bad\.mdx: user_story:/);
+});
+
 test('each broken field is reported as path: field: message, and the run fails', (t) => {
   const result = run(t, {
     'good.mdx': GOOD,

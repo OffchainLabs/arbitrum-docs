@@ -135,7 +135,7 @@ pub fn storage_cache_bytes32(key: *const u8, value: *const u8);
 ```
 
 <Callout type="warn">
-  
+
 Values are cached and must be persisted using `storage_flush_cache` before they're permanently written to storage.
 
 </Callout>
@@ -274,7 +274,7 @@ pub fn tx_origin(origin: *mut u8);
 
 #### `tx_ink_price`
 
-Gets the price of ink on the EVM gas basis in gas basis points. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/gas-metering) for more information.
+Gets the price of ink on the EVM gas basis in gas basis points. See [Ink and Gas](/stylus/concepts/gas-metering) for more information.
 
 ```rust
 pub fn tx_ink_price() -> u32;
@@ -480,7 +480,7 @@ pub fn evm_ink_left() -> u64;
 
 <Callout type="info">
 
-Ink is Stylus's compute pricing unit. See [Ink and Gas](https://docs.arbitrum.io/stylus/concepts/gas-metering) for conversion between ink and gas.
+Ink is Stylus's compute pricing unit. See [Ink and Gas](/stylus/concepts/gas-metering) for conversion between ink and gas.
 
 </Callout>
 
@@ -882,7 +882,7 @@ mod tests {
 - [Stylus VM specification](https://github.com/OffchainLabs/stylus)
 - [EVM opcodes reference](https://www.evm.codes/)
 - [Arbitrum block numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time)
-- [Ink and gas metering](https://docs.arbitrum.io/stylus/concepts/gas-metering)
+- [Ink and gas metering](/stylus/concepts/gas-metering)
 - [stylus-sdk-rs source](https://github.com/OffchainLabs/stylus-sdk-rs/blob/main/stylus-sdk/src/hostio.rs)
 
 ## Best practices

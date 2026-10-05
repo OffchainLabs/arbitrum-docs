@@ -63,7 +63,7 @@ Soft finality refers to the preliminary confirmation of transactions based on th
 
 The soft-finality trust dependency on the Sequencer is bounded rather than open-ended. A user can submit a transaction directly to the parent chain through the <Term id="delayed-inbox">delayed inbox</Term>. If the Sequencer refuses to include it, the user can call <Term id="forceinclusion">`forceInclusion`</Term> on the Sequencer Inbox contract once the Sequencer’s exclusive window has elapsed, pushing the message into the chain without the Sequencer’s cooperation (see [censorship resistance and the Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer#censorship-timeout)). By default this window is roughly 24 hours (configured as `delayBlocks`/`delaySeconds`, defaulting to about 5,760 blocks or 86,400 seconds).
 
-The practical consequence is that the Sequencer can _delay_ a transaction but cannot _permanently_ censor it. Delayed-inbox messages are only sequenced after they reach parent-chain finality — the delayed sequencer waits for the parent chain's `safe` (or, if configured, `finalized`) head before including them — so force-included transactions inherit parent-chain finality guarantees.
+The practical consequence is that the Sequencer can _delay_ a transaction but cannot _permanently_ censor it. Delayed-inbox messages are only sequenced after they reach parent-chain finality — the delayed sequencer waits for the parent chain’s `safe` (or, if configured, `finalized`) head before including them — so force-included transactions inherit parent-chain finality guarantees.
 
 ## Hard finality
 

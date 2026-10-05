@@ -39,7 +39,7 @@ The other fields are optional. `content_type`, when set, must be exactly one of 
 matches what the reader is trying to do, not just what feels closest. See
 [Document type conventions](#document-type-conventions) below. `author` and `sme` name the writer
 and the subject-matter reviewer. `sidebar_label` replaces the title as the page's name in the
-sidebar.
+sidebar. `user_story` is an optional string describing the reader’s goal.
 
 `target_audience` and `user_story` are optional authoring metadata. Use `target_audience` to
 describe the intended readers and their assumed knowledge, and `user_story` to record the
