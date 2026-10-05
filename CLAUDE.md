@@ -133,8 +133,9 @@ entries do not carry this contract.
   `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
   entry left chaining, and fails when a URL in `scripts/data/master-routes.json` is neither a page
   nor a redirect source. `next.config.ts` derives a `.md` twin for every entry that lands on a
-  documentation page. A source that was a Docusaurus page route is `permanent: true`; the rest are
-  `permanent: false`.
+  documentation page. Former canonical Docusaurus page routes, published files and this site's
+  moved URLs use `permanent: true`; `/welcome/get-started` keeps master's 308. Other legacy
+  aliases use `permanent: false`. See [INTERNALS.md](INTERNALS.md#redirects) for the full rule.
 - **Routing.** `next.config.ts` rewrites `/<slug>.md` and `/index.md` to the `/llms.mdx/` mirror
   and sets the response headers (security headers, report-only CSP, `Link` on `/`, CORS on the
   markdown surface). The `og/` and `llms.mdx/` routes have `dynamicParams = false`. `proxy.ts` only

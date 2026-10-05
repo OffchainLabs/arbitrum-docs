@@ -494,19 +494,14 @@ stylesheet fails the build job.
 
 Other things not to undo:
 
-- **The Inkeep search dialog** (`components/inkeep/inkeep-search.tsx`) renders nothing until the
-  first time Fumadocs opens it, tracked by a `hasOpened` state. Fumadocs' `SearchProvider` mounts
-  the dialog on first render (its `preload` option defaults to true), so without the gate every
-  page view downloaded the 1.19 MB Inkeep chunk, 327 KB gzipped, with no interaction. When
-  `NEXT_PUBLIC_INKEEP_API_KEY` is unset, Fumadocs' default dialog over `/api/search` is used and
-  the chat button is not rendered; that route clamps its `limit` and query length and exists only
-  as the keyless fallback.
+- **The search dialog mounts on first open.** `app/layout.tsx` passes `preload: false` to
+  Fumadocs' search options, so `components/inkeep/inkeep-search.tsx` loads the Inkeep bundle only
+  when the dialog opens. Fumadocs defaults to `preload: true`, which would fetch the bundle on
+  every page load. When `NEXT_PUBLIC_INKEEP_API_KEY` is unset, search is disabled and the chat
+  button is not rendered; this site has no `/api/search` fallback route.
 - **The Inkeep chat widget** (`components/inkeep/inkeep-chat-button.tsx`) waits for `load` and then
   an idle callback before it loads its chunk, so it downloads after the resources that decide
   Largest Contentful Paint.
-- **The search dialog mounts on first open.** `app/layout.tsx` passes `preload: false` to
-  Fumadocs' search options; its default of `true` mounts the dialog at once, which fetches the
-  Inkeep bundle on every page load.
 - **Fonts are self-hosted** under `public/fonts/` and loaded with `next/font/local` in
   `app/layout.tsx`. Never add `next/font/google`: it makes the build fetch from Google. Only the two
   upright Aeonik faces preload. The italic is its own declaration so it can skip preloading, and
@@ -585,7 +580,8 @@ The file has two blocks:
 **Permanence.** An entry is `permanent: true` (308) when its source was a canonical page route on
 `docs.arbitrum.io` (one of the page routes in `scripts/data/master-routes.json`), a file master
 published at that URL, or a URL this site itself used to serve (every `move-doc` entry): that URL is
-in search indexes and inbound links and will never serve a page again. Every other legacy entry is
+in search indexes and inbound links and will never serve a page again. `/welcome/get-started`
+also keeps the 308 master gave it. Every other legacy entry is
 `permanent: false` (307): those URLs were already redirects on master, and a temporary answer keeps
 the mapping free to change. The header comment in `redirects.config.ts` states the rule; keep to it
 when adding an entry.
@@ -639,7 +635,8 @@ one exists. The list comes from the September 2026 review's sweep of 1,609 maste
 - **Root `.md` mirrors** (`/<slug>.md`, about 300 URLs master told readers to fetch). Served
   directly: `next.config.ts` rewrites `/<slug>.md` and `/index.md` onto the mirror route, and derives
   a `.md` twin for every alias in `redirects.config.ts` whose destination is a page, so the "append
-  `.md`" habit still works and no proxy runs.
+  `.md`" habit still works. Routing uses rewrites and redirects; the tracking proxy still runs once
+  for the markdown request and records a PostHog event in production.
 - **Audit-report PDFs** at `/assets/files/<name>-<hash>.pdf` (47 files). Redirected by one pattern
   entry to `/audit-reports/<name>.pdf` under `public/`.
 - **`/category/best-practices`, `/category/troubleshooting`**, Docusaurus generated-index pages for
