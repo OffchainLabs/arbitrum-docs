@@ -9,7 +9,11 @@ sme: gmehta2
 target_audience: 'Developers who want to configure compliance rules on their chain'
 ---
 
-<Callout type="info">This feature is available through the ArbOS 61 upgrade, however off by default. We recommend adopting this feature at least 30 days after the release of ArbOS 61 on Arbitrum One.</Callout>
+<Callout type="info">
+
+This feature is available through the ArbOS 61 upgrade, however off by default. We recommend adopting this feature at least 30 days after the release of ArbOS 61 on Arbitrum One.
+
+</Callout>
 
 New, optional components can be added to the <Term id="sequencer">Sequencer</Term> and <Term id="state-transition-function">State Transition Function</Term> (STF) to enable protocol-level transaction filtering for regulatory or compliance purposes, at the discretion of the chain owner.
 
@@ -107,7 +111,11 @@ Nodes are expected to always have a valid list in memory. On startup or restart,
 | Delayed Inbox Sentinel (STF)    | Requires audit; must be activated at deployment |
 | Burn exception rules            | Covers Aave, Paxos, and similar protocols       |
 
-<Callout type="info">All the components above are available with ArbOS 61 (Elara).</Callout>
+<Callout type="info">
+
+All the components above are available with ArbOS 61 (Elara).
+
+</Callout>
 
 Compliance Filtering is disabled by default. Chain owners must explicitly configure and enable each component. <Term id="activation">Activation</Term> after chain deployment may require an ArbOS upgrade.
 

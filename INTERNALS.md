@@ -136,18 +136,24 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 collection in `source.config.ts` applies it (the schema has its own module because
 `source.config.ts` may only export collections):
 
-| Field           | Rule                                                                                                  |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| `title`         | Required, trimmed, not empty                                                                          |
-| `description`   | Required, trimmed, not empty                                                                          |
-| `sidebar_label` | Optional; replaces the title as the page's sidebar name                                               |
-| `content_type`  | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
-| `author`, `sme` | Optional strings                                                                                      |
+| Field                       | Rule                                                                                                  |
+| --------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `title`                     | Required, trimmed, not empty                                                                          |
+| `description`               | Required, trimmed, not empty                                                                          |
+| `sidebar_label`             | Optional; replaces the title as the page's sidebar name                                               |
+| `content_type`              | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
+| `author`, `sme`             | Optional strings                                                                                      |
+| `third_party_content_owner` | Optional string; GitHub username of the designated third-party content maintainer                     |
+| `target_audience`           | Optional string describing the intended readers and their assumed knowledge                           |
+| `user_story`                | Optional string describing the reader's goal and why it matters                                       |
 
 A missing title or description, or a `content_type` outside the enum, fails `frontmatter:check`
 and the build. `types:check` does not validate every page's frontmatter. Nothing renders
 `content_type`; it is an editorial label kept to one enum so values stay
 comparable. Partials and glossary entries do not carry this contract.
+
+`target_audience` and `user_story` are authoring metadata, preserved in parsed page data for
+writers and reviewers. They do not render on the page and are not required for a valid page.
 
 ## Last modified dates
 
@@ -326,6 +332,10 @@ writes a docs-repository URL in full. `_know-more-tools-box-partial.mdx` also us
 and is covered only by that last check.
 `.github/pull_request_template.md` stays hardcoded because GitHub renders it, not this site.
 
+The canonical documentation branch is `master`, including after the Fumadocs migration.
+Keep `docsRepositoryBranch` and the PR template's file links aimed at `master`; development
+branches do not change this value.
+
 ### Announcement banner
 
 The bar above the navbar is Fumadocs' `Banner`, rendered in `app/layout.tsx` before `{children}`.
@@ -484,17 +494,14 @@ stylesheet fails the build job.
 
 Other things not to undo:
 
-- **The Inkeep search dialog mounts on first open.** `app/layout.tsx` passes `preload: false` to
-  Fumadocs' search options; its default of `true` mounts the dialog at once, which fetched the
-  1.19 MB Inkeep chunk, 327 KB gzipped, on every page view. When `NEXT_PUBLIC_INKEEP_API_KEY` is
-  unset, search is disabled (`search={{ enabled: false }}`) and the chat button is not rendered:
-  there is no Orama route for Fumadocs' own dialog to call.
+- **The search dialog mounts on first open.** `app/layout.tsx` passes `preload: false` to
+  Fumadocs' search options, so `components/inkeep/inkeep-search.tsx` loads the Inkeep bundle only
+  when the dialog opens. Fumadocs defaults to `preload: true`, which would fetch the bundle on
+  every page load. When `NEXT_PUBLIC_INKEEP_API_KEY` is unset, search is disabled and the chat
+  button is not rendered; this site has no `/api/search` fallback route.
 - **The Inkeep chat widget** (`components/inkeep/inkeep-chat-button.tsx`) waits for `load` and then
   an idle callback before it loads its chunk, so it downloads after the resources that decide
   Largest Contentful Paint.
-- **The search dialog mounts on first open.** `app/layout.tsx` passes `preload: false` to
-  Fumadocs' search options; its default of `true` mounts the dialog at once, which fetches the
-  Inkeep bundle on every page load.
 - **Fonts are self-hosted** under `public/fonts/` and loaded with `next/font/local` in
   `app/layout.tsx`. Never add `next/font/google`: it makes the build fetch from Google. Only the two
   upright Aeonik faces preload. The italic is its own declaration so it can skip preloading, and
@@ -575,7 +582,8 @@ The file has two blocks:
 **Permanence.** An entry is `permanent: true` (308) when its source was a canonical page route on
 `docs.arbitrum.io` (one of the page routes in `scripts/data/master-routes.json`), a file master
 published at that URL, or a URL this site itself used to serve (every `move-doc` entry): that URL is
-in search indexes and inbound links and will never serve a page again. Every other legacy entry is
+in search indexes and inbound links and will never serve a page again. `/welcome/get-started`
+also keeps the 308 master gave it. Every other legacy entry is
 `permanent: false` (307): those URLs were already redirects on master, and a temporary answer keeps
 the mapping free to change. The header comment in `redirects.config.ts` states the rule; keep to it
 when adding an entry.
@@ -584,8 +592,8 @@ when adding an entry.
 documentation page (`lib/markdown-redirects.ts`): a second redirect from `<source>.md` to
 `<destination>.md`. External destinations and public assets get no twin, nor do pattern sources and
 sources that already end in `.md`. The root overview is served directly at `/index.md`. The twins
-are derived in `redirects()`, never written to the file, cost no proxy invocation, and the redirect
-test checks the combined list.
+are derived in `redirects()`, never written to the file, and the redirect test checks the combined
+list. Markdown requests still run the tracking proxy once before the rewrite.
 
 **Route compaction.** After deriving the twins, `next.config.ts` calls
 `lib/compact-redirects.ts` to group literal aliases with the same destination and permanence into
@@ -603,9 +611,10 @@ That test asserts that every internal destination names a page under `content/do
 (case-sensitively), a file under `public/` or a markdown mirror, that no source is a live page, that
 nothing chains or loops, and that no source is listed twice; it runs over the hand-written list and
 the derived `.md` twins together, and every pattern entry (today, the audit-report PDFs) needs a
-dedicated test of its own. Never hand-write a `.md` entry: the twin is derived. The 17 legacy
-`features/` sources point at the `configuration/**` pages that replaced the retired decision pages,
-as master's own redirects did.
+dedicated test of its own. Never hand-write a `.md` entry: the twin is derived. The 19 legacy
+`features/` sources point at the `chain-config/**` and `extend-the-protocol/**` pages that replaced
+the retired decision pages; two point at the Arbitrum Foundation's AEP fee calculator, as master's
+own redirects did.
 
 `scripts/lib/master-routes.test.ts` covers the entries that are missing.
 `scripts/data/master-routes.json` is a frozen list of the 294 page routes docs.arbitrum.io served
@@ -640,7 +649,8 @@ one exists. The list comes from the September 2026 review's sweep of 1,609 maste
 - **Root `.md` mirrors** (`/<slug>.md`, about 300 URLs master told readers to fetch). Served
   directly: `next.config.ts` rewrites `/<slug>.md` and `/index.md` onto the mirror route, and derives
   a `.md` twin for every alias in `redirects.config.ts` whose destination is a page, so the "append
-  `.md`" habit still works and no proxy runs.
+  `.md`" habit still works. Routing uses rewrites and redirects; the tracking proxy still runs once
+  for the markdown request and records a PostHog event in production.
 - **Audit-report PDFs** at `/assets/files/<name>-<hash>.pdf` (47 files). Redirected by one pattern
   entry to `/audit-reports/<name>.pdf` under `public/`.
 - **`/category/best-practices`, `/category/troubleshooting`**, Docusaurus generated-index pages for
@@ -841,10 +851,11 @@ docs metadata, and the contribute guide's links home. The build also catches a p
 but throws at prerender. Nothing in the build reaches the network after `pnpm install`.
 
 The same job installs Chromium and runs `pnpm test:browser` against the server at `localhost`.
-`tests/browser/findable-panels.test.ts` simulates Find's `beforematch` event on an inactive tab
-and a closed accordion, verifies their rendered content becomes visible, and checks manual tab
-and accordion controls. It exercises the built components and styles, without automating the
-browser's native Find UI. See [Commands](README.md#commands) for local setup.
+`tests/browser/findable-panels.test.ts` checks that native text search discovers inactive tab
+and closed accordion content, then uses text fragments to trigger trusted `beforematch` events
+and verifies that the matched content becomes visible. It also simulates repeated `beforematch`
+events and checks manual tab and accordion controls. It exercises the built components and
+styles, without automating the browser's native Find UI. See [Commands](README.md#commands) for local setup.
 
 `merge-controlled.yml` fails a PR while it carries the `merge-controlled` label. Which checks block
 a merge is decided by branch rules on GitHub, not by these files: until an admin makes it a
@@ -861,23 +872,22 @@ There is no pre-commit hook. Run the gates yourself before you push.
 `scripts/lib/strip-code.ts`, so an example inside a fence is never reported. The one exception is
 `var-in-code`, which looks only inside code.
 
-| Rule                           | Catches                                                                                                                                  |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                        |
-| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                       |
-| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                             |
-| `site-import`                  | An `import … from '@site/…'` or `'@theme/…'` line, which has no module here and fails the build                                          |
-| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx`, nor a Fumadocs default, nor imported in the file, which throws at render  |
-| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                    |
-| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                       |
-| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                          |
-| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                 |
-| `component-in-heading`         | A JSX component such as `<Var>` in a heading; Fumadocs compiles heading text into the TOC with no component in scope, so the build fails |
-| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                    |
-| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                     |
-| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                         |
-| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                 |
-| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                 |
+| Rule                           | Catches                                                                                                                                 |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                       |
+| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                      |
+| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                            |
+| `site-import`                  | An `import … from '@site/…'` or `'@theme/…'` line, which has no module here and fails the build                                         |
+| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx`, nor a Fumadocs default, nor imported in the file, which throws at render |
+| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                   |
+| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                      |
+| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                         |
+| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                |
+| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                   |
+| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                    |
+| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                        |
+| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                |
+| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                |
 
 `strip-code.ts` is the one "ignore code" scanner for every script; import it rather than writing
 another.
@@ -932,10 +942,11 @@ partial changed. It is the only place the token is used; `faq:check` in CI is of
   the page and line; comment-only `{/* */}` expressions pass, and a symlinked upstream file is
   refused. Without that check an upstream `export` would run at build with the Vercel environment
   and in every reader's browser. A relative link to a slug this site does not publish stops the
-  run. `stylus:check` still needs the network, so it is not a CI gate.
+  run. `stylus:check` fetches upstream by default; `--source-path` uses a local clone containing
+  the pinned commit. It is not a CI gate.
 - **The precompile tables** escape upstream Solidity and Go text (signatures, doc comments, event
   names) before it lands in JSX, and each generated partial must pass the same `assertInertMdx`:
-  no expression, and no element other than the table elements.
+  no executable expression, and no element other than the table elements.
 - **`content/docs/run-a-node/nitro/cli-flags-reference.mdx`'s code cells** escape `|` and refuse a
   `\|` in a flag default with a named error, since that sequence would end the code span and put
   upstream text into live MDX.

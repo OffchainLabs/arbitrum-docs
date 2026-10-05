@@ -67,10 +67,12 @@ opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mo
 
 `arbitrumPageSchema` in `lib/page-schema.ts` extends the Fumadocs page schema; `source.config.ts`
 applies it to the `docs` collection. Required: `title` and `description` (both trimmed, not empty).
-Optional: `sidebar_label`, `content_type`, `author`, `sme`. `content_type`
+Optional: `sidebar_label`, `content_type`, `author`, `sme`,
+`third_party_content_owner` (the third-party maintainer's GitHub username), `target_audience`,
+`user_story`. The last two are authoring metadata; preserve existing values. `content_type`
 is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
 required field or an out-of-enum value fails `frontmatter:check` and the build. There is no
-`user_story`, `draft` or date field; last-modified dates come from git. Partials and glossary
+`draft` or date field; last-modified dates come from git. Partials and glossary
 entries do not carry this contract.
 
 ## Rules that break a build or a page
@@ -99,9 +101,6 @@ entries do not carry this contract.
   `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
 - **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check`
   rule R3 only forbids ESM-importing such a partial, which no component does.
-- **No JSX component in a heading.** Fumadocs compiles heading text into the table of contents
-  with no component in scope, so a `<Var>` or `<Term>` there fails the build
-  (`component-in-heading`). Put the variable in the first sentence below the heading.
 - **No link in a heading, and no `<tr>` directly in `<table>`.** Both break React hydration (rules
   `link-in-heading`, `tr-in-table`).
 - **A plain `.css` import in a component registered in `components/mdx.tsx` adds a render-blocking
@@ -128,6 +127,8 @@ entries do not carry this contract.
   their generators.
 - **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
+  The canonical branch is `master`, including after migration. Keep the variable and PR
+  template links aimed at `master`, regardless of the current development branch.
 - **Components.** `components/mdx.tsx` is the registry.
 - **Redirects.** `redirects.config.ts`, hand-maintained. Never hand-edit between the
   `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
@@ -135,8 +136,9 @@ entries do not carry this contract.
   nor a redirect source. `next.config.ts` derives a `.md` twin for every entry that lands on a
   documentation page; never hand-write one. It then groups exact aliases with the same destination
   and permanence through `lib/compact-redirects.ts` to reduce Next's custom route count. Keep editing
-  individual entries. A source that was a Docusaurus page route is `permanent: true`; the rest are
-  `permanent: false`.
+  individual entries. Former canonical Docusaurus page routes, published files and this site's
+  moved URLs use `permanent: true`; `/welcome/get-started` keeps master's 308. Other legacy
+  aliases use `permanent: false`. See [INTERNALS.md](INTERNALS.md#redirects) for the full rule.
 - **Routing.** `next.config.ts` rewrites `/<slug>.md` and `/index.md` to the `/llms.mdx/` mirror
   and sets the response headers from `lib/http-headers.ts` (security headers, report-only CSP,
   `Link` on `/`, CORS on the markdown surface). The `og/` and `llms.mdx/` routes have

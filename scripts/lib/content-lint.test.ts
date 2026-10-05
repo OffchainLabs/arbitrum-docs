@@ -79,3 +79,23 @@ test('a local image, a JSX remote src or an image in code is fine', () => {
   assert.deepEqual(rules('```md\n![x](https://example.com/a.png)\n```\n'), []);
   assert.deepEqual(rules('![x][logo]\n\n[logo]: /img/a.png\n'), []);
 });
+
+test('a Docusaurus @@variable@@ token is reported; in code it is fine', () => {
+  assert.deepEqual(rules('Run Nitro @@nitroVersionTag=v3.11.4@@ today.\n'), [
+    'docusaurus-var-token',
+  ]);
+  assert.deepEqual(rules('Use @@nitroVersionTag@@.\n'), ['docusaurus-var-token']);
+  assert.deepEqual(rules('`@@nitroVersionTag@@`\n'), []);
+  assert.deepEqual(rules('An email a@@b is not a token.\n'), []);
+});
+
+test('a quicklook anchor is reported; in a fence it is fine', () => {
+  assert.deepEqual(rules("<a data-quicklook-from='dapp'>dApp</a>\n"), ['quicklook-anchor']);
+  assert.deepEqual(rules("```html\n<a data-quicklook-from='dapp'>dApp</a>\n```\n"), []);
+});
+
+test('an @site or @theme import is reported; in a fence it is fine', () => {
+  assert.deepEqual(rules("import X from '@site/docs/partials/_x.mdx';\n"), ['site-import']);
+  assert.deepEqual(rules('import Tabs from "@theme/Tabs";\n'), ['site-import']);
+  assert.deepEqual(rules("```js\nimport X from '@site/x';\n```\n"), []);
+});

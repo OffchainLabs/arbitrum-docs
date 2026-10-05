@@ -424,3 +424,19 @@ test('the llms index and the mirror route', { skip: !baseUrl }, async (t) => {
     }
   });
 });
+
+test('page weight', { skip: !baseUrl }, async (t) => {
+  await t.test('a plain docs page links exactly three stylesheets', async () => {
+    // INTERNALS.md#page-weight-and-what-loads-late: a plain `.css` import in a component that
+    // `components/mdx.tsx` reaches adds a render-blocking stylesheet to every docs page.
+    for (const path of ['/stylus', livePath]) {
+      const html = documentOnly(await head(path));
+      const sheets = [...html.matchAll(/<link\b[^>]*\brel="stylesheet"[^>]*>/g)].map((m) => m[0]);
+      assert.equal(
+        sheets.length,
+        3,
+        `${path} links ${sheets.length} stylesheets:\n${sheets.join('\n')}`,
+      );
+    }
+  });
+});
