@@ -343,6 +343,25 @@ test('legacy URLs', { skip: !baseUrl }, async (t) => {
     assert.equal(pdf.status, 200);
     await pdf.arrayBuffer();
   });
+
+  await t.test(
+    'grouped aliases keep queries, HTML fragments and markdown destinations',
+    async () => {
+      for (const path of [
+        '/how-arbitrum-works/deep-dives/parent-chain-pricing',
+        '/how-arbitrum-works/reference/parent-chain-pricing',
+      ]) {
+        for (const suffix of ['', '.md']) {
+          const [status, to] = await location(`${path}${suffix}?utm_source=legacy`);
+          assert.equal(status, 307, path);
+          const target = new URL(to ?? '', baseUrl);
+          assert.equal(target.pathname, `/how-arbitrum-works/deep-dives/gas-and-fees${suffix}`);
+          assert.equal(target.hash, suffix ? '' : '#parent-chain-gas-pricing');
+          assert.equal(target.search, '?utm_source=legacy');
+        }
+      }
+    },
+  );
 });
 
 test('response headers', { skip: !baseUrl }, async (t) => {
