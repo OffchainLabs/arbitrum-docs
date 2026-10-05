@@ -51,7 +51,9 @@
   --vadm-bg: rgba(3, 102, 214, 0.1);
 }
 
-.warning {
+/* `caution` is an alias of `warning`, matching Docusaurus admonition semantics */
+.warning,
+.caution {
   --vadm-color: #f0b400;
   --vadm-bg: rgba(240, 180, 0, 0.1);
 }

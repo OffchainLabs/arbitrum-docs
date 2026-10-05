@@ -36,7 +36,7 @@ const globalVars = {
   l1AvgBlockTimeSeconds: L1_BLOCK_TIME_SECONDS,
 
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.11.3-beb2108',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.12.1-70fa99a',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.6-551a39b3',
 
   // Node snapshots (taken around April 20th, 2013)
@@ -53,7 +53,7 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v3.11.3',
+  nitroVersionTag: 'v3.12.1',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
@@ -65,7 +65,7 @@ const globalVars = {
   nitroPrecompilesCommit: 'e7e6566ae5b0efa0ad4d779138f64ead11928c66',
   nitroPrecompilesPathToInterfaces: '',
 
-  goEthereumCommit: '0f618f330b8d78457524839997f0041d86f3cd1a',
+  goEthereumCommit: '5eee8f546e7602b7deeef7909f291bbebc77e233',
 
   nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',

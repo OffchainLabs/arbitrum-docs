@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import { DangerIcon, InfoIcon, NoteIcon, TipIcon, WarningIcon } from './Icons';
 import styles from './styles.module.css';
 
-type AdmonitionType = 'note' | 'tip' | 'info' | 'warning' | 'danger';
+type AdmonitionType = 'note' | 'tip' | 'info' | 'warning' | 'caution' | 'danger';
 
 interface AdmonitionProps {
   type: AdmonitionType;
@@ -16,6 +16,7 @@ const defaultTitles: Record<AdmonitionType, string> = {
   tip: 'Tip',
   info: 'Info',
   warning: 'Warning',
+  caution: 'Caution',
   danger: 'Danger',
 };
 
@@ -24,6 +25,7 @@ const icons: Record<AdmonitionType, React.ReactNode> = {
   tip: <TipIcon className={styles.icon} />,
   info: <InfoIcon className={styles.icon} />,
   warning: <WarningIcon className={styles.icon} />,
+  caution: <WarningIcon className={styles.icon} />,
   danger: <DangerIcon className={styles.icon} />,
 };
 

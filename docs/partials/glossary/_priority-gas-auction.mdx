@@ -1,0 +1,7 @@
+---
+title: Priority Gas Auction (PGA)
+key: priority-gas-auction
+titleforSort: Priority Gas Auction
+---
+
+A [transaction ordering policy](/intro/glossary#transaction-ordering-policy) in which you bid for ordering by attaching a [priority fee](/intro/glossary#priority-fee) to each transaction. The [Sequencer](/intro/glossary#sequencer) sorts transactions by that fee, highest first, and evaluates the order in short rounds that run several times per block. An anti-starvation boost raises the queue position of transactions still waiting at the end of a round, so a transaction that pays no priority fee is still included within a small number of blocks. PGA replaces [Timeboost](/intro/glossary#timeboost) on [Arbitrum One](/intro/glossary#arbitrum-one).

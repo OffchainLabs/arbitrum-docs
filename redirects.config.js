@@ -16,6 +16,11 @@ export const redirects = [
     from: '/stylus/how-tos/adding-support-for-new-languages',
     to: '/stylus/how-tos/deploying-non-rust-wasm-contracts',
   },
+  // Manual redirect — STF gentle introduction replaced by the STF deep dive
+  {
+    from: '/how-arbitrum-works/deep-dives/stf-gentle-intro',
+    to: '/how-arbitrum-works/deep-dives/stf',
+  },
   // AUTO-GENERATED REDIRECTS START
   {
     from: '/build-decentralized-apps/how-to-estimate-gas',

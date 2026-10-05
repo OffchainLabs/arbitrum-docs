@@ -22,6 +22,11 @@
       "permanent": false
     },
     {
+      "source": "/how-arbitrum-works/deep-dives/stf-gentle-intro",
+      "destination": "/how-arbitrum-works/deep-dives/stf",
+      "permanent": false
+    },
+    {
       "source": "/build-decentralized-apps/how-to-estimate-gas",
       "destination": "/arbitrum-essentials/how-to-estimate-gas",
       "permanent": false
@@ -1209,7 +1214,7 @@
     },
     {
       "source": "/(how-arbitrum-works/geth-at-the-core/?)",
-      "destination": "/how-arbitrum-works/deep-dives/stf-gentle-intro",
+      "destination": "/how-arbitrum-works/deep-dives/stf",
       "permanent": false
     },
     {
@@ -1279,7 +1284,7 @@
     },
     {
       "source": "/(how-arbitrum-works/state-transition-function/stf-gentle-intro/?)",
-      "destination": "/how-arbitrum-works/deep-dives/stf-gentle-intro",
+      "destination": "/how-arbitrum-works/deep-dives/stf",
       "permanent": false
     },
     {
