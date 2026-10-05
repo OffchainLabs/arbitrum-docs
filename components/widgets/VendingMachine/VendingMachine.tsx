@@ -2,7 +2,7 @@
 
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { type Address, createPublicClient, createWalletClient, custom, isAddress } from 'viem';
+import { type Address, createPublicClient, custom, isAddress } from 'viem';
 // viem ships the `Window.ethereum` augmentation as its own module. Importing it beats re-declaring
 // the global here, where a second copy elsewhere in the app would conflict. Type-only, so nothing
 // reaches the bundle.
@@ -11,13 +11,14 @@ import type {} from 'viem/window';
 import { cn } from '@/lib/cn';
 
 import { vendingMachineAbi } from './abi';
+import { type VendingMachineMode, requestCupcake } from './wallet.ts';
 
 /**
  * The three widgets the quickstart renders, in page order. A closed union rather than `string`
  * because `web2` and `web3` are opposite halves of the page's argument: a value that is neither
  * must not quietly pick one of them.
  */
-export type VendingMachineMode = 'web2' | 'web3-localhost' | 'web3-arb-sepolia';
+export type { VendingMachineMode } from './wallet.ts';
 
 const WEB3_MODES = new Set<string>(['web3-localhost', 'web3-arb-sepolia']);
 
@@ -33,28 +34,6 @@ const CUPCAKE_VISIBLE_MS = 5500;
  * timeout error carries a `shortMessage`, so it surfaces as the component's normal error text.
  */
 const RECEIPT_TIMEOUT_MS = 90_000;
-
-const ARBITRUM_SEPOLIA_CHAIN_ID = 421614;
-/**
- * Local devnets the tutorial can be followed on: Anvil and Hardhat (31337), Ganache (1337) and the
- * Nitro test node (412346). Any other chain is refused, so a wallet left on a mainnet never pays
- * real gas for a cupcake.
- */
-const LOCAL_DEVNET_CHAIN_IDS = new Set([31337, 1337, 412346]);
-
-/**
- * Why the wallet's current chain is wrong for this widget, or null when it is right. The Sepolia
- * widget needs Arbitrum Sepolia. The localhost widget needs one of the local devnet ids above.
- */
-function chainProblem(type: VendingMachineMode, chainId: number): string | null {
-  if (type === 'web3-arb-sepolia' && chainId !== ARBITRUM_SEPOLIA_CHAIN_ID) {
-    return `Switch your wallet to Arbitrum Sepolia (chain ID ${ARBITRUM_SEPOLIA_CHAIN_ID}) and try again. It is on chain ID ${chainId}.`;
-  }
-  if (type === 'web3-localhost' && !LOCAL_DEVNET_CHAIN_IDS.has(chainId)) {
-    return `Your wallet is on chain ID ${chainId}. Switch it to your local devnet (chain ID 31337 for the Anvil node this tutorial starts) and try again.`;
-  }
-  return null;
-}
 
 function truncateAddress(text: string) {
   if (!text) return 'no name';
@@ -78,8 +57,9 @@ function errorMessage(error: unknown) {
  * then on Arbitrum Sepolia). That contrast is the entire point of the page.
  *
  * It uses viem over the injected EIP-1193 provider, which keeps reads and writes on whatever
- * network the reader picked in their wallet. No chain or contract address is hardcoded, because
- * readers deploy their own instance from Remix.
+ * supported demo network the reader picked in their wallet. The write pins that network so a
+ * switch during the balance read cannot send on another chain. Readers deploy their own contract
+ * instance from Remix and supply its address.
  */
 export function VendingMachine({ id, type = 'web2' }: { id?: string; type?: VendingMachineMode }) {
   // Membership test rather than `type !== 'web2'`: MDX call sites are not type-checked, and a
@@ -204,35 +184,11 @@ export function VendingMachine({ id, type = 'web2' }: { id?: string; type?: Vend
 
       if (isWeb3) {
         const { account, contract } = requireWeb3Inputs();
-        const provider = requireProvider();
-        const publicClient = createPublicClient({
-          transport: custom(provider),
-          pollingInterval: 1_000,
-        });
-        const walletClient = createWalletClient({ transport: custom(provider) });
-        // Prompts the wallet to connect if it has not been connected yet.
-        const [signer] = await walletClient.requestAddresses();
-        if (!signer) throw new Error('No account selected in the wallet.');
-        // Checked before any write, so a wallet left on a mainnet never pays real gas for a demo.
-        const problem = chainProblem(type, await walletClient.getChainId());
-        if (problem) throw new Error(problem);
-
-        const before = Number(
-          await publicClient.readContract({
-            address: contract,
-            abi: vendingMachineAbi,
-            functionName: 'getCupcakeBalanceFor',
-            args: [account],
-          }),
-        );
-        const hash = await walletClient.writeContract({
-          account: signer,
-          // The reader picks the network in their wallet; `chainProblem` above has vetted it.
-          chain: null,
-          address: contract,
-          abi: vendingMachineAbi,
-          functionName: 'giveCupcakeTo',
-          args: [account],
+        const { publicClient, before, hash } = await requestCupcake({
+          provider: requireProvider(),
+          type,
+          account,
+          contract,
         });
         await publicClient.waitForTransactionReceipt({ hash, timeout: RECEIPT_TIMEOUT_MS });
         const after = Number(
