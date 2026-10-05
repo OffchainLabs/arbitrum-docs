@@ -110,13 +110,16 @@ Four rules:
 - **Once per file, on the first mention.** Leave every later mention of the same term as plain text.
   A second popover on the same term tells the reader nothing new and turns the page into a field of
   links.
-- **Only for terms that have an entry.** `pnpm references:check` is a blocking gate and fails the
-  build on an id with no matching file, so a typo is caught rather than silently dropped.
+- **Only for terms that have an entry.** `pnpm references:check` is a blocking CI gate and fails
+  on an id with no matching file, so a typo is caught rather than silently dropped. (`pnpm build`
+  itself runs only `check-links`; the other gates run in CI and by hand.)
 - **Add the entry rather than skipping the link** when a term deserves one and has none. A new file
   under `content/glossary/` needs only `id` and `title` in its frontmatter, plus the definition as
   its body.
-- **Never inside a partial.** `content/partials/` is off limits for `<Term>`, and
-  `pnpm references:check` rule R3 fails on one. Put the link in the page that includes the partial.
+- **Inside a partial, link the partial's first mention.** A `<Term>` works in a partial: the
+  include is spliced into the page at build time, so the component renders in the page. A partial
+  cannot know what its including pages already link, so apply the once-per-file rule to the partial
+  itself.
 
 `<ReferenceList>` renders the whole glossary and belongs only on the glossary index page.
 
@@ -153,7 +156,7 @@ so leave both spellings alone until it is decided.
 - **Document types.** Which of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`,
   `troubleshooting` or `faq` a page is, and what each one owes the reader, is in
   [CONTRIBUTE.md](CONTRIBUTE.md#document-type-conventions). The enum itself is enforced by the
-  frontmatter schema in `source.config.ts`.
+  frontmatter schema in `lib/page-schema.ts`, through `pnpm frontmatter:check` and the build.
 - **Callout syntax.** Use `<Callout type="…">`, with `type` set to `info`, `warn`, `error`, `idea`
   or `success`. Docusaurus `:::` directives do not render here, and `pnpm content:lint` rule
   `docusaurus-directive` is a blocking gate that fails on one.

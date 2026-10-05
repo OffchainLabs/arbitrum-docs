@@ -294,7 +294,7 @@ export function lintSource(source: string, options: LintOptions = {}): Finding[]
     add('quicklook-anchor', m.index, 'write <Term id="…">…</Term> instead');
   }
 
-  for (const m of text.matchAll(/\b(?:from|import)\s+['"](@(?:site|theme)\/[^'"]*)['"]/g)) {
+  for (const m of text.matchAll(/(?:from|import)\s+['"](@(?:site|theme)\/[^'"]*)['"]/g)) {
     add(
       'site-import',
       m.index,
