@@ -94,7 +94,7 @@ function inlineCode(content: string): string {
 /** Render a rich-text array to inline MDX. */
 export function renderRichText(
   items: NotionRichText[],
-  { allowLinks = true }: { allowLinks?: boolean } = {},
+  { allowLinks = true, tableCell = false }: { allowLinks?: boolean; tableCell?: boolean } = {},
 ): string {
   // Notion can split one code span across multiple rich-text items. Fence the combined value
   // once so neighbouring delimiters cannot merge into a different run of backticks.
@@ -124,6 +124,13 @@ export function renderRichText(
 
       let out: string;
       if (code) {
+        // Check after coalescing: Notion can split the backslash and pipe across code items.
+        if (tableCell && content.includes('\\|')) {
+          throw new RenderError(
+            `table cell code ${JSON.stringify(content)} contains a backslash directly before a pipe; ` +
+              'GFM cannot preserve it in a table code span. Put the example outside the table.',
+          );
+        }
         out = inlineCode(content);
       } else {
         // Other formatting: extract whitespace and apply markers to core only
@@ -300,7 +307,9 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
       // GFM consumes the backslash protecting a pipe, including inside inline code. Leave other
       // escapes alone: doubling an MDX escape would expose its brace or tag to the parser.
       const cells = rows.map((r) =>
-        (payloadOf(r).cells ?? []).map((c) => renderRichText(c).replace(/\|/g, '\\|')),
+        (payloadOf(r).cells ?? []).map((c) =>
+          renderRichText(c, { tableCell: true }).replace(/\|/g, '\\|'),
+        ),
       );
       if (cells.length === 0) return null;
       const width = Math.max(...cells.map((r) => r.length));

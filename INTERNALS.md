@@ -958,7 +958,10 @@ publishing`, routed by `Target document slugs` and ordered by `FAQ order index`.
   edit. Answers carry literal values, no `<Var>`, and no `<Term>`. A block the renderer does not
   support, a Notion link, an unsupported link protocol, or a link to no page fails the fetch and
   names the Notion page. Inline-code delimiters are longer than embedded backtick runs, and link
-  destinations encode Markdown and MDX delimiters. Before formatting and again before writing
+  destinations encode Markdown and MDX delimiters. A table code value containing a backslash
+  directly before a pipe is rejected during the fetch, including when Notion splits the value
+  across adjacent code items: GFM cannot preserve that sequence in a table code span. Put that
+  example outside the table. Before formatting and again before writing
   or checking a partial, `assertInertMdx` rejects executable MDX and permits only the renderer's
   `<Callout type="info">` elements with that single literal attribute. Rejected content leaves
   the destination partial untouched; fix the answer in Notion or put the example in code. The same

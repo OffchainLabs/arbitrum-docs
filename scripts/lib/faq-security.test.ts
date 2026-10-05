@@ -171,6 +171,50 @@ describe('FAQ imported text stays inert', () => {
     assert.throws(() => buildPartial(snapshot(renderBlocks([table]))), /mdxTextExpression/);
   });
 
+  for (const content of [String.raw`a\|b`, String.raw`a\\|b`]) {
+    for (const split of [false, true]) {
+      it(`rejects backslash-pipe table code (split=${split}): ${content}`, () => {
+        const items = split
+          ? [text(content.slice(0, -2), true), text(content.slice(-2), true)]
+          : [text(content, true)];
+        const table: NotionBlock = {
+          id: 'table',
+          type: 'table',
+          table: { has_column_header: true },
+          children: [
+            { id: 'header', type: 'table_row', table_row: { cells: [[text('Header')]] } },
+            { id: 'row', type: 'table_row', table_row: { cells: [items] } },
+          ],
+        };
+        assert.throws(() => renderBlocks([table]), {
+          name: 'RenderError',
+          message: /table cell.*backslash directly before a pipe/,
+        });
+      });
+    }
+  }
+
+  it('preserves supported table escapes and backslash-pipe code outside tables', async () => {
+    const code = String.raw`a\b | c`;
+    const prose = String.raw`a\|b`;
+    const table: NotionBlock = {
+      id: 'table',
+      type: 'table',
+      table: { has_column_header: true },
+      children: [
+        { id: 'header', type: 'table_row', table_row: { cells: [[text('Header')]] } },
+        { id: 'code', type: 'table_row', table_row: { cells: [[text(code, true)]] } },
+        { id: 'prose', type: 'table_row', table_row: { cells: [[text(prose)]] } },
+      ],
+    };
+    const html = await render(renderBlocks([table, paragraph([text(prose, true)])]));
+    assert.ok(html.includes(`<td><code>${code}</code></td>`), html);
+    assert.ok(html.includes(`<td>${prose}</td>`), html);
+    assert.ok(html.includes(`<p><code>${prose}</code></p>`), html);
+    assert.equal((html.match(/<table>/g) ?? []).length, 1, html);
+    assert.equal((html.match(/<td>/g) ?? []).length, 2, html);
+  });
+
   it('preserves MDX escapes and code delimiters inside GFM table cells', async () => {
     const table: NotionBlock = {
       id: 'table',
@@ -186,6 +230,7 @@ describe('FAQ imported text stays inert', () => {
       ],
     };
     const html = await render(renderBlocks([table]));
+    assert.ok(html.includes('<table>'), html);
     assert.ok(html.includes('&lt;T&gt; | '), html);
     assert.ok(html.includes('<code>`code` | pipe</code>'), html);
     assert.equal(Reflect.get(globalThis, 'faqSecurityProbe'), undefined);
