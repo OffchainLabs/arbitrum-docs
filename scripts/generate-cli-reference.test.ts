@@ -23,6 +23,7 @@ import {
 } from './lib/cli-reference-page.ts';
 import {
   type GoTree,
+  goFiles,
   indexGoTree,
   literalFields,
   splitArgs,
@@ -141,7 +142,7 @@ before(() => {
     fs.mkdirSync(path.dirname(abs), { recursive: true });
     fs.writeFileSync(abs, source);
   }
-  indexed = indexGoTree([{ modulePath: MODULE, dir: '', absDir: workDir }]);
+  indexed = indexGoTree([{ modulePath: MODULE, dir: '', absDir: workDir }], workDir);
 });
 
 after(() => fs.rmSync(workDir, { recursive: true, force: true }));
@@ -157,6 +158,48 @@ function readFixtureFlags() {
     },
   });
 }
+
+describe('go-source symlinks (review 09.16)', () => {
+  it('refuses a symlinked .go file and skips a symlinked directory', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'go-symlink-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'go-symlink-outside-'));
+    t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+    fs.writeFileSync(path.join(outside, 'secret.go'), 'package secret\n');
+    fs.mkdirSync(path.join(root, 'pkg'));
+    fs.writeFileSync(path.join(root, 'pkg', 'real.go'), 'package pkg\n');
+    fs.symlinkSync(outside, path.join(root, 'linked-dir'));
+
+    assert.deepEqual(goFiles(root), [path.join(root, 'pkg', 'real.go')]);
+
+    fs.symlinkSync(path.join(outside, 'secret.go'), path.join(root, 'pkg', 'linked.go'));
+    assert.throws(() => goFiles(root), /pkg\/linked\.go is a symlink/);
+    assert.throws(
+      () => indexGoTree([{ modulePath: MODULE, dir: '', absDir: root }], root),
+      /linked\.go is a symlink/,
+    );
+  });
+
+  for (const link of ['go-ethereum', 'modules']) {
+    it(`refuses a module reached through a symlink at ${link}`, (t) => {
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'go-module-symlink-'));
+      t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+      const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'go-module-outside-'));
+      t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+      fs.mkdirSync(path.join(outside, 'go-ethereum'));
+      fs.writeFileSync(path.join(outside, 'go-ethereum', 'secret.go'), 'package secret\n');
+      fs.symlinkSync(
+        link === 'modules' ? outside : path.join(outside, 'go-ethereum'),
+        path.join(root, link),
+      );
+      const absDir = path.join(root, link, ...(link === 'modules' ? ['go-ethereum'] : []));
+      assert.throws(
+        () => indexGoTree([{ modulePath: MODULE, dir: 'go-ethereum', absDir }], root),
+        /is a symlink, or sits under one/,
+      );
+    });
+  }
+});
 
 describe('go-source', () => {
   it('strips comments without letting an apostrophe open a literal', () => {

@@ -19,6 +19,9 @@
  * Each built page is checked before it is written: a body holding an `import`, `export`, `{…}`
  * expression or JSX the generator did not write fails the run (`assertStaticBody`), because the
  * build compiles and runs MDX.
+ *
+ * A symlinked page is refused: `git clone` checks symlinks out as symlinks, and one could
+ * point anywhere on the machine running the generator.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -40,7 +43,9 @@ import { stringifyMeta } from './lib/doc-links.ts';
 import {
   StaleFileError,
   type WriteOrCheckOptions,
+  assertDirectoryInCheckout,
   isCheckMode,
+  readRegularFile,
   runScript,
   writeOrCheck,
 } from './lib/generated-partial.ts';
@@ -78,7 +83,7 @@ function parseArgs(argv: string[]): Args {
 }
 
 /**
- * Put the upstream tree under `workDir` and return the directory holding the app-router pages.
+ * Put the upstream tree under `workDir` and return its checkout root and app-router directory.
  *
  * A local clone is read through `git archive`, not off the working tree, so a checkout with local
  * edits or a stale index cannot leak into the generated pages, the same rule
@@ -90,7 +95,7 @@ function materializeSource({
 }: {
   sourcePath: string | null;
   workDir: string;
-}): string {
+}): { treeDir: string; appDir: string } {
   const treeDir = path.join(workDir, 'stylus-by-example');
   if (!/^[0-9a-f]{40}$/.test(repoRef)) {
     throw new Error(
@@ -139,7 +144,8 @@ function materializeSource({
         `has been restructured and scripts/data/stylus-examples.data.ts needs sourceRoot updated`,
     );
   }
-  return appDir;
+  assertDirectoryInCheckout(appDir, treeDir);
+  return { treeDir, appDir };
 }
 
 /**
@@ -201,7 +207,7 @@ async function main(): Promise<void> {
   let written = 0;
   let missingBanner: string[] = [];
   try {
-    const appDir = materializeSource({ sourcePath, workDir });
+    const { treeDir, appDir } = materializeSource({ sourcePath, workDir });
 
     // A report, not a failure, and printed before the writes so it survives a staleness throw:
     // this is how an example added upstream gets noticed at all.
@@ -220,7 +226,7 @@ async function main(): Promise<void> {
         }
 
         const { content, banner } = buildPage({
-          source: fs.readFileSync(sourceFile, 'utf-8'),
+          source: readRegularFile(sourceFile, treeDir),
           context,
           marker: MARKER,
           frontmatterDefaults,

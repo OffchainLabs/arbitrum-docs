@@ -188,14 +188,17 @@ async function main(): Promise<void> {
   try {
     const treeDir = materializeNitro({ tag, nitroPath, workDir });
 
-    const { dirs, fileImports } = indexGoTree([
-      { modulePath: NITRO_MODULE, dir: '', absDir: treeDir },
-      {
-        modulePath: GETH_MODULE,
-        dir: 'go-ethereum',
-        absDir: path.join(treeDir, 'go-ethereum'),
-      },
-    ]);
+    const { dirs, fileImports } = indexGoTree(
+      [
+        { modulePath: NITRO_MODULE, dir: '', absDir: treeDir },
+        {
+          modulePath: GETH_MODULE,
+          dir: 'go-ethereum',
+          absDir: path.join(treeDir, 'go-ethereum'),
+        },
+      ],
+      treeDir,
+    );
 
     const { flags, problems } = extractFlags({
       dirs,
