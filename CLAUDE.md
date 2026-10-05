@@ -31,7 +31,9 @@ Grounding rule: State only what you read in a file, and cite it as `file:line`. 
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # http://localhost:3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
+pnpm frontmatter:check # every documentation page satisfies lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts
+pnpm test:browser      # Chromium interactions against a running production server; see README.md
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build
 
@@ -63,7 +65,7 @@ opens a PR that gets no CI run of its own.
 `source.config.ts` extends the Fumadocs page schema. Required: `title` (trimmed, not empty) and
 `description` (trimmed). Optional: `sidebar_label`, `content_type`, `author`, `sme`. `content_type`
 is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
-required field or an out-of-enum value fails `types:check` and the build. There is no
+required field or an out-of-enum value fails `frontmatter:check` and the build. There is no
 `user_story`, `draft` or date field; last-modified dates come from git. Partials and glossary
 entries do not carry this contract.
 
@@ -90,7 +92,8 @@ entries do not carry this contract.
   stylesheet to every docs page.** Use Tailwind utilities or `app/global.css`, or put the component
   behind `next/dynamic` like the widgets in `components/widgets/`. A docs page loads three
   stylesheets.
-- **`types:check` proves the schema, not the render.** Open changed pages on
+- **`types:check` checks TypeScript; `frontmatter:check` validates page metadata.** Neither
+  proves the render. Open changed pages on
   `http://localhost:3000`; on `127.0.0.1` React does not hydrate.
 
 ## Where things live

@@ -1,7 +1,6 @@
 ---
 name: content-audit
 description: Run full documentation quality audit, covering MDX structure, internal links, glossary references, contract addresses, variables, formatting, tests, and types. Triggers on "audit docs", "check docs quality", "find problems", "content audit".
-disable-model-invocation: true
 ---
 
 # Content Audit

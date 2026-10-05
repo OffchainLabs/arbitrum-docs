@@ -74,18 +74,20 @@ reads the reader's IP address. See [Routing and `proxy.ts`](INTERNALS.md#routing
 
 ```bash
 pnpm types:check   # the main verification gate
+pnpm frontmatter:check # every documentation page satisfies the frontmatter schema
 pnpm test          # tooling tests, including the sidebar and redirect checks
 pnpm check-links   # broken internal links and MDX fragments
 pnpm content:lint  # MDX that compiles but renders wrong
 pnpm format        # prettier, in place
 ```
 
-CI runs eight blocking checks, then a `pnpm build` that serves the built site and checks it over
+CI runs nine blocking checks, then a `pnpm build` that serves the built site and checks it over
 HTTP. `pnpm build` runs the same link check first, so a broken link fails the Vercel deploy too. See
 [The gates](INTERNALS.md#the-gates) for the full list. There is no pre-commit hook, so run these
 yourself.
 
-`types:check` proves the schema, not the render. It passes on a page that serves literal `:::` or
+`types:check` checks TypeScript; `frontmatter:check` validates page metadata. Neither proves
+the render. Type checking passes on a page that serves literal `:::` or
 `undefined`. **Always confirm content changes in a browser.**
 
 ## Layout

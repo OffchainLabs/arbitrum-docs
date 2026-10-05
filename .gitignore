@@ -42,8 +42,9 @@ next-env.d.ts
 # `.claude/agents/` in a working copy also hold whatever personal skills and agents the developer
 # has installed, and a blanket re-include would commit those on the next `git add -A`. Only the
 # four arbitrum-docs skills and the one agent below belong in the repo; add another here
-# deliberately. `.agents/` (Codex skills) and `.codex/` are tracked wholesale, so they carry no
-# rule here; keep personal files out of them.
+# deliberately. Existing `.agents/` (Codex skills) and `.codex/` files are shared tooling;
+# there is no ignore rule for those directories here. Keep new personal files out of commits,
+# and preserve shared files that contributor-local Claude or Codex setups may reference.
 !/.claude/
 /.claude/*
 !/.claude/docs/

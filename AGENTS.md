@@ -3,9 +3,9 @@
 > **Machine-facing. Not written for humans, and not the canonical documentation.**
 >
 > This file is what Codex, and any other agent that reads `AGENTS.md`, sees first. It is a pointer,
-> not a copy. Everything an agent needs is in [CLAUDE.md](CLAUDE.md), which is kept current, and in
-> the four human documents below. Do not add material here; edit those files. The one block that
-> lives here is the Next.js notice at the end, which `next dev` rewrites.
+> a guide to the shared documentation. Read [CLAUDE.md](CLAUDE.md) and the four human documents
+> below for repository conventions. Edit the canonical documents first, then update the pointers
+> and summaries here. The Next.js notice at the end is rewritten by `next dev`.
 
 Arbitrum documentation portal on Next.js 16 and Fumadocs 16, with Tailwind 4 and TypeScript. English
 MDX docs under `content/docs/`, served at `/<slug>`, deployed on Vercel.
@@ -33,7 +33,7 @@ verify by reading.
 
 ## Commands
 
-The same list as in CLAUDE.md. When the two disagree, CLAUDE.md is right.
+These commands come from `package.json`; see CLAUDE.md and README.md for the workflows.
 
 ```bash
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
@@ -41,6 +41,7 @@ pnpm dev               # http://localhost:3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
 pnpm frontmatter:check # every page's frontmatter satisfies the schema in lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts
+pnpm test:browser      # Chromium interactions against a running production server; see README.md
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build
 
@@ -64,9 +65,14 @@ pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
 
 ## Skills
 
-Codex skills live under `.agents/skills/`. The writer skills (`new-doc`, `content-audit`) and the
-diagram and video skills (`arbitrum-brand-svg-diagrams`, `arbitrum-brand-video-explainers`) exist
-only under `.claude/skills/`; read them from there rather than looking for a copy here.
+Codex skills live under `.agents/skills/`; Claude skills live under `.claude/skills/`.
+The writer and brand skills are available at both paths. Keep their instructions in sync.
+
+Contributors may use Claude, Codex, or both, with local configuration that references these
+files. Preserve existing skills, hooks, assets, and environment files when updating guidance;
+do not infer that a file is unused from the absence of tracked consumers. The retained Codex
+hooks contain legacy paths and need to be checked against the contributor's local integration.
+See [INTERNALS.md](INTERNALS.md#contributor-agent-setups).
 
 <!-- BEGIN:nextjs-agent-rules -->
 

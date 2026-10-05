@@ -21,8 +21,9 @@ content/**/meta.json
 # Assistant guidance; parts of CLAUDE.md are rewritten by `next dev`
 CLAUDE.md
 
-# Agent config for other tools. .agents, .codex and AGENTS.md are tracked but kept out of
-# Prettier because they mirror text Prettier does not own; .superpowers is per-developer state.
+# Shared Codex skills, config and guidance use tool-specific or mirrored formats.
+# Keep them out of automatic formatting; preserve paths used by contributor-local agent setups.
+# .superpowers is per-developer state.
 .agents
 .codex
 .superpowers

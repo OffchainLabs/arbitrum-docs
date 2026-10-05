@@ -90,16 +90,16 @@ for one.
 
 ## Gotchas
 
-- **`.svg` extension guarantees nothing.** Always grep for `base64`/`mxfile` , 
+- **`.svg` extension guarantees nothing.** Always grep for `base64`/`mxfile`:
   `head -c 2000` can miss a base64 blob that starts later in the file (some
   Serif/Affinity exports reference embedded images via `<use xlink:href>` well
   past the header), so `scan.sh` greps the whole file.
-- **Genuine large vector exists** (e.g. an 80 KB Graphviz UML with no base64) , 
+- **Genuine large vector exists** (e.g. an 80 KB Graphviz UML with no base64), and
   it is _not_ flagged, correctly. Size alone isn't the signal; base64 is.
 - `rg` may be rewritten to `grep` by a shell hook here; `scan.sh` uses `grep -r`
   directly to avoid that.
 
 ## See also
 
-- `arbitrum-brand-svg-diagrams` (under `.claude/skills/`) does the actual conversion.
+- `arbitrum-brand-svg-diagrams` (under `.agents/skills/` and `.claude/skills/`) does the actual conversion.
 - Subagent `diagram-converter` (`.codex/agents/diagram-converter.toml`) parallelizes conversion across the list.
