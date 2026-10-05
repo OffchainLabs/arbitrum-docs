@@ -67,10 +67,11 @@ opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mo
 
 `source.config.ts` extends the Fumadocs page schema. Required: `title` (trimmed, not empty) and
 `description` (trimmed). Optional: `sidebar_label`, `content_type`, `author`, `sme`,
-`third_party_content_owner` (the third-party maintainer's GitHub username). `content_type`
+`third_party_content_owner` (the third-party maintainer's GitHub username), `target_audience`,
+`user_story`. The last two are authoring metadata; preserve existing values. `content_type`
 is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
 required field or an out-of-enum value fails `frontmatter:check` and the build. There is no
-`user_story`, `draft` or date field; last-modified dates come from git. Partials and glossary
+`draft` or date field; last-modified dates come from git. Partials and glossary
 entries do not carry this contract.
 
 ## Rules that break a build or a page

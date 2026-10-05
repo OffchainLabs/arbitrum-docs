@@ -123,7 +123,7 @@ sme: reviewing-sme-handle
 ---
 ```
 
-`content_type`, `author`, `sme` and `sidebar_label` are optional. When set, `content_type` must be
+`content_type`, `author`, `sme`, `sidebar_label` and `user_story` are optional. When set, `content_type` must be
 one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq`.
 
 The sidebar comes from the `meta.json` in each directory: a page's directory is its place, and
