@@ -262,7 +262,9 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
     case 'table': {
       const rows = children.filter((c) => c.type === 'table_row');
       const cells = rows.map((r) =>
-        (payloadOf(r).cells ?? []).map((c) => renderRichText(c).replace(/\|/g, '\\|')),
+        (payloadOf(r).cells ?? []).map((c) =>
+          renderRichText(c).replace(/\\/g, '\\\\').replace(/\|/g, '\\|'),
+        ),
       );
       if (cells.length === 0) return null;
       const width = Math.max(...cells.map((r) => r.length));
