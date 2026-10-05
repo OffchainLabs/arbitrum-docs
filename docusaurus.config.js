@@ -188,13 +188,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      announcementBar: {
-        backgroundColor: '#e3246e',
-        textColor: 'white',
-        content:
-          'Reactivate your Stylus contracts to ensure they remain callable - <a href="https://docs.arbitrum.io/stylus/gentle-introduction#activation" target="_blank">here’s how to do it.</a>',
-        isCloseable: false,
-      },
       navbar: {
         title: 'Arbitrum Docs',
         logo: {
