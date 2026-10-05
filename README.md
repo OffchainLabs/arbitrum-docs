@@ -1,8 +1,8 @@
 # Arbitrum docs portal
 
-Arbitrum documentation portal, on Next.js 16 and Fumadocs. It replaced the Docusaurus site at
-[`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs), which is archived.
-Serves English MDX docs; deployed on Vercel.
+Arbitrum documentation portal, on Next.js 16 and Fumadocs. The migration lives on the `fumadocs`
+branch of [`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs); `master`
+contains the Docusaurus site. Serves English MDX docs; deployed on Vercel.
 
 This file covers **how to work on the docs.** For how the codebase works and why, see
 [INTERNALS.md](INTERNALS.md). Contributing a page or a PR? Start with
@@ -17,6 +17,9 @@ New to Fumadocs, or arriving from the old Docusaurus site? Start with
 cover the differences that cause the most mistakes.
 
 ## Setup
+
+Check out `fumadocs` before installing dependencies. Create your contribution branch from it
+and open pull requests against `fumadocs` while the migration is in progress.
 
 ```bash
 pnpm install      # runs a postinstall that generates .source/
