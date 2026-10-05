@@ -343,6 +343,25 @@ test('legacy URLs', { skip: !baseUrl }, async (t) => {
     assert.equal(pdf.status, 200);
     await pdf.arrayBuffer();
   });
+
+  await t.test(
+    'grouped aliases keep queries, HTML fragments and markdown destinations',
+    async () => {
+      for (const path of [
+        '/how-arbitrum-works/deep-dives/parent-chain-pricing',
+        '/how-arbitrum-works/reference/parent-chain-pricing',
+      ]) {
+        for (const suffix of ['', '.md']) {
+          const [status, to] = await location(`${path}${suffix}?utm_source=legacy`);
+          assert.equal(status, 307, path);
+          const target = new URL(to ?? '', baseUrl);
+          assert.equal(target.pathname, `/how-arbitrum-works/deep-dives/gas-and-fees${suffix}`);
+          assert.equal(target.hash, suffix ? '' : '#parent-chain-gas-pricing');
+          assert.equal(target.search, '?utm_source=legacy');
+        }
+      }
+    },
+  );
 });
 
 test('response headers', { skip: !baseUrl }, async (t) => {
@@ -372,6 +391,37 @@ test('response headers', { skip: !baseUrl }, async (t) => {
     await response.text();
     assert.ok([200, 308].includes(response.status), String(response.status));
     assert.equal(response.headers.get('access-control-allow-origin'), '*');
+  });
+});
+
+test('the llms index and the mirror route', { skip: !baseUrl }, async (t) => {
+  await t.test('the index and a mirror declare charset=utf-8', async () => {
+    for (const path of ['/llms.txt', `${livePath}.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 200, path);
+      assert.match(response.headers.get('content-type') ?? '', /charset=utf-8/i, path);
+      await response.text();
+    }
+  });
+
+  await t.test('llms.txt has master title and summary and links each mirror once', async () => {
+    const body = await (await get('/llms.txt')).text();
+    assert.match(body, /^# Arbitrum Documentation\n\n> Official documentation/);
+    const links = [...body.matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1]);
+    assert.ok(links.length > 100);
+    assert.deepEqual(
+      links.filter((l) => !l.endsWith('.md')),
+      [],
+    );
+    assert.equal(new Set(links).size, links.length);
+  });
+
+  await t.test('the mirror route 404s for paths it did not prerender', async () => {
+    for (const path of ['/llms.mdx/docs/zz-junk/content.md', `/llms.mdx${livePath}/other.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
   });
 });
 

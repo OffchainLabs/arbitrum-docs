@@ -26,6 +26,7 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 - [Scripts are TypeScript, run by Node](#scripts-are-typescript-run-by-node)
 - [The gates](#the-gates)
 - [What nothing catches](#what-nothing-catches)
+- [Contributor agent setups](#contributor-agent-setups)
 
 ## What Fumadocs is
 
@@ -82,8 +83,9 @@ mistakes:
 Read `source.config.ts`, `lib/source.ts` and `app/(docs)/[...slug]/page.tsx` together. Nothing else
 reads the `docs` collection. The `glossary` collection has one reader, `lib/references.ts`.
 
-1. `fumadocs-mdx` scans `content/docs/**` and `content/glossary/**`, validates every docs page's
-   frontmatter against the schema in `source.config.ts`, and emits the `.source/` collections.
+1. `fumadocs-mdx` scans `content/docs/**` and `content/glossary/**` and emits the `.source/`
+   collections. `pnpm frontmatter:check` validates every docs page up front; `source.config.ts`
+   applies the same schema when each page compiles.
 2. `lib/source.ts` runs `loader()` over that collection with the Lucide icons plugin and exports
    `source`.
 3. Route handlers read `source`. The docs page renders pages; the `llms.txt`, `llms-full.txt`,
@@ -128,8 +130,9 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 | `content_type`  | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
 | `author`, `sme` | Optional strings                                                                                      |
 
-A missing title or description, or a `content_type` outside the enum, fails `types:check` and the
-build. Nothing renders `content_type`; it is an editorial label kept to one enum so values stay
+A missing title or description, or a `content_type` outside the enum, fails `frontmatter:check`
+and the build. `types:check` does not validate every page's frontmatter. Nothing renders
+`content_type`; it is an editorial label kept to one enum so values stay
 comparable. Partials and glossary entries do not carry this contract.
 
 ## Last modified dates
@@ -630,16 +633,18 @@ Never bypass `engines`.
 
 **`Gates`**, in order:
 
-| Step               | What it proves                                                               |
-| ------------------ | ---------------------------------------------------------------------------- |
-| `types:check`      | Frontmatter schema, generated Next types, and `tsc` over the project         |
-| `test`             | Every `scripts/**/*.test.ts` suite, including the sidebar and redirect tests |
-| `vars:check`       | Every variable reference resolves; the banner keys are valid                 |
-| `references:check` | Every glossary id resolves                                                   |
-| `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file       |
-| `check-links`      | Internal links and their `#fragments` resolve, using the real MDX transforms |
-| `content:lint`     | MDX that compiles but renders wrong (below)                                  |
-| `format:check`     | Prettier                                                                     |
+| Step                | What it proves                                                               |
+| ------------------- | ---------------------------------------------------------------------------- |
+| `types:check`       | Generated collections, Next types, and `tsc` over the project                |
+| `frontmatter:check` | Every documentation page satisfies `lib/page-schema.ts`                      |
+| `test`              | Every `scripts/**/*.test.ts` suite, including the sidebar and redirect tests |
+| `vars:check`        | Every variable reference resolves; the banner keys are valid                 |
+| `references:check`  | Every glossary id resolves                                                   |
+| `contracts:check`   | The contract-address partial matches `@arbitrum/sdk` and its data file       |
+| `faq:check`         | The six FAQ partials match their `content/faq/*.json` snapshots              |
+| `check-links`       | Internal links and their `#fragments` resolve, using the real MDX transforms |
+| `content:lint`      | MDX that compiles but renders wrong (below)                                  |
+| `format:check`      | Prettier                                                                     |
 
 **`Build and HTTP smoke tests`** runs `pnpm build` (which runs `check-links` first), starts the
 server, and runs `scripts/static-docs-http.test.ts`. That suite checks what only a built site
@@ -672,7 +677,7 @@ another.
 
 ### Hand-run tools
 
-None of these is a CI gate. Two workflows run some of them (below):
+Only `faq:check` is also a CI gate. Three workflows run some of them (below):
 
 | Command                                 | Does                                                                                                                                                                                                                                                                                                                               |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -683,6 +688,8 @@ None of these is a CI gate. Two workflows run some of them (below):
 | `pnpm cli:generate` / `:check`          | The Nitro CLI flags page from the pinned tag's Go source                                                                                                                                                                                                                                                                           |
 | `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example`                                                                                                                                                                                                                                                                  |
 | `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                  |
+| `pnpm faq:fetch`                        | The FAQ snapshots in `content/faq/` from the Notion "FAQ CMS" database (needs `NOTION_TOKEN`)                                                                                                                                                                                                                                      |
+| `pnpm faq:generate` / `:check`          | The six `_troubleshooting-*-partial.mdx` partials from the snapshots; offline                                                                                                                                                                                                                                                      |
 
 `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` every Monday at 08:00
 UTC. It never writes `content/vars.json`. It opens `automated/upstream-refresh` as a maintenance
@@ -692,6 +699,10 @@ bump checklist. A stale submodule pin is only reported in the job log; a human r
 the agreed version, runs `nitro:check-release --to <tag>` plus both generators, and opens
 `automated/nitro-bump` as a PR. A PR opened with `GITHUB_TOKEN` triggers no CI run, so review
 either PR's diff and run the gates locally.
+
+`faq-refresh.yml` runs `faq:fetch` and `faq:generate` every Monday at 08:00 UTC with the
+`NOTION_TOKEN` repository secret, and opens `automated/faq-refresh` as a PR when a snapshot or a
+partial changed. It is the only place the token is used; `faq:check` in CI is offline.
 
 ### Generated pages
 
@@ -707,13 +718,22 @@ either PR's diff and run the gates locally.
   sidebar order and follows upstream's teaching sequence. The parent `meta.json` is hand-owned.
   Upstream's `metadata` export is parsed, never evaluated. A relative link to a slug this site does
   not publish stops the run. Nothing upstream is pinned, so `stylus:check` is not a CI gate.
+- **`content/partials/_troubleshooting-{users,nodes,building,bridging,arbitrum-chain,stylus}-partial.mdx`**
+  are written by `pnpm faq:generate` from `content/faq/<key>.json`, which `pnpm faq:fetch` reads
+  from the Notion "FAQ CMS" database: rows that are `Publishable` and `4 - Continuously
+publishing`, routed by `Target document slugs` and ordered by `FAQ order index`. The mapping is
+  `lib/faq-pages.ts`. Edit a question in Notion, never in the partial; `faq:check` fails on a hand
+  edit. Answers carry literal values, no `<Var>`, and no `<Term>`. A block the renderer does not
+  support, a Notion link, or a link to no page fails the fetch and names the Notion page. The same
+  snapshots feed the `FAQPage` JSON-LD that `lib/faq.ts` emits on those six pages.
 
 Generated `meta.json` files are not formatted: `.prettierignore` excludes `content/**/meta.json`,
 and the generators write them with `format: false`.
 
 ## What nothing catches
 
-- **Rendering.** `types:check` proves the schema, not the render. Open changed pages on
+- **Rendering.** `types:check` checks TypeScript; `frontmatter:check` validates page metadata.
+  Neither proves the render. Open changed pages on
   `http://localhost:3000`, not `127.0.0.1`, where React does not hydrate.
 - **Runtime anchors.** `check-links` validates compiled heading ids but runs no components. Click
   changed anchors and confirm the target is visible under the sticky header.
@@ -724,3 +744,19 @@ and the generators write them with `format: false`.
   knows only the routes master published; for a newer page, every gate passes while its URL starts
   to 404.
 - **A remote image that has rotted.** Nothing requests third-party images.
+
+## Contributor agent setups
+
+Contributors can use Claude, Codex, or both. Shared agent files live under `.claude/`,
+`.agents/`, and `.codex/`. Their paths can also be referenced by contributor-local
+configuration that is outside this repository.
+
+Keep existing skill, hook, asset, and environment files when updating agent guidance.
+An obsolete path or a missing tracked consumer does not establish that a file is unused.
+Retiring a file requires an explicit migration for the local setups that use it. Keeping
+a Claude implementation does not replace a Codex hook invocation, or vice versa.
+
+The duplicated writer and brand skill instructions should stay in sync across `.claude/skills/`
+and `.agents/skills/`. The retained Codex hook configuration and scripts still contain legacy
+paths; contributors must check those paths against their local integration. CI does not run
+these agent hooks, and the repository does not establish which local agent loads them.

@@ -29,25 +29,30 @@ next-env.d.ts
 /.serena
 # Ignore .claude/ contents but keep the design docs in .claude/docs/ tracked.
 # All three lines are load-bearing, in this order:
-#   1. un-ignore the directory itself — the user's global excludesFile
+#   1. un-ignore the directory itself: the user's global excludesFile
 #      (~/.gitignore_global) ignores `.claude/`, and git will not descend into an
 #      excluded directory, so no negation below it can take effect until this
 #      repo-level rule (higher precedence) re-admits it;
 #   2. ignore the *contents* rather than the directory, because git cannot
 #      re-include a path whose parent directory is excluded;
 #   3. re-include the design docs, and the shared agent tooling this tree carries to
-#      arbitrum-docs on landing — its own .claude/.gitignore, settings.json, hooks/ and agents/.
+#      arbitrum-docs on landing: its own .claude/.gitignore, settings.json, hooks/ and agents/.
 #
-# Skills are listed one by one on purpose. `.claude/skills/` in a working copy also holds whatever
-# personal skills the developer has installed, and a blanket re-include would commit those on the
-# next `git add -A`. Only the five arbitrum-docs tracks belong in the repo; add a sixth here
-# deliberately.
+# Skills, hooks and agents are listed one by one on purpose. `.claude/skills/` and
+# `.claude/agents/` in a working copy also hold whatever personal skills and agents the developer
+# has installed, and a blanket re-include would commit those on the next `git add -A`. Only the
+# four arbitrum-docs skills and the one agent below belong in the repo; add another here
+# deliberately. Existing `.agents/` (Codex skills) and `.codex/` files are shared tooling;
+# there is no ignore rule for those directories here. Keep new personal files out of commits,
+# and preserve shared files that contributor-local Claude or Codex setups may reference.
 !/.claude/
 /.claude/*
 !/.claude/docs/
 !/.claude/.gitignore
 !/.claude/settings.json
+/.claude/agents/*
 !/.claude/agents/
+!/.claude/agents/diagram-converter.md
 /.claude/hooks/*
 !/.claude/hooks/
 !/.claude/hooks/optimize-svg.sh

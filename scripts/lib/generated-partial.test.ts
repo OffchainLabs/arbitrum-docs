@@ -1,15 +1,22 @@
 /**
- * Tests for `generatedMarker`, the shared do-not-edit comment both
+ * Tests for the shared generator helpers in `generated-partial.ts`. Among them is
+ * `generatedMarker`, the shared do-not-edit comment both
  * `generate-contract-addresses.ts` and `generate-precompile-tables.ts` prepend to what they
  * write. Pinned here so the two generators cannot drift in wording, and so a change
  * to the shape is a deliberate, reviewed edit rather than something that slips in unnoticed.
  */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 
-import { assertInertMdx, generatedMarker } from './generated-partial.ts';
+import {
+  assertInertMdx,
+  generatedMarker,
+  readRegularFile,
+  setOutput,
+} from './generated-partial.ts';
 import { NODE_INTERFACE_MARKER, PRECOMPILE_MARKER } from './precompile-tables.ts';
 
 const PRECOMPILE_DIR = path.join('content', 'partials', 'precompile-tables');
@@ -177,5 +184,130 @@ describe('assertInertMdx', () => {
 
   it('turns an MDX parse error into one naming the file', () => {
     assert.throws(() => check('returns x if a<b\n'), /^Error: fixture\.mdx: not valid MDX/);
+  });
+});
+
+describe('readRegularFile', () => {
+  it('reads a regular file and refuses a symlinked file or directory', (t) => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'read-regular-'));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'read-regular-outside-'));
+    t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+    fs.writeFileSync(path.join(outside, 'secret'), 'SECRET');
+    fs.mkdirSync(path.join(root, 'real'));
+    fs.writeFileSync(path.join(root, 'real', 'page.mdx'), 'ok');
+    fs.symlinkSync(path.join(outside, 'secret'), path.join(root, 'real', 'linked.mdx'));
+    fs.symlinkSync(outside, path.join(root, 'linked-dir'));
+
+    assert.equal(readRegularFile(path.join(root, 'real', 'page.mdx'), root), 'ok');
+    assert.throws(
+      () => readRegularFile(path.join(root, 'real', 'linked.mdx'), root),
+      /real\/linked\.mdx is a symlink/,
+    );
+    assert.throws(
+      () => readRegularFile(path.join(root, 'linked-dir', 'secret'), root),
+      /linked-dir\/secret is a symlink, or sits under one/,
+    );
+  });
+
+  for (const link of ['src', 'src/app']) {
+    it(`refuses an upstream source directory linked at ${link}`, (t) => {
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'source-root-symlink-'));
+      t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+      const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'source-root-outside-'));
+      t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+      const relative = 'basic_examples/hello_world/page.mdx';
+      fs.mkdirSync(path.join(outside, 'app', path.dirname(relative)), { recursive: true });
+      fs.writeFileSync(path.join(outside, 'app', relative), 'outside checkout');
+      fs.mkdirSync(path.join(root, 'src'));
+      if (link === 'src') fs.rmdirSync(path.join(root, 'src'));
+      fs.symlinkSync(link === 'src' ? outside : path.join(outside, 'app'), path.join(root, link));
+      assert.throws(
+        () => readRegularFile(path.join(root, 'src/app', relative), root),
+        /is a symlink, or sits under one/,
+      );
+    });
+  }
+
+  it('refuses a linked checkout root', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'linked-checkout-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    fs.mkdirSync(path.join(dir, 'outside'));
+    fs.writeFileSync(path.join(dir, 'outside/page.mdx'), 'outside checkout');
+    const root = path.join(dir, 'checkout');
+    fs.symlinkSync(path.join(dir, 'outside'), root);
+    assert.throws(() => readRegularFile(path.join(root, 'page.mdx'), root), /root|is a symlink/);
+  });
+
+  it('refuses a regular file outside the checkout and a directory used as a file', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'checkout-boundary-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    const root = path.join(dir, 'checkout');
+    fs.mkdirSync(root);
+    fs.writeFileSync(path.join(dir, 'secret'), 'outside checkout');
+    assert.throws(() => readRegularFile(path.join(dir, 'secret'), root), /outside the upstream/);
+    assert.throws(
+      () => readRegularFile(path.join(root, '../secret'), root),
+      /outside the upstream/,
+    );
+    assert.throws(() => readRegularFile(root, root), /not a regular file/);
+  });
+
+  it('allows system directory aliases above the trusted checkout', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'checkout-parent-alias-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    fs.mkdirSync(path.join(dir, 'parent/checkout'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'parent/checkout/page.mdx'), 'ok');
+    fs.symlinkSync(path.join(dir, 'parent'), path.join(dir, 'alias'));
+    const root = path.join(dir, 'alias/checkout');
+    assert.equal(readRegularFile(path.join(root, 'page.mdx'), root), 'ok');
+  });
+});
+
+describe('setOutput', () => {
+  const withOutputFile = (fn: (file: string) => void): void => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'set-output-'));
+    const file = path.join(dir, 'outputs');
+    const previous = process.env.GITHUB_OUTPUT;
+    process.env.GITHUB_OUTPUT = file;
+    try {
+      fn(file);
+    } finally {
+      if (previous === undefined) delete process.env.GITHUB_OUTPUT;
+      else process.env.GITHUB_OUTPUT = previous;
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  };
+
+  it('appends one name=value line', () => {
+    withOutputFile((file) => {
+      setOutput('newer_release', 'v3.11.5');
+      assert.equal(fs.readFileSync(file, 'utf-8'), 'newer_release=v3.11.5\n');
+    });
+  });
+
+  for (const value of ['v1.2.3\nupdates_made=true', 'v1.2.3\rx', '\n']) {
+    it(`refuses a value holding a line break (${JSON.stringify(value)}) and writes nothing`, () => {
+      withOutputFile((file) => {
+        assert.throws(() => setOutput('newer_release', value), /may not contain a newline/);
+        assert.equal(fs.existsSync(file), false);
+      });
+    });
+  }
+
+  it('refuses a name holding a line break', () => {
+    withOutputFile(() => {
+      assert.throws(() => setOutput('a\nb', 'x'), /the name of step output/);
+    });
+  });
+
+  it('refuses a line break even outside Actions, so a local run fails the way CI would', () => {
+    const previous = process.env.GITHUB_OUTPUT;
+    delete process.env.GITHUB_OUTPUT;
+    try {
+      assert.throws(() => setOutput('x', 'a\nb'), /may not contain a newline/);
+    } finally {
+      if (previous !== undefined) process.env.GITHUB_OUTPUT = previous;
+    }
   });
 });

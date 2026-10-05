@@ -16,6 +16,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { assertDirectoryInCheckout, readRegularFile } from './generated-partial.ts';
+
 /** A captured `name = expression` declaration: the raw right-hand side and the file it is in. */
 export interface GoAssignment {
   expr: string;
@@ -72,11 +74,26 @@ const SKIP_DIRS = new Set([
   'node_modules',
 ]);
 
-/** Every non-test `.go` file under `dir`. */
+/**
+ * Every non-test `.go` file under `dir`.
+ *
+ * A symlinked directory is not entered (a `Dirent` for a link is not a directory), and a symlink
+ * named `*.go` throws: `git clone` checks links out as links, and one could point at any file on
+ * the machine running the generator.
+ */
 export function goFiles(dir: string, out: string[] = []): string[] {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name.startsWith('.')) continue;
     const abs = path.join(dir, entry.name);
+    if (entry.isSymbolicLink()) {
+      if (entry.name.endsWith('.go') && !entry.name.endsWith('_test.go')) {
+        throw new Error(
+          `${abs} is a symlink. The Go reader reads only regular files from the checkout, so a ` +
+            `link cannot feed it a file from outside the tree.`,
+        );
+      }
+      continue;
+    }
     if (entry.isDirectory()) {
       if (SKIP_DIRS.has(entry.name)) continue;
       goFiles(abs, out);
@@ -247,8 +264,10 @@ function colonAtDepthZero(src: string): number {
  * `roots` maps a Go module path to the directory holding it, so the Nitro tree and its vendored
  * go-ethereum submodule can be indexed together. Nitro's `execution.rpc.*` flags are registered
  * inside go-ethereum's `arbitrum` package, so the submodule is not optional.
+ * `checkoutRoot` anchors every module's directory and file checks at the materialized checkout,
+ * rather than trusting an upstream-controlled module directory as a new root.
  */
-export function indexGoTree(roots: readonly GoRoot[]): GoTree {
+export function indexGoTree(roots: readonly GoRoot[], checkoutRoot: string): GoTree {
   const dirs = new Map<string, GoPackage>();
   const fileImports = new Map<string, GoImports>();
 
@@ -278,8 +297,9 @@ export function indexGoTree(roots: readonly GoRoot[]): GoTree {
 
   for (const root of roots) {
     const absRoot = root.absDir;
+    assertDirectoryInCheckout(absRoot, checkoutRoot);
     for (const file of goFiles(absRoot)) {
-      const src = stripComments(fs.readFileSync(file, 'utf8'));
+      const src = stripComments(readRegularFile(file, checkoutRoot));
       const rel = path.relative(absRoot, path.dirname(file));
       const dir = root.dir ? path.join(root.dir, rel) : rel;
       const entry = dirEntry(dir);

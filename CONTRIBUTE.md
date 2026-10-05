@@ -185,6 +185,7 @@ run `pnpm test`. Deleting a page is not a move, so write its redirect by hand in
 
 ```bash
 pnpm types:check       # regenerates .source/, generates Next types, tsc --noEmit (the main gate)
+pnpm frontmatter:check # every documentation page satisfies the frontmatter schema
 pnpm test              # tooling tests, including the sidebar tree and redirects
 pnpm vars:check        # every <Var name> and {var:name} resolves
 pnpm references:check  # every <Term id> resolves
@@ -200,8 +201,9 @@ it over HTTP. Both block. There is no pre-commit hook, so nothing runs on `git c
 If you touched MDX with components, imports or raw JSX, run `pnpm build` yourself before you push.
 It catches a page that compiles but throws while rendering, which `types:check` does not.
 
-A green PR does not by itself mean the content renders correctly: `types:check` proves the
-frontmatter schema, not the render, and it exits 0 on a page that serves a literal `:::` or the
+A green PR does not by itself mean the content renders correctly: `types:check` checks TypeScript
+and `frontmatter:check` validates page metadata. Neither proves the render. Type checking passes
+on a page that serves a literal `:::` or the
 string `undefined`. **Always open a changed page on `http://localhost:3000` and confirm it looks
 right**, in light and dark mode if you touched styling.
 

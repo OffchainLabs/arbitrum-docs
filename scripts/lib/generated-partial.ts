@@ -138,6 +138,20 @@ export async function writeOrCheck(
  * output plumbing.
  */
 export function setOutput(name: string, value: string): void {
+  // The file is line-oriented: a newline in either half would end this pair early and start a
+  // second one of the value's choosing. Checked before the GITHUB_OUTPUT test so a local run
+  // fails the same way CI would.
+  for (const [label, text] of [
+    ['name', name],
+    ['value', value],
+  ]) {
+    if (/[\r\n]/.test(text)) {
+      throw new Error(
+        `setOutput: the ${label} of step output ${JSON.stringify(name)} may not contain a ` +
+          `newline, which would inject a second output line: ${JSON.stringify(text)}`,
+      );
+    }
+  }
   const outputFile = process.env.GITHUB_OUTPUT;
   if (!outputFile) return;
   fs.appendFileSync(outputFile, `${name}=${value}\n`);
@@ -256,6 +270,50 @@ export function assertInertMdx(
         problems.map((problem) => `  - ${problem}`).join('\n'),
     );
   }
+}
+
+/**
+ * Read a file from an upstream checkout, refusing one reached through a symlink.
+ *
+ * `git clone` and `tar` both check a symlink out as a symlink, so an upstream file (or a directory
+ * above it) could point at any file on the machine running the generator, and its text would be
+ * read as if upstream had written it. `root` must be the materialized checkout root, not an
+ * upstream-controlled subdirectory such as `src/app` or a module inside the checkout. System
+ * aliases above that root (for example macOS's `/var`) are resolved before comparing paths.
+ */
+function assertPathInCheckout(file: string, root: string): fs.Stats {
+  const relative = path.relative(root, file);
+  if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+    throw new Error(`${file} is outside the upstream checkout ${root}.`);
+  }
+  if (fs.lstatSync(root).isSymbolicLink()) {
+    throw new Error(`${root} is a symlink, not a materialized upstream checkout root.`);
+  }
+  const realRoot = fs.realpathSync(root);
+  const expected = path.join(realRoot, relative);
+  const stat = fs.lstatSync(file);
+  if (stat.isSymbolicLink() || fs.realpathSync(file) !== expected) {
+    throw new Error(
+      `${relative || file} is a symlink, or sits under one, in the upstream tree. The ` +
+        `generator reads only regular files, so a link cannot publish a file from outside the clone.`,
+    );
+  }
+  return stat;
+}
+
+/** Validate a directory before traversing it, using the same checkout boundary as file reads. */
+export function assertDirectoryInCheckout(dir: string, root: string): void {
+  if (!assertPathInCheckout(dir, root).isDirectory()) {
+    throw new Error(`${dir} is not a directory in the upstream checkout.`);
+  }
+}
+
+/** Read a regular file, rejecting symlinks and paths outside the materialized checkout root. */
+export function readRegularFile(file: string, root: string): string {
+  if (!assertPathInCheckout(file, root).isFile()) {
+    throw new Error(`${file} is not a regular file in the upstream checkout.`);
+  }
+  return fs.readFileSync(file, 'utf-8');
 }
 
 /**

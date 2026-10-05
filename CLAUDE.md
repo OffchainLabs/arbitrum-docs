@@ -31,7 +31,9 @@ Grounding rule: State only what you read in a file, and cite it as `file:line`. 
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # http://localhost:3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
+pnpm frontmatter:check # every documentation page satisfies lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts
+pnpm test:browser      # Chromium interactions against a running production server; see README.md
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build
 
@@ -39,6 +41,7 @@ pnpm start             # serve the production build
 pnpm vars:check        # every <Var name> and {var:name} resolves; banner keys are valid
 pnpm references:check  # every <Term id> resolves to a content/glossary entry
 pnpm contracts:check   # the contract-address partial is current
+pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
 pnpm content:lint      # MDX that compiles but renders wrong
 pnpm format:check      # prettier (pnpm format writes)
@@ -51,19 +54,21 @@ pnpm contracts:generate                # contract-address partial
 pnpm cli:generate                      # Nitro CLI flags page (:check compares)
 pnpm stylus:generate                   # Stylus by Example pages (:check compares)
 pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
+pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN); then faq:generate
+pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
 ```
 
 CI (`.github/workflows/ci.yml`) runs the gates in one job, then `pnpm build` plus
 `scripts/static-docs-http.test.ts` against the running build in a second. There is no pre-commit
 hook. `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` on Mondays and
-opens a PR that gets no CI run of its own.
+opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mondays for the Notion FAQ snapshots.
 
 ## Frontmatter contract
 
 `source.config.ts` extends the Fumadocs page schema. Required: `title` (trimmed, not empty) and
 `description` (trimmed). Optional: `sidebar_label`, `content_type`, `author`, `sme`. `content_type`
 is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
-required field or an out-of-enum value fails `types:check` and the build. There is no
+required field or an out-of-enum value fails `frontmatter:check` and the build. There is no
 `user_story`, `draft` or date field; last-modified dates come from git. Partials and glossary
 entries do not carry this contract.
 
@@ -90,7 +95,8 @@ entries do not carry this contract.
   stylesheet to every docs page.** Use Tailwind utilities or `app/global.css`, or put the component
   behind `next/dynamic` like the widgets in `components/widgets/`. A docs page loads three
   stylesheets.
-- **`types:check` proves the schema, not the render.** Open changed pages on
+- **`types:check` checks TypeScript; `frontmatter:check` validates page metadata.** Neither
+  proves the render. Open changed pages on
   `http://localhost:3000`; on `127.0.0.1` React does not hydrate.
 
 ## Where things live
@@ -115,6 +121,7 @@ entries do not carry this contract.
 - **Theme.** Tokens are `--color-fd-*`; never `--ifm-*`. PostCSS config lives in `package.json`.
 - **Generated pages.** `content/docs/stylus/stylus-by-example/` and
   `content/docs/run-a-node/nitro/cli-flags-reference.mdx`. Change their generators, not the pages.
+  The six `content/partials/_troubleshooting-*-partial.mdx` come from `content/faq/*.json`; edit them in Notion.
 
 Details for each are in [INTERNALS.md](INTERNALS.md).
 
