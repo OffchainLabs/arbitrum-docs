@@ -1,6 +1,6 @@
 {
   "docsRepositoryUrl": "https://github.com/OffchainLabs/arbitrum-docs",
-  "docsRepositoryBranch": "fumadocs",
+  "docsRepositoryBranch": "master",
 
   "arbOneChainId": 42161,
   "novaChainId": 42170,

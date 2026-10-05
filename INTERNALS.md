@@ -314,9 +314,9 @@ writes a docs-repository URL in full. `_know-more-tools-box-partial.mdx` also us
 and is covered only by that last check.
 `.github/pull_request_template.md` stays hardcoded because GitHub renders it, not this site.
 
-During the migration, `docsRepositoryBranch` is `fumadocs`, which contains the Next.js content
-tree and workflow guide. Contributions and edit links target that branch. When the migration
-lands on `master`, change this value and the PR template's file links together.
+The canonical documentation branch is `master`, including after the Fumadocs migration.
+Keep `docsRepositoryBranch` and the PR template's file links aimed at `master`; development
+branches do not change this value.
 
 ### Announcement banner
 

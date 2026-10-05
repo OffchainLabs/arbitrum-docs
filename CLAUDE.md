@@ -113,8 +113,8 @@ entries do not carry this contract.
   from a page and file-relative from another partial. Two are generated; edit their generators.
 - **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
-  During migration, `docsRepositoryBranch` is `fumadocs`. At cutover to `master`, update it and
-  the PR template's file links together.
+  The canonical branch is `master`, including after migration. Keep the variable and PR
+  template links aimed at `master`, regardless of the current development branch.
 - **Components.** `components/mdx.tsx` is the registry.
 - **Redirects.** `redirects.config.ts`. Never hand-edit between the `AUTO-GENERATED` markers.
   `move-doc` appends one entry and touches no other; `pnpm test` names any entry left chaining.

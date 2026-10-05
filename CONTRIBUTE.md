@@ -1,16 +1,15 @@
 # Contributing to the Arbitrum docs
 
 Thank you for considering a contribution to the Arbitrum documentation portal. This repo is a
-Next.js 16 / Fumadocs migration on the `fumadocs` branch of
+Next.js 16 / Fumadocs site in
 [`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs). The content model,
-tooling and gates differ from the Docusaurus site on `master`. If something here
+tooling and gates differ from the previous Docusaurus site. If something here
 conflicts with [README.md](README.md) or [INTERNALS.md](INTERNALS.md), those two are canonical.
 This file exists to get a new contributor from zero to an open PR.
 
 ## Setup
 
-Check out `fumadocs` before installing dependencies. Create your contribution branch from it
-and open pull requests against `fumadocs` while the migration is in progress.
+Create your contribution branch from `master` and open pull requests against `master`.
 
 ```bash
 pnpm install      # runs a postinstall that generates .source/
