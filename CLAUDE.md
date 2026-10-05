@@ -81,16 +81,25 @@ entries do not carry this contract.
 - **Node 22 only** (`>=22.18 <23`), pnpm 10. Run `nvm use 22`; never bypass `engines`. Every script
   is TypeScript run directly by Node, and a relative import carries its `.ts` extension.
 - **Never use `next/font/google`.** Fonts are self-hosted in `public/fonts/` and loaded with
-  `next/font/local`, so the build never fetches.
+  `next/font/local`, so the build never fetches. `pnpm test` greps for the import.
 - **Never import `lib/source` from a client component**, directly or through a module that imports
-  it. It pulls the compiled collection into the browser bundle, and no gate notices.
+  it. It pulls the compiled collection into the browser bundle. `pnpm test` walks the imports of
+  every `'use client'` module.
 - **A `<Var>` does not evaluate inside a fenced block or inline code.** It ships as the literal tag
   (`content:lint` rule `var-in-code`). In a link destination or `href`, write `{var:name}` instead
   (rule `var-in-link`). A `{var:name}` in prose fails the build.
 - **A remote markdown image renders broken.** Commit it under `public/img/`, or write
   `<ImageZoom><img src="https://…" alt="…" /></ImageZoom>` (rule `remote-image`).
 - **Callouts are `<Callout type="info|warn|error|idea|success">`.** A Docusaurus `:::` line renders
-  as text (rule `docusaurus-directive`).
+  as text (rule `docusaurus-directive`); another type fails `callout-type`; markdown in `title`
+  prints literally (`markdown-in-title`); a one-line Callout glued to the next paragraph breaks
+  hydration (`block-component-in-paragraph`). Put a Callout on its own lines.
+- **Docusaurus habits fail `content:lint`.** `@@name@@` (`docusaurus-var-token`),
+  `<a data-quicklook-from>` (`quicklook-anchor`), `import … from '@site/…'` (`site-import`), a JSX
+  tag that is neither registered in `components/mdx.tsx` nor imported (`unknown-component`), and
+  `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
+- **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check` no
+  longer forbids it.
 - **No link in a heading, and no `<tr>` directly in `<table>`.** Both break React hydration (rules
   `link-in-heading`, `tr-in-table`).
 - **A plain `.css` import in a component registered in `components/mdx.tsx` adds a render-blocking
@@ -110,7 +119,9 @@ entries do not carry this contract.
   renames a page. Never write a `[Label](/section/page)` link entry for a page in this repo; use a
   `"../path"` entry. `scripts/sidebar.test.ts` checks the tree.
 - **Partials.** `content/partials/`, included with `<include cwd>content/partials/…</include>`
-  from a page and file-relative from another partial. Two are generated; edit their generators.
+  from a page and file-relative from another partial. Write links inside a partial root-absolute;
+  `check-links` checks those and reports a missing include with its line. Two are generated; edit
+  their generators.
 - **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
   The canonical branch is `master`, including after migration. Keep the variable and PR

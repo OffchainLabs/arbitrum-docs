@@ -109,7 +109,8 @@ the render. Type checking passes on a page that serves literal `:::` or
 
 ## Write a page
 
-Every page needs a `title` and a `description`. A missing one fails the build.
+Every page needs a `title` and a `description`. A missing one fails `pnpm frontmatter:check` and
+the build. `pnpm types:check` does not see frontmatter, so run the check before you push.
 
 ```mdx
 ---
@@ -271,6 +272,7 @@ owns that block. ([Details](INTERNALS.md#redirects).)
 ```bash
 pnpm dev                 # http://localhost:3000
 pnpm types:check         # regenerate .source/, generate Next types, tsc --noEmit
+pnpm frontmatter:check   # every page's frontmatter satisfies lib/page-schema.ts
 pnpm build               # production build (runs check-links first)
 pnpm start               # serve the production build
 
