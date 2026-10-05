@@ -11,7 +11,12 @@ import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 
-import { assertInertMdx, generatedMarker, readRegularFile, setOutput } from './generated-partial.ts';
+import {
+  assertInertMdx,
+  generatedMarker,
+  readRegularFile,
+  setOutput,
+} from './generated-partial.ts';
 import { NODE_INTERFACE_MARKER, PRECOMPILE_MARKER } from './precompile-tables.ts';
 
 const PRECOMPILE_DIR = path.join('content', 'partials', 'precompile-tables');
@@ -203,6 +208,59 @@ describe('readRegularFile', () => {
       () => readRegularFile(path.join(root, 'linked-dir', 'secret'), root),
       /linked-dir\/secret is a symlink, or sits under one/,
     );
+  });
+
+  for (const link of ['src', 'src/app']) {
+    it(`refuses an upstream source directory linked at ${link}`, (t) => {
+      const root = fs.mkdtempSync(path.join(os.tmpdir(), 'source-root-symlink-'));
+      t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+      const outside = fs.mkdtempSync(path.join(os.tmpdir(), 'source-root-outside-'));
+      t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+      const relative = 'basic_examples/hello_world/page.mdx';
+      fs.mkdirSync(path.join(outside, 'app', path.dirname(relative)), { recursive: true });
+      fs.writeFileSync(path.join(outside, 'app', relative), 'outside checkout');
+      fs.mkdirSync(path.join(root, 'src'));
+      if (link === 'src') fs.rmdirSync(path.join(root, 'src'));
+      fs.symlinkSync(link === 'src' ? outside : path.join(outside, 'app'), path.join(root, link));
+      assert.throws(
+        () => readRegularFile(path.join(root, 'src/app', relative), root),
+        /is a symlink, or sits under one/,
+      );
+    });
+  }
+
+  it('refuses a linked checkout root', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'linked-checkout-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    fs.mkdirSync(path.join(dir, 'outside'));
+    fs.writeFileSync(path.join(dir, 'outside/page.mdx'), 'outside checkout');
+    const root = path.join(dir, 'checkout');
+    fs.symlinkSync(path.join(dir, 'outside'), root);
+    assert.throws(() => readRegularFile(path.join(root, 'page.mdx'), root), /root|is a symlink/);
+  });
+
+  it('refuses a regular file outside the checkout and a directory used as a file', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'checkout-boundary-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    const root = path.join(dir, 'checkout');
+    fs.mkdirSync(root);
+    fs.writeFileSync(path.join(dir, 'secret'), 'outside checkout');
+    assert.throws(() => readRegularFile(path.join(dir, 'secret'), root), /outside the upstream/);
+    assert.throws(
+      () => readRegularFile(path.join(root, '../secret'), root),
+      /outside the upstream/,
+    );
+    assert.throws(() => readRegularFile(root, root), /not a regular file/);
+  });
+
+  it('allows system directory aliases above the trusted checkout', (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'checkout-parent-alias-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    fs.mkdirSync(path.join(dir, 'parent/checkout'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'parent/checkout/page.mdx'), 'ok');
+    fs.symlinkSync(path.join(dir, 'parent'), path.join(dir, 'alias'));
+    const root = path.join(dir, 'alias/checkout');
+    assert.equal(readRegularFile(path.join(root, 'page.mdx'), root), 'ok');
   });
 });
 
