@@ -136,18 +136,24 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 collection in `source.config.ts` applies it (the schema has its own module because
 `source.config.ts` may only export collections):
 
-| Field           | Rule                                                                                                  |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| `title`         | Required, trimmed, not empty                                                                          |
-| `description`   | Required, trimmed, not empty                                                                          |
-| `sidebar_label` | Optional; replaces the title as the page's sidebar name                                               |
-| `content_type`  | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
-| `author`, `sme` | Optional strings                                                                                      |
+| Field                       | Rule                                                                                                  |
+| --------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `title`                     | Required, trimmed, not empty                                                                          |
+| `description`               | Required, trimmed, not empty                                                                          |
+| `sidebar_label`             | Optional; replaces the title as the page's sidebar name                                               |
+| `content_type`              | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
+| `author`, `sme`             | Optional strings                                                                                      |
+| `third_party_content_owner` | Optional string; GitHub username of the designated third-party content maintainer                     |
+| `target_audience`           | Optional string describing the intended readers and their assumed knowledge                           |
+| `user_story`                | Optional string describing the reader's goal and why it matters                                       |
 
 A missing title or description, or a `content_type` outside the enum, fails `frontmatter:check`
 and the build. `types:check` does not validate every page's frontmatter. Nothing renders
 `content_type`; it is an editorial label kept to one enum so values stay
 comparable. Partials and glossary entries do not carry this contract.
+
+`target_audience` and `user_story` are authoring metadata, preserved in parsed page data for
+writers and reviewers. They do not render on the page and are not required for a valid page.
 
 ## Last modified dates
 
@@ -325,6 +331,10 @@ link, and the contribute partials write their links home as
 writes a docs-repository URL in full. `_know-more-tools-box-partial.mdx` also uses the placeholders
 and is covered only by that last check.
 `.github/pull_request_template.md` stays hardcoded because GitHub renders it, not this site.
+
+The canonical documentation branch is `master`, including after the Fumadocs migration.
+Keep `docsRepositoryBranch` and the PR template's file links aimed at `master`; development
+branches do not change this value.
 
 ### Announcement banner
 

@@ -1,14 +1,15 @@
 # Contributing to the Arbitrum docs
 
 Thank you for considering a contribution to the Arbitrum documentation portal. This repo is a
-Next.js 16 / Fumadocs site. It replaced the Docusaurus site at
-[`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs), which is archived, and
-the content model, tooling and gates are different enough that this document is a rewrite, not a
-port, of that repo's `CONTRIBUTE.md`. If something here
+Next.js 16 / Fumadocs site in
+[`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs). The content model,
+tooling and gates differ from the previous Docusaurus site. If something here
 conflicts with [README.md](README.md) or [INTERNALS.md](INTERNALS.md), those two are canonical.
 This file exists to get a new contributor from zero to an open PR.
 
 ## Setup
+
+Create your contribution branch from `master` and open pull requests against `master`.
 
 ```bash
 pnpm install      # runs a postinstall that generates .source/
@@ -44,7 +45,13 @@ The other fields are optional. `content_type`, when set, must be exactly one of 
 matches what the reader is trying to do, not just what feels closest. See
 [Document type conventions](#document-type-conventions) below. `author` and `sme` name the writer
 and the subject-matter reviewer. `sidebar_label` replaces the title as the page's name in the
-sidebar.
+sidebar. For third-party pages, set `third_party_content_owner` to the GitHub username of the
+designated maintainer.
+
+`target_audience` and `user_story` are optional authoring metadata. Use `target_audience` to
+describe the intended readers and their assumed knowledge, and `user_story` to record the
+reader's goal (for example, "As a chain operator, I want to rotate node keys so I can keep my
+chain secure"). Preserve existing values when editing a page. Neither field renders on the site.
 
 Callouts use Fumadocs' `<Callout>` component, with `type` set to `info`, `warn`, `error`, `idea`
 or `success`. A Docusaurus `:::note` line renders as plain text and fails `pnpm content:lint`.

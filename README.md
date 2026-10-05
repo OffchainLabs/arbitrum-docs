@@ -1,8 +1,7 @@
 # Arbitrum docs portal
 
-Arbitrum documentation portal, on Next.js 16 and Fumadocs. It replaced the Docusaurus site at
-[`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs), which is archived.
-Serves English MDX docs; deployed on Vercel.
+Arbitrum documentation portal, on Next.js 16 and Fumadocs. Serves English MDX docs from
+[`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs); deployed on Vercel.
 
 This file covers **how to work on the docs.** For how the codebase works and why, see
 [INTERNALS.md](INTERNALS.md). Contributing a page or a PR? Start with
@@ -17,6 +16,8 @@ New to Fumadocs, or arriving from the old Docusaurus site? Start with
 cover the differences that cause the most mistakes.
 
 ## Setup
+
+Create your contribution branch from `master` and open pull requests against `master`.
 
 ```bash
 pnpm install      # runs a postinstall that generates .source/
@@ -131,7 +132,7 @@ sme: reviewing-sme-handle
 ---
 ```
 
-`content_type`, `author`, `sme` and `sidebar_label` are optional. When set, `content_type` must be
+`content_type`, `author`, `sme`, `sidebar_label` and `user_story` are optional. When set, `content_type` must be
 one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq`.
 
 The sidebar comes from the `meta.json` in each directory: a page's directory is its place, and

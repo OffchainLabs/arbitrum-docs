@@ -254,7 +254,7 @@ When these differ, both are required, and a missing machine for **either** produ
 
 By default, `pending` resolves through the `machines/latest` symlink, which `download-machine.sh` repoints to whatever it fetched last. If you'd rather not depend on that, pin it: `--node.block-validator.pending-upgrade-module-root=<target root>`. Either way the machine must be on disk, or startup fails with `cannot validate WasmModuleRoot`—pinning changes which root is required, not whether one is.
 
-<Callout type="warn" title="Clearing `pending-upgrade-module-root` is not a fix for a Rollup mismatch">
+<Callout type="warn" title="Clearing pending-upgrade-module-root is not a fix for a Rollup mismatch">
 
 Setting `--node.block-validator.pending-upgrade-module-root=` to an empty value only shrinks the set of roots required **at startup**. It has no effect on the runtime `wasmroot doesn't match rollup` error, which compares against the Rollup contract rather than against this flag.
 
