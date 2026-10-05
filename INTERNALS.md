@@ -128,6 +128,7 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 | `description`   | Required, trimmed                                                                                     |
 | `sidebar_label` | Optional; replaces the title as the page's sidebar name                                               |
 | `content_type`  | Optional; one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq` |
+| `user_story`    | Optional string describing the reader’s goal                                                          |
 | `author`, `sme` | Optional strings                                                                                      |
 
 A missing title or description, or a `content_type` outside the enum, fails `frontmatter:check`
