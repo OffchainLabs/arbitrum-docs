@@ -18,7 +18,7 @@ Inputs reach a node through two doors. The fast door is the [Sequencer feed](/ho
 
 #### 2. The envelope (`L1IncomingMessage`)
 
-Whatever the door, every input lands as one `L1IncomingMessage`: a header plus an opaque L2msg payload. The header is the input surface the STF reads—what kind of message, who put it there, `BlockNumber` and `Timestamp`, the ordering/identity handle, and `L1BaseFee` (parent-chain gas price used). Determinism comes from this: the STF never asks the outside world for the time or the gas price—it only reads what is in the header.
+Whatever the door, every input lands as one `L1IncomingMessage`: a header plus an opaque L2msg payload. The header is the input surface the STF reads: message type, sender, `BlockNumber` and `Timestamp`, the ordering/identity handle, and `L1BaseFee` (the parent-chain gas price used). Determinism comes from this: the STF never asks the outside world for the time or the gas price; it only reads what is in the header.
 
 #### 3. One byte decides the path
 
@@ -30,7 +30,7 @@ Open an `L2Message`, and you’ll find a second type byte—the `L2MessageKind`.
 
 #### 5. From batch to messages
 
-A batch posted to L1 isn’t a list of transactions; it’s a Brotli-compressed blob, or calldata. The inbox multiplexer inspects the leading header byte, decompresses, and pops out individual `L1IncomingMessage`s one at a time—the same shape the feed delivers. By the time anything reaches the STF, both doors have converged on the identical stream of envelopes.
+A batch posted to L1 isn’t a list of transactions; it can be either a Brotli-compressed blob or some calldata. The inbox multiplexer inspects the leading header byte, decompresses, and pops out individual `L1IncomingMessage`s one at a time—the same shape the feed delivers. By the time anything reaches the STF, both doors have converged on the identical stream of envelopes.
 
 #### 6. The unwrap
 
@@ -38,7 +38,7 @@ Finally, `ParseL2Transactions` turns each envelope into the EVM transactions <Te
 
 ## Stylus-specific transaction processing
 
-A modified version of <Term id="geth">Geth</Term> that recognizes and processes <Term id="stylus">Stylus</Term> transactions, ensuring proper inclusion in state transitions.
+A modified version of Geth that recognizes and processes <Term id="stylus">Stylus</Term> transactions, ensuring proper inclusion in state transitions.
 
 ## Execution in a WASM runtime
 
