@@ -1,8 +1,8 @@
 /**
  * content-lint: MDX that compiles, passes Prettier and `check-links`, and still renders wrong.
  *
- * Every rule reads the source with code masked (`stripCode`), so syntax shown as an example inside
- * a fence or an inline code span is never reported, except `var-in-code`, which looks inside code.
+ * Text rules read code-masked source (`stripCode`); component rules inspect the MDX syntax tree.
+ * Neither reports examples inside code, except `var-in-code`, which deliberately looks there.
  *
  *   docusaurus-directive  A `:::note` line. Nothing converts it, so the reader sees the colons.
  *   var-in-code           `<Var>` inside a fence or inline code span. MDX does not evaluate
@@ -40,21 +40,24 @@
  *                         a `<Callout>` or `<Accordion>`. The title is a plain string, so the reader
  *                         sees the asterisks.
  *   block-component-in-paragraph
- *                         A block component (`<Callout>`, `<Tabs>`, `<Cards>`, …) opened and closed
- *                         on one line with text beside it, on the line above or on the line below.
+ *                         A block component (`<Callout>`, `<Tabs>`, `<Cards>`, …) in a paragraph
+ *                         whose contents prevent Fumadocs from removing its paragraph wrapper.
  *                         MDX puts it inside a `<p>`, the browser closes the `<p>` at its `<div>`,
  *                         and React hydration fails. Put the tags on their own lines, with a blank
  *                         line before and after.
  *   tabs-null-default     `<Tabs defaultValue={null}>`, a Docusaurus-era prop. Fumadocs takes it
  *                         as the selected tab, so every panel is hidden until a click. Delete it.
  */
+import { createProcessor } from '@mdx-js/mdx';
+import { remarkGfm } from 'fumadocs-core/mdx-plugins';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import remarkMath from 'remark-math';
 
 import { MALFORMED_VAR_PLACEHOLDER } from '../../lib/var-links.ts';
 import { toPosix, walk } from './partials.ts';
-import { codeRegions, stripCode } from './strip-code.ts';
+import { codeRegions, maskCode, stripCode } from './strip-code.ts';
 
 export const RULES = {
   'docusaurus-directive': 'unconverted Docusaurus ::: directive renders as literal text',
@@ -121,7 +124,17 @@ export const FUMADOCS_DEFAULT_COMPONENTS: readonly string[] = [
 export const CALLOUT_TYPES: readonly string[] = ['info', 'warn', 'error', 'idea', 'success'];
 
 /** Components that render a block element, so MDX must not put them inside a paragraph. */
-const BLOCK_COMPONENTS = 'Callout|Accordions|Accordion|Tabs|Tab|Cards|Card|Steps|Step';
+const BLOCK_COMPONENTS = new Set([
+  'Callout',
+  'Accordions',
+  'Accordion',
+  'Tabs',
+  'Tab',
+  'Cards',
+  'Card',
+  'Steps',
+  'Step',
+]);
 
 const REGISTRY = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -167,28 +180,123 @@ function localNames(text: string): Set<string> {
   return names;
 }
 
-/** The whole opening tag that starts at `start`, read from the original source (quotes and braces respected). */
-function openingTag(source: string, start: number): string {
-  let depth = 0;
-  let quote: string | null = null;
-  for (let i = start + 1; i < source.length; i++) {
-    const c = source[i];
-    if (quote) {
-      if (c === quote) quote = null;
-    } else if (c === '"' || c === "'" || c === '`') quote = c;
-    else if (c === '{') depth++;
-    else if (c === '}') depth--;
-    else if (c === '>' && depth === 0) return source.slice(start, i + 1);
-  }
-  return source.slice(start);
+// Local structural types: mdast/estree are transitive dependencies, not importable here.
+interface ExpressionNode {
+  type: string;
+  start?: number;
+  name?: string | ExpressionNode;
+  object?: ExpressionNode;
+  property?: ExpressionNode;
+  openingElement?: ExpressionNode;
+  attributes?: { type: string; name?: ExpressionNode; value?: ExpressionNode | null }[];
+  expression?: ExpressionNode;
+  value?: unknown;
+  expressions?: ExpressionNode[];
+  quasis?: { value: { cooked?: string | null } }[];
+  body?: { expression?: ExpressionNode }[];
 }
 
-/** A string attribute's value in an opening tag: `a="x"`, `a='x'` or `a={"x"}`. */
-function attribute(tag: string, name: string): string | undefined {
-  const m = new RegExp(
-    `\\s${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|\\{\\s*(?:"([^"]*)"|'([^']*)'|\`([^\`]*)\`)\\s*\\})`,
-  ).exec(tag);
-  return m ? (m[1] ?? m[2] ?? m[3] ?? m[4] ?? m[5]) : undefined;
+interface MdxAttribute {
+  type: string;
+  name?: string;
+  data?: { estree?: ExpressionNode };
+  value?: string | null | { data?: { estree?: ExpressionNode } };
+}
+
+interface MdxNode {
+  type: string;
+  name?: string | null;
+  value?: string;
+  attributes?: MdxAttribute[];
+  children?: MdxNode[];
+  data?: { estree?: ExpressionNode };
+  position?: { start: { offset?: number } };
+}
+
+const componentParser = createProcessor({ remarkPlugins: [remarkGfm, remarkMath] });
+
+function jsxName(node: ExpressionNode | undefined): string | undefined {
+  if (node?.type === 'JSXIdentifier' && typeof node.name === 'string') return node.name;
+  if (node?.type === 'JSXMemberExpression') {
+    const object = jsxName(node.object);
+    const property = jsxName(node.property);
+    if (object && property) return `${object}.${property}`;
+  }
+  return undefined;
+}
+
+/** Real JSX inside {expressions}, including attribute expressions, uses ESTree nodes. */
+function expressionElements(value: unknown, check: (node: MdxNode) => void): void {
+  if (!value || typeof value !== 'object') return;
+  const node = value as ExpressionNode;
+  if (node.type === 'JSXElement' && node.openingElement) {
+    const opening = node.openingElement;
+    check({
+      type: 'mdxJsxTextElement',
+      name: typeof opening.name === 'object' ? jsxName(opening.name) : undefined,
+      position: { start: { offset: opening.start } },
+      attributes: opening.attributes
+        ?.filter((a) => a.type === 'JSXAttribute')
+        .map((a) => ({
+          type: 'mdxJsxAttribute',
+          name: jsxName(a.name),
+          value:
+            a.value?.type === 'Literal' && typeof a.value.value === 'string'
+              ? a.value.value
+              : {
+                  data: {
+                    estree: { type: 'Program', body: [{ expression: a.value?.expression }] },
+                  },
+                },
+        })),
+    });
+  }
+  for (const child of Object.values(value)) {
+    if (Array.isArray(child)) {
+      for (const item of child) expressionElements(item, check);
+    } else expressionElements(child, check);
+  }
+}
+
+function componentTree(source: string): MdxNode | undefined {
+  try {
+    // Keep code and attributes intact: the parser knows which are strings, code or real JSX.
+    // Only frontmatter is masked, at its original offsets, as the build removes it before MDX.
+    return componentParser.parse(
+      maskCode(source, {
+        frontmatter: true,
+        fences: false,
+        inlineCode: false,
+      }),
+    ) as unknown as MdxNode;
+  } catch {
+    // These rules target valid MDX that renders wrong. Syntax errors already fail compilation;
+    // the text-based rules still report independent defects in malformed sources.
+    return undefined;
+  }
+}
+
+function attributeExpression(node: MdxNode, name: string): ExpressionNode | undefined {
+  const value = node.attributes?.find(
+    (a) => a.type === 'mdxJsxAttribute' && a.name === name,
+  )?.value;
+  return typeof value === 'object' && value !== null
+    ? value.data?.estree?.body?.[0]?.expression
+    : undefined;
+}
+
+/** Literal attribute text, including a quoted expression or a static template literal. */
+function stringAttribute(node: MdxNode, name: string): string | undefined {
+  const value = node.attributes?.find(
+    (a) => a.type === 'mdxJsxAttribute' && a.name === name,
+  )?.value;
+  if (typeof value === 'string') return value;
+  const expression = attributeExpression(node, name);
+  if (expression?.type === 'Literal' && typeof expression.value === 'string')
+    return expression.value;
+  if (expression?.type === 'TemplateLiteral' && expression.expressions?.length === 0)
+    return expression.quasis?.[0]?.value.cooked ?? undefined;
+  return undefined;
 }
 
 /** What markdown a plain-string title holds, if any. */
@@ -201,22 +309,18 @@ function markdownIn(title: string): string[] {
   return found;
 }
 
-/** A line whose own content is only JSX tags, such as `</Tab>` or `<Callout>x</Callout>`. */
-const jsxOnly = (line: string): boolean => /^<.*>$/.test(line.trim());
-
-/** A line that ends the paragraph above it, so a component on the next line is not glued to it. */
-const endsParagraph = (line: string): boolean =>
-  line.trim() === '' ||
-  jsxOnly(line) ||
-  /^\s{0,3}(?:#{1,6}(?:\s|$)|(?:[-*_]\s*){3,}$|\||import\s|export\s)/.test(line);
-
 /**
- * A line that starts a new block, so it does not continue a paragraph above it. A list item or a
- * blockquote interrupts a paragraph, but a component after one is still glued in by lazy
- * continuation, which is why `endsParagraph` does not accept them.
+ * Fumadocs' remark-unravel removes a paragraph only if every child is JSX, an expression or
+ * whitespace, and at least one is JSX/an expression. Anything else preserves the <p> wrapper.
  */
-const startsBlock = (line: string): boolean =>
-  endsParagraph(line) || /^\s{0,3}(?:>|[-*+]\s|1[.)]\s)/.test(line);
+const unravels = (node: MdxNode): boolean =>
+  !!node.children?.some((c) => c.type === 'mdxJsxTextElement' || c.type === 'mdxTextExpression') &&
+  node.children.every(
+    (c) =>
+      c.type === 'mdxJsxTextElement' ||
+      c.type === 'mdxTextExpression' ||
+      (c.type === 'text' && c.value?.trim() === ''),
+  );
 
 export interface LintOptions {
   /** Components usable without an import. Defaults to `components/mdx.tsx` plus Fumadocs' defaults. */
@@ -259,9 +363,6 @@ export function lintSource(source: string, options: LintOptions = {}): Finding[]
     if (/(?:https?:\/\/|\bwww\.)\S/i.test(rest)) problems.push('a bare URL');
     if (problems.length)
       add('link-in-heading', m.index, `heading contains ${problems.join(' + ')}`);
-    const component = /<([A-Z][A-Za-z0-9]*)[\s/>]/.exec(heading.replace(/`[^`]*`/g, ' '));
-    if (component)
-      add('component-in-heading', m.index, `move <${component[1]}> out of the heading text`);
   }
 
   for (const table of text.matchAll(/<table[\s>][\s\S]*?<\/table>/g)) {
@@ -304,73 +405,76 @@ export function lintSource(source: string, options: LintOptions = {}): Finding[]
 
   const known = options.components ?? defaultKnownComponents();
   const local = localNames(text);
-  for (const m of text.matchAll(/<([A-Z][A-Za-z0-9]*)(?=[\s/>.])/g)) {
-    const name = m[1];
-    if (known.has(name) || local.has(name)) continue;
-    add('unknown-component', m.index, `<${name}> is not registered; add it to components/mdx.tsx`);
-  }
-
-  for (const m of text.matchAll(/<(Callout|Accordion|Tabs)(?=[\s/>])/g)) {
-    const tag = openingTag(source, m.index);
-    if (m[1] === 'Callout') {
-      const type = attribute(tag, 'type');
+  const reportedHeadings = new Set<number>();
+  function checkElement(node: MdxNode, inParagraph: boolean, headingOffset?: number): void {
+    const name = node.name;
+    const index = node.position?.start.offset;
+    if (!name || index === undefined) return;
+    const rootName = name.split('.')[0];
+    if (/^[A-Z]/.test(rootName) && !known.has(rootName) && !local.has(rootName)) {
+      add(
+        'unknown-component',
+        index,
+        `<${rootName}> is not registered; add it to components/mdx.tsx`,
+      );
+    }
+    if (
+      /^[A-Z]/.test(rootName) &&
+      headingOffset !== undefined &&
+      !reportedHeadings.has(headingOffset)
+    ) {
+      add('component-in-heading', headingOffset, `move <${name}> out of the heading text`);
+      reportedHeadings.add(headingOffset);
+    }
+    if (name === 'Callout') {
+      const type = stringAttribute(node, 'type');
       if (type !== undefined && !CALLOUT_TYPES.includes(type)) {
-        add('callout-type', m.index, `type="${type}": use one of ${CALLOUT_TYPES.join(', ')}`);
+        add('callout-type', index, `type="${type}": use one of ${CALLOUT_TYPES.join(', ')}`);
       }
     }
-    if (m[1] !== 'Tabs') {
-      const title = attribute(tag, 'title');
+    if (name === 'Callout' || name === 'Accordion') {
+      const title = stringAttribute(node, 'title');
       const kinds = title === undefined ? [] : markdownIn(title);
       if (kinds.length) {
-        add(
-          'markdown-in-title',
-          m.index,
-          `title holds ${kinds.join(' + ')}; write it as plain text`,
-        );
+        add('markdown-in-title', index, `title holds ${kinds.join(' + ')}; write it as plain text`);
       }
     }
-    if (m[1] === 'Tabs' && /\sdefaultValue\s*=\s*\{\s*null\s*\}/.test(tag)) {
+    const defaultValue = attributeExpression(node, 'defaultValue');
+    if (name === 'Tabs' && defaultValue?.type === 'Literal' && defaultValue.value === null) {
+      add('tabs-null-default', index, 'delete defaultValue={null}; the first tab is then selected');
+    }
+    if (inParagraph && BLOCK_COMPONENTS.has(name)) {
       add(
-        'tabs-null-default',
-        m.index,
-        'delete defaultValue={null}; the first tab is then selected',
+        'block-component-in-paragraph',
+        index,
+        `<${name}> is inside a paragraph; put its tags on their own lines with a blank line before and after`,
       );
     }
   }
 
-  const lines = text.split('\n');
-  let offset = 0;
-  const single = new RegExp(
-    `<(${BLOCK_COMPONENTS})\\b[^>]*>.*?</\\1>|<(?:${BLOCK_COMPONENTS})\\b[^>]*/>`,
-  );
-  for (const [i, line] of lines.entries()) {
-    const m = single.exec(line);
-    if (m) {
-      const before = line
-        .slice(0, m.index)
-        .replace(/^\s*(?:[-*+]|\d+[.)]|>)\s+/, '')
-        .trim();
-      const after = line.slice(m.index + m[0].length).trim();
-      const selfClosing = m[1] === undefined;
-      const where: string[] = [];
-      if (before !== '' && !before.endsWith('>')) where.push('text before it on the line');
-      if (after !== '' && !after.startsWith('<')) where.push('text after it on the line');
-      if (!selfClosing) {
-        if (i > 0 && !endsParagraph(lines[i - 1])) where.push('text on the line above');
-        if (i + 1 < lines.length && !startsBlock(lines[i + 1]))
-          where.push('text on the line below');
-      }
-      if (where.length) {
-        const name = m[1] ?? /<(\w+)/.exec(m[0])?.[1];
-        add(
-          'block-component-in-paragraph',
-          offset + m.index,
-          `<${name}> has ${where.join(' and ')}; put its tags on their own lines with a blank line before and after`,
+  function visit(node: MdxNode, inParagraph = false, headingOffset?: number): void {
+    if (node.type === 'paragraph') inParagraph = !unravels(node);
+    if (node.type === 'heading') headingOffset = node.position?.start.offset;
+    if (node.type === 'mdxJsxFlowElement') inParagraph = false;
+    if (node.type === 'mdxJsxTextElement' || node.type === 'mdxJsxFlowElement') {
+      checkElement(node, inParagraph, headingOffset);
+      for (const attribute of node.attributes ?? []) {
+        if (attribute.value && typeof attribute.value === 'object')
+          expressionElements(attribute.value.data?.estree, (element) =>
+            checkElement(element, false, headingOffset),
+          );
+        expressionElements(attribute.data?.estree, (element) =>
+          checkElement(element, false, headingOffset),
         );
       }
     }
-    offset += line.length + 1;
+    expressionElements(node.data?.estree, (element) =>
+      checkElement(element, inParagraph, headingOffset),
+    );
+    for (const child of node.children ?? []) visit(child, inParagraph, headingOffset);
   }
+  const tree = componentTree(source);
+  if (tree) visit(tree);
 
   return findings.sort((a, b) => a.line - b.line || a.rule.localeCompare(b.rule));
 }

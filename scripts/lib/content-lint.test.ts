@@ -1,3 +1,4 @@
+import { createProcessor } from '@mdx-js/mdx';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -209,4 +210,127 @@ test('Tabs defaultValue={null} is reported, on one line or across lines', () => 
     'tabs-null-default',
   ]);
   assert.deepEqual(rules('<Tabs items={["a"]} defaultValue="a">\n</Tabs>\n'), []);
+});
+
+test('component-looking attribute strings are plain text, not JSX elements or props', () => {
+  for (const title of [
+    'Use <Example> as a placeholder',
+    'Use <Tabs defaultValue={null}> syntax',
+    "Use <Callout type='note'> syntax",
+  ]) {
+    assert.deepEqual(rules(`<Callout title="${title}">\n\nx\n\n</Callout>\n`), [], title);
+  }
+  assert.deepEqual(rules('<Callout title={"Use <Example />"} />\n'), []);
+  assert.deepEqual(rules('<Callout title="Use defaultValue={null}" type="info" />\n'), []);
+  assert.deepEqual(rules('<Callout title="Use type=\'note\'" type="info" />\n'), []);
+  assert.deepEqual(rules('## <span title="Use <Example>">Heading</span>\n'), []);
+});
+
+test('inline JSX cannot hide text beside a block component', () => {
+  for (const source of [
+    'Text <Term id="dapp">dapp</Term> <Callout>Note.</Callout>\n',
+    '<Callout>Note.</Callout> <Term id="dapp">dapp</Term> text.\n',
+  ]) {
+    assert.deepEqual(
+      lintSource(source).map((f) => [f.rule, f.line]),
+      [['block-component-in-paragraph', 1]],
+      source,
+    );
+  }
+});
+
+test('real JSX in expressions still checks components and their attributes', () => {
+  assert.deepEqual(rules('<Callout title={<Nope />} />\n'), ['unknown-component']);
+  assert.deepEqual(rules('<Callout title={<Tabs defaultValue={null} />} />\n'), [
+    'tabs-null-default',
+  ]);
+  assert.deepEqual(rules('{<Callout title="**Bold**" type="note" />}\n'), [
+    'callout-type',
+    'markdown-in-title',
+  ]);
+  assert.deepEqual(rules('Text {<Callout>Note.</Callout>} here.\n'), [
+    'block-component-in-paragraph',
+  ]);
+});
+
+test('component rules ignore code, comments, frontmatter and strings in expressions', () => {
+  assert.deepEqual(
+    rules(
+      lines(
+        '---',
+        'title: <Example />',
+        '---',
+        '',
+        '```mdx',
+        '<Nope />',
+        '<Tabs defaultValue={null} />',
+        '```',
+        '',
+        '`<Nope />`',
+        '',
+        '{/* <Nope /> */}',
+        '',
+        '{"<Nope />"}',
+      ),
+    ),
+    [],
+  );
+  assert.deepEqual(rules('const-looking text {"<Tabs defaultValue={null}>"}.\n'), []);
+});
+
+test('paragraph detection uses all contents, including code, links and nested JSX', () => {
+  for (const source of [
+    '`code` <Callout>Note.</Callout>\n',
+    '[link](/x) <Callout>Note.</Callout>\n',
+    '*Text <Callout>Note.</Callout>*\n',
+    'Text <span><Callout>Note.</Callout></span>\n',
+    '> Text <Term id="dapp">dapp</Term> <Callout>Note.</Callout>\n',
+  ])
+    assert.deepEqual(rules(source), ['block-component-in-paragraph'], source);
+
+  for (const source of [
+    '<Callout>Note.</Callout> <Term id="dapp">dapp</Term>\n',
+    '<Callout>a</Callout> {<Callout>b</Callout>}\n',
+    'Above.\n\n<Callout>Note.</Callout>\n\nBelow.\n',
+  ])
+    assert.deepEqual(rules(source), [], source);
+});
+
+test('component diagnostics preserve line offsets after frontmatter and code', () => {
+  const source = lines(
+    '---',
+    'title: Page',
+    '---',
+    '',
+    '```mdx',
+    '<Nope />',
+    '```',
+    '',
+    'Text <Term id="dapp">dapp</Term> <Callout>Note.</Callout>',
+    '<Unknown />',
+  );
+  assert.deepEqual(
+    lintSource(source).map((f) => [f.rule, f.line]),
+    [
+      ['block-component-in-paragraph', 9],
+      ['unknown-component', 10],
+    ],
+  );
+});
+
+test('text rules still report defects when MDX cannot parse', () => {
+  assert.deepEqual(rules(':::note\n\n<Callout>\n'), ['docusaurus-directive']);
+});
+
+test('paragraph diagnostics match the compiled MDX paragraph wrapper', () => {
+  for (const [source, wrapped] of [
+    ['Text <Term id="dapp">dapp</Term> <Callout>Note.</Callout>\n', true],
+    ['<Callout>Note.</Callout> <Term id="dapp">dapp</Term> text.\n', true],
+    ['<Callout>Note.</Callout> <Term id="dapp">dapp</Term>\n', false],
+    ['<Callout>a</Callout>\n<Callout>b</Callout>\n', false],
+  ] as const) {
+    const compiled = String(createProcessor().processSync(source));
+    assert.equal(/_jsxs?\(_components\.p,/.test(compiled), wrapped, source);
+    assert.equal(rules(source).includes('block-component-in-paragraph'), wrapped, source);
+  }
 });
