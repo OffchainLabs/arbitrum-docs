@@ -53,6 +53,9 @@ jobs:
       - name: Contract address reference is current
         run: pnpm contracts:check
 
+      - name: FAQ partials match their Notion snapshots
+        run: pnpm faq:check
+
       # Fumadocs has no `onBrokenLinks: 'throw'`. `pnpm build` runs check-links too, so a broken
       # link also fails the deploy; this step reports it on its own. Fragments are validated
       # against the real MDX transforms, so a dead #anchor fails as well.

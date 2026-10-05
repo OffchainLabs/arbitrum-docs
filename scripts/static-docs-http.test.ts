@@ -374,3 +374,34 @@ test('response headers', { skip: !baseUrl }, async (t) => {
     assert.equal(response.headers.get('access-control-allow-origin'), '*');
   });
 });
+
+test('the llms index and the mirror route', { skip: !baseUrl }, async (t) => {
+  await t.test('the index and a mirror declare charset=utf-8', async () => {
+    for (const path of ['/llms.txt', `${livePath}.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 200, path);
+      assert.match(response.headers.get('content-type') ?? '', /charset=utf-8/i, path);
+      await response.text();
+    }
+  });
+
+  await t.test('llms.txt has master title and summary and links each mirror once', async () => {
+    const body = await (await get('/llms.txt')).text();
+    assert.match(body, /^# Arbitrum Documentation\n\n> Official documentation/);
+    const links = [...body.matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1]);
+    assert.ok(links.length > 100);
+    assert.deepEqual(
+      links.filter((l) => !l.endsWith('.md')),
+      [],
+    );
+    assert.equal(new Set(links).size, links.length);
+  });
+
+  await t.test('the mirror route 404s for paths it did not prerender', async () => {
+    for (const path of ['/llms.mdx/docs/zz-junk/content.md', `/llms.mdx${livePath}/other.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
+  });
+});

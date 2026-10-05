@@ -1,5 +1,6 @@
 /**
- * Tests for `generatedMarker`, the shared do-not-edit comment both
+ * Tests for the shared generator helpers in `generated-partial.ts`. Among them is
+ * `generatedMarker`, the shared do-not-edit comment both
  * `generate-contract-addresses.ts` and `generate-precompile-tables.ts` prepend to what they
  * write. Pinned here so the two generators cannot drift in wording, and so a change
  * to the shape is a deliberate, reviewed edit rather than something that slips in unnoticed.
@@ -10,7 +11,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 
-import { assertInertMdx, generatedMarker, readRegularFile } from './generated-partial.ts';
+import { assertInertMdx, generatedMarker, readRegularFile, setOutput } from './generated-partial.ts';
 import { NODE_INTERFACE_MARKER, PRECOMPILE_MARKER } from './precompile-tables.ts';
 
 const PRECOMPILE_DIR = path.join('content', 'partials', 'precompile-tables');
@@ -202,5 +203,53 @@ describe('readRegularFile', () => {
       () => readRegularFile(path.join(root, 'linked-dir', 'secret'), root),
       /linked-dir\/secret is a symlink, or sits under one/,
     );
+  });
+});
+
+describe('setOutput', () => {
+  const withOutputFile = (fn: (file: string) => void): void => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'set-output-'));
+    const file = path.join(dir, 'outputs');
+    const previous = process.env.GITHUB_OUTPUT;
+    process.env.GITHUB_OUTPUT = file;
+    try {
+      fn(file);
+    } finally {
+      if (previous === undefined) delete process.env.GITHUB_OUTPUT;
+      else process.env.GITHUB_OUTPUT = previous;
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  };
+
+  it('appends one name=value line', () => {
+    withOutputFile((file) => {
+      setOutput('newer_release', 'v3.11.5');
+      assert.equal(fs.readFileSync(file, 'utf-8'), 'newer_release=v3.11.5\n');
+    });
+  });
+
+  for (const value of ['v1.2.3\nupdates_made=true', 'v1.2.3\rx', '\n']) {
+    it(`refuses a value holding a line break (${JSON.stringify(value)}) and writes nothing`, () => {
+      withOutputFile((file) => {
+        assert.throws(() => setOutput('newer_release', value), /may not contain a newline/);
+        assert.equal(fs.existsSync(file), false);
+      });
+    });
+  }
+
+  it('refuses a name holding a line break', () => {
+    withOutputFile(() => {
+      assert.throws(() => setOutput('a\nb', 'x'), /the name of step output/);
+    });
+  });
+
+  it('refuses a line break even outside Actions, so a local run fails the way CI would', () => {
+    const previous = process.env.GITHUB_OUTPUT;
+    delete process.env.GITHUB_OUTPUT;
+    try {
+      assert.throws(() => setOutput('x', 'a\nb'), /may not contain a newline/);
+    } finally {
+      if (previous !== undefined) process.env.GITHUB_OUTPUT = previous;
+    }
   });
 });

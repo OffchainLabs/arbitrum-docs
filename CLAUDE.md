@@ -39,6 +39,7 @@ pnpm start             # serve the production build
 pnpm vars:check        # every <Var name> and {var:name} resolves; banner keys are valid
 pnpm references:check  # every <Term id> resolves to a content/glossary entry
 pnpm contracts:check   # the contract-address partial is current
+pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
 pnpm content:lint      # MDX that compiles but renders wrong
 pnpm format:check      # prettier (pnpm format writes)
@@ -51,12 +52,14 @@ pnpm contracts:generate                # contract-address partial
 pnpm cli:generate                      # Nitro CLI flags page (:check compares)
 pnpm stylus:generate                   # Stylus by Example pages (:check compares)
 pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
+pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN); then faq:generate
+pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
 ```
 
 CI (`.github/workflows/ci.yml`) runs the gates in one job, then `pnpm build` plus
 `scripts/static-docs-http.test.ts` against the running build in a second. There is no pre-commit
 hook. `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` on Mondays and
-opens a PR that gets no CI run of its own.
+opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mondays for the Notion FAQ snapshots.
 
 ## Frontmatter contract
 
@@ -115,6 +118,7 @@ entries do not carry this contract.
 - **Theme.** Tokens are `--color-fd-*`; never `--ifm-*`. PostCSS config lives in `package.json`.
 - **Generated pages.** `content/docs/stylus/stylus-by-example/` and
   `content/docs/run-a-node/nitro/cli-flags-reference.mdx`. Change their generators, not the pages.
+  The six `content/partials/_troubleshooting-*-partial.mdx` come from `content/faq/*.json`; edit them in Notion.
 
 Details for each are in [INTERNALS.md](INTERNALS.md).
 

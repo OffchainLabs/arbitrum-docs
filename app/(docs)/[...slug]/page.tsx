@@ -13,6 +13,7 @@ import { notFound } from 'next/navigation';
 import { RequestUpdateLink } from '@/components/RequestUpdateLink';
 import { Feedback } from '@/components/feedback/client';
 import { getMDXComponents } from '@/components/mdx';
+import { faqJsonLd } from '@/lib/faq';
 import { onPageFeedbackAction } from '@/lib/posthog';
 import { appName, getSiteUrl, gitConfig, socialHandle } from '@/lib/shared';
 import { getPageImage, getPageMarkdownUrl, source } from '@/lib/source';
@@ -33,10 +34,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   const MDX = page.data.body;
   const { lastModified } = page.data;
   const markdownUrl = getPageMarkdownUrl(page).url;
+  const jsonLd = faqJsonLd(page.slugs);
 
   return (
     // Narrower gutters than the notebook layout's default `px-4 md:px-6 xl:px-8`.
     <DocsPage toc={page.data.toc} full={page.data.full} className="md:px-4 xl:px-4">
+      {jsonLd ? (
+        <script
+          type="application/ld+json"
+          // `<` is escaped so a `</script>` inside an answer cannot end the element early.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+        />
+      ) : null}
       <DocsTitle className="font-medium">{page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
       {lastModified ? (

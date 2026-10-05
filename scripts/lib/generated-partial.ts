@@ -138,6 +138,20 @@ export async function writeOrCheck(
  * output plumbing.
  */
 export function setOutput(name: string, value: string): void {
+  // The file is line-oriented: a newline in either half would end this pair early and start a
+  // second one of the value's choosing. Checked before the GITHUB_OUTPUT test so a local run
+  // fails the same way CI would.
+  for (const [label, text] of [
+    ['name', name],
+    ['value', value],
+  ]) {
+    if (/[\r\n]/.test(text)) {
+      throw new Error(
+        `setOutput: the ${label} of step output ${JSON.stringify(name)} may not contain a ` +
+          `newline, which would inject a second output line: ${JSON.stringify(text)}`,
+      );
+    }
+  }
   const outputFile = process.env.GITHUB_OUTPUT;
   if (!outputFile) return;
   fs.appendFileSync(outputFile, `${name}=${value}\n`);

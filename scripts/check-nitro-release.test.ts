@@ -163,6 +163,20 @@ test('default mode reports a newer release without bumping the pin or the image'
   assert.ok(result.requests.every((url) => !url.includes('?ref=v3.11.4')));
 });
 
+for (const latest of ['v3.11.4\nupdates_made=true', 'v3.11.4-rc.1', 'v3.11.4 ']) {
+  test(`default mode refuses to pass on a malformed release tag ${JSON.stringify(latest)}`, (t) => {
+    const result = run(t, { latest, sha: OLD_SHA });
+    // A warning, not a failure, so the rest of the weekly refresh still runs.
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(
+      result.stderr,
+      /::warning::.*which is not vX\.Y\.Z; refusing to pass it on as newer_release/,
+    );
+    assert.doesNotMatch(result.outputs, /newer_release/);
+    assert.equal(result.raw, result.original);
+  });
+}
+
 test('default mode reports a stale submodule pin without writing', (t) => {
   const result = run(t);
   assert.equal(result.status, 0, result.stderr);
