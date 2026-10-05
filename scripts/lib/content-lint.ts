@@ -19,6 +19,13 @@
  *   remote-image          A markdown image with an `http(s)` src. It becomes `next/image`, whose
  *                         optimizer rejects every remote host here, so the reader gets a broken
  *                         image. Commit the file under `public/`, or wrap an `<img>` in `<ImageZoom>`.
+ *   docusaurus-var-token  A Docusaurus `@@name@@` or `@@name=value@@` token. Nothing substitutes
+ *                         it, so the reader sees the token. Write `<Var name="name" />`.
+ *   quicklook-anchor      A Docusaurus `<a data-quicklook-from="…">` glossary anchor. It renders
+ *                         with no link and no hover. Write `<Term id="…">…</Term>`.
+ *   site-import           An `import … from '@site/…'` or `'@theme/…'` line. Those are Docusaurus
+ *                         aliases and do not resolve here, so the build fails. Use an `<include>`
+ *                         or a component registered in `components/mdx.tsx`.
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -34,6 +41,9 @@ export const RULES = {
   'link-in-heading': 'link inside a heading nests <a> inside <a>',
   'tr-in-table': '<tr> is a direct child of <table>',
   'remote-image': 'markdown image with a remote src renders broken',
+  'docusaurus-var-token': 'Docusaurus @@variable@@ token renders as literal text',
+  'quicklook-anchor': 'Docusaurus quicklook anchor renders with no link or hover',
+  'site-import': 'Docusaurus @site/@theme import does not resolve',
 } as const;
 
 export type RuleId = keyof typeof RULES;
@@ -119,6 +129,23 @@ export function lintSource(source: string): Finding[] {
   for (const m of text.matchAll(IMAGE_REFERENCE)) {
     const url = definitions.get(label(m[2] || m[1]));
     if (url && /^https?:\/\//i.test(url)) add('remote-image', m.index, url);
+  }
+
+  for (const m of text.matchAll(/@@\w+(?:=[^@\n]*)?@@/g)) {
+    const name = /@@(\w+)/.exec(m[0])?.[1];
+    add('docusaurus-var-token', m.index, `${m[0]}: write <Var name="${name}" /> instead`);
+  }
+
+  for (const m of text.matchAll(/data-quicklook-from/g)) {
+    add('quicklook-anchor', m.index, 'write <Term id="…">…</Term> instead');
+  }
+
+  for (const m of text.matchAll(/(?:from|import)\s+['"](@(?:site|theme)\/[^'"]*)['"]/g)) {
+    add(
+      'site-import',
+      m.index,
+      `${m[1]} is a Docusaurus alias; use <include> or a registered component`,
+    );
   }
 
   return findings.sort((a, b) => a.line - b.line || a.rule.localeCompare(b.rule));
