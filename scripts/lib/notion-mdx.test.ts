@@ -10,6 +10,7 @@ import {
   type NotionRichText,
   RenderError,
   escapeMdxText,
+  escapeTableCellPipes,
   renderAnswer,
   renderBlocks,
   renderRichText,
@@ -277,5 +278,21 @@ describe('renderAnswer', () => {
 
   it('rejects an answer with neither', () => {
     assert.throws(() => renderAnswer([], []), /empty/);
+  });
+});
+
+describe('escapeTableCellPipes', () => {
+  it('escapes a bare pipe', () => {
+    assert.equal(escapeTableCellPipes('a|b'), 'a\\|b');
+  });
+  it('escapes a pipe after an escaped backslash, keeping the pair', () => {
+    // escapeMdxText turns a literal `a\|b` into `a\\|b`; the pipe still needs its own escape.
+    assert.equal(escapeTableCellPipes('a\\\\|b'), 'a\\\\\\|b');
+  });
+  it('leaves MDX escapes alone', () => {
+    assert.equal(escapeTableCellPipes('\\{x\\} \\<y'), '\\{x\\} \\<y');
+  });
+  it('does not escape a pipe that is already escaped', () => {
+    assert.equal(escapeTableCellPipes('a\\|b'), 'a\\|b');
   });
 });
