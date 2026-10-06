@@ -1,13 +1,12 @@
 {
   "docsRepositoryUrl": "https://github.com/OffchainLabs/arbitrum-docs",
   "docsRepositoryBranch": "master",
-
   "arbOneChainId": 42161,
   "novaChainId": 42170,
   "nitroDocsRepo": "https://github.com/OffchainLabs/nitro",
-  "latestNitroNodeImage": "offchainlabs/nitro-node:v3.11.4-7d5ac27",
+  "latestNitroNodeImage": "offchainlabs/nitro-node:v3.12.1-70fa99a",
   "latestClassicNodeImage": "offchainlabs/arb-node:v1.4.6-551a39b3",
-  "nitroVersionTag": "v3.11.4",
+  "nitroVersionTag": "v3.12.1",
   "nitroRepositorySlug": "nitro",
   "nitroPathToArbos": "arbos",
   "nitroPathToArbosState": "arbos/arbosState",
@@ -16,7 +15,7 @@
   "nitroPathToNodeInterface": "execution/nodeinterface",
   "nitroPrecompilesRepositorySlug": "nitro-precompile-interfaces",
   "nitroPrecompilesCommit": "e7e6566ae5b0efa0ad4d779138f64ead11928c66",
-  "goEthereumCommit": "dff2aadcd2e75e33923b13acce6468d847477e79",
+  "goEthereumCommit": "5eee8f546e7602b7deeef7909f291bbebc77e233",
   "portalApplicationForm": "https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform",
   "arbOneNitroArchiveSnapshot": "https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar",
   "arbOneClassicArchiveSnapshot": "https://snapshot.arbitrum.foundation/arb1/classic-archive.tar",
@@ -56,7 +55,6 @@
   "cargoStylusVersion": "0.10.7",
   "stylusSdkVersion": "0.10.7",
   "aepRevenueSharePercent": 10,
-
   "announcementEnabled": false,
   "announcementText": null,
   "announcementLinkText": null,

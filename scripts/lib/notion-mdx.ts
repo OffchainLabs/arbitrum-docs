@@ -304,11 +304,11 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
       return '---';
     case 'table': {
       const rows = children.filter((c) => c.type === 'table_row');
-      // Escape backslashes before pipes so existing escapes in source text cannot interfere with
-      // table-cell pipe escaping when serialized to GFM/MDX.
+      // GFM consumes the backslash protecting a pipe, including inside inline code. Leave other
+      // escapes alone: doubling an MDX escape would expose its brace or tag to the parser.
       const cells = rows.map((r) =>
         (payloadOf(r).cells ?? []).map((c) =>
-          renderRichText(c, { tableCell: true }).replace(/\\/g, '\\\\').replace(/\|/g, '\\|'),
+          renderRichText(c, { tableCell: true }).replace(/\|/g, '\\|'),
         ),
       );
       if (cells.length === 0) return null;
