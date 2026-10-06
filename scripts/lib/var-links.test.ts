@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { test } from 'node:test';
 
 import {
@@ -160,6 +163,39 @@ test('remarkVarLinks defaults to the real content/vars.json', () => {
   const tree = { type: 'root', children: [link('https://x/{var:nitroRepositorySlug}')] };
   remarkVarLinks()(tree);
   assert.equal(tree.children[0].url, `https://x/${vars.nitroRepositorySlug}`);
+});
+
+test('remarkVarLinks rereads vars.json on every compile, so pnpm dev picks up an edit', () => {
+  // fumadocs-mdx attaches the plugin once per server and reuses the processor, so a read at attach
+  // time would freeze the values until a restart.
+  const varsPath = path.join(mkdtempSync(path.join(tmpdir(), 'var-links-')), 'vars.json');
+  writeFileSync(varsPath, JSON.stringify({ nitroVersionTag: 'v1' }));
+  const transform = remarkVarLinks({ varsPath });
+  const first = { type: 'root', children: [link('/{var:nitroVersionTag}')] };
+  transform(first);
+  writeFileSync(varsPath, JSON.stringify({ nitroVersionTag: 'v2' }));
+  const second = { type: 'root', children: [link('/{var:nitroVersionTag}')] };
+  transform(second);
+  assert.equal(first.children[0].url, '/v1');
+  assert.equal(second.children[0].url, '/v2');
+});
+
+test('remarkVarLinks registers vars.json as a dependency of the page being compiled', () => {
+  // `_compiler` is the fumadocs-mdx hook `<include>` uses for partials. Without the dependency, an
+  // edit to vars.json changes no page source, so no page recompiles.
+  const varsPath = path.join(mkdtempSync(path.join(tmpdir(), 'var-links-')), 'vars.json');
+  writeFileSync(varsPath, '{}');
+  const added: string[] = [];
+  const file = { data: { _compiler: { addDependency: (p: string) => added.push(p) } } };
+  remarkVarLinks({ varsPath })({ type: 'root', children: [] }, file);
+  assert.deepEqual(added, [varsPath]);
+});
+
+test('remarkVarLinks registers no dependency when given its values directly', () => {
+  const added: string[] = [];
+  const file = { data: { _compiler: { addDependency: (p: string) => added.push(p) } } };
+  remarkVarLinks({ vars: VARS })({ type: 'root', children: [] }, file);
+  assert.deepEqual(added, []);
 });
 
 test('remarkVarLinks rewrites an image destination', () => {

@@ -7,10 +7,11 @@
  * `var:` prefix keeps a placeholder distinct from a path template like `…/{chainId}/…`, so
  * `vars:check` can be strict about an unknown name; the plugin leaves one in place rather than
  * throwing, so a typo reaches the page visibly instead of taking the site down. Import-free apart
- * from `node:fs`, so scripts import it under `node --test`; node types are local because the
- * `mdast` type packages are transitive dependencies only.
+ * from `node:fs` and `node:url`, so scripts import it under `node --test`; node types are local
+ * because the `mdast` type packages are transitive dependencies only.
  */
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 /** Variable values keyed by name, as `content/vars.json` holds them. */
 export type VarValues = Readonly<Record<string, unknown>>;
@@ -32,9 +33,34 @@ export interface VarLinksNode {
 }
 
 export interface RemarkVarLinksOptions {
-  /** Values to substitute. Defaults to `content/vars.json`, read once when the plugin attaches. */
+  /** Values to substitute. Without them, the plugin reads `varsPath` on every compile. */
   vars?: VarValues;
+  /** The file to read when `vars` is not given. Defaults to `content/vars.json`. */
+  varsPath?: string;
 }
+
+/**
+ * The slice of the vfile this plugin reads. fumadocs-mdx puts its loader on `data._compiler`
+ * (internal, as the underscore says); its own `<include>` registers partials through it the same
+ * way. `scripts/lib/var-links.test.ts` fails if the plugin stops calling it.
+ */
+export interface VarLinksFile {
+  // `object`, not the field shape: vfile's `Data` is an empty interface, which TypeScript's
+  // weak-type check refuses to assign to a type whose only property is optional.
+  data?: object;
+}
+
+/** The fumadocs-mdx loader hook on `file.data`, when the file is compiled by fumadocs-mdx. */
+function compilerOf(file?: VarLinksFile): { addDependency(path: string): void } | undefined {
+  return (file?.data as { _compiler?: { addDependency(path: string): void } } | undefined)
+    ?._compiler;
+}
+
+/**
+ * `content/vars.json`, resolved from this file since `source.config.ts` and `check-links` run from
+ * different places.
+ */
+const VARS_PATH = fileURLToPath(new URL('../content/vars.json', import.meta.url));
 
 /** A `{var:name}` placeholder; the name is an identifier, so plain braces in a URL stay put. */
 export const VAR_PLACEHOLDER: RegExp = /\{var:([A-Za-z_]\w*)\}/g;
@@ -69,9 +95,15 @@ const URL_ATTRIBUTES: ReadonlySet<string> = new Set(['href', 'to', 'src']);
  * URL attributes of a JSX element. `image` only helps a remote src: Fumadocs runs remark-image
  * first, and a local src is already an import of the written path by the time this runs.
  */
-export function remarkVarLinks({ vars }: RemarkVarLinksOptions = {}): (tree: VarLinksNode) => void {
-  const values = vars ?? readVars();
-  return (tree) => {
+export function remarkVarLinks({ vars, varsPath = VARS_PATH }: RemarkVarLinksOptions = {}): (
+  tree: VarLinksNode,
+  file?: VarLinksFile,
+) => void {
+  return (tree, file) => {
+    // fumadocs-mdx attaches this plugin once per server, so read the file here, per compile, and
+    // make it a dependency: an edit to vars.json then recompiles the page under `pnpm dev`.
+    const values = vars ?? readVars(varsPath);
+    if (vars === undefined) compilerOf(file)?.addDependency(varsPath);
     walkTree(tree, (node) => {
       if (node?.type === 'link' || node?.type === 'definition' || node?.type === 'image') {
         node.url = expandVarPlaceholders(node.url, values);
@@ -91,14 +123,12 @@ export function remarkVarLinks({ vars }: RemarkVarLinksOptions = {}): (tree: Var
 }
 
 /**
- * Read `content/vars.json` off disk, resolved from this file since `source.config.ts` and
- * `check-links` run from different places. `content/vars.ts`'s bare JSON import fails under Node.
+ * Read `content/vars.json` (or `varsPath`) off disk. `content/vars.ts`'s bare JSON import fails
+ * under Node.
  */
-export function readVars(): Record<string, unknown> {
-  const parsed: unknown = JSON.parse(
-    readFileSync(new URL('../content/vars.json', import.meta.url), 'utf8'),
-  );
-  if (!isRecord(parsed)) throw new TypeError('content/vars.json is not a JSON object.');
+export function readVars(varsPath: string = VARS_PATH): Record<string, unknown> {
+  const parsed: unknown = JSON.parse(readFileSync(varsPath, 'utf8'));
+  if (!isRecord(parsed)) throw new TypeError(`${varsPath} is not a JSON object.`);
   return parsed;
 }
 

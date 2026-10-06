@@ -10,9 +10,10 @@
   },
   "scripts": {
     "build": "node scripts/check-links.ts && next build",
-    "dev": "next dev",
+    "dev": "pnpm install && pnpm clean && next dev",
     "start": "next start",
     "check-links": "node scripts/check-links.ts",
+    "clean": "node scripts/clean.ts",
     "content:lint": "node scripts/content-lint.ts",
     "contracts:check": "node scripts/generate-contract-addresses.ts --check",
     "format:check": "prettier --check .",
