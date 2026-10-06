@@ -40,6 +40,16 @@ export function escapeMdxText(s: string): string {
   return s.replace(/[\\`*_{}[\]<~]/g, (c) => `\\${c}`);
 }
 
+/**
+ * Escape each unescaped pipe in a rendered table cell. GFM consumes the backslash protecting a
+ * pipe, including inside inline code. The pattern steps over every existing backslash pair as one
+ * unit, so `\\`, `\{` and `\|` pass through unchanged: doubling a backslash would expose an MDX
+ * brace or tag to the parser, and escaping an escaped pipe would split the cell.
+ */
+export function escapeTableCellPipes(cell: string): string {
+  return cell.replace(/\\[\s\S]|\|/g, (match) => (match === '|' ? '\\|' : match));
+}
+
 const CURLY_QUOTES: Record<string, string> = { '“': '"', '”': '"', '‘': "'", '’': "'" };
 
 const straightenQuotes = (s: string): string => s.replace(/[“”‘’]/g, (c) => CURLY_QUOTES[c] ?? c);
@@ -304,11 +314,9 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
       return '---';
     case 'table': {
       const rows = children.filter((c) => c.type === 'table_row');
-      // GFM consumes the backslash protecting a pipe, including inside inline code. Leave other
-      // escapes alone: doubling an MDX escape would expose its brace or tag to the parser.
       const cells = rows.map((r) =>
         (payloadOf(r).cells ?? []).map((c) =>
-          renderRichText(c, { tableCell: true }).replace(/\|/g, '\\|'),
+          escapeTableCellPipes(renderRichText(c, { tableCell: true })),
         ),
       );
       if (cells.length === 0) return null;
