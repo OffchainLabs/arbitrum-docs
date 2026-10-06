@@ -37,7 +37,7 @@ These commands come from `package.json`; see CLAUDE.md and README.md for the wor
 
 ```bash
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
-pnpm dev               # http://localhost:3000
+pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
 pnpm frontmatter:check # every page's frontmatter satisfies the schema in lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts
