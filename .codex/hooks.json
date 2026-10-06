@@ -64,7 +64,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(js|jsx|ts|tsx)$ ]]; then npx prettier --write \"$FILE\"; fi",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(js|jsx|ts|tsx)$ ]]; then ./node_modules/.bin/prettier --write -- \"$FILE\"; fi",
             "timeout": 30
           }
         ]
@@ -74,7 +74,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(ts|tsx)$ ]]; then RESULT=$(npx tsc --noEmit 2>&1); if [ $? -ne 0 ]; then echo \"TypeScript errors found: $RESULT\" >&2; exit 2; fi; fi",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(ts|tsx)$ ]]; then RESULT=$(./node_modules/.bin/tsc --noEmit 2>&1); if [ $? -ne 0 ]; then echo \"TypeScript errors found: $RESULT\" >&2; exit 2; fi; fi",
             "timeout": 30
           }
         ]
@@ -93,7 +93,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(js|jsx|ts|tsx)$ && \"$FILE\" != *\".test.\"* && \"$FILE\" != *\".spec.\"* ]]; then DIR=$(dirname \"$FILE\"); BASENAME=$(basename \"$FILE\" | sed -E 's/\\.(js|jsx|ts|tsx)$//'); for TEST_FILE in \"$DIR/$BASENAME.test.\"* \"$DIR/$BASENAME.spec.\"*; do if [ -f \"$TEST_FILE\" ]; then echo \"Running tests for $TEST_FILE...\"; if command -v jest >/dev/null 2>&1; then npx jest \"$TEST_FILE\" --passWithNoTests; elif command -v vitest >/dev/null 2>&1; then npx vitest run \"$TEST_FILE\"; fi; break; fi; done; fi",
+            "command": "FILE=$(echo $STDIN_JSON | jq -r '.tool_input.file_path // \"\"'); if [[ \"$FILE\" =~ \\.(js|jsx|ts|tsx)$ && \"$FILE\" != *\".test.\"* && \"$FILE\" != *\".spec.\"* ]]; then DIR=$(dirname \"$FILE\"); BASENAME=$(basename \"$FILE\" | sed -E 's/\\.(js|jsx|ts|tsx)$//'); for TEST_FILE in \"$DIR/$BASENAME.test.\"* \"$DIR/$BASENAME.spec.\"*; do if [ -f \"$TEST_FILE\" ]; then echo \"Running tests for $TEST_FILE...\"; if [ -x ./node_modules/.bin/jest ]; then ./node_modules/.bin/jest \"$TEST_FILE\" --passWithNoTests; elif [ -x ./node_modules/.bin/vitest ]; then ./node_modules/.bin/vitest run \"$TEST_FILE\"; fi; break; fi; done; fi",
             "timeout": 60
           }
         ]
@@ -113,7 +113,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [[ -f package.json && $(git status --porcelain | grep -E '\\.js$|\\.jsx$|\\.ts$|\\.tsx$') ]]; then echo 'Analyzing bundle size impact...'; if command -v bundlesize >/dev/null 2>&1; then npx bundlesize; elif npm list webpack-bundle-analyzer >/dev/null 2>&1; then echo 'Use: npx webpack-bundle-analyzer build/static/js/*.js'; else echo 'No bundle analysis tool found'; fi; fi",
+            "command": "if [[ -f package.json && $(git status --porcelain | grep -E '\\.js$|\\.jsx$|\\.ts$|\\.tsx$') ]]; then echo 'Analyzing bundle size impact...'; if [ -x ./node_modules/.bin/bundlesize ]; then ./node_modules/.bin/bundlesize; elif npm list webpack-bundle-analyzer >/dev/null 2>&1; then echo 'Use: npx webpack-bundle-analyzer build/static/js/*.js'; else echo 'No bundle analysis tool found'; fi; fi",
             "timeout": 60
           }
         ]

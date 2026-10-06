@@ -314,6 +314,9 @@ function renderOne(b: NotionBlock, ordinal: number): string | null {
       return '---';
     case 'table': {
       const rows = children.filter((c) => c.type === 'table_row');
+      // Rich text already escapes MDX and prose backslashes. Preserve those escapes: doubling
+      // them here would expose braces as expressions. Code containing a backslash before a pipe
+      // is refused by renderRichText because GFM cannot represent it safely.
       const cells = rows.map((r) =>
         (payloadOf(r).cells ?? []).map((c) =>
           escapeTableCellPipes(renderRichText(c, { tableCell: true })),

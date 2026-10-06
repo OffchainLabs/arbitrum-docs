@@ -19,7 +19,15 @@
  * change without touching the filesystem. After a real run, verify with `pnpm check-links`.
  */
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readFileSync,
+  realpathSync,
+  renameSync,
+  writeFileSync,
+} from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
 
@@ -29,6 +37,7 @@ import {
   type LinkRef,
   type MetaFile,
   type Rewrite,
+  SHARED_DIRS,
   applyRewrites,
   buildIndex,
   computeFileMeta,
@@ -93,6 +102,26 @@ function validatePath(label: string, raw: string, abs: string, docsRoot: string)
   if (!abs.startsWith(docsRoot + path.sep) || !/\.mdx?$/i.test(abs)) {
     console.error(`move-doc: <${label}> must be a .md/.mdx file under ${CONTENT_DIR}/: ${abs}`);
     process.exit(1);
+  }
+}
+
+/** Reject links below the canonical repository root, including dangling destination links. */
+function assertRepoPath(abs: string, repoRoot: string): void {
+  const relative = path.relative(repoRoot, abs);
+  if (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) {
+    exitErr(`path is outside the repository: ${abs}`);
+  }
+  let current = repoRoot;
+  for (const segment of relative.split(path.sep).filter(Boolean)) {
+    current = path.join(current, segment);
+    let stat;
+    try {
+      stat = lstatSync(current);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return;
+      throw error;
+    }
+    if (stat.isSymbolicLink()) exitErr(`refusing symlink in repository path: ${current}`);
   }
 }
 
@@ -345,17 +374,21 @@ function contentOf(index: DocIndex, abs: string): string {
 
 async function main(): Promise<void> {
   const { from, to, dryRun } = parseArgs(process.argv.slice(2));
-  const repoRoot = process.cwd();
+  // Canonicalize ancestors such as macOS /var -> /private/var; links inside the repo are refused.
+  const repoRoot = realpathSync(process.cwd());
   const docsRoot = path.join(repoRoot, CONTENT_DIR);
   const fromAbs = path.resolve(repoRoot, from);
   const toAbs = path.resolve(repoRoot, to);
 
   validatePath('from', from, fromAbs, docsRoot);
   validatePath('to', to, toAbs, docsRoot);
+  assertRepoPath(fromAbs, repoRoot);
+  assertRepoPath(toAbs, repoRoot);
   if (fromAbs === toAbs) exitErr('<from> and <to> are the same path');
   if (!existsSync(fromAbs)) exitErr(`<from> does not exist: ${fromAbs}`);
   if (existsSync(toAbs)) exitErr(`<to> already exists: ${toAbs}`);
 
+  for (const sharedDir of SHARED_DIRS) assertRepoPath(path.join(repoRoot, sharedDir), repoRoot);
   const index = buildIndex(repoRoot);
   if (!index.byAbs.has(fromAbs)) exitErr(`<from> is not an indexed doc: ${fromAbs}`);
 
@@ -368,6 +401,17 @@ async function main(): Promise<void> {
       : null;
   const records = scanLinks(index);
   const { editsByFile, changes, unrenderable } = planMove(records, index, fromAbs, toAbs);
+
+  // Check every possible write before the first edit or rename, so rejection leaves all files intact.
+  const writePaths = new Set([
+    fromAbs,
+    toAbs,
+    ...editsByFile.keys(),
+    path.join(path.dirname(fromAbs), 'meta.json'),
+    path.join(path.dirname(toAbs), 'meta.json'),
+    ...(redirect ? [path.join(repoRoot, REDIRECTS_CONFIG_PATH)] : []),
+  ]);
+  for (const abs of writePaths) assertRepoPath(abs, repoRoot);
 
   const relFrom = toPosix(path.relative(repoRoot, fromAbs));
   const relTo = toPosix(path.relative(repoRoot, toAbs));

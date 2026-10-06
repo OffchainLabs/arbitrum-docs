@@ -932,6 +932,9 @@ partial changed. It is the only place the token is used; `faq:check` in CI is of
   `scripts/data/nitro-cli-reference.data.ts`; anything else the reader cannot evaluate fails the
   run, as does a default holding a backslash before a pipe, which has no safe spelling in a table
   code cell. The fix for either is a hand-declared default in `defaultOverrides` in that file.
+  Flag names must use dotted alphanumeric, hyphen or underscore segments. The generated region
+  must pass `assertInertMdx` before formatting and before writing, so upstream names cannot become
+  expressions in headings or JSX attributes. The Nitro ref must be a release tag.
 - **`content/docs/stylus/stylus-by-example/`** is republished whole, frontmatter included, by
   `pnpm stylus:generate`. Each page carries a do-not-edit comment, so fix those pages upstream. The
   published set is the allowlist in `scripts/data/stylus-examples.data.ts`, whose order is the
@@ -1004,3 +1007,9 @@ The duplicated writer and brand skill instructions should stay in sync across `.
 and `.agents/skills/`. The retained Codex hook configuration and scripts still contain legacy
 paths; contributors must check those paths against their local integration. CI does not run
 these agent hooks, and the repository does not establish which local agent loads them.
+
+The retained hook commands invoke installed `node_modules/.bin` tools directly; missing tools fail
+without fetching a package from the registry. The image-debt scanner keeps filenames separate from
+validated numeric sizes. The brand SVG importer validates scene fields before producing XML, and
+the contrast checker uses a private temporary directory. The PGA example uses a fresh directory
+by default and rejects symlinked output files and directories before writing or removing frames.

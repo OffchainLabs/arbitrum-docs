@@ -4,7 +4,16 @@
  */
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  unlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
@@ -71,6 +80,72 @@ function fixtureRepo(): { root: string; redirectsPath: string; fromRel: string; 
     fromRel: 'content/docs/example/old-name.mdx',
     toRel: 'content/docs/example/new-name.mdx',
   };
+}
+
+for (const target of [
+  'source',
+  'destination directory',
+  'dangling destination',
+  'linked page',
+  'source meta',
+  'destination meta',
+  'redirects',
+] as const) {
+  test(`move-doc rejects a symlink at ${target} before changing any files`, (t) => {
+    const { root, redirectsPath, fromRel } = fixtureRepo();
+    const outside = mkdtempSync(path.join(tmpdir(), 'move-doc-outside-'));
+    t.after(() => rmSync(root, { recursive: true, force: true }));
+    t.after(() => rmSync(outside, { recursive: true, force: true }));
+    const source = path.join(root, fromRel);
+    const sourceMeta = path.join(path.dirname(source), 'meta.json');
+    const destinationDir = path.join(root, 'content/docs/other');
+    const destination = path.join(destinationDir, 'new-name.mdx');
+    const destinationMeta = path.join(destinationDir, 'meta.json');
+    const linker = path.join(root, 'content/docs/example/linker.mdx');
+    mkdirSync(destinationDir);
+    writeFileSync(sourceMeta, JSON.stringify({ pages: ['old-name', 'linker'] }));
+    writeFileSync(destinationMeta, JSON.stringify({ pages: [] }));
+    writeFileSync(linker, PAGE_FRONTMATTER + '\n[Old](/example/old-name)\n');
+    const outsideFile = path.join(outside, 'outside.txt');
+
+    if (target === 'destination directory') {
+      rmSync(destinationDir, { recursive: true });
+      symlinkSync(outside, destinationDir);
+      writeFileSync(outsideFile, 'outside directory sentinel');
+    } else if (target === 'dangling destination') {
+      symlinkSync(path.join(outside, 'missing.mdx'), destination);
+      writeFileSync(outsideFile, 'dangling destination sentinel');
+    } else {
+      const linked = {
+        'source': source,
+        'linked page': linker,
+        'source meta': sourceMeta,
+        'destination meta': destinationMeta,
+        'redirects': redirectsPath,
+      }[target]!;
+      writeFileSync(outsideFile, readFileSync(linked));
+      unlinkSync(linked);
+      symlinkSync(outsideFile, linked);
+    }
+
+    const tracked = [source, linker, sourceMeta, destinationMeta, redirectsPath, outsideFile]
+      .filter((file) => existsSync(file))
+      .map((file) => ({ file, before: readFileSync(file, 'utf8') }));
+    const run = spawnSync(
+      process.execPath,
+      [MOVE_DOC, fromRel, 'content/docs/other/new-name.mdx'],
+      { cwd: root, encoding: 'utf8' },
+    );
+    assert.equal(run.status, 1, run.stderr);
+    assert.match(run.stderr, /refusing symlink in repository path/);
+    for (const { file, before } of tracked) {
+      assert.equal(readFileSync(file, 'utf8'), before, `${file} must remain unchanged`);
+    }
+    assert.ok(existsSync(source), 'source must not move');
+    assert.ok(!existsSync(destination), 'no destination file may be created');
+    assert.ok(!existsSync(path.join(outside, 'missing.mdx')));
+    assert.ok(!existsSync(path.join(outside, 'new-name.mdx')));
+  });
 }
 
 test('move-doc moves the file and appends one redirect, leaving other entries as written', (t) => {

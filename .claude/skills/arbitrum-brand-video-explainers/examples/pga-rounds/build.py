@@ -15,6 +15,7 @@ Then encode with ../../tools/render.sh <workdir>/f <out.mp4>
 """
 
 import os
+import stat
 import sys
 import tempfile
 from pathlib import Path
@@ -30,11 +31,38 @@ SKILL = Path(
 def _work_dir():
     if '--out' in sys.argv:
         return Path(sys.argv[sys.argv.index('--out') + 1])
-    return Path(tempfile.gettempdir()) / 'pga-rounds-build'
+    return Path(tempfile.mkdtemp(prefix='pga-rounds-build-')).resolve()
 
 
-OUT = _work_dir()
-FRAMES = OUT / 'f'
+def _safe_dir(path):
+    path = path.absolute()
+    # macOS owns these standard aliases. Normalize only these exact destinations,
+    # then reject symlinks in all caller-selected path components below them.
+    for alias, target in ((Path('/tmp'), Path('/private/tmp')),
+                          (Path('/var'), Path('/private/var'))):
+        if (path == alias or alias in path.parents) and alias.is_symlink() and alias.resolve() == target:
+            path = target / path.relative_to(alias)
+    for component in reversed((path, *path.parents)):
+        if component.is_symlink():
+            raise ValueError(f"refusing symlink output directory: {component}")
+    path.mkdir(parents=True, exist_ok=True, mode=0o700)
+    info = path.stat()
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o022:
+        raise ValueError(f"output directory must be owned and writable only by you: {path}")
+    return path
+
+
+def _write_svg(path, text):
+    # Check before truncation: O_NOFOLLOW rejects symlinks; fstat also rejects
+    # devices, pipes, and hardlinks to files outside this output directory.
+    flags = os.O_WRONLY | os.O_CREAT | os.O_NOFOLLOW | os.O_NONBLOCK
+    fd = os.open(path, flags, 0o600)
+    with os.fdopen(fd, 'w') as output:
+        info = os.fstat(output.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_nlink != 1:
+            raise ValueError(f"refusing unsafe SVG output: {path}")
+        output.truncate(0)
+        output.write(text)
 
 W, H, FPS = 1600, 900, 30
 
@@ -451,16 +479,21 @@ def main():
     build()
     total = sum(d for d, _ in KEYS)
     print(f'{len(KEYS)} keyframes, {total:.2f} s, {int(total * FPS)} frames')
-    OUT.mkdir(parents=True, exist_ok=True)
+    out = _safe_dir(_work_dir())
     if '--one' in sys.argv:
         i = int(sys.argv[sys.argv.index('--one') + 1])
-        probe = OUT / 'probe.svg'
-        probe.write_text(render(KEYS[i][1], KEYS[i][1], 1.0, inline_bg=True))
+        probe = out / 'probe.svg'
+        _write_svg(probe, render(KEYS[i][1], KEYS[i][1], 1.0, inline_bg=True))
         print(f'wrote {probe}')
         return
 
-    FRAMES.mkdir(parents=True, exist_ok=True)
-    for old in FRAMES.glob('*.svg'):
+    frames = _safe_dir(out / 'f')
+    old_frames = list(frames.glob('*.svg'))
+    for old in old_frames:
+        info = old.lstat()
+        if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_nlink != 1:
+            raise ValueError(f"refusing unsafe existing frame: {old}")
+    for old in old_frames:
         old.unlink()
     n = 0
     for i, (dur, stb) in enumerate(KEYS):
@@ -468,7 +501,7 @@ def main():
         cnt = max(1, int(round(dur * FPS)))
         for k in range(cnt):
             u = (k + 1) / cnt
-            (FRAMES / f'{n:05d}.svg').write_text(render(sta, stb, u))
+            _write_svg(frames / f'{n:05d}.svg', render(sta, stb, u))
             n += 1
     print(f'wrote {n} frame svgs')
 
