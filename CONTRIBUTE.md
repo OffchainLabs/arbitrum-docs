@@ -18,6 +18,9 @@ pnpm dev          # http://localhost:3000
 
 Node `22.x` (`>=22.18 <23`, enforced by `engines`; every script is a `.ts` file Node runs directly) and pnpm 10. Other Node majors are rejected.
 
+`pnpm test` also requires Python 3.9 or newer on PATH as `python3` for the brand-helper security
+tests. No additional Python packages are needed.
+
 **Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken, which is a common false alarm when checking a content change.
 

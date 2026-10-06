@@ -11,6 +11,7 @@
 import { gfmTableToMarkdown } from 'mdast-util-gfm-table';
 import { toMarkdown } from 'mdast-util-to-markdown';
 
+import { assertInertMdx } from './generated-partial.ts';
 import type { CliFlag } from './nitro-cli-flags.ts';
 
 /** A link to a curated guide: the text the page shows and the site-relative href. */
@@ -32,6 +33,37 @@ export interface RenderOptions {
 
 export const START_MARKER = '{/* GENERATED:START */}';
 export const END_MARKER = '{/* GENERATED:END */}';
+
+/** Only the JSX emitted by this renderer may occur in its generated region. */
+export function assertStaticCliRegion(region: string): void {
+  assertInertMdx(region, {
+    context: 'CLI flags reference generated region',
+    allowedElements: ['Callout', 'Accordions', 'Accordion'],
+  });
+}
+
+/** Validate the final formatted region while preserving trusted editorial MDX around it. */
+export function assertStaticCliPage(page: string): void {
+  const { body } = splitFrontmatter(page);
+  const start = body.indexOf(START_MARKER);
+  const end = body.indexOf(END_MARKER);
+  if (
+    start === -1 ||
+    end < start ||
+    body.indexOf(START_MARKER, start + START_MARKER.length) !== -1 ||
+    body.indexOf(END_MARKER, end + END_MARKER.length) !== -1
+  ) {
+    throw new Error('CLI flags reference must have exactly one ordered generated marker pair');
+  }
+  assertStaticCliRegion(body.slice(start + START_MARKER.length, end));
+}
+
+/** Release tags are interpolated into Markdown and passed to git as refs, never options. */
+export function assertNitroVersionTag(tag: string): void {
+  if (!/^v\d+\.\d+\.\d+(?:-[A-Za-z0-9][A-Za-z0-9.-]*)?$/.test(tag)) {
+    throw new Error(`Invalid Nitro release tag: ${JSON.stringify(tag)}`);
+  }
+}
 
 const DO_NOT_EDIT =
   '{/* The region between the GENERATED markers below is written by ' +
@@ -125,6 +157,10 @@ export function groupByNamespace(
 ): Array<{ namespace: string; flags: CliFlag[] }> {
   const groups = new Map<string, CliFlag[]>();
   for (const flag of flags) {
+    // Names also become Markdown headings and JSX titles, outside the table's code spans.
+    if (!/^[A-Za-z0-9][A-Za-z0-9_-]*(?:\.[A-Za-z0-9][A-Za-z0-9_-]*)*$/.test(flag.flag)) {
+      throw new Error(`Unsafe CLI flag name: ${JSON.stringify(flag.flag)}`);
+    }
     const dot = flag.flag.indexOf('.');
     const namespace = dot === -1 ? flag.flag : flag.flag.slice(0, dot);
     const group = groups.get(namespace);
@@ -144,6 +180,7 @@ export function renderGeneratedRegion(
   flags: readonly CliFlag[],
   { introLinks, namespaceLinks, defaultNamespaceLink, nitroVersionTag }: RenderOptions,
 ): string {
+  assertNitroVersionTag(nitroVersionTag);
   const groups = groupByNamespace(flags);
   const lines: string[] = [];
   const intro = introLinks.map((link) => `- [${link.label}](${link.href})`).join('\n');
@@ -193,7 +230,9 @@ nitro --conf.file=/path/to/config.json
     lines.push('');
   }
 
-  return lines.join('\n');
+  const region = lines.join('\n');
+  assertStaticCliRegion(region);
+  return region;
 }
 
 /**

@@ -19,3 +19,16 @@ strictDepBuilds: true
 # For an urgent fix that cannot wait (a security release, as dependabot.yml also allows), list the
 # package under `minimumReleaseAgeExclude` in the same change that bumps it, and remove it after.
 minimumReleaseAge: 10080
+
+# Security fixes for transitive packages that upstream dependency ranges still permit.
+overrides:
+  dompurify: 3.4.16
+  source-map-js: 1.2.2
+  ws@8: 8.21.0
+  katex: 0.18.4
+
+# Recent security fixes: GHSA-p98j-92pf-mc4p, GHSA-6688-9rhm-gjv2 and
+# GHSA-68fv-2mgg-jv7q. Keep the release-age exceptions restricted to these versions.
+minimumReleaseAgeExclude:
+  - dompurify@3.4.16
+  - source-map-js@1.2.2

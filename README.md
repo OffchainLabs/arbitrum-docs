@@ -26,6 +26,9 @@ pnpm dev          # http://localhost:3000
 
 Node 22 (`>=22.18 <23`) · pnpm 10. Other Node majors are rejected by `engines`.
 
+Python 3.9 or newer must be available as `python3` for `pnpm test`, which runs the brand-helper
+security tests alongside the TypeScript suites. Those Python tests use only the standard library.
+
 `pnpm-workspace.yaml` sets `strictDepBuilds`, so an install fails with `ERR_PNPM_IGNORED_BUILDS`
 when a dependency's build script was skipped. Two cases: a `node_modules` installed before that
 setting records the skipped build, so delete `node_modules` and install again; a new dependency

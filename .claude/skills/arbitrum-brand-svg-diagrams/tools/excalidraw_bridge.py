@@ -11,6 +11,8 @@ Excalidraw renders the clean, non-hand-drawn style that matches the docs.
 Output is deterministic (fixed seeds) — no randomness, so diffs stay stable.
 """
 import json
+import math
+import re
 import sys
 import xml.etree.ElementTree as ET
 
@@ -51,22 +53,67 @@ def _esc(s):
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+def _number(value, name, minimum=None):
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ValueError(f"{name} must be a number")
+    if not math.isfinite(value) or (minimum is not None and value < minimum):
+        raise ValueError(f"invalid {name}: require a finite number" +
+                         (f" >= {minimum}" if minimum is not None else ""))
+    return value
+
+
+def _color(value, name):
+    if not isinstance(value, str) or not (
+        value in ("transparent", "none") or
+        re.fullmatch(r"#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})", value)
+    ):
+        raise ValueError(f"{name} must be a hex color, transparent, or none")
+    return value
+
+
 # ---------------- Excalidraw -> brand SVG ----------------
 def excalidraw_to_svg(scene):
+    if not isinstance(scene, dict) or not isinstance(scene.get("elements", []), list):
+        raise ValueError("scene must contain an elements array")
+    if any(not isinstance(e, dict) for e in scene.get("elements", [])):
+        raise ValueError("each element must be an object")
     els = [e for e in scene.get("elements", []) if not e.get("isDeleted")]
+    for e in els:
+        for name in ("x", "y"):
+            _number(e[name], name)
+        for name in ("width", "height"):
+            _number(e.get(name, 0), name, minimum=0)
+        if e.get("type") in ("arrow", "line"):
+            _color(e.get("strokeColor", "#12aaff"), "strokeColor")
+            points = e.get("points")
+            if points is not None:
+                if not isinstance(points, list):
+                    raise ValueError("points must be an array")
+                for point in points:
+                    if not isinstance(point, list) or len(point) != 2:
+                        raise ValueError("each point must contain two numbers")
+                    for value in point:
+                        _number(value, "point")
+        elif e.get("type") in ("rectangle", "ellipse"):
+            _color(e.get("backgroundColor") or "#213147", "backgroundColor")
+        elif e.get("type") == "text":
+            _color(e.get("strokeColor", "#ffffff"), "strokeColor")
+            _number(e.get("fontSize", 16), "fontSize", minimum=1)
+            if not isinstance(e.get("text", ""), str):
+                raise ValueError("text must be a string")
     xs = [e["x"] for e in els] or [0]
     ys = [e["y"] for e in els] or [0]
     xe = [e["x"] + e.get("width", 0) for e in els] or [10]
     ye = [e["y"] + e.get("height", 0) for e in els] or [10]
     minx, miny, pad = min(xs), min(ys), 20
-    w = max(xe) - minx + 2 * pad
-    h = max(ye) - miny + 2 * pad
+    w = _number(max(xe) - minx + 2 * pad, "viewBox width", minimum=1)
+    h = _number(max(ye) - miny + 2 * pad, "viewBox height", minimum=1)
 
     def X(v):
-        return v - minx + pad
+        return _number(v - minx + pad, "transformed x")
 
     def Y(v):
-        return v - miny + pad
+        return _number(v - miny + pad, "transformed y")
 
     out = [f'<svg xmlns="{SVG_NS}" viewBox="0 0 {w:.0f} {h:.0f}" width="{w:.0f}" '
            f'height="{h:.0f}" font-family="Inter, ui-sans-serif, system-ui, sans-serif">',
@@ -91,14 +138,19 @@ def excalidraw_to_svg(scene):
     for e in els:
         if e["type"] == "text":
             fs = e.get("fontSize", 16)
-            cx = X(e["x"]) + e.get("width", 0) / 2
-            cy = Y(e["y"]) + fs
+            cx = _number(X(e["x"]) + e.get("width", 0) / 2, "text x")
+            cy = _number(Y(e["y"]) + fs, "text y")
             for i, line in enumerate(e.get("text", "").split("\n")):
                 out.append(f'<text x="{cx:.1f}" y="{cy + i * fs * 1.25:.1f}" text-anchor="middle" '
                            f'fill="{e.get("strokeColor", "#ffffff")}" font-size="{fs}" '
                            f'font-weight="600">{_esc(line)}</text>')
     out.append("</svg>")
-    return "\n".join(out) + "\n"
+    # Parse the validated markup and serialize it as XML, rather than emitting
+    # unchecked fragments. ElementTree also rejects invalid XML text characters.
+    root = ET.fromstring("\n".join(out))
+    ET.register_namespace("", SVG_NS)
+    ET.indent(root)
+    return ET.tostring(root, encoding="unicode") + "\n"
 
 
 # ---------------- brand SVG -> Excalidraw ----------------
@@ -143,11 +195,14 @@ def main():
         print(__doc__)
         sys.exit(2)
     mode, src, dst = sys.argv[1:4]
-    if mode == "import":
-        with open(dst, "w") as f:
-            f.write(excalidraw_to_svg(json.load(open(src))))
-    else:
-        json.dump(svg_to_excalidraw(open(src).read()), open(dst, "w"), indent=2)
+    with open(src) as source:
+        if mode == "import":
+            output = excalidraw_to_svg(json.load(source))
+        else:
+            output = json.dumps(svg_to_excalidraw(source.read()), indent=2)
+    # Validate the complete input before opening (and truncating) the destination.
+    with open(dst, "w") as destination:
+        destination.write(output)
     print(f"wrote {dst}")
 
 

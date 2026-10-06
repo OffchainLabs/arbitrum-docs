@@ -15,12 +15,15 @@ import { after, before, describe, it } from 'node:test';
 
 import {
   UnrepresentableCellError,
+  assertNitroVersionTag,
+  assertStaticCliPage,
   codeCell,
   escapeCell,
   groupByNamespace,
   renderGeneratedRegion,
   splicePage,
 } from './lib/cli-reference-page.ts';
+import { writeOrCheck } from './lib/generated-partial.ts';
 import {
   type GoTree,
   goFiles,
@@ -422,6 +425,83 @@ describe('page rendering', () => {
     assert.deepEqual(
       groupByNamespace(flags).map((g) => `${g.namespace}:${g.flags.length}`),
       ['http:2', 'node:2'],
+    );
+  });
+
+  it('rejects expression and JSX syntax in upstream names before rendering namespace headings', () => {
+    for (const flagName of ['{40+2}', 'http" onClick={40+2} x=".addr', '<Injected>.addr']) {
+      const { flags: upstreamFlags, problems } = extractFlags({
+        dirs: new Map([
+          [
+            'fixture',
+            {
+              vars: new Map(),
+              consts: new Map(),
+              funcs: new Map([
+                [
+                  'AddOptions',
+                  {
+                    params: ['f *pflag.FlagSet'],
+                    body: `f.Bool(${JSON.stringify(flagName)}, false, "fixture")`,
+                    file: 'fixture.go',
+                  },
+                ],
+              ]),
+            },
+          ],
+        ]),
+        fileImports: new Map(),
+        entryPoint: { dir: 'fixture', func: 'AddOptions' },
+      });
+      assert.deepEqual(problems, []);
+      assert.throws(() => renderGeneratedRegion(upstreamFlags, options), /Unsafe CLI flag name/);
+    }
+  });
+
+  it('rejects unsafe release refs before git or Markdown interpolation', () => {
+    for (const tag of ['--output=outside', 'v1.2.3` {40+2}', 'main', 'v1.2.3\nextra']) {
+      assert.throws(() => assertNitroVersionTag(tag), /Invalid Nitro release tag/);
+    }
+    assert.doesNotThrow(() => assertNitroVersionTag('v3.11.4'));
+    assert.doesNotThrow(() => assertNitroVersionTag('v3.6.0-rc.4'));
+  });
+
+  it('validates the whole generated region, including curated guide labels', () => {
+    assert.throws(
+      () =>
+        renderGeneratedRegion(flags, { ...options, introLinks: [{ label: '{40+2}', href: '/x' }] }),
+      /generated text would compile to code/,
+    );
+  });
+
+  it('rejects executable formatted output before changing the destination', async (t) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cli-inert-write-'));
+    t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+    const destination = path.join(dir, 'reference.mdx');
+    const original = splicePage('', renderGeneratedRegion(flags, options));
+    fs.writeFileSync(destination, original);
+    for (const region of [
+      '## {40+2}',
+      '<Accordion title="fixture" onClick={40+2}>text</Accordion>',
+    ]) {
+      await assert.rejects(
+        writeOrCheck(destination, splicePage(original, region), {
+          check: false,
+          overrides: { parser: 'mdx', plugins: [], printWidth: 9999, proseWrap: 'preserve' },
+          validate: assertStaticCliPage,
+        }),
+        /generated text would compile to code/,
+      );
+      assert.equal(fs.readFileSync(destination, 'utf-8'), original);
+    }
+  });
+
+  it('validates the generated region while retaining trusted editorial MDX', () => {
+    const page = splicePage('', renderGeneratedRegion(flags, options)) + '\nEditorial {40+2}.\n';
+    assert.doesNotThrow(() => assertStaticCliPage(page));
+    assert.throws(
+      () => assertStaticCliPage(page + '\n{/* GENERATED:START */}\n'),
+      /exactly one ordered generated marker pair/,
     );
   });
 

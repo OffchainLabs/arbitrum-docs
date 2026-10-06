@@ -41,7 +41,12 @@ import {
   namespaceLinks,
 } from './data/nitro-cli-reference.data.ts';
 import type { ExclusionRule } from './data/nitro-cli-reference.data.ts';
-import { renderGeneratedRegion, splicePage } from './lib/cli-reference-page.ts';
+import {
+  assertNitroVersionTag,
+  assertStaticCliPage,
+  renderGeneratedRegion,
+  splicePage,
+} from './lib/cli-reference-page.ts';
 import {
   StaleFileError,
   type WriteOrCheckOptions,
@@ -176,6 +181,7 @@ function readNitroVersionTag(): string {
   if (typeof tag !== 'string') {
     throw new Error(`${VARS_PATH} has no string nitroVersionTag`);
   }
+  assertNitroVersionTag(tag);
   return tag;
 }
 
@@ -260,7 +266,11 @@ async function main(): Promise<void> {
   }
 
   try {
-    await writeOrCheck(OUTPUT_PATH, content, { check, overrides: MDX_FORMAT });
+    await writeOrCheck(OUTPUT_PATH, content, {
+      check,
+      overrides: MDX_FORMAT,
+      validate: assertStaticCliPage,
+    });
   } catch (error) {
     // "The page is stale" does not say whether a flag or a default moved or only whitespace did,
     // which is what a reviewer of the regenerated file needs to know. `writeOrCheck`

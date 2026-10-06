@@ -32,7 +32,7 @@ pnpm install           # postinstall runs fumadocs-mdx, which regenerates .sourc
 pnpm dev               # http://localhost:3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
 pnpm frontmatter:check # every documentation page satisfies lib/page-schema.ts
-pnpm test              # node --test over scripts/**/*.test.ts
+pnpm test              # node --test over scripts/**/*.test.ts; helper tests require python3 >=3.9
 pnpm test:browser      # Chromium interactions against a running production server; see README.md
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build
