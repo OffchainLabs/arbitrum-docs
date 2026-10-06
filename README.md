@@ -1,254 +1,321 @@
-# Arbitrum Docs
+# Arbitrum docs portal
 
-Arbitrum Docs, built with docusaurus; docs are live at https://developer.arbitrum.io/.
+Arbitrum documentation portal, on Next.js 16 and Fumadocs. Serves English MDX docs from
+[`OffchainLabs/arbitrum-docs`](https://github.com/OffchainLabs/arbitrum-docs); deployed on Vercel.
 
-## File structure
+This file covers **how to work on the docs.** For how the codebase works and why, see
+[INTERNALS.md](INTERNALS.md). Contributing a page or a PR? Start with
+[CONTRIBUTE.md](CONTRIBUTE.md) instead. It covers the frontmatter contract, partials, variables,
+moving pages, and the gates to run before you push. For the prose itself, the house editorial
+standard is [STYLE-GUIDE.md](STYLE-GUIDE.md): plain-language rules, words and phrases to replace or
+cut, the terminology table, and the glossary-linking convention.
 
-This repository is organized as follows:
+New to Fumadocs, or arriving from the old Docusaurus site? Start with
+[What Fumadocs is](INTERNALS.md#what-fumadocs-is) and
+[Coming from Docusaurus](INTERNALS.md#coming-from-docusaurus). They take about five minutes and
+cover the differences that cause the most mistakes.
 
-### Documentation Content
+## Setup
 
-- **`docs/`** - Main documentation content directory
-  - `arbitrum-bridge/` - Bridge-related documentation
-  - `build-decentralized-apps/` - Developer guides and references
-  - `for-devs/` - Developer tools and third-party integrations
-  - `for-users/` - User-focused documentation
-  - `how-arbitrum-works/` - Technical explanations of Arbitrum
-  - `intro/` - Introduction and glossary
-  - `launch-arbitrum-chain/` - Arbitrum chain deployment guides
-  - `learn-more/` - Additional learning resources
-  - `node-running/` - Node operation guides
-  - `partials/` - Reusable content components and troubleshooting guides
-  - `run-arbitrum-node/` - Node setup and configuration
-  - `stylus/` - Stylus smart contract development
-  - `welcome/` - Getting started content
+Create your contribution branch from `master` and open pull requests against `master`.
 
-### Application Code
-
-- **`src/`**: Docusaurus application source code
-  - `components/`: React components for the documentation site
-  - `css/`: Styling and themes
-  - `pages/`: Custom pages and landing pages
-  - `resources/`: Global variables and configuration
-  - `scripts/`: Build scripts
-  - `theme/`: Docusaurus theme customizations
-
-### Configuration & Dependencies
-
-- **`scripts/`**: Repository maintenance, build scripts, and content generators
-- **`static/`**: Static assets (images, files, JSON data)
-
-## Contribution
-
-For most of the docs content, you can contribute by simply reviewing our [docs contribution guidelines](https://docs.arbitrum.io/for-devs/contribute) and opening a PR!
-
-The following are the only exceptions:
-
-- Contributing to the three troubleshooting pages — [nodes](docs/partials/_troubleshooting-nodes-partial.mdx), [builders](docs/partials/_troubleshooting-building-partial.mdx), and [users](docs/partials/_troubleshooting-users-partial.mdx) require internal Offchain Labs access. If you'd like to make a suggestion about content on any of those pages, open an [issue ticket](https://github.com/OffchainLabs/arbitrum-docs/issues).
-
-- To request to have your project added to the [3rd party node providers page](docs/build-decentralized-apps/reference/01-node-providers.mdx), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
-
-### Initial set up
-
-1. Clone this repo
-
-```shell
-git clone git@github.com:OffchainLabs/arbitrum-docs.git
+```bash
+pnpm install      # runs a postinstall that generates .source/
+pnpm dev          # install, clean, then http://localhost:3000 with hot reload
 ```
 
-2. Install node dependencies
+Node 22 (`>=22.18 <23`) · pnpm 10. Other Node majors are rejected by `engines`.
 
-```shell
-yarn
+Python 3.9 or newer must be available as `python3` for `pnpm test`, which runs the brand-helper
+security tests alongside the TypeScript suites. Those Python tests use only the standard library.
+
+`pnpm-workspace.yaml` sets `strictDepBuilds`, so an install fails with `ERR_PNPM_IGNORED_BUILDS`
+when a dependency's build script was skipped. Two cases: a `node_modules` installed before that
+setting records the skipped build, so delete `node_modules` and install again; a new dependency
+with a build script needs an entry in `ignoredBuiltDependencies` or `onlyBuiltDependencies` in
+that file, with a comment saying what its script does. `minimumReleaseAge` there also refuses a
+version published in the last seven days; add it to `minimumReleaseAgeExclude` to take one on
+purpose.
+
+**Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
+component looks broken.
+
+Search and the "Ask AI" chat button are powered by [Inkeep](https://inkeep.com). Set the
+publishable key in a local `.env` (gitignored):
+
+```bash
+NEXT_PUBLIC_INKEEP_API_KEY=<inkeep-search-key>
 ```
 
-3. Build
+Config lives in `lib/inkeep.ts`; the widgets mount in `components/inkeep/` and are wired into
+`RootProvider` in `app/layout.tsx`.
 
-```shell
-yarn build
+### Environment variables
+
+None of these are needed to run the site locally; everything that reads them degrades to a no-op
+or a documented fallback.
+
+| Variable                     | Used by                                                                             | Without it                                                                                                                                                              |
+| ---------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_INKEEP_API_KEY` | search and the "Ask AI" button                                                      | both are unavailable                                                                                                                                                    |
+| `NEXT_PUBLIC_SITE_URL`       | `metadataBase`, `app/sitemap.ts`, `app/robots.ts`, request tracking                 | `http://localhost:3000` locally; a **production build fails**                                                                                                           |
+| `NEXT_PUBLIC_POSTHOG_KEY`    | page feedback (`lib/posthog.ts`), web analytics, and request tracking in `proxy.ts` | feedback submissions and tracking events are dropped with a server-side log                                                                                             |
+| `NEXT_PUBLIC_VERCEL_ENV`     | the production gate on web analytics and the Inkeep event bridge                    | neither fires; Vercel sets this one, you never do                                                                                                                       |
+| `VERCEL_DEEP_CLONE`          | `hasFullGitHistory()` in `source.config.ts`, which gates the last-modified dates    | a shallow Vercel clone resolves no dates: no "Last updated" line, no `<lastmod>`, no `article:modified_time`, and nothing warns. Set it to `true` on the Vercel project |
+
+Set the PostHog token the same way as the Inkeep key, in a local `.env` (gitignored):
+
+```bash
+NEXT_PUBLIC_POSTHOG_KEY=phc_<posthog-project-token>
 ```
 
-4. Start the development server
+`NEXT_PUBLIC_POSTHOG_KEY` is PostHog's documented name for the publishable `phc_` project token
+(Project settings, Project API key). It is write-only, so the `NEXT_PUBLIC_` prefix is safe even
+though two of its three consumers read it on the server. Set it on Vercel for Preview and
+Production.
 
-```shell
-yarn start
+Page feedback needs the key locally. Web analytics does not fire locally or on a preview deployment
+no matter what you set, because `components/analytics/posthog-provider.tsx` also requires
+`NEXT_PUBLIC_VERCEL_ENV` to be `production` and only Vercel sets that. Request tracking is gated the
+same way, on the server-side `VERCEL_ENV`, so nothing is sent locally or from a preview and no key
+is needed for either. See [Analytics](INTERNALS.md#analytics).
+
+Each tracking event carries a random `distinct_id` and creates no person profile. The proxy never
+reads the reader's IP address. See [Routing and `proxy.ts`](INTERNALS.md#routing-and-proxyts).
+
+## Before you push
+
+```bash
+pnpm types:check   # the main verification gate
+pnpm frontmatter:check # every documentation page satisfies the frontmatter schema
+pnpm test          # tooling tests, including the sidebar and redirect checks
+pnpm check-links   # broken internal links and MDX fragments
+pnpm content:lint  # MDX that compiles but renders wrong
+pnpm faq:check     # the FAQ partials match their Notion snapshots
+pnpm format        # prettier, in place
 ```
 
-### Dev Build
+CI runs ten blocking checks, then a `pnpm build` that serves the built site and checks it over
+HTTP. `pnpm build` runs the same link check first, so a broken link fails the Vercel deploy too. See
+[The gates](INTERNALS.md#the-gates) for the full list. There is no pre-commit hook, so run these
+yourself.
 
-To start a build server to serve the docs site locally, run this command from the root directory:
+`types:check` checks TypeScript; `frontmatter:check` validates page metadata. Neither proves
+the render. Type checking passes on a page that serves literal `:::` or
+`undefined`. **Always confirm content changes in a browser.**
 
-```shell
-yarn start
-```
+## Layout
 
-### Build
+| Path                    | Purpose                                                    |
+| ----------------------- | ---------------------------------------------------------- |
+| `content/docs/`         | MDX pages and the `meta.json` files that order the sidebar |
+| `content/partials/`     | Reusable `_`-prefixed fragments, included into pages       |
+| `content/glossary/`     | Glossary terms for `<Term>` (hand-written)                 |
+| `content/vars.json`     | Global variables                                           |
+| `app/(docs)/[...slug]/` | Docs route                                                 |
+| `components/mdx.tsx`    | The MDX component registry                                 |
+| `components/widgets/`   | The four interactive widgets, each used by one page        |
+| `lib/source.ts`         | Fumadocs source adapter                                    |
+| `proxy.ts`              | PostHog tracking for markdown and `llms*.txt` fetches      |
+| `source.config.ts`      | Fumadocs MDX config: the two collections                   |
+| `lib/page-schema.ts`    | The frontmatter schema every page must satisfy             |
 
-While in the root directory, this command will build the site:
+## Write a page
 
-```shell
-yarn build
-```
+Every page needs a `title` and a `description`. A missing one fails `pnpm frontmatter:check` and
+the build. `pnpm types:check` does not see frontmatter, so run the check before you push.
 
-To test the build locally, you can use the following command:
-
-```shell
-yarn serve
-```
-
-### Update glossary
-
-You can add any terms to the glossary by following these steps:
-
-Let's assume you need to add the term "State Transition Function" to the glossary.
-
-1. Create an `.mdx` file as follows:
-
-`docs/partials/glossary/_state-transition-function.mdx`
-
-2. Ensure that the content of your file follows the following format:
-
-```markdown
+```mdx
 ---
-title: State Transition Function
-key: state-transition-function
-titleforSort: State Transition Function
+title: 'How to run a full node'
+description: One-line summary shown in search results and social cards.
+content_type: how-to
+author: your-github-handle
+sme: reviewing-sme-handle
 ---
-
-The STF (State Transition Function) defines how new blocks are produced from input messages (i.e., transactions) in an Arbitrum chain.
 ```
 
-3. While in the root directory, run the following command:
+`content_type`, `author`, `sme`, `sidebar_label` and `user_story` are optional. When set, `content_type` must be
+one of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`, `troubleshooting`, `faq`.
 
-```shell
-npx tsx scripts/build-glossary.ts
+The sidebar comes from the `meta.json` in each directory: a page's directory is its place, and
+that file's `pages` array orders it. `sidebar_label` replaces the title as the page's sidebar name.
+See [Place your page in the sidebar](CONTRIBUTE.md#place-your-page-in-the-sidebar) and
+[The sidebar and its roots](INTERNALS.md#the-sidebar-and-its-roots).
+
+Callouts use Fumadocs' component. Docusaurus `:::` directives render as plain text.
+
+```mdx
+<Callout type="warn" title="Before you start">
+  Fund the batch poster account first.
+</Callout>
 ```
 
-This part will update the glossary.
+`type` is one of `info`, `warn`, `error`, `idea` or `success`.
 
-4. Commit your changes and open a PR.
+## Use a partial
 
-### Update Nitro CLI flag reference
+**Before writing a banner, note, config table, or troubleshooting block, look in
+`content/partials/`** and reuse a partial instead of duplicating prose. File names say what each
+one holds.
 
-`docs/run-arbitrum-node/nitro/cli-flags-reference.mdx` is auto-generated from `scripts/data/nitro-cli-flags.json` by `scripts/generate-cli-reference.ts`. Do not edit the `.mdx` file by hand — your changes will be overwritten on the next regeneration.
+```mdx
+<!-- From a doc page: root-anchored, so moving the page never breaks it -->
 
-To regenerate the reference after updating the JSON data file:
-
-```shell
-yarn generate-cli-reference
+<include cwd>content/partials/_hardware-requirements.mdx</include>
 ```
 
-To verify the committed `.mdx` is in sync with the JSON data (used in CI):
+```mdx
+<!-- From another partial: file-relative -->
 
-```shell
-yarn generate-cli-reference --check
+<include>../_hardware-requirements.mdx</include>
 ```
 
-The script also accepts `--output <path>` to write to a different location and `--nitro-path <path>` (or the `NITRO_REPO_PATH` env var) to point at a local Nitro checkout — useful when refreshing the JSON data against a specific Nitro version.
+To add one, create `content/partials/<area>/_your-partial.mdx` and include it. It needs no
+frontmatter. ([Details](INTERNALS.md#partials).)
 
-### Reference generators
+## Use a variable
 
-Several docs pages are generated from source data. Edit the source, not the generated `.mdx` — hand edits are overwritten on the next run.
+Values that move on a release cadence (version tags, chain parameters, node image names) live in
+one file, so you edit them once and every page follows.
 
-| Command                                | Generates                                                           | Source                                                  |
-| -------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------- |
-| `yarn generate-contract-addresses`     | `docs/partials/_reference-arbitrum-contract-addresses-partial.mdx`  | `@arbitrum/sdk` + `scripts/contract-addresses.data.ts`  |
-| `yarn generate-precompiles-ref-tables` | `docs/for-devs/dev-tools-and-resources/partials/precompile-tables/` | Nitro source (pinned via `src/resources/globalVars.js`) |
-| `yarn build-glossary`                  | `docs/partials/_glossary-partial.mdx` + `static/glossary.json`      | `docs/partials/glossary/*.mdx`                          |
-| `yarn generate-cli-reference`          | `docs/run-arbitrum-node/nitro/cli-flags-reference.mdx`              | `scripts/data/nitro-cli-flags.json`                     |
-| `yarn update-variable-refs`            | `@@var@@` values across docs                                        | `src/resources/globalVars.js`                           |
-
-Run them all with `yarn generate`, then commit the regenerated files.
-
-Add `--check` to any command (e.g. `yarn build-glossary --check`) to verify instead of write: it regenerates in memory, compares against the committed file, changes nothing, and exits with an error if they differ. `yarn generate:check` runs this verify mode across all of them (used in CI to catch stale output).
-
-### Restructuring docs (moving or renaming pages)
-
-The tooling handles internal links, the moved file's own relative links, sidebar entries,
-redirects, and quicklook glossary data so a move costs minutes instead of hours.
-
-`redirects.config.js` is the single source of truth for internal redirects. It is consumed by the
-`@docusaurus/plugin-client-redirects` plugin (in-app redirects) and mirrored into `vercel.json` for
-the edge by `yarn sync-redirects`.
-
-#### One command (recommended)
-
-`yarn restructure <from> <to>` runs the whole sequence in the order that keeps the edge consistent:
-it moves the file and rewrites references, then runs `yarn build` as a verification gate,
-regenerates the glossary only if a glossary term was affected, and finally mirrors the redirect
-into `vercel.json`. If the build fails, it aborts **before** touching `vercel.json`.
-
-```shell
-# preview only — no files are changed
-yarn restructure docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx --dry-run
-
-# perform the move end to end
-yarn restructure docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx
+```mdx
+The current Nitro release is <Var name="nitroVersionTag" />.
 ```
 
-Then commit your changes and open a PR.
+`Var` is registered globally, so pages need no import. It works inside partials too.
 
-#### Step by step (for batch moves or granular control)
+**Variables do not work inside code.** MDX does not evaluate components inside a fenced code block
+or an inline code span, so `<Var name="…" />` there renders as a literal tag, not its value.
+Usually the value was never code to begin with, and dropping the backticks is the whole fix. When a
+reader is meant to copy the line, as in a `docker run` command, hardcode the current value in the
+code and reference the variable in the prose next to it. `pnpm content:lint` (rule `var-in-code`)
+fails on any `<Var>` found inside code. To have a hardcoded copy of `latestNitroNodeImage` kept current for you,
+put `{/* sync-with-var: latestNitroNodeImage */}` anywhere in the page and
+`pnpm nitro:check-release --to <tag>` will rewrite it when it bumps that variable. Do not put that marker on a page that states a
+Nitro version as a historical fact, such as an ArbOS release note, or a bump will rewrite history.
 
-Use the individual commands when you want to inspect the blast radius first, or move several files
-before building once (build and sync a single time, after all the moves).
+**Variables do not work in a link destination either, and that one leaves no link at all.** A
+markdown link destination may not contain a space and `<Var name="…" />` contains two, so the link
+never parses and the reader is served the literal `[text](…)` brackets. Write the variable as a
+`{var:name}` placeholder in the destination instead:
 
-1. Size the blast radius — list every internal link that points at the page (accepts a path or a glob):
-
-```shell
-yarn inventory-links docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx
+```mdx
+[Interface](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/precompiles/ArbSys.go)
 ```
 
-2. Preview the move without changing any files:
+Use as many placeholders as the URL needs. The same form works in an `href`, `to` or `src`
+attribute, in a link title, and in an internal `/<slug>` destination, which `pnpm check-links`
+expands before it resolves. Everywhere else on the page, the link text included, keep using
+`<Var name="…" />`: a placeholder written in prose is read as a JavaScript expression and fails the
+build with an acorn parse error. The one destination it cannot do is a local image path
+(`![a](/img/…)`), which is imported before the placeholder is expanded, so write that path out in
+full. `pnpm content:lint` (rule `var-in-link`) fails on a `<Var>` left in a destination, and `pnpm vars:check`
+reads placeholders too, so a mistyped name is caught the way a mistyped `<Var>` name is.
 
-```shell
-yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx --dry-run
+**To update a value:** edit [`content/vars.json`](content/vars.json), then run `pnpm vars:check`.
+
+**To add a new variable:** add the key to `content/vars.json`. No other file changes.
+([Details](INTERNALS.md#global-variables).)
+
+Never hardcode a version or chain parameter into a page.
+
+**Links to a file in this repository are variables too.** `docsRepositoryUrl` and
+`docsRepositoryBranch` hold this repository's own GitHub identity, so a link to `CONTRIBUTE.md`,
+or `STYLE-GUIDE.md` is written
+`[Contribute]({var:docsRepositoryUrl}/blob/{var:docsRepositoryBranch}/CONTRIBUTE.md)`. The same two
+values build the edit link and the "Request an update" button on every page, so editing
+`docsRepositoryUrl` once moves every link home at the same time. That is the one value that changes
+when this repository takes over the `arbitrum-docs` name. `pnpm check-links` skips an external URL
+without resolving it, so a hardcoded one would not be caught if it went dead.
+
+### Announcement banner
+
+The bar above the navbar is configured from the same file, so turning it on, rewording it, or
+retiring it is a content edit. Five keys control it:
+
+| Key                    | Meaning                                                      |
+| ---------------------- | ------------------------------------------------------------ |
+| `announcementEnabled`  | `false` renders nothing at all                               |
+| `announcementText`     | The message, shown before the link                           |
+| `announcementLinkText` | The link label                                               |
+| `announcementLinkHref` | Where the link goes                                          |
+| `announcementId`       | Dismissal key. **Change it whenever you change the message** |
+
+`announcementId` also lands in the page as an HTML `id` and inside a CSS selector, so it has to
+start with a letter and use only letters, digits, hyphens and underscores. `pnpm vars:check` fails
+on anything else.
+
+**Keep the message short: `announcementText` plus `announcementLinkText` under roughly 140
+characters combined.** The bar has a fixed height (3rem, and 4rem below 640px) because the layout
+feeds that number into the sticky offsets of every page, so it cannot grow to fit a longer message.
+It will not clip a message at the length above, but there is no gate on this and nothing will warn
+you. After changing the text, look at the top of a docs page in a browser window narrowed to about
+400px wide and confirm nothing is cut off.
+
+**Dismissal is permanent per viewer, not per session.** A reader who closes the banner has
+`announcementId` written to their browser's `localStorage`, which survives closing the tab and
+every later visit, so they never see that id again on that browser. Reuse an id for a new message
+and everyone who dismissed the old one misses the new one. Give each message its own id.
+
+`announcementLinkHref` is checked by `pnpm vars:check`: it has to be an `https` URL, or a
+root-absolute internal path that resolves to a real page or a file under `public/`. Nothing else
+would catch a typo there, because `pnpm check-links` only reads MDX.
+
+## Move a page
+
+```bash
+pnpm move-doc <from> <to>
 ```
 
-3. Perform the move. This moves the file with `git mv` (staging it as a rename so `git log --follow`
-   keeps the page's history), rewrites every reference to it (and the moved file's own relative
-   links), updates the doc id in `sidebars.js`, and appends a redirect to `redirects.config.js`:
+This rewrites inbound links, re-bases the moved page's own relative links and includes, updates
+`meta.json`, and appends the redirect. Add `--dry-run` to see all of it without touching a file. It
+touches no other redirect. If an older redirect pointed at the old URL, `pnpm test` fails and names
+the entry to retarget by hand.
 
-```shell
-yarn move-doc docs/launch-arbitrum-chain/05-customize-your-chain/customize-stf.mdx docs/launch-arbitrum-chain/customize-stf.mdx
+**Never hand-edit between the `AUTO-GENERATED` markers in `redirects.config.ts`**, since `move-doc`
+owns that block. ([Details](INTERNALS.md#redirects).)
+
+## Commands
+
+```bash
+pnpm dev                 # pnpm install, pnpm clean, next dev on http://localhost:3000
+pnpm clean               # delete .next/ and .source/ (next dev regenerates .source/)
+pnpm types:check         # regenerate .source/, generate Next types, tsc --noEmit
+pnpm frontmatter:check   # every page's frontmatter satisfies lib/page-schema.ts
+pnpm build               # production build (runs check-links first)
+pnpm start               # serve the production build
+
+pnpm test                # tooling test suites, including the sidebar and redirects
+pnpm test:browser        # Chromium interactions against a running production server
+pnpm check-links         # broken internal doc links and MDX fragments
+pnpm vars:check          # every <Var name> and {var:name} resolves; banner keys are valid
+pnpm references:check    # every <Term id> resolves
+pnpm contracts:check     # the contract-address partial is current
+pnpm faq:check           # the six FAQ partials match content/faq/*.json
+pnpm content:lint        # MDX structural defects
+pnpm format:check        # prettier (pnpm format writes)
+
+pnpm move-doc <from> <to>
 ```
 
-4. Verify links resolve. The build fails on any broken internal link:
+Nitro, precompile, contract, CLI, Stylus and edge-challenge tooling runs by hand only. See
+[Hand-run tools](INTERNALS.md#hand-run-tools).
 
-```shell
-yarn build
-```
+For browser tests, run `pnpm exec playwright install chromium`, `pnpm build`, and `pnpm start`.
+In another terminal, run `pnpm test:browser`. It uses `http://localhost:3000` by default; set
+`STATIC_DOCS_TEST_URL` to use another server. The suite checks native text search and text-fragment
+reveal on hidden tab and accordion panels, simulates repeated `beforematch` events, and checks
+manual selection.
 
-5. If the move affected a glossary term, regenerate the quicklook data:
+## Conventions
 
-```shell
-yarn build-glossary
-```
-
-6. Mirror the redirect into `vercel.json` for the edge:
-
-```shell
-yarn sync-redirects
-```
-
-7. Commit your changes and open a PR.
-
-Notes:
-
-- Links whose URL is built from a JavaScript expression (e.g. `<Link to={someVar}>`), and relative
-  links inside partials (a partial has no fixed URL), cannot be rewritten automatically; `move-doc`
-  lists both so you can update them by hand.
-- `yarn move-doc` does not run the build — `yarn restructure` does. With the manual steps, run
-  `yarn build` yourself, plus `yarn build-glossary` if a glossary term changed: quicklook tooltips
-  render from `static/glossary.json` at runtime, which `yarn build` does not validate.
-- The move uses `git mv`, so the rename is staged for you (the link-rewrite shows as a follow-on
-  modification). If the source isn't tracked or you're outside a git work tree, it falls back to a
-  plain filesystem move and warns that the move is unstaged.
-- The doc id in `sidebars.js` is updated in place — the entry is **not** relocated. A page's URL
-  comes from its file path and slug, not its sidebar position, so reorganizing the sidebar by hand
-  (shifting a section elsewhere, reordering items) needs no tooling and no redirects: just edit
-  `sidebars.js` and run `yarn build`, which validates that every entry resolves to a real doc.
-
-### Formatting
-
-1. Run `yarn format` from the root directory.
+- Theme tokens are `--color-fd-*` (Fumadocs). Never `--ifm-*` (legacy Docusaurus).
+- Route constants live in `lib/shared.ts`. Reference these rather than hardcoding paths.
+- Never hand-edit generated files: `.source/`, the `AUTO-GENERATED` block in
+  `redirects.config.ts`, the precompile tables and contract-address partial, the generated region
+  of the Nitro CLI flags page, and every page under `content/docs/stylus/stylus-by-example/`
+  (republished from
+  [`offchainlabs/stylus-by-example`](https://github.com/offchainlabs/stylus-by-example) by
+  `pnpm stylus:generate`, so fix those upstream).
+- Fumadocs reference: <https://www.fumadocs.dev/llms.txt>

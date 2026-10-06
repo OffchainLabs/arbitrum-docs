@@ -1,0 +1,34 @@
+# Dependency lifecycle scripts. pnpm 10 runs none by default. Every package that ships one is
+# listed here as an explicit decision, and strictDepBuilds fails the install when a new one
+# appears, instead of printing a warning that scrolls past.
+# - esbuild: its postinstall checks the platform binary and downloads one from npm only when
+#   the matching @esbuild/<platform> optional dependency is missing. pnpm installs that
+#   package, so the script has nothing to do.
+# - core-js@3.50.0: its postinstall only prints a funding banner and skips it in CI.
+#   Approve this reviewed version because pnpm 10.29.3 retains cached ignored-build records
+#   even after a package is explicitly ignored. Approval clears that stale state.
+onlyBuiltDependencies:
+  - core-js@3.50.0
+ignoredBuiltDependencies:
+  - esbuild
+strictDepBuilds: true
+
+# Refuse to resolve any version published less than 7 days ago (the value is in minutes). It
+# matches Dependabot's 7-day cooldown in .github/dependabot.yml and also covers a hand-run
+# `pnpm add` or `pnpm update`. `--frozen-lockfile` installs are unaffected: they resolve nothing.
+# For an urgent fix that cannot wait (a security release, as dependabot.yml also allows), list the
+# package under `minimumReleaseAgeExclude` in the same change that bumps it, and remove it after.
+minimumReleaseAge: 10080
+
+# Security fixes for transitive packages that upstream dependency ranges still permit.
+overrides:
+  dompurify: 3.4.16
+  source-map-js: 1.2.2
+  ws@8: 8.21.0
+  katex: 0.18.4
+
+# Recent security fixes: GHSA-p98j-92pf-mc4p, GHSA-6688-9rhm-gjv2 and
+# GHSA-68fv-2mgg-jv7q. Keep the release-age exceptions restricted to these versions.
+minimumReleaseAgeExclude:
+  - dompurify@3.4.16
+  - source-map-js@1.2.2

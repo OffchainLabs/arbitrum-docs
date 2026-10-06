@@ -1,10 +1,11 @@
 # Dependabot configuration.
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 #
-# Routine version updates are batched into a single weekly PR. Security
-# advisories are handled by GitHub's separate Dependabot security-updates
-# feature (Settings → Code security & analysis), which bypasses this schedule
-# and opens individual PRs immediately when a vulnerability is matched.
+# Routine version updates are batched into a single weekly PR per ecosystem, held
+# for 7 days after release so freshly published versions are not pulled in
+# immediately. Security advisories are handled by GitHub's separate Dependabot
+# security-updates feature (Settings → Code security), which ignores both the
+# schedule and the cooldown and opens individual PRs as soon as a match is found.
 
 version: 2
 updates:
@@ -13,6 +14,8 @@ updates:
     schedule:
       interval: 'weekly'
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
     groups:
       npm-minor-and-patch:
         applies-to: version-updates
@@ -22,11 +25,26 @@ updates:
           - 'minor'
           - 'patch'
     ignore:
-      # Keep @types/node aligned with the Node runtime declared in engines (22.x).
-      # Major bumps ship type definitions for newer Node lines than we run, which
-      # lets tsc approve APIs absent at runtime. Minor/patch updates still flow.
+      # Keep @types/node aligned with the Node runtime in engines (22.x). Major bumps
+      # ship type definitions for newer Node lines than we run, which lets tsc approve
+      # APIs absent at runtime. Minor/patch updates still flow.
       - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore(deps)'
       include: 'scope'
+
+  # Keeps the SHA pins in .github/workflows/ current; without this they never move.
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    cooldown:
+      default-days: 7
+    groups:
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - '*'
+    commit-message:
+      prefix: 'chore(actions)'

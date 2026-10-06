@@ -1,0 +1,7 @@
+---
+id: validator-client
+title: 'Validator client'
+---
+
+The software an [honest validator](/glossary#honest-validator) runs. It learns the correct [child chain](/glossary#child-chain) history from a [state manager backend](/glossary#state-manager-backend), then posts [assertions](/glossary#assertion) to the [parent chain](/glossary#parent-chain) by bonding a claim. It reaches the contracts through [chain bindings](/glossary#chain-bindings). It tracks the [Rollup contract](/glossary#rollup-contract) for posted assertions and, if you configure it to do so, opens challenges against invalid ones. Under [BoLD](/glossary#bold) it also joins challenges that other honest validators started. Its goal is that only honest assertions are confirmed, and that every honest assertion is confirmed within at most two [challenge periods](/glossary#challenge-period). Every [Arbitrum full node](/glossary#arbitrum-full-node) is a [watchtower validator](/glossary#watchtower-validator) by default: it posts nothing, but warns you when it detects an invalid assertion.
+_Also known as: validator software_

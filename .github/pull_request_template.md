@@ -1,42 +1,28 @@
-Thank you for contributing to our docs!
-
-Please fill out the form below to ensure your doc gets quickly approved and merged.
-
 ## Description
 
-<!-- Provide a brief description of the changes in this PR -->
+<!-- What changed, and why? Include the pages or behavior reviewers should inspect. -->
 
 ## Document type
 
-- [ ] Gentle introduction
-- [ ] Quickstart
+<!-- Select the type of new or substantially revised pages. The `content_type` frontmatter field is optional; if you set it, use the same value. -->
+
 - [ ] How-to
 - [ ] Concept
-- [ ] FAQ
-- [ ] Troubleshooting
+- [ ] Quickstart
+- [ ] Tutorial
 - [ ] Reference
-- [ ] Third-party content
-- [ ] Codebase changes
-- [ ] Not applicable
+- [ ] Troubleshooting
+- [ ] FAQ
+- [ ] Code or tooling change / not applicable
 
 ## Checklist
 
-<!-- Mark completed items with an "x" -->
+- [ ] I followed the [contribution guide](https://github.com/OffchainLabs/arbitrum-docs/blob/master/CONTRIBUTE.md) and [style guide](https://github.com/OffchainLabs/arbitrum-docs/blob/master/STYLE-GUIDE.md).
+- [ ] New pages have a `title` and `description` in their frontmatter, and titles use sentence case.
+- [ ] Links have descriptive text and I checked changed links with `pnpm check-links`.
+- [ ] I ran the relevant [local checks](https://github.com/OffchainLabs/arbitrum-docs/blob/master/CONTRIBUTE.md#gates-to-run-before-you-push) and reviewed the rendered pages in a browser when I changed MDX.
+- [ ] For third-party content, I followed the [third-party content policy](https://github.com/OffchainLabs/arbitrum-docs/blob/master/CONTRIBUTE.md#third-party-content), or this item does not apply.
 
-- [ ] I have read the [CONTRIBUTE.md](../CONTRIBUTE.md) guidelines
-- [ ] My changes follow the style conventions outlined in CONTRIBUTE.md
-- [ ] I have used sentence-case for titles and headers
-- [ ] I have used descriptive link text (not "here" or "this")
-- [ ] I have separated procedural from conceptual content where appropriate
-- [ ] I have tested my changes locally with `yarn start` or `yarn build`
-- [ ] My code follows the existing code style and conventions
-- [ ] I have added/updated frontmatter for new documents
-- [ ] I have checked for broken links
-- [ ] I have verified that my changes don't break the build
-- Third-party docs only: Do you agree to the third-party content policy outlined within [CONTRIBUTE.md](../CONTRIBUTE.md)?
-  - [ ] Yes
-  - [ ] Not applicable
+## Notes for reviewers
 
-## Additional Notes
-
-<!-- Add any additional notes or context for reviewers -->
+<!-- Mention known limitations, preview URLs, or checks you could not run. -->

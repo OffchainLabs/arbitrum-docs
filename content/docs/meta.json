@@ -1,0 +1,16 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "!index",
+    "get-started",
+    "build-decentralized-apps",
+    "stylus",
+    "arbitrum-essentials",
+    "launch-arbitrum-chain",
+    "run-a-node",
+    "arbitrum-bridge",
+    "how-arbitrum-works",
+    "notices",
+    "..."
+  ]
+}

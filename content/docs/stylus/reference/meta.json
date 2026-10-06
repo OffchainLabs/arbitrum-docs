@@ -1,0 +1,14 @@
+{
+  "title": "Reference",
+  "pages": [
+    "overview",
+    "opcode-hostio-pricing",
+    "stylus-toml-reference",
+    "rust-sdk-guide",
+    "../stylus-by-example",
+    "external:[Cargo Stylus CLI GitHub](https://github.com/OffchainLabs/stylus-sdk-rs/tree/main/cargo-stylus)",
+    "external:[Rust SDK Crate](https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html)",
+    "external:[Source Code Repository](https://github.com/OffchainLabs/stylus-sdk-rs)",
+    "..."
+  ]
+}
