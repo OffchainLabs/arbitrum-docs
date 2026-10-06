@@ -27,9 +27,8 @@ import { VendingMachine } from '@/components/widgets/VendingMachine';
 import { cn } from '@/lib/cn';
 
 /**
- * The words a screen reader hears for an untitled callout, whose type is otherwise only its colour
- * and an `aria-hidden` icon. Keyed by every spelling Fumadocs accepts, so `tip` reads as a tip even
- * though Fumadocs draws it as `info`.
+ * Visible headings for callouts without a custom title. Keyed by every spelling Fumadocs accepts,
+ * so `tip` reads as a tip even though Fumadocs draws it as `info`.
  */
 const calloutLabels: Record<string, string> = {
   info: 'Note',
@@ -42,11 +41,9 @@ const calloutLabels: Record<string, string> = {
 };
 
 /**
- * Fumadocs' `Callout` with its type exposed to assistive technology: `role="note"`, and a visually
- * hidden label such as "Warning:" when the callout has no title. A titled callout already says what
- * it is, so it gets the role only. Every type is a note, never an `alert`: an alert is a live region
- * that screen readers announce when it appears, and a static error callout would be announced on
- * every client-side navigation to its page.
+ * Fumadocs' `Callout` with a visible heading beside the icon and the content below it. Custom titles
+ * take precedence over the type label. Every type has `role="note"`, never `alert`: a static error
+ * callout should not be announced as a live region on every client-side navigation to its page.
  */
 function Callout({
   type = 'info',
@@ -55,8 +52,12 @@ function Callout({
   ...props
 }: ComponentProps<typeof FumadocsCallout>) {
   return (
-    <FumadocsCallout type={type} title={title} role="note" {...props}>
-      {title ? null : <span className="sr-only">{calloutLabels[type] ?? 'Note'}: </span>}
+    <FumadocsCallout
+      type={type}
+      title={title || (calloutLabels[type] ?? 'Note')}
+      role="note"
+      {...props}
+    >
       {children}
     </FumadocsCallout>
   );

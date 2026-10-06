@@ -26,6 +26,14 @@ pnpm dev          # install, clean, then http://localhost:3000 with hot reload
 
 Node 22 (`>=22.18 <23`) · pnpm 10. Other Node majors are rejected by `engines`.
 
+`pnpm-workspace.yaml` sets `strictDepBuilds`, so an install fails with `ERR_PNPM_IGNORED_BUILDS`
+when a dependency's build script was skipped. Two cases: a `node_modules` installed before that
+setting records the skipped build, so delete `node_modules` and install again; a new dependency
+with a build script needs an entry in `ignoredBuiltDependencies` or `onlyBuiltDependencies` in
+that file, with a comment saying what its script does. `minimumReleaseAge` there also refuses a
+version published in the last seven days; add it to `minimumReleaseAgeExclude` to take one on
+purpose.
+
 **Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken.
 
@@ -44,12 +52,13 @@ Config lives in `lib/inkeep.ts`; the widgets mount in `components/inkeep/` and a
 None of these are needed to run the site locally; everything that reads them degrades to a no-op
 or a documented fallback.
 
-| Variable                     | Used by                                                                             | Without it                                                                  |
-| ---------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_INKEEP_API_KEY` | search and the "Ask AI" button                                                      | both are unavailable                                                        |
-| `NEXT_PUBLIC_SITE_URL`       | `metadataBase`, `app/sitemap.ts`, `app/robots.ts`, request tracking                 | `http://localhost:3000` locally; a **production build fails**               |
-| `NEXT_PUBLIC_POSTHOG_KEY`    | page feedback (`lib/posthog.ts`), web analytics, and request tracking in `proxy.ts` | feedback submissions and tracking events are dropped with a server-side log |
-| `NEXT_PUBLIC_VERCEL_ENV`     | the production gate on web analytics and the Inkeep event bridge                    | neither fires; Vercel sets this one, you never do                           |
+| Variable                     | Used by                                                                             | Without it                                                                                                                                                              |
+| ---------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_INKEEP_API_KEY` | search and the "Ask AI" button                                                      | both are unavailable                                                                                                                                                    |
+| `NEXT_PUBLIC_SITE_URL`       | `metadataBase`, `app/sitemap.ts`, `app/robots.ts`, request tracking                 | `http://localhost:3000` locally; a **production build fails**                                                                                                           |
+| `NEXT_PUBLIC_POSTHOG_KEY`    | page feedback (`lib/posthog.ts`), web analytics, and request tracking in `proxy.ts` | feedback submissions and tracking events are dropped with a server-side log                                                                                             |
+| `NEXT_PUBLIC_VERCEL_ENV`     | the production gate on web analytics and the Inkeep event bridge                    | neither fires; Vercel sets this one, you never do                                                                                                                       |
+| `VERCEL_DEEP_CLONE`          | `hasFullGitHistory()` in `source.config.ts`, which gates the last-modified dates    | a shallow Vercel clone resolves no dates: no "Last updated" line, no `<lastmod>`, no `article:modified_time`, and nothing warns. Set it to `true` on the Vercel project |
 
 Set the PostHog token the same way as the Inkeep key, in a local `.env` (gitignored):
 
@@ -105,7 +114,8 @@ the render. Type checking passes on a page that serves literal `:::` or
 | `components/widgets/`   | The four interactive widgets, each used by one page        |
 | `lib/source.ts`         | Fumadocs source adapter                                    |
 | `proxy.ts`              | PostHog tracking for markdown and `llms*.txt` fetches      |
-| `source.config.ts`      | Fumadocs MDX config and the frontmatter schema             |
+| `source.config.ts`      | Fumadocs MDX config: the two collections                   |
+| `lib/page-schema.ts`    | The frontmatter schema every page must satisfy             |
 
 ## Write a page
 
@@ -274,6 +284,7 @@ pnpm build               # production build (runs check-links first)
 pnpm start               # serve the production build
 
 pnpm test                # tooling test suites, including the sidebar and redirects
+pnpm test:browser        # Chromium interactions against a running production server
 pnpm check-links         # broken internal doc links and MDX fragments
 pnpm vars:check          # every <Var name> and {var:name} resolves; banner keys are valid
 pnpm references:check    # every <Term id> resolves
@@ -287,6 +298,12 @@ pnpm move-doc <from> <to>
 
 Nitro, precompile, contract, CLI, Stylus and edge-challenge tooling runs by hand only. See
 [Hand-run tools](INTERNALS.md#hand-run-tools).
+
+For browser tests, run `pnpm exec playwright install chromium`, `pnpm build`, and `pnpm start`.
+In another terminal, run `pnpm test:browser`. It uses `http://localhost:3000` by default; set
+`STATIC_DOCS_TEST_URL` to use another server. The suite checks native text search and text-fragment
+reveal on hidden tab and accordion panels, simulates repeated `beforematch` events, and checks
+manual selection.
 
 ## Conventions
 

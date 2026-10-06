@@ -235,6 +235,12 @@ body {
   }
 }
 
+/* The first block in a callout sits below its title with the component's own gap. Keep the
+   unlayered prose heading margins above from overriding Fumadocs' first-child reset. */
+.prose [role='note'] .prose-no-margin > :first-child {
+  margin-top: 0;
+}
+
 /* Fumadocs' accordion trigger has no pointer and no hover state. */
 h3:has(> button[data-state]) {
   @apply transition-colors duration-150 ease-[ease] *:cursor-pointer hover:bg-fd-accent;
@@ -249,6 +255,10 @@ h3:has(> button[data-state]) {
    in light mode. A 5% tint measures 4.63:1 and keeps the brand blue. Dark mode is 11.66:1 as is. */
 :root:not(.dark) :is(#nd-sidebar, #nd-sidebar-mobile) a[data-active='true'] {
   background-color: color-mix(in oklab, var(--color-fd-primary) 5%, transparent);
+}
+
+#nd-subnav {
+  z-index: 30;
 }
 
 /* Navbar (the notebook header on docs pages, components/home-header.tsx elsewhere): logo left,

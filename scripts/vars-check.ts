@@ -29,7 +29,7 @@ for (const abs of walk(path.join(repoRoot, 'content'), (p) => /\.mdx?$/i.test(p)
   errors.push(...checkVarReferences(rel, readFileSync(abs, 'utf8'), vars));
 }
 
-if ('announcementId' in vars) {
+if ('announcementId' in vars && (vars.announcementEnabled || vars.announcementId !== null)) {
   const id = vars.announcementId;
   if (typeof id !== 'string' || !/^[A-Za-z][A-Za-z0-9_-]*$/.test(id)) {
     errors.push(
@@ -38,7 +38,10 @@ if ('announcementId' in vars) {
   }
 }
 
-if ('announcementLinkHref' in vars) {
+if (
+  'announcementLinkHref' in vars &&
+  (vars.announcementEnabled || vars.announcementLinkHref !== null)
+) {
   const result = checkAnnouncementLink(vars.announcementLinkHref, buildIndex(repoRoot), repoRoot);
   if (!result.ok) {
     errors.push(

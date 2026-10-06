@@ -156,7 +156,7 @@ so leave both spellings alone until it is decided.
 - **Document types.** Which of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`,
   `troubleshooting` or `faq` a page is, and what each one owes the reader, is in
   [CONTRIBUTE.md](CONTRIBUTE.md#document-type-conventions). The enum itself is enforced by the
-  frontmatter schema in `source.config.ts`.
+  frontmatter schema in `lib/page-schema.ts`, through `pnpm frontmatter:check` and the build.
 - **Callout syntax.** Use `<Callout type="…">`, with `type` set to `info`, `warn`, `error`, `idea`
   or `success`. Docusaurus `:::` directives do not render here, and `pnpm content:lint` rule
   `docusaurus-directive` is a blocking gate that fails on one.
