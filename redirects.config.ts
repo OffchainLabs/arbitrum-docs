@@ -2761,6 +2761,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/notices/glamsterdam-sepolia-notice',
+    destination: '/notices',
+    permanent: true,
+  },
+  {
     source: '/precompiles',
     destination: '/arbitrum-essentials/precompiles/reference',
     permanent: false,
