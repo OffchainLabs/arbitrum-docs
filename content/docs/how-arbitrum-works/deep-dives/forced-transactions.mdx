@@ -8,14 +8,6 @@ content_type: how-to
 
 A forced transaction is a <Term id="child-chain">child-chain</Term> transaction you submit on the <Term id="parent-chain">parent chain</Term> instead of to the <Term id="sequencer">sequencer</Term>. If the sequencer is offline or refuses your transaction, you can still get it included. After a wait called the force-inclusion window, anyone can push it into the chain's inbox without the sequencer's help.
 
-This page covers:
-
-- Why forced transactions matter and how they work.
-- How long the force-inclusion window is, and how the Censorship Timeout shortens it.
-- Which messages you can force-include.
-- How to force-include a transaction with the Arbitrum SDK, including an ETH withdrawal.
-- What to check when a forced transaction never gets a receipt.
-
 ## Why forced transactions matter
 
 The sequencer orders child-chain transactions, so it can delay them. It cannot block them for good. Force inclusion gives every user a path onto the chain that depends only on the parent chain.
