@@ -1,5 +1,4 @@
 import { Accordions } from 'fumadocs-ui/components/accordion';
-import { Callout as FumadocsCallout } from 'fumadocs-ui/components/callout';
 import { ImageZoom, type ImageZoomProps } from 'fumadocs-ui/components/image-zoom';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Tabs } from 'fumadocs-ui/components/tabs';
@@ -10,6 +9,7 @@ import type { ComponentProps, ElementType } from 'react';
 import { InLink } from '@/components/HoverPopover/in-link';
 import { Accordion } from '@/components/mdx/Accordion';
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
+import { Callout } from '@/components/mdx/Callout';
 import { Tab } from '@/components/mdx/FindableTab';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
@@ -25,43 +25,6 @@ import {
 } from '@/components/widgets/Troubleshooting';
 import { VendingMachine } from '@/components/widgets/VendingMachine';
 import { cn } from '@/lib/cn';
-
-/**
- * Visible headings for callouts without a custom title. Keyed by every spelling Fumadocs accepts,
- * so `tip` reads as a tip even though Fumadocs draws it as `info`.
- */
-const calloutLabels: Record<string, string> = {
-  info: 'Note',
-  tip: 'Tip',
-  idea: 'Tip',
-  warn: 'Warning',
-  warning: 'Warning',
-  error: 'Danger',
-  success: 'Success',
-};
-
-/**
- * Fumadocs' `Callout` with a visible heading beside the icon and the content below it. Custom titles
- * take precedence over the type label. Every type has `role="note"`, never `alert`: a static error
- * callout should not be announced as a live region on every client-side navigation to its page.
- */
-function Callout({
-  type = 'info',
-  title,
-  children,
-  ...props
-}: ComponentProps<typeof FumadocsCallout>) {
-  return (
-    <FumadocsCallout
-      type={type}
-      title={title || (calloutLabels[type] ?? 'Note')}
-      role="note"
-      {...props}
-    >
-      {children}
-    </FumadocsCallout>
-  );
-}
 
 export function getMDXComponents(components?: MDXComponents) {
   const merged = {
