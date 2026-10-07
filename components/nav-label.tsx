@@ -17,5 +17,10 @@ export function NavLabel({ sections, children }: { sections: string[]; children:
   const root = useTreePath().find(
     (node): node is PageTree.Folder => node.type === 'folder' && node.root === true,
   );
-  return <span data-active={root ? contains(root, sections) : false}>{children}</span>;
+  const active = root ? contains(root, sections) : false;
+  return (
+    <span data-active={active} aria-current={active ? 'location' : undefined}>
+      {children}
+    </span>
+  );
 }
