@@ -199,6 +199,8 @@ export default function Layout({ children }: { children: ReactNode }) {
             {/* Fumadocs exposes no footer slot, so the site footer is a sibling of
               the layout inside the flex column body. See components/footer.tsx. */}
             <Footer />
+            {/* Keeps the child count React's useId hashes; the removed chat button held this slot. */}
+            {null}
           </RootProvider>
         </PostHogProvider>
       </body>
