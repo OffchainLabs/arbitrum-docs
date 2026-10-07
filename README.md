@@ -40,28 +40,31 @@ purpose.
 **Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken.
 
-Search and the "Ask AI" chat button are powered by [Inkeep](https://inkeep.com). Set the
-publishable key in a local `.env` (gitignored):
+Search and the AI chat panel are powered by [Inkeep](https://inkeep.com). Set the
+publishable search key in a local `.env` (gitignored):
 
 ```bash
 NEXT_PUBLIC_INKEEP_API_KEY=<inkeep-search-key>
 ```
 
-Config lives in `lib/inkeep.ts`; the widgets mount in `components/inkeep/` and are wired into
-`RootProvider` in `app/layout.tsx`.
+Config lives in `lib/inkeep.ts`; the search dialog mounts in `components/inkeep/` and is wired into
+`RootProvider` in `app/layout.tsx`. The chat panel is in `components/ai/`; see the two chat rows in
+the table below.
 
 ### Environment variables
 
 None of these are needed to run the site locally; everything that reads them degrades to a no-op
 or a documented fallback.
 
-| Variable                     | Used by                                                                             | Without it                                                                                                                                                              |
-| ---------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_INKEEP_API_KEY` | search and the "Ask AI" button                                                      | both are unavailable                                                                                                                                                    |
-| `NEXT_PUBLIC_SITE_URL`       | `metadataBase`, `app/sitemap.ts`, `app/robots.ts`, request tracking                 | `http://localhost:3000` locally; a **production build fails**                                                                                                           |
-| `NEXT_PUBLIC_POSTHOG_KEY`    | page feedback (`lib/posthog.ts`), web analytics, and request tracking in `proxy.ts` | feedback submissions and tracking events are dropped with a server-side log                                                                                             |
-| `NEXT_PUBLIC_VERCEL_ENV`     | the production gate on web analytics and the Inkeep event bridge                    | neither fires; Vercel sets this one, you never do                                                                                                                       |
-| `VERCEL_DEEP_CLONE`          | `hasFullGitHistory()` in `source.config.ts`, which gates the last-modified dates    | a shallow Vercel clone resolves no dates: no "Last updated" line, no `<lastmod>`, no `article:modified_time`, and nothing warns. Set it to `true` on the Vercel project |
+| Variable                      | Used by                                                                             | Without it                                                                                                                                                              |
+| ----------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_INKEEP_API_KEY`  | search                                                                              | search is unavailable                                                                                                                                                   |
+| `INKEEP_API_KEY`              | `/api/chat`, the server route behind the AI chat panel                              | `/api/chat` returns 503                                                                                                                                                 |
+| `NEXT_PUBLIC_AI_CHAT_ENABLED` | the AI chat panel in `app/(docs)/layout.tsx`                                        | no panel; `true` shows it                                                                                                                                               |
+| `NEXT_PUBLIC_SITE_URL`        | `metadataBase`, `app/sitemap.ts`, `app/robots.ts`, request tracking                 | `http://localhost:3000` locally; a **production build fails**                                                                                                           |
+| `NEXT_PUBLIC_POSTHOG_KEY`     | page feedback (`lib/posthog.ts`), web analytics, and request tracking in `proxy.ts` | feedback submissions and tracking events are dropped with a server-side log                                                                                             |
+| `NEXT_PUBLIC_VERCEL_ENV`      | the production gate on web analytics and the Inkeep event bridge                    | neither fires; Vercel sets this one, you never do                                                                                                                       |
+| `VERCEL_DEEP_CLONE`           | `hasFullGitHistory()` in `source.config.ts`, which gates the last-modified dates    | a shallow Vercel clone resolves no dates: no "Last updated" line, no `<lastmod>`, no `article:modified_time`, and nothing warns. Set it to `true` on the Vercel project |
 
 Set the PostHog token the same way as the Inkeep key, in a local `.env` (gitignored):
 

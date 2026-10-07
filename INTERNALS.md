@@ -499,11 +499,16 @@ Other things not to undo:
 - **The search dialog mounts on first open.** `app/layout.tsx` passes `preload: false` to
   Fumadocs' search options, so `components/inkeep/inkeep-search.tsx` loads the Inkeep bundle only
   when the dialog opens. Fumadocs defaults to `preload: true`, which would fetch the bundle on
-  every page load. When `NEXT_PUBLIC_INKEEP_API_KEY` is unset, search is disabled and the chat
-  button is not rendered; this site has no `/api/search` fallback route.
-- **The Inkeep chat widget** (`components/inkeep/inkeep-chat-button.tsx`) waits for `load` and then
-  an idle callback before it loads its chunk, so it downloads after the resources that decide
-  Largest Contentful Paint.
+  every page load. When `NEXT_PUBLIC_INKEEP_API_KEY` is unset, search is disabled; this site has no
+  `/api/search` fallback route.
+- **The AI chat panel** mounts in `components/ai/layout.tsx`, which `app/(docs)/layout.tsx` loads
+  through `next/dynamic` only when `NEXT_PUBLIC_AI_CHAT_ENABLED` is `true`. With the flag unset the
+  layout and bundle have no chat code. The panel posts to `app/api/chat/route.ts`, which returns 503
+  without `INKEEP_API_KEY`. `lib/ai/chat-request.ts` checks each request before it reaches Inkeep:
+  origin, `Content-Type`, body size, message count and message size. The search dialog's "Ask AI"
+  closes the dialog and opens the panel with the query through `lib/ai/bridge.ts`. The files under
+  `components/ai/chat/` are vendored from `@fumadocs/cli@1.7.3`; update them by running that CLI
+  again.
 - **Fonts are self-hosted** under `public/fonts/` and loaded with `next/font/local` in
   `app/layout.tsx`. Never add `next/font/google`: it makes the build fetch from Google. Only the two
   upright Aeonik faces preload. The italic is its own declaration so it can skip preloading, and
@@ -789,14 +794,15 @@ flight payload. `scripts/static-docs-http.test.ts` asserts this against a runnin
 
 ## Analytics
 
-Four paths send events to one PostHog project. They share only the project token and the ingest
+Five paths send events to one PostHog project. They share only the project token and the ingest
 host.
 
 | Path                                   | Where                                               | Runs            |
 | -------------------------------------- | --------------------------------------------------- | --------------- |
 | Page feedback (`docs_feedback`)        | `lib/posthog.ts`, a server action                   | everywhere      |
 | Web analytics (`$pageview`)            | `components/analytics/posthog-provider.tsx`, client | production only |
-| Inkeep search and chat (`inkeep_*`)    | `lib/inkeep.ts`, through the same client            | production only |
+| Inkeep search (`inkeep_*`)             | `lib/inkeep.ts`, through the same client            | production only |
+| AI chat panel (`inkeep_*`)             | `lib/ai/events.ts`, through the same client         | production only |
 | Markdown fetches (`llms_file_fetched`) | `proxy.ts`, server                                  | production only |
 
 The client gate is `NEXT_PUBLIC_VERCEL_ENV === 'production'` plus a key; Vercel sets that
@@ -804,6 +810,10 @@ variable. The client runs cookieless and in memory, with no session recording or
 a pinned `defaults` date so an SDK upgrade cannot change what is captured. The 404 page reports `404_error` through
 `components/analytics/not-found-tracker.tsx`, which retries until the client is ready and snapshots
 the URL at mount. Those events show inbound URLs the redirect map misses.
+
+The AI chat panel sends `inkeep_user_message_submitted`, `inkeep_assistant_message_received` and
+`inkeep_assistant_source_item_clicked` from `lib/ai/events.ts`, with `component_type` set to
+`ChatButton` or `SearchBar` and, for a source click, `source_link`. It never sends message text.
 
 `NEXT_PUBLIC_POSTHOG_KEY` is the publishable, write-only `phc_` token. Page feedback posts
 server-side, so it works locally with the key set.
