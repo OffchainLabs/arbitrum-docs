@@ -292,5 +292,9 @@ h3:has(> button[data-state]) {
     &:is(:hover, [data-state='open'], [data-active='true'], :has([data-active='true']))::before {
       @apply bg-arbitrum-cyan drop-shadow-hex-glow;
     }
+    /* Aeonik Fono ships one weight, so the active link is thickened with a stroke. */
+    &:is([data-active='true'], :has([data-active='true'])) {
+      @apply underline decoration-arbitrum-cyan decoration-2 underline-offset-8 [-webkit-text-stroke:0.03em_currentColor];
+    }
   }
 }
