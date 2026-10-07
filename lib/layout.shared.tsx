@@ -1,7 +1,7 @@
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { BookOpen, Braces, Code, Coins } from 'lucide-react';
 
-import { BuildAppsNavLabel } from '@/components/build-apps-nav-label';
+import { NavLabel } from '@/components/nav-label';
 
 import { appName, docsRoute } from './shared';
 
@@ -20,10 +20,23 @@ export function baseOptions(): BaseLayoutProps {
     },
     links: [
       // The top navbar, in order. Each target is a section landing page.
-      { text: 'Get started', url: docHref('get-started') },
+      {
+        text: <NavLabel sections={[docHref('get-started')]}>Get started</NavLabel>,
+        url: docHref('get-started'),
+      },
       {
         type: 'menu',
-        text: <BuildAppsNavLabel />,
+        text: (
+          <NavLabel
+            sections={[
+              docHref('build-decentralized-apps'),
+              docHref('stylus/quickstart'),
+              docHref('arbitrum-essentials'),
+            ]}
+          >
+            Build apps
+          </NavLabel>
+        ),
         // Rendered as a popover list by both headers (the notebook header on docs pages and
         // components/home-header.tsx elsewhere): icon and text on one row, `[&_svg]:size-4`.
         // Both ignore each item's `menu` options, and the icons carry no class of their own, since
@@ -55,11 +68,26 @@ export function baseOptions(): BaseLayoutProps {
           },
         ],
       },
-      { text: 'Launch a chain', url: docHref('launch-arbitrum-chain') },
-      { text: 'Run a node', url: docHref('run-a-node') },
-      { text: 'Use the bridge', url: docHref('arbitrum-bridge') },
-      { text: 'How it works', url: docHref('how-arbitrum-works') },
-      { text: 'Notices', url: docHref('notices') },
+      {
+        text: <NavLabel sections={[docHref('launch-arbitrum-chain')]}>Launch a chain</NavLabel>,
+        url: docHref('launch-arbitrum-chain'),
+      },
+      {
+        text: <NavLabel sections={[docHref('run-a-node')]}>Run a node</NavLabel>,
+        url: docHref('run-a-node'),
+      },
+      {
+        text: <NavLabel sections={[docHref('arbitrum-bridge')]}>Use the bridge</NavLabel>,
+        url: docHref('arbitrum-bridge'),
+      },
+      {
+        text: <NavLabel sections={[docHref('how-arbitrum-works')]}>How it works</NavLabel>,
+        url: docHref('how-arbitrum-works'),
+      },
+      {
+        text: <NavLabel sections={[docHref('notices')]}>Notices</NavLabel>,
+        url: docHref('notices'),
+      },
     ],
   };
 }
