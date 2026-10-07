@@ -72,7 +72,7 @@ Retryable tickets are a special message type that enables atomic parent-to-child
 
 ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple <Term id="gas-target">gas targets</Term> over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the [batch poster](/how-arbitrum-works/deep-dives/batchposter) (for parent chain data costs) and the network (for child chain execution).
 
-ArbOS manages child chain gas pricing and fee collection for both child chain execution costs and parent chain data posting costs. The child chain uses a dynamic basefee mechanism with multiple <Term id="gas-target">gas targets</Term> over different time windows to handle demand spikes while maintaining long-term chain capacity. Transactions pay fees to both the [batch poster](/how-arbitrum-works/deep-dives/batchposter) (for parent chain data costs) and the network (for child chain execution).
+## ArbOS versions and upgrades
 
 Because the STF must stay deterministic across every node and across every historical replay, ArbOS cannot change behavior simply by shipping a new binary—old blocks must still reproduce exactly. Upgrades are therefore scheduled as onchain events.
 
