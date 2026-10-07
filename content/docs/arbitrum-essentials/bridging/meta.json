@@ -1,0 +1,14 @@
+{
+  "title": "Bridging",
+  "pages": [
+    "overview",
+    "cross-chain-messaging",
+    "../how-to-get-l2block-on-l1",
+    "l1-l3-teleportation",
+    "custom-gas-token-chains",
+    "deposit",
+    "withdraw",
+    "configure-token-gateway",
+    "..."
+  ]
+}

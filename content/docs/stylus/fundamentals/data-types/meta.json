@@ -1,0 +1,10 @@
+{
+  "title": "Data types",
+  "pages": [
+    "primitives",
+    "compound-types",
+    "storage",
+    "conversions-between-types",
+    "..."
+  ]
+}

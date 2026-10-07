@@ -1,67 +1,113 @@
 name: SBOM Export & Centralize
 
+# Generates a CycloneDX SBOM of the pnpm dependency set with cdxgen and uploads it to the
+# organisation's Dependency-Track, on every push to master and weekly. Restored from master's
+# yarn-era workflow of the same name, with three changes: cdxgen reads `pnpm-lock.yaml`, the
+# action and the container are pinned, and the job skips cleanly when the Dependency-Track
+# secrets are absent (a fork, or a repo that was never enrolled).
+#
+# The cdxgen image is pinned by tag and index digest. Dependabot's github-actions ecosystem
+# does not see an image inside a `run:` step, so bump both by hand: resolve the new digest with
+# `docker manifest inspect -v ghcr.io/cdxgen/cdxgen:<tag>` or the registry's
+# `Docker-Content-Digest` header.
+
 on:
   push:
-    branches: [ "master" ]
+    branches: ['master']
   schedule:
-    - cron: '49 7 * * 2'
+    - cron: '49 7 * * 2' # Tuesdays, 07:49 UTC
 
 permissions:
   contents: read
 
+concurrency:
+  group: sbom-export
+  cancel-in-progress: false
+
 jobs:
   generate-and-upload:
+    name: Generate and upload SBOM
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v6
+      - name: Check for the Dependency-Track secrets
+        id: secrets
+        env:
+          DT_API_KEY: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
+          DT_URL: ${{ secrets.DEPENDENCY_TRACK_URL }}
+        run: |
+          if [ -z "${DT_API_KEY}" ] || [ -z "${DT_URL}" ]; then
+            echo "::notice::DEPENDENCY_TRACK_API_KEY or DEPENDENCY_TRACK_URL is not set; skipping the SBOM export."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
 
+      - name: Checkout source code
+        if: steps.secrets.outputs.skip != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # A shallow checkout holds only HEAD, so this asks whether HEAD is less than 7 days old.
+      # A push to master always passes; the weekly run skips when nothing landed that week.
       - name: Check for recent changes
-        id: check
+        if: steps.secrets.outputs.skip != 'true'
+        id: recent
         run: |
           if [ -z "$(git log --since='7 days ago' --oneline | head -1)" ]; then
             echo "No commits in the last 7 days, skipping SBOM generation."
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # `-t js --no-recurse` reads the root `pnpm-lock.yaml` only. `--no-install-deps` keeps
+      # cdxgen from running an install (and any lifecycle script) inside the container.
       - name: Generate CycloneDX SBOM via cdxgen
-        if: steps.check.outputs.skip != 'true'
+        if: steps.secrets.outputs.skip != 'true' && steps.recent.outputs.skip != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          test -s pnpm-lock.yaml || { echo "::error::pnpm-lock.yaml is missing."; exit 1; }
+
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             -v /tmp:/tmp \
-            -v "${{ github.workspace }}:/app:rw" \
+            -v "${GITHUB_WORKSPACE}:/app:rw" \
             -e FETCH_LICENSE=true \
             -e GITHUB_TOKEN \
-            ghcr.io/cdxgen/cdxgen:v12.1.1 \
-            -r /app \
-            -o /app/sbom.cdx.json \
+            ghcr.io/cdxgen/cdxgen:v12.1.1@sha256:02b56cdbdb3157baf7c3d64196546176bcbd8cb09e262b59ee72115cd556c006 \
+            -t js \
+            --no-recurse \
             --no-install-deps \
-            --spec-version 1.6
+            --spec-version 1.6 \
+            -o /app/sbom.cdx.json \
+            /app
 
           if [ ! -s sbom.cdx.json ]; then
             echo "::error::cdxgen SBOM generation failed or returned empty."
             exit 1
           fi
 
+          if ! jq -e '(.components // []) | length > 0' sbom.cdx.json > /dev/null; then
+            echo "::error::The SBOM lists no components; cdxgen did not read pnpm-lock.yaml."
+            exit 1
+          fi
+
           echo "SBOM generated successfully:"
           ls -lh sbom.cdx.json
+          jq -r '"components: \((.components // []) | length)"' sbom.cdx.json
 
-      - name: Upload SBOM to Dependency Track
-        if: steps.check.outputs.skip != 'true'
+      - name: Upload SBOM to Dependency-Track
+        if: steps.secrets.outputs.skip != 'true' && steps.recent.outputs.skip != 'true'
         env:
           DT_API_KEY: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
           DT_URL: ${{ secrets.DEPENDENCY_TRACK_URL }}
         run: |
           REPO_NAME=${GITHUB_REPOSITORY##*/}
 
-          curl -sf -X POST "${DT_URL}/api/v1/bom" \
+          curl -sS --fail-with-body -X POST "${DT_URL}/api/v1/bom" \
             -H "X-Api-Key: ${DT_API_KEY}" \
             -F "autoCreate=true" \
             -F "projectName=${REPO_NAME}" \
-            -F "projectVersion=${{ github.ref_name }}" \
+            -F "projectVersion=${GITHUB_REF_NAME}" \
             -F "bom=@sbom.cdx.json"
 
-          echo "SBOM uploaded to Dependency Track for ${REPO_NAME}@${{ github.ref_name }}"
+          echo "SBOM uploaded to Dependency-Track for ${REPO_NAME}@${GITHUB_REF_NAME}"

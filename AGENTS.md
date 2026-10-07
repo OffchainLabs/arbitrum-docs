@@ -1,71 +1,88 @@
 # AGENTS.md
 
-Skills and subagents that have proven useful in this repository, with the context in which they were invoked.
+> **Machine-facing. Not written for humans, and not the canonical documentation.**
+>
+> This file is what Codex, and any other agent that reads `AGENTS.md`, sees first. It is a pointer,
+> a guide to the shared documentation. Read [CLAUDE.md](CLAUDE.md) and the four human documents
+> below for repository conventions. Edit the canonical documents first, then update the pointers
+> and summaries here. The Next.js notice at the end is rewritten by `next dev`.
+
+Arbitrum documentation portal on Next.js 16 and Fumadocs 16, with Tailwind 4 and TypeScript. English
+MDX docs under `content/docs/`, served at `/<slug>`, deployed on Vercel.
+
+## Read these first
+
+1. [CLAUDE.md](CLAUDE.md): the agent-facing summary. Commands, the frontmatter contract, the rules
+   that break a build or a page, and where things live.
+2. [README.md](README.md): how to work on the docs.
+3. [INTERNALS.md](INTERNALS.md): how the codebase works, and why.
+4. [CONTRIBUTE.md](CONTRIBUTE.md): from a first edit to an open PR, with the component cheat-sheet
+   and the gates to run before you push.
+5. [STYLE-GUIDE.md](STYLE-GUIDE.md): the house prose rules. Read it before writing or editing any
+   prose in `content/`.
+
+Fumadocs information comes from https://www.fumadocs.dev/llms.txt. Do not guess its APIs.
+
+## Grounding rule
+
+Grounding rule: State only what you read in a file, and cite it as `file:line`. Read the file before
+you describe it. Do not infer file content from file names, paths, directory listings, docs,
+comments, or other repos. If you did not read it, write "not verified" and name the check that would
+settle it. Never use "likely", "probably", "presumably", or "appears to" for a claim you could
+verify by reading.
+
+## Commands
+
+These commands come from `package.json`; see CLAUDE.md and README.md for the workflows.
+
+```bash
+pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
+pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
+pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
+pnpm frontmatter:check # every page's frontmatter satisfies the schema in lib/page-schema.ts
+pnpm test              # node --test over scripts/**/*.test.ts
+pnpm test:browser      # Chromium interactions against a running production server; see README.md
+pnpm build             # check-links, then next build
+pnpm start             # serve the production build
+
+# The other CI gates
+pnpm vars:check        # every <Var name> and {var:name} resolves; banner keys are valid
+pnpm references:check  # every <Term id> resolves to a content/glossary entry
+pnpm contracts:check   # the contract-address partial is current
+pnpm faq:check         # the six FAQ partials match content/faq/*.json
+pnpm check-links       # internal links and #fragments resolve
+pnpm content:lint      # MDX that compiles but renders wrong
+pnpm format:check      # prettier (pnpm format writes)
+
+# By hand only
+pnpm move-doc <from> <to> [--dry-run]  # move a page, rewrite links, update meta.json, add a redirect
+pnpm nitro:check-release               # report a newer Nitro release and stale pins, verify paths; --to <tag> is the only writer
+pnpm precompiles:generate              # precompile tables (:check compares)
+pnpm contracts:generate                # contract-address partial
+pnpm cli:generate                      # Nitro CLI flags page (:check compares)
+pnpm stylus:generate                   # Stylus by Example pages (:check compares)
+pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
+pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN); then faq:generate
+pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
+```
 
 ## Skills
 
-### `context-prep` (slash command `/context-prep`)
+Codex skills live under `.agents/skills/`; Claude skills live under `.claude/skills/`.
+The writer and brand skills are available at both paths. Keep their instructions in sync.
 
-Run at session start. Launches four `Explore` subagents in parallel — documentation survey, technology stack scout, git history scan, architecture deep-dive — and synthesizes a navigable project map using progressive revelation. Cheap (~500 tokens) and prevents the "explore the codebase first" thrash before any real work.
+Contributors may use Claude, Codex, or both, with local configuration that references these
+files. Preserve existing skills, hooks, assets, and environment files when updating guidance;
+do not infer that a file is unused from the absence of tracked consumers. The retained Codex
+hooks contain legacy paths and need to be checked against the contributor's local integration.
+See [INTERNALS.md](INTERNALS.md#contributor-agent-setups).
 
-### `arbitrum-brand-svg-diagrams` (`.claude/skills/arbitrum-brand-svg-diagrams/`)
+<!-- BEGIN:nextjs-agent-rules -->
 
-Authors lean, on-brand SVG concept diagrams for the docs, and replaces the draw.io
-raster-in-SVG exports under `static/img/` (26 of them remain, 101.5 MB total). Ships
-the Arbitrum brand background as a committed asset, plus three tools:
+# This is NOT the Next.js you know
 
-| Tool                   | Purpose                                                                                                                                                            |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `check_contrast.py`    | Verifies every label against WCAG AA. Renders the diagram twice — once with `<text>` stripped — to sample each label's true background. Exits non-zero on failure. |
-| `round_arrows.py`      | Rounds elbow-arrow corners geometrically. Imposes strict path-authoring rules documented in the skill.                                                             |
-| `excalidraw_bridge.py` | Round-trips a diagram to an Excalidraw scene for hand editing.                                                                                                     |
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-Use it for **static concept art only** — interactive diagrams go through the
-ReactFlow / `DrawioReactFlow` pipeline instead, and Mermaid is never an option.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
-Two rules worth knowing before you touch a diagram, because both were shipped
-wrong before they were measured:
-
-- **White text on cyan `#12aaff` is 2.55:1 and fails WCAG** (white on orange is
-  2.80:1). Use dark `#0b1b2e` on cyan. Run `check_contrast.py` rather than
-  trusting a render — spot-checking by hand missed four real failures.
-- **Size type for the displayed width.** A 1600px canvas shown at
-  `className="img-900px"` scales to 0.5625×, so sublabels need ≥18px.
-
-Recent invocation: replaced the 37-line ASCII "Fee lifecycle" diagram in
-`docs/launch-arbitrum-chain/chain-config/costs/revenue-routing.mdx` with
-`static/img/arb-chain-fee-lifecycle.svg` — the current reference example.
-
-### `superpowers:systematic-debugging`
-
-Iron-law debugging for any technical issue: build failures, deployment failures, unexpected behavior. Four phases — root cause investigation, pattern analysis, hypothesis & testing, implementation — with the rule **no fixes without root cause investigation**. Especially valuable when a "one-line fix" is tempting.
-
-Recent invocation: Diagnosed the failed Vercel deployment on PR #3279. Root cause was a `resolutions: { "image-size": "^1.1.1" }` pin in `package.json` incompatible with Docusaurus 3.10's `@docusaurus/mdx-loader`, which calls `require("image-size/fromFile")` — a subpath that only exists in image-size v2.x. Symptom-fixing (e.g. switching the pin between `^1.1.1` and `latest`) had been ping-ponging the PR; root-cause analysis revealed the pin should be removed entirely.
-
-### `superpowers:using-superpowers`
-
-Auto-loaded at session start. Foundational meta-skill that governs how every other skill is discovered and invoked.
-
-## Subagents
-
-### `Explore`
-
-Read-only fast search for files, symbols, references, and code structure. Specify a thoroughness level: `quick` (single targeted lookup), `medium` (moderate exploration), or `very thorough` (multi-path search across naming conventions). Used four times in parallel during `/context-prep`.
-
-## User-level agents
-
-Agents defined at `~/.claude/agents/<name>.md` are personal to each contributor and available across all repos. They are not committed here — keep repo-specific tooling in `.claude/skills/` so the whole team gets it.
-
-## Project conventions for agents
-
-- Print `git branch --show-current` before any git operation. Branches change outside the session; do not assume from session start or branch names.
-- Confirm with the user before `git push`, before opening or closing PRs, and before destructive operations on shared state.
-- `yarn build` (or `vercel build` for Vercel parity) is the canonical pre-merge check. Type-checking and tests verify code, not feature correctness.
-- Bundle low-risk Dependabot patches (patch/minor) into a single PR; keep major-version bumps in their own PRs for code review.
-- `onBrokenLinks: 'throw'`, `onBrokenAnchors: 'warn'` in `docusaurus.config.js`. TypeDoc SDK pages emit false-positive anchor warnings; they are documented as harmless build noise in `CLAUDE.md`.
-
-## See also
-
-- `CLAUDE.md` — project conventions, terminology, content style, harmless build noise.
-- `docs/Offchain-pattern-guide.md` — editorial standards every doc change is held to.
-- `.claude/skills/` — skills committed to this repo, available to everyone who clones it.
+<!-- END:nextjs-agent-rules -->

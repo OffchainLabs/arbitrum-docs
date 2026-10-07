@@ -1,0 +1,189 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+import ControlBar from './ControlBar';
+import D3EdgeTree from './D3EdgeTree';
+import EventTimeline from './EventTimeline';
+import FlowSteps from './FlowSteps';
+import NodeDetailsPanel from './NodeDetailsPanel';
+import { ARBISCAN_BASE_URL, DATA_URL } from './constants';
+import './edge-challenge-flow.css';
+import type { EdgeChallengeData } from './types';
+import { useEdgeChallengeState } from './useEdgeChallengeState';
+
+/**
+ * Replay of a real BoLD challenge.
+ *
+ * The decoded Arbitrum Sepolia event log is a static file under `public/data/`, fetched on mount
+ * rather than bundled, so the page downloads it only when a reader reaches the diagram.
+ */
+function EdgeChallengeFlowLoader() {
+  const [data, setData] = useState<EdgeChallengeData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(DATA_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((json: EdgeChallengeData) => {
+        if (!cancelled) setData(json);
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) setError(err instanceof Error ? err.message : String(err));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (error) {
+    return <div className="p-5 text-center text-ecf-rival">Failed to load data: {error}</div>;
+  }
+  if (!data) {
+    return (
+      <div className="p-10 text-center text-fd-muted-foreground">
+        Loading edge challenge data...
+      </div>
+    );
+  }
+
+  return <EdgeChallengeFlowLoaded data={data} />;
+}
+
+function EdgeChallengeFlowLoaded({ data }: { data: EdgeChallengeData }) {
+  const {
+    currentIndex,
+    isPlaying,
+    intervalMs,
+    collapsedSet,
+    selectedNodeKey,
+    state,
+    rangeIndex,
+    levelMeta,
+    levelGroups,
+    edgeAddedById,
+    rangeByEdgeId,
+    events,
+    play,
+    pause,
+    next,
+    showAll,
+    reset,
+    setSpeed,
+    toggleNode,
+    selectNode,
+  } = useEdgeChallengeState(data.events, data.edgeAddedById);
+
+  const challengeManager = data.meta.challengeManager;
+
+  return (
+    <div className="ecf-page not-prose">
+      <div className="ecf-header-info">
+        <p>
+          Replay of real logs from Arbitrum Sepolia for ChallengeManager{' '}
+          <a
+            className="ecf-tx-link"
+            href={`${ARBISCAN_BASE_URL}/address/${challengeManager}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {challengeManager}
+          </a>
+          .
+        </p>
+        <p>
+          For more information or to use your own assertion data, visit the{' '}
+          <a
+            className="ecf-tx-link"
+            href="https://offchainlabs.github.io/fraudproof-example-dashboard/edge-challenge-flow.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            BoLD assertion dashboard
+          </a>
+          .
+        </p>
+      </div>
+
+      <ControlBar
+        isPlaying={isPlaying}
+        intervalMs={intervalMs}
+        currentIndex={currentIndex}
+        totalEvents={events.length}
+        onPlay={play}
+        onPause={pause}
+        onNext={next}
+        onShowAll={showAll}
+        onReset={reset}
+        onSetSpeed={setSpeed}
+      />
+
+      <FlowSteps currentStepIndex={state.currentStepIndex} />
+
+      <div className="ecf-grid">
+        <div className="ecf-panel ecf-tree">
+          <h4>Edge Tree</h4>
+          <div className="ecf-tree-grid">
+            {levelGroups.map((group) => (
+              <div key={group.id} className="ecf-tree-panel">
+                <h5>{group.label}</h5>
+                <D3EdgeTree
+                  group={group}
+                  state={state}
+                  levelMeta={levelMeta}
+                  collapsedSet={collapsedSet}
+                  onSelectNode={selectNode}
+                  onToggleNode={toggleNode}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="ecf-legend">
+            <span className="ecf-legend-active">Active edge</span>
+            <span className="ecf-legend-bisected">Bisected</span>
+            <span className="ecf-legend-rival">Has rival</span>
+            <span className="ecf-legend-osp">OSP confirmed</span>
+          </div>
+          <div className="ecf-hint">
+            Tip: drag to pan, ctrl-scroll (or ⌘-scroll) to zoom, click nodes to view details,
+            double-click to expand/collapse. From the keyboard: tab to a node, Enter to view
+            details, left/right arrows to collapse or expand.
+          </div>
+        </div>
+
+        <div className="ecf-sidebar">
+          <div className="ecf-panel ecf-log">
+            <h4>Information</h4>
+            <div className="ecf-log-split">
+              <div className="ecf-log-section">
+                <h5>Node Info</h5>
+                <NodeDetailsPanel
+                  selectedNodeKey={selectedNodeKey}
+                  rangeNodes={rangeIndex.rangeNodes}
+                  state={state}
+                  levelMeta={levelMeta}
+                  edgeAddedById={edgeAddedById}
+                />
+              </div>
+              <div className="ecf-log-section">
+                <EventTimeline
+                  appliedEvents={state.appliedEvents}
+                  currentIndex={currentIndex}
+                  levelMeta={levelMeta}
+                  edgeAddedById={edgeAddedById}
+                  rangeByEdgeId={rangeByEdgeId}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default EdgeChallengeFlowLoader;

@@ -1,0 +1,77 @@
+/*
+ * Markers and step dialog for the Timeboost auction diagram.
+ *
+ * The marker sits on top of fixed brand artwork, so its orange keeps the artwork's palette rather
+ * than following the theme. The step dialog is Tailwind utilities in AuctionStepMarker.tsx.
+ */
+.markerCircle {
+  fill: #ff7f2a;
+  transition: filter 0.2s ease;
+}
+
+/* Black on the orange (8.3:1, as master had) in both themes: the orange does not follow the theme,
+   and white on it is 2.5:1. */
+.markerDigit {
+  fill: #000;
+}
+
+/* Pulsing halo that marks a step as openable. */
+.markerRing {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 3;
+  opacity: 0.55;
+  animation: markerPulse 2s ease-in-out infinite;
+}
+
+.markerInteractive {
+  cursor: pointer;
+  pointer-events: all;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.markerInteractive:hover {
+  transform: scale(1.12);
+}
+
+.markerInteractive:hover .markerCircle {
+  filter: brightness(1.2);
+}
+
+.markerInteractive:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+/* Outline rendering on an SVG group is patchy across browsers, so the halo also thickens and stops
+   pulsing while the marker holds focus. */
+.markerInteractive:focus-visible .markerRing {
+  opacity: 1;
+  stroke-width: 6;
+  animation: none;
+}
+
+@keyframes markerPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    stroke-width: 3;
+  }
+
+  50% {
+    opacity: 0.15;
+    stroke-width: 6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markerRing {
+    animation: none;
+  }
+
+  .markerInteractive {
+    transition: none;
+  }
+}

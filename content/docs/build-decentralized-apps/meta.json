@@ -1,0 +1,15 @@
+{
+  "title": "Build apps with Solidity",
+  "icon": "Code",
+  "description": "Deploy Solidity smart contracts to Arbitrum chains.",
+  "root": true,
+  "pages": [
+    "index",
+    "quickstart-solidity-remix",
+    "quickstart-create-a-token",
+    "troubleshooting-building",
+    "external:[Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)",
+    "external:[Example code repository](https://github.com/OffchainLabs/arbitrum-tutorials)",
+    "..."
+  ]
+}

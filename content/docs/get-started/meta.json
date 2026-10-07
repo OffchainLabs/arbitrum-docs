@@ -1,0 +1,20 @@
+{
+  "title": "Get started",
+  "icon": "Rocket",
+  "description": "Quickstarts and orientation for building on Arbitrum.",
+  "root": true,
+  "pages": [
+    "index",
+    "arbitrum-introduction",
+    "../build-decentralized-apps/machine-payments-protocol",
+    "../chain-info",
+    "../glossary",
+    "../contribute",
+    "faq",
+    "../audit-reports",
+    "../third-party-docs",
+    "external:[DAO docs](https://docs.arbitrum.foundation/gentle-intro-dao-governance)",
+    "external:[Prysm docs](https://www.offchainlabs.com/prysm/docs)",
+    "..."
+  ]
+}

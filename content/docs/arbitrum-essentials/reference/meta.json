@@ -1,0 +1,15 @@
+{
+  "title": "Reference",
+  "pages": [
+    "chain-params",
+    "contract-addresses",
+    "debugging-tools",
+    "development-frameworks",
+    "mainnet-risks",
+    "monitoring-tools-block-explorers",
+    "node-providers",
+    "solidity-references",
+    "web3-libraries-tools",
+    "..."
+  ]
+}

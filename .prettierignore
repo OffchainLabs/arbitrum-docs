@@ -1,13 +1,49 @@
-# Generated files from notion tables
-../arbitrum-docs/partials/_glossary-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-bridging-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-building-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-nodes-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-orbit-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-stylus-partial.mdx
-../arbitrum-docs/partials/_troubleshooting-users-partial.mdx
-../arbitrum-docs/CODEOWNERS.md
+# Dependencies
+node_modules
 
-# SDK documentation landing pages (manually maintained, skip formatting)
-docs/sdk/index.mdx
-docs/sdk/migrate.mdx
+# Build / generated output
+.next
+.source
+.vercel
+out
+next-env.d.ts
+
+# Tooling state
+.serena
+.remember
+
+# Machine-generated
+pnpm-lock.yaml
+
+# Written by move-doc as JSON.stringify; Prettier would reflow them and the next run would undo it.
+content/**/meta.json
+
+# Assistant guidance; parts of CLAUDE.md are rewritten by `next dev`
+CLAUDE.md
+
+# Shared Codex skills, config and guidance use tool-specific or mirrored formats.
+# Keep them out of automatic formatting; preserve paths used by contributor-local agent setups.
+# .superpowers is per-developer state.
+.agents
+.codex
+.superpowers
+AGENTS.md
+
+# Prettier's MDX parser damages these files. It rewrites MDX comments, adds a stray closing
+# fence, and, in a fence that directly follows a JSX closing tag, escapes `*` and `_` and dedents
+# the code. The 27f230fcd reformat did that to the Go sample in the DA API guide and the TypeScript
+# sample on the node-config page. Both were restored from 27f230fcd^ and now have a blank line
+# after the tag. Edit these files by hand. content:lint and the build catch broken MDX, not code
+# that was altered inside a fence.
+content/docs/launch-arbitrum-chain/deploy/configure-node.mdx
+content/docs/launch-arbitrum-chain/extend-the-protocol/da-api-guide.mdx
+content/docs/stylus/how-tos/trait-based-composition.mdx
+content/partials/run-a-node/_dao-chains-parameters.mdx
+content/partials/run-a-node/_orbit-chains-parameters.mdx
+content/docs/launch-arbitrum-chain/configuration/validation/test-chain-configuration.mdx
+content/docs/launch-arbitrum-chain/configuration/data-availability/das-docker-deployment.mdx
+content/docs/run-a-node/troubleshooting.mdx
+content/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-mirror-das.mdx
+content/docs/stylus/concepts/gas-metering.mdx
+content/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das.mdx
+content/docs/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx

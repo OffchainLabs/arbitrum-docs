@@ -1,0 +1,12 @@
+{
+  "title": "Reference",
+  "root": true,
+  "pages": [
+    "../deep-dives/sequencer",
+    "geth",
+    "finality-and-reorgs",
+    "stf-inputs",
+    "arbos-reference",
+    "..."
+  ]
+}
