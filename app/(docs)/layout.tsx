@@ -1,10 +1,15 @@
-import { DocsLayout } from 'fumadocs-ui/layouts/notebook';
+import { DocsLayout as NotebookLayout } from 'fumadocs-ui/layouts/notebook';
 import type { ReactNode } from 'react';
 
+import { DocsLayout as AIChatLayout } from '@/components/ai/layout';
 import { SidebarCollapseButton } from '@/components/sidebar-collapse-button';
 import { SidebarResourceLinks } from '@/components/sidebar-resource-links';
 import { baseOptions } from '@/lib/layout.shared';
 import { source } from '@/lib/source';
+
+// `NEXT_PUBLIC_*` is inlined at build time, so this is a constant per build.
+const DocsLayout =
+  process.env.NEXT_PUBLIC_AI_CHAT_ENABLED === 'true' ? AIChatLayout : NotebookLayout;
 
 export default function Layout({ children }: { children: ReactNode }) {
   const base = baseOptions();

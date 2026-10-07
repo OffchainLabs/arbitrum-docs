@@ -8,7 +8,6 @@ import type { ReactNode } from 'react';
 
 import { PostHogProvider } from '@/components/analytics/posthog-provider';
 import { Footer } from '@/components/footer';
-import { InkeepChatButton } from '@/components/inkeep/inkeep-chat-button';
 import InkeepSearchDialog from '@/components/inkeep/inkeep-search';
 import { vars } from '@/content/vars';
 import { getSiteUrl } from '@/lib/shared';
@@ -200,7 +199,6 @@ export default function Layout({ children }: { children: ReactNode }) {
             {/* Fumadocs exposes no footer slot, so the site footer is a sibling of
               the layout inside the flex column body. See components/footer.tsx. */}
             <Footer />
-            {inkeepEnabled ? <InkeepChatButton /> : null}
           </RootProvider>
         </PostHogProvider>
       </body>
