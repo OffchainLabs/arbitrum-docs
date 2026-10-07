@@ -135,6 +135,11 @@ function useChatState() {
   return use(ChatContext)!;
 }
 
+/** sends a question as the user, with the page as client context */
+export function useAIChatSend() {
+  return useChatState().send;
+}
+
 /** the chat panel, for the `aiChat` option of docs layouts */
 export function AIChatPanel() {
   return (

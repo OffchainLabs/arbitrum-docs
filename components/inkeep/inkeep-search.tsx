@@ -3,6 +3,7 @@
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search';
 import dynamic from 'next/dynamic';
 
+import { askAI, canAskAI } from '@/lib/ai/bridge';
 import { inkeepAiChatSettings, inkeepSearchSettings, useInkeepBaseSettings } from '@/lib/inkeep';
 
 // The Inkeep widget bundle is large; load it only in the browser and only once
@@ -26,6 +27,13 @@ export default function InkeepSearchDialog({ open, onOpenChange }: SharedProps) 
       aiChatSettings={inkeepAiChatSettings}
       searchSettings={inkeepSearchSettings}
       modalSettings={{ isOpen: open, onOpenChange, shortcutKey: null }}
+      // With the AI chat panel mounted, "Ask AI" closes this dialog and opens the panel with the query.
+      // `onToggleView` is cxkit's WidgetView callback (@inkeep/cxkit-types OnToggleView).
+      onToggleView={({ view, query }) => {
+        if (view !== 'chat' || !canAskAI()) return;
+        onOpenChange(false);
+        askAI(query ?? '');
+      }}
     />
   );
 }
