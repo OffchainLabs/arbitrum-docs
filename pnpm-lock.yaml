@@ -107,6 +107,9 @@ importers:
       tailwind-merge:
         specifier: ^3.7.0
         version: 3.7.0
+      unist-util-visit:
+        specifier: 5.1.0
+        version: 5.1.0
       viem:
         specifier: 2.57.1
         version: 2.57.1(typescript@7.0.2)(zod@4.6.5)
@@ -186,9 +189,6 @@ importers:
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
-      unist-util-visit:
-        specifier: 5.1.0
-        version: 5.1.0
       vfile:
         specifier: 6.0.3
         version: 6.0.3
