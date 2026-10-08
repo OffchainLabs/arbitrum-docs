@@ -32,7 +32,8 @@ const PendingContext = createContext<{
 
 /**
  * The open state of the chat, without the chat itself. `Ctrl + /` opens it and `Escape` closes
- * it. A prompt from `askAI` opens it and waits until the chat takes it.
+ * it. A prompt from `askAI` opens it and waits until the chat takes it; a newer prompt replaces one
+ * the chat has not sent yet.
  */
 export function AIChatOpenProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);

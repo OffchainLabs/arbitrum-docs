@@ -115,6 +115,42 @@ test('the panel code loads on the first open only', panel, async () => {
   await p.close();
 });
 
+test('a failed panel download shows a message and keeps the page', panel, async () => {
+  const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const blocked: string[] = [];
+  // The panel chunk has a hashed name, so find it by its text.
+  await p.route('**/_next/static/**/*.js', async (route) => {
+    const response = await route.fetch();
+    if (!(await response.text()).includes('Ask a follow-up')) return route.fulfill({ response });
+    blocked.push(route.request().url());
+    return route.fulfill({ status: 404, body: '' });
+  });
+  await p.goto(baseUrl + page);
+  await p.getByRole('button', { name: 'Ask AI' }).filter({ visible: true }).click();
+  await p.getByText('The AI chat could not load. Reload the page to try again.').waitFor();
+  assert.ok(blocked.length > 0, 'the panel chunk was requested');
+  assert.equal(await p.locator('h1').first().isVisible(), true);
+  await p.close();
+});
+
+test('closing and reopening keeps the panel mounted', panel, async () => {
+  const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await p.goto(baseUrl + page);
+  const trigger = p.getByRole('button', { name: 'Ask AI' }).filter({ visible: true });
+  await trigger.click();
+  const input = p.getByRole('textbox');
+  await input.fill('draft question');
+  // A remount would replace the element and drop this attribute.
+  await input.evaluate((el) => el.setAttribute('data-probe', 'kept'));
+  await p.keyboard.press('Escape');
+  await input.waitFor({ state: 'hidden' });
+  await trigger.click();
+  await input.waitFor();
+  assert.equal(await input.inputValue(), 'draft question');
+  assert.equal(await input.getAttribute('data-probe'), 'kept');
+  await p.close();
+});
+
 test('mobile: no floating pill, navbar icon opens the panel', panel, async () => {
   const p = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await p.goto(baseUrl + page);

@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import type { z } from 'zod';
 
 import type { InkeepUIMessage } from '@/app/api/chat/route';
+import { useAIChatPendingPrompt } from '@/components/ai/chat/open';
 import { type ComponentType, captureChatEvent } from '@/lib/ai/events';
 import type { ProvideLinksToolSchema } from '@/lib/ai/inkeep-qa-schema';
 import { inkeepAiChatSettings } from '@/lib/inkeep';
@@ -18,7 +19,6 @@ import {
   AIChatSources,
   useAIChatSend,
 } from './chat';
-import { useAIChatPendingPrompt } from './chat/open';
 
 // Keeps the request body under the 32 KiB cap of /api/chat in normal use.
 const MAX_SENT_MESSAGES = 10;

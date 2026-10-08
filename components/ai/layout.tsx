@@ -8,7 +8,7 @@ import {
 } from 'fumadocs-ui/layouts/shared/slots/search-trigger';
 import { MessageCircleIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { Component, type ReactNode, useState } from 'react';
 
 import { AIChatOpenProvider, AIChatTrigger, useAIChat } from '@/components/ai/chat/open';
 import { buttonVariants } from '@/components/ui/button';
@@ -17,7 +17,26 @@ import { cn } from '@/lib/cn';
 // The chat runtime, the transport and the markdown renderer download on the first open only.
 const LazyPanel = dynamic(() => import('@/components/ai/search').then((m) => m.AIChatLazyPanel), {
   ssr: false,
+  loading: () => <div className="size-full" />,
 });
+
+/** Keeps a failed panel download, such as a chunk gone after a deploy, inside the panel. */
+class PanelErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  override state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  override render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <p role="alert" className="m-auto p-4 text-center text-sm text-fd-muted-foreground">
+        The AI chat could not load. Reload the page to try again.
+      </p>
+    );
+  }
+}
 
 export function DocsLayout(props: DocsLayoutProps) {
   return (
@@ -63,7 +82,15 @@ function ChatLayout(props: DocsLayoutProps) {
     <Layout
       {...props}
       slots={{ ...props.slots, searchTrigger: { sm: MobileTriggers, full: FullSearchTrigger } }}
-      aiChat={{ open, onOpenChange: setOpen, panel: loaded ? <LazyPanel /> : undefined }}
+      aiChat={{
+        open,
+        onOpenChange: setOpen,
+        panel: loaded ? (
+          <PanelErrorBoundary>
+            <LazyPanel />
+          </PanelErrorBoundary>
+        ) : undefined,
+      }}
     />
   );
 }
