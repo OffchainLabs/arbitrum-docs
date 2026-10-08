@@ -86,6 +86,7 @@ test('search Ask AI opens the panel and sends the query once', async () => {
   await askAIToggle(dialog).click();
   await p.getByText('how do fees work').last().waitFor();
   await dialog.waitFor({ state: 'hidden' });
+  await p.getByText('The AI assistant is not available.').waitFor();
   await p.waitForTimeout(1500);
   assert.equal(posts.length, 1);
   assert.match(posts[0] ?? '', /how do fees work/);
@@ -103,6 +104,7 @@ test('search Ask AI with no query opens the panel and sends nothing', async () =
   const dialog = await openSearch(p);
   await askAIToggle(dialog).click();
   await p.getByRole('textbox').last().waitFor();
+  await p.getByRole('button', { name: 'What is Arbitrum Stylus?' }).waitFor();
   assert.equal(posts, 0);
   await p.close();
 });
