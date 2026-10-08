@@ -8,7 +8,8 @@ await generateFiles({
   per: 'operation',
   frontmatter: (title, description) => ({
     title,
-    description: description ?? title,
+    // The page description renders as plain text, so inline-code backticks are dropped.
+    description: (description ?? title).replaceAll('`', ''),
     content_type: 'reference',
   }),
 });

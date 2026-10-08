@@ -16,6 +16,7 @@ import { Term } from '@/components/mdx/Term';
 import { Var } from '@/components/mdx/Var';
 import { FlowChart } from '@/components/widgets/CentralizedAuction';
 import { EdgeChallengeFlow } from '@/components/widgets/EdgeChallengeFlow';
+import { OpenAPIPage } from '@/components/widgets/OpenAPIPage';
 import {
   ChecklistItem,
   ConfigGuidance,
@@ -36,6 +37,7 @@ export function getMDXComponents(components?: MDXComponents) {
     EdgeChallengeFlow,
     FlowChart,
     ImageZoom,
+    OpenAPIPage,
     // Markdown images arrive with `src`, `width` and `height` that remark-image measured from
     // `public/`. `rounded-lg` matches the Fumadocs default `img` this mapping replaces.
     img: (props: ComponentProps<'img'>) => (

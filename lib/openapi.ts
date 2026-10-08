@@ -43,11 +43,20 @@ export async function openapiPageMarkdown(schemaId: string, slug: string): Promi
   lines.push('', '## Response', '');
   for (const v of variants) {
     const r = resolve(doc, v);
-    lines.push(`### ${r.title ?? 'Response'}`, '', '```json', JSON.stringify(r.properties, null, 2));
+    lines.push(
+      `### ${r.title ?? 'Response'}`,
+      '',
+      '```json',
+      JSON.stringify(r.properties, null, 2),
+    );
     lines.push('```', '');
   }
   const request = { jsonrpc: '2.0', id: 1, method: op.operationId, params: example };
   lines.push('## Example', '', '```bash', `curl -X POST ${server} \\`);
-  lines.push(`  -H "Content-Type: application/json" \\`, `  -d '${JSON.stringify(request)}'`, '```');
+  lines.push(
+    `  -H "Content-Type: application/json" \\`,
+    `  -d '${JSON.stringify(request)}'`,
+    '```',
+  );
   return lines.join('\n');
 }

@@ -12,9 +12,9 @@ import { notFound } from 'next/navigation';
 import type { ComponentProps } from 'react';
 
 import { RequestUpdateLink } from '@/components/RequestUpdateLink';
-import { OpenAPIPage } from '@/components/api-page';
 import { Feedback } from '@/components/feedback/client';
 import { getMDXComponents } from '@/components/mdx';
+import { OpenAPIPage } from '@/components/widgets/OpenAPIPage';
 import { faqJsonLd } from '@/lib/faq';
 import { openapi } from '@/lib/openapi';
 import { onPageFeedbackAction } from '@/lib/posthog';

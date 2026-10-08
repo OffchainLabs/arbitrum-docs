@@ -1,8 +1,7 @@
 ---
 title: arb_getRawBlockMetadata
 description: 'Returns the raw block metadata for each block in the range from
-  `fromBlock` to `toBlock`. Source: nitro v3.12.1
-  `execution/gethexec/api.go:59`.'
+  fromBlock to toBlock. Source: nitro v3.12.1 execution/gethexec/api.go:59.'
 full: true
 content_type: reference
 _openapi:
@@ -26,7 +25,7 @@ export default function Layout(props) {
   return (
     <>
       {props.children}
-      <OpenAPIPage document="./content/openapi/arbitrum-json-rpc.json" operations={[{"path":"/arb_getRawBlockMetadata","method":"post"}]} />
+      <OpenAPIPage document="./content/openapi/arbitrum-json-rpc.json" operations={[{ path: '/arb_getRawBlockMetadata', method: 'post' }]} />
     </>
   );
 }

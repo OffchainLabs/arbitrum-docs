@@ -71,6 +71,7 @@
                 "description": "Last block of the range."
               }
             ],
+            "description": "Positional parameters. Each position is listed under Params.",
             "items": false,
             "examples": [["0x1000000", "0x1000001"]]
           }
@@ -80,7 +81,10 @@
         "type": "object",
         "description": "nitro v3.12.1 `execution/gethexec/api.go:46-49`.",
         "properties": {
-          "blockNumber": { "type": "integer", "description": "Block number (JSON number, Go uint64)." },
+          "blockNumber": {
+            "type": "integer",
+            "description": "Block number (JSON number, Go uint64)."
+          },
           "rawMetadata": {
             "type": "string",
             "pattern": "^0x[0-9a-fA-F]*$",
@@ -97,7 +101,10 @@
           "id": { "oneOf": [{ "type": "integer" }, { "type": "string" }] },
           "result": {
             "oneOf": [
-              { "type": "array", "items": { "$ref": "#/components/schemas/NumberAndBlockMetadata" } },
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/NumberAndBlockMetadata" }
+              },
               { "type": "null" }
             ]
           }
