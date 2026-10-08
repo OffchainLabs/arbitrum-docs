@@ -503,12 +503,16 @@ Other things not to undo:
   `/api/search` fallback route.
 - **The AI chat panel** mounts in `components/ai/layout.tsx`, which `app/(docs)/layout.tsx` loads
   through `next/dynamic` only when `NEXT_PUBLIC_AI_CHAT_ENABLED` is `true`. With the flag unset the
-  layout and bundle have no chat code. The panel posts to `app/api/chat/route.ts`, which returns 503
-  without `INKEEP_API_KEY`. `lib/ai/chat-request.ts` checks each request before it reaches Inkeep:
-  origin, `Content-Type`, body size, message count and message size. The search dialog's "Ask AI"
-  closes the dialog and opens the panel with the query through `lib/ai/bridge.ts`. The files under
-  `components/ai/chat/` are vendored from `@fumadocs/cli@1.7.3`; update them by running that CLI
-  again.
+  layout and bundle have no chat panel code. The panel posts to `app/api/chat/route.ts`, which
+  returns 503 without `INKEEP_API_KEY`. Add a Vercel WAF rate-limit rule on `POST /api/chat` before
+  setting `INKEEP_API_KEY`: the route is live whenever the key is set, with or without the flag.
+  `lib/ai/chat-request.ts` checks each request before it reaches Inkeep: origin, `Content-Type`,
+  body size, message count and the text length of each user message. The origin check stops
+  browsers only. The panel sends the last 10 messages. The search dialog's "Ask AI" closes the
+  dialog and opens the panel with the query through `lib/ai/bridge.ts`. With the panel mounted, the
+  dialog hides cxkit's "Ask AI" card and remounts cxkit after the hand-off, so the next open shows
+  search. The files under `components/ai/chat/` are vendored from `@fumadocs/cli@1.7.3`; update
+  them by running that CLI again.
 - **Fonts are self-hosted** under `public/fonts/` and loaded with `next/font/local` in
   `app/layout.tsx`. Never add `next/font/google`: it makes the build fetch from Google. Only the two
   upright Aeonik faces preload. The italic is its own declaration so it can skip preloading, and
@@ -812,8 +816,9 @@ a pinned `defaults` date so an SDK upgrade cannot change what is captured. The 4
 the URL at mount. Those events show inbound URLs the redirect map misses.
 
 The AI chat panel sends `inkeep_user_message_submitted`, `inkeep_assistant_message_received` and
-`inkeep_assistant_source_item_clicked` from `lib/ai/events.ts`, with `component_type` set to
-`ChatButton` or `SearchBar` and, for a source click, `source_link`. It never sends message text.
+`inkeep_assistant_source_item_clicked` from `lib/ai/events.ts`. The two message events set
+`component_type` to `ChatButton` or `SearchBar`. A source click always sets `ChatButton` and adds
+`source_link`. It never sends message text.
 
 `NEXT_PUBLIC_POSTHOG_KEY` is the publishable, write-only `phc_` token. Page feedback posts
 server-side, so it works locally with the key set.
