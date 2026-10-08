@@ -9,11 +9,14 @@ import {
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import type { ComponentProps } from 'react';
 
 import { RequestUpdateLink } from '@/components/RequestUpdateLink';
+import { OpenAPIPage } from '@/components/api-page';
 import { Feedback } from '@/components/feedback/client';
 import { getMDXComponents } from '@/components/mdx';
 import { faqJsonLd } from '@/lib/faq';
+import { openapi } from '@/lib/openapi';
 import { onPageFeedbackAction } from '@/lib/posthog';
 import { appName, getSiteUrl, gitConfig, socialHandle } from '@/lib/shared';
 import { getPageImage, getPageMarkdownUrl, source } from '@/lib/source';
@@ -68,6 +71,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         <MDX
           components={getMDXComponents({
             a: createRelativeLink(source, page),
+            OpenAPIPage: async (props: ComponentProps<typeof OpenAPIPage>) => (
+              <OpenAPIPage {...await openapi.preloadOpenAPIPage(page)} {...props} />
+            ),
           })}
         />
       </DocsBody>
