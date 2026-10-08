@@ -10,6 +10,21 @@
     "/arb_getRawBlockMetadata": {
       "post": {
         "operationId": "arb_getRawBlockMetadata",
+        "x-codeSamples": [
+          { "id": "curl", "lang": "bash", "source": false },
+          { "id": "js", "lang": "js", "source": false },
+          { "id": "go", "lang": "go", "source": false },
+          { "id": "python", "lang": "python", "source": false },
+          { "id": "java", "lang": "java", "source": false },
+          { "id": "csharp", "lang": "csharp", "source": false },
+          { "id": "rust", "lang": "rust", "source": false },
+          {
+            "id": "jsonrpc-curl",
+            "lang": "bash",
+            "label": "cURL (x-codeSamples)",
+            "source": "curl -X POST https://arb1.arbitrum.io/rpc \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"arb_getRawBlockMetadata\",\"params\":[\"0x1000000\",\"0x1000001\"]}'"
+          }
+        ],
         "summary": "arb_getRawBlockMetadata",
         "description": "Returns the raw block metadata for each block in the range from `fromBlock` to `toBlock`. Source: nitro v3.12.1 `execution/gethexec/api.go:59`.",
         "requestBody": {
