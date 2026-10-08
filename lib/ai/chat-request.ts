@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const MAX_BODY_BYTES = 32 * 1024;
 const MAX_MESSAGES = 20;
-const MAX_MESSAGE_CHARS = 8_000;
+const MAX_USER_TEXT_CHARS = 8_000;
 
 const requestSchema = z.object({
   messages: z
@@ -14,6 +14,19 @@ const requestSchema = z.object({
 export type ChatRequestResult =
   | { ok: true; messages: z.infer<typeof requestSchema>['messages'] }
   | { ok: false; status: 400 | 403 | 413 | 415 | 503; error: string };
+
+type ChatMessage = z.infer<typeof requestSchema>['messages'][number];
+
+function userTextLength(message: ChatMessage): number {
+  if (message.role !== 'user') return 0;
+  let length = 0;
+  for (const part of message.parts) {
+    if (typeof part !== 'object' || part === null) continue;
+    const { type, text } = part as { type?: unknown; text?: unknown };
+    if (type === 'text' && typeof text === 'string') length += text.length;
+  }
+  return length;
+}
 
 function originAllowed(req: Request, siteUrl: string, production: boolean): boolean {
   const origin = req.headers.get('origin');
@@ -46,7 +59,7 @@ export async function checkChatRequest(
   } catch {
     return { ok: false, status: 400, error: 'Invalid chat request' };
   }
-  if (parsed.messages.some((m) => JSON.stringify(m).length > MAX_MESSAGE_CHARS)) {
+  if (parsed.messages.some((m) => userTextLength(m) > MAX_USER_TEXT_CHARS)) {
     return { ok: false, status: 413, error: 'Message too large' };
   }
   return { ok: true, messages: parsed.messages };

@@ -21,6 +21,9 @@ import {
 
 export { AIChatPanel, AIChatTrigger, useAIChat } from './chat';
 
+// Keeps the request body under the 32 KiB cap of /api/chat in normal use.
+const MAX_SENT_MESSAGES = 10;
+
 export function AIChat({ children }: { children: ReactNode }) {
   const source = useRef<ComponentType>('ChatButton');
   const chat = useChat<InkeepUIMessage>({
@@ -33,6 +36,9 @@ export function AIChat({ children }: { children: ReactNode }) {
     },
     transport: new DefaultChatTransport({
       api: '/api/chat',
+      prepareSendMessagesRequest: ({ id, messages, body, trigger, messageId }) => ({
+        body: { ...body, id, messages: messages.slice(-MAX_SENT_MESSAGES), trigger, messageId },
+      }),
     }),
   });
 

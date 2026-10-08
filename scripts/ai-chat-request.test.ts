@@ -81,3 +81,30 @@ test('413 for one message over 8,000 characters', async () => {
   const r = await checkChatRequest(req({ body: JSON.stringify({ messages: [long] }) }), prod);
   assert.equal(r.ok || r.status, 413);
 });
+
+test('accepts an assistant message with about 12,000 characters of text', async () => {
+  const answer = { role: 'assistant', parts: [{ type: 'text', text: 'x'.repeat(12_000) }] };
+  const body = JSON.stringify({ messages: [message, answer, message] });
+  const r = await checkChatRequest(req({ body }), prod);
+  assert.equal(r.ok, true);
+});
+
+test('413 for a user message with 8,001 characters of text in two parts', async () => {
+  const parts = [
+    { type: 'text', text: 'x'.repeat(4_000) },
+    { type: 'text', text: 'x'.repeat(4_001) },
+  ];
+  const body = JSON.stringify({ messages: [{ role: 'user', parts }] });
+  const r = await checkChatRequest(req({ body }), prod);
+  assert.equal(r.ok || r.status, 413);
+});
+
+test('accepts a user message whose text is short but whose JSON is over 8,000', async () => {
+  const parts = [
+    { type: 'data-client', data: { location: 'x'.repeat(9_000), title: 't' } },
+    { type: 'text', text: 'x'.repeat(7_000) },
+  ];
+  const body = JSON.stringify({ messages: [{ role: 'user', parts }] });
+  const r = await checkChatRequest(req({ body }), prod);
+  assert.equal(r.ok, true);
+});
