@@ -17,6 +17,13 @@ async function openSearch(p: Page, query?: string): Promise<Locator> {
   return dialog;
 }
 
+/** The "Ask AI" half of the view toggle in cxkit's search input row. */
+function askAIToggle(dialog: Locator): Locator {
+  return dialog
+    .locator('[data-part="ai-search-input-group"] [data-part="view_toggle"]')
+    .getByRole('button', { name: 'Ask AI', exact: true });
+}
+
 before(async () => {
   browser = await chromium.launch();
 });
@@ -76,7 +83,7 @@ test('search Ask AI opens the panel and sends the query once', async () => {
   });
   await p.goto(baseUrl + page);
   const dialog = await openSearch(p, 'how do fees work');
-  await dialog.getByText('Ask AI').first().click();
+  await askAIToggle(dialog).click();
   await p.getByText('how do fees work').last().waitFor();
   await dialog.waitFor({ state: 'hidden' });
   await p.waitForTimeout(1500);
@@ -94,8 +101,41 @@ test('search Ask AI with no query opens the panel and sends nothing', async () =
   });
   await p.goto(baseUrl + page);
   const dialog = await openSearch(p);
-  await dialog.getByText('Ask AI').first().click();
+  await askAIToggle(dialog).click();
   await p.getByRole('textbox').last().waitFor();
   assert.equal(posts, 0);
+  await p.close();
+});
+
+test('search opens in search view after an Ask AI hand-off', async () => {
+  const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await p.route('**/api/chat', (route) => route.fulfill({ status: 503, body: '{}' }));
+  await p.goto(baseUrl + page);
+  const dialog = await openSearch(p, 'how do fees work');
+  await askAIToggle(dialog).click();
+  await dialog.waitFor({ state: 'hidden' });
+  await openSearch(p);
+  assert.equal(await dialog.getByPlaceholder('Search documentation...').isVisible(), true);
+  assert.equal(await dialog.locator('[data-part="ai-chat-root"]').isVisible(), false);
+  await p.close();
+});
+
+test('search Ask AI hand-off sends nothing to Inkeep chat', async () => {
+  const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const chatRequests: string[] = [];
+  await p.route('**/api.inkeep.com/**', (route) => {
+    const url = route.request().url();
+    if (!url.includes('chat')) return route.continue();
+    chatRequests.push(url);
+    return route.abort();
+  });
+  await p.route('**/api/chat', (route) => route.fulfill({ status: 503, body: '{}' }));
+  await p.goto(baseUrl + page);
+  const dialog = await openSearch(p, 'how do fees work');
+  assert.equal(await dialog.getByText('Start conversation').count(), 0, 'no Ask AI card');
+  await askAIToggle(dialog).click();
+  await p.getByText('how do fees work').last().waitFor();
+  await p.waitForTimeout(1500);
+  assert.deepEqual(chatRequests, []);
   await p.close();
 });
