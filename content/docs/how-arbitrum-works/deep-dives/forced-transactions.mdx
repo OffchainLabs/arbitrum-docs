@@ -1,0 +1,361 @@
+---
+title: Forced transactions
+description: 'Learn how to get a transaction onto an Arbitrum chain when the sequencer is offline or censoring you, and how long force inclusion takes.'
+author: pete-vielhaber
+user_story: As an Arbitrum user or developer, I need to know how to get my transaction included when the sequencer is offline or censoring me, and how long it takes.
+content_type: concept
+---
+
+A forced transaction is a message to the <Term id="child-chain">child chain</Term> that you send through the Delayed Inbox on the <Term id="parent-chain">parent chain</Term> instead of to the <Term id="sequencer">sequencer</Term>. The message can be a signed transaction, an ETH deposit, a retryable ticket, or an unsigned message. If the sequencer is offline or ignores your message, you can still get it included. After a wait called the force-inclusion window, anyone can move it into the Sequencer Inbox without the sequencer's help.
+
+## Why forced transactions matter
+
+The sequencer orders child-chain transactions, so it can delay them. It cannot block them for good. Force inclusion gives every user a path onto the chain that depends only on the parent chain. The one exception is the chain owner, who can [allowlist or pause the Inbox](#things-to-consider).
+
+- **Censorship resistance.** If the sequencer refuses your transaction, you can still get it included.
+- **Liveness.** If the sequencer is offline, transactions still reach the chain.
+- **A way out.** You can force-include a withdrawal, so you can move funds back to the parent chain without the sequencer. See [Withdraw ETH while the sequencer is down](#withdraw-eth-while-the-sequencer-is-down).
+- **Timely disputes on an L3.** On an <Term id="layer-3-l3">L3</Term>, <Term id="bold">BoLD</Term> assertions and challenge moves go to the parent chain, which is an Arbitrum chain with its own sequencer. If that sequencer censors them, each move waits for force inclusion. The [Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer#censorship-timeout) shortens that wait, so a challenge does not stall for days.
+
+## Key terms
+
+| Term                                                                              | Meaning                                                                                                                                                                                                                                                                                                          |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Term id="delayed-inbox">Delayed Inbox</Term>                                     | The parent-chain Inbox contract that accepts messages for the child chain, together with the Bridge contract that records them. Any account can send to it unless the chain owner turns on the Inbox allowlist. Messages wait until the sequencer or a force-inclusion call moves them into the Sequencer Inbox. |
+| <Term id="sequencer-inbox">Sequencer Inbox</Term>                                 | The parent-chain contract that holds the canonical, ordered list of child-chain messages. Every child-chain node reads from it.                                                                                                                                                                                  |
+| <Term id="forceinclusion">Force inclusion</Term>                                  | Calling `forceInclusion` on the Sequencer Inbox to move waiting Delayed Inbox messages into the Sequencer Inbox. Anyone can call it once the force-inclusion window has passed.                                                                                                                                  |
+| Force-inclusion window                                                            | How long a Delayed Inbox message must wait before anyone can force-include it. It is the smaller of `delayBlocks` and the delay buffer.                                                                                                                                                                          |
+| `delayBlocks`                                                                     | The longest force-inclusion window, in Ethereum blocks. It is one field of the Sequencer Inbox's `maxTimeVariation` setting.                                                                                                                                                                                     |
+| [Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer#censorship-timeout) | A Sequencer Inbox feature, also called the delay buffer, that shortens the force-inclusion window after the sequencer has delayed messages for a long time.                                                                                                                                                      |
+| <Term id="sequencer-feed">Sequencer feed</Term>                                   | The stream the sequencer uses to send new blocks to nodes before it posts them to the parent chain.                                                                                                                                                                                                              |
+
+## How a forced transaction works
+
+A forced transaction takes the same path as any other Delayed Inbox message. Only the last step differs.
+
+1. **You send a message to the Delayed Inbox on the parent chain.** Each [message type](#what-you-can-force-include) has its own Inbox function. The parent chain records the message and the block it arrived in.
+2. **The sequencer picks it up, or the window runs out.** If the sequencer adds the message, the next batch the batch poster posts to the Sequencer Inbox marks it as read. If the sequencer ignores the message until the force-inclusion window ends, anyone can call `forceInclusion`. It posts an empty batch to the Sequencer Inbox that marks the message as read.
+3. **Every child-chain node executes it.** Nodes see the message marked as read in the Sequencer Inbox, take its contents from the Delayed Inbox, and execute it in order.
+
+![A Delayed Inbox message reaches the Sequencer Inbox through the sequencer, or through force inclusion after the window ends](/img/haw-bypassing-the-sequencer.svg)
+
+### When the sequencer is running
+
+When the sequencer is running, you do not need force inclusion. Most transactions go straight to the sequencer through an RPC endpoint. A message you send to the Delayed Inbox also reaches the chain: the sequencer adds it to a child-chain block, and the batch poster later posts that block to the parent chain.
+
+The sequencer's delayed sequencer waits before it adds your message. Sequencer operators turn this component on. By default, it waits until the parent-chain block that holds your message is marked safe. Three [settings](https://github.com/OffchainLabs/nitro/blob/ccc5c828d9ea22f161efc784bac4d4a6559b7e59/arbnode/delayed_sequencer.go#L66-L72) change that wait:
+
+- `node.delayed-sequencer.require-full-finality=true` makes it wait for a finalized block instead of a safe one.
+- `node.delayed-sequencer.use-merge-finality=false` makes it wait a fixed number of blocks instead.
+- `node.delayed-sequencer.finalize-distance` sets that number of blocks, 20 by default. The sequencer also uses this setting if the parent chain does not report safe and finalized blocks.
+
+## What you can force-include
+
+`forceInclusion` works on every Delayed Inbox message, whatever its type. The message type decides which Inbox function you call and what the child chain does with the message.
+
+| Message                                                                                    | Inbox function                                                                     | What the child chain does with it                                                                                                                                                                                                                                                                                                                                       |
+| ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A signed child-chain transaction                                                           | `sendL2Message` or `sendL2MessageFromOrigin`                                       | Executes it from your own address, with no aliasing. ArbOS drops blob (EIP-4844) transactions. Use this to call any contract or to [withdraw ETH](#withdraw-eth-while-the-sequencer-is-down). The [SDK steps](#force-include-a-signed-transaction-with-the-arbitrum-sdk) use this message type.                                                                         |
+| An ETH deposit                                                                             | `depositEth`                                                                       | Credits the ETH to the sender's address on the child chain. If a contract sent the deposit, the ETH goes to the contract's aliased address. The [`force-inclusion` example](#runnable-examples) force-includes a deposit.                                                                                                                                               |
+| A <Term id="retryable-ticket">retryable ticket</Term>                                      | `createRetryableTicket`                                                            | Creates the ticket. ArbOS schedules an automatic redemption only if the gas limit is at least 21,000, the fee cap covers the child chain's base fee when the message executes, and the sender's balance covers both. Otherwise, the ticket waits for a manual redemption. See [Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets). |
+| An [unsigned message](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#unsigned-messages) | `sendUnsignedTransaction`, `sendContractTransaction`, or their `L1Funded` variants | Executes it from the sender's [aliased address](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#address-aliasing).                                                                                                                                                                                                                                                    |
+
+For each function's parameters, see [Sending transactions via the Delayed Inbox](/arbitrum-essentials/bridging/deposit/eth-and-messages#sending-transactions-via-the-delayed-inbox).
+
+## The force-inclusion timeline
+
+How your message reaches the chain depends on how long the sequencer stays offline or keeps ignoring it.
+
+| How long the sequencer is offline or ignores your message | What happens to your message                                                                                                                |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Not at all                                                | The sequencer adds it once the parent-chain block is safe, by default. See [When the sequencer is running](#when-the-sequencer-is-running). |
+| Less than the force-inclusion window                      | It waits in the Delayed Inbox. When the sequencer returns, it adds the message in order. Nobody can force-include it yet.                   |
+| Longer than the force-inclusion window                    | Anyone can call `forceInclusion`. The message enters the Sequencer Inbox, and every child-chain node processes it.                          |
+
+### Before the window ends
+
+Your message is safe in the Delayed Inbox, but only the sequencer can move it. The Sequencer Inbox reverts any `forceInclusion` call for this message with `ForceIncludeBlockTooSoon`. If the sequencer or someone else already included the message, the call reverts earlier, with `DelayedBackwards`.
+
+The sequencer cannot skip or reorder Delayed Inbox messages. It must process them in the order they arrived.
+
+### After the window ends
+
+The [`forceInclusion`](https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/bridge/SequencerInbox.sol#L273-L330) function succeeds once the current parent-chain block number exceeds your message’s block number plus the force-inclusion window.
+
+One call includes your message and every earlier message still waiting in the Delayed Inbox. If someone else force-includes a later message, your message is included too.
+
+<Callout type="info" title="The contract counts blocks, not seconds">
+
+`forceInclusion` checks only parent-chain block numbers. `delayBlocks` is <Var name="arbOneForceIncludePeriodBlocks" /> Ethereum blocks on Arbitrum One and <Var name="novaForceIncludePeriodBlocks" /> on Arbitrum Nova. At 12 seconds per block, that is <Var name="arbOneForceIncludePeriodHours" /> hours and <Var name="novaForceIncludePeriodHours" /> hours.
+
+If the parent chain is itself an Arbitrum chain, as it is for an L3, `block.number` returns the parent chain's estimate of the Ethereum block number. The parent chain's sequencer sets that value, and it stays close to the real Ethereum block number. The window is counted in these Ethereum block numbers. See [Block numbers and time](/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time#ethereum-or-parent-chain-block-numbers-within-arbitrum).
+
+The parent chain's `block.number` advances only when the parent chain produces blocks. If the parent chain's own sequencer is also down, the L3's window stops advancing until the parent chain produces blocks again.
+
+</Callout>
+
+### When a force inclusion reorders the chain
+
+A force inclusion can cause a <Term id="reorg">reorg</Term> on the child chain. This happens when the sequencer produced blocks it never posted to the parent chain. Those blocks were <Term id="soft-confirmation">soft-confirmed</Term> through the sequencer feed, but the force-included messages now come before them in the Sequencer Inbox.
+
+Every node that follows the sequencer feed reorgs as soon as it reads the empty batch that `forceInclusion` posts to the Sequencer Inbox. It drops the unposted blocks. Soft-confirmed transactions in those blocks can be lost for good:
+
+- **Only an active sequencer re-sequences.** If the sequencer isn't active when the reorg happens, it doesn't re-sequence the dropped messages.
+- **Re-sequencing has a depth limit.** The sequencer re-sequences up to 1,024 dropped messages by default (`node.transaction-streamer.max-reorg-resequence-depth`). It removes any messages beyond that limit.
+- **Re-sequencing is best effort.** The sequencer skips any message it fails to re-sequence and moves on to the next one.
+- **Re-sequenced transactions can fail.** The chain state changes underneath them, so some revert or are dropped.
+
+<Callout type="info" title="A reorg happens on each node, not on the whole chain">
+  Only nodes that follow the sequencer feed see the unposted blocks, so only they reorg. A node that reads only from the parent chain builds blocks from posted batches, already in canonical order. It never reorgs because of a force inclusion. It can still follow a parent-chain reorg unless you set `node.inbox-reader.read-mode` to `safe` or `finalized`, which also turns off the feed. In exchange, it sees transactions only after they're posted, not when they're soft-confirmed.
+</Callout>
+
+### How the Censorship Timeout shortens the window
+
+The force-inclusion window is the smaller of `delayBlocks` and the delay buffer. Arbitrum One and Arbitrum Nova both have the delay buffer enabled.
+
+- **The buffer starts full.** The maximum is 14,400 Ethereum blocks (48 hours). While the buffer is at least `delayBlocks`, the window is `delayBlocks`: <Var name="arbOneForceIncludePeriodHours" /> hours on Arbitrum One and <Var name="novaForceIncludePeriodHours" /> hours on Arbitrum Nova.
+- **Long delays drain the buffer.** If the sequencer delays a Delayed Inbox message past a `threshold`, the extra delay comes out of the buffer. The `threshold` is 150 blocks (30 minutes) on Arbitrum One and 300 blocks (1 hour) on Arbitrum Nova.
+- **Draining is capped and applied later.** The contract records a delay when it updates the buffer and deducts it at the next update. Each deduction is at most the number of blocks between the two updates.
+- **The buffer never drops below the threshold.** So the shortest possible window is 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
+- **The buffer refills slowly.** At each update, the contract adds 5% of the blocks elapsed since the last update, then deducts any recorded delay. That is about one day of buffer for every 20 days without long delays.
+
+The first force-included message of an outage gets the full `delayBlocks` window, as long as the buffer holds at least `delayBlocks` when the outage starts. That force inclusion records a delay of about `delayBlocks` blocks. Later messages in the same long outage pay for it, so their windows get shorter. Repeated outages drain the buffer the same way. For the full math, see the [`DelayBuffer` library](https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/bridge/DelayBuffer.sol) and the [Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer#censorship-timeout) section.
+
+### Window settings on Arbitrum One and Arbitrum Nova
+
+Block counts are Ethereum blocks, at 12 seconds per block.
+
+| Setting                               | Arbitrum One                                                                                              | Arbitrum Nova                                                                                         |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `delayBlocks`, the longest window     | <Var name="arbOneForceIncludePeriodBlocks" /> blocks (<Var name="arbOneForceIncludePeriodHours" /> hours) | <Var name="novaForceIncludePeriodBlocks" /> blocks (<Var name="novaForceIncludePeriodHours" /> hours) |
+| Largest delay buffer                  | 14,400 blocks (48 hours)                                                                                  | 14,400 blocks (48 hours)                                                                              |
+| `threshold`, also the shortest window | 150 blocks (30 minutes)                                                                                   | 300 blocks (1 hour)                                                                                   |
+| Buffer refill rate                    | 5% of elapsed blocks                                                                                      | 5% of elapsed blocks                                                                                  |
+
+To get the deadline for a message, call [`forceInclusionDeadline(blockNumber)`](https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/bridge/SequencerInbox.sol#L755-L764) on the Sequencer Inbox. It applies the buffer's pending changes for you. You can force-include from the block after the deadline it returns.
+
+The deadline can move. A sequencer batch or another force inclusion updates the buffer, which changes the result. Call `forceInclusionDeadline` again right before you call `forceInclusion`.
+
+## Force-include a signed transaction with the Arbitrum SDK
+
+These steps send a signed child-chain transaction with `sendL2Message` and force-include it. To force-include another message type, replace steps 2 and 3 with that type's [Inbox function](#what-you-can-force-include). Steps 4 and 5 work the same for every type. Step 6 finds the result by the signed transaction's hash, so it applies only to signed transactions.
+
+The steps use the [`InboxTools`](https://github.com/OffchainLabs/arbitrum-sdk/blob/cbb96c6f7f84d71bdef65d0fd9d3d7275a236711/packages/sdk/src/lib/inbox/inbox.ts#L64) class from `@arbitrum/sdk` v4 with ethers v5.
+
+You need:
+
+- An account with ETH on the parent chain to pay for the parent-chain transactions.
+- The same account with enough funds on the child chain to pay for the child-chain transaction.
+- An RPC endpoint for the parent chain.
+- An RPC endpoint for a child-chain node that reads from the parent chain. A full node works. It doesn't need the sequencer or the sequencer feed.
+
+### 1. Set up the SDK
+
+```ts
+import { providers, Wallet, Contract, utils } from 'ethers';
+import { getArbitrumNetwork, InboxTools } from '@arbitrum/sdk';
+
+const parentProvider = new providers.JsonRpcProvider(process.env.PARENT_CHAIN_RPC);
+const childProvider = new providers.JsonRpcProvider(process.env.CHAIN_RPC);
+
+const parentWallet = new Wallet(process.env.PRIVATE_KEY, parentProvider);
+const childWallet = new Wallet(process.env.PRIVATE_KEY, childProvider);
+
+const childNetwork = await getArbitrumNetwork(childProvider);
+const inboxTools = new InboxTools(parentWallet, childNetwork);
+```
+
+`getArbitrumNetwork` knows Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia out of the box. If your chain is not one of them, call `registerCustomArbitrumNetwork` with your chain's details first. Otherwise, `getArbitrumNetwork` throws `Unrecognized network`.
+
+### 2. Sign the child-chain transaction
+
+`signChildTx` fills in the nonce and fees from the child-chain node if you leave them out. It always sets the gas limit to the node's current estimate, with no margin. Then it signs the transaction with your child-chain wallet.
+
+```ts
+const feeData = await childProvider.getFeeData();
+
+const signedTx = await inboxTools.signChildTx(
+  {
+    to: '0xRecipientAddress',
+    value: utils.parseEther('0.01'),
+    data: '0x',
+    // Leave room for the base fee to rise before the transaction executes
+    maxFeePerGas: feeData.maxFeePerGas.mul(3),
+    maxPriorityFeePerGas: 0,
+  },
+  childWallet,
+);
+
+// Save this hash to find the transaction on the child chain later
+const childTxHash = utils.parseTransaction(signedTx).hash;
+```
+
+The fee cap and gas limit are fixed once you sign. Your transaction might execute a day or more later, so set `maxFeePerGas` well above today's base fee. If the transaction's gas use depends on chain state that can change, sign it with ethers directly and set a higher gas limit yourself.
+
+### 3. Send it to the Delayed Inbox
+
+`sendChildSignedTx` calls `sendL2Message` on the Delayed Inbox. Because the message is signed, the child chain executes it from your own address, with no [address aliasing](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#address-aliasing).
+
+```ts
+const parentTx = await inboxTools.sendChildSignedTx(signedTx);
+const parentReceipt = await parentTx.wait();
+```
+
+If the sequencer is running, it adds your transaction without force inclusion. Skip to step 6.
+
+### 4. Wait for the force-inclusion deadline
+
+Ask the Sequencer Inbox for your message’s deadline. The result includes pending changes in the delay buffer.
+
+```ts
+const sequencerInbox = new Contract(childNetwork.ethBridge.sequencerInbox, ['function forceInclusionDeadline(uint64 blockNumber) view returns (uint64)'], parentProvider);
+
+const deadline = await sequencerInbox.forceInclusionDeadline(parentReceipt.blockNumber);
+console.log(`Force inclusion opens after parent-chain block ${deadline}`);
+```
+
+Wait until the parent chain's block number is greater than `deadline`. Then check the deadline again, because a later batch can move it.
+
+If your parent chain is an Arbitrum chain, both numbers are Ethereum block numbers, not the parent chain's own block numbers. The plain ethers receipt doesn't include the Ethereum block number. Read both numbers through the SDK's `ArbitrumProvider` instead:
+
+```ts
+import { ArbitrumProvider } from '@arbitrum/sdk';
+
+const arbParentProvider = new ArbitrumProvider(parentProvider);
+
+// The Ethereum block number your message was recorded at
+const messageReceipt = await arbParentProvider.getTransactionReceipt(parentReceipt.transactionHash);
+const l3Deadline = await sequencerInbox.forceInclusionDeadline(messageReceipt.l1BlockNumber);
+
+// Compare against this, not against parentProvider.getBlockNumber()
+const currentBlock = await arbParentProvider.getBlock('latest');
+const isOpen = currentBlock.l1BlockNumber > l3Deadline.toNumber();
+```
+
+### 5. Force-include the message
+
+Pass your own message to `forceInclude`. Take the `MessageDelivered` event from your step 3 receipt, and read the message's accumulator from the Bridge contract.
+
+```ts
+import { ParentTransactionReceipt } from '@arbitrum/sdk';
+
+const bridge = new Contract(childNetwork.ethBridge.bridge, ['function delayedInboxAccs(uint256 index) view returns (bytes32)'], parentProvider);
+
+// The MessageDelivered event your step 3 transaction emitted
+const [delivered] = new ParentTransactionReceipt(parentReceipt).getMessageDeliveredEvents();
+
+const forceTx = await inboxTools.forceInclude({
+  event: delivered,
+  blockNumber: parentReceipt.blockNumber,
+  blockHash: parentReceipt.blockHash,
+  delayedAcc: await bridge.delayedInboxAccs(delivered.messageIndex),
+} as any); // forceInclude reads only these fields
+await forceTx.wait();
+```
+
+The call includes your message and every earlier message still waiting. If your parent chain is an Arbitrum chain, `forceInclude` converts the block number to an Ethereum block number for you. If the sequencer or someone else already included your message, the call reverts with `DelayedBackwards`.
+
+<Callout type="warn" title="Calling forceInclude() with no arguments can miss your message">
+
+With no arguments, `forceInclude` searches the parent chain for the newest eligible message. The search is stricter than the contract:
+
+- It treats a message as eligible only after both `delayBlocks` and `delaySeconds` have passed.
+- It ignores the delay buffer. If the buffer has shortened the window, it misses messages the contract already accepts.
+- It searches back at most 19,635 blocks (`3 * 6545`, about three days) from the newest eligible block. It misses older messages.
+
+In these cases it returns `null`, even though your window is open. Use the no-argument form only when you don't have your message's receipt.
+
+</Callout>
+
+### 6. Confirm the transaction on the child chain
+
+The child-chain node reads the force-included message from the Sequencer Inbox and processes it. Wait with a timeout, because an invalid transaction never gets a receipt.
+
+```ts
+// Wait up to 30 minutes for one confirmation
+const childReceipt = await childProvider.waitForTransaction(childTxHash, 1, 30 * 60 * 1000).catch(() => null);
+
+if (childReceipt === null) {
+  console.log('No receipt. ArbOS may have dropped the transaction; see "When a signed transaction has no receipt".');
+} else {
+  console.log(`Child-chain status: ${childReceipt.status === 1 ? 'success' : 'reverted'}`);
+}
+```
+
+For other message types, start from the same step 3 receipt. Wrap it with `new ParentTransactionReceipt(parentReceipt)`, then:
+
+- **ETH deposit.** Call `getEthDeposits(childProvider)`, then `wait()` on the result.
+- **Retryable ticket.** Call `getParentToChildMessages(childProvider)`, then `waitForStatus()` on the result.
+
+### Withdraw ETH while the sequencer is down
+
+To move ETH back to the parent chain without the sequencer, force-include a call to the `ArbSys` precompile's `withdrawEth` method. [`ArbSys`](/arbitrum-essentials/precompiles/reference#arbsys) lives at address `0x0000000000000000000000000000000000000064`.
+
+In step 2, sign this transaction instead:
+
+```ts
+const arbSys = new utils.Interface(['function withdrawEth(address destination) payable returns (uint256)']);
+
+const signedTx = await inboxTools.signChildTx(
+  {
+    to: '0x0000000000000000000000000000000000000064',
+    // The ETH to withdraw from your child-chain balance
+    value: utils.parseEther('0.1'),
+    // The parent-chain address that receives the ETH
+    data: arbSys.encodeFunctionData('withdrawEth', [parentWallet.address]),
+    maxFeePerGas: feeData.maxFeePerGas.mul(3),
+    maxPriorityFeePerGas: 0,
+  },
+  childWallet,
+);
+```
+
+Then follow steps 3 through 6. When the transaction lands, the child chain burns your ETH and creates a child-to-parent message. Claim the ETH on the parent chain after the challenge period: <Var name="arbOneDisputeWindowDays" /> days on Arbitrum One and <Var name="novaDisputeWindowDays" /> days on Arbitrum Nova. See [Withdrawing ETH](/arbitrum-essentials/bridging/withdraw/eth-and-messages#withdrawing-eth) for the claim steps.
+
+### Runnable examples
+
+- [`delayedInbox-l2msg`](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/delayedInbox-l2msg) sends a signed transaction through the Delayed Inbox while the sequencer is running.
+- [`force-inclusion`](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/force-inclusion) deploys a test chain with a 90-second window, deposits ETH, and force-includes the deposit with no sequencer.
+
+## When a signed transaction has no receipt
+
+Force inclusion guarantees that every child-chain node processes your message. It does not guarantee that a signed transaction executes. ArbOS checks a signed transaction before it executes it. If a check fails, ArbOS drops the transaction, and the transaction hash never gets a receipt.
+
+| What went wrong                                                                               | Result                            |
+| --------------------------------------------------------------------------------------------- | --------------------------------- |
+| The nonce no longer matches, because you sent another transaction from the same account first | Dropped, no receipt               |
+| The child chain's base fee rose above your `maxFeePerGas`                                     | Dropped, no receipt               |
+| Your child-chain balance cannot cover the gas limit times the fee, plus the value             | Dropped, no receipt               |
+| The signature or chain ID is wrong, or the message cannot be parsed                           | Dropped, no receipt               |
+| The transaction passes these checks but runs out of gas or reverts                            | Included, receipt with `status` 0 |
+
+If you get no receipt, check the account’s current nonce and balance on the child chain. Compare the current base fee with the fee cap you signed. Then sign a new transaction and resend it. ArbOS records the reason only in the node’s log, at debug level, or at warn level on a chain in debug mode.
+
+## Things to consider
+
+- **A signed transaction's nonce is fixed when you sign.** Wait until the forced transaction lands before you send another child-chain transaction from the same account.
+- **A signed transaction's fee cap and gas limit are fixed when you sign.** Set both with room to spare, as described in step 2.
+- **You pay parent-chain gas twice.** You pay once to send the message and again for `forceInclusion`. Signed transactions, unsigned messages, and retryable tickets also pay child-chain gas.
+- **An Inbox allowlist limits who can send.** A chain owner can turn on the Inbox allowlist with `setAllowListEnabled`. The Inbox then checks the account that signed the parent-chain transaction (`tx.origin`), so only allowlisted accounts can send messages to the Delayed Inbox. Other accounts cannot start a forced transaction.
+- **A paused Inbox accepts no messages.** The chain owner can pause the Inbox, and every send function reverts while it is paused. Messages already in the Delayed Inbox can still be force-included, because `forceInclusion` is on the Sequencer Inbox. See [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access#inbox-delayed-inbox).
+- **Each chain sets its own window.** The numbers on this page are for Arbitrum One and Arbitrum Nova. If you run your own Arbitrum chain, it can use different values. See [Sequencer timing adjustments](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments).
+
+## Example scenario
+
+Suppose the Arbitrum One sequencer goes offline while its delay buffer is full.
+
+1. **Monday, 12:00 UTC.** You send a signed transaction to the Delayed Inbox. The parent chain records it in Ethereum block `N`.
+2. **Monday, 18:00 UTC.** The sequencer is still offline. A call to `forceInclusion` reverts with `ForceIncludeBlockTooSoon`.
+3. **Tuesday, about 12:00 UTC.** Ethereum reaches the block after `N` + <Var name="arbOneForceIncludePeriodBlocks" />. You call `forceInclusion`, and your message enters the Sequencer Inbox.
+4. **Tuesday, a few minutes later.** Child-chain full nodes read the new inbox entry and process your transaction. If it passes the ArbOS checks, your receipt appears on the child chain.
+5. **Later.** The sequencer comes back online. It continues from the force-included messages. Every node that follows the sequencer feed has already dropped the blocks the sequencer produced but never posted, and the sequencer tries to re-sequence them.
+
+If the sequencer had come back on Monday evening, it would have included your message, and you wouldn't have needed step 3.
+
+## Related pages
+
+- [Transaction lifecycle: bypassing the sequencer](/how-arbitrum-works/deep-dives/transaction-lifecycle#bypassing-the-sequencer)
+- [Parent to child chain messaging: transacting via the Delayed Inbox](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox)
+- [The sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer)
+- [Sequencer timing adjustments](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments)
+- [How to bridge from child chain to parent chain](/arbitrum-essentials/bridging/withdraw/eth-and-messages)
