@@ -7,20 +7,18 @@ import type { ReactNode } from 'react';
 import type { z } from 'zod';
 
 import type { InkeepUIMessage } from '@/app/api/chat/route';
-import { onAskAI } from '@/lib/ai/bridge';
 import { type ComponentType, captureChatEvent } from '@/lib/ai/events';
 import type { ProvideLinksToolSchema } from '@/lib/ai/inkeep-qa-schema';
 import { inkeepAiChatSettings } from '@/lib/inkeep';
 
 import {
   type AIChatClientData,
+  AIChatPanel,
   AIChatProvider,
   AIChatSources,
-  useAIChat,
   useAIChatSend,
 } from './chat';
-
-export { AIChatPanel, AIChatTrigger, useAIChat } from './chat';
+import { useAIChatPendingPrompt } from './chat/open';
 
 // Keeps the request body under the 32 KiB cap of /api/chat in normal use.
 const MAX_SENT_MESSAGES = 10;
@@ -39,7 +37,16 @@ function plainError(error: Error | undefined): Error | undefined {
   return new Error(text ?? 'Something went wrong. Try again.');
 }
 
-export function AIChat({ children }: { children: ReactNode }) {
+/** The chat panel with its chat state; `components/ai/layout.tsx` loads it on first open. */
+export function AIChatLazyPanel() {
+  return (
+    <AIChat>
+      <AIChatPanel />
+    </AIChat>
+  );
+}
+
+function AIChat({ children }: { children: ReactNode }) {
   const source = useRef<ComponentType>('ChatButton');
   const chat = useChat<InkeepUIMessage>({
     id: 'search',
@@ -97,20 +104,20 @@ export function AIChat({ children }: { children: ReactNode }) {
   );
 }
 
+/** Sends the prompt that the search dialog queued, once per prompt id. */
 function AskAIBridge({ source }: { source: RefObject<ComponentType> }) {
-  const { setOpen } = useAIChat();
+  const { prompt, clear } = useAIChatPendingPrompt();
   const send = useAIChatSend();
+  const sent = useRef(0);
 
-  useEffect(
-    () =>
-      onAskAI((prompt) => {
-        setOpen(true);
-        if (!prompt.trim()) return;
-        source.current = 'SearchBar';
-        send(prompt.trim());
-      }),
-    [setOpen, send, source],
-  );
+  useEffect(() => {
+    if (!prompt) return;
+    clear(prompt.id);
+    if (sent.current === prompt.id) return;
+    sent.current = prompt.id;
+    source.current = 'SearchBar';
+    send(prompt.text);
+  }, [prompt, clear, send, source]);
 
   return null;
 }

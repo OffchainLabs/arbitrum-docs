@@ -93,6 +93,28 @@ for (const viewport of [
   });
 }
 
+/** Counts the loaded scripts whose text contains `marker`. */
+function scriptsContaining(p: Page, marker: string): Promise<number> {
+  return p.evaluate(async (text) => {
+    const urls = performance
+      .getEntriesByType('resource')
+      .map((entry) => entry.name)
+      .filter((url) => new URL(url).pathname.endsWith('.js'));
+    const bodies = await Promise.all(urls.map((url) => fetch(url).then((r) => r.text())));
+    return bodies.filter((body) => body.includes(text)).length;
+  }, marker);
+}
+
+test('the panel code loads on the first open only', panel, async () => {
+  const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  await p.goto(baseUrl + page, { waitUntil: 'load' });
+  assert.equal(await scriptsContaining(p, 'Ask a follow-up'), 0, 'panel code before open');
+  await p.getByRole('button', { name: 'Ask AI' }).filter({ visible: true }).click();
+  await p.getByRole('textbox').waitFor();
+  assert.ok((await scriptsContaining(p, 'Ask a follow-up')) > 0, 'panel code after open');
+  await p.close();
+});
+
 test('mobile: no floating pill, navbar icon opens the panel', panel, async () => {
   const p = await browser.newPage({ viewport: { width: 390, height: 844 } });
   await p.goto(baseUrl + page);

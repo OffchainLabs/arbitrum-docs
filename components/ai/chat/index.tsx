@@ -12,7 +12,6 @@ import {
   CheckIcon,
   ChevronRightIcon,
   CopyIcon,
-  MessageCircleIcon,
   RefreshCwIcon,
   SearchIcon,
   SquareIcon,
@@ -29,8 +28,6 @@ import {
   memo,
   use,
   useEffect,
-  useEffectEvent,
-  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -40,6 +37,7 @@ import { cn } from '@/lib/cn';
 
 import { Conversation, Turn } from './conversation';
 import { Markdown } from './markdown';
+import { useAIChat } from './open';
 
 /** the page a question is asked from, sent as a `data-client` part */
 export interface AIChatClientData {
@@ -64,71 +62,45 @@ interface ChatState extends AIChatOptions {
   inputRef: RefObject<HTMLTextAreaElement | null>;
 }
 
-// separate from the chat, so layouts reading `open` skip the updates of a streaming answer
-const OpenContext = createContext<{ open: boolean; setOpen: (open: boolean) => void } | null>(null);
 const ChatContext = createContext<ChatState | null>(null);
 
 /**
- * The chat state, `Ctrl + /` opens it and `Escape` closes it.
+ * The chat state; the open state comes from `AIChatOpenProvider` in `./open`.
  */
 export function AIChatProvider<Message extends UIMessage>({
   children,
   ...options
 }: AIChatOptions<Message> & { children: ReactNode }) {
-  const [open, setOpen] = useState(false);
-  const openState = useMemo(() => ({ open, setOpen }), [open]);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const { chat, toMessage } = options as unknown as AIChatOptions;
 
-  const onKeyDown = useEffectEvent((e: KeyboardEvent) => {
-    if (e.key === 'Escape' && open) {
-      setOpen(false);
-      e.preventDefault();
-    } else if (e.key === '/' && (e.metaKey || e.ctrlKey) && !open) {
-      setOpen(true);
-      e.preventDefault();
-    }
-  });
-
-  useEffect(() => {
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, []);
-
   return (
-    <OpenContext value={openState}>
-      <ChatContext
-        value={{
-          ...(options as unknown as AIChatOptions),
-          busy: chat.status === 'streaming' || chat.status === 'submitted',
-          send: (text) =>
-            void chat.sendMessage(
-              toMessage?.(text) ?? {
-                role: 'user',
-                parts: [
-                  {
-                    type: 'data-client',
-                    data: {
-                      location: location.href,
-                      title: document.title,
-                    } satisfies AIChatClientData,
-                  },
-                  { type: 'text', text },
-                ],
-              },
-            ),
-          inputRef,
-        }}
-      >
-        {children}
-      </ChatContext>
-    </OpenContext>
+    <ChatContext
+      value={{
+        ...(options as unknown as AIChatOptions),
+        busy: chat.status === 'streaming' || chat.status === 'submitted',
+        send: (text) =>
+          void chat.sendMessage(
+            toMessage?.(text) ?? {
+              role: 'user',
+              parts: [
+                {
+                  type: 'data-client',
+                  data: {
+                    location: location.href,
+                    title: document.title,
+                  } satisfies AIChatClientData,
+                },
+                { type: 'text', text },
+              ],
+            },
+          ),
+        inputRef,
+      }}
+    >
+      {children}
+    </ChatContext>
   );
-}
-
-/** whether the chat is open */
-export function useAIChat() {
-  return use(OpenContext)!;
 }
 
 function useChatState() {
@@ -368,29 +340,6 @@ export function AIChatInput({ className }: { className?: string }) {
         />
       </button>
     </form>
-  );
-}
-
-/** a floating button that toggles the chat */
-export function AIChatTrigger({ className }: { className?: string }) {
-  const { open, setOpen } = useAIChat();
-  const t = useTranslations({ note: 'AI chat' });
-
-  return (
-    <button
-      type="button"
-      className={cn(
-        buttonVariants({ variant: 'secondary' }),
-        'fixed inset-e-[calc(--spacing(4)+var(--removed-body-scroll-bar-size,0px))] bottom-4 z-20 gap-2 rounded-2xl text-fd-muted-foreground shadow-lg transition-[translate,opacity] motion-reduce:transition-none',
-        open && 'translate-y-10 opacity-0',
-        className,
-      )}
-      inert={open}
-      onClick={() => setOpen(!open)}
-    >
-      <MessageCircleIcon className="size-4.5" />
-      {t('Ask AI')}
-    </button>
   );
 }
 

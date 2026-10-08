@@ -511,8 +511,14 @@ Other things not to undo:
   browsers only. The panel sends the last 10 messages. The search dialog's "Ask AI" closes the
   dialog and opens the panel with the query through `lib/ai/bridge.ts`. With the panel mounted, the
   dialog hides cxkit's "Ask AI" card and remounts cxkit after the hand-off, so the next open shows
-  search. The files under `components/ai/chat/` are vendored from `@fumadocs/cli@1.7.3`; update
-  them by running that CLI again.
+  search. The layout holds only the open state, the `Ctrl + /` and `Escape` keys, the "Ask AI"
+  controls and the queue for a search query (`components/ai/chat/open.tsx`). It loads the chat
+  (`AIChatLazyPanel` in `components/ai/search.tsx`, with AI SDK and the markdown renderer) through
+  `next/dynamic` on the first open, so a page load downloads none of it. A query from search waits
+  in the queue until the chat loads and sends it once. The files under `components/ai/chat/` are
+  vendored from `@fumadocs/cli@1.7.3`; update them by running that CLI again. Local edits to
+  re-apply after an update: `open.tsx` is not vendored, and `index.tsx` imports `useAIChat` from
+  it and no longer has the open state, the keyboard listener, `useAIChat` or `AIChatTrigger`.
 - **Fonts are self-hosted** under `public/fonts/` and loaded with `next/font/local` in
   `app/layout.tsx`. Never add `next/font/google`: it makes the build fetch from Google. Only the two
   upright Aeonik faces preload. The italic is its own declaration so it can skip preloading, and
