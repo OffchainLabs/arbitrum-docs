@@ -19,6 +19,61 @@ codeUsages.add('jsonrpc-curl', {
     ].join(' \\\n'),
 });
 
+function indentBody(body: unknown, spaces: number): string {
+  return JSON.stringify(body, null, 2).replaceAll('\n', `\n${' '.repeat(spaces)}`);
+}
+
+codeUsages.add('jsonrpc-typescript', {
+  lang: 'typescript',
+  label: 'TypeScript',
+  generate: (data) =>
+    [
+      `const response = await fetch('${SERVER_URL}', {`,
+      `  method: 'POST',`,
+      `  headers: { 'Content-Type': 'application/json' },`,
+      `  body: JSON.stringify(${indentBody(data.body, 2)}),`,
+      `});`,
+      ``,
+      `// JSON-RPC returns HTTP 200 for errors too: check \`error\` before \`result\`.`,
+      `const { result, error } = await response.json();`,
+      `if (error) throw new Error(\`\${error.code}: \${error.message}\`);`,
+      `console.log(result);`,
+    ].join('\n'),
+});
+
+codeUsages.add('jsonrpc-rust', {
+  lang: 'rust',
+  label: 'Rust',
+  generate: (data) =>
+    [
+      `// Cargo.toml:`,
+      `// reqwest = { version = "0.13", features = ["json"] }`,
+      `// serde_json = "1"`,
+      `// tokio = { version = "1", features = ["macros", "rt-multi-thread"] }`,
+      `use serde_json::{json, Value};`,
+      ``,
+      `#[tokio::main]`,
+      `async fn main() -> Result<(), Box<dyn std::error::Error>> {`,
+      `    let body = json!(${indentBody(data.body, 4)});`,
+      ``,
+      `    let response: Value = reqwest::Client::new()`,
+      `        .post("${SERVER_URL}")`,
+      `        .json(&body)`,
+      `        .send()`,
+      `        .await?`,
+      `        .json()`,
+      `        .await?;`,
+      ``,
+      `    // JSON-RPC returns HTTP 200 for errors too: check "error" before "result".`,
+      `    if let Some(error) = response.get("error") {`,
+      `        return Err(format!("JSON-RPC error: {error}").into());`,
+      `    }`,
+      `    println!("{:#}", response["result"]);`,
+      `    Ok(())`,
+      `}`,
+    ].join('\n'),
+});
+
 interface ParamSchema {
   'title'?: string;
   'description'?: string;
