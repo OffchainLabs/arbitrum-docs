@@ -42,7 +42,7 @@ A forced transaction takes the same path as any other Delayed Inbox message. Onl
 
 When the sequencer is running, you do not need force inclusion. Most transactions go straight to the sequencer through an RPC endpoint. A message you send to the Delayed Inbox also reaches the chain: the sequencer adds it to a child-chain block, and the batch poster later posts that block to the parent chain.
 
-The sequencer's delayed sequencer waits before it adds your message. Sequencer operators turn this component on; it is off by default in a plain node. By default, it waits until the parent-chain block that holds your message is marked safe. Three [settings](https://github.com/OffchainLabs/nitro/blob/ccc5c828d9ea22f161efc784bac4d4a6559b7e59/arbnode/delayed_sequencer.go#L66-L72) change that wait:
+The sequencer's delayed sequencer waits before it adds your message. Sequencer operators turn this component on; only sequencer can enable this mode. By default, it waits until the parent-chain block that holds your message is marked safe. Three [settings](https://github.com/OffchainLabs/nitro/blob/ccc5c828d9ea22f161efc784bac4d4a6559b7e59/arbnode/delayed_sequencer.go#L66-L72) change that wait:
 
 - `node.delayed-sequencer.require-full-finality=true` makes it wait for a finalized block instead of a safe one.
 - `node.delayed-sequencer.use-merge-finality=false` makes it wait a fixed number of blocks instead.
