@@ -18,6 +18,19 @@ function resolve(doc: Json, node: Json | undefined): Json {
   return { ...resolve(doc, target), ...node, $ref: undefined };
 }
 
+/** Replaces every `$ref` at any depth. A ref already on the path becomes `{ recursive: name }`. */
+export function inline(doc: Json, node: unknown, path: string[] = []): unknown {
+  if (Array.isArray(node)) return node.map((n) => inline(doc, n, path));
+  if (!node || typeof node !== 'object') return node;
+  const ref = (node as Json).$ref as string | undefined;
+  if (ref && path.includes(ref)) return { recursive: ref.split('/').at(-1) };
+  const next = ref ? [...path, ref] : path;
+  const resolved = ref ? resolve(doc, node as Json) : (node as Json);
+  return Object.fromEntries(
+    Object.entries(resolved).map(([key, value]) => [key, inline(doc, value, next)]),
+  );
+}
+
 /**
  * Spike: markdown for a generated OpenAPI page, for the `.md` mirror. The fake path is taken from
  * the last slug, which the generator derived from it; a real version would read the operations
@@ -47,7 +60,7 @@ export async function openapiPageMarkdown(schemaId: string, slug: string): Promi
       `### ${r.title ?? 'Response'}`,
       '',
       '```json',
-      JSON.stringify(r.properties, null, 2),
+      JSON.stringify(inline(doc, r.properties), null, 2),
     );
     lines.push('```', '');
   }
