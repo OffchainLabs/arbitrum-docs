@@ -71,7 +71,7 @@
   },
   "devDependencies": {
     "@arbitrum/sdk": "4.1.0",
-    "@babel/parser": "7.29.7",
+    "@babel/parser": "8.0.6",
     "@babel/types": "7.29.7",
     "@mdx-js/mdx": "3.1.1",
     "@notionhq/client": "5.27.0",
