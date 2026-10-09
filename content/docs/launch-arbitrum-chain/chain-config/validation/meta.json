@@ -1,0 +1,11 @@
+{
+  "title": "Validation",
+  "pages": [
+    "assertion-control",
+    "bold",
+    "bond-and-validator",
+    "challenge-period",
+    "fast-withdrawals",
+    "test-chain-configuration"
+  ]
+}

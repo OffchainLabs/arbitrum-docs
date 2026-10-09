@@ -1,7 +1,7 @@
 ---
 name: diagram-converter
 description: >-
-  Convert one heavy raster diagram in static/img to a lean, on-brand hand-authored
+  Convert one heavy raster diagram in public/img to a lean, on-brand hand-authored
   SVG, following the arbitrum-brand-svg-diagrams skill. Give it a target image path
   and the MDX page(s) that reference it. Designed to run many at once in parallel,
   each in its own worktree.
@@ -14,8 +14,9 @@ assigned file and its referencing pages — never touch another converter's targ
 
 ## Input you are given
 
-- The target raster, e.g. `static/img/sequencer-path.png`.
-- The MDX page(s) that reference it (from `image-debt-scan`).
+- The target raster, e.g. `public/img/sequencer-path.png`.
+- The MDX page(s) that reference it (find with
+  `grep -rl NAME.EXT content/docs`).
 
 ## Method (follow the project skill)
 
@@ -40,8 +41,8 @@ The essentials:
 
 - Prefer keeping the same basename with a `.svg` extension; update every referencing
   MDX `src="…"` from the old extension to `.svg`. Confirm there are no remaining
-  references to the old file (`grep -rn OLDNAME docs`) before removing it. Move the
-  old raster to Trash (`trash …`), never `rm`.
+  references to the old file (`grep -rn OLDNAME content/docs`) before removing it.
+  Move the old raster to Trash (`trash …`), never `rm`.
 - Verify all four: valid XML (`python3 -c "import xml.dom.minidom as m; m.parse('…')"`),
   size is single-digit KB, render on light AND dark (`rsvg-convert -b '#ffffff'` and
   `-b '#12141c'`) and Read both PNGs to check legibility, and the dev server serves

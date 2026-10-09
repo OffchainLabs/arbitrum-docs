@@ -7,7 +7,7 @@ true background. This works uniformly for text on an opaque box and for text
 sitting straight on the brand gradient, where the backdrop varies by position.
 
 Usage:
-    python3 check_contrast.py static/img/NAME.svg
+    python3 check_contrast.py public/img/NAME.svg
 
 Exits 1 if any label fails, so it can gate a build step.
 """
@@ -15,6 +15,8 @@ Exits 1 if any label fails, so it can gate a build step.
 import re
 import subprocess
 import sys
+import tempfile
+from pathlib import Path
 import xml.dom.minidom
 
 # WCAG AA: 4.5:1 normal text, 3:1 "large" text (>=24px, or >=18.66px bold).
@@ -79,12 +81,14 @@ def collect_text(svg_path):
 
 
 def main(svg_path):
-    stripped = "/tmp/_notext.svg"
-    src = open(svg_path).read()
-    open(stripped, "w").write(re.sub(r"<text\b.*?</text>", "", src, flags=re.S))
-
-    render(stripped, "/tmp/_notext.png")
-    w, h, px = read_ppm("/tmp/_notext.png")
+    # A private directory prevents symlink attacks and concurrent-run collisions.
+    with tempfile.TemporaryDirectory(prefix="brand-contrast-") as work:
+        stripped = str(Path(work) / "notext.svg")
+        png = str(Path(work) / "notext.png")
+        src = Path(svg_path).read_text()
+        Path(stripped).write_text(re.sub(r"<text\b.*?</text>", "", src, flags=re.S))
+        render(stripped, png)
+        w, h, px = read_ppm(png)
 
     failures = []
     print(f"{'ratio':>7}  {'need':>5}  {'size':>5}  text")

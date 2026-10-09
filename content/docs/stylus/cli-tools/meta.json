@@ -1,0 +1,11 @@
+{
+  "title": "CLI tools",
+  "pages": [
+    "overview",
+    "check-and-deploy",
+    "verify-contracts",
+    "debugging-tx",
+    "commands-reference",
+    "..."
+  ]
+}

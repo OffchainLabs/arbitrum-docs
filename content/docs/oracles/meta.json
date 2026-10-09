@@ -1,0 +1,15 @@
+{
+  "title": "Oracles",
+  "icon": "Radio",
+  "description": "Integrate oracle price feeds and VRF into your Arbitrum apps.",
+  "pages": [
+    "...api3",
+    "...chainlink",
+    "...chronicle",
+    "...DIA",
+    "...ora",
+    "...supra",
+    "...trellor",
+    "..."
+  ]
+}

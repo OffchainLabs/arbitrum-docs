@@ -1,3 +1,9 @@
+/**
+ * Classification and payload building for the PostHog `llms_file_fetched` event `proxy.ts` sends.
+ * Event and property names match the series the existing dashboards read.
+ */
+import { docsContentRoute, docsRoute } from './shared.ts';
+
 export type BotCategory =
   | 'oai-searchbot'
   | 'gptbot'
@@ -35,50 +41,36 @@ export function classifyUA(ua: string): BotCategory {
 export type PathInfoResult =
   | { kind: 'llms-index'; trackedPath: string; fileType: 'index' }
   | { kind: 'markdown-direct'; trackedPath: string; fileType: 'page' }
-  | { kind: 'markdown-negotiate'; trackedPath: string; fileType: 'page' }
+  | { kind: 'markdown-mirror'; trackedPath: string; fileType: 'page' }
   | { kind: 'ignored'; trackedPath: null; fileType: null };
 
-const SDK_EXCLUDE = /^\/sdk\//;
+const MIRROR_PREFIX = `${docsContentRoute}/`;
+const MIRROR_SUFFIX = '/content.md';
 
 /**
- * Classifies an incoming request path for LLM-fetch tracking purposes.
- *
- * @param pathname - URL pathname only (no query string). Pass the result of `new URL(request.url).pathname`.
- * @param accept - The `Accept` header value (empty string if absent).
+ * Classifies a request path. Both markdown shapes are tracked as `/<slug>.md`, so one page is
+ * one series; a rewrite does not re-enter the proxy, so each request is counted once.
  */
-export function pathInfo(pathname: string, accept: string): PathInfoResult {
+export function pathInfo(pathname: string): PathInfoResult {
   if (pathname === '/llms.txt' || pathname === '/llms-full.txt') {
     return { kind: 'llms-index', trackedPath: pathname, fileType: 'index' };
   }
 
-  if (pathname.endsWith('.md')) {
-    if (SDK_EXCLUDE.test(pathname)) {
-      return { kind: 'ignored', trackedPath: null, fileType: null };
-    }
+  if (!pathname.endsWith('.md')) {
+    return { kind: 'ignored', trackedPath: null, fileType: null };
+  }
+
+  if (pathname.startsWith(MIRROR_PREFIX) && pathname.endsWith(MIRROR_SUFFIX)) {
+    const slug = pathname.slice(MIRROR_PREFIX.length, -MIRROR_SUFFIX.length);
+    const trackedPath = slug === '' ? '/index.md' : `${docsRoute}/${slug}.md`;
+    return { kind: 'markdown-mirror', trackedPath, fileType: 'page' };
+  }
+
+  if (!pathname.startsWith('/llms.mdx/')) {
     return { kind: 'markdown-direct', trackedPath: pathname, fileType: 'page' };
   }
 
-  const isCleanUrl = !pathname.includes('.');
-  const wantsMarkdown = accept.includes('text/markdown');
-  if (isCleanUrl && wantsMarkdown) {
-    const stripped = pathname.replace(/\/$/, '');
-    const trackedPath = stripped === '' ? '/index.md' : `${stripped}.md`;
-    return { kind: 'markdown-negotiate', trackedPath, fileType: 'page' };
-  }
-
   return { kind: 'ignored', trackedPath: null, fileType: null };
-}
-
-export function dailySalt(now: Date = new Date()): string {
-  return now.toISOString().slice(0, 10);
-}
-
-export async function ipHash(ip: string, salt: string): Promise<string> {
-  const data = new TextEncoder().encode(`${ip}|${salt}`);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
 }
 
 export interface BuildPayloadInput {
@@ -86,9 +78,9 @@ export interface BuildPayloadInput {
   fileType: 'index' | 'page';
   userAgent: string;
   referrer: string;
-  ip: string;
   posthogKey: string;
-  now?: Date;
+  /** Origin the tracked path is resolved against, e.g. `https://docs.arbitrum.io`. No trailing slash. */
+  siteUrl: string;
 }
 
 export interface TrackingPayload {
@@ -102,24 +94,24 @@ export interface TrackingPayload {
     bot_category: BotCategory;
     $user_agent: string;
     $referrer: string;
+    $process_person_profile: false;
   };
 }
 
-export async function buildTrackingPayload(input: BuildPayloadInput): Promise<TrackingPayload> {
-  const category = classifyUA(input.userAgent);
-  const salt = dailySalt(input.now);
-  const distinct_id = await ipHash(input.ip, salt);
+/** The capture body: a random `distinct_id` and no person profile, since it counts fetches. */
+export function buildTrackingPayload(input: BuildPayloadInput): TrackingPayload {
   return {
     api_key: input.posthogKey,
     event: 'llms_file_fetched',
-    distinct_id,
+    distinct_id: crypto.randomUUID(),
     properties: {
-      $current_url: `https://docs.arbitrum.io${input.trackedPath}`,
+      $current_url: `${input.siteUrl}${input.trackedPath}`,
       file: input.trackedPath,
       file_type: input.fileType,
-      bot_category: category,
+      bot_category: classifyUA(input.userAgent),
       $user_agent: input.userAgent,
       $referrer: input.referrer,
+      $process_person_profile: false,
     },
   };
 }

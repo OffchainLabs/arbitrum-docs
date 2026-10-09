@@ -1,0 +1,14 @@
+{
+  "title": "Notices",
+  "icon": "Bell",
+  "description": "Upgrade notices for Arbitrum chains and node operators.",
+  "root": true,
+  "pages": [
+    "index",
+    "stylus-activation-pause-notice",
+    "arbos61-upgrade-notice",
+    "arbos51-upgrade-notice",
+    "fusaka-upgrade-notice",
+    "..."
+  ]
+}

@@ -1,113 +1,165 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+> **Machine-facing. Not written for humans, and not the canonical documentation.**
+>
+> This file provides guidance to Claude Code (claude.ai/code) when working with code in this
+> repository. It is tied to a specific commercial tool; parts of it are rewritten automatically by
+> `next dev`.
+>
+> The canonical docs are [README.md](README.md) (how to work on the docs),
+> [INTERNALS.md](INTERNALS.md) (how the codebase works, and why),
+> [CONTRIBUTE.md](CONTRIBUTE.md) (how an outside contributor gets from zero to an open PR), and
+> [STYLE-GUIDE.md](STYLE-GUIDE.md) (the house prose rules: plain language, words to replace,
+> terminology, glossary linking). Humans should read those. **Read STYLE-GUIDE.md before writing or
+> editing any prose in `content/`.**
+>
+> **Duplication here is expected and fine.** When the same material lives in several places, **edit
+> INTERNALS.md first**, then mirror what agents need back here. The frontmatter contract, the
+> include rules, the variable workflow, `move-doc` and the gate list live in three places (here,
+> INTERNALS.md and CONTRIBUTE.md). Change one and check the other two.
 
-## Working with branches
+Arbitrum documentation portal on Next.js 16 and Fumadocs 16, with Tailwind 4 and TypeScript. English
+MDX docs under `content/docs/`, served at `/<slug>`, deployed on Vercel.
 
-Always confirm with the user before choosing which branch to commit to, push to, or modify — especially when multiple branches are in play (stacked PRs, feature branches). Do not assume the user agrees with a branch choice just because it seems logical. Ask first, act after confirmation.
+## Grounding rule
 
-## Project overview
-
-Arbitrum documentation portal ([docs.arbitrum.io](https://docs.arbitrum.io/)), built with Docusaurus 3.10.x, React 19, MDX, TypeScript 6.x. Package manager: Yarn. Node 22.x.
+Grounding rule: State only what you read in a file, and cite it as `file:line`. Read the file before you describe it. Do not infer file content from file names, paths, directory listings, docs, comments, or other repos. If you did not read it, write "not verified" and name the check that would settle it. Never use "likely", "probably", "presumably", or "appears to" for a claim you could verify by reading.
 
 ## Commands
 
-```shell
-yarn                              # Install dependencies
-yarn start --no-open              # Dev server (always use --no-open)
-yarn build                        # Production build (yarn && yarn clear && docusaurus build — always a cold rebuild)
-vercel build                      # Vercel-parity build (use to verify before deploying)
-yarn serve --no-open              # Serve built site locally
-yarn typecheck                    # TypeScript checking (tsc --noEmit)
-yarn format                       # Prettier (docs + app + check)
-yarn lint:markdown                # Markdownlint on docs/**/*.{md,mdx}
-yarn lint:markdown:fix            # Auto-fix markdown lint issues
-yarn generate-precompiles-ref-tables  # Regenerate precompile reference tables
-yarn update-variable-refs         # Propagate globalVars.js changes into doc files
-yarn build-glossary               # Rebuild glossary from partials/glossary/*.mdx
-yarn generate                     # Run all generators (precompiles, contract addresses, glossary, variable refs)
-yarn generate:check               # Same, --check mode — CI fails if generated files are stale
-yarn test:llms-tracking           # Test middleware tracking logic
-node scripts/sync-stylus-content.js   # Refresh Stylus examples — NOTE: expects submodules/stylus-by-example, which no longer exists
-yarn find-orphan-pages            # Find docs not linked in sidebars
-yarn sync-redirects               # Sync redirects.config.js → vercel.json
+```bash
+pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
+pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
+pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
+pnpm frontmatter:check # every documentation page satisfies lib/page-schema.ts
+pnpm test              # node --test over scripts/**/*.test.ts; helper tests require python3 >=3.9
+pnpm test:browser      # Chromium interactions against a running production server; see README.md
+pnpm build             # check-links, then next build
+pnpm start             # serve the production build
+
+# The other CI gates
+pnpm vars:check        # every <Var name> and {var:name} resolves; banner keys are valid
+pnpm references:check  # every <Term id> resolves to a content/glossary entry
+pnpm contracts:check   # the contract-address partial is current
+pnpm faq:check         # the six FAQ partials match content/faq/*.json
+pnpm check-links       # internal links and #fragments resolve
+pnpm content:lint      # MDX that compiles but renders wrong
+pnpm format:check      # prettier (pnpm format writes)
+
+# By hand only
+pnpm move-doc <from> <to> [--dry-run]  # move a page, rewrite links, update meta.json, add a redirect
+pnpm nitro:check-release               # report a newer Nitro release and stale pins, verify paths; --to <tag> is the only writer
+pnpm precompiles:generate              # precompile tables (:check compares)
+pnpm contracts:generate                # contract-address partial
+pnpm cli:generate                      # Nitro CLI flags page (:check compares)
+pnpm stylus:generate                   # Stylus by Example pages (:check compares)
+pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
+pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN); then faq:generate
+pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
 ```
 
-## Architecture
+CI (`.github/workflows/ci.yml`) runs the gates in one job, then `pnpm build` plus
+`scripts/static-docs-http.test.ts` against the running build in a second. There is no pre-commit
+hook. `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` on Mondays and
+opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mondays for the Notion FAQ snapshots.
 
-### Strict link enforcement
+## Frontmatter contract
 
-`onBrokenLinks: 'throw'` and `onBrokenMarkdownLinks: 'throw'` in `docusaurus.config.js`. Builds fail on any dead link. Always verify links after renaming/moving files.
+`arbitrumPageSchema` in `lib/page-schema.ts` extends the Fumadocs page schema; `source.config.ts`
+applies it to the `docs` collection. Required: `title` and `description` (both trimmed, not empty).
+Optional: `sidebar_label`, `content_type`, `author`, `sme`,
+`third_party_content_owner` (the third-party maintainer's GitHub username), `target_audience`,
+`user_story`. The last two are authoring metadata; preserve existing values. `content_type`
+is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
+required field or an out-of-enum value fails `frontmatter:check` and the build. There is no
+`draft` or date field; last-modified dates come from git. Partials and glossary
+entries do not carry this contract.
 
-`onBrokenAnchors` is set to `'warn'` (not `'throw'`) because TypeDoc-generated pages emit false-positive anchor warnings. These are expected and not actionable.
+## Rules that break a build or a page
 
-### Edge middleware
+- **Fumadocs information comes from https://www.fumadocs.dev/llms.txt.** Do not guess its APIs.
+- **`.source/` is generated.** Never hand-edit it; run `pnpm types:check`.
+- **Node 22 only** (`>=22.18 <23`), pnpm 10. Run `nvm use 22`; never bypass `engines`. Every script
+  is TypeScript run directly by Node, and a relative import carries its `.ts` extension.
+- **Never use `next/font/google`.** Fonts are self-hosted in `public/fonts/` and loaded with
+  `next/font/local`, so the build never fetches. `pnpm test` greps for the import.
+- **Never import `lib/source` from a client component**, directly or through a module that imports
+  it. It pulls the compiled collection into the browser bundle. `pnpm test` walks the imports of
+  every `'use client'` module.
+- **A `<Var>` does not evaluate inside a fenced block or inline code.** It ships as the literal tag
+  (`content:lint` rule `var-in-code`). In a link destination or `href`, write `{var:name}` instead
+  (rule `var-in-link`). A `{var:name}` in prose fails the build.
+- **A remote markdown image renders broken.** Commit it under `public/img/`, or write
+  `<ImageZoom><img src="https://…" alt="…" /></ImageZoom>` (rule `remote-image`).
+- **Callouts are `<Callout type="info|warn|error|idea|success">`.** A Docusaurus `:::` line renders
+  as text (rule `docusaurus-directive`); another type fails `callout-type`; markdown in `title`
+  prints literally (`markdown-in-title`); a one-line Callout glued to the next paragraph breaks
+  hydration (`block-component-in-paragraph`). Put a Callout on its own lines.
+- **Docusaurus habits fail `content:lint`.** `@@name@@` (`docusaurus-var-token`),
+  `<a data-quicklook-from>` (`quicklook-anchor`), `import … from '@site/…'` (`site-import`), a JSX
+  tag that is neither registered in `components/mdx.tsx` nor imported (`unknown-component`), and
+  `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
+- **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check`
+  rule R3 only forbids ESM-importing such a partial, which no component does.
+- **No link in a heading, and no `<tr>` directly in `<table>`.** Both break React hydration (rules
+  `link-in-heading`, `tr-in-table`).
+- **A plain `.css` import in a component registered in `components/mdx.tsx` adds a render-blocking
+  stylesheet to every docs page.** Use Tailwind utilities or `app/global.css`, or put the component
+  behind `next/dynamic` like the widgets in `components/widgets/`. A docs page loads three
+  stylesheets.
+- **`types:check` checks TypeScript; `frontmatter:check` validates page metadata.** Neither
+  proves the render. Open changed pages on
+  `http://localhost:3000`; on `127.0.0.1` React does not hydrate.
 
-`middleware.ts` runs on Vercel Edge (`@vercel/edge`). It serves raw Markdown to LLM/agent user-agents via content negotiation and dispatches PostHog server-side tracking. The tracking logic lives in `lib/llms-tracking.ts` and is tested via `yarn test:llms-tracking`.
+## Where things live
 
-### Stylus and SDK content origins
+- **Pipeline.** `source.config.ts` (collections), `lib/page-schema.ts` (the frontmatter schema),
+  `lib/source.ts` (the single `loader()`, the only reader of `.source/`),
+  `app/(docs)/[...slug]/page.tsx` (every page, prerendered, `dynamicParams = false`). MDX options
+  are in `lib/mdx-options.ts`; `lib/llms-markdown.ts` decides how each component reads in the
+  markdown mirrors.
+- **Sidebar.** `meta.json` files only. The nine section folders set `"root": true`; `sidebar_label`
+  renames a page. Never write a `[Label](/section/page)` link entry for a page in this repo; use a
+  `"../path"` entry. `scripts/sidebar.test.ts` checks the tree.
+- **Partials.** `content/partials/`, included with `<include cwd>content/partials/…</include>`
+  from a page and file-relative from another partial. Write links inside a partial root-absolute;
+  `check-links` checks those and reports a missing include with its line. Two are generated; edit
+  their generators.
+- **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
+  and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
+  The canonical branch is `master`, including after migration. Keep the variable and PR
+  template links aimed at `master`, regardless of the current development branch.
+- **Components.** `components/mdx.tsx` is the registry.
+- **Redirects.** `redirects.config.ts`, hand-maintained. Never hand-edit between the
+  `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
+  entry left chaining, and fails when a URL in `scripts/data/master-routes.json` is neither a page
+  nor a redirect source. `next.config.ts` derives a `.md` twin for every entry that lands on a
+  documentation page; never hand-write one. It then groups exact aliases with the same destination
+  and permanence through `lib/compact-redirects.ts` to reduce Next's custom route count. Keep editing
+  individual entries. Former canonical Docusaurus page routes, published files and this site's
+  moved URLs use `permanent: true`; `/welcome/get-started` keeps master's 308. Other legacy
+  aliases use `permanent: false`. See [INTERNALS.md](INTERNALS.md#redirects) for the full rule.
+- **Routing.** `next.config.ts` rewrites `/<slug>.md` and `/index.md` to the `/llms.mdx/` mirror
+  and sets the response headers from `lib/http-headers.ts` (security headers, report-only CSP,
+  `Link` on `/`, CORS on the markdown surface). The `og/` and `llms.mdx/` routes have
+  `dynamicParams = false`. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
+- **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
+  production build without `NEXT_PUBLIC_SITE_URL`.
+- **Theme.** `app/global.css` only. Tokens are `--color-fd-*`, built on the `--color-arbitrum-*`
+  palette; never `--ifm-*`. Breakpoints are Tailwind's plus `nav-sm`. The navbar selectors depend on Fumadocs' header DOM. PostCSS
+  config lives in `package.json`.
+- **Generated pages.** `content/docs/stylus/stylus-by-example/` and
+  `content/docs/run-a-node/nitro/cli-flags-reference.mdx`. Change their generators, not the pages.
+  The six `content/partials/_troubleshooting-*-partial.mdx` come from `content/faq/*.json`; edit them in Notion.
 
-- `docs/stylus-by-example/` is checked into this repo directly (no submodule, no `.gitmodules`). Its `DONT-EDIT-THIS-FOLDER` marker points at `submodules/stylus-by-example`, which no longer exists — so edit the files here directly. `node scripts/sync-stylus-content.js` still exists but expects that missing submodule.
-- **The SDK API docs subsystem is dead.** `docs/sdk/` and `scripts/sdkDocsHandler.ts` no longer exist; `sdk-sidebar.js` is orphaned; `docs/api/` is a 3-file stub not referenced by `docusaurus.config.js`. The `sdk-docs` job in `.github/workflows/update-external-content.yml` still targets them and would fail if run. Do not treat any of these as a live pipeline.
+Details for each are in [INTERNALS.md](INTERNALS.md).
 
-### Global variables and markdown preprocessor
+<!-- BEGIN:nextjs-agent-rules -->
 
-`src/resources/globalVars.js` defines version numbers, snapshot URLs, gas parameters, and chain config used across docs. Variables are embedded in MDX files as `@@variableName=value@@` and resolved by `scripts/markdown-preprocessor.js` at build time.
+# This is NOT the Next.js you know
 
-**After modifying globalVars.js**, run `yarn update-variable-refs` to update all doc files (required for Vercel cache invalidation).
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-### Partials convention
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
-Files starting with `_` in `docs/partials/` are reusable content fragments. The `parseFrontMatter` hook in `docusaurus.config.js` clears their frontmatter to suppress Docusaurus warnings. Partials are content-rich and imported across many pages — changes propagate widely, so trace imports before editing.
-
-### Generated content — do not hand-edit
-
-`docs/api/`, `docs/stylus-by-example/`, `docs/partials/glossary/` (138 files), `docs/partials/_reference-arbitrum-contract-addresses-partial.mdx`, `docs/run-arbitrum-node/nitro/cli-flags-reference.mdx`, `docs/run-arbitrum-node/assign-node-roles.mdx`, and `vercel.json` (generated from `redirects.config.js`). `docs/superpowers/` holds internal plans/specs, not published docs.
-
-### Sidebar configuration
-
-`sidebars.js` (1855 lines) defines all navigation sidebars and is **self-contained — it imports nothing**. `sdk-sidebar.js` and `docs/stylus-by-example/*/sidebar.js` exist on disk but are not imported by it.
-
-### Pre-commit hooks (Husky)
-
-The pre-commit hook (`.husky/pre-commit`) runs on staged files only:
-
-1. Prettier formatting + re-stage
-2. Markdownlint (excludes `docs/sdk/`)
-3. TypeScript type checking (if .ts/.tsx files staged)
-
-The hook also contains a submodule-update step, but it only fires if `.gitmodules` is staged — the repo has no submodules, so it never runs.
-
-Skip with `HUSKY=0 git commit` when needed.
-
-### Key directories
-
-- `docs/` — MDX documentation content (routed at `/`)
-- `docs/partials/` — reusable content (prefixed with `_`) + ~110 glossary partials
-- `src/components/` — React components (interactive diagrams, address helpers, quicklooks)
-- `src/plugins/` — remark/rehype transforms that generate the LLM-crawlable `llms.txt` output
-- `src/resources/globalVars.js` — shared variables injected into docs
-- `src/theme/` — Docusaurus theme overrides (Footer, Layout, NotFound)
-- `scripts/` — build tooling, content sync, doc auditing
-- `static/` — images, PDFs, JSON data
-
-### Path aliases
-
-`tsconfig.json` defines `@/*` and `@site/*` both mapping to project root.
-
-## Content writing guidelines
-
-ALWAYS READ THE [PATTERN GUIDE](docs/Offchain-pattern-guide.md) AND APPLY ITS RULES IN YOUR WRITING
-
-- **One Quicklook per term per file.** Wrap a term in `<a data-quicklook-from='…'>` on its first mention only. Leave every later mention of that same term as plain text.
-
-## PR Authoring conventions
-
-- PR descriptions start from `.github/pull_request_template.md` — preserve its top-level headings (`## Description`, `## Document type`, `## Checklist`, `## Additional Notes`) and fill the sections rather than replacing them.
-- See `AGENTS.md` at the repo root for notes on relevant agents/subagents/skills used while working in this repo.
-
-## Security audit workflow
-
-- `yarn audit --level moderate` lists advisories at moderate or higher.
-- `package.json` has a `resolutions` block to pin transitive deps with security fixes (currently `elliptic` and `serialize-javascript`). Update resolutions when new advisories appear that aren't reachable through a direct-dep bump.
-- Dependabot opens PRs labeled `dependencies`. Some are obsoleted by `resolutions` entries — check before merging.
+<!-- END:nextjs-agent-rules -->

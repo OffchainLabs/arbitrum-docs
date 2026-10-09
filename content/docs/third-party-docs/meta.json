@@ -1,0 +1,11 @@
+{
+  "title": "Third-party docs",
+  "icon": "Boxes",
+  "description": "Guides for tools and services in the Arbitrum ecosystem.",
+  "pages": [
+    "../oracles",
+    "index",
+    "contribute",
+    "..."
+  ]
+}
