@@ -184,3 +184,28 @@ test('drops keys the allowlist does not name', async () => {
   assert.ok(r.ok);
   if (r.ok) assert.deepEqual(r.messages[0]?.parts, [{ type: 'text', text: 'hi' }]);
 });
+
+test('400 when the last user message has no text', async () => {
+  const blank = (text: string) => ({ role: 'user', parts: [{ type: 'text', text }] });
+  const clientOnly = {
+    role: 'user',
+    parts: [{ type: 'data-client', data: { location: site, title: 't' } }],
+  };
+  const answer = { role: 'assistant', parts: [{ type: 'text', text: 'a' }] };
+  for (const messages of [
+    [blank('')],
+    [blank('  \n')],
+    [clientOnly],
+    [message, answer, blank('')],
+  ]) {
+    const r = await checkChatRequest(partsBody(messages), prod);
+    assert.equal(r.ok || r.status, 400, JSON.stringify(messages.at(-1)));
+  }
+});
+
+test('accepts a blank earlier user message when the last one has text', async () => {
+  const blank = { role: 'user', parts: [{ type: 'text', text: '' }] };
+  const answer = { role: 'assistant', parts: [{ type: 'text', text: 'a' }] };
+  const r = await checkChatRequest(partsBody([blank, answer, message]), prod);
+  assert.equal(r.ok, true);
+});

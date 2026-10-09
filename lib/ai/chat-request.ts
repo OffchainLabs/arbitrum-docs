@@ -92,5 +92,9 @@ export async function checkChatRequest(
   if (parsed.messages.some((m) => userTextLength(m) > MAX_USER_TEXT_CHARS)) {
     return { ok: false, status: 413, error: 'Message too large' };
   }
+  const question = parsed.messages.findLast((m) => m.role === 'user');
+  if (!question?.parts.some((p) => p.type === 'text' && p.text.trim())) {
+    return { ok: false, status: 400, error: 'Empty message' };
+  }
   return { ok: true, messages: parsed.messages };
 }
