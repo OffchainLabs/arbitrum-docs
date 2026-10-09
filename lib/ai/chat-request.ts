@@ -4,9 +4,41 @@ const MAX_BODY_BYTES = 32 * 1024;
 const MAX_MESSAGES = 20;
 const MAX_USER_TEXT_CHARS = 8_000;
 
+const MAX_PARTS = 100;
+
+const textPart = z.object({ type: z.literal('text'), text: z.string() });
+
+// Only the parts the chat sends. The AI SDK downloads every file URL in a message on the server,
+// so a `file` part, or a tool output that holds one, must never reach `convertToModelMessages`.
+// Unnamed keys are dropped.
+const userPart = z.discriminatedUnion('type', [
+  textPart,
+  z.object({
+    type: z.literal('data-client'),
+    data: z.object({ location: z.string(), title: z.string() }),
+  }),
+]);
+
+const assistantPart = z.discriminatedUnion('type', [
+  textPart,
+  z.object({ type: z.literal('step-start') }),
+  // No `execute`, so the call never has an output; the route drops it as incomplete.
+  z.object({
+    type: z.literal('tool-provideLinks'),
+    toolCallId: z.string(),
+    state: z.enum(['input-streaming', 'input-available']),
+    input: z.unknown().optional(),
+  }),
+]);
+
 const requestSchema = z.object({
   messages: z
-    .array(z.object({ role: z.enum(['user', 'assistant']), parts: z.array(z.unknown()).max(100) }))
+    .array(
+      z.discriminatedUnion('role', [
+        z.object({ role: z.literal('user'), parts: z.array(userPart).max(MAX_PARTS) }),
+        z.object({ role: z.literal('assistant'), parts: z.array(assistantPart).max(MAX_PARTS) }),
+      ]),
+    )
     .min(1)
     .max(MAX_MESSAGES),
 });
@@ -21,9 +53,7 @@ function userTextLength(message: ChatMessage): number {
   if (message.role !== 'user') return 0;
   let length = 0;
   for (const part of message.parts) {
-    if (typeof part !== 'object' || part === null) continue;
-    const { type, text } = part as { type?: unknown; text?: unknown };
-    if (type === 'text' && typeof text === 'string') length += text.length;
+    if (part.type === 'text') length += part.text.length;
   }
   return length;
 }

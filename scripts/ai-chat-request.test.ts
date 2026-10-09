@@ -108,3 +108,79 @@ test('accepts a user message whose text is short but whose JSON is over 8,000', 
   const r = await checkChatRequest(req({ body }), prod);
   assert.equal(r.ok, true);
 });
+
+function partsBody(messages: unknown[]) {
+  return req({ body: JSON.stringify({ messages }) });
+}
+
+test('accepts history with every allowed part type', async () => {
+  const user = {
+    role: 'user',
+    parts: [
+      { type: 'data-client', data: { location: `${site}/a`, title: 'A' } },
+      { type: 'text', text: 'hi' },
+    ],
+  };
+  const answer = {
+    role: 'assistant',
+    parts: [
+      { type: 'step-start' },
+      { type: 'text', text: 'hello', state: 'done' },
+      {
+        type: 'tool-provideLinks',
+        toolCallId: 'c1',
+        state: 'input-available',
+        input: { links: [] },
+      },
+    ],
+  };
+  const r = await checkChatRequest(partsBody([user, answer, message]), prod);
+  assert.equal(r.ok, true);
+});
+
+test('400 for a user file part', async () => {
+  const file = { type: 'file', mediaType: 'image/png', url: 'https://evil.example/a.png' };
+  const r = await checkChatRequest(partsBody([{ role: 'user', parts: [file] }]), prod);
+  assert.equal(r.ok || r.status, 400);
+});
+
+test('400 for a tool output, which can carry files', async () => {
+  const tool = {
+    type: 'tool-provideLinks',
+    toolCallId: 'c1',
+    state: 'output-available',
+    input: {},
+    output: { type: 'content', value: [{ type: 'file', url: 'https://evil.example/a' }] },
+  };
+  const r = await checkChatRequest(
+    partsBody([message, { role: 'assistant', parts: [tool] }, message]),
+    prod,
+  );
+  assert.equal(r.ok || r.status, 400);
+});
+
+test('400 for a part type outside the allowlist', async () => {
+  for (const part of [
+    { type: 'source-url', sourceId: 's', url: 'https://evil.example' },
+    { type: 'tool-other', toolCallId: 'c1', state: 'input-available', input: {} },
+    { type: 'data-client', data: { location: 'x', title: 't' } },
+  ]) {
+    const r = await checkChatRequest(
+      partsBody([message, { role: 'assistant', parts: [part] }, message]),
+      prod,
+    );
+    assert.equal(r.ok || r.status, 400, part.type);
+  }
+});
+
+test('drops keys the allowlist does not name', async () => {
+  const text = {
+    type: 'text',
+    text: 'hi',
+    url: 'https://evil.example',
+    providerMetadata: { x: 1 },
+  };
+  const r = await checkChatRequest(partsBody([{ role: 'user', parts: [text] }]), prod);
+  assert.ok(r.ok);
+  if (r.ok) assert.deepEqual(r.messages[0]?.parts, [{ type: 'text', text: 'hi' }]);
+});
