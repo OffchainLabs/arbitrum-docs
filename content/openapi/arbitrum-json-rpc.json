@@ -1,0 +1,134 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Arbitrum JSON-RPC (spike)",
+    "version": "0.0.0-spike",
+    "description": "Hand-written mini OpenAPI 3.1 document. One fake path per JSON-RPC method."
+  },
+  "servers": [{ "url": "https://arb1.arbitrum.io/rpc", "description": "Arbitrum One" }],
+  "paths": {
+    "/arb_getRawBlockMetadata": {
+      "post": {
+        "operationId": "arb_getRawBlockMetadata",
+        "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
+        "summary": "arb_getRawBlockMetadata",
+        "description": "Returns the raw block metadata for each block in the range from `fromBlock` to `toBlock`. Source: nitro v3.12.1 `execution/gethexec/api.go:59`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Request_arb_getRawBlockMetadata" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    { "$ref": "#/components/schemas/Result_arb_getRawBlockMetadata" },
+                    { "$ref": "#/components/schemas/JsonRpcError" }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BlockNumberOrTag": {
+        "title": "BlockNumber",
+        "description": "A hex block number, or a block tag.",
+        "oneOf": [
+          { "type": "string", "pattern": "^0x[0-9a-fA-F]+$", "examples": ["0x1000000"] },
+          { "type": "string", "enum": ["earliest", "latest", "pending", "safe", "finalized"] }
+        ]
+      },
+      "Request_arb_getRawBlockMetadata": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": { "type": "string", "const": "2.0" },
+          "id": { "oneOf": [{ "type": "integer" }, { "type": "string" }], "examples": [1] },
+          "method": { "type": "string", "const": "arb_getRawBlockMetadata" },
+          "params": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/BlockNumberOrTag",
+                "title": "fromBlock",
+                "description": "First block of the range."
+              },
+              {
+                "$ref": "#/components/schemas/BlockNumberOrTag",
+                "title": "toBlock",
+                "description": "Last block of the range."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["0x1000000", "0x1000001"]]
+          }
+        }
+      },
+      "NumberAndBlockMetadata": {
+        "type": "object",
+        "description": "nitro v3.12.1 `execution/gethexec/api.go:46-49`.",
+        "properties": {
+          "blockNumber": {
+            "type": "integer",
+            "description": "Block number (JSON number, Go uint64)."
+          },
+          "rawMetadata": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]*$",
+            "description": "Raw block metadata bytes, hex encoded."
+          }
+        }
+      },
+      "Result_arb_getRawBlockMetadata": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": { "type": "string", "const": "2.0" },
+          "id": { "oneOf": [{ "type": "integer" }, { "type": "string" }] },
+          "result": {
+            "oneOf": [
+              {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/NumberAndBlockMetadata" }
+              },
+              { "type": "null" }
+            ]
+          }
+        }
+      },
+      "JsonRpcError": {
+        "title": "Error",
+        "type": "object",
+        "required": ["jsonrpc", "id", "error"],
+        "properties": {
+          "jsonrpc": { "type": "string", "const": "2.0" },
+          "id": { "oneOf": [{ "type": "integer" }, { "type": "string" }, { "type": "null" }] },
+          "error": {
+            "type": "object",
+            "required": ["code", "message"],
+            "properties": {
+              "code": { "type": "integer", "examples": [-32601] },
+              "message": { "type": "string" },
+              "data": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
