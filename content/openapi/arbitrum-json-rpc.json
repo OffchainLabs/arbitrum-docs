@@ -10,6 +10,7 @@
     "/arb_getRawBlockMetadata": {
       "post": {
         "operationId": "arb_getRawBlockMetadata",
+        "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arb_getRawBlockMetadata",
         "description": "Returns the raw block metadata for each block in the range from `fromBlock` to `toBlock`. Source: nitro v3.12.1 `execution/gethexec/api.go:59`.",
         "requestBody": {

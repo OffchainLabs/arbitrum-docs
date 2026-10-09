@@ -4,16 +4,18 @@ import { type OperationObject, useOpenAPI } from 'fumadocs-openapi';
 import { createCodeUsageGeneratorRegistry } from 'fumadocs-openapi/requests/generators';
 import { createOpenAPIPage } from 'fumadocs-openapi/ui';
 
-// The only code sample: a JSON-RPC POST to the server root. `data.url` carries the fake per-method
-// path, so it is replaced with the server URL of the document.
-const SERVER_URL = 'https://arb1.arbitrum.io/rpc';
+import requestUrls from '@/components/widgets/OpenAPIPage/request-urls.json';
+import { requestUrl } from '@/lib/json-rpc-request-url';
+
+// JSON-RPC code samples. `data.url` carries the fake per-method path, so every tab takes its URL
+// from the operation's `x-arbitrum-request-url`, through the generated `request-urls.json`.
 const codeUsages = createCodeUsageGeneratorRegistry();
 codeUsages.add('jsonrpc-curl', {
   lang: 'bash',
   label: 'JSON-RPC cURL',
   generate: (data) =>
     [
-      `curl -X POST ${SERVER_URL}`,
+      `curl -X POST ${requestUrl(requestUrls, data.body)}`,
       `  -H "Content-Type: application/json"`,
       `  -d '${JSON.stringify(data.body, null, 2)}'`,
     ].join(' \\\n'),
@@ -28,7 +30,7 @@ codeUsages.add('jsonrpc-typescript', {
   label: 'TypeScript',
   generate: (data) =>
     [
-      `const response = await fetch('${SERVER_URL}', {`,
+      `const response = await fetch('${requestUrl(requestUrls, data.body)}', {`,
       `  method: 'POST',`,
       `  headers: { 'Content-Type': 'application/json' },`,
       `  body: JSON.stringify(${indentBody(data.body, 2)}),`,
@@ -57,7 +59,7 @@ codeUsages.add('jsonrpc-rust', {
       `    let body = json!(${indentBody(data.body, 4)});`,
       ``,
       `    let response: Value = reqwest::Client::new()`,
-      `        .post("${SERVER_URL}")`,
+      `        .post("${requestUrl(requestUrls, data.body)}")`,
       `        .json(&body)`,
       `        .send()`,
       `        .await?`,
