@@ -4,8 +4,10 @@ import type { CSSProperties, ReactNode, SVGProps } from 'react';
  * The callout from the Docusaurus site's `VanillaAdmonition`: a 6px coloured left border, a tint of
  * the same colour, and the icon and title on one row above the content. The icons are its Octicons
  * paths. Each type has one colour per theme, and the tint is 15% on the white page and 20% on the
- * black one, so the fill measures at least 1.2:1 against the page and the body text at least 7:1. Every type has `role="note"`, never `alert`: a static error callout should not be
- * announced as a live region on every client-side navigation to its page.
+ * black one, so the fill measures at least 1.2:1 against the page and the body text at least 7:1.
+ * The warning type sets its own fill and border; its light fill is 1.11:1, and its border marks the
+ * edge. Every type has `role="note"`, never `alert`: a static error callout should not be announced
+ * as a live region on every client-side navigation to its page.
  */
 
 type IconProps = SVGProps<SVGSVGElement>;
@@ -72,19 +74,29 @@ interface CalloutStyle {
   /** Darker shade for the white page, lighter shade for the black one: each is at least 3:1. */
   light: string;
   dark: string;
+  /** Border and background per theme. Default: the type colour, and a 15% / 20% tint of it. */
+  border?: { light: string; dark: string };
+  fill?: { light: string; dark: string };
   Icon: (props: IconProps) => ReactNode;
 }
 
 const green = { light: '#1a7f37', dark: '#3fb950' };
-const yellow = { light: '#9a6700', dark: '#d29922' };
+// A soft orange: a peach fill, not a 15% tint of the icon colour. The light fill is 1.11:1 against
+// white, so the orange border marks the box edge.
+const warning = {
+  light: '#c2410c',
+  dark: '#fb923c',
+  border: { light: '#f28c28', dark: '#f28c28' },
+  fill: { light: '#fff1e0', dark: '#2e1a05' },
+};
 
 /** Keyed by every type Fumadocs accepts, so pages written for Fumadocs' Callout keep working. */
 const calloutStyles: Record<string, CalloutStyle> = {
   info: { label: 'Note', light: '#0366d6', dark: '#4493f8', Icon: InfoIcon },
   tip: { label: 'Tip', ...green, Icon: TipIcon },
   idea: { label: 'Tip', ...green, Icon: TipIcon },
-  warn: { label: 'Warning', ...yellow, Icon: WarningIcon },
-  warning: { label: 'Warning', ...yellow, Icon: WarningIcon },
+  warn: { label: 'Warning', ...warning, Icon: WarningIcon },
+  warning: { label: 'Warning', ...warning, Icon: WarningIcon },
   error: { label: 'Danger', light: '#cf222e', dark: '#f85149', Icon: DangerIcon },
   success: { label: 'Success', ...green, Icon: NoteIcon },
 };
@@ -98,12 +110,20 @@ export function Callout({
   title?: ReactNode;
   children?: ReactNode;
 }) {
-  const { label, light, dark, Icon } = calloutStyles[type] ?? calloutStyles.info!;
+  const { label, light, dark, border, fill, Icon } = calloutStyles[type] ?? calloutStyles.info!;
+  const style = {
+    '--callout-light': light,
+    '--callout-dark': dark,
+    '--callout-border-light': border?.light ?? light,
+    '--callout-border-dark': border?.dark ?? dark,
+    '--callout-fill-light': fill?.light ?? `color-mix(in oklab, ${light} 15%, transparent)`,
+    '--callout-fill-dark': fill?.dark ?? `color-mix(in oklab, ${dark} 20%, transparent)`,
+  } as CSSProperties;
   return (
     <div
       role="note"
-      style={{ '--callout-light': light, '--callout-dark': dark } as CSSProperties}
-      className="my-4 rounded border-l-[6px] border-(--callout-color) bg-(--callout-color)/15 px-3 pt-2.5 pb-1.5 [--callout-color:var(--callout-light)] dark:bg-(--callout-color)/20 dark:[--callout-color:var(--callout-dark)]"
+      style={style}
+      className="my-4 rounded border-l-[6px] border-(--callout-border-light) bg-(--callout-fill-light) px-3 pt-2.5 pb-1.5 [--callout-color:var(--callout-light)] dark:border-(--callout-border-dark) dark:bg-(--callout-fill-dark) dark:[--callout-color:var(--callout-dark)]"
     >
       <div className="mb-1 flex items-center gap-2 text-(--callout-color)">
         <span className="inline-flex shrink-0 items-center">
