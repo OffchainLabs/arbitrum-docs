@@ -925,7 +925,7 @@ partial changed. It is the only place the token is used; `faq:check` in CI is of
 
 ### Generated pages
 
-- **`content/docs/run-a-node/nitro/cli-flags-reference.mdx`** is written by `pnpm cli:generate`
+- **`content/docs/run-a-node/reference/cli-flags-reference.mdx`** is written by `pnpm cli:generate`
   from the Nitro source at `nitroVersionTag`, including its go-ethereum submodule. Only the region
   between `{/* GENERATED:START */}` and `{/* GENERATED:END */}` is replaced, so frontmatter and
   surrounding prose survive. Flags whose default is not a static value are declared in
@@ -952,7 +952,7 @@ partial changed. It is the only place the token is used; `faq:check` in CI is of
 - **The precompile tables** escape upstream Solidity and Go text (signatures, doc comments, event
   names) before it lands in JSX, and each generated partial must pass the same `assertInertMdx`:
   no executable expression, and no element other than the table elements.
-- **`content/docs/run-a-node/nitro/cli-flags-reference.mdx`'s code cells** escape `|` and refuse a
+- **`content/docs/run-a-node/reference/cli-flags-reference.mdx`'s code cells** escape `|` and refuse a
   `\|` in a flag default with a named error, since that sequence would end the code span and put
   upstream text into live MDX.
 - **`content/partials/_troubleshooting-{users,nodes,building,bridging,arbitrum-chain,stylus}-partial.mdx`**

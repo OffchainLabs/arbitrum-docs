@@ -192,7 +192,7 @@ export default function HomePage() {
               icon={<Radio />}
               title="Run a feed relay"
               description="Distribute the sequencer feed across multiple nodes."
-              href={docs('/run-a-node/run-feed-relay')}
+              href={docs('/run-a-node/data-availability/run-feed-relay')}
             />
             <Card
               icon={<HardDrive />}

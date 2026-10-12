@@ -29,12 +29,12 @@
     {
       "id": "06141709-af8a-4c85-a6a5-c14c04f89884",
       "question": "How do I read messages from the Sequencer feed?",
-      "answer": "Running an Arbitrum relay locally as a [Feed Relay](/run-a-node/run-feed-relay) lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions offchain. Refer to [How to read the sequencer feed](/run-a-node/sequencer/read-sequencer-feed) for a detailed guide."
+      "answer": "Running an Arbitrum relay locally as a [Feed Relay](/run-a-node/data-availability/run-feed-relay) lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions offchain. Refer to [How to read the sequencer feed](/run-a-node/sequencer/read-sequencer-feed) for a detailed guide."
     },
     {
       "id": "b8847110-7a7f-46ad-89ba-f8a3781e3788",
       "question": "How do I run a node locally for development?",
-      "answer": "See instructions in our  [our guide about running a local devnet node](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).\n\nWe recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](/run-a-node/nitro/build-nitro-locally)."
+      "answer": "See instructions in our  [our guide about running a local devnet node](https://developer.arbitrum.io/node-running/how-tos/local-dev-node).\n\nWe recommend running Nitro nodes via Docker; to compile directly / run without Docker, you can follow the steps in [How to build Nitro locally](/run-a-node/build-nitro-locally)."
     },
     {
       "id": "5b4b7b4a-268b-43bc-8704-1ce090e33ba8",

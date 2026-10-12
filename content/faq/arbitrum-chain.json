@@ -139,7 +139,7 @@
     {
       "id": "22901a3f-59f8-80cd-8c8c-e365011c934c",
       "question": "How do I export snapshots for nitro-based chains? Is there any tooling for this?",
-      "answer": "We currently don't have any toolkits available for this. The best way to make a snapshot is to gracefully stop the node and make a copy of the database.\n\nLearn more: [Nitro database snapshots](/run-a-node/nitro/nitro-database-snapshots)."
+      "answer": "We currently don't have any toolkits available for this. The best way to make a snapshot is to gracefully stop the node and make a copy of the database.\n\nLearn more: [Nitro database snapshots](/run-a-node/reference/nitro-database-snapshots)."
     },
     {
       "id": "22901a3f-59f8-807e-a3ca-c96746f544b0",

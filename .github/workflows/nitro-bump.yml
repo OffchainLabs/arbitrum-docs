@@ -75,7 +75,7 @@ jobs:
             - `content/vars.json`: `nitroVersionTag`, `latestNitroNodeImage` and `goEthereumCommit`
             - the node image in every page carrying a `sync-with-var: latestNitroNodeImage` marker
             - `content/partials/precompile-tables/`: regenerated at the new refs
-            - `content/docs/run-a-node/nitro/cli-flags-reference.mdx`: regenerated from the new
+            - `content/docs/run-a-node/reference/cli-flags-reference.mdx`: regenerated from the new
               tag's Go source
 
             Still human-only before merging:

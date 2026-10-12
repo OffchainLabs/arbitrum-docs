@@ -1,5 +1,5 @@
 /**
- * generate-cli-reference: regenerate content/docs/run-a-node/nitro/cli-flags-reference.mdx.
+ * generate-cli-reference: regenerate content/docs/run-a-node/reference/cli-flags-reference.mdx.
  *
  * Usage:
  *   pnpm cli:generate                        # clone the pinned Nitro tag and write the page
@@ -58,7 +58,13 @@ import { indexGoTree } from './lib/go-source.ts';
 import { diffSummary } from './lib/line-diff.ts';
 import { type CliFlag, extractFlags } from './lib/nitro-cli-flags.ts';
 
-const OUTPUT_PATH = path.join('content', 'docs', 'run-a-node', 'nitro', 'cli-flags-reference.mdx');
+const OUTPUT_PATH = path.join(
+  'content',
+  'docs',
+  'run-a-node',
+  'reference',
+  'cli-flags-reference.mdx',
+);
 const VARS_PATH = path.join('content', 'vars.json');
 const NITRO_URL = 'https://github.com/OffchainLabs/nitro.git';
 

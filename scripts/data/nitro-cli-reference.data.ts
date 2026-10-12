@@ -22,19 +22,19 @@ export const entryPoint: EntryPoint = { dir: 'cmd/nitro/config', func: 'NodeConf
 
 const CONFIGURATION: GuideLink = {
   label: 'Configuration system',
-  href: '/run-a-node/nitro/configuration-system',
+  href: '/run-a-node/reference/configuration-system',
 };
 const BINARIES: GuideLink = {
   label: 'Docker and CLI binaries',
-  href: '/run-a-node/nitro/docker-and-cli-binaries',
+  href: '/run-a-node/reference/docker-and-cli-binaries',
 };
 const TUNING: GuideLink = {
   label: 'Node tuning and monitoring',
-  href: '/run-a-node/nitro/node-tuning-and-monitoring',
+  href: '/run-a-node/operation/node-tuning-and-monitoring',
 };
 const DA_TOOLS: GuideLink = {
   label: 'DA tools reference',
-  href: '/run-a-node/nitro/da-tools-reference',
+  href: '/run-a-node/reference/da-tools-reference',
 };
 
 /**
