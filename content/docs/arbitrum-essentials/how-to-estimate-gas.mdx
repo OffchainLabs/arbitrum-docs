@@ -75,7 +75,7 @@ You can use the [`NodeInterface`](/arbitrum-essentials/nodeinterface/reference) 
 - **P** (L2 Gas Price): Price per gas unit. Starts at a gas floor price and increases with demand.
   - Call `NodeInterface.gasEstimateComponents()` and get the third element, `baseFee`.
 - **B (Extra Buffer)**: The extra buffer is the amount of gas required for posting the transaction on L1, priced in L2 gas.
-  - Call `NodeInterface.GasEstimateComponents()` and get the second element, `baseFee`.
+  - Call `NodeInterface.gasEstimateComponents()` and get the second element, `gasEstimateForL1`.
 - **L2G** (Gas used on L2): Gas consumed by child chain computation, excluding parent chain posting costs.
   - Call `NodeInterface.gasEstimateComponents()` with the transaction data and subtract the second element (`gasEstimateForL1`) from the first (`gasEstimate`).
 - **L1P** (L1 estimated price per byte of data): Estimated cost of posting 1 byte of data on the parent chain.
