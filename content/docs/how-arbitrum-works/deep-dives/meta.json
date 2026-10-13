@@ -10,6 +10,7 @@
     "l1-to-l2-messaging",
     "l2-to-l1-messaging",
     "transaction-lifecycle",
+    "forced-transactions",
     "sequencer-transaction-flow",
     "token-bridging",
     "gas-and-fees",
