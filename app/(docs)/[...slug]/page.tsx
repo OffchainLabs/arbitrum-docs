@@ -4,12 +4,12 @@ import {
   DocsPage,
   DocsTitle,
   MarkdownCopyButton,
-  ViewOptionsPopover,
 } from 'fumadocs-ui/layouts/notebook/page';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { PageActionsPopover } from '@/components/PageActionsPopover';
 import { RequestUpdateLink } from '@/components/RequestUpdateLink';
 import { Feedback } from '@/components/feedback/client';
 import { getMDXComponents } from '@/components/mdx';
@@ -58,8 +58,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
       ) : null}
       <div className="flex flex-row flex-wrap gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
-        <ViewOptionsPopover
+        <PageActionsPopover
           markdownUrl={markdownUrl}
+          pageUrl={new URL(page.url, getSiteUrl()).toString()}
           githubUrl={`${gitConfig.url}/blob/${gitConfig.branch}/content/docs/${page.path}`}
         />
         <RequestUpdateLink pageUrl={page.url} />
