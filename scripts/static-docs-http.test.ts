@@ -5,7 +5,7 @@ import test from 'node:test';
 import { appName, gitConfig } from '../lib/shared.ts';
 
 const baseUrl = process.env.STATIC_DOCS_TEST_URL;
-const livePath = '/run-a-node/start-here';
+const livePath = '/run-a-node/run-full-node';
 const liveMirror = `/llms.mdx/docs${livePath}/content.md`;
 const documentOnly = (html: string): string => {
   let previous: string;
