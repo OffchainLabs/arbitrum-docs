@@ -116,9 +116,12 @@ async function assertVisiblePanel(panel: Locator, state: string) {
 test('native text search reveals a collapsed tab and preserves manual selection', async () => {
   const page = await browser.newPage();
   try {
-    await page.goto(new URL('/run-a-node/start-here', baseUrl).href);
-    const firstTab = page.getByRole('tab', { name: 'Arbitrum One, Nova, Sepolia', exact: true });
-    const matchedTab = page.getByRole('tab', { name: 'Arbitrum chains', exact: true });
+    await page.goto(new URL('/run-a-node/run-full-node', baseUrl).href);
+    // The page repeats the chain tabs in several synced groups; the first group holds the parameters.
+    const firstTab = page
+      .getByRole('tab', { name: 'Arbitrum One, Nova, Sepolia', exact: true })
+      .first();
+    const matchedTab = page.getByRole('tab', { name: 'Your Arbitrum chain', exact: true }).first();
     const firstPanel = await panelFor(firstTab);
     const matchedPanel = await panelFor(matchedTab);
     await firstTab.click();

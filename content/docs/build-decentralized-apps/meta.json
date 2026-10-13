@@ -7,6 +7,8 @@
     "index",
     "quickstart-solidity-remix",
     "quickstart-create-a-token",
+    "run-nitro-dev-node",
+    "../run-a-node/build-nitro-locally",
     "troubleshooting-building",
     "external:[Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)",
     "external:[Example code repository](https://github.com/OffchainLabs/arbitrum-tutorials)",

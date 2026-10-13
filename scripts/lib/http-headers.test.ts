@@ -53,14 +53,14 @@ test('the markdown and llms routes are readable cross-origin, and match the prox
     '/llms.txt',
     '/llms-full.txt',
     '/docs.md',
-    '/docs/run-a-node/start-here.md',
-    '/llms.mdx/docs/run-a-node/start-here/content.md',
+    '/docs/run-a-node/run-full-node.md',
+    '/llms.mdx/docs/run-a-node/run-full-node/content.md',
     '/how-arbitrum-works/deep-dives/stf.md',
     '/index.md',
   ]) {
     assert.ok(hasCors(path), path);
   }
-  for (const path of ['/', '/docs', '/docs/run-a-node/start-here', '/img/logo.svg']) {
+  for (const path of ['/', '/docs', '/docs/run-a-node/run-full-node', '/img/logo.svg']) {
     assert.ok(!hasCors(path), `${path} must not be readable cross-origin`);
   }
   // proxy.ts tracks exactly these paths; the two lists describe the same surface.

@@ -122,6 +122,16 @@ export const redirects: Redirect[] = [
     destination: '/run-a-node/reference/nitro-database-snapshots',
     permanent: true,
   },
+  {
+    source: '/run-a-node/run-local-full-chain-simulation',
+    destination: '/build-decentralized-apps/run-local-full-chain-simulation',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/run-nitro-dev-node',
+    destination: '/build-decentralized-apps/run-nitro-dev-node',
+    permanent: true,
+  },
   // AUTO-GENERATED REDIRECTS END
 
   // The run-a-node restructure split the Nitro folder into Operation and Reference and removed
@@ -129,6 +139,19 @@ export const redirects: Redirect[] = [
   {
     source: '/run-a-node/nitro',
     destination: '/run-a-node',
+    permanent: true,
+  },
+
+  // The run-a-node rewrite merged "Prepare to run a node" and the chain operators' Helm guide into
+  // the full node how-to.
+  {
+    source: '/run-a-node/start-here',
+    destination: '/run-a-node/run-full-node',
+    permanent: true,
+  },
+  {
+    source: '/launch-arbitrum-chain/run-a-node/run-full-node-with-helm',
+    destination: '/run-a-node/run-full-node',
     permanent: true,
   },
 
@@ -2684,7 +2707,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/node-running/how-tos/local-dev-node',
-    destination: '/run-a-node/run-local-full-chain-simulation',
+    destination: '/build-decentralized-apps/run-local-full-chain-simulation',
     permanent: false,
   },
   {
@@ -2744,7 +2767,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/node-running/local-dev-node',
-    destination: '/run-a-node/run-local-full-chain-simulation',
+    destination: '/build-decentralized-apps/run-local-full-chain-simulation',
     permanent: false,
   },
   {
@@ -3110,17 +3133,17 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/run-local-dev-node',
-    destination: '/run-a-node/run-local-full-chain-simulation',
+    destination: '/build-decentralized-apps/run-local-full-chain-simulation',
     permanent: false,
   },
   {
     source: '/run-arbitrum-node/run-local-full-chain-simulation',
-    destination: '/run-a-node/run-local-full-chain-simulation',
+    destination: '/build-decentralized-apps/run-local-full-chain-simulation',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/run-nitro-dev-node',
-    destination: '/run-a-node/run-nitro-dev-node',
+    destination: '/build-decentralized-apps/run-nitro-dev-node',
     permanent: true,
   },
   {
@@ -3150,7 +3173,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/start-here',
-    destination: '/run-a-node/start-here',
+    destination: '/run-a-node/run-full-node',
     permanent: true,
   },
   {
@@ -3413,7 +3436,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/stylus/how-tos/local-stylus-dev-node',
-    destination: '/run-a-node/run-nitro-dev-node',
+    destination: '/build-decentralized-apps/run-nitro-dev-node',
     permanent: false,
   },
   {
