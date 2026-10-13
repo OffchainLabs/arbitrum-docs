@@ -16,6 +16,7 @@ import { Term } from '@/components/mdx/Term';
 import { Var } from '@/components/mdx/Var';
 import { FlowChart } from '@/components/widgets/CentralizedAuction';
 import { EdgeChallengeFlow } from '@/components/widgets/EdgeChallengeFlow';
+import { SolidityQuickstartWorkbench } from '@/components/widgets/SolidityWorkbench';
 import {
   ChecklistItem,
   ConfigGuidance,
@@ -42,6 +43,7 @@ export function getMDXComponents(components?: MDXComponents) {
       <ImageZoom {...(props as ImageZoomProps)} className={cn('rounded-lg', props.className)} />
     ),
     ReferenceList,
+    SolidityQuickstartWorkbench,
     Step,
     Steps,
     Tab,
