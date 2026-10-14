@@ -149,7 +149,7 @@ entries do not carry this contract.
   palette; never `--ifm-*`. Breakpoints are Tailwind's plus `nav-sm`. The navbar selectors depend on Fumadocs' header DOM. PostCSS
   config lives in `package.json`.
 - **Generated pages.** `content/docs/stylus/stylus-by-example/` and
-  `content/docs/run-a-node/nitro/cli-flags-reference.mdx`. Change their generators, not the pages.
+  `content/docs/run-a-node/reference/cli-flags-reference.mdx`. Change their generators, not the pages.
   The six `content/partials/_troubleshooting-*-partial.mdx` come from `content/faq/*.json`; edit them in Notion.
 
 Details for each are in [INTERNALS.md](INTERNALS.md).

@@ -6,7 +6,7 @@ sme: allan-gulley
 content_type: how-to
 ---
 
-When deploying an <Term id="arbitrum-chain">Arbitrum chain</Term> in [Rollup mode](/run-a-node/data-availability#rollup-mode), you can use a custom **ERC-20** token as the native gas token. This token is usable for <Term id="transaction">Transaction</Term> fees on that specific Arbitrum chain and reimbursing the [Batch Poster](/how-arbitrum-works/deep-dives/assertions) for data posted to Ethereum. An example would be an <Term id="L2">L2</Term> Rollup that uses **USDC** as its custom gas token but pays **ETH** to post data to <Term id="L1">L1</Term> Ethereum.
+When deploying an <Term id="arbitrum-chain">Arbitrum chain</Term> in [Rollup mode](/how-arbitrum-works/deep-dives/data-availability#rollup-mode), you can use a custom **ERC-20** token as the native gas token. This token is usable for <Term id="transaction">Transaction</Term> fees on that specific Arbitrum chain and reimbursing the [Batch Poster](/how-arbitrum-works/deep-dives/assertions) for data posted to Ethereum. An example would be an <Term id="L2">L2</Term> Rollup that uses **USDC** as its custom gas token but pays **ETH** to post data to <Term id="L1">L1</Term> Ethereum.
 
 Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-anytrust); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 

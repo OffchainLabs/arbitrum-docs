@@ -37,7 +37,7 @@ The rest of this series focuses on the second approach: running your own Arbitru
 
 When interacting with the Arbitrum network, users have the option to run either a full node or an <Term id="archive-node">archive node</Term>. There are distinct advantages to running an <Term id="arbitrum-full-node">Arbitrum full node</Term>. In this quick start, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each node type, users can make an informed decision based on their specific requirements and objectives.
 
-Beyond full and archive nodes, a Nitro node can take on other roles — <Term id="sequencer">sequencer</Term>, <Term id="batch-poster">batch poster</Term>, <Term id="validator">validator</Term>, or <Term id="feed-relay">feed relay</Term>—purely through configuration. For the flags that define each role and how to convert a node between roles, see [How to assign roles to a Nitro node](/run-a-node/assign-node-roles).
+Beyond full and archive nodes, a Nitro node can take on other roles — <Term id="sequencer">sequencer</Term>, <Term id="batch-poster">batch poster</Term>, <Term id="validator">validator</Term>, or <Term id="feed-relay">feed relay</Term>—purely through configuration. For the flags that define each role and how to convert a node between roles, see [How to assign roles to a Nitro node](/run-a-node/operation/assign-node-roles).
 
 ## Considerations for running an Arbitrum full node
 
@@ -65,7 +65,7 @@ If you are running a single node, there is no requirement to set up a feed relay
 
 Soon, feed endpoints will mandate compression using a custom dictionary. Therefore, if you plan to connect to a feed using anything other than a standard node, it is strongly advised to run a local feed relay. This local feed relay will ensure that you have access to an uncompressed feed by default, maintaining optimal performance and compatibility.
 
-For detailed instructions, read [how to run an Arbitrum feed relay](/run-a-node/run-feed-relay).
+For detailed instructions, read [how to run an Arbitrum feed relay](/run-a-node/data-availability/run-feed-relay).
 
 ## Support policy
 

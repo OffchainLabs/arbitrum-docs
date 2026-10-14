@@ -1,0 +1,12 @@
+{
+  "title": "Reference",
+  "pages": [
+    "cli-flags-reference",
+    "configuration-system",
+    "da-tools-reference",
+    "docker-and-cli-binaries",
+    "l1-ethereum-beacon-chain-rpc-providers",
+    "nitro-database-snapshots",
+    "..."
+  ]
+}

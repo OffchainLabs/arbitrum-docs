@@ -298,7 +298,7 @@ Work through the stages in order—each row's check assumes the previous rows pa
 
 <Callout type="warn" title="Historical data availability">
 
-Ethereum consensus nodes are required to serve blob data for only 4,096 epochs (≈18 days). Monitors that reconstruct old withdrawal history need archive access: an [archive beacon endpoint for historical blobs](/run-a-node/beacon-nodes-historical-blobs) to re-derive the chain from batch data, and an archive child chain node for the event logs that `constructOutboxProof` reads. On AnyTrust chains, the equivalent concern is the <Term id="data-availability-committee-dac">Data Availability Committee</Term>'s retention window. Claiming a confirmed withdrawal itself is unaffected—proofs are built from child chain logs, not blobs.
+Ethereum consensus nodes are required to serve blob data for only 4,096 epochs (≈18 days). Monitors that reconstruct old withdrawal history need archive access: an [archive beacon endpoint for historical blobs](/run-a-node/data-availability/beacon-nodes-historical-blobs) to re-derive the chain from batch data, and an archive child chain node for the event logs that `constructOutboxProof` reads. On AnyTrust chains, the equivalent concern is the <Term id="data-availability-committee-dac">Data Availability Committee</Term>'s retention window. Claiming a confirmed withdrawal itself is unaffected—proofs are built from child chain logs, not blobs.
 
 </Callout>
 

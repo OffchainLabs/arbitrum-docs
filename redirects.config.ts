@@ -52,7 +52,85 @@ export const redirects: Redirect[] = [
     destination: '/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
     permanent: true,
   },
+  {
+    source: '/run-a-node/data-availability',
+    destination: '/how-arbitrum-works/deep-dives/data-availability',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/build-nitro-locally',
+    destination: '/run-a-node/build-nitro-locally',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/beacon-nodes-historical-blobs',
+    destination: '/run-a-node/data-availability/beacon-nodes-historical-blobs',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/run-feed-relay',
+    destination: '/run-a-node/data-availability/run-feed-relay',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/assign-node-roles',
+    destination: '/run-a-node/operation/assign-node-roles',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
+    destination: '/run-a-node/operation/how-to-convert-databases-from-leveldb-to-pebble',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/migrate-state-and-history-from-classic',
+    destination: '/run-a-node/operation/migrate-state-and-history-from-classic',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/node-tuning-and-monitoring',
+    destination: '/run-a-node/operation/node-tuning-and-monitoring',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/cli-flags-reference',
+    destination: '/run-a-node/reference/cli-flags-reference',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/configuration-system',
+    destination: '/run-a-node/reference/configuration-system',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/da-tools-reference',
+    destination: '/run-a-node/reference/da-tools-reference',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/docker-and-cli-binaries',
+    destination: '/run-a-node/reference/docker-and-cli-binaries',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/l1-ethereum-beacon-chain-rpc-providers',
+    destination: '/run-a-node/reference/l1-ethereum-beacon-chain-rpc-providers',
+    permanent: true,
+  },
+  {
+    source: '/run-a-node/nitro/nitro-database-snapshots',
+    destination: '/run-a-node/reference/nitro-database-snapshots',
+    permanent: true,
+  },
   // AUTO-GENERATED REDIRECTS END
+
+  // The run-a-node restructure split the Nitro folder into Operation and Reference and removed
+  // its index page.
+  {
+    source: '/run-a-node/nitro',
+    destination: '/run-a-node',
+    permanent: true,
+  },
 
   // Docusaurus served the audit-report PDFs at content-hashed paths
   // (`/assets/files/<name>-<32 hex>.pdf`). The same files are in public/audit-reports/.
@@ -1122,7 +1200,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/how-arbitrum-works/data-availability',
-    destination: '/run-a-node/data-availability',
+    destination: '/how-arbitrum-works/deep-dives/data-availability',
     permanent: false,
   },
   {
@@ -2546,7 +2624,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/migration/state-migration',
-    destination: '/run-a-node/nitro/migrate-state-and-history-from-classic',
+    destination: '/run-a-node/operation/migrate-state-and-history-from-classic',
     permanent: false,
   },
   {
@@ -2556,7 +2634,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/node-running/build-nitro-locally',
-    destination: '/run-a-node/nitro/build-nitro-locally',
+    destination: '/run-a-node/build-nitro-locally',
     permanent: false,
   },
   {
@@ -2576,7 +2654,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/node-running/how-tos/build-nitro-locally',
-    destination: '/run-a-node/nitro/build-nitro-locally',
+    destination: '/run-a-node/build-nitro-locally',
     permanent: false,
   },
   {
@@ -2611,7 +2689,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/node-running/how-tos/migrate-state-and-history-from-classic',
-    destination: '/run-a-node/nitro/migrate-state-and-history-from-classic',
+    destination: '/run-a-node/operation/migrate-state-and-history-from-classic',
     permanent: false,
   },
   {
@@ -2631,7 +2709,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/node-running/how-tos/running-a-feed-relay',
-    destination: '/run-a-node/run-feed-relay',
+    destination: '/run-a-node/data-availability/run-feed-relay',
     permanent: false,
   },
   {
@@ -2701,7 +2779,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/node-running/reference/ethereum-beacon-rpc-providers',
-    destination: '/run-a-node/l1-ethereum-beacon-chain-rpc-providers',
+    destination: '/run-a-node/reference/l1-ethereum-beacon-chain-rpc-providers',
     permanent: false,
   },
   {
@@ -2716,7 +2794,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/node-running/running-a-feed-relay',
-    destination: '/run-a-node/run-feed-relay',
+    destination: '/run-a-node/data-availability/run-feed-relay',
     permanent: false,
   },
   {
@@ -2892,17 +2970,17 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/assign-node-roles',
-    destination: '/run-a-node/assign-node-roles',
+    destination: '/run-a-node/operation/assign-node-roles',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/beacon-nodes-historical-blobs',
-    destination: '/run-a-node/beacon-nodes-historical-blobs',
+    destination: '/run-a-node/data-availability/beacon-nodes-historical-blobs',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/data-availability',
-    destination: '/run-a-node/data-availability',
+    destination: '/how-arbitrum-works/deep-dives/data-availability',
     permanent: true,
   },
   {
@@ -2927,7 +3005,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
-    destination: '/run-a-node/l1-ethereum-beacon-chain-rpc-providers',
+    destination: '/run-a-node/reference/l1-ethereum-beacon-chain-rpc-providers',
     permanent: true,
   },
   {
@@ -2962,47 +3040,47 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/nitro/build-nitro-locally',
-    destination: '/run-a-node/nitro/build-nitro-locally',
+    destination: '/run-a-node/build-nitro-locally',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/nitro/cli-flags-reference',
-    destination: '/run-a-node/nitro/cli-flags-reference',
+    destination: '/run-a-node/reference/cli-flags-reference',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/nitro/configuration-system',
-    destination: '/run-a-node/nitro/configuration-system',
+    destination: '/run-a-node/reference/configuration-system',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/nitro/da-tools-reference',
-    destination: '/run-a-node/nitro/da-tools-reference',
+    destination: '/run-a-node/reference/da-tools-reference',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/nitro/docker-and-cli-binaries',
-    destination: '/run-a-node/nitro/docker-and-cli-binaries',
+    destination: '/run-a-node/reference/docker-and-cli-binaries',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
-    destination: '/run-a-node/nitro/how-to-convert-databases-from-leveldb-to-pebble',
+    destination: '/run-a-node/operation/how-to-convert-databases-from-leveldb-to-pebble',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
-    destination: '/run-a-node/nitro/migrate-state-and-history-from-classic',
+    destination: '/run-a-node/operation/migrate-state-and-history-from-classic',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/nitro/nitro-database-snapshots',
-    destination: '/run-a-node/nitro/nitro-database-snapshots',
+    destination: '/run-a-node/reference/nitro-database-snapshots',
     permanent: true,
   },
   {
     source: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-    destination: '/run-a-node/nitro/node-tuning-and-monitoring',
+    destination: '/run-a-node/operation/node-tuning-and-monitoring',
     permanent: true,
   },
   {
@@ -3022,7 +3100,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/run-feed-relay',
-    destination: '/run-a-node/run-feed-relay',
+    destination: '/run-a-node/data-availability/run-feed-relay',
     permanent: true,
   },
   {
@@ -3057,7 +3135,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/sequencer/run-feed-relay',
-    destination: '/run-a-node/run-feed-relay',
+    destination: '/run-a-node/data-availability/run-feed-relay',
     permanent: false,
   },
   {
