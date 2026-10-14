@@ -1,5 +1,6 @@
 'use client';
 
+import { HomeLayout as BaseHomeLayout, type HomeLayoutProps } from 'fumadocs-ui/layouts/home';
 import { type DocsLayoutProps, DocsLayout as Layout } from 'fumadocs-ui/layouts/notebook';
 import {
   FullSearchTrigger,
@@ -45,6 +46,46 @@ export function DocsLayout(props: DocsLayoutProps) {
       {/* Below md the navbar icon replaces it: a floating pill covers text while scrolling. */}
       <AIChatTrigger className="max-md:hidden" />
     </AIChatOpenProvider>
+  );
+}
+
+export function HomeLayout(props: HomeLayoutProps) {
+  return (
+    <AIChatOpenProvider>
+      <BaseHomeLayout
+        {...props}
+        slots={{ ...props.slots, searchTrigger: { sm: MobileTriggers, full: FullSearchTrigger } }}
+      />
+      <HomeChatPanel />
+      <AIChatTrigger className="max-md:hidden" />
+    </AIChatOpenProvider>
+  );
+}
+
+/**
+ * The home layout has no `aiChat` prop and fumadocs-ui does not export its panel, so this copies
+ * the panel's below-`xl` overlay classes (fumadocs-ui dist/layouts/shared/client.js AIChatPanel).
+ */
+function HomeChatPanel() {
+  const { open } = useAIChat();
+  const [loaded, setLoaded] = useState(false);
+  if (open && !loaded) setLoaded(true);
+
+  return (
+    <aside
+      className={cn(
+        'fixed inset-y-2 end-2 z-40 w-[min(25rem,calc(100vw-1rem))] overflow-clip rounded-2xl border bg-fd-card text-fd-card-foreground shadow-xl transition-[translate,visibility] duration-300 ease-in-out motion-reduce:transition-none',
+        !open && 'invisible translate-x-[calc(100%+0.5rem)] rtl:-translate-x-[calc(100%+0.5rem)]',
+      )}
+    >
+      <div className="flex size-full flex-col">
+        {loaded ? (
+          <PanelErrorBoundary>
+            <LazyPanel />
+          </PanelErrorBoundary>
+        ) : null}
+      </div>
+    </aside>
   );
 }
 
