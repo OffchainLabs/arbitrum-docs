@@ -118,7 +118,16 @@ The `transaction` object carries the transaction itself:
 | `tx_hash`      | string | Hex-encoded transaction hash                       |
 | `receipt`      | object | Execution result                                   |
 
-The receipt reports `status`, `gas_used`, `gas_used_for_l1`, `cumulative_gas_used`, `effective_gas_price`, `base_fee`, any `contract_address` the transaction created, and the event `logs` it emitted.
+What the receipt reports:
+
+- `status`
+- `gas_used`
+- `gas_used_for_l1`
+- `cumulative_gas_used`
+- `effective_gas_price`
+- `base_fee`
+- Any `contract_address` the transaction created
+- The event `logs` emitted by the transaction
 
 ## Reconnect after a drop
 
