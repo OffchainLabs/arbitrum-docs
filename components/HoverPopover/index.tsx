@@ -107,6 +107,7 @@ export function HoverPopover({
       {inLink ? (
         <span
           ref={linkedTriggerRef}
+          data-hover-popover=""
           className="border-b border-dotted border-fd-primary"
           {...getReferenceProps()}
         >
@@ -128,6 +129,7 @@ export function HoverPopover({
             <div
               ref={refs.setFloating}
               style={floatingStyles}
+              data-hover-popover-panel=""
               aria-labelledby={title ? titleId : undefined}
               className="z-9999 flex max-h-[60vh] max-w-[380px] flex-col overflow-hidden rounded-lg border bg-fd-popover text-fd-popover-foreground shadow-popover"
               {...getFloatingProps({
