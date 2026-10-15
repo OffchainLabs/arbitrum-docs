@@ -1,0 +1,92 @@
+---
+title: 'Upcoming changes to transaction submission'
+sidebar_label: 'Transaction submission changes'
+description: Upcoming changes to how eth_sendRawTransaction and eth_sendRawTransactionSync respond on Arbitrum chains, and what latency-sensitive teams need to do
+content_type: 'concept'
+author: pete-vielhaber
+sme: leeederek
+---
+
+<Term id="offchain-labs">Offchain</Term> is changing how two transaction submission methods respond on <Term id="arbitrum-chain">Arbitrum chains</Term>. After the change, `eth_sendRawTransaction` and `eth_sendRawTransactionSync` will both return sooner than they do today. The changes are not live yet. We are posting this notice now so you have time to prepare.
+
+<Callout type="warn" title="What this means for you">
+
+- If you treat an `eth_sendRawTransaction` response as “**received**” and confirm the result later, you don’t need to change anything. You will get the transaction hash sooner.
+- If you treat an `eth_sendRawTransaction` response as “**included**,” or you retry based on the errors it returns, switch to `eth_sendRawTransactionSync`.
+- If you need the `blockHash` in a receipt, keep polling `eth_getTransactionReceipt`.
+- The node you send transactions to must run an upgraded <Term id="arbitrum-nitro">Nitro</Term> version (version TBD). This applies to your own nodes and to third-party RPC providers.
+
+</Callout>
+
+## Context
+
+These changes are part of our work to optimize Arbitrum chains for decentralized finance (DeFi). They reduce the round-trip time to know when the <Term id="sequencer">sequencer</Term> receives or executes your transaction.
+
+These updates will help teams who rely on speed—like traders, DeFi app developers, market makers, arbitrageurs, and solvers. By letting you know your transaction status faster, you can act faster, whether that means making your next trade or filling an order sooner. Ultimately, this should help you use your capital more efficiently, reduce trade time, and create better pricing for everyone.
+
+## What’s changing
+
+| Method                       | Returns today                                               | Returns after the change                                                                         |
+| ---------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `eth_sendRawTransaction`     | After the transaction is received, executed, and in a block | When the transaction enters the sequencer's queue                                                |
+| `eth_sendRawTransactionSync` | The full receipt, after the block is built                  | A receipt as soon as the sequencer executes the transaction, with `blockHash` set to `0x000…000` |
+
+### `eth_sendRawTransaction` returns on admission to the queue
+
+`eth_sendRawTransaction` returns a response when the transaction enters the sequencer’s queue. It no longer waits for the sequencer to execute the transaction and include it in a block. This matches how the method behaves on other EVM chains, such as Ethereum, Base, Monad, and Polygon.
+
+The sequencer will complete prechecks before admitting a transaction. These errors still return synchronously, and sooner than today:
+
+- Nonce already used
+- Insufficient funds
+- Fee cap
+- Queue full
+
+A transaction that reverts still shows the revert in its receipt.
+
+<Callout type="warn" title="Some failed transactions no longer return an error">
+
+A transaction can pass the prechecks but still fail at block time. Examples are a nonce gap, a fee cap below the base fee, or a queue timeout. After the change, the sequencer drops these transactions without a receipt. `eth_sendRawTransaction` no longer returns an error for them.
+
+If your path depends on these inclusion-time errors, use `eth_sendRawTransactionSync` instead.
+
+</Callout>
+
+### `eth_sendRawTransactionSync` returns the receipt after execution
+
+`eth_sendRawTransactionSync` returns the transaction receipt as soon as the sequencer finishes executing the transaction. It no longer waits for the block to finish building. It returns sooner than `eth_sendRawTransactionSync` does today. It also returns sooner than `eth_sendRawTransaction` does today.
+
+`eth_sendRawTransactionSync` returns most of the same synchronous errors as today’s `eth_sendRawTransaction`. If you rely on those errors, you can switch to `eth_sendRawTransactionSync` without slower responses and without losing inclusion errors.
+
+#### This change has two trade-offs
+
+- The receipt has no block hash. The sequencer returns the receipt before the block exists, so `blockHash` is set to `0x000…000`. As a result, the method no longer complies with [EIP-7966](https://eips.ethereum.org/EIPS/eip-7966).
+- In rare cases, a receipt can be retracted. A block can still fail after the sequencer executes a transaction, for example because of a disk write error or a sequencer crash. To avoid these cases, or to get the `blockHash`, poll `eth_getTransactionReceipt` for the canonical receipt.
+
+## Who benefits
+
+| If you currently…                                                                                                                                               | After the change…                                                    | Action                                      |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------- |
+| Treat an `eth_sendRawTransaction` response as "received," then confirm through a receipt, the <Term id="sequencer-feed">sequencer feed</Term>, or a nonce check | You get the transaction hash sooner                                  | None                                        |
+| Treat an `eth_sendRawTransaction` response as "included," or retry based on its errors                                                                          | `eth_sendRawTransaction` no longer reports inclusion-time errors     | Switch to `eth_sendRawTransactionSync`      |
+| Poll `eth_getTransactionReceipt` and don't need the `blockHash`                                                                                                 | `eth_sendRawTransactionSync` returns the status and logs in one call | Switch to `eth_sendRawTransactionSync`      |
+| Submit user operations through the ZeroDev UltraRelay bundler                                                                                                   | You get user operation receipts sooner                               | None                                        |
+| Run custom logic or infrastructure to serve `eth_sendRawTransactionSync` calls                                                                                  | The Nitro node serves these calls natively                           | Upgrade Nitro, then retire the custom setup |
+| Need the canonical receipt with the `blockHash`                                                                                                                 | `eth_sendRawTransactionSync` returns a partial receipt               | Keep polling `eth_getTransactionReceipt`    |
+
+## Actions required for node operators
+
+The changes take effect only on nodes that run the upgraded Nitro version. The required version is not released yet. We will update this notice with the version, Docker image, and release notes.
+
+- If you run your own node, upgrade it to the required Nitro version when it ships.
+- If you use a third-party RPC provider, such as Alchemy, confirm that your provider has upgraded. Offchain is working with major RPC providers to upgrade their nodes and update their documentation.
+
+## Rollout
+
+The following table shows the rollout plan. We will add dates as each stage is scheduled.
+
+| Stage | What happens                                                                                        | Date |
+| ----- | --------------------------------------------------------------------------------------------------- | ---- |
+| Now   | We publish this notice. The team implements and tests the changes.                                  | TBD  |
+| Next  | We update the documentation, send announcements, and roll out to testnets such as Arbitrum Sepolia. | TBD  |
+| Later | We roll out to mainnets, including <Term id="arbitrum-one">Arbitrum One</Term>.                     | TBD  |
