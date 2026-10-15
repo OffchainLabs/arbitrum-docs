@@ -503,7 +503,7 @@ references. Every client component it reaches statically lands in every docs pag
 each widget sits behind `next/dynamic`, and why shared component styles live in `app/global.css`
 or as Tailwind utilities.
 
-`LinkPreview` is the one client module that every docs page carries. It reuses `@floating-ui/react`,
+`LinkPreview` is a small client module that every docs page carries. It reuses `@floating-ui/react`,
 which `HoverPopover` already ships. The preview JSON loads on hover only and is cached, so page
 weight does not grow with the number of links.
 

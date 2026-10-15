@@ -67,6 +67,13 @@ test('hovering a hash link shows that section', async () => {
 
 test('a Term inside a link keeps its own popover and gets no card', async () => {
   const page = await open(gethPath);
+  // A fetch of the ArbOS preview would mean the listener attached before the Term bail-out.
+  const previewRequests: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('/preview/how-arbitrum-works/deep-dives/arbos/preview.json')) {
+      previewRequests.push(request.url());
+    }
+  });
   try {
     const link = articleLink(page, 'ArbOS');
     await link.hover();
@@ -77,6 +84,7 @@ test('a Term inside a link keeps its own popover and gets no card', async () => 
       '[data-floating-ui-portal] div[style]:not([data-hover-popover-panel])',
     );
     assert.equal(await cards.count(), 0);
+    assert.deepEqual(previewRequests, []);
   } finally {
     await page.close();
   }

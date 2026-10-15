@@ -12,7 +12,7 @@ import {
   useHover,
   useInteractions,
 } from '@floating-ui/react';
-import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 
 import type { LinkPreview as LinkPreviewData } from '@/lib/link-preview';
 
@@ -68,7 +68,9 @@ export function LinkPreview({
   // `useHover` learns the pointer type from its reference props, which cannot be spread on the
   // server-rendered link. The listeners below forward the native events to them.
   const referenceProps = useRef(getReferenceProps());
-  referenceProps.current = getReferenceProps();
+  useLayoutEffect(() => {
+    referenceProps.current = getReferenceProps();
+  });
 
   useEffect(() => {
     const anchor = wrapperRef.current?.querySelector('a');
@@ -80,8 +82,8 @@ export function LinkPreview({
     refs.setReference(anchor);
     const onPointerEnter = (event: PointerEvent) => {
       (referenceProps.current.onPointerEnter as PointerHandler | undefined)?.(event);
-      // Start the fetch now so it overlaps the open delay.
-      void load(previewUrl).then(setData);
+      // Start the fetch now so it overlaps the open delay. A touch pointer never opens a card.
+      if (event.pointerType !== 'touch') void load(previewUrl).then(setData);
     };
     const onPointerDown = (event: PointerEvent) =>
       (referenceProps.current.onPointerDown as PointerHandler | undefined)?.(event);
@@ -118,7 +120,7 @@ export function LinkPreview({
             <a
               href={hash ? `${data.url}#${hash}` : data.url}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener"
               className="group block px-5 py-4 text-sm leading-[1.6]"
             >
               <PreviewBody data={data} hash={hash} />
@@ -132,7 +134,7 @@ export function LinkPreview({
 
 function PreviewBody({ data, hash }: { data: LinkPreviewData; hash?: string | undefined }) {
   const titleClass = 'font-semibold text-fd-foreground group-hover:underline';
-  const section = hash ? data.sections[hash] : undefined;
+  const section = hash && Object.hasOwn(data.sections, hash) ? data.sections[hash] : undefined;
   if (section) {
     return (
       <>

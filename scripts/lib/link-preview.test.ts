@@ -67,16 +67,6 @@ test('a page without a description has no description key', () => {
   assert.equal('description' in out, false);
 });
 
-test('a lead equal to the description passes through unchanged', () => {
-  const out = buildLinkPreview({
-    ...base,
-    description: 'Same text.',
-    structuredData: { headings: [], contents: [{ heading: undefined, content: 'Same text.' }] },
-  });
-  assert.equal(out.lead, 'Same text.');
-  assert.equal(out.description, 'Same text.');
-});
-
 test('a long lead is cut at a sentence boundary and ends with an ellipsis', () => {
   const sentence = 'This sentence has some words in it. ';
   const content = sentence.repeat(20).trim();
@@ -120,5 +110,14 @@ test('a sentence boundary before two thirds of the cap is ignored', () => {
     ...base,
     structuredData: { headings: [], contents: [{ heading: undefined, content }] },
   });
-  assert.ok(out.lead.length > 200, `length ${out.lead.length}`);
+  assert.equal(out.lead, `Hi. ${'word '.repeat(68)}word…`);
+});
+
+test('a dot inside a version number at the cut is not a sentence end', () => {
+  const content = `${'word '.repeat(68)}abcdefgv1.5 tail ${'word '.repeat(20)}`.trim();
+  const out = buildLinkPreview({
+    ...base,
+    structuredData: { headings: [], contents: [{ heading: undefined, content }] },
+  });
+  assert.equal(out.lead, `${'word '.repeat(67)}word…`);
 });

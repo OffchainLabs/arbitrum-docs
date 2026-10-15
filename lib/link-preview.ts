@@ -32,8 +32,12 @@ function clip(text: string, cap: number): string {
   const flat = text.replace(/\s+/g, ' ').trim();
   if (flat.length <= cap) return flat;
   const head = flat.slice(0, cap);
+  // Match on `flat`, not `head`: at the cut, `$` would turn the "." of "v1.5" into a sentence end.
   let sentenceEnd = -1;
-  for (const match of head.matchAll(SENTENCE_END)) sentenceEnd = match.index;
+  for (const match of flat.matchAll(SENTENCE_END)) {
+    if (match.index >= cap) break;
+    sentenceEnd = match.index;
+  }
   if (sentenceEnd >= (cap * 2) / 3) return `${head.slice(0, sentenceEnd + 1)}…`;
   const space = head.lastIndexOf(' ');
   return `${space > 0 ? head.slice(0, space) : head}…`;
@@ -43,7 +47,9 @@ export function buildLinkPreview(input: LinkPreviewInput): LinkPreview {
   const { title, description, url, structuredData } = input;
   const byHeading = new Map<string | undefined, string[]>();
   for (const { heading, content } of structuredData.contents) {
-    byHeading.set(heading, [...(byHeading.get(heading) ?? []), content]);
+    const items = byHeading.get(heading) ?? [];
+    items.push(content);
+    byHeading.set(heading, items);
   }
   const joined = (id: string | undefined): string =>
     clip((byHeading.get(id) ?? []).join(' '), CLIP_LENGTH);

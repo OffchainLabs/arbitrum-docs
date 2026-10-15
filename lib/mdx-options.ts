@@ -22,7 +22,7 @@ export const mdxOptions: DefaultMDXOptions = {
   // `structuredData` feeds the link previews (`lib/link-preview.ts`). Headings and paragraphs only,
   // so table cells, blockquote blocks and JSX blocks are not stored as units; a paragraph inside a
   // callout or list is still visited. Handlers keep the stored text prose: `text` bypasses
-  // markdown escaping, and emphasis and code lose their markers.
+  // markdown escaping, and emphasis, code and `$…$` maths lose their markers.
   remarkStructureOptions: {
     types: ['heading', 'paragraph'],
     stringify: {
@@ -30,6 +30,7 @@ export const mdxOptions: DefaultMDXOptions = {
       handlers: {
         text: (node) => node.value,
         inlineCode: (node) => node.value,
+        inlineMath: (node) => node.value,
         break: () => ' ',
         strong: (node, _parent, state, info) => state.containerPhrasing(node, info),
         emphasis: (node, _parent, state, info) => state.containerPhrasing(node, info),

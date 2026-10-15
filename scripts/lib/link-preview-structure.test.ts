@@ -7,6 +7,7 @@ import { remarkGfm, remarkHeading, remarkStructure } from 'fumadocs-core/mdx-plu
 import type { StructuredData } from 'fumadocs-core/mdx-plugins';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import remarkMath from 'remark-math';
 import { VFile } from 'vfile';
 
 import { createLlmsStringify } from '../../lib/llms-markdown.ts';
@@ -29,7 +30,7 @@ const options = {
 async function structure(source: string): Promise<StructuredData> {
   const file = new VFile({ value: source, path: 'fixture.mdx' });
   await createProcessor({
-    remarkPlugins: [remarkGfm, remarkHeading, [remarkStructure, options]],
+    remarkPlugins: [remarkMath, remarkGfm, remarkHeading, [remarkStructure, options]],
   }).process(file);
   return file.data.structuredData as StructuredData;
 }
@@ -86,5 +87,10 @@ test('a paragraph inside a Callout is included', async () => {
 
 test('a blockquote block is not stored as a unit', async () => {
   const data = await structure('> quoted words\n');
-  assert.ok(texts(data).every((t) => !t.startsWith('>')));
+  assert.deepEqual(texts(data), ['quoted words']);
+});
+
+test('inline maths reads as its source without the dollar signs', async () => {
+  const data = await structure('The value $x$ grows.\n');
+  assert.deepEqual(texts(data), ['The value x grows.']);
 });

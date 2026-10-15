@@ -73,7 +73,8 @@ export function getMDXComponents(components?: MDXComponents) {
       }
       // Hash-only and external hrefs do not start with `/`, so they never get a preview.
       const target = props.href?.startsWith('/') ? source.getPageByHref(props.href) : undefined;
-      if (!target) return <Link {...props}>{content}</Link>;
+      // `/` resolves to `content/docs/index.mdx`, which no route renders: the `(home)` page does.
+      if (!target || target.page.slugs.length === 0) return <Link {...props}>{content}</Link>;
       return (
         <LinkPreview
           previewUrl={getPagePreviewUrl(target.page).url}
