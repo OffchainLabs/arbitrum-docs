@@ -33,7 +33,7 @@ These updates will help teams who rely on speed, like traders, DeFi app develope
 | `eth_sendRawTransaction`     | The transaction hash, pre-check errors or inclusion errors after the transaction is received, executed, and in a block. | When the transaction enters the sequencer's queue or pre-check errors. Inclusion errors will no longer be returned.                           |
 | `eth_sendRawTransactionSync` | The full receipt, after the block is built, alongside any inclusion or precheck errors.                                 | A receipt as soon as the sequencer executes the transaction, with `blockHash` set to `0x000…000`, alongside any inclusion or precheck errors. |
 
-### `eth_sendRawTransaction` returns on admission to the queue
+### eth_sendRawTransaction returns on admission to the queue
 
 `eth_sendRawTransaction` returns a response when the transaction enters the sequencer’s queue. It no longer waits for the sequencer to execute the transaction and include it in a block. This matches how the method behaves on other EVM chains, such as Ethereum, Base, Monad, and Polygon.
 
@@ -76,7 +76,7 @@ If your path depends on these inclusion-time errors, use `eth_sendRawTransaction
 | Treat an `eth_sendRawTransaction` response as "included," or retry based on its errors                                                                          | You can no longer rely on `eth_sendRawTransaction` to report inclusion-time errors                                                                                          | Switch to `eth_sendRawTransactionSync`      |
 | Need the canonical receipt with the `blockHash`                                                                                                                 | You will no longer get the `blockHash` in the receipt from `eth_sendRawTransactionSync`                                                                                     | Keep polling `eth_getTransactionReceipt`    |
 
-<Callout type="warn" title="If you take no action`">
+<Callout type="warn" title="If you take no action">
 	
 You can still serve `eth_sendRawTransactionSync` calls but they will not benefit from being faster or match the expected behaviors above.
 
