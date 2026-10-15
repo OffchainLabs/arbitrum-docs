@@ -1,0 +1,14 @@
+{
+  "title": "Evaluate Arbitrum",
+  "icon": "ShieldCheck",
+  "description": "Guarantees, trust assumptions, operations and compliance controls for teams evaluating Arbitrum.",
+  "root": true,
+  "pages": [
+    "index",
+    "due-diligence-summary",
+    "threat-model",
+    "operational-assurance",
+    "compliance-controls",
+    "..."
+  ]
+}
