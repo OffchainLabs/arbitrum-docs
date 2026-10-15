@@ -72,7 +72,7 @@ If your path depends on these inclusion-time errors, use `eth_sendRawTransaction
 | Poll `eth_getTransactionReceipt` and don't need the `blockHash`                                                                                                 | `eth_sendRawTransactionSync` returns the status and logs in one call | Switch to `eth_sendRawTransactionSync`      |
 | Submit user operations through the ZeroDev UltraRelay bundler                                                                                                   | You get user operation receipts sooner                               | None                                        |
 | Run custom logic or infrastructure to serve `eth_sendRawTransactionSync` calls                                                                                  | The Nitro node serves these calls natively                           | Upgrade Nitro, then retire the custom setup |
-| Need the canonical receipt with the `blockHash`                                                                                                                 | `eth_sendRawTransactionSync` returns a partial receipt               | Keep polling `eth_getTransactionReceipt`    |
+| Need the canonical receipt with the `blockHash`                                                                                                                 | You will no longer get the `blockHash` in the receipt from `eth_sendRawTransactionSync`          | Keep polling `eth_getTransactionReceipt`    |
 
 ## Actions required for node operators
 
