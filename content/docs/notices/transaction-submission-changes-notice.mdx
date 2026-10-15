@@ -63,7 +63,7 @@ If your path depends on these inclusion-time errors, use `eth_sendRawTransaction
 #### Rare cases to be aware of
 
 - The receipt has no block hash. The sequencer returns the receipt before the block exists, so `blockHash` is set to `0x000…000`. As a result, the method no longer complies with [EIP-7966](https://eips.ethereum.org/EIPS/eip-7966). 
-  - This is the tradeoff: increased speed, but the `blockHash` is unavailable. There is a workaround: if you need the blockhash, retrieve the receipt by polling.
+  - This is the tradeoff: increased speed, but the `blockHash` is unavailable. There is a workaround: if you need the blockhash, retrieve the receipt by polling ([Arbitrum bridge transaction traceability](/arbitrum-bridge/bridge-transaction-traceability) and [Monitor withdrawals programmatically](/arbitrum-bridge/withdrawal-monitoring)).
 - In rare cases, a receipt can be retracted. A block can still fail after the sequencer executes a transaction, for example because of a disk write error or a sequencer crash. To avoid these cases, or to get the `blockHash`, poll `eth_getTransactionReceipt` for the canonical receipt.
 
 ## Who benefits
