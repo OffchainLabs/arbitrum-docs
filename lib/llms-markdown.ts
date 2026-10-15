@@ -29,11 +29,14 @@ import type { LLMsOptions } from 'fumadocs-core/mdx-plugins/remark-llms';
 
 import { readVars } from './var-links.ts';
 
-type Hook = NonNullable<LLMsOptions['stringify']>;
-type Node = Parameters<Hook>[0];
-type Parent = Parameters<Hook>[1];
-type State = Parameters<Hook>[2];
-type Info = Parameters<Hook>[3];
+type LlmsHook = NonNullable<LLMsOptions['stringify']>;
+type Node = Parameters<LlmsHook>[0];
+type Parent = Parameters<LlmsHook>[1];
+type State = Parameters<LlmsHook>[2];
+type Info = Parameters<LlmsHook>[3];
+// Four parameters, so one hook fits `remarkLLMs` and `remarkStructure`, whose fifth (context)
+// parameters differ.
+type Hook = (node: Node, parent: Parent, state: State, info: Info) => string | undefined;
 
 /** The slice of an `mdxJsxFlowElement` / `mdxJsxTextElement` this module reads. */
 interface JsxElement {
