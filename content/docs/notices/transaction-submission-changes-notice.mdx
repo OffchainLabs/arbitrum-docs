@@ -13,7 +13,7 @@ sme: leeederek
 
 - If you treat an `eth_sendRawTransaction` response as “**received**” and confirm the result later, you don’t need to change anything. You will get the transaction hash sooner.
 - If you treat an `eth_sendRawTransaction` response as “**included**,” or you retry based on the errors it returns, switch to `eth_sendRawTransactionSync`.
-- If you need the `blockHash` in a receipt, keep polling `eth_getTransactionReceipt`.
+- `eth_sendRawTransactionSync` will return sooner than it does today, but will no longer return the `blockHash` in the receipt (it will be `0x000...000` instead). If you need the `blockHash` in a receipt, continue polling `eth_getTransactionReceipt` from your own node or from a third-party RPC provider.
 - The node you send transactions to must run an upgraded <Term id="arbitrum-nitro">Nitro</Term> version (version TBD). This applies to your own nodes and to third-party RPC providers.
 
 </Callout>
