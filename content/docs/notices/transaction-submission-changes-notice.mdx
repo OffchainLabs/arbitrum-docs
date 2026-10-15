@@ -54,7 +54,7 @@ If your path depends on these inclusion-time errors, use `eth_sendRawTransaction
 
 ### `eth_sendRawTransactionSync` returns the receipt after execution
 
-`eth_sendRawTransactionSync` returns the transaction receipt as soon as the sequencer finishes executing the transaction. It no longer waits for the block to finish building. It returns sooner than `eth_sendRawTransactionSync` does today. It also returns sooner than `eth_sendRawTransaction` does today.
+`eth_sendRawTransactionSync` returns the transaction receipt as soon as the sequencer finishes executing the transaction. It no longer waits for the block to finish building. It returns sooner than `eth_sendRawTransactionSync` does today at the same time as `eth_sendRawTransaction` would today.
 
 `eth_sendRawTransactionSync` returns most of the same synchronous errors as today’s `eth_sendRawTransaction`. If you rely on those errors, you can switch to `eth_sendRawTransactionSync` without slower responses and without losing inclusion errors.
 
