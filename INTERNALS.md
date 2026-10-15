@@ -434,7 +434,7 @@ and closes on leave or Esc. It is one anchor that opens the previewed page, with
 new tab. Touch and `(hover: none)` devices get no card. A link that wraps a `<Term>` keeps the Term
 popover and gets no card, and a link inside a glossary definition gets none either (the component
 checks for the `data-hover-popover` and `data-hover-popover-panel` attributes that
-`components/HoverPopover` sets). The card shows the page title, description and lead. For a
+`components/HoverPopover` sets). The card shows the page title and lead. For a
 `#section` link it shows the section heading and its text, with the page title as a caption.
 
 The data is `page.data.structuredData`, which `remarkStructureOptions` in `lib/mdx-options.ts`
@@ -444,7 +444,7 @@ heading) and `sections` (the text under each heading id), each clipped to 350 ch
 `app/preview/[...slug]/route.ts` prerenders it at `/preview/<slug>/preview.json`; any other path
 404s. The component fetches the JSON on the first hover and caches the promise in memory for the
 session. A 404 or a failed fetch caches as no card. A page that opens with a heading has an empty
-`lead`, so its card shows the title and description. Tables and code never contribute text, so an
+`lead`, so its card shows only the title. Tables and code never contribute text, so an
 excerpt can end on a colon.
 
 ### Image captions

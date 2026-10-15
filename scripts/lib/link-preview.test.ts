@@ -9,7 +9,6 @@ const base = { title: 'Gas', url: '/gas' };
 test('lead joins the paragraphs that come before the first heading', () => {
   const out = buildLinkPreview({
     ...base,
-    description: 'About gas.',
     structuredData: {
       headings: [{ id: 'fees', content: 'Fees' }],
       contents: [
@@ -22,7 +21,6 @@ test('lead joins the paragraphs that come before the first heading', () => {
   assert.equal(out.lead, 'First. Second.');
   assert.equal(out.title, 'Gas');
   assert.equal(out.url, '/gas');
-  assert.equal(out.description, 'About gas.');
 });
 
 test('sections are keyed by heading id and carry the heading text', () => {
@@ -50,21 +48,6 @@ test('a page with no contents has an empty lead and no sections', () => {
   const out = buildLinkPreview({ ...base, structuredData: { headings: [], contents: [] } });
   assert.equal(out.lead, '');
   assert.deepEqual(out.sections, {});
-});
-
-test('a page with a description only keeps the description', () => {
-  const out = buildLinkPreview({
-    ...base,
-    description: 'Only this.',
-    structuredData: { headings: [], contents: [] },
-  });
-  assert.equal(out.description, 'Only this.');
-  assert.equal(out.lead, '');
-});
-
-test('a page without a description has no description key', () => {
-  const out = buildLinkPreview({ ...base, structuredData: { headings: [], contents: [] } });
-  assert.equal('description' in out, false);
 });
 
 test('a long lead is cut at a sentence boundary and ends with an ellipsis', () => {

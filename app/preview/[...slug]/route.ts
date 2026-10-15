@@ -16,7 +16,6 @@ export async function GET(_req: Request, { params }: RouteContext<'/preview/[...
   return Response.json(
     buildLinkPreview({
       title: page.data.title,
-      description: page.data.description,
       url: page.url,
       structuredData: page.data.structuredData,
     }),

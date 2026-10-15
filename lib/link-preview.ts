@@ -6,14 +6,12 @@ import type { StructuredData } from 'fumadocs-core/mdx-plugins';
 
 export interface LinkPreviewInput {
   title: string;
-  description?: string | undefined;
   url: string;
   structuredData: StructuredData;
 }
 
 export interface LinkPreview {
   title: string;
-  description?: string;
   url: string;
   /** The text before the page's first heading. */
   lead: string;
@@ -44,7 +42,7 @@ function clip(text: string, cap: number): string {
 }
 
 export function buildLinkPreview(input: LinkPreviewInput): LinkPreview {
-  const { title, description, url, structuredData } = input;
+  const { title, url, structuredData } = input;
   const byHeading = new Map<string | undefined, string[]>();
   for (const { heading, content } of structuredData.contents) {
     const items = byHeading.get(heading) ?? [];
@@ -58,11 +56,5 @@ export function buildLinkPreview(input: LinkPreviewInput): LinkPreview {
   for (const { id, content } of structuredData.headings) {
     sections[id] = { heading: content, text: joined(id) };
   }
-  return {
-    title,
-    ...(description === undefined ? {} : { description }),
-    url,
-    lead: joined(undefined),
-    sections,
-  };
+  return { title, url, lead: joined(undefined), sections };
 }
