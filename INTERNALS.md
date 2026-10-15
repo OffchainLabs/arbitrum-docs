@@ -434,7 +434,10 @@ and closes on leave or Esc. It is one anchor that opens the previewed page, with
 new tab. Touch and `(hover: none)` devices get no card. A link that wraps a `<Term>` keeps the Term
 popover and gets no card, and a link inside a glossary definition gets none either (the component
 checks for the `data-hover-popover` and `data-hover-popover-panel` attributes that
-`components/HoverPopover` sets). The card shows the page title and lead. For a
+`components/HoverPopover` sets). The two cards share a panel but differ on purpose: the Term card
+has a left accent and a "Glossary" kicker and is a reading surface; the preview card has a
+"Preview" kicker with an arrow, its title in the link colour, and a hover tint, because the whole
+card is a link. The card shows the page title and lead. For a
 `#section` link it shows the section heading and its text, with the page title as a caption.
 
 The data is `page.data.structuredData`, which `remarkStructureOptions` in `lib/mdx-options.ts`

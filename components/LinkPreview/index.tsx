@@ -12,6 +12,7 @@ import {
   useHover,
   useInteractions,
 } from '@floating-ui/react';
+import { ArrowUpRight } from 'lucide-react';
 import { type ReactNode, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 
 import type { LinkPreview as LinkPreviewData } from '@/lib/link-preview';
@@ -117,12 +118,18 @@ export function LinkPreview({
             {...getFloatingProps()}
             className="z-9999 max-w-[380px] rounded-lg border bg-fd-popover text-fd-popover-foreground shadow-popover"
           >
+            {/* The whole card is the link, so it takes the hover cues a prose link has: the title
+                in the link colour, an underline and a tint on hover. The Term card has none. */}
             <a
               href={hash ? `${data.url}#${hash}` : data.url}
               target="_blank"
               rel="noopener"
-              className="group block px-5 py-4 text-sm leading-[1.6]"
+              className="group block rounded-lg px-5 py-4 text-sm leading-[1.6] transition-colors duration-200 hover:bg-fd-accent"
             >
+              <span className="mb-2 flex items-center justify-between text-[0.6875rem] font-medium tracking-[0.08em] text-fd-muted-foreground uppercase">
+                Preview
+                <ArrowUpRight className="size-3.5" aria-hidden="true" />
+              </span>
               <PreviewBody data={data} hash={hash} />
             </a>
           </div>
@@ -133,7 +140,8 @@ export function LinkPreview({
 }
 
 function PreviewBody({ data, hash }: { data: LinkPreviewData; hash?: string | undefined }) {
-  const titleClass = 'font-semibold text-fd-foreground group-hover:underline';
+  const titleClass =
+    'font-semibold text-fd-primary decoration-2 underline-offset-4 group-hover:underline';
   const section = hash && Object.hasOwn(data.sections, hash) ? data.sections[hash] : undefined;
   if (section) {
     return (

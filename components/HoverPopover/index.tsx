@@ -36,10 +36,13 @@ export function HoverPopover({
   children,
   content,
   title,
+  label,
 }: {
   children: ReactNode;
   content: ReactNode;
   title?: string;
+  /** A kicker above the title naming the kind of content, such as "Glossary". */
+  label?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const inLink = useInLink();
@@ -131,7 +134,9 @@ export function HoverPopover({
               style={floatingStyles}
               data-hover-popover-panel=""
               aria-labelledby={title ? titleId : undefined}
-              className="z-9999 flex max-h-[60vh] max-w-[380px] flex-col overflow-hidden rounded-lg border bg-fd-popover text-fd-popover-foreground shadow-popover"
+              // The left accent and the kicker tell it apart from the LinkPreview card, which is
+              // itself a link and carries the link colour and hover cues instead.
+              className="z-9999 flex max-h-[60vh] max-w-[380px] flex-col overflow-hidden rounded-lg border border-l-2 border-l-fd-primary bg-fd-popover text-fd-popover-foreground shadow-popover"
               {...getFloatingProps({
                 // React bubbles events out of a portal through the component tree, so without this a
                 // click in the definition reaches an enclosing link and navigates to its href.
@@ -140,6 +145,11 @@ export function HoverPopover({
             >
               {/* Portaled outside `.prose`, so links restate the prose link treatment. */}
               <div className="flex-1 overflow-y-auto px-5 py-4 leading-[1.6] [&_a]:font-medium [&_a]:underline [&_a]:decoration-fd-primary [&_a]:decoration-2 [&_a]:underline-offset-4 [&_a]:transition-colors [&_a]:duration-200 [&_a:hover]:text-fd-primary [&_a:hover]:decoration-current [&>:last-child]:mb-0">
+                {label && (
+                  <p className="mb-2 text-[0.6875rem] font-medium tracking-[0.08em] text-fd-muted-foreground uppercase">
+                    {label}
+                  </p>
+                )}
                 {title && (
                   <p id={titleId} className="mb-2 text-[1rem] font-semibold text-fd-foreground">
                     {title}
