@@ -86,8 +86,8 @@ const green = { light: '#1a7f37', dark: '#3fb950' };
 const warning = {
   light: '#c2410c',
   dark: '#fb923c',
-  border: { light: '#d29922', dark: '#f28c28' },
-  fill: { light: '#fff1e0', dark: '#2e1a05' },
+  border: { light: '#f28c28', dark: '#f28c28' },
+  fill: { light: '#d29922', dark: '#2e1a05' },
 };
 
 /** Keyed by every type Fumadocs accepts, so pages written for Fumadocs' Callout keep working. */
