@@ -428,6 +428,28 @@ The registry also overrides `a`: an internal link ending in `.pdf` renders as a 
 Next's `<Link>` does not prefetch the file. Every other link goes through Fumadocs' relative-link
 resolver.
 
+An internal link that `source.getPageByHref` resolves is wrapped in `components/LinkPreview`, a
+hover card in the style of Wikipedia's page previews. The card opens on mouse hover after 400 ms
+and closes on leave or Esc. It is one anchor that opens the previewed page, with its `#hash`, in a
+new tab. Touch and `(hover: none)` devices get no card. A link that wraps a `<Term>` keeps the Term
+popover and gets no card, and a link inside a glossary definition gets none either (the component
+checks for the `data-hover-popover` and `data-hover-popover-panel` attributes that
+`components/HoverPopover` sets). The two cards share a panel but differ on purpose: the Term card
+has a left accent and a "Glossary" kicker and is a reading surface; the preview card has a
+"Preview" kicker with an arrow, its title in the link colour, and a hover tint, because the whole
+card is a link. The card shows the page title and lead. For a
+`#section` link it shows the section heading and its text, with the page title as a caption.
+
+The data is `page.data.structuredData`, which `remarkStructureOptions` in `lib/mdx-options.ts`
+limits to headings and paragraphs and stringifies to plain text with the `lib/llms-markdown.ts`
+hook. `lib/link-preview.ts` turns it into one JSON per page: `lead` (the text before the first
+heading) and `sections` (the text under each heading id), each clipped to 350 characters.
+`app/preview/[...slug]/route.ts` prerenders it at `/preview/<slug>/preview.json`; any other path
+404s. The component fetches the JSON on the first hover and caches the promise in memory for the
+session. A 404 or a failed fetch caches as no card. A page that opens with a heading has an empty
+`lead`, so its card shows only the title. Tables and code never contribute text, so an
+excerpt can end on a colon.
+
 ### Image captions
 
 Fumadocs' `ImageZoom` has no caption prop: its props are the image props plus `zoomInProps` and
@@ -483,6 +505,10 @@ references. Every client component it reaches statically lands in every docs pag
 `.css` file one of them imports becomes a render-blocking stylesheet on all of them. That is why
 each widget sits behind `next/dynamic`, and why shared component styles live in `app/global.css`
 or as Tailwind utilities.
+
+`LinkPreview` is a small client module that every docs page carries. It reuses `@floating-ui/react`,
+which `HoverPopover` already ships. The preview JSON loads on hover only and is cached, so page
+weight does not grow with the number of links.
 
 A docs page loads three stylesheets. Check after any component change:
 
@@ -720,6 +746,9 @@ an explorer link, `<ImageZoom>` a markdown image, and a self-closing widget noth
 touched, an unknown `<Var>` keeps its tag so the typo stays visible, and the rendered page is
 unaffected because it compiles from the same tree. The HTTP smoke suite asserts that no component
 tag reaches `/llms-full.txt` or a mirror outside code.
+
+`/preview/<slug>/preview.json` is a third machine endpoint. It is static, `proxy.ts` does not track
+it, and `lib/http-headers.ts` gives it no CORS header.
 
 ### Response headers
 

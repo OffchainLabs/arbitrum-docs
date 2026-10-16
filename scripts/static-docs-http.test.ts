@@ -425,6 +425,28 @@ test('the llms index and the mirror route', { skip: !baseUrl }, async (t) => {
   });
 });
 
+test('the link-preview route', { skip: !baseUrl }, async (t) => {
+  await t.test('a page preview is JSON with its title and sections', async () => {
+    const response = await get(`/preview${livePath}/preview.json`);
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get('content-type') ?? '', /application\/json/);
+    const body = (await response.json()) as {
+      title: string;
+      sections: Record<string, { heading: string }>;
+    };
+    assert.equal(body.title, 'Prepare to run a node');
+    assert.equal(body.sections.prerequisites?.heading, 'Prerequisites');
+  });
+
+  await t.test('the preview route 404s for paths it did not prerender', async () => {
+    for (const path of ['/preview/zz-junk/preview.json', `/preview${livePath}/other.json`]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
+  });
+});
+
 test('page weight', { skip: !baseUrl }, async (t) => {
   await t.test('a plain docs page links exactly three stylesheets', async () => {
     // INTERNALS.md#page-weight-and-what-loads-late: a plain `.css` import in a component that

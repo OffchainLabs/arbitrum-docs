@@ -117,6 +117,7 @@ the render. Type checking passes on a page that serves literal `:::` or
 | `content/vars.json`     | Global variables                                           |
 | `app/(docs)/[...slug]/` | Docs route                                                 |
 | `components/mdx.tsx`    | The MDX component registry                                 |
+| `app/preview/`          | Static JSON behind the hover link previews                 |
 | `components/widgets/`   | The four interactive widgets, each used by one page        |
 | `lib/source.ts`         | Fumadocs source adapter                                    |
 | `proxy.ts`              | PostHog tracking for markdown and `llms*.txt` fetches      |
