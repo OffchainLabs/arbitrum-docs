@@ -29,11 +29,11 @@ The Fast Feed admits one WebSocket connection per ticket, and a ticket is valid 
 
 ## Addresses and endpoints
 
-| Item               | Arbitrum One                                                                 |
-| ------------------ | ---------------------------------------------------------------------------- |
-| Fast Feed endpoint | `wss://arb1-txfeed.arbitrum.io/`                                             |
-| `Tickets` (proxy)  | <AEL address="0x451DD62C26b753d07d6104aaC6865AaE73a6A598" chainID={42161} /> |
-| USDG payment token | <AEL address="0x004B506865409877C9fA29bfb1ebA929984B9bbC" chainID={42161} /> |
+| Item               | Arbitrum One                                                                       | Arbitrum Sepolia                                                                                |
+| ------------------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Fast Feed endpoint | `wss://arb1-txfeed.arbitrum.io/`                                                   | `wss://sepolia-rollup-txfeed.arbitrum.io`                                                       |
+| `Tickets` (proxy)  | <AEL address="0x451DD62C26b753d07d6104aaC6865AaE73a6A598" chainID={42161} />       | <AEL address="0x6f940179448e0a1C7BD8cfCB787555eb85cFC879" chainID={421614} />                   |
+| Payment token      | USDG: <AEL address="0x004B506865409877C9fA29bfb1ebA929984B9bbC" chainID={42161} /> | TestToken (TEST): <AEL address="0xca202b90454Db321256Cd84531Dd4929561d1e00" chainID={421614} /> |
 
 USDG has 6 decimals, so the 17 USD minimum price is `17000000` in the token's smallest unit. The first round started on September 23, 2026 at 17:00 UTC.
 
@@ -44,6 +44,16 @@ export FEED_URL=wss://arb1-txfeed.arbitrum.io/
 export TICKETS=0x451DD62C26b753d07d6104aaC6865AaE73a6A598
 export USDG=0x004B506865409877C9fA29bfb1ebA929984B9bbC
 ```
+
+To test on Arbitrum Sepolia, export the Sepolia values instead. `$USDG` then holds the TestToken (TEST) address, so the commands in this guide work without changes:
+
+```shell
+export FEED_URL=wss://sepolia-rollup-txfeed.arbitrum.io
+export TICKETS=0x6f940179448e0a1C7BD8cfCB787555eb85cFC879
+export USDG=0xca202b90454Db321256Cd84531Dd4929561d1e00
+```
+
+On Arbitrum Sepolia, a round lasts 10 minutes. TEST has 6 decimals and the minimum price is `17000000`, as on Arbitrum One. TEST is minted on request.
 
 ## Step 1: Generate an API key and its hash
 
