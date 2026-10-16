@@ -6,10 +6,13 @@
  * `content:lint` rule `var-in-link` reports the tag and names this placeholder as the fix. The
  * `var:` prefix keeps a placeholder distinct from a path template like `…/{chainId}/…`, so
  * `vars:check` can be strict about an unknown name; the plugin leaves one in place rather than
- * throwing, so a typo reaches the page visibly instead of taking the site down. Import-free apart
- * from `node:fs` and `node:url`, so scripts import it under `node --test`; node types are local
- * because the `mdast` type packages are transitive dependencies only.
+ * throwing, so a typo reaches the page visibly instead of taking the site down. The markdown
+ * mirrors are sliced from the authored source, so a rewritten `url` is also recorded with
+ * `replaceSource` (`lib/llms-markdown.ts` explains the mechanism). Import-free apart from
+ * `node:fs`, `node:url` and that stringifier, so scripts import it under `node --test`; node types
+ * are local because the `mdast` type packages are transitive dependencies only.
  */
+import { replaceSource } from 'fumadocs-core/mdx-plugins/stringifier';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -28,9 +31,15 @@ export interface VarLinksNode {
   type: string;
   url?: string;
   title?: string | null;
+  alt?: string | null;
+  label?: string | null;
+  identifier?: string;
   attributes?: VarLinksAttribute[];
   children?: VarLinksNode[];
 }
+
+type SourceFile = Parameters<typeof replaceSource>[0];
+type SourceNode = Parameters<typeof replaceSource>[1];
 
 export interface RemarkVarLinksOptions {
   /** Values to substitute. Without them, the plugin reads `varsPath` on every compile. */
@@ -51,7 +60,7 @@ export interface VarLinksFile {
 }
 
 /** The fumadocs-mdx loader hook on `file.data`, when the file is compiled by fumadocs-mdx. */
-function compilerOf(file?: VarLinksFile): { addDependency(path: string): void } | undefined {
+export function compilerOf(file?: VarLinksFile): { addDependency(path: string): void } | undefined {
   return (file?.data as { _compiler?: { addDependency(path: string): void } } | undefined)
     ?._compiler;
 }
@@ -60,7 +69,7 @@ function compilerOf(file?: VarLinksFile): { addDependency(path: string): void } 
  * `content/vars.json`, resolved from this file since `source.config.ts` and `check-links` run from
  * different places.
  */
-const VARS_PATH = fileURLToPath(new URL('../content/vars.json', import.meta.url));
+export const VARS_PATH: string = fileURLToPath(new URL('../content/vars.json', import.meta.url));
 
 /** A `{var:name}` placeholder; the name is an identifier, so plain braces in a URL stay put. */
 export const VAR_PLACEHOLDER: RegExp = /\{var:([A-Za-z_]\w*)\}/g;
@@ -106,8 +115,13 @@ export function remarkVarLinks({ vars, varsPath = VARS_PATH }: RemarkVarLinksOpt
     if (vars === undefined) compilerOf(file)?.addDependency(varsPath);
     walkTree(tree, (node) => {
       if (node?.type === 'link' || node?.type === 'definition' || node?.type === 'image') {
-        node.url = expandVarPlaceholders(node.url, values);
-        node.title = expandVarPlaceholders(node.title, values);
+        const url = expandVarPlaceholders(node.url, values);
+        const title = expandVarPlaceholders(node.title, values);
+        if (url === node.url && title === node.title) return;
+        node.url = url;
+        node.title = title;
+        // The mirror prints the authored text unless told otherwise.
+        if (file) replaceSource(file as SourceFile, node as SourceNode, markdownOf(node));
         return;
       }
       if (node?.type !== 'mdxJsxFlowElement' && node?.type !== 'mdxJsxTextElement') return;
@@ -120,6 +134,14 @@ export function remarkVarLinks({ vars, varsPath = VARS_PATH }: RemarkVarLinksOpt
       }
     });
   };
+}
+
+/** The rewritten node as markdown; a link keeps the edits inside its text. */
+function markdownOf(node: VarLinksNode): Parameters<typeof replaceSource>[2] {
+  const target = node.title ? `${node.url} "${node.title}"` : `${node.url}`;
+  if (node.type === 'image') return `![${node.alt ?? ''}](${target})`;
+  if (node.type === 'definition') return `[${node.label ?? node.identifier}]: ${target}`;
+  return (s) => `[${s.inner(node as SourceNode)}](${target})`;
 }
 
 /**

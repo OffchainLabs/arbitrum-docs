@@ -166,6 +166,7 @@ test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => 
     assert.equal(body.includes('{/*'), false, `${path} still serves an MDX comment`);
     const leak = prose(body).match(COMPONENT_TAG)?.[0];
     assert.equal(leak, undefined, `${path} still serves the component tag ${leak}`);
+    assert.equal(prose(body).includes('{var:'), false, `${path} still serves a {var:} placeholder`);
   };
 
   await t.test('a page mirror is clean and still carries its prose', async () => {
