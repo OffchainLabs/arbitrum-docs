@@ -1,8 +1,11 @@
+import { createProcessor } from '@mdx-js/mdx';
+import { remarkLLMs } from 'fumadocs-core/mdx-plugins/remark-llms';
 import assert from 'node:assert/strict';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
+import { VFile } from 'vfile';
 
 import {
   MALFORMED_VAR_PLACEHOLDER,
@@ -207,6 +210,30 @@ test('remarkVarLinks rewrites an image destination', () => {
     children: [{ type: 'image', url: 'https://x/{var:nitroVersionTag}/i.png', alt: 'a' }],
   };
   assert.equal(run(tree).children[0].url, 'https://x/v3.11.3/i.png');
+});
+
+test('the markdown mirror prints the expanded destination, not the placeholder', async () => {
+  // `remarkLLMs` slices the authored source, so a rewritten `node.url` alone would leave the
+  // placeholder in the mirror; the plugin has to record the edit with `replaceSource`.
+  const file = new VFile({
+    value:
+      'See [the file](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/x.go).\n',
+    path: 'test.mdx',
+  });
+  await createProcessor({
+    outputFormat: 'program',
+    format: 'mdx',
+    remarkPlugins: [
+      [remarkVarLinks, { vars: VARS }],
+      [remarkLLMs, { _data: true }],
+    ],
+  }).process(file);
+  const out = String(file.data.markdown);
+  assert.match(
+    out,
+    /\[the file\]\(https:\/\/github\.com\/OffchainLabs\/nitro\/blob\/v3\.11\.3\/x\.go\)/,
+  );
+  assert.equal(out.includes('{var:'), false);
 });
 
 test('remarkVarLinks rewrites a link title, and leaves a link without one untouched', () => {
