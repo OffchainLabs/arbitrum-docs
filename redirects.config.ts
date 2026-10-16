@@ -52,6 +52,11 @@ export const redirects: Redirect[] = [
     destination: '/launch-arbitrum-chain/run-a-node/high-availability-sequencer',
     permanent: true,
   },
+  {
+    source: '/run-a-node/nitro/node-tuning-and-monitoring',
+    destination: '/run-a-node/nitro/node-tuning',
+    permanent: true,
+  },
   // AUTO-GENERATED REDIRECTS END
 
   // Docusaurus served the audit-report PDFs at content-hashed paths
@@ -3002,7 +3007,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
-    destination: '/run-a-node/nitro/node-tuning-and-monitoring',
+    destination: '/run-a-node/nitro/node-tuning',
     permanent: true,
   },
   {
