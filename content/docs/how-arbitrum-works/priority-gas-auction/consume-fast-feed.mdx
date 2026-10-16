@@ -1,0 +1,155 @@
+---
+title: 'How to consume the Fast Feed'
+sidebar_label: 'Consume the Fast Feed'
+description: 'Open an authenticated WebSocket to the Fast Feed on Arbitrum One, read the fields of each message, reconnect after a drop, and troubleshoot rejected or closed connections.'
+author: anegg0
+sme: gligneul
+content_type: how-to
+---
+
+This guide shows you how to connect to the <Term id="fast-feed">Fast Feed</Term> on <Term id="arbitrum-one">Arbitrum One</Term> and read the messages it publishes. To buy the ticket that admits your connection, follow [how to buy Fast Feed access](/how-arbitrum-works/priority-gas-auction/use-fast-feed) first.
+
+## Prerequisites
+
+- An API key bound to an active ticket. [How to buy Fast Feed access](/how-arbitrum-works/priority-gas-auction/use-fast-feed) shows how to generate the key and buy the ticket.
+- The Fast Feed endpoint for your network, from [addresses and endpoints](/how-arbitrum-works/priority-gas-auction/use-fast-feed#addresses-and-endpoints). The examples read it from `$FEED_URL` and the raw key from `$API_KEY`.
+- A WebSocket client. The examples use [wscat](https://github.com/websockets/wscat) or [websocat](https://github.com/vi/websocat) on the command line, the `ws` package for Node.js, and the `websockets` package for Python.
+
+## Connect
+
+Once the round in which you bought has ended, open a WebSocket to the Fast Feed endpoint and send your raw API key, not its hash, as a bearer token in the `Authorization` header of the upgrade request:
+
+```text
+Authorization: Bearer <your-api-key>
+```
+
+The endpoint hashes the key with Keccak-256, compares it against the active tickets, and only then completes the upgrade. Messages start flowing at once. You open one connection per ticket, and each connection receives the full feed. Three rules apply to every client:
+
+- Complete the upgrade within 5 seconds, or the endpoint drops the socket.
+- Send only ping and pong frames.
+- Read as fast as the feed arrives. The endpoint drops a client that lags behind, so parse and process off the read loop.
+
+Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](#what-the-fast-feed-publishes) section lists every field.
+
+<Tabs groupId="ws-client" items={["Command line", "Node.js", "Python"]}>
+<Tab value="Command line">
+
+```shell
+wscat -c "$FEED_URL" -H "Authorization: Bearer $API_KEY"
+```
+
+</Tab>
+<Tab value="Node.js">
+
+```typescript
+import WebSocket from 'ws';
+
+const ws = new WebSocket(process.env.FEED_URL, {
+  headers: { Authorization: `Bearer ${process.env.API_KEY}` },
+});
+
+ws.on('unexpected-response', (req, res) => {
+  // 401: unknown key or no active ticket. 429: every ticket already has a connection.
+  console.error(`Rejected: HTTP ${res.statusCode}`);
+  req.destroy(); // with a listener attached, ws leaves the request open
+});
+
+ws.on('message', (data) => {
+  const msg = JSON.parse(data.toString());
+  // msg.pga_round, msg.transaction.tx_hash, msg.transaction.receipt, ...
+});
+
+ws.on('close', (code, reason) => {
+  console.log('closed', code, reason.toString());
+});
+```
+
+</Tab>
+<Tab value="Python">
+
+```python
+import asyncio
+import json
+import os
+
+import websockets
+
+
+async def main():
+    headers = {"Authorization": f"Bearer {os.environ['API_KEY']}"}
+    try:
+        async with websockets.connect(os.environ["FEED_URL"], additional_headers=headers) as ws:
+            async for frame in ws:
+                msg = json.loads(frame)
+                # msg["pga_round"], msg["transaction"]["tx_hash"], msg["transaction"]["receipt"], ...
+    except websockets.InvalidStatus as e:
+        # 401: unknown key or no active ticket. 429: every ticket already has a connection.
+        print(f"Rejected: HTTP {e.response.status_code}")
+    except websockets.ConnectionClosed as e:
+        print(f"closed {e.rcvd.code} {e.rcvd.reason}")
+
+
+asyncio.run(main())
+```
+
+This example needs `websockets` 14 or later. Older versions use `extra_headers=` instead of `additional_headers=`.
+
+</Tab>
+</Tabs>
+
+## What the Fast Feed publishes
+
+Each message is a `FeedMessage` envelope that carries one transaction plus the metadata that you need to place it in time and in order. The Sequencer sends each message as a JSON object inside a binary WebSocket frame, so byte fields arrive as hex-encoded strings.
+
+| Field          | Type             | Description                                                                |
+| -------------- | ---------------- | -------------------------------------------------------------------------- |
+| `version`      | number           | Protocol version, for forward compatibility (currently `1`)                |
+| `timestamp_ms` | number           | Unix time in milliseconds when the Sequencer created the message           |
+| `pga_round`    | number, optional | The PGA round this transaction belongs to, within the block, starting at 1 |
+| `transaction`  | object           | The transaction data and its partial receipt                               |
+
+The `transaction` object carries the transaction itself:
+
+| Field          | Type   | Description                                        |
+| -------------- | ------ | -------------------------------------------------- |
+| `block_number` | number | Tentative block number, not guaranteed to be final |
+| `tx_index`     | number | Position within the block so far                   |
+| `raw_tx`       | string | Hex-encoded, RLP-encoded signed transaction        |
+| `tx_hash`      | string | Hex-encoded transaction hash                       |
+| `receipt`      | object | Execution result                                   |
+
+What the receipt reports:
+
+- `status`
+- `gas_used`
+- `gas_used_for_l1`
+- `cumulative_gas_used`
+- `effective_gas_price`
+- `base_fee`
+- Any `contract_address` the transaction created
+- The event `logs` emitted by the transaction
+
+## Reconnect after a drop
+
+If your connection closes, reconnect and continue from the current head. The Fast Feed keeps no history, so the messages sent while you were away are gone.
+
+To keep a connection open from one round to the next, buy a ticket for every round, as described in [keep the connection across rounds](/how-arbitrum-works/priority-gas-auction/use-fast-feed#step-5-keep-the-connection-across-rounds).
+
+## Troubleshoot
+
+### Connection rejected or closed
+
+| Response                                  | Cause                                                                          | Fix                                                                                     |
+| ----------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `HTTP 401 Unauthorized`                   | The `Authorization` header is missing, or the key's hash has no active ticket. | Check the raw key and its hash. Tickets bought this round activate at `roundEnd`.       |
+| `HTTP 429 Too Many Requests`              | The key already has as many open connections as it has active tickets.         | Close a connection, or buy more tickets for the next round.                             |
+| `HTTP 426 Upgrade Required`               | The request was not a WebSocket upgrade, for example a plain HTTPS `GET`.      | Use a WebSocket client.                                                                 |
+| Close `1008`, `authentication expired`    | The round ended and your key holds no ticket in the new round.                 | Buy before `roundEnd` each round, then reconnect.                                       |
+| Close `1013`, `client lagged`             | Your client fell more than 2048 messages behind.                               | Drain the socket faster. Move parsing and processing off the read loop, then reconnect. |
+| Close `1003`, `unexpected client message` | Your client sent a data frame.                                                 | Send only ping and pong frames.                                                         |
+| Close `1011`, `server shutting down`      | The endpoint restarted.                                                        | Reconnect with a short backoff.                                                         |
+
+## FAQ
+
+**Do I need a Nitro node?**
+No. The Fast Feed is a stream for your own client. To follow the chain, use the free [sequencer feed](/run-a-node/sequencer/read-sequencer-feed) instead.
