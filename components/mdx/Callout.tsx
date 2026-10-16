@@ -86,7 +86,7 @@ const green = { light: '#1a7f37', dark: '#3fb950' };
 const warning = {
   light: '#c2410c',
   dark: '#fb923c',
-  border: { light: '#f28c28', dark: '#f28c28' },
+  border: { light: '#d29922', dark: '#f28c28' },
   fill: { light: '#fff1e0', dark: '#2e1a05' },
 };
 
