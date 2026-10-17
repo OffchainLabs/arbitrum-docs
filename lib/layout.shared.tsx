@@ -88,6 +88,10 @@ export function baseOptions(): BaseLayoutProps {
         url: docHref('how-arbitrum-works'),
       },
       {
+        text: <NavLabel sections={[docHref('evaluate')]}>Evaluate</NavLabel>,
+        url: docHref('evaluate'),
+      },
+      {
         text: <NavLabel sections={[docHref('notices')]}>Notices</NavLabel>,
         url: docHref('notices'),
       },

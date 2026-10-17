@@ -1,0 +1,157 @@
+---
+title: 'Compliance controls'
+description: 'The controls Arbitrum offers for sanctions screening, validator and sender allowlists, permissioned data access and licensing, where each applies, and what each cannot do.'
+content_type: concept
+author: gblanchemain
+sme: gblanchemain
+target_audience: 'Compliance and risk reviewers at institutions evaluating Arbitrum.'
+---
+
+This page lists each compliance control the Arbitrum stack offers, where it applies, and what it cannot do. Most controls exist only on a chain you launch and own; <Term id="arbitrum-one">Arbitrum One</Term> is permissionless, and anybody can deploy any smart contract code they want on it. For the wider review, see [Due-diligence summary](/evaluate/due-diligence-summary).
+
+## Summary table
+
+| Control                               | Arbitrum One                                                      | Your own Arbitrum chain                                                          | Main limit                                                                      |
+| ------------------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Protocol-level sanctions filtering    | Shipped in ArbOS 61, left disabled, not intended for Arbitrum One | Optional; the chain owner enables and configures it                              | Without the STF components, a restricted user can wait for force inclusion      |
+| Validator allowlist                   | Conflicting statements in the docs; see the SME callout           | On by default; you choose the validators                                         | An inactivity window lets anyone remove the allowlist                           |
+| Sequencer sender allowlist            | Not available to you                                              | Node flag; empty means every sender is allowed                                   | Applies to transactions the sequencer admits                                    |
+| Inbox allowlist and pause             | Not available to you                                              | Chain owner functions on the Inbox contract                                      | Messages already in the Delayed Inbox can still be force-included               |
+| Permissioned data access              | Not available; Arbitrum One posts its data to Ethereum            | AnyTrust mode with a Data Availability Committee you choose                      | Adds a trust assumption on the committee; a committee outage can halt the chain |
+| Licensing and governance independence | Governed by the Arbitrum DAO                                      | Business Source License with an Additional Use Grant; no DAO governance required | Revenue share applies to some L3s that settle elsewhere                         |
+
+## Protocol-level sanctions filtering
+
+### What it does
+
+The <Term id="chain-owner">chain owner</Term> can add optional components to the <Term id="sequencer">Sequencer</Term> and the <Term id="state-transition-function">State Transition Function</Term> (STF) that filter transactions for regulatory or compliance purposes. An external compliance provider, such as TRM Labs or Chainalysis, defines which addresses are restricted. Any transaction that originates from, targets, or otherwise involves a restricted address is filtered before execution. This covers transactions submitted through the <Term id="delayed-inbox">Delayed Inbox</Term> on the parent chain.
+
+The restricted address list is held in memory on screening nodes, encoded as salted hashes of the form `sha256(salt || address)`, and refreshed through a synchronization pipeline. A rules engine inside the Sequencer simulates each transaction before it is sequenced. A transaction that violates a rule is rejected at the Sequencer and never enters a block. The chain owner defines the rules. Examples in the docs are:
+
+- Block any transaction from or to a restricted address.
+- Block ERC-20, ERC-721, and ERC-1155 transfers from or to a restricted address.
+- Block the `CALL`, `CREATE`, `CREATE2`, and `SELFDESTRUCT` opcodes when they target a restricted address.
+
+Delayed Inbox transactions cannot be filtered by the Sequencer alone, because they become eligible for <Term id="forceinclusion">force inclusion</Term> after a timeout window. Two components close this path. A Transaction Guardian <Term id="precompile">precompile</Term> lets an authorized entity register the hash of a restricted transaction onchain before it is force-included; the STF then fails that transaction on inclusion and consumes its gas. A Delayed Inbox Sentinel watches the Delayed Inbox, submits the hash to the precompile before the force-inclusion window closes, and lets the Sequencer process the transaction so that it fails at the STF.
+
+One exception exists. ERC-20, ERC-721, and ERC-1155 transfers whose `to` field is the zero address are permitted even when the `from` address is restricted, so that lending protocols can liquidate or burn balances of restricted accounts. If such a burn transaction contains any other violation, the whole transaction fails. A restricted address cannot start a burn itself, because its `tx.origin` is blocked at the Sequencer.
+
+### Where it applies
+
+The feature ships with ArbOS 61 and is off by default. The docs state that it "is not intended or proposed to be used by Arbitrum One" and that it is "left intentionally disabled on Arbitrum One". It is intended for Arbitrum chains with compliance and regulatory obligations. On such a chain, the feature is gated behind an `ArbOwner` call, so only the chain owner can enable it. If a chain owner enables filtering on a live chain, a 7-day delay applies before the change takes effect. The docs recommend adopting the feature at least 30 days after the release of ArbOS 61 on Arbitrum One.
+
+The Delayed Inbox Sentinel requires an audit and must be activated at deployment. Filtering is disabled by default, the chain owner must configure and enable each component, and activation after chain deployment may require an ArbOS upgrade. Address filters must be both enabled and configured before transactions are filtered; event filters are optional. See [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering) and [ArbOS 61 Elara](/run-a-node/arbos-releases/arbos61#compliance-transaction-filtering).
+
+<Callout type="warn" title="SME to confirm">
+
+[Customize genesis state](/launch-arbitrum-chain/deploy/custom-genesis-state) states that the `enableTransactionFiltering` flag "requires ArbOS60 and Nitro node v3.10.0", while [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering) states that the feature "is available through the ArbOS 61 upgrade"; the required ArbOS version needs one answer.
+
+</Callout>
+
+### Limits
+
+- Without STF-level enforcement through the Transaction Guardian, a restricted user can bypass Sequencer filtering by waiting for the force-inclusion window. The Sentinel and precompile together close this gap, so a chain that runs only Sequencer-level filtering keeps it open.
+- If a restricted address deposits ETH through `depositEth()` on the parent chain, the ETH enters the bridge contract before any filtering happens on the child chain. If the child-chain credit is dropped, the ETH can become locked in the bridge with no child-chain asset. The docs tell chain owners to account for this in their compliance design and user communication.
+- Restricted addresses are never stored in plaintext; salted hashing prevents trivial enumeration of the list. The policy itself comes from the external provider the chain owner selects.
+
+## Validator allowlist
+
+### What it does
+
+A <Term id="validator">validator</Term> allowlist restricts which addresses can post assertions that advance the chain. On your own chain, the recommendation is to keep validation permissioned by leaving `disableValidatorWhitelist` at `false`, which is the default, and by listing validators in the `validators[]` array. The docs give Know Your Customer (KYC) checks on validators as an example of a vetting rule for enterprise or regulated environments, and state that you can move to permissionless validation later on your own timeline.
+
+### Where it applies
+
+On your own chain, the control is yours. The docs strongly recommend that chains adopt <Term id="bold">BoLD</Term> but keep validation permissioned, because of the risks of letting any entity advance and challenge the chain's state. The three risks named are resource exhaustion attacks, increased infrastructure costs and overhead, and risks to liveness or delays of the chain. For chains that still want permissionless validation, the docs do not endorse configurations that differ from Arbitrum One's. The Rollup admin toggles the allowlist with `setValidatorWhitelistDisabled(bool)` through the Upgrade Executor. On a permissioned chain, `onlyValidator` restricts callers to the allowlist. See [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold#caveats-that-come-with-adopting-arbitrum-bold-for-permissionless-validation).
+
+On Arbitrum One, fee-earning proposers and defenders must pass the Arbitrum Foundation's KYC process, because no AIP may violate applicable laws, in particular sanctions-related regulations. See [Economics of Disputes in Arbitrum BoLD](/how-arbitrum-works/bold/bold-economics-of-disputes).
+
+<Callout type="warn" title="SME to confirm">
+
+[Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro) states that "with the deployment of BoLD, validation is permissionless" and that an allowlist is "an optional" toggle, while [Arbitrum FAQ](/get-started/faq) states that "Arbitrum One's validator set is currently allowlisted"; the current state of the Arbitrum One validator set needs one answer.
+
+</Callout>
+
+### Limits
+
+- `validatorAfkBlocks` is a liveness escape hatch. If no assertions are confirmed for that many parent-chain blocks, anyone can disable the allowlist without permission, regardless of `disableValidatorWhitelist`. Setting `validatorAfkBlocks` to `0` removes that escape hatch and with it the chain's ability to recover without permission if every allowlisted validator becomes unavailable. See [BoLD upgrade playbook for multisig and security council chains](/launch-arbitrum-chain/operate/bold-upgrade-playbook).
+- A misconfigured allowlist blocks your own validators. See [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting).
+
+## Transaction sender and inbox allowlists
+
+These two controls exist only on your own chain. The docs describe them as separate controls on separate entry points.
+
+### Sequencer sender allowlist
+
+The Sequencer's admission checks include optional sender allowlists that can reject a transaction before it reaches the mempool. The node flag `execution.sequencer.sender-whitelist` takes a comma-separated list of authorized senders; if the list is empty, everyone is allowed. See [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer) and [CLI flags reference](/run-a-node/nitro/cli-flags-reference).
+
+### Inbox allowlist and pause
+
+Force inclusion gives every user a path onto the chain that depends only on the parent chain. The one exception is the chain owner, who can allowlist or pause the Inbox. With `setAllowListEnabled`, the Inbox checks the account that signed the parent-chain transaction (`tx.origin`), so only allowlisted accounts can send messages to the Delayed Inbox. A paused Inbox accepts no messages; every send function reverts while it is paused. `setAllowListEnabled(bool)` and `setAllowList(address[], bool[])` live on the `Inbox` contract and require the Rollup contract or the Rollup owner through the Upgrade Executor. See [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions#things-to-consider) and [Ownership structure and access control](/launch-arbitrum-chain/operate/ownership-and-access#inbox-delayed-inbox).
+
+### Limits
+
+- Messages already in the Delayed Inbox can still be force-included after a pause, because `forceInclusion` is on the Sequencer Inbox.
+- The Sequencer flag governs admission at the Sequencer. The Inbox allowlist governs who can send to the Delayed Inbox. The docs do not describe one as covering the other.
+
+## Permissioned data access
+
+### What it does
+
+In AnyTrust mode, a <Term id="data-availability-committee-dac">Data Availability Committee</Term> (DAC) stores transaction data offchain. The DAC is a group of permissioned nodes that you choose and run, or outsource to a Rollup-as-a-Service provider. The batch poster sends a Data Availability Certificate signed by the required number of DAC members instead of posting all data to the parent chain. The docs present this as a way to keep sensitive business and user data out of a fully public ledger. See [Configure data availability](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability).
+
+### Where it applies
+
+Your own chain, when you set `DataAvailabilityCommittee` to `true` and deploy a Data Availability Server for each member. Arbitrum One is a Rollup that posts its data to Ethereum.
+
+### Limits
+
+- The <Term id="arbitrum-anytrust-protocol">AnyTrust protocol</Term> lowers costs by accepting a mild trust assumption: the DAC has N members, of which at least two are assumed honest. See [AnyTrust Protocol](/how-arbitrum-works/deep-dives/anytrust-protocol).
+- If the batch poster's fallback to onchain posting is disabled, a DAC outage halts the chain. See [DAC/DAS Operations Guide](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations).
+
+## Licensing and governance independence
+
+Nitro is licensed under a Business Source License with an "Additional Use Grant", so that everyone can use and run nodes on all public Arbitrum chains. The grant permits deployment of the Nitro software as a new blockchain, without permission and at zero cost, provided that the chain settles to Arbitrum One. L3s that settle to Arbitrum One have no obligation to share revenue with the <Term id="arbitrum-dao">Arbitrum DAO</Term>. The <Term id="arbitrum-expansion-program">Arbitrum Expansion Program</Term> (AEP) expands this license into a self-service model for L2s and L3s on other parent chains. Arbitrum chains are not required to be governed by the Arbitrum DAO and can modify any part of the stack. L3s that settle to other parent chains must contribute net chain revenue, with 8% to the DAO and 2% to the developer guild. See [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license).
+
+<Callout type="warn" title="SME to confirm">
+
+The settlement condition summarized in [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license) names a second settlement chain that this page omits, so the reviewer should read the license text itself before relying on the summary above.
+
+</Callout>
+
+## What is not a control
+
+- Arbitrum One has no sender screening. Anybody can deploy any smart contract code on it. See [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks).
+- Arbitrum One has no validator allowlist or sender allowlist that your institution controls. Protocol-level sanctions filtering is disabled there and is not intended for it.
+- Screening which end users may submit transactions is an application-layer concern, not a chain-config setting. The validator and data-availability controls decide who validates the chain and who can read its data; they are not a per-user transaction allowlist. Know Your Customer and anti-money-laundering checks on end users are therefore the application's responsibility. See [Overview of Arbitrum chains](/launch-arbitrum-chain/overview/introduction#privacy-and-access-controls).
+
+<Callout type="warn" title="SME to confirm">
+
+The docs state nothing on data residency, on privacy of transaction data beyond the DAC read restriction described in [Configure data availability](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability), or on record retention, so this page cannot describe a control for any of them.
+
+</Callout>
+
+## Related resources
+
+- [Due-diligence summary](/evaluate/due-diligence-summary)
+- [Threat model and trust boundaries](/evaluate/threat-model)
+- [Operational assurance](/evaluate/operational-assurance)
+- [Compliance filtering](/launch-arbitrum-chain/chain-config/sequencer/compliance-filtering)
+- [ArbOS 61 Elara](/run-a-node/arbos-releases/arbos61)
+- [Overview of Arbitrum chains](/launch-arbitrum-chain/overview/introduction#compliance)
+- [Customize genesis state](/launch-arbitrum-chain/deploy/custom-genesis-state)
+- [BoLD for Arbitrum chains](/launch-arbitrum-chain/chain-config/validation/bold)
+- [BoLD upgrade playbook for multisig and security council chains](/launch-arbitrum-chain/operate/bold-upgrade-playbook)
+- [Validator troubleshooting](/launch-arbitrum-chain/operate/validator-troubleshooting)
+- [Ownership structure and access control](/launch-arbitrum-chain/operate/ownership-and-access)
+- [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro)
+- [Arbitrum FAQ](/get-started/faq)
+- [Economics of Disputes in Arbitrum BoLD](/how-arbitrum-works/bold/bold-economics-of-disputes)
+- [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions)
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer)
+- [CLI flags reference](/run-a-node/nitro/cli-flags-reference)
+- [Configure data availability](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability)
+- [DAC/DAS Operations Guide](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations)
+- [AnyTrust Protocol](/how-arbitrum-works/deep-dives/anytrust-protocol)
+- [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license)
+- [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks)
