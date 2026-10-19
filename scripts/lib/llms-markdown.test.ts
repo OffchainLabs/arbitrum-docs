@@ -1,6 +1,7 @@
 /**
- * Compiles MDX fixtures through Fumadocs' own `remarkLLMs` with the site's hook, the plugin
- * `postprocess.includeProcessedMarkdown` runs, and checks the markdown it stores.
+ * Compiles MDX fixtures through the site's `remarkLlmsMarkdown` and then Fumadocs' own
+ * `remarkLLMs`, the order `postprocess.includeProcessedMarkdown` runs them, and checks the
+ * markdown it stores.
  */
 import { createProcessor } from '@mdx-js/mdx';
 import { remarkGfm } from 'fumadocs-core/mdx-plugins';
@@ -10,14 +11,17 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { VFile } from 'vfile';
 
-import { EXPLORER_ROOTS, createLlmsStringify, llmsStringify } from '../../lib/llms-markdown.ts';
+import { EXPLORER_ROOTS, remarkLlmsMarkdown } from '../../lib/llms-markdown.ts';
 
-const stringify = createLlmsStringify({ vars: { minBond: '3600', rpc: 'https://arb1.example' } });
+const VARS = { minBond: '3600', rpc: 'https://arb1.example' };
 
-async function mirror(source: string, hook = stringify): Promise<string> {
+async function mirror(
+  source: string,
+  options: Parameters<typeof remarkLlmsMarkdown>[0] = { vars: VARS },
+): Promise<string> {
   const file = new VFile({ value: source, path: 'fixture.mdx' });
   await createProcessor({
-    remarkPlugins: [remarkGfm, [remarkLLMs, { stringify: hook, _data: true }]],
+    remarkPlugins: [remarkGfm, [remarkLlmsMarkdown, options], [remarkLLMs, { _data: true }]],
   }).process(file);
   return String(file.data.markdown);
 }
@@ -29,7 +33,7 @@ test('Var becomes its value, also inside a table cell', async () => {
     'The bond is <Var name="minBond" /> ETH.\n\n| Param | Value |\n| --- | --- |\n| Bond | <Var name="minBond" /> ETH |\n',
   );
   assert.match(out, /The bond is 3600 ETH\./);
-  assert.match(out, /\| Bond {2}\| 3600 ETH \|/);
+  assert.match(out, /\| Bond \| 3600 ETH \|/);
   assert.doesNotMatch(out, NO_JSX);
 });
 
@@ -53,6 +57,24 @@ test('Callout becomes a blockquote opening with the bold title or the type label
   const untitled = await mirror('<Callout type="info">\n  Plain note.\n</Callout>\n');
   assert.match(untitled, /^> \*\*Note\*\*\n>\n> Plain note\./m);
   assert.doesNotMatch(titled + untitled, NO_JSX);
+});
+
+test('a multi-paragraph Callout body keeps a bare > line between paragraphs', async () => {
+  const out = await mirror('<Callout type="info">\n  First para.\n\n  Second para.\n</Callout>\n');
+  assert.match(out, /^> \*\*Note\*\*\n>\n> First para\.\n>\n> Second para\.$/m);
+});
+
+test('a Callout inside a list item continues the item’s indentation', async () => {
+  const out = await mirror(
+    '1. Step one.\n\n   <Callout type="info">\n     Note body.\n   </Callout>\n\n2. Step two.\n',
+  );
+  assert.match(out, /^ {3}> \*\*Note\*\*\n {3}>\n {3}> Note body\./m);
+  assert.match(out, /^2\. Step two\.$/m);
+});
+
+test('Term keeps the markup it wraps', async () => {
+  const out = await mirror('A <Term id="x">**bold** [link](/x)</Term> here.');
+  assert.equal(out.trim(), 'A **bold** [link](/x) here.');
 });
 
 test('Accordions and Tabs become headings with their bodies', async () => {
@@ -169,11 +191,11 @@ test('fenced and inline code are left alone', async () => {
   assert.match(out, /```mdx\n<Callout type="warn">\n {2}<Var name="minBond" \/>\n<\/Callout>\n```/);
 });
 
-test('the default hook reads content/vars.json', async () => {
+test('the default plugin reads content/vars.json', async () => {
   const vars = JSON.parse(
     readFileSync(new URL('../../content/vars.json', import.meta.url), 'utf8'),
   );
   const [name, value] = Object.entries(vars).find(([, v]) => typeof v === 'string') ?? [];
   assert.ok(name);
-  assert.equal((await mirror(`<Var name="${name}" />`, llmsStringify)).trim(), value);
+  assert.equal((await mirror(`<Var name="${name}" />`, {})).trim(), value);
 });
