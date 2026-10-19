@@ -108,11 +108,14 @@ reads the `docs` collection. The `glossary` collection has one reader, `lib/refe
 
 MDX options live in `lib/mdx-options.ts`, shared by the site and by `check-links`, so anchor
 validation sees the transforms the reader gets. The remark plugins are `remark-math` (with
-`rehype-katex`), `remarkVarLinks` (see [Global variables](#global-variables)) and
-`remarkStripMdxComments`, which removes `{/* … */}` comments. Those comments never reach the HTML,
-but the markdown mirrors are stringified from the same tree and would otherwise print them. A
-comment inside a fence or an inline code span is not an expression node and is served as written.
-Generators that depend on a marker comment read the raw `.mdx` file from disk.
+`rehype-katex`), `remarkVarLinks` (see [Global variables](#global-variables)),
+`remarkStripMdxComments`, which removes `{/* … */}` comments, and `remarkLlmsMarkdown`, which
+turns the site's components into markdown for the mirrors (see
+[Routing and `proxy.ts`](#routing-and-proxyts)). Comments never reach the HTML, but the markdown
+mirrors are sliced from the authored source, which prints a removed node unless the plugin also
+records the removal (see [`source` is a choke point](#source-is-a-choke-point)). A comment inside
+a fence or an inline code span is not an expression node and is served as written. Generators that
+depend on a marker comment read the raw `.mdx` file from disk.
 
 ## `source` is a choke point
 
@@ -125,10 +128,13 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
 - Helpers are typed `(typeof source)['$inferPage']`, so a schema edit re-types every consumer.
 - URL derivation lives next to `source` (`getPageImage`, `getPageMarkdownUrl`, `getLLMText`), not
   in routes.
-- `postprocess.includeProcessedMarkdown` on the collection (an object carrying the `stringify`
-  hook from `lib/llms-markdown.ts`) is what makes
+- `postprocess.includeProcessedMarkdown` on the collection is what makes
   `page.data.getText('processed')` work. Remove it and the `llms-full.txt` and `llms.mdx` routes
-  break. `llms.txt` only lists pages and does not read their text.
+  break. `llms.txt` only lists pages and does not read their text. Behind the option, Fumadocs'
+  `remarkLLMs` runs after the plugins in `lib/mdx-options.ts` and slices the authored source by
+  node position. A plugin that only mutates or removes a node leaves the mirror unchanged, so
+  `remarkLlmsMarkdown` (`lib/llms-markdown.ts`), `remarkVarLinks` and `remarkStripMdxComments`
+  record their edits with `replaceSource()` from `fumadocs-core/mdx-plugins/stringifier`.
 - **Server only.** Never import `lib/source`, or a module that imports it, from a client
   component. It drags the compiled collection into the browser bundle, and no gate notices.
 
@@ -737,15 +743,18 @@ the root markdown overview; it is excluded from the sidebar and the article rout
 parameters. The sitemap lists `/` only once. `/og/docs` and `/llms.mdx/docs` remain machine
 endpoints. `/llms.txt` lists every page with its title, summary and `.md` link, and
 `/llms-full.txt` concatenates them; `lib/llms-index.ts` shapes the index (master's title and
-summary, one `.md` link per page). The text the mirrors serve is Fumadocs' stringified mdast, and
-`lib/llms-markdown.ts` supplies the `stringify` hook (through `includeProcessedMarkdown` in
-`source.config.ts`) that turns the site's components into markdown: `<Var>` becomes its value,
-`<Term>` and the other wrappers become their children, `<Callout>` a blockquote opening with its
-title or type, `<Accordion>` and `<Tab>` a level-4 heading and body, `<Cards>` a link list, `<AEL>`
-an explorer link, `<ImageZoom>` a markdown image, and a self-closing widget nothing. Code is never
-touched, an unknown `<Var>` keeps its tag so the typo stays visible, and the rendered page is
-unaffected because it compiles from the same tree. The HTTP smoke suite asserts that no component
-tag reaches `/llms-full.txt` or a mirror outside code.
+summary, one `.md` link per page). The text the mirrors serve is the authored source, sliced by
+Fumadocs' `remarkLLMs` (through `includeProcessedMarkdown` in `source.config.ts`) with the edits the
+site's plugins record through `replaceSource`. `remarkLlmsMarkdown` in `lib/llms-markdown.ts`
+records one for each component: `<Var>` becomes its value, `<Term>` and the other wrappers become
+their children, `<Callout>` a blockquote opening with its title or type, `<Accordion>` and `<Tab>`
+a level-4 heading and body, `<Cards>` a link list, `<AEL>` an explorer link, `<ImageZoom>` a
+markdown image, and a self-closing widget nothing. `remarkVarLinks` records the expanded link
+destination and `remarkStripMdxComments` the removed comment, because a plugin that only mutates
+or removes a node leaves the mirror as authored. Code is never touched, an unknown `<Var>` keeps
+its tag so the typo stays visible, and the rendered page is unaffected because the edits live
+beside the tree. The HTTP smoke suite asserts that no component tag or `{var:}` placeholder reaches
+`/llms-full.txt` or a mirror outside code.
 
 `/preview/<slug>/preview.json` is a third machine endpoint. It is static, `proxy.ts` does not track
 it, and `lib/http-headers.ts` gives it no CORS header.
