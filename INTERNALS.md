@@ -443,21 +443,21 @@ checks for the `data-hover-popover` and `data-hover-popover-panel` attributes th
 `components/HoverPopover` sets). The two cards share a panel but differ on purpose: the Term card
 has a left accent and a "Glossary" kicker and is a reading surface; the preview card has a
 "Preview" kicker with an arrow, its title in the link colour, and a hover tint, because the whole
-card is a link. The card shows the page title and lead. For a
-`#section` link it shows the section heading and its text, with the page title as a caption.
+card is a link. The card shows the page title, its frontmatter description and the lead, muted.
+For a `#section` link it shows the section heading and its text, with the page title as a caption.
 
 The data is `page.data.structuredData`, which `remarkStructureOptions` in `lib/mdx-options.ts`
 limits to headings and paragraphs. `lib/preview-text.ts` runs before Fumadocs' `remarkStructure`
 and hands it the plain text of each one: a paragraph through the `node.data.structuredData` hook, a
 heading through `'search'`-namespaced `replaceSource` edits on its children, so a `<Var>` reads as
 its value and markers and `<Term>` wrappers are gone. `lib/link-preview.ts` turns it into one JSON
-per page: `lead` (the text before the first
-heading) and `sections` (the text under each heading id), each clipped to 350 characters.
+per page: `description` (from frontmatter), `lead` (the text before the first heading) and
+`sections` (the text under each heading id), the last two clipped to 350 characters.
 `app/preview/[...slug]/route.ts` prerenders it at `/preview/<slug>/preview.json`; any other path
 404s. The component fetches the JSON on the first hover and caches the promise in memory for the
 session. A 404 or a failed fetch caches as no card. A page that opens with a heading has no
-lead text, so its card shows the frontmatter `description` instead. Tables and code never contribute text, so an
-excerpt can end on a colon.
+lead text, so its card shows the title and description only. Tables and code never contribute
+text, so an excerpt can end on a colon.
 
 ### Image captions
 

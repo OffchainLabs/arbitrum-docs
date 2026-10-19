@@ -155,7 +155,10 @@ function PreviewBody({ data, hash }: { data: LinkPreviewData; hash?: string | un
   return (
     <>
       <span className={`mb-2 block text-[1rem] ${titleClass}`}>{data.title}</span>
-      {data.lead && <span className="block">{data.lead}</span>}
+      {data.description && <span className="mb-2 block">{data.description}</span>}
+      {data.lead && data.lead !== data.description && (
+        <span className="block text-fd-muted-foreground">{data.lead}</span>
+      )}
     </>
   );
 }

@@ -7,15 +7,16 @@ import type { StructuredData } from 'fumadocs-core/mdx-plugins';
 export interface LinkPreviewInput {
   title: string;
   url: string;
-  /** The frontmatter description, shown as the lead when the page opens with a heading. */
+  /** The frontmatter description. */
   description: string;
   structuredData: StructuredData;
 }
 
 export interface LinkPreview {
   title: string;
+  description: string;
   url: string;
-  /** The text before the page's first heading, or the description when there is none. */
+  /** The text before the page's first heading. */
   lead: string;
   /** The text under each heading, by heading id. */
   sections: Record<string, { heading: string; text: string }>;
@@ -58,6 +59,5 @@ export function buildLinkPreview(input: LinkPreviewInput): LinkPreview {
   for (const { id, content } of structuredData.headings) {
     sections[id] = { heading: content, text: joined(id) };
   }
-  const lead = joined(undefined);
-  return { title, url, lead: lead === '' ? clip(description, CLIP_LENGTH) : lead, sections };
+  return { title, description, url, lead: joined(undefined), sections };
 }
