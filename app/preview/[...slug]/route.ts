@@ -17,6 +17,7 @@ export async function GET(_req: Request, { params }: RouteContext<'/preview/[...
     buildLinkPreview({
       title: page.data.title,
       url: page.url,
+      description: page.data.description,
       structuredData: page.data.structuredData,
     }),
   );

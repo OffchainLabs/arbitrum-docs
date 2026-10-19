@@ -455,8 +455,8 @@ per page: `lead` (the text before the first
 heading) and `sections` (the text under each heading id), each clipped to 350 characters.
 `app/preview/[...slug]/route.ts` prerenders it at `/preview/<slug>/preview.json`; any other path
 404s. The component fetches the JSON on the first hover and caches the promise in memory for the
-session. A 404 or a failed fetch caches as no card. A page that opens with a heading has an empty
-`lead`, so its card shows only the title. Tables and code never contribute text, so an
+session. A 404 or a failed fetch caches as no card. A page that opens with a heading has no
+lead text, so its card shows the frontmatter `description` instead. Tables and code never contribute text, so an
 excerpt can end on a colon.
 
 ### Image captions

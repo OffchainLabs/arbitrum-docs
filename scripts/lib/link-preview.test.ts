@@ -4,7 +4,7 @@ import { test } from 'node:test';
 
 import { buildLinkPreview } from '../../lib/link-preview.ts';
 
-const base = { title: 'Gas', url: '/gas' };
+const base = { title: 'Gas', url: '/gas', description: 'Gas on Arbitrum.' };
 
 test('lead joins the paragraphs that come before the first heading', () => {
   const out = buildLinkPreview({
@@ -44,10 +44,44 @@ test('sections are keyed by heading id and carry the heading text', () => {
   });
 });
 
-test('a page with no contents has an empty lead and no sections', () => {
-  const out = buildLinkPreview({ ...base, structuredData: { headings: [], contents: [] } });
+test('an empty lead falls back to the description, and sections are not affected', () => {
+  const out = buildLinkPreview({
+    ...base,
+    structuredData: {
+      headings: [{ id: 'fees', content: 'Fees' }],
+      contents: [{ heading: 'fees', content: 'Under fees.' }],
+    },
+  });
+  assert.equal(out.lead, 'Gas on Arbitrum.');
+  assert.deepEqual(out.sections, { fees: { heading: 'Fees', text: 'Under fees.' } });
+});
+
+test('the description is not used when the lead has text', () => {
+  const out = buildLinkPreview({
+    ...base,
+    structuredData: { headings: [], contents: [{ heading: undefined, content: 'Lead.' }] },
+  });
+  assert.equal(out.lead, 'Lead.');
+});
+
+test('a blank description leaves the lead empty', () => {
+  const out = buildLinkPreview({
+    ...base,
+    description: '  ',
+    structuredData: { headings: [], contents: [] },
+  });
   assert.equal(out.lead, '');
   assert.deepEqual(out.sections, {});
+});
+
+test('a long description is clipped like a lead', () => {
+  const out = buildLinkPreview({
+    ...base,
+    description: 'This sentence has some words in it. '.repeat(20).trim(),
+    structuredData: { headings: [], contents: [] },
+  });
+  assert.ok(out.lead.length <= 351, `length ${out.lead.length}`);
+  assert.match(out.lead, /in it\.…$/);
 });
 
 test('a long lead is cut at a sentence boundary and ends with an ellipsis', () => {
