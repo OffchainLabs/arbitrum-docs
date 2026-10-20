@@ -1,0 +1,137 @@
+---
+title: 'Sequencer outages'
+sidebar_label: 'Sequencer outages'
+description: 'Learn what happens to your Arbitrum chain when the sequencer or batch poster stops, and which settings control how long your users wait.'
+user_story: 'As a chain owner, I want to understand what happens to my Arbitrum chain during a sequencer outage, so I can plan for one and choose my delay settings.'
+content_type: concept
+author: pete-vielhaber
+---
+
+A sequencer outage is any period when your <Term id="arbitrum-chain">Arbitrum chain</Term> stops ordering or posting transactions to the <Term id="parent-chain">parent chain</Term>. Your users can still send a transaction through the <Term id="delayed-inbox">Delayed Inbox</Term> on the parent chain unless you pause the Inbox or enable its allowlist. They wait longer for inclusion, though, and some confirmed transactions can be reordered or dropped. This page explains the two kinds of outage, what your users see during each one, and which settings you control.
+
+<Callout type="info" title="Is your sequencer down now?">
+
+See [Respond to a sequencer outage](/launch-arbitrum-chain/operate/respond-to-sequencer-outage) for an ordered checklist.
+
+</Callout>
+
+## Two kinds of outage
+
+An outage stops one of two jobs. The <Term id="sequencer">sequencer</Term> orders transactions into blocks. The <Term id="batch-poster">batch poster</Term> posts those blocks to the <Term id="sequencer-inbox">Sequencer Inbox</Term> on the parent chain. Each job can fail without the other.
+
+| Outage               | What stops                         | What keeps working                                                                                   | Main risk                                                    |
+| -------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Sequencer downtime   | Block production                   | The Delayed Inbox accepts messages. Nodes serve the existing chain state.                            | Users wait up to the <Term id="forceinclusion">force-inclusion</Term> window for inclusion.   |
+| Batch posting outage | Posting blocks to the parent chain | The sequencer produces blocks, and users get <Term id="soft-confirmation">soft confirmations</Term>. | Blocks that never reach the parent chain can be reorganized. |
+
+A batch posting outage does not stop the sequencer. As [Sequencer troubleshooting](/launch-arbitrum-chain/operate/sequencer-troubleshooting#what-does-not-halt-block-production) puts it for an unfunded batch poster: "Posting stops; sequencing does not."
+
+## Sequencer downtime
+
+### What causes it
+
+Block production stops for one of four reasons:
+
+- **No sequencer holds the lockout.** When you run several sequencers with a coordinator, exactly one must hold the lockout in Redis. If none does, the chain stops.
+- **The sequencer refuses to build a block.** The most common cause is a down or lagging parent-chain connection, or a local clock that has drifted.
+- **The sequencer rejects every transaction.** For example, the expected surplus fell below its hard threshold.
+- **Execution fails.** For example, block creation panics on every attempt.
+
+A crashed host or cloud outage can also stop a sequencer unless a standby sequencer takes over. For each error message and its fix, see [Block production halt conditions](/launch-arbitrum-chain/operate/sequencer-troubleshooting#block-production-halt-conditions).
+
+### What your users see
+
+- The chain stops producing blocks. The block height stays the same.
+- Remote procedure call (RPC) nodes cannot process new transactions. The error a user gets depends on where the transaction stops:
+
+| Where the transaction stops                                     | What the node returns                                                        |
+| --------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| A node forwards it, but no forwarding target answers            | `failed to publish transaction to any of the forwarding targets`             |
+| A node has no forwarding target, or its forwarder is turned off | `sequencer temporarily not available`                                        |
+| The sequencer is running but cannot build blocks                | An error after the transaction waits `queue-timeout` (12 seconds by default) |
+
+{/* SME gap: What exact error text do wallets see when the sequencer's queue times out? Do public RPC providers or load balancers in front of the node change these errors? */}
+
+{/* SME gap: What happens to a transaction a user sends to the RPC during the outage? Does any node queue it and send it when the sequencer returns, or is it dropped and must be resent? */}
+
+### How your users get a transaction in
+
+Your users send their transaction through the Delayed Inbox on the parent chain instead of to the sequencer. What happens next depends on how long the outage lasts:
+
+| How long the outage lasts              | What happens to the message                                                                                                                   |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Less than the force-inclusion window   | It waits in the Delayed Inbox. When the sequencer returns, it adds the message in the order it arrived. Nobody can force-include it.          |
+| Longer than the force-inclusion window | Anyone can call `forceInclusion` on the Sequencer Inbox. The message enters the chain without the sequencer. |
+
+The sequencer cannot skip or reorder Delayed Inbox messages. For the user steps, see [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions). Users can also [withdraw ETH while the sequencer is down](/how-arbitrum-works/deep-dives/forced-transactions#withdraw-eth-while-the-sequencer-is-down).
+
+{/* SME gap: When the sequencer returns before the window ends, how quickly does it add the waiting Delayed Inbox messages? Does it add them ahead of new transactions from the RPC? */}
+
+## Batch posting outage
+
+During a batch posting outage, your chain looks healthy. The sequencer keeps producing blocks, and users keep getting soft confirmations through the <Term id="sequencer-feed">sequencer feed</Term>. Those blocks exist only on your nodes, though. Nothing about them is on the parent chain yet.
+
+Common causes are an unfunded batch poster account, a batch that reverted on the parent chain, and a lost or compromised batch poster key. When a batch reverts, the batch poster stops posting on purpose until you investigate and restart it. For the causes and fixes, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting) and [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery).
+
+The longer a batch posting outage lasts, the more it puts at risk:
+
+- **A force inclusion reorganizes the chain.** If the outage outlasts the force-inclusion window, anyone can force-include a Delayed Inbox message. Every node that follows the feed then drops the blocks it never saw on the parent chain. This is a <Term id="reorg">reorg</Term>.
+- **Some dropped transactions are lost for good.** Only an active sequencer re-sequences dropped messages. It re-sequences up to 1,024 messages by default and skips any it fails to add. Some re-sequenced transactions revert because the chain state changed. See [When a force inclusion reorders the chain](/how-arbitrum-works/deep-dives/forced-transactions#when-a-force-inclusion-reorders-the-chain).
+- **Old messages reach the past edge of `maxTimeVariation`.** The batch poster stops posting when a batch's oldest message comes within `reorg-resistance-margin` (10 minutes by default) of the oldest time the Sequencer Inbox allows. See [Relationship with the batch poster](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments#relationship-with-the-batch-poster-reorg-resistance-margin).
+- **The first batch after a force inclusion can fail.** A force inclusion changes the message count the batch poster expects. [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery) explains the flag that lets the first batch through.
+
+{/* SME gap: Is there a typical batch posting outage length at which chain owners should act, short of the force-inclusion window? */}
+
+## Settings you control
+
+You choose how long your users wait and how much time you have to fix an outage. These settings shape both.
+
+| Setting                             | What it changes                                                                                                            | Default                                                                                                 | How to change it                                                                                                                                                                                                                                                                                                |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `delayBlocks` in `maxTimeVariation` | The force-inclusion window: how many parent-chain blocks a Delayed Inbox message waits before anyone can force-include it. | 4 days of parent-chain blocks, when the Chain SDK recognizes your parent chain                          | Call `setMaxTimeVariation` on the Sequencer Inbox. See [Changing `maxTimeVariation`](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments#changing-maxtimevariation).                                                                                                                     |
+| Censorship Timeout (`bufferConfig`) | Shortens the window after long delays, so repeated or long outages cost users less wait time.                              | Inert. The Chain SDK sets `threshold` and `max` to 2³² blocks, so the buffer never shortens the window. | Set `bufferConfig` at deployment, or call `setBufferConfig` later. `setBufferConfig` works only if the Sequencer Inbox was deployed with a nonzero `threshold`. Otherwise it reverts with `NotDelayBufferable`. See [Ownership and access](/launch-arbitrum-chain/operate/ownership-and-access#sequencerinbox). |
+| Sequencer coordinator               | Lets a standby sequencer take over when the active one fails.                                                              | Off                                                                                                     | See [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer).                                                                                                                                                                                               |
+| Batch poster Redis lock             | Lets a standby batch poster take over. The lock expires after `LockoutDuration` (1 minute by default).                     | Off until you set `node.batch-poster.redis-url`                                                         | See [Redis failover](/launch-arbitrum-chain/operate/bp-recovery#recovery-mechanism-3-redis-failover-high-availability).                                                                                                                                                                                         |
+
+### Choose a force-inclusion window
+
+The window trades your recovery time against your users' wait:
+
+- **A longer window** gives you more time to fix an outage before anyone can force-include a message. Your users wait longer to get a transaction in, and the chain's censorship resistance weakens.
+- **A shorter window** lets your users get transactions in sooner. A shorter batch posting outage is then enough for a force inclusion to reorganize the chain.
+
+The Censorship Timeout narrows the gap between the two. The first force-included message in an outage still waits the full `delayBlocks`. Later messages in a long outage, and messages in repeated outages, wait less. Set the buffer and its threshold above your chain's batch posting interval, or the feature does not work as intended. See [How the Censorship Timeout shortens the window](/how-arbitrum-works/deep-dives/forced-transactions#how-the-censorship-timeout-shortens-the-window).
+
+{/* SME gap: What force-inclusion window and Censorship Timeout values do we recommend for a new chain? */}
+
+## When the parent chain's sequencer is down
+
+If your chain is an <Term id="layer-3-l3">L3</Term>, its parent chain has its own sequencer. When that sequencer stops, three things happen to your chain:
+
+- Your batch poster cannot post, because the parent chain accepts no new transactions except through its own Delayed Inbox.
+- Your force-inclusion window stops counting. The window counts parent-chain block numbers, which advance only while the parent chain produces blocks.
+- Your sequencer can stop too. It stops building blocks once the newest parent-chain block is more than 1 hour older than its local clock (`execution.sequencer.max-acceptable-timestamp-delta`).
+
+See the callout under [After the window ends](/how-arbitrum-works/deep-dives/forced-transactions#after-the-window-ends).
+
+{/* SME gap: What should an L3 chain owner do while the parent chain's sequencer is down? */}
+
+## Example timeline
+
+This example assumes the Chain SDK defaults on a parent chain with 12-second blocks: a 4-day force-inclusion window and the Censorship Timeout at its inert default.
+
+| Time            | Event                                                                                                    |
+| --------------- | -------------------------------------------------------------------------------------------------------- |
+| Hour 0          | The sequencer stops. The chain stops producing blocks.                                                   |
+| Hour 1          | A user sends a transaction to the Delayed Inbox. It waits.                                               |
+| Hour 6          | The sequencer returns. It adds the user's message in order. Nobody needed to force-include it.           |
+| Hour 1 + 4 days | If the sequencer had stayed down, anyone could now call `forceInclusion` and include the user's message. |
+
+## Related pages
+
+- [Respond to a sequencer outage](/launch-arbitrum-chain/operate/respond-to-sequencer-outage)
+- [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions)
+- [Sequencer timing adjustments](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments)
+- [Censorship Timeout](/how-arbitrum-works/deep-dives/sequencer#censorship-timeout)
+- [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer)
+- [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring)

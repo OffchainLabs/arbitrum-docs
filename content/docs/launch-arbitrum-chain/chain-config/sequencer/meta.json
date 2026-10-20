@@ -4,6 +4,7 @@
     "chain-finality",
     "compliance-filtering",
     "sequencer-config-reference",
+    "sequencer-outages",
     "sequencer-timing-adjustments",
     "timeboost",
     "pga"
