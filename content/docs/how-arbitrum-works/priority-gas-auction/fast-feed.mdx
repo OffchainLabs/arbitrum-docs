@@ -32,26 +32,7 @@ If you send ordinary transactions through a wallet or an app, the Fast Feed does
 
 ## What the Fast Feed publishes
 
-Each message is a `FeedMessage` envelope that carries one transaction plus the metadata you need to place it in time and in order. The Sequencer sends each message as a JSON object inside a binary WebSocket frame, so byte fields arrive as hex-encoded strings.
-
-| Field          | Type             | Description                                                                |
-| -------------- | ---------------- | -------------------------------------------------------------------------- |
-| `version`      | number           | Protocol version, for forward compatibility (currently `1`)                |
-| `timestamp_ms` | number           | Unix time in milliseconds when the Sequencer created the message           |
-| `pga_round`    | number, optional | The PGA round this transaction belongs to, within the block, starting at 1 |
-| `transaction`  | object           | The transaction data and its partial receipt                               |
-
-The `transaction` object carries the transaction itself:
-
-| Field          | Type   | Description                                        |
-| -------------- | ------ | -------------------------------------------------- |
-| `block_number` | number | Tentative block number, not guaranteed to be final |
-| `tx_index`     | number | Position within the block so far                   |
-| `raw_tx`       | string | Hex-encoded, RLP-encoded signed transaction        |
-| `tx_hash`      | string | Hex-encoded transaction hash                       |
-| `receipt`      | object | Execution result                                   |
-
-The receipt reports `status`, `gas_used`, `gas_used_for_l1`, `cumulative_gas_used`, `effective_gas_price`, `base_fee`, any `contract_address` the transaction created, and the event `logs` it emitted.
+Each message is a `FeedMessage` envelope that carries one transaction plus the metadata you need to place it in time and in order. It holds a timestamp, the PGA round, a tentative block number and position, the signed transaction and its hash, and a partial receipt. The [message reference](/how-arbitrum-works/priority-gas-auction/consume-fast-feed#what-the-fast-feed-publishes) lists every field.
 
 ## Limits to design for
 
@@ -79,7 +60,7 @@ Access runs on tickets sold by the `Tickets` contract, an audited contract on Ar
 
 Your access starts at the end of the round in which you buy the ticket. You can rotate your credential only when you buy a ticket for a new round.
 
-For the contract calls, the WebSocket handshake, the reference purchase bot, and the errors you can hit, see [how to use the Fast Feed](/how-arbitrum-works/priority-gas-auction/use-fast-feed).
+For the contract calls, the reference purchase bot, and purchase errors, see [how to buy Fast Feed access](/how-arbitrum-works/priority-gas-auction/use-fast-feed). For the WebSocket handshake, the message format, and connection errors, see [how to consume the Fast Feed](/how-arbitrum-works/priority-gas-auction/consume-fast-feed).
 
 ### Rounds and pricing
 
@@ -112,7 +93,7 @@ This split follows the framework that Timeboost established, which keeps Arbitru
 
 <Callout type="info">
 
-The Arbitrum Treasury Management (ATM) Council and OAT selected USDG as the stablecoin. The `Tickets` and USDG addresses are listed in [how to use the Fast Feed](/how-arbitrum-works/priority-gas-auction/use-fast-feed#addresses-and-endpoints).
+The Arbitrum Treasury Management (ATM) Council and OAT selected USDG as the stablecoin. The `Tickets` and USDG addresses are listed in [how to buy Fast Feed access](/how-arbitrum-works/priority-gas-auction/use-fast-feed#addresses-and-endpoints).
 
 </Callout>
 
