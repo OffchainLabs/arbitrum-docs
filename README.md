@@ -24,6 +24,10 @@ pnpm install      # runs a postinstall that generates .source/
 pnpm dev          # install, clean, then http://localhost:3000 with hot reload
 ```
 
+The dev server compiles a page when it is first requested, not every page at start. The first
+page you open takes a few seconds; the next ones are instant. Two rules follow: no top-level
+`import` or `export` in a page, and images by URL (`/img/…`), never a relative path.
+
 Node 22 (`>=22.18 <23`) · pnpm 10. Other Node majors are rejected by `engines`.
 
 Python 3.9 or newer must be available as `python3` for `pnpm test`, which runs the brand-helper

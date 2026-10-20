@@ -189,7 +189,8 @@ literal string `undefined`.
 ## Components
 
 Every component below is registered globally in `components/mdx.tsx`, so a page never needs an
-`import` line. Copy the form you need; each is written the way the lint rules expect it (a
+`import` line, and must not carry one: pages compile on demand, which forbids a top-level `import`
+or `export`. Copy the form you need; each is written the way the lint rules expect it (a
 component on its own lines, with a blank line before and after, and markdown inside it separated
 by blank lines).
 

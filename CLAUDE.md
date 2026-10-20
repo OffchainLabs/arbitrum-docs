@@ -79,6 +79,9 @@ entries do not carry this contract.
 
 - **Fumadocs information comes from https://www.fumadocs.dev/llms.txt.** Do not guess its APIs.
 - **`.source/` is generated.** Never hand-edit it; run `pnpm types:check`.
+- **Both collections are `dynamic`.** A page compiles on first request; `body`, `toc` and
+  `lastModified` come from `await page.data.load()`, a glossary body from `await entry.load()`.
+  No top-level `import`/`export` in MDX and no relative image path: both fail at compile time.
 - **Node 22 only** (`>=22.18 <23`), pnpm 10. Run `nvm use 22`; never bypass `engines`. Every script
   is TypeScript run directly by Node, and a relative import carries its `.ts` extension.
 - **Never use `next/font/google`.** Fonts are self-hosted in `public/fonts/` and loaded with
@@ -114,7 +117,7 @@ entries do not carry this contract.
 ## Where things live
 
 - **Pipeline.** `source.config.ts` (collections), `lib/page-schema.ts` (the frontmatter schema),
-  `lib/source.ts` (the single `loader()`, the only reader of `.source/`),
+  `lib/source.ts` (the single `loader()`, over `collections/dynamic`),
   `app/(docs)/[...slug]/page.tsx` (every page, prerendered, `dynamicParams = false`). MDX options
   are in `lib/mdx-options.ts`; `lib/llms-markdown.ts` decides how each component reads in the
   markdown mirrors.

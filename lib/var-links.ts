@@ -14,6 +14,7 @@
  */
 import { replaceSource } from 'fumadocs-core/mdx-plugins/stringifier';
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /** Variable values keyed by name, as `content/vars.json` holds them. */
@@ -67,9 +68,16 @@ export function compilerOf(file?: VarLinksFile): { addDependency(path: string): 
 
 /**
  * `content/vars.json`, resolved from this file since `source.config.ts` and `check-links` run from
- * different places.
+ * different places. Not `new URL('../content/vars.json', import.meta.url)`: the dynamic
+ * collections bundle this module into the server, where Turbopack turns that pattern into a
+ * static-asset URL under `/_next/static/media/`.
  */
-export const VARS_PATH: string = fileURLToPath(new URL('../content/vars.json', import.meta.url));
+export const VARS_PATH: string = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  'content',
+  'vars.json',
+);
 
 /** A `{var:name}` placeholder; the name is an identifier, so plain braces in a URL stay put. */
 export const VAR_PLACEHOLDER: RegExp = /\{var:([A-Za-z_]\w*)\}/g;
@@ -146,10 +154,13 @@ function markdownOf(node: VarLinksNode): Parameters<typeof replaceSource>[2] {
 
 /**
  * Read `content/vars.json` (or `varsPath`) off disk. `content/vars.ts`'s bare JSON import fails
- * under Node.
+ * under Node. The dynamic collections bundle this module into the server; `turbopackIgnore` keeps
+ * the variable path from making Turbopack trace the whole project into every server function.
+ * Nothing compiles at request time in production (every page and mirror is prerendered), so the
+ * server never reads the file.
  */
 export function readVars(varsPath: string = VARS_PATH): Record<string, unknown> {
-  const parsed: unknown = JSON.parse(readFileSync(varsPath, 'utf8'));
+  const parsed: unknown = JSON.parse(readFileSync(/* turbopackIgnore: true */ varsPath, 'utf8'));
   if (!isRecord(parsed)) throw new TypeError(`${varsPath} is not a JSON object.`);
   return parsed;
 }

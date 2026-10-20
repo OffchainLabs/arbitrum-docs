@@ -1,4 +1,4 @@
-import { glossary } from 'collections/server';
+import { glossary } from 'collections/dynamic';
 import type { MDXContent } from 'mdx/types';
 
 import { docsRoute } from './shared';
@@ -13,7 +13,8 @@ export interface ReferenceEntry {
   id: string;
   title: string;
   sortAs?: string;
-  body: MDXContent;
+  /** Compiles the definition on first call (the collection is dynamic) and caches it. */
+  load(): Promise<{ body: MDXContent }>;
 }
 
 interface ReferenceCollection {

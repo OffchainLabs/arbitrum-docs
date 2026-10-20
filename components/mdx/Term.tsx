@@ -7,11 +7,11 @@ import { getReference } from '@/lib/references';
 /**
  * Glossary term with a hover definition: `<Term id="dapp">decentralized app</Term>`.
  *
- * Server component: it renders the entry's MDX definition on the server and hands it to the client
- * `HoverPopover`, so each page bundles only the definitions it cites. An unknown id renders the text
- * plainly; `pnpm references:check` fails on one.
+ * Async server component: it compiles and renders the entry's MDX definition on the server and
+ * hands it to the client `HoverPopover`, so each page bundles only the definitions it cites. An
+ * unknown id renders the text plainly; `pnpm references:check` fails on one.
  */
-export function Term({ id, children }: { id: string; children: ReactNode }) {
+export async function Term({ id, children }: { id: string; children: ReactNode }) {
   const entry = getReference('glossary', id);
   if (!entry) {
     if (process.env.NODE_ENV !== 'production') {
@@ -20,7 +20,7 @@ export function Term({ id, children }: { id: string; children: ReactNode }) {
     return <>{children}</>;
   }
 
-  const Definition = entry.body;
+  const { body: Definition } = await entry.load();
   return (
     <HoverPopover
       title={entry.title}
