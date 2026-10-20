@@ -23,6 +23,7 @@ export function Term({ id, children }: { id: string; children: ReactNode }) {
   const Definition = entry.body;
   return (
     <HoverPopover
+      label="Glossary"
       title={entry.title}
       content={<Definition components={getMDXComponents({ Term: PlainTerm })} />}
     >

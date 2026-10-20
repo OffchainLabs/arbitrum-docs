@@ -2,7 +2,7 @@ import { docs } from 'collections/server';
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 
-import { docsContentRoute, docsImageRoute, docsRoute } from './shared';
+import { docsContentRoute, docsImageRoute, docsPreviewRoute, docsRoute } from './shared';
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
 export const source = loader({
@@ -39,6 +39,15 @@ export function getPageMarkdownUrl(page: (typeof source)['$inferPage']) {
   return {
     segments,
     url: `${docsContentRoute}/${segments.join('/')}`,
+  };
+}
+
+export function getPagePreviewUrl(page: (typeof source)['$inferPage']) {
+  const segments = [...page.slugs, 'preview.json'];
+
+  return {
+    segments,
+    url: `${docsPreviewRoute}/${segments.join('/')}`,
   };
 }
 
