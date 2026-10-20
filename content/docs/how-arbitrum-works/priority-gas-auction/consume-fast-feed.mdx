@@ -129,6 +129,12 @@ What the receipt reports:
 - Any `contract_address` the transaction created
 - The event `logs` emitted by the transaction
 
+Each entry in `logs` carries three fields:
+
+- `address`: the hex-encoded address of the contract that emitted the event
+- `topics`: the hex-encoded topics of the event, in order
+- `data`: the hex-encoded event data
+
 ## Reconnect after a drop
 
 If your connection closes, reconnect and continue from the current head. The Fast Feed keeps no history, so the messages sent while you were away are gone.
