@@ -479,8 +479,9 @@ has a left accent and a "Glossary" kicker and is a reading surface; the preview 
 card is a link. The card shows the page title, its frontmatter description and the lead, muted.
 For a `#section` link it shows the section heading and its text, with the page title as a caption.
 
-The data is `page.data.structuredData`, which `remarkStructureOptions` in `lib/mdx-options.ts`
-limits to headings and paragraphs. `lib/preview-text.ts` runs before Fumadocs' `remarkStructure`
+The data is the `structuredData` export, read through `await page.data.load()` because the
+collection is dynamic, which `remarkStructureOptions` in `lib/mdx-options.ts` limits to headings
+and paragraphs. `lib/preview-text.ts` runs before Fumadocs' `remarkStructure`
 and hands it the plain text of each one: a paragraph through the `node.data.structuredData` hook, a
 heading through `'search'`-namespaced `replaceSource` edits on its children, so a `<Var>` reads as
 its value and markers and `<Term>` wrappers are gone. `lib/link-preview.ts` turns it into one JSON
