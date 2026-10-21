@@ -28,10 +28,10 @@ These updates will help teams who rely on speed, like traders, DeFi app develope
 
 ## What’s changing
 
-| Method                       | Returns today                                                                                                           | Returns after the change                                                                                                                      |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Method                       | Returns today                                                                                                            | Returns after the change                                                                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | `eth_sendRawTransaction`     | The transaction hash, pre-check errors or inclusion errors before the transaction is received, executed, and in a block. | When the transaction enters the sequencer's queue or pre-check errors. Inclusion errors will no longer be returned.                           |
-| `eth_sendRawTransactionSync` | The full receipt, after the block is built, alongside any inclusion or precheck errors.                                 | A receipt as soon as the sequencer executes the transaction, with `blockHash` set to `0x000…000`, alongside any inclusion or precheck errors. |
+| `eth_sendRawTransactionSync` | The full receipt, after the block is built, alongside any inclusion or precheck errors.                                  | A receipt as soon as the sequencer executes the transaction, with `blockHash` set to `0x000…000`, alongside any inclusion or precheck errors. |
 
 ### `eth_sendRawTransaction` returns on admission to the queue
 
