@@ -81,7 +81,9 @@ entries do not carry this contract.
 - **`.source/` is generated.** Never hand-edit it; run `pnpm types:check`.
 - **Both collections are `dynamic`.** A page compiles on first request; `body`, `toc` and
   `lastModified` come from `await page.data.load()`, a glossary body from `await entry.load()`.
-  No top-level `import`/`export` in MDX and no relative image path: both fail at compile time.
+  No top-level `import`/`export` in MDX (`content:lint` rule `esm-in-page`; the build does not
+  reject one) and no relative image path. In `next dev`, a partial or `{var:…}` edit does not
+  reach an already compiled page: edit any page, or restart.
 - **Node 22 only** (`>=22.18 <23`), pnpm 10. Run `nvm use 22`; never bypass `engines`. Every script
   is TypeScript run directly by Node, and a relative import carries its `.ts` extension.
 - **Never use `next/font/google`.** Fonts are self-hosted in `public/fonts/` and loaded with
@@ -99,9 +101,9 @@ entries do not carry this contract.
   prints literally (`markdown-in-title`); a one-line Callout glued to the next paragraph breaks
   hydration (`block-component-in-paragraph`). Put a Callout on its own lines.
 - **Docusaurus habits fail `content:lint`.** `@@name@@` (`docusaurus-var-token`),
-  `<a data-quicklook-from>` (`quicklook-anchor`), `import … from '@site/…'` (`site-import`), a JSX
-  tag that is neither registered in `components/mdx.tsx` nor imported (`unknown-component`), and
-  `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
+  `<a data-quicklook-from>` (`quicklook-anchor`), any top-level `import`/`export`
+  (`esm-in-page`), a JSX tag that `components/mdx.tsx` does not register (`unknown-component`),
+  and `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
 - **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check`
   rule R3 only forbids ESM-importing such a partial, which no component does.
 - **No link in a heading, and no `<tr>` directly in `<table>`.** Both break React hydration (rules
