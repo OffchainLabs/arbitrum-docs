@@ -37,7 +37,7 @@ These updates will help teams who rely on speed, like traders, DeFi app develope
 
 `eth_sendRawTransaction` returns a response when the transaction enters the sequencer’s queue. It no longer waits for the sequencer to execute the transaction and include it in a block. This matches how the method behaves on other EVM chains, such as Ethereum, Base, Monad, and Polygon.
 
-The sequencer will complete prechecks before admitting a transaction. These errors still return synchronously, and sooner than today:
+The sequencer will complete prechecks before admitting a transaction. These errors still return synchronously:
 
 - Nonce already used
 - Insufficient funds
