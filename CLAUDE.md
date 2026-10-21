@@ -34,7 +34,7 @@ pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
 pnpm frontmatter:check # every documentation page satisfies lib/page-schema.ts
 pnpm test              # node --test over scripts/**/*.test.ts; helper tests require python3 >=3.9
 pnpm test:browser      # Chromium interactions against a running production server; see README.md
-pnpm build             # check-links, then next build
+pnpm build             # format:check, check-links, then next build
 pnpm start             # serve the production build
 
 # The other CI gates
@@ -134,7 +134,8 @@ entries do not carry this contract.
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
   The canonical branch is `master`, including after migration. Keep the variable and PR
   template links aimed at `master`, regardless of the current development branch.
-- **Components.** `components/mdx.tsx` is the registry.
+- **Components.** `components/mdx.tsx` is the registry. Its `a` override wraps resolvable internal links in
+  `components/LinkPreview`, a mouse-only hover card fed by `/preview/<slug>/preview.json`.
 - **Redirects.** `redirects.config.ts`, hand-maintained. Never hand-edit between the
   `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
   entry left chaining, and fails when a URL in `scripts/data/master-routes.json` is neither a page
@@ -147,7 +148,8 @@ entries do not carry this contract.
 - **Routing.** `next.config.ts` rewrites `/<slug>.md` and `/index.md` to the `/llms.mdx/` mirror
   and sets the response headers from `lib/http-headers.ts` (security headers, report-only CSP,
   `Link` on `/`, CORS on the markdown surface). The `og/` and `llms.mdx/` routes have
-  `dynamicParams = false`. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
+  `dynamicParams = false`. `app/preview/` serves the static link-preview JSON, untracked and without
+  CORS. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
   production build without `NEXT_PUBLIC_SITE_URL`.
 - **Theme.** `app/global.css` only. Tokens are `--color-fd-*`, built on the `--color-arbitrum-*`
