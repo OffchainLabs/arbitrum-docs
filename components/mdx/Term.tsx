@@ -23,6 +23,7 @@ export async function Term({ id, children }: { id: string; children: ReactNode }
   const { body: Definition } = await entry.load();
   return (
     <HoverPopover
+      label="Glossary"
       title={entry.title}
       content={<Definition components={getMDXComponents({ Term: PlainTerm })} />}
     >
