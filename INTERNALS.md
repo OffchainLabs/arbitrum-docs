@@ -907,12 +907,13 @@ Never bypass `engines`.
 | `content:lint`      | MDX that compiles but renders wrong (below)                                                                                                                                                                           |
 | `format:check`      | Prettier                                                                                                                                                                                                              |
 
-**`Build and HTTP smoke tests`** runs `pnpm build` (which runs `check-links` first), starts the
-server, and runs `scripts/static-docs-http.test.ts`. That suite checks what only a built site
-shows: prerendered pages, markdown URLs, the 404 shape, mirrors free of MDX comments and of `<Var>`,
-`<Term>` and `<Callout>` tags, the stylesheet count on a plain docs page, the MCP card, home and
-docs metadata, and the contribute guide's links home. The build also catches a page that compiles
-but throws at prerender. Nothing in the build reaches the network after `pnpm install`.
+**`Build and HTTP smoke tests`** runs `pnpm build` (which runs `format:check` and `check-links`
+first), starts the server, and runs `scripts/static-docs-http.test.ts`. That suite checks what only
+a built site shows: prerendered pages, markdown URLs, the 404 shape, mirrors free of MDX comments
+and of `<Var>`, `<Term>` and `<Callout>` tags, the stylesheet count on a plain docs page, the MCP
+card, home and docs metadata, and the contribute guide's links home. The build also catches a page
+that compiles but throws at prerender. Nothing in the build reaches the network after
+`pnpm install`.
 
 The same job installs Chromium and runs `pnpm test:browser` against the server at `localhost`.
 `tests/browser/findable-panels.test.ts` checks that native text search discovers inactive tab

@@ -99,9 +99,9 @@ pnpm format        # prettier, in place
 ```
 
 CI runs ten blocking checks, then a `pnpm build` that serves the built site and checks it over
-HTTP. `pnpm build` runs the same link check first, so a broken link fails the Vercel deploy too. See
-[The gates](INTERNALS.md#the-gates) for the full list. There is no pre-commit hook, so run these
-yourself.
+HTTP. `pnpm build` runs the same formatting and link checks first, so an unformatted file or a
+broken link fails the Vercel deploy too. See [The gates](INTERNALS.md#the-gates) for the full
+list. There is no pre-commit hook, so run these yourself.
 
 `types:check` checks TypeScript; `frontmatter:check` validates page metadata. Neither proves
 the render. Type checking passes on a page that serves literal `:::` or
@@ -287,7 +287,7 @@ pnpm dev                 # pnpm install, pnpm clean, next dev on http://localhos
 pnpm clean               # delete .next/ and .source/ (next dev regenerates .source/)
 pnpm types:check         # regenerate .source/, generate Next types, tsc --noEmit
 pnpm frontmatter:check   # every page's frontmatter satisfies lib/page-schema.ts
-pnpm build               # production build (runs check-links first)
+pnpm build               # production build (runs format:check and check-links first)
 pnpm start               # serve the production build
 
 pnpm test                # tooling test suites, including the sidebar and redirects
