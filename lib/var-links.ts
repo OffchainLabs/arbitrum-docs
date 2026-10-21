@@ -3,9 +3,9 @@
  *
  * `<Var>` cannot be used in a link destination (a CommonMark destination may not hold a space, so
  * the link never parses) or in an `href`/`to`/`src` attribute (its quotes close the value early);
- * `content:lint` rule `var-in-link` reports the tag and names this placeholder as the fix. The
+ * ESLint rule `docs/var-in-link` reports the tag and names this placeholder as the fix. The
  * `var:` prefix keeps a placeholder distinct from a path template like `…/{chainId}/…`, so
- * `vars:check` can be strict about an unknown name; the plugin leaves one in place rather than
+ * rule `docs/unknown-var` can be strict about an unknown name; the plugin leaves one in place rather than
  * throwing, so a typo reaches the page visibly instead of taking the site down. The markdown
  * mirrors are sliced from the authored source, so a rewritten `url` is also recorded with
  * `replaceSource` (`lib/llms-markdown.ts` explains the mechanism). Import-free apart from
@@ -82,7 +82,7 @@ export const VARS_PATH: string = path.join(
 /** A `{var:name}` placeholder; the name is an identifier, so plain braces in a URL stay put. */
 export const VAR_PLACEHOLDER: RegExp = /\{var:([A-Za-z_]\w*)\}/g;
 
-/** Opens like a placeholder but the name is not an identifier; `content:lint` reports it. */
+/** Opens like a placeholder but the name is not an identifier; rule `docs/var-in-link` reports it. */
 export const MALFORMED_VAR_PLACEHOLDER: RegExp = /\{var:(?![A-Za-z_]\w*\})[^}\n]*\}/g;
 
 /** Every placeholder name in a string, in source order, with duplicates kept. */
