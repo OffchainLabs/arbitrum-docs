@@ -278,7 +278,7 @@ test('a CRLF blank line bounds a span the way an LF one does', () => {
   const crlf = 'para `x\r\n\r\nSHOWN_ONE\r\nSHOWN_TWO\r\n\r\nmore y` tail\r\n';
   assert.ok(kept(crlf, 'SHOWN_ONE'));
   assert.ok(kept(crlf, 'SHOWN_TWO'));
-  // A CRLF whitespace-only line is blank too; `content-lint` reads files verbatim and strips no CR.
+  // A CRLF whitespace-only line is blank too; the scripts read files verbatim and strip no CR.
   assert.ok(kept('para `x\r\n \t\r\nSHOWN_THREE\r\n\r\nmore y` tail\r\n', 'SHOWN_THREE'));
 });
 
@@ -300,7 +300,7 @@ test('a span does not cross a setext heading underline', () => {
 });
 
 test('a thematic break and a frontmatter fence bound a span on CRLF input too', () => {
-  // `content-lint` reads files verbatim, so a `---\r` line must still end the paragraph. Prettier
+  // The scripts read files verbatim, so a `---\r` line must still end the paragraph. Prettier
   // rejects CRLF, so this cannot reach content/, but the scanner should not depend on that.
   assert.ok(kept('para `x\r\n---\r\nSHOWN_AFTER_BREAK y` tail\r\n', 'SHOWN_AFTER_BREAK'));
   assert.ok(kept('para `x\r\n* * *\r\nSHOWN_AFTER_STARS y` tail\r\n', 'SHOWN_AFTER_STARS'));
