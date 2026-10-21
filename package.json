@@ -9,7 +9,7 @@
     "pnpm": ">=10.0.0"
   },
   "scripts": {
-    "build": "node scripts/check-links.ts && next build",
+    "build": "prettier --check . && node scripts/check-links.ts && next build",
     "dev": "pnpm install && pnpm clean && next dev",
     "start": "next start",
     "check-links": "node scripts/check-links.ts",
