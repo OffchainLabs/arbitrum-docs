@@ -6,7 +6,6 @@
   "pages": [
     "index",
     "arbitrum-introduction",
-    "../build-decentralized-apps/machine-payments-protocol",
     "../chain-info",
     "../glossary",
     "../contribute",
