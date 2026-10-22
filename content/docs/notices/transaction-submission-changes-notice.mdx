@@ -72,6 +72,12 @@ If your path depends on these inclusion-time errors, use `eth_sendRawTransaction
 | Treat an `eth_sendRawTransaction` response as "included," or retry based on its errors                                                                          | You can no longer rely on `eth_sendRawTransaction` to report inclusion-time errors                                                                                          | Switch to `eth_sendRawTransactionSync`      |
 | Need the canonical receipt with the `blockHash`                                                                                                                 | You will no longer get the `blockHash` in the receipt from `eth_sendRawTransactionSync`                                                                                     | Keep polling `eth_getTransactionReceipt`    |
 
+<Callout type="info" title="Chains with more than one PGA round per block">
+
+The latency gain is larger on a chain that runs more than one <Term id="priority-gas-auction">Priority Gas Auction (PGA)</Term> round per block. Today, `eth_sendRawTransactionSync` waits for every round in the block to finish before it returns the receipt. After the change, it returns as soon as the sequencer executes your transaction, however many rounds remain.
+
+</Callout>
+
 <Callout type="warn" title="If you take no action">
 	
 You can still serve `eth_sendRawTransactionSync` calls but they will not benefit from being faster or match the expected behaviors above.
