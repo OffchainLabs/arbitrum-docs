@@ -420,8 +420,8 @@ include `Callout`, `Card`, `Cards` and code blocks) and adds:
   label naming its type, so the type is not conveyed by colour alone.
 - `AEL`, an address explorer link (`components/mdx/AddressExplorerLink.tsx`).
 - `Term`, `ReferenceList` and `Var` from `components/mdx/`.
-- Four widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`
-  boundary in its `index.tsx`: `FlowChart` from `CentralizedAuction/` (the Timeboost auction), `EdgeChallengeFlow` (BoLD,
+- Three widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`
+  boundary in its `index.tsx`: `EdgeChallengeFlow` (BoLD,
   client only), `VendingMachine` (the cupcake demo, which pulls in viem) and the node
   troubleshooting set (`TroubleshootingChecklist`, `ChecklistItem`, `ConfigGuidance`,
   `TroubleshootingConfig`, `TroubleshootingReport`).
