@@ -34,7 +34,9 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 Fumadocs is a set of libraries on top of a Next.js App Router app that we own. There is no
 `fumadocs build`, no plugin system and no theme to eject from. `pnpm dev` runs `pnpm install`, then
 `pnpm clean` (deletes `.next/` and `.source/`), then `next dev`: the same sequence as master's
-`yarn start`, so the first page compiles cold on every start. Every route under `app/` is ordinary
+`yarn start`, so the first page compiles cold on every start. Both collections are `dynamic`
+(see [The pipeline](#the-pipeline)), so that first page compiles its own MDX and the glossary
+entries it cites, not every file under `content/`. Every route under `app/` is ordinary
 Next code. We get full control, and in exchange we own the pieces a
 monolithic docs framework would supply. Most of this document describes those pieces.
 
@@ -83,7 +85,7 @@ mistakes:
 | `:::note`, `:::caution`, `:::info` admonitions                       | `<Callout type="info\|warn\|error\|idea\|success">` on its own lines (`docusaurus-directive`)           |
 | `<a data-quicklook-from="id">text</a>`                               | `<Term id="id">text</Term>` (`quicklook-anchor`)                                                        |
 | `@@varName@@` preprocessing                                          | `<Var name="…" />` in prose, `{var:name}` in a URL, see [Global variables](#global-variables)           |
-| `import Partial from '@site/docs/partials/_x.mdx'` and `<Partial />` | `<include cwd>content/partials/_x.mdx</include>` (`site-import`)                                        |
+| `import Partial from '@site/docs/partials/_x.mdx'` and `<Partial />` | `<include cwd>content/partials/_x.mdx</include>` (`esm-in-page`)                                        |
 | `import Tabs from '@theme/Tabs'` and `<TabItem value label>`         | `<Tabs items={[…]}>` and `<Tab value>`; nothing is imported                                             |
 | `<details>`                                                          | `<Accordions><Accordion title="…">`                                                                     |
 | `className="img-600px"` on an image                                  | One prose cap (600px) in `app/global.css`, with a `data-wide` escape, see [Image sizing](#image-sizing) |
@@ -95,14 +97,42 @@ Read `source.config.ts`, `lib/source.ts` and `app/(docs)/[...slug]/page.tsx` tog
 reads the `docs` collection. The `glossary` collection has one reader, `lib/references.ts`.
 
 1. `fumadocs-mdx` scans `content/docs/**` and `content/glossary/**` and emits the `.source/`
-   collections. The frontmatter schema (`arbitrumPageSchema` in `lib/page-schema.ts`, applied by
-   the `docs` collection in `source.config.ts`) does not run here: the loader runs it when it
-   compiles a page, in `next build` and `next dev`. `pnpm frontmatter:check` runs the same schema
-   offline (`scripts/frontmatter-check.ts`).
-2. `lib/source.ts` runs `loader()` over that collection with the Lucide icons plugin and exports
-   `source`.
-3. Route handlers read `source`. The docs page renders pages; the `llms.txt`, `llms-full.txt`,
-   `llms.mdx/`, `og/` and sitemap routes derive from the same object.
+   collections. Both collections set `dynamic: true`, so `.source/dynamic.ts` lists each file with
+   its parsed frontmatter and nothing imports the MDX: a page compiles on first request, in the
+   server, through the same `buildMDX` and plugins as the bundler path
+   (`fumadocs-mdx/runtime/dynamic.js`). Under `next dev` the first page therefore waits for its own
+   MDX, not for every file; `next build` still prerenders every page. The frontmatter schema
+   (`arbitrumPageSchema` in `lib/page-schema.ts`, applied by the `docs` collection in
+   `source.config.ts`) runs when the index is generated. `pnpm frontmatter:check` runs the same
+   schema offline (`scripts/frontmatter-check.ts`).
+2. `lib/source.ts` imports `docs` from `collections/dynamic` and runs `loader()` over it with the
+   Lucide icons plugin and exports `source`.
+3. Route handlers read `source`. `page.data` holds the frontmatter; `body`, `toc` and
+   `lastModified` come from `await page.data.load()`, which compiles once per process and caches.
+   The docs page renders pages; the `llms.txt`, `llms-full.txt`, `llms.mdx/`, `og/` and sitemap
+   routes derive from the same object. `getText('processed')` loads the same way.
+
+Dynamic mode supports neither a top-level `import` or `export` in an MDX page nor a relative
+image path (`./image.png`); components come from the registry in `components/mdx.tsx` and images
+from `public/`. Nothing in the build rejects an import: the compiled body runs as a function, so
+an import becomes a runtime `import()` from the page's directory. A relative one fails at request
+time with "Cannot find module"; a package import resolves through the repo's `node_modules` and
+renders, untraced by the bundler. `content:lint` rule `esm-in-page` is the gate.
+
+Because `.source/dynamic.ts` imports `source.config.ts`, the plugins in `lib/mdx-options.ts` are
+bundled into the server. Two consequences in `lib/var-links.ts`: `VARS_PATH` is derived from
+`import.meta.url` as a string (Turbopack rewrites `new URL('…', import.meta.url)` into a static
+asset), and the read in `readVars` carries `turbopackIgnore` (a variable path otherwise makes
+Turbopack trace the whole project, `public/` included, into every server function). The server
+never reads the file in production: every page and mirror is prerendered.
+
+Hot reload under `next dev` follows the same cache. An edit to a page changes its hash in
+`.source/dynamic.ts`, Turbopack re-evaluates that module, and every page recompiles on its next
+request. An edit to a partial or to `content/vars.json` changes no hash, and the runtime compile
+records no dependencies (`compilerOf(file)` is undefined on that path), so a page already
+compiled keeps the old include and the old `{var:…}` link destinations until a page under
+`content/docs/` changes or the server restarts. `<Var>` in prose still updates: the component
+reads `@/content/vars` at render time.
 
 `.source/` is generated by `postinstall`, `types:check` and the build. Never hand-edit it.
 
@@ -135,8 +165,9 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
   node position. A plugin that only mutates or removes a node leaves the mirror unchanged, so
   `remarkLlmsMarkdown` (`lib/llms-markdown.ts`), `remarkVarLinks` and `remarkStripMdxComments`
   record their edits with `replaceSource()` from `fumadocs-core/mdx-plugins/stringifier`.
-- **Server only.** Never import `lib/source`, or a module that imports it, from a client
-  component. It drags the compiled collection into the browser bundle, and no gate notices.
+- **Server only.** Never import `lib/source`, `lib/references`, or a module that imports either,
+  from a client component. They reach `collections/dynamic`, which reads and compiles files on the
+  server; `scripts/lib/client-imports.test.ts` fails on such a chain.
 
 ## The frontmatter contract
 
@@ -168,7 +199,8 @@ writers and reviewers. They do not render on the page and are not required for a
 The `lastModified` option on the `docs` collection makes `fumadocs-mdx` read each file's date from
 git. The docs page prints it as "Last updated on …", the sitemap emits it as `<lastmod>`, and page
 metadata emits it as `article:modified_time`. It is not frontmatter, so never add a date field to a
-page.
+page. It is resolved when the page compiles, so it sits behind `await page.data.load()`; the
+sitemap loads every page to read it.
 
 The option is gated by `hasFullGitHistory()` in `source.config.ts`. A shallow clone reports its
 oldest commit as having added every file, which would stamp most pages with one wrong date, so a
@@ -384,7 +416,8 @@ runs only here, not in CI, because the gates stay offline.
 ## Glossary and inline references
 
 `content/glossary/*.mdx` is a reference collection (`{ id, title, sortAs? }`, body is the
-definition). `lib/references.ts` is the registry. `<Term id="…">text</Term>` renders the text with
+definition). `lib/references.ts` is the registry; the collection is dynamic, so an entry's body
+comes from `await entry.load()` and `Term` and `ReferenceList` are async server components. `<Term id="…">text</Term>` renders the text with
 the definition in a popover (`components/HoverPopover`, a non-modal dialog that opens on hover,
 focus or click, so the links inside a definition are reachable by keyboard), rendered on the server
 so each page ships only the definitions it cites. `<ReferenceList collection="glossary" />` renders the whole
@@ -446,8 +479,9 @@ has a left accent and a "Glossary" kicker and is a reading surface; the preview 
 card is a link. The card shows the page title, its frontmatter description and the lead, muted.
 For a `#section` link it shows the section heading and its text, with the page title as a caption.
 
-The data is `page.data.structuredData`, which `remarkStructureOptions` in `lib/mdx-options.ts`
-limits to headings and paragraphs. `lib/preview-text.ts` runs before Fumadocs' `remarkStructure`
+The data is the `structuredData` export, read through `await page.data.load()` because the
+collection is dynamic, which `remarkStructureOptions` in `lib/mdx-options.ts` limits to headings
+and paragraphs. `lib/preview-text.ts` runs before Fumadocs' `remarkStructure`
 and hands it the plain text of each one: a paragraph through the `node.data.structuredData` hook, a
 heading through `'search'`-namespaced `replaceSource` edits on its children, so a `<Var>` reads as
 its value and markers and `<Term>` wrappers are gone. `lib/link-preview.ts` turns it into one JSON
@@ -937,22 +971,22 @@ There is no pre-commit hook. Run the gates yourself before you push.
 `scripts/lib/strip-code.ts`, so an example inside a fence is never reported. The one exception is
 `var-in-code`, which looks only inside code.
 
-| Rule                           | Catches                                                                                                                                 |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                       |
-| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                      |
-| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                            |
-| `site-import`                  | An `import … from '@site/…'` or `'@theme/…'` line, which has no module here and fails the build                                         |
-| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx`, nor a Fumadocs default, nor imported in the file, which throws at render |
-| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                   |
-| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                      |
-| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                         |
-| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                |
-| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                   |
-| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                    |
-| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                        |
-| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                |
-| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                |
+| Rule                           | Catches                                                                                                                                |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                      |
+| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                     |
+| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                           |
+| `esm-in-page`                  | A top-level `import` or `export`; pages compile on demand, where Fumadocs supports neither (a `@site/` or `@theme/` alias gets a hint) |
+| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx` nor a Fumadocs default, which throws at render                           |
+| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                  |
+| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                     |
+| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                        |
+| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                               |
+| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                  |
+| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                   |
+| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                       |
+| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                               |
+| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                               |
 
 `strip-code.ts` is the one "ignore code" scanner for every script; import it rather than writing
 another.
