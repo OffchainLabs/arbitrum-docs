@@ -384,6 +384,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/build-decentralized-apps/machine-payments-protocol',
+    destination: '/arbitrum-essentials/machine-payments-protocol',
+    permanent: true,
+  },
+  {
     source: '/build-decentralized-apps/nodeinterface/overview',
     destination: '/arbitrum-essentials/nodeinterface/overview',
     permanent: false,
