@@ -930,6 +930,7 @@ Never bypass `engines`.
 
 | Step                | What it proves                                                                                                                                                                                                        |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `audit`             | No advisory in `pnpm-lock.yaml` beyond those listed under `auditConfig.ignoreGhsas` in `pnpm-workspace.yaml`                                                                                                          |
 | `types:check`       | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                         |
 | `frontmatter:check` | Every page under `content/docs` satisfies the page schema in `lib/page-schema.ts`                                                                                                                                     |
 | `test`              | Every `scripts/**/*.test.ts` suite: the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import |
@@ -940,6 +941,12 @@ Never bypass `engines`.
 | `check-links`       | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                      |
 | `content:lint`      | MDX that compiles but renders wrong (below)                                                                                                                                                                           |
 | `format:check`      | Prettier                                                                                                                                                                                                              |
+
+`audit` asks the npm registry, so an advisory published today fails every PR, including one that
+touched no dependency. First bump the direct dependency that brings the package in. If a parent
+still pins a vulnerable version, add an `overrides` entry in `pnpm-workspace.yaml` and name that
+parent in its comment. If no patched release exists, add the GHSA id to `auditConfig.ignoreGhsas`
+with the reason. Drop an override once `pnpm why <package>` shows every parent allows the fix.
 
 **`Build and HTTP smoke tests`** runs `pnpm build` (which runs `format:check` and `check-links`
 first), starts the server, and runs `scripts/static-docs-http.test.ts`. That suite checks what only

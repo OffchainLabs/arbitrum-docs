@@ -298,6 +298,7 @@ pnpm build               # production build (runs format:check and check-links f
 pnpm start               # serve the production build
 
 pnpm test                # tooling test suites, including the sidebar and redirects
+pnpm audit               # dependency advisories (ignores those in pnpm-workspace.yaml)
 pnpm test:browser        # Chromium interactions against a running production server
 pnpm check-links         # broken internal doc links and MDX fragments
 pnpm vars:check          # every <Var name> and {var:name} resolves; banner keys are valid
