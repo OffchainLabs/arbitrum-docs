@@ -38,6 +38,7 @@ pnpm build             # format:check, check-links, then next build
 pnpm start             # serve the production build
 
 # The other CI gates
+pnpm audit             # no advisory in the lockfile beyond auditConfig.ignoreGhsas in pnpm-workspace.yaml
 pnpm vars:check        # every <Var name> and {var:name} resolves; banner keys are valid
 pnpm references:check  # every <Term id> resolves to a content/glossary entry
 pnpm contracts:check   # the contract-address partial is current
