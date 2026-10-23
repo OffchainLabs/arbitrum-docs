@@ -76,7 +76,10 @@ interface CalloutStyle {
 }
 
 const green = { light: '#1a7f37', dark: '#3fb950' };
-const yellow = { light: '#9a6700', dark: '#d29922' };
+const yellow = {
+  light: '#d29922',
+  dark: '#d29922',
+}; /* Alternatively both light & dark could be #fb923c */
 
 /** Keyed by every type Fumadocs accepts, so pages written for Fumadocs' Callout keep working. */
 const calloutStyles: Record<string, CalloutStyle> = {
