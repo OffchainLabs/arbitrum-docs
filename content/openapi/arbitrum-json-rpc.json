@@ -59,7 +59,7 @@
         "operationId": "arb_checkPublisherHealth",
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arb_checkPublisherHealth",
-        "description": "Returns an error if the transaction publisher of the node, such as its sequencer or its transaction forwarder, is not healthy. Returns `null` otherwise.",
+        "description": "Returns an error if the transaction publisher of the node, such as its <Term id=\"sequencer\">sequencer</Term> or its <Term id=\"forwarder\">transaction forwarder</Term>, is not healthy. Returns `null` otherwise.",
         "requestBody": {
           "required": true,
           "content": {
@@ -101,7 +101,7 @@
         "operationId": "arbdebug_pricingModel",
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arbdebug_pricingModel",
-        "description": "Returns the parent chain and child chain pricing state at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples.",
+        "description": "Returns the <Term id=\"parent-chain\">parent chain</Term> and <Term id=\"child-chain\">child chain</Term> pricing state at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples.",
         "requestBody": {
           "required": true,
           "content": {
@@ -143,7 +143,7 @@
         "operationId": "arbdebug_timeoutQueueHistory",
         "x-arbitrum-request-url": "$NITRO_RPC_URL",
         "summary": "arbdebug_timeoutQueueHistory",
-        "description": "Returns the size of the retryable timeout queue at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples.",
+        "description": "Returns the size of the <Term id=\"retryable-ticket\">retryable</Term> timeout queue at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples.",
         "requestBody": {
           "required": true,
           "content": {
@@ -185,7 +185,7 @@
         "operationId": "arbdebug_timeoutQueue",
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arbdebug_timeoutQueue",
-        "description": "Returns the retryable tickets in the timeout queue at the given block, with the timeout of each queue entry in Unix seconds, or 0 if the retryable no longer exists. Returns at most one entry more than the configured timeout queue bound.",
+        "description": "Returns the <Term id=\"retryable-ticket\">retryable tickets</Term> in the timeout queue at the given block, with the timeout of each queue entry in Unix seconds, or 0 if the retryable no longer exists. Returns at most one entry more than the configured timeout queue bound.",
         "requestBody": {
           "required": true,
           "content": {
@@ -269,7 +269,7 @@
         "operationId": "eth_sendRawTransactionConditional",
         "x-arbitrum-request-url": "$NITRO_RPC_URL",
         "summary": "eth_sendRawTransactionConditional",
-        "description": "Submits a signed raw transaction that the sequencer includes only if the given options hold: the parent chain block number and the block timestamp ranges, and the storage of the known accounts. Returns the transaction hash.",
+        "description": "Submits a signed raw transaction that the <Term id=\"sequencer\">sequencer</Term> includes only if the given options hold: the <Term id=\"parent-chain\">parent chain</Term> block number and the block timestamp ranges, and the storage of the known accounts. Returns the transaction hash.",
         "requestBody": {
           "required": true,
           "content": {
@@ -563,7 +563,7 @@
         "operationId": "das_commitChunkedStore",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_commitChunkedStore",
-        "description": "Assembles the chunks received for the given message ID, stores the message and returns the signed data availability certificate.",
+        "description": "Assembles the chunks received for the given message ID, stores the message and returns the signed <Term id=\"data-availability-certificate\">data availability certificate</Term>.",
         "requestBody": {
           "required": true,
           "content": {
@@ -605,7 +605,7 @@
         "operationId": "das_healthCheck",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_healthCheck",
-        "description": "Returns an error if the storage backend of the data availability server is not healthy. Returns `null` otherwise.",
+        "description": "Returns an error if the storage backend of the <Term id=\"data-availability-server-das\">data availability server</Term> is not healthy. Returns `null` otherwise.",
         "requestBody": {
           "required": true,
           "content": {

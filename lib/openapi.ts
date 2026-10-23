@@ -36,7 +36,7 @@ export async function openapiPageMarkdown(schemaId: string, slug: string): Promi
   const example = resolve(doc, body.properties?.params).examples?.[0] ?? [];
   const types = methodTypes(doc, op.operationId as string);
 
-  const lines = [op.description ?? '', '', '## Parameters', ''];
+  const lines = ['', '## Parameters', ''];
   lines.push('| # | Name | Type | Description |', '| --- | --- | --- | --- |');
   params.forEach((p, i) => {
     const type = p.$ref ? resolve(doc, { $ref: p.$ref }).title : p.type;
