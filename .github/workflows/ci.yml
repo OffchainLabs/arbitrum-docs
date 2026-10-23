@@ -65,6 +65,11 @@ jobs:
       - name: MDX that builds but renders wrong
         run: pnpm content:lint
 
+      # The same rules as ESLint, plus every <Var> and <Term> resolving and the page frontmatter
+      # schema; replaces the script gates above once they are removed.
+      - name: Content rules (ESLint)
+        run: pnpm lint
+
       # MDX is in Prettier's scope; files the tooling writes (meta.json) are in .prettierignore.
       - name: Formatting
         run: pnpm format:check
