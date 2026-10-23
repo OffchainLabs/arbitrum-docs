@@ -922,6 +922,10 @@ workflow that sets up Node (`ci.yml`, `upstream-refresh.yml` and `nitro-bump.yml
 project's Node.js Version setting, which is set by hand.
 Never bypass `engines`.
 
+Dependencies in `package.json` take caret ranges; `pnpm-lock.yaml` decides what installs, and CI
+installs with `--frozen-lockfile`. `fumadocs-ui` and `fumadocs-core` stay exact, because the navbar
+CSS depends on Fumadocs' header DOM (see [Theme](#theme)).
+
 ## The gates
 
 `.github/workflows/ci.yml` runs on pushes and PRs to `main`, `master` and `fumadocs`, in two jobs.
