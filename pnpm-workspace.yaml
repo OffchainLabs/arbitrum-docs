@@ -25,10 +25,19 @@ minimumReleaseAge: 10080
 # - ws@8: @ethersproject/providers 5.8.0 (ethers 5, through @arbitrum/sdk) pins ws 8.18.0
 #   (GHSA-96hv-2xvq-fx4p, GHSA-58qx-3vcg-4xpx). ethers 5.8.0 is the last v5 release.
 # - katex: rehype-katex 7.0.1 and micromark-extension-math 3.1.0 ask for ^0.16.0
-#   (GHSA-238p-pmpm-9mq7, fixed in 0.18.2).
+#   (GHSA-238p-pmpm-9mq7, fixed in 0.18.2). `$katex` follows the direct dependency in
+#   package.json, so rehype-katex renders with the version whose CSS app/layout.tsx imports.
 overrides:
   ws@8: 8.21.0
-  katex: 0.18.4
+  katex: $katex
+
+# @offchainlabs/prettier-config 0.3.0 (the latest) declares a peer of
+# @trivago/prettier-plugin-sort-imports ^5.2.2. It never loads the plugin: it only sets
+# importOrder, importOrderSeparation and importOrderSortSpecifiers, which v6 still reads, and
+# prettier.config.ts registers the plugin. Drop this once the shared config accepts v6.
+peerDependencyRules:
+  allowedVersions:
+    '@offchainlabs/prettier-config>@trivago/prettier-plugin-sort-imports': '6'
 
 # Advisories `pnpm audit` skips, each with no patched release. Remove an entry when a fix ships.
 # - GHSA-848j-6mx2-7j84 (low): elliptic, every version. It comes from ethers 5 under the
