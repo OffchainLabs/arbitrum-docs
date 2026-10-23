@@ -5,19 +5,26 @@
     "version": "0.0.0-spike",
     "description": "Hand-written mini OpenAPI 3.1 document. One fake path per JSON-RPC method."
   },
-  "servers": [{ "url": "https://arb1.arbitrum.io/rpc", "description": "Arbitrum One" }],
+  "servers": [
+    {
+      "url": "https://arb1.arbitrum.io/rpc",
+      "description": "Arbitrum One"
+    }
+  ],
   "paths": {
     "/arb_getRawBlockMetadata": {
       "post": {
         "operationId": "arb_getRawBlockMetadata",
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arb_getRawBlockMetadata",
-        "description": "Returns the raw block metadata for each block in the range from `fromBlock` to `toBlock`. Source: nitro v3.12.1 `execution/gethexec/api.go:59`.",
+        "description": "Returns the block number and the raw block metadata of each block in the range from `fromBlock` to `toBlock` that has metadata. Returns an error if the node does not serve block metadata, if `fromBlock` is greater than `toBlock`, or if the range exceeds the configured block limit. Source: nitro v3.12.1 `execution/gethexec/api.go:59`.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/Request_arb_getRawBlockMetadata" }
+              "schema": {
+                "$ref": "#/components/schemas/Request_arb_getRawBlockMetadata"
+              }
             }
           }
         },
@@ -28,8 +35,530 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
-                    { "$ref": "#/components/schemas/Result_arb_getRawBlockMetadata" },
-                    { "$ref": "#/components/schemas/JsonRpcError" }
+                    {
+                      "$ref": "#/components/schemas/Result_arb_getRawBlockMetadata"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/arb_checkPublisherHealth": {
+      "post": {
+        "operationId": "arb_checkPublisherHealth",
+        "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
+        "summary": "arb_checkPublisherHealth",
+        "description": "Returns an error if the transaction publisher of the node, such as its sequencer or its transaction forwarder, is not healthy. Returns `null` otherwise. Source: nitro v3.12.1 `execution/gethexec/api.go:55`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_arb_checkPublisherHealth"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_arb_checkPublisherHealth"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/arbdebug_pricingModel": {
+      "post": {
+        "operationId": "arbdebug_pricingModel",
+        "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
+        "summary": "arbdebug_pricingModel",
+        "description": "Returns the parent chain and child chain pricing state at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples. Source: nitro v3.12.1 `execution/gethexec/api.go:163`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_arbdebug_pricingModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_arbdebug_pricingModel"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/arbdebug_timeoutQueueHistory": {
+      "post": {
+        "operationId": "arbdebug_timeoutQueueHistory",
+        "x-arbitrum-request-url": "$NITRO_RPC_URL",
+        "summary": "arbdebug_timeoutQueueHistory",
+        "description": "Returns the size of the retryable timeout queue at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples. Source: nitro v3.12.1 `execution/gethexec/api.go:257`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_arbdebug_timeoutQueueHistory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_arbdebug_timeoutQueueHistory"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/arbdebug_timeoutQueue": {
+      "post": {
+        "operationId": "arbdebug_timeoutQueue",
+        "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
+        "summary": "arbdebug_timeoutQueue",
+        "description": "Returns the retryable tickets in the timeout queue at the given block, with the timeout of each queue entry in Unix seconds, or 0 if the retryable no longer exists. Returns at most one entry more than the configured timeout queue bound. Source: nitro v3.12.1 `execution/gethexec/api.go:290`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_arbdebug_timeoutQueue"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_arbdebug_timeoutQueue"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eth_sendRawTransactionSync": {
+      "post": {
+        "operationId": "eth_sendRawTransactionSync",
+        "x-arbitrum-request-url": "$NITRO_RPC_URL",
+        "summary": "eth_sendRawTransactionSync",
+        "description": "Adds the signed transaction to the transaction pool, waits until it is included in a block, and returns the receipt. Returns an error if the timeout ends first. Source: go-ethereum 5eee8f5 (pinned by nitro v3.12.1) `internal/ethapi/api.go:2044`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_eth_sendRawTransactionSync"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_eth_sendRawTransactionSync"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/eth_sendRawTransactionConditional": {
+      "post": {
+        "operationId": "eth_sendRawTransactionConditional",
+        "x-arbitrum-request-url": "$NITRO_RPC_URL",
+        "summary": "eth_sendRawTransactionConditional",
+        "description": "Submits a signed raw transaction that the sequencer includes only if the given options hold: the parent chain block number and the block timestamp ranges, and the storage of the known accounts. Returns the transaction hash. Source: go-ethereum 5eee8f5 (pinned by nitro v3.12.1) `arbitrum/conditionaltx.go:25`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_eth_sendRawTransactionConditional"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_eth_sendRawTransactionConditional"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daprovider_store": {
+      "post": {
+        "operationId": "daprovider_store",
+        "x-arbitrum-request-url": "$DA_SERVER_URL",
+        "summary": "daprovider_store",
+        "description": "Stores the message until the given timeout and returns the serialized data availability certificate. Source: nitro v3.12.1 `daprovider/server/provider_server.go:275`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_daprovider_store"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_daprovider_store"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daprovider_startChunkedStore": {
+      "post": {
+        "operationId": "daprovider_startChunkedStore",
+        "x-arbitrum-request-url": "$DA_SERVER_URL",
+        "summary": "daprovider_startChunkedStore",
+        "description": "Opens a chunked store of a message of `totalSize` bytes, sent as `nChunks` chunks of `chunkSize` bytes, and returns the message ID to pass to `daprovider_sendChunk` and `daprovider_commitChunkedStore`. Source: nitro v3.12.1 `daprovider/server/provider_server.go:256`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_daprovider_startChunkedStore"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_daprovider_startChunkedStore"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daprovider_sendChunk": {
+      "post": {
+        "operationId": "daprovider_sendChunk",
+        "x-arbitrum-request-url": "$DA_SERVER_URL",
+        "summary": "daprovider_sendChunk",
+        "description": "Adds the chunk with the given chunk ID to the chunked store opened for the given message ID. Returns `null`. Source: nitro v3.12.1 `daprovider/server/provider_server.go:260`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_daprovider_sendChunk"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_daprovider_sendChunk"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daprovider_commitChunkedStore": {
+      "post": {
+        "operationId": "daprovider_commitChunkedStore",
+        "x-arbitrum-request-url": "$DA_SERVER_URL",
+        "summary": "daprovider_commitChunkedStore",
+        "description": "Assembles the chunks received for the given message ID, stores the message and returns the serialized data availability certificate. Source: nitro v3.12.1 `daprovider/server/provider_server.go:264`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_daprovider_commitChunkedStore"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_daprovider_commitChunkedStore"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/das_startChunkedStore": {
+      "post": {
+        "operationId": "das_startChunkedStore",
+        "x-arbitrum-request-url": "$DA_SERVER_URL",
+        "summary": "das_startChunkedStore",
+        "description": "Opens a chunked store of a message of `totalSize` bytes, sent as `nChunks` chunks of `chunkSize` bytes, and returns the message ID to pass to `das_sendChunk` and `das_commitChunkedStore`. Requests that are too old or replayed are rejected. Source: nitro v3.12.1 `daprovider/anytrust/rpc_server.go:169`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_das_startChunkedStore"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_das_startChunkedStore"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/das_sendChunk": {
+      "post": {
+        "operationId": "das_sendChunk",
+        "x-arbitrum-request-url": "$DA_SERVER_URL",
+        "summary": "das_sendChunk",
+        "description": "Adds the chunk with the given chunk ID to the chunked store opened for the given message ID. Returns `null`. Source: nitro v3.12.1 `daprovider/anytrust/rpc_server.go:187`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_das_sendChunk"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_das_sendChunk"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/das_commitChunkedStore": {
+      "post": {
+        "operationId": "das_commitChunkedStore",
+        "x-arbitrum-request-url": "$DA_SERVER_URL",
+        "summary": "das_commitChunkedStore",
+        "description": "Assembles the chunks received for the given message ID, stores the message and returns the signed data availability certificate. Source: nitro v3.12.1 `daprovider/anytrust/rpc_server.go:205`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_das_commitChunkedStore"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_das_commitChunkedStore"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/das_healthCheck": {
+      "post": {
+        "operationId": "das_healthCheck",
+        "x-arbitrum-request-url": "$DA_SERVER_URL",
+        "summary": "das_healthCheck",
+        "description": "Returns an error if the storage backend of the data availability server is not healthy. Returns `null` otherwise. Source: nitro v3.12.1 `daprovider/anytrust/rpc_server.go:236`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Request_das_healthCheck"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response. HTTP status is 200 for both a result and an error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Result_das_healthCheck"
+                    },
+                    {
+                      "$ref": "#/components/schemas/JsonRpcError"
+                    }
                   ]
                 }
               }
@@ -45,17 +574,40 @@
         "title": "BlockNumber",
         "description": "A hex block number, or a block tag.",
         "oneOf": [
-          { "type": "string", "pattern": "^0x[0-9a-fA-F]+$", "examples": ["0x1000000"] },
-          { "type": "string", "enum": ["earliest", "latest", "pending", "safe", "finalized"] }
+          {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]+$",
+            "examples": ["0x1000000"]
+          },
+          {
+            "type": "string",
+            "enum": ["earliest", "latest", "pending", "safe", "finalized"]
+          }
         ]
       },
       "Request_arb_getRawBlockMetadata": {
         "type": "object",
         "required": ["jsonrpc", "id", "method", "params"],
         "properties": {
-          "jsonrpc": { "type": "string", "const": "2.0" },
-          "id": { "oneOf": [{ "type": "integer" }, { "type": "string" }], "examples": [1] },
-          "method": { "type": "string", "const": "arb_getRawBlockMetadata" },
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "arb_getRawBlockMetadata"
+          },
           "params": {
             "type": "array",
             "minItems": 2,
@@ -74,7 +626,7 @@
             ],
             "description": "Positional parameters. Each position is listed under Params.",
             "items": false,
-            "examples": [["0x1000000", "0x1000001"]]
+            "examples": [["latest", "latest"]]
           }
         }
       },
@@ -98,15 +650,31 @@
         "type": "object",
         "required": ["jsonrpc", "id", "result"],
         "properties": {
-          "jsonrpc": { "type": "string", "const": "2.0" },
-          "id": { "oneOf": [{ "type": "integer" }, { "type": "string" }] },
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
           "result": {
             "oneOf": [
               {
                 "type": "array",
-                "items": { "$ref": "#/components/schemas/NumberAndBlockMetadata" }
+                "items": {
+                  "$ref": "#/components/schemas/NumberAndBlockMetadata"
+                }
               },
-              { "type": "null" }
+              {
+                "type": "null"
+              }
             ]
           }
         }
@@ -116,16 +684,1354 @@
         "type": "object",
         "required": ["jsonrpc", "id", "error"],
         "properties": {
-          "jsonrpc": { "type": "string", "const": "2.0" },
-          "id": { "oneOf": [{ "type": "integer" }, { "type": "string" }, { "type": "null" }] },
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "error": {
             "type": "object",
             "required": ["code", "message"],
             "properties": {
-              "code": { "type": "integer", "examples": [-32601] },
-              "message": { "type": "string" },
+              "code": {
+                "type": "integer",
+                "examples": [-32601]
+              },
+              "message": {
+                "type": "string"
+              },
               "data": {}
             }
+          }
+        }
+      },
+      "ConditionalOptions": {
+        "type": "object",
+        "properties": {
+          "knownAccounts": {
+            "type": "object",
+            "properties": {},
+            "description": "Map from account address to its expected storage root hash, or to a map from storage slot to expected value.",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-fA-F]{64}$"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string",
+                    "pattern": "^0x[0-9a-fA-F]{64}$"
+                  }
+                }
+              ]
+            }
+          },
+          "blockNumberMin": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]+$",
+            "description": "Lowest parent chain block number."
+          },
+          "blockNumberMax": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]+$",
+            "description": "Highest parent chain block number."
+          },
+          "timestampMin": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]+$",
+            "description": "Lowest block timestamp, in Unix seconds."
+          },
+          "timestampMax": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]+$",
+            "description": "Highest block timestamp, in Unix seconds."
+          }
+        },
+        "description": "go-ethereum 5eee8f5 (pinned by nitro v3.12.1) `arbitrum_types/txoptions.go:71-77`.",
+        "title": "ConditionalOptions"
+      },
+      "Bytes": {
+        "type": "string",
+        "pattern": "^0x[0-9a-fA-F]*$",
+        "description": "Bytes, hex encoded.",
+        "title": "Bytes"
+      },
+      "Quantity": {
+        "type": "string",
+        "pattern": "^0x[0-9a-fA-F]+$",
+        "description": "Unsigned integer, hex encoded.",
+        "title": "Quantity"
+      },
+      "Hash": {
+        "type": "string",
+        "pattern": "^0x[0-9a-fA-F]{64}$",
+        "description": "32-byte hash, hex encoded.",
+        "title": "Hash"
+      },
+      "Integer": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Unsigned integer, as a JSON number.",
+        "title": "Integer"
+      },
+      "Request_arb_checkPublisherHealth": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "arb_checkPublisherHealth"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 0,
+            "prefixItems": [],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [[]]
+          }
+        }
+      },
+      "Result_arb_checkPublisherHealth": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "null"
+          }
+        }
+      },
+      "Request_arbdebug_pricingModel": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "arbdebug_pricingModel"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/BlockNumberOrTag",
+                "title": "start",
+                "description": "First block of the range."
+              },
+              {
+                "$ref": "#/components/schemas/BlockNumberOrTag",
+                "title": "end",
+                "description": "Last block of the range."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["latest", "latest"]]
+          }
+        }
+      },
+      "Result_arbdebug_pricingModel": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "step": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "timestamp": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "baseFee": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "gasBacklog": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "gasUsed": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "minBaseFee": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "speedLimit": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "perBlockGasLimit": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "perTxGasLimit": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "pricingInertia": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "backlogTolerance": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "l1BaseFeeEstimate": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "l1LastSurplus": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "l1FundsDue": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "l1FundsDueForRewards": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "l1UnitsSinceUpdate": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "l1LastUpdateTime": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "l1EquilibrationUnits": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "l1PerBatchCost": {
+                "type": "integer"
+              },
+              "l1AmortizedCostCapBips": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "l1PricingInertia": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "l1PerUnitReward": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "l1PayRewardTo": {
+                "type": "string",
+                "description": "Address, hex encoded."
+              }
+            },
+            "description": "nitro v3.12.1 `execution/gethexec/api.go:112-139`. Array fields have one entry per sampled block; the other fields are read at the last sampled block."
+          }
+        }
+      },
+      "Request_arbdebug_timeoutQueueHistory": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "arbdebug_timeoutQueueHistory"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/BlockNumberOrTag",
+                "title": "start",
+                "description": "First block of the range."
+              },
+              {
+                "$ref": "#/components/schemas/BlockNumberOrTag",
+                "title": "end",
+                "description": "Last block of the range."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["latest", "latest"]]
+          }
+        }
+      },
+      "Result_arbdebug_timeoutQueueHistory": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "step": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "count": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "description": "nitro v3.12.1 `execution/gethexec/api.go:250-255`."
+          }
+        }
+      },
+      "Request_arbdebug_timeoutQueue": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "arbdebug_timeoutQueue"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/BlockNumberOrTag",
+                "title": "blockNum",
+                "description": "Block at which to read the queue."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["latest"]]
+          }
+        }
+      },
+      "Result_arbdebug_timeoutQueue": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "blockNumber": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "tickets": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^0x[0-9a-fA-F]{64}$"
+                }
+              },
+              "timeouts": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            "description": "nitro v3.12.1 `execution/gethexec/api.go:284-288`."
+          }
+        }
+      },
+      "Request_eth_sendRawTransactionSync": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "eth_sendRawTransactionSync"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "input",
+                "description": "Signed transaction, RLP encoded."
+              },
+              {
+                "$ref": "#/components/schemas/Integer",
+                "title": "timeoutMs",
+                "description": "Optional. Time to wait for the receipt, in milliseconds. The node applies its default and maximum timeouts."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["<signed transaction, hex>", 5000]]
+          }
+        }
+      },
+      "Result_eth_sendRawTransactionSync": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "description": "Transaction receipt."
+          }
+        }
+      },
+      "Request_eth_sendRawTransactionConditional": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "eth_sendRawTransactionConditional"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "input",
+                "description": "Signed transaction, RLP encoded."
+              },
+              {
+                "$ref": "#/components/schemas/ConditionalOptions",
+                "title": "options",
+                "description": "Conditions for inclusion."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [
+              [
+                "<signed transaction, hex>",
+                {
+                  "knownAccounts": {},
+                  "timestampMax": "0x6718f2a0"
+                }
+              ]
+            ]
+          }
+        }
+      },
+      "Result_eth_sendRawTransactionConditional": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{64}$",
+            "description": "Transaction hash."
+          }
+        }
+      },
+      "Request_daprovider_store": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "daprovider_store"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "message",
+                "description": "Message bytes."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "timeout",
+                "description": "Unix time until which the data must be stored."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["<message bytes, hex>", "0x67400000"]]
+          }
+        }
+      },
+      "Result_daprovider_store": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "serialized-da-cert": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]*$",
+                "description": "Serialized data availability certificate."
+              }
+            },
+            "description": "nitro v3.12.1 `daprovider/server_api/types.go:21-23`."
+          }
+        }
+      },
+      "Request_daprovider_startChunkedStore": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "daprovider_startChunkedStore"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 6,
+            "maxItems": 6,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "timestamp",
+                "description": "Unix time at which the request was signed."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "nChunks",
+                "description": "Number of chunks."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "chunkSize",
+                "description": "Size of each chunk, in bytes."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "totalSize",
+                "description": "Size of the whole message, in bytes."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "timeout",
+                "description": "Unix time until which the data must be stored."
+              },
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "sig",
+                "description": "Signature of the request."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [
+              ["0x6718f2a0", "0x2", "0x100000", "0x180000", "0x67400000", "<signature, hex>"]
+            ]
+          }
+        }
+      },
+      "Result_daprovider_startChunkedStore": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "BatchId": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]+$",
+                "description": "Message ID to pass to the chunk and commit calls. The JSON name is kept for compatibility."
+              }
+            },
+            "description": "nitro v3.12.1 `daprovider/data_streaming/receiver.go:88-90`."
+          }
+        }
+      },
+      "Request_daprovider_sendChunk": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "daprovider_sendChunk"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "messageId",
+                "description": "Message ID returned by the start call."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "chunkId",
+                "description": "Index of the chunk, from 0."
+              },
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "chunk",
+                "description": "Chunk bytes."
+              },
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "sig",
+                "description": "Signature of the request."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["0x1", "0x0", "<chunk bytes, hex>", "<signature, hex>"]]
+          }
+        }
+      },
+      "Result_daprovider_sendChunk": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "null"
+          }
+        }
+      },
+      "Request_daprovider_commitChunkedStore": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "daprovider_commitChunkedStore"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "messageId",
+                "description": "Message ID returned by the start call."
+              },
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "sig",
+                "description": "Signature of the request."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["0x1", "<signature, hex>"]]
+          }
+        }
+      },
+      "Result_daprovider_commitChunkedStore": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "serialized-da-cert": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]*$",
+                "description": "Serialized data availability certificate."
+              }
+            },
+            "description": "nitro v3.12.1 `daprovider/server_api/types.go:21-23`."
+          }
+        }
+      },
+      "Request_das_startChunkedStore": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "das_startChunkedStore"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 6,
+            "maxItems": 6,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "timestamp",
+                "description": "Unix time at which the request was signed."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "nChunks",
+                "description": "Number of chunks."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "chunkSize",
+                "description": "Size of each chunk, in bytes."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "totalSize",
+                "description": "Size of the whole message, in bytes."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "timeout",
+                "description": "Unix time until which the data must be stored."
+              },
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "sig",
+                "description": "Signature of the request."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [
+              ["0x6718f2a0", "0x2", "0x100000", "0x180000", "0x67400000", "<signature, hex>"]
+            ]
+          }
+        }
+      },
+      "Result_das_startChunkedStore": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "BatchId": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]+$",
+                "description": "Message ID to pass to the chunk and commit calls. The JSON name is kept for compatibility."
+              }
+            },
+            "description": "nitro v3.12.1 `daprovider/data_streaming/receiver.go:88-90`."
+          }
+        }
+      },
+      "Request_das_sendChunk": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "das_sendChunk"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "messageId",
+                "description": "Message ID returned by the start call."
+              },
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "chunkId",
+                "description": "Index of the chunk, from 0."
+              },
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "chunk",
+                "description": "Chunk bytes."
+              },
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "sig",
+                "description": "Signature of the request."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["0x1", "0x0", "<chunk bytes, hex>", "<signature, hex>"]]
+          }
+        }
+      },
+      "Result_das_sendChunk": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "null"
+          }
+        }
+      },
+      "Request_das_commitChunkedStore": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "das_commitChunkedStore"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "$ref": "#/components/schemas/Quantity",
+                "title": "messageId",
+                "description": "Message ID returned by the start call."
+              },
+              {
+                "$ref": "#/components/schemas/Bytes",
+                "title": "sig",
+                "description": "Signature of the request."
+              }
+            ],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [["0x1", "<signature, hex>"]]
+          }
+        }
+      },
+      "Result_das_commitChunkedStore": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "dataHash": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]*$"
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]+$"
+              },
+              "signersMask": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]+$"
+              },
+              "keysetHash": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]*$"
+              },
+              "sig": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]*$"
+              },
+              "version": {
+                "type": "string",
+                "pattern": "^0x[0-9a-fA-F]+$"
+              }
+            },
+            "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:117-124`."
+          }
+        }
+      },
+      "Request_das_healthCheck": {
+        "type": "object",
+        "required": ["jsonrpc", "id", "method", "params"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "examples": [1]
+          },
+          "method": {
+            "type": "string",
+            "const": "das_healthCheck"
+          },
+          "params": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 0,
+            "prefixItems": [],
+            "description": "Positional parameters. Each position is listed under Params.",
+            "items": false,
+            "examples": [[]]
+          }
+        }
+      },
+      "Result_das_healthCheck": {
+        "title": "Result",
+        "type": "object",
+        "required": ["jsonrpc", "id", "result"],
+        "properties": {
+          "jsonrpc": {
+            "type": "string",
+            "const": "2.0"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "result": {
+            "type": "null"
           }
         }
       }
