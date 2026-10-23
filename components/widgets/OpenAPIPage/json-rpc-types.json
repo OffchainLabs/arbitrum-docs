@@ -1,0 +1,383 @@
+{
+  "arb_getRawBlockMetadata": {
+    "typescript": "export type ArbGetRawBlockMetadataParams = [fromBlock: BlockNumber, toBlock: BlockNumber];\n\nexport type ArbGetRawBlockMetadataResult = NumberAndBlockMetadata[] | null;\n\nexport type BlockNumber = string | 'earliest' | 'latest' | 'pending' | 'safe' | 'finalized';\n\nexport type NumberAndBlockMetadata = {\n  blockNumber: number;\n  rawMetadata: string;\n};",
+    "result": [
+      {
+        "name": "result",
+        "type": "NumberAndBlockMetadata[] | null",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "[].blockNumber",
+        "type": "number",
+        "required": true,
+        "description": "Block number (JSON number, Go uint64)."
+      },
+      {
+        "name": "[].rawMetadata",
+        "type": "string",
+        "required": true,
+        "description": "Raw block metadata bytes, hex encoded."
+      }
+    ]
+  },
+  "arb_checkPublisherHealth": {
+    "typescript": "export type ArbCheckPublisherHealthParams = [];\n\nexport type ArbCheckPublisherHealthResult = null;",
+    "result": [
+      {
+        "name": "result",
+        "type": "null",
+        "required": true,
+        "description": ""
+      }
+    ]
+  },
+  "arbdebug_pricingModel": {
+    "typescript": "export type ArbdebugPricingModelParams = [start: BlockNumber, end: BlockNumber];\n\nexport type ArbdebugPricingModelResult = {\n  start: number;\n  end: number;\n  step: number;\n  timestamp: number[];\n  baseFee: number[];\n  gasBacklog: number[];\n  gasUsed: number[];\n  minBaseFee: number;\n  speedLimit: number;\n  perBlockGasLimit: number;\n  perTxGasLimit: number;\n  pricingInertia: number;\n  backlogTolerance: number;\n  l1BaseFeeEstimate: number[];\n  l1LastSurplus: number[];\n  l1FundsDue: number[];\n  l1FundsDueForRewards: number[];\n  l1UnitsSinceUpdate: number[];\n  l1LastUpdateTime: number[];\n  l1EquilibrationUnits: number;\n  l1PerBatchCost: number;\n  l1AmortizedCostCapBips: number;\n  l1PricingInertia: number;\n  l1PerUnitReward: number;\n  l1PayRewardTo: string;\n};\n\nexport type BlockNumber = string | 'earliest' | 'latest' | 'pending' | 'safe' | 'finalized';",
+    "result": [
+      {
+        "name": "start",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "end",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "timestamp",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "baseFee",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "gasBacklog",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "gasUsed",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "minBaseFee",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "speedLimit",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "perBlockGasLimit",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "perTxGasLimit",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "pricingInertia",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "backlogTolerance",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1BaseFeeEstimate",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1LastSurplus",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1FundsDue",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1FundsDueForRewards",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1UnitsSinceUpdate",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1LastUpdateTime",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1EquilibrationUnits",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1PerBatchCost",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1AmortizedCostCapBips",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1PricingInertia",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1PerUnitReward",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "l1PayRewardTo",
+        "type": "string",
+        "required": true,
+        "description": "Address, hex encoded."
+      }
+    ]
+  },
+  "arbdebug_timeoutQueueHistory": {
+    "typescript": "export type ArbdebugTimeoutQueueHistoryParams = [start: BlockNumber, end: BlockNumber];\n\nexport type ArbdebugTimeoutQueueHistoryResult = {\n  start: number;\n  end: number;\n  step: number;\n  count: number[];\n};\n\nexport type BlockNumber = string | 'earliest' | 'latest' | 'pending' | 'safe' | 'finalized';",
+    "result": [
+      {
+        "name": "start",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "end",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "step",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "count",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      }
+    ]
+  },
+  "arbdebug_timeoutQueue": {
+    "typescript": "export type ArbdebugTimeoutQueueParams = [blockNum: BlockNumber];\n\nexport type ArbdebugTimeoutQueueResult = {\n  blockNumber: number;\n  tickets: string[];\n  timeouts: number[];\n};\n\nexport type BlockNumber = string | 'earliest' | 'latest' | 'pending' | 'safe' | 'finalized';",
+    "result": [
+      {
+        "name": "blockNumber",
+        "type": "number",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "tickets",
+        "type": "string[]",
+        "required": true,
+        "description": ""
+      },
+      {
+        "name": "timeouts",
+        "type": "number[]",
+        "required": true,
+        "description": ""
+      }
+    ]
+  },
+  "eth_sendRawTransactionSync": {
+    "typescript": "export type EthSendRawTransactionSyncParams = [input: Bytes, timeoutMs?: Integer];\n\nexport type EthSendRawTransactionSyncResult = Record<string, unknown>;\n\nexport type Bytes = string;\n\nexport type Integer = number;",
+    "result": [
+      {
+        "name": "result",
+        "type": "Record<string, unknown>",
+        "required": true,
+        "description": ""
+      }
+    ]
+  },
+  "eth_sendRawTransactionConditional": {
+    "typescript": "export type EthSendRawTransactionConditionalParams = [input: Bytes, options: ConditionalOptions];\n\nexport type EthSendRawTransactionConditionalResult = string;\n\nexport type Bytes = string;\n\nexport type ConditionalOptions = {\n  knownAccounts?: Record<string, string | Record<string, string>>;\n  blockNumberMin?: string;\n  blockNumberMax?: string;\n  timestampMin?: string;\n  timestampMax?: string;\n};",
+    "result": [
+      {
+        "name": "result",
+        "type": "string",
+        "required": true,
+        "description": ""
+      }
+    ]
+  },
+  "daprovider_store": {
+    "typescript": "export type DaproviderStoreParams = [message: Bytes, timeout: Quantity];\n\nexport type DaproviderStoreResult = {\n  'serialized-da-cert'?: string;\n};\n\nexport type Bytes = string;\n\nexport type Quantity = string;",
+    "result": [
+      {
+        "name": "serialized-da-cert",
+        "type": "string",
+        "required": false,
+        "description": "Serialized data availability certificate."
+      }
+    ]
+  },
+  "daprovider_startChunkedStore": {
+    "typescript": "export type DaproviderStartChunkedStoreParams = [timestamp: Quantity, nChunks: Quantity, chunkSize: Quantity, totalSize: Quantity, timeout: Quantity, sig: Bytes];\n\nexport type DaproviderStartChunkedStoreResult = {\n  BatchId?: string;\n};\n\nexport type Quantity = string;\n\nexport type Bytes = string;",
+    "result": [
+      {
+        "name": "BatchId",
+        "type": "string",
+        "required": false,
+        "description": "Message ID to pass to the chunk and commit calls. The JSON name is kept for compatibility."
+      }
+    ]
+  },
+  "daprovider_sendChunk": {
+    "typescript": "export type DaproviderSendChunkParams = [messageId: Quantity, chunkId: Quantity, chunk: Bytes, sig: Bytes];\n\nexport type DaproviderSendChunkResult = null;\n\nexport type Quantity = string;\n\nexport type Bytes = string;",
+    "result": [
+      {
+        "name": "result",
+        "type": "null",
+        "required": true,
+        "description": ""
+      }
+    ]
+  },
+  "daprovider_commitChunkedStore": {
+    "typescript": "export type DaproviderCommitChunkedStoreParams = [messageId: Quantity, sig: Bytes];\n\nexport type DaproviderCommitChunkedStoreResult = {\n  'serialized-da-cert'?: string;\n};\n\nexport type Quantity = string;\n\nexport type Bytes = string;",
+    "result": [
+      {
+        "name": "serialized-da-cert",
+        "type": "string",
+        "required": false,
+        "description": "Serialized data availability certificate."
+      }
+    ]
+  },
+  "das_startChunkedStore": {
+    "typescript": "export type DasStartChunkedStoreParams = [timestamp: Quantity, nChunks: Quantity, chunkSize: Quantity, totalSize: Quantity, timeout: Quantity, sig: Bytes];\n\nexport type DasStartChunkedStoreResult = {\n  BatchId?: string;\n};\n\nexport type Quantity = string;\n\nexport type Bytes = string;",
+    "result": [
+      {
+        "name": "BatchId",
+        "type": "string",
+        "required": false,
+        "description": "Message ID to pass to the chunk and commit calls. The JSON name is kept for compatibility."
+      }
+    ]
+  },
+  "das_sendChunk": {
+    "typescript": "export type DasSendChunkParams = [messageId: Quantity, chunkId: Quantity, chunk: Bytes, sig: Bytes];\n\nexport type DasSendChunkResult = null;\n\nexport type Quantity = string;\n\nexport type Bytes = string;",
+    "result": [
+      {
+        "name": "result",
+        "type": "null",
+        "required": true,
+        "description": ""
+      }
+    ]
+  },
+  "das_commitChunkedStore": {
+    "typescript": "export type DasCommitChunkedStoreParams = [messageId: Quantity, sig: Bytes];\n\nexport type DasCommitChunkedStoreResult = {\n  dataHash?: string;\n  timeout?: string;\n  signersMask?: string;\n  keysetHash?: string;\n  sig?: string;\n  version?: string;\n};\n\nexport type Quantity = string;\n\nexport type Bytes = string;",
+    "result": [
+      {
+        "name": "dataHash",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "timeout",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "signersMask",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "keysetHash",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "sig",
+        "type": "string",
+        "required": false,
+        "description": ""
+      },
+      {
+        "name": "version",
+        "type": "string",
+        "required": false,
+        "description": ""
+      }
+    ]
+  },
+  "das_healthCheck": {
+    "typescript": "export type DasHealthCheckParams = [];\n\nexport type DasHealthCheckResult = null;",
+    "result": [
+      {
+        "name": "result",
+        "type": "null",
+        "required": true,
+        "description": ""
+      }
+    ]
+  }
+}

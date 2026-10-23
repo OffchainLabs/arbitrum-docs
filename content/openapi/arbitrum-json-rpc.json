@@ -703,7 +703,8 @@
             "pattern": "^0x[0-9a-fA-F]*$",
             "description": "Raw block metadata bytes, hex encoded."
           }
-        }
+        },
+        "required": ["blockNumber", "rawMetadata"]
       },
       "Result_arb_getRawBlockMetadata": {
         "title": "Result",
@@ -1102,7 +1103,34 @@
                 "description": "Address, hex encoded."
               }
             },
-            "description": "nitro v3.12.1 `execution/gethexec/api.go:112-139`. Array fields have one entry per sampled block; the other fields are read at the last sampled block."
+            "description": "nitro v3.12.1 `execution/gethexec/api.go:112-139`. Array fields have one entry per sampled block; the other fields are read at the last sampled block.",
+            "required": [
+              "start",
+              "end",
+              "step",
+              "timestamp",
+              "baseFee",
+              "gasBacklog",
+              "gasUsed",
+              "minBaseFee",
+              "speedLimit",
+              "perBlockGasLimit",
+              "perTxGasLimit",
+              "pricingInertia",
+              "backlogTolerance",
+              "l1BaseFeeEstimate",
+              "l1LastSurplus",
+              "l1FundsDue",
+              "l1FundsDueForRewards",
+              "l1UnitsSinceUpdate",
+              "l1LastUpdateTime",
+              "l1EquilibrationUnits",
+              "l1PerBatchCost",
+              "l1AmortizedCostCapBips",
+              "l1PricingInertia",
+              "l1PerUnitReward",
+              "l1PayRewardTo"
+            ]
           }
         }
       },
@@ -1193,7 +1221,8 @@
                 }
               }
             },
-            "description": "nitro v3.12.1 `execution/gethexec/api.go:250-255`."
+            "description": "nitro v3.12.1 `execution/gethexec/api.go:250-255`.",
+            "required": ["start", "end", "step", "count"]
           }
         }
       },
@@ -1278,7 +1307,8 @@
                 }
               }
             },
-            "description": "nitro v3.12.1 `execution/gethexec/api.go:284-288`."
+            "description": "nitro v3.12.1 `execution/gethexec/api.go:284-288`.",
+            "required": ["blockNumber", "tickets", "timeouts"]
           }
         }
       },

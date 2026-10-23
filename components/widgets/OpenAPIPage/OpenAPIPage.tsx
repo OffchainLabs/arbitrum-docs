@@ -3,9 +3,12 @@
 import { type OperationObject, useOpenAPI } from 'fumadocs-openapi';
 import { createCodeUsageGeneratorRegistry } from 'fumadocs-openapi/requests/generators';
 import { createOpenAPIPage } from 'fumadocs-openapi/ui';
+import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
 
+import jsonRpcTypes from '@/components/widgets/OpenAPIPage/json-rpc-types.json';
 import requestUrls from '@/components/widgets/OpenAPIPage/request-urls.json';
 import { requestUrl, urlExpression } from '@/lib/json-rpc-request-url';
+import type { MethodTypes } from '@/lib/json-rpc-types';
 
 // JSON-RPC code samples. `data.url` carries the fake per-method path, so every tab takes its URL
 // from the operation's `x-arbitrum-request-url`, through the generated `request-urls.json`.
@@ -123,12 +126,59 @@ function PositionalParams({ operation }: { operation: OperationObject }) {
   );
 }
 
+function typesOf(operation: OperationObject): MethodTypes | undefined {
+  const id = operation.operationId;
+  return id === undefined ? undefined : (jsonRpcTypes as Record<string, MethodTypes>)[id];
+}
+
+/** The `result` of the JSON-RPC response, without the envelope, from `json-rpc-types.json`. */
+function ResultFields({ operation }: { operation: OperationObject }) {
+  const rows = typesOf(operation)?.result;
+  if (!rows) return null;
+
+  return (
+    <section className="mt-10">
+      <h2 id="result">Result</h2>
+      <ul className="not-prose flex flex-col divide-y border-y text-sm">
+        {rows.map((row) => (
+          <li key={row.name} className="flex flex-col gap-1 py-3">
+            <span className="font-mono">
+              <span className="text-fd-primary">{row.name}</span> {row.type}
+              {row.required ? null : <span className="text-fd-muted-foreground"> optional</span>}
+            </span>
+            {row.description ? (
+              <span className="text-fd-muted-foreground">{row.description}</span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+      <p className="text-sm text-fd-muted-foreground">
+        On failure the response has an <code>error</code> object with <code>code</code>,{' '}
+        <code>message</code> and an optional <code>data</code>, instead of <code>result</code>.
+      </p>
+    </section>
+  );
+}
+
+function TypeScriptTypes({ operation }: { operation: OperationObject }) {
+  const code = typesOf(operation)?.typescript;
+  if (!code) return null;
+
+  return (
+    <section className="mt-10">
+      <h2 id="typescript-types">TypeScript types</h2>
+      <DynamicCodeBlock lang="ts" code={code} />
+    </section>
+  );
+}
+
 export const OpenAPIPage = createOpenAPIPage({
   codeUsages,
   playground: { enabled: false },
   content: {
-    // Drops the `apiPlayground` slot, which holds the method and the fake path, and the `body`
-    // slot, the library's Request Body section (FR-006): PositionalParams lists the params.
+    // Drops the `apiPlayground` slot, which holds the method and the fake path, the `body` slot,
+    // the library's Request Body section (FR-006), and the `responses` slot, which shows the
+    // JSON-RPC envelope: PositionalParams, ResultFields and TypeScriptTypes show the method alone.
     renderOperationLayout: (slots, { operation }) => (
       <div className="flex flex-col gap-x-6 gap-y-4 @4xl:flex-row @4xl:items-start">
         <div className="min-w-0 flex-1">
@@ -136,7 +186,8 @@ export const OpenAPIPage = createOpenAPIPage({
           {slots.description}
           {slots.parameters}
           <PositionalParams operation={operation} />
-          {slots.responses}
+          <ResultFields operation={operation} />
+          <TypeScriptTypes operation={operation} />
         </div>
         <div className="@4xl:sticky @4xl:top-[calc(var(--fd-docs-row-1,2rem)+1rem)] @4xl:w-[400px]">
           {slots.apiExample}

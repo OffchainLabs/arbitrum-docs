@@ -1,9 +1,12 @@
 // Spike: writes one MDX page per JSON-RPC method from content/openapi/arbitrum-json-rpc.json, and
-// the method → request URL map that the code samples read.
+// the method → request URL map that the code samples read, and the method → types map that the
+// Result list and the TypeScript panel read.
 import { generateFiles } from 'fumadocs-openapi';
 import { createOpenAPI } from 'fumadocs-openapi/server';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { basename } from 'node:path';
+
+import { methodTypes } from '../lib/json-rpc-types.ts';
 
 const INPUT = './content/openapi/arbitrum-json-rpc.json';
 
@@ -53,4 +56,9 @@ for (const [path, { post }] of Object.entries(doc.paths)) {
 writeFileSync(
   './components/widgets/OpenAPIPage/request-urls.json',
   `${JSON.stringify(urls, null, 2)}\n`,
+);
+
+writeFileSync(
+  './components/widgets/OpenAPIPage/json-rpc-types.json',
+  `${JSON.stringify(Object.fromEntries([...operations.keys()].map((id) => [id, methodTypes(doc, id)])), null, 2)}\n`,
 );
