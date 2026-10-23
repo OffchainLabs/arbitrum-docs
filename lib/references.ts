@@ -6,7 +6,8 @@ import { docsRoute } from './shared';
 /**
  * Registry for the glossary hover references. A reference collection is a `defineCollections` doc
  * collection (`{ id, title, sortAs? }` plus the definition body); to add one, define it in
- * `source.config.ts` and add an entry here. `scripts/references-check.ts` reads the files directly.
+ * `source.config.ts` and add an entry here. `scripts/references-check.ts` and ESLint rule
+ * `docs/unknown-term` read the files directly.
  */
 /** Declared explicitly: the generated collection module is `@ts-nocheck` and types as `any`. */
 export interface ReferenceEntry {

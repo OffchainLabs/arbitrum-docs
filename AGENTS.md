@@ -39,20 +39,19 @@ These commands come from `package.json`; see CLAUDE.md and README.md for the wor
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
-pnpm frontmatter:check # every page's frontmatter satisfies the schema in lib/page-schema.ts
-pnpm test              # node --test over scripts/**/*.test.ts
+pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts
 pnpm test:browser      # Chromium interactions against a running production server; see README.md
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build
 
 # The other CI gates
 pnpm audit             # no advisory in the lockfile beyond auditConfig.ignoreGhsas in pnpm-workspace.yaml
-pnpm vars:check        # every <Var name> and {var:name} resolves; banner keys are valid
-pnpm references:check  # every <Term id> resolves to a content/glossary entry
+pnpm lint              # ESLint over content/: MDX that renders wrong, every <Var> and <Term> resolving, the page frontmatter schema
+pnpm vars:check        # the announcement banner keys in content/vars.json are valid
+pnpm references:check  # glossary ids are present and unique; no partial holding a <Term> is ESM-imported
 pnpm contracts:check   # the contract-address partial is current
 pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
-pnpm content:lint      # MDX that compiles but renders wrong
 pnpm format:check      # prettier (pnpm format writes)
 
 # By hand only

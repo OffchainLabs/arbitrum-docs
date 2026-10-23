@@ -24,6 +24,9 @@ tests. No additional Python packages are needed.
 **Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken, which is a common false alarm when checking a content change.
 
+The content rules that `pnpm lint` enforces also run in your editor as you type, with the ESLint
+and MDX extensions and one setting. See [Editor setup](README.md#editor-setup).
+
 If you write with Claude Code, expect its first edit to a page or partial in a session to be
 refused: a project hook (`.claude/settings.json`) returns `STYLE-GUIDE.md` as the reason so the
 guide is in context, and every later edit in that session goes through.
@@ -31,7 +34,7 @@ guide is in context, and every later edit in that session goes through.
 ## Add or edit a page
 
 Every page needs a `title` and a `description` in its frontmatter. A missing one fails
-`pnpm frontmatter:check` and the build:
+`pnpm lint` (rule `docs/frontmatter-schema`) and the build:
 
 ```mdx
 ---
@@ -57,7 +60,7 @@ reader's goal (for example, "As a chain operator, I want to rotate node keys so 
 chain secure"). Preserve existing values when editing a page. Neither field renders on the site.
 
 Callouts use Fumadocs' `<Callout>` component, with `type` set to `info`, `warn`, `error`, `idea`
-or `success`. A Docusaurus `:::note` line renders as plain text and fails `pnpm content:lint`.
+or `success`. A Docusaurus `:::note` line renders as plain text and fails `pnpm lint`.
 
 ```mdx
 <Callout type="info" title="Optional title">
@@ -172,7 +175,7 @@ parse and the reader sees the literal `[text](…)` brackets:
 
 The same form works in an `href`, `to` or `src` attribute and in an internal `/<slug>`
 destination. Everywhere else, prose and link text included, use the component: a placeholder in
-prose fails the build. `pnpm content:lint` (rule `var-in-link`) fails on a `<Var>` left in a
+prose fails the build. `pnpm lint` (rule `docs/var-in-link`) fails on a `<Var>` left in a
 destination.
 
 A link to a file in this repository takes the same treatment, with `docsRepositoryUrl` and
@@ -182,15 +185,15 @@ the URL. Those two values also build the edit link and the "Request an update" b
 moves every link home together, and `pnpm check-links` never resolves an external URL that would
 catch a hardcoded one gone dead.
 
-To change a value or add a new one, edit `vars.json` and run `pnpm vars:check`. No other file
-changes. The check fails on a name that `vars.json` does not hold, which would otherwise render the
-literal string `undefined`.
+To change a value or add a new one, edit `vars.json` and run `pnpm lint`. No other file
+changes. Rule `docs/unknown-var` fails on a name that `vars.json` does not hold, which would
+otherwise render the literal string `undefined`.
 
 ## Components
 
 Every component below is registered globally in `components/mdx.tsx`, so a page never needs an
 `import` line, and must not carry one: pages compile on demand, where a top-level `import` or
-`export` is unsupported (`content:lint` rule `esm-in-page`). Copy the form you need; each is written
+`export` is unsupported (`pnpm lint` rule `docs/esm-in-page`). Copy the form you need; each is written
 the way the lint rules expect it (a
 component on its own lines, with a blank line before and after, and markdown inside it separated
 by blank lines).
@@ -333,18 +336,16 @@ route count; keep writing individual entries in `redirects.config.ts`.
 
 ```bash
 pnpm types:check       # regenerates .source/, generates Next types, tsc --noEmit (the main gate)
-pnpm frontmatter:check # every documentation page satisfies the frontmatter schema
+pnpm lint              # ESLint over content/: MDX that renders wrong, <Var> and <Term> names, frontmatter
 pnpm test              # tooling tests, including the sidebar tree and redirects
-pnpm vars:check        # every <Var name> and {var:name} resolves
-pnpm references:check  # every <Term id> resolves
+pnpm references:check  # glossary ids are present and unique
 pnpm check-links       # broken internal doc links and MDX fragments
-pnpm content:lint      # MDX that compiles but renders wrong
 pnpm format            # prettier, in place (CI runs format:check)
 ```
 
 These are the ones a content change usually trips. The `Gates` job in `.github/workflows/ci.yml`
-runs them all, plus `contracts:check` and `pnpm audit`. A second job runs `pnpm build`, serves the
-result, and checks it over HTTP. Both block. There is no pre-commit hook, so nothing runs on `git commit`.
+runs them all, plus `vars:check`, `contracts:check` and `pnpm audit`. A second job runs `pnpm build`, serves the result, and checks
+it over HTTP. Both block. There is no pre-commit hook, so nothing runs on `git commit`.
 
 The build job also runs `pnpm test:browser` in Chromium to check tab and accordion reveal and
 manual selection. See [Commands](README.md#commands) for local browser test setup.
@@ -353,7 +354,7 @@ If you touched MDX with components, imports or raw JSX, run `pnpm build` yoursel
 It catches a page that compiles but throws while rendering, which no gate above does.
 
 A green PR does not by itself mean the content renders correctly: `types:check` checks TypeScript
-and `frontmatter:check` validates page metadata. Neither proves the render. Type checking passes
+and `pnpm lint` validates page metadata and MDX shape. Neither proves the render. Type checking passes
 on a page that serves a literal `:::` or the
 string `undefined`. **Always open a changed page on `http://localhost:3000` and confirm it looks
 right**, in light and dark mode if you touched styling.
@@ -400,10 +401,10 @@ predates them and gets brought up to spec incrementally, not all at once.
    are fine; avoid jargon your target reader won't recognize.
 7. **Never put a link in a heading.** Fumadocs wraps every heading in its own anchor, so a link
    inside one renders an anchor inside an anchor and breaks React hydration on the page. Keep the
-   heading as plain text and put the link in the prose under it. `pnpm content:lint` rule
-   `link-in-heading` is a blocking gate on this, alongside `tr-in-table` (a `<tr>` outside a
-   `<thead>`/`<tbody>`) and `var-in-link` (a `<Var>` in a link destination, which leaves no link at
-   all). See [The content-lint rules](INTERNALS.md#the-content-lint-rules).
+   heading as plain text and put the link in the prose under it. `pnpm lint` rule
+   `docs/link-in-heading` is a blocking gate on this, alongside `docs/tr-in-table` (a `<tr>` outside
+   a `<thead>`/`<tbody>`) and `docs/var-in-link` (a `<Var>` in a link destination, which leaves no
+   link at all). See [The content rules](INTERNALS.md#the-content-rules).
 
 The long version lives in [STYLE-GUIDE.md](STYLE-GUIDE.md), at the root of this repo: the
 plain-language rules in testable form, the words and phrases to replace or cut, the
