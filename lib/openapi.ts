@@ -40,7 +40,8 @@ export async function openapiPageMarkdown(schemaId: string, slug: string): Promi
   const doc = (await openapi.getSchema(schemaId)).bundled as Json;
   const op = doc.paths?.[`/${slug}`]?.post as Json | undefined;
   if (!op) return '';
-  const server = doc.servers?.[0]?.url as string;
+  const server = op['x-arbitrum-request-url'] as string | undefined;
+  if (!server) throw new Error(`${schemaId}: POST /${slug} has no x-arbitrum-request-url`);
   const body = resolve(doc, op.requestBody?.content?.['application/json']?.schema);
   const params = (resolve(doc, body.properties?.params).prefixItems ?? []) as Json[];
   const example = resolve(doc, body.properties?.params).examples?.[0] ?? [];

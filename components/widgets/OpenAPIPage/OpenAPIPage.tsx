@@ -5,7 +5,7 @@ import { createCodeUsageGeneratorRegistry } from 'fumadocs-openapi/requests/gene
 import { createOpenAPIPage } from 'fumadocs-openapi/ui';
 
 import requestUrls from '@/components/widgets/OpenAPIPage/request-urls.json';
-import { requestUrl } from '@/lib/json-rpc-request-url';
+import { requestUrl, urlExpression } from '@/lib/json-rpc-request-url';
 
 // JSON-RPC code samples. `data.url` carries the fake per-method path, so every tab takes its URL
 // from the operation's `x-arbitrum-request-url`, through the generated `request-urls.json`.
@@ -30,7 +30,7 @@ codeUsages.add('jsonrpc-typescript', {
   label: 'TypeScript',
   generate: (data) =>
     [
-      `const response = await fetch('${requestUrl(requestUrls, data.body)}', {`,
+      `const response = await fetch(${urlExpression(requestUrl(requestUrls, data.body), 'typescript')}, {`,
       `  method: 'POST',`,
       `  headers: { 'Content-Type': 'application/json' },`,
       `  body: JSON.stringify(${indentBody(data.body, 2)}),`,
@@ -59,7 +59,7 @@ codeUsages.add('jsonrpc-rust', {
       `    let body = json!(${indentBody(data.body, 4)});`,
       ``,
       `    let response: Value = reqwest::Client::new()`,
-      `        .post("${requestUrl(requestUrls, data.body)}")`,
+      `        .post(${urlExpression(requestUrl(requestUrls, data.body), 'rust')})`,
       `        .json(&body)`,
       `        .send()`,
       `        .await?`,

@@ -30,3 +30,12 @@ test('inline stops at a schema that refers to itself', () => {
     properties: { child: { recursive: 'Node' } },
   });
 });
+
+test('the curl example targets the URL of the method, not the first server', async () => {
+  const arb1 = await openapiPageMarkdown(SCHEMA, 'arb_getRawBlockMetadata');
+  assert.match(arb1, /curl -X POST https:\/\/arb1\.arbitrum\.io\/rpc \\/);
+  const node = await openapiPageMarkdown(SCHEMA, 'eth_sendRawTransactionSync');
+  assert.match(node, /curl -X POST \$NITRO_RPC_URL \\/);
+  const da = await openapiPageMarkdown(SCHEMA, 'daprovider_store');
+  assert.match(da, /curl -X POST \$DA_SERVER_URL \\/);
+});
