@@ -160,14 +160,15 @@ function ResultFields({ operation }: { operation: OperationObject }) {
   );
 }
 
-function TypeScriptTypes({ operation }: { operation: OperationObject }) {
-  const code = typesOf(operation)?.typescript;
+/** The method's Go signature and the structs it uses, copied from the pinned Nitro source. */
+function GoDefinition({ operation }: { operation: OperationObject }) {
+  const code = typesOf(operation)?.go;
   if (!code) return null;
 
   return (
     <section className="mt-10">
-      <h2 id="typescript-types">TypeScript types</h2>
-      <DynamicCodeBlock lang="ts" code={code} />
+      <h2 id="go-definition">Go definition</h2>
+      <DynamicCodeBlock lang="go" code={code} />
     </section>
   );
 }
@@ -178,7 +179,7 @@ export const OpenAPIPage = createOpenAPIPage({
   content: {
     // Drops the `apiPlayground` slot, which holds the method and the fake path, the `body` slot,
     // the library's Request Body section (FR-006), and the `responses` slot, which shows the
-    // JSON-RPC envelope: PositionalParams, ResultFields and TypeScriptTypes show the method alone.
+    // JSON-RPC envelope: PositionalParams, ResultFields and GoDefinition show the method alone.
     renderOperationLayout: (slots, { operation }) => (
       <div className="flex flex-col gap-x-6 gap-y-4 @4xl:flex-row @4xl:items-start">
         <div className="min-w-0 flex-1">
@@ -187,7 +188,7 @@ export const OpenAPIPage = createOpenAPIPage({
           {slots.parameters}
           <PositionalParams operation={operation} />
           <ResultFields operation={operation} />
-          <TypeScriptTypes operation={operation} />
+          <GoDefinition operation={operation} />
         </div>
         <div className="@4xl:sticky @4xl:top-[calc(var(--fd-docs-row-1,2rem)+1rem)] @4xl:w-[400px]">
           {slots.apiExample}

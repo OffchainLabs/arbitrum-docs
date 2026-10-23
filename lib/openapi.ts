@@ -52,7 +52,7 @@ export async function openapiPageMarkdown(schemaId: string, slug: string): Promi
   }
   lines.push('', 'On failure the response has an `error` object with `code`, `message` and an');
   lines.push('optional `data`, instead of `result`.', '');
-  lines.push('## TypeScript types', '', '```ts', types.typescript, '```', '');
+  lines.push('## Go definition', '', '```go', types.go, '```', '');
   const request = { jsonrpc: '2.0', id: 1, method: op.operationId, params: example };
   lines.push('## Example', '', '```bash', `curl -X POST ${server} \\`);
   lines.push(

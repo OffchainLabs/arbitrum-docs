@@ -1,6 +1,6 @@
 /**
  * The `.md` mirror of a JSON-RPC page is plain text, so a `$ref` in it points nowhere. It lists
- * the result fields and the TypeScript types by name, without the JSON-RPC envelope.
+ * the result fields and the Go definition, without the JSON-RPC envelope.
  */
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -13,7 +13,10 @@ test('arb_getRawBlockMetadata markdown documents the nested result fields', asyn
   const md = await openapiPageMarkdown(SCHEMA, 'arb_getRawBlockMetadata');
   assert.match(md, /\| `\[\]\.blockNumber` \| number \| yes \|/);
   assert.match(md, /\| `result` \| NumberAndBlockMetadata\[\] \\\| null \| yes \|/);
-  assert.match(md, /```ts\nexport type ArbGetRawBlockMetadataParams = \[/);
+  assert.match(
+    md,
+    /```go\n\/\/ nitro v3\.12\.1 execution\/gethexec\/api\.go:59\nfunc \(a \*ArbAPI\) GetRawBlockMetadata\(/,
+  );
   assert.doesNotMatch(md, /\$ref|#\/components\//);
 });
 

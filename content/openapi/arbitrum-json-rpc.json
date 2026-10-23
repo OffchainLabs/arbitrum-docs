@@ -50,7 +50,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `execution/gethexec/api.go:59`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L59"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 execution/gethexec/api.go:59\nfunc (a *ArbAPI) GetRawBlockMetadata(ctx context.Context, fromBlock, toBlock rpc.BlockNumber) ([]NumberAndBlockMetadata, error)\n\n// nitro v3.12.1 execution/gethexec/api.go:46\ntype NumberAndBlockMetadata struct {\n\tBlockNumber uint64        `json:\"blockNumber\"`\n\tRawMetadata hexutil.Bytes `json:\"rawMetadata\"`\n}"
       }
     },
     "/arb_checkPublisherHealth": {
@@ -91,7 +92,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `execution/gethexec/api.go:55`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L55"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 execution/gethexec/api.go:55\nfunc (a *ArbAPI) CheckPublisherHealth(ctx context.Context) error"
       }
     },
     "/arbdebug_pricingModel": {
@@ -132,7 +134,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `execution/gethexec/api.go:163`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L163"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 execution/gethexec/api.go:163\nfunc (api *ArbDebugAPI) PricingModel(ctx context.Context, start, end rpc.BlockNumber) (PricingModelHistory, error)\n\n// nitro v3.12.1 execution/gethexec/api.go:112\ntype PricingModelHistory struct {\n\tStart            uint64     `json:\"start\"`\n\tEnd              uint64     `json:\"end\"`\n\tStep             uint64     `json:\"step\"`\n\tTimestamp        []uint64   `json:\"timestamp\"`\n\tBaseFee          []*big.Int `json:\"baseFee\"`\n\tGasBacklog       []uint64   `json:\"gasBacklog\"`\n\tGasUsed          []uint64   `json:\"gasUsed\"`\n\tMinBaseFee       *big.Int   `json:\"minBaseFee\"`\n\tSpeedLimit       uint64     `json:\"speedLimit\"`\n\tPerBlockGasLimit uint64     `json:\"perBlockGasLimit\"`\n\tPerTxGasLimit    uint64     `json:\"perTxGasLimit\"`\n\tPricingInertia   uint64     `json:\"pricingInertia\"`\n\tBacklogTolerance uint64     `json:\"backlogTolerance\"`\n\n\tL1BaseFeeEstimate      []*big.Int `json:\"l1BaseFeeEstimate\"`\n\tL1LastSurplus          []*big.Int `json:\"l1LastSurplus\"`\n\tL1FundsDue             []*big.Int `json:\"l1FundsDue\"`\n\tL1FundsDueForRewards   []*big.Int `json:\"l1FundsDueForRewards\"`\n\tL1UnitsSinceUpdate     []uint64   `json:\"l1UnitsSinceUpdate\"`\n\tL1LastUpdateTime       []uint64   `json:\"l1LastUpdateTime\"`\n\tL1EquilibrationUnits   *big.Int   `json:\"l1EquilibrationUnits\"`\n\tL1PerBatchCost         int64      `json:\"l1PerBatchCost\"`\n\tL1AmortizedCostCapBips uint64     `json:\"l1AmortizedCostCapBips\"`\n\tL1PricingInertia       uint64     `json:\"l1PricingInertia\"`\n\tL1PerUnitReward        uint64     `json:\"l1PerUnitReward\"`\n\tL1PayRewardTo          string     `json:\"l1PayRewardTo\"`\n}"
       }
     },
     "/arbdebug_timeoutQueueHistory": {
@@ -173,7 +176,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `execution/gethexec/api.go:257`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L257"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 execution/gethexec/api.go:257\nfunc (api *ArbDebugAPI) TimeoutQueueHistory(ctx context.Context, start, end rpc.BlockNumber) (TimeoutQueueHistory, error)\n\n// nitro v3.12.1 execution/gethexec/api.go:250\ntype TimeoutQueueHistory struct {\n\tStart uint64   `json:\"start\"`\n\tEnd   uint64   `json:\"end\"`\n\tStep  uint64   `json:\"step\"`\n\tCount []uint64 `json:\"count\"`\n}"
       }
     },
     "/arbdebug_timeoutQueue": {
@@ -214,7 +218,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `execution/gethexec/api.go:290`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L290"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 execution/gethexec/api.go:290\nfunc (api *ArbDebugAPI) TimeoutQueue(ctx context.Context, blockNum rpc.BlockNumber) (TimeoutQueue, error)\n\n// nitro v3.12.1 execution/gethexec/api.go:284\ntype TimeoutQueue struct {\n\tBlockNumber uint64        `json:\"blockNumber\"`\n\tTickets     []common.Hash `json:\"tickets\"`\n\tTimeouts    []uint64      `json:\"timeouts\"`\n}"
       }
     },
     "/eth_sendRawTransactionSync": {
@@ -255,7 +260,8 @@
         "externalDocs": {
           "description": "go-ethereum 5eee8f5 `internal/ethapi/api.go:2044`",
           "url": "https://github.com/OffchainLabs/go-ethereum/blob/5eee8f546e7602b7deeef7909f291bbebc77e233/internal/ethapi/api.go#L2044"
-        }
+        },
+        "x-arbitrum-go": "// go-ethereum 5eee8f5 internal/ethapi/api.go:2044\nfunc (api *TransactionAPI) SendRawTransactionSync(ctx context.Context, input hexutil.Bytes, timeoutMs *uint64) (map[string]interface{}, error)"
       }
     },
     "/eth_sendRawTransactionConditional": {
@@ -296,7 +302,8 @@
         "externalDocs": {
           "description": "go-ethereum 5eee8f5 `arbitrum/conditionaltx.go:25`",
           "url": "https://github.com/OffchainLabs/go-ethereum/blob/5eee8f546e7602b7deeef7909f291bbebc77e233/arbitrum/conditionaltx.go#L25"
-        }
+        },
+        "x-arbitrum-go": "// go-ethereum 5eee8f5 arbitrum/conditionaltx.go:25\nfunc (s *ArbTransactionAPI) SendRawTransactionConditional(ctx context.Context, input hexutil.Bytes, options *arbitrum_types.ConditionalOptions) (common.Hash, error)\n\n// go-ethereum 5eee8f5 arbitrum_types/txoptions.go:71\ntype ConditionalOptions struct {\n\tKnownAccounts  map[common.Address]RootHashOrSlots `json:\"knownAccounts\"`\n\tBlockNumberMin *math.HexOrDecimal64               `json:\"blockNumberMin,omitempty\"`\n\tBlockNumberMax *math.HexOrDecimal64               `json:\"blockNumberMax,omitempty\"`\n\tTimestampMin   *math.HexOrDecimal64               `json:\"timestampMin,omitempty\"`\n\tTimestampMax   *math.HexOrDecimal64               `json:\"timestampMax,omitempty\"`\n}\n\n// go-ethereum 5eee8f5 arbitrum_types/txoptions.go:49\ntype RootHashOrSlots struct {\n\tRootHash  *common.Hash\n\tSlotValue map[common.Hash]common.Hash\n}"
       }
     },
     "/daprovider_store": {
@@ -337,7 +344,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `daprovider/server/provider_server.go:275`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/server/provider_server.go#L275"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 daprovider/server/provider_server.go:275\nfunc (s *WriterServer) Store(ctx context.Context, message hexutil.Bytes, timeout hexutil.Uint64) (*server_api.StoreResult, error)\n\n// nitro v3.12.1 daprovider/server_api/types.go:21\ntype StoreResult struct {\n\tSerializedDACert hexutil.Bytes `json:\"serialized-da-cert,omitempty\"`\n}"
       }
     },
     "/daprovider_startChunkedStore": {
@@ -378,7 +386,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `daprovider/server/provider_server.go:256`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/server/provider_server.go#L256"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 daprovider/server/provider_server.go:256\nfunc (s *WriterServer) StartChunkedStore(ctx context.Context, timestamp, nChunks, chunkSize, totalSize, timeout hexutil.Uint64, sig hexutil.Bytes) (*data_streaming.StartStreamingResult, error)\n\n// nitro v3.12.1 daprovider/data_streaming/receiver.go:88\ntype StartStreamingResult struct {\n\tMessageId hexutil.Uint64 `json:\"BatchId,omitempty\"` // For compatibility reasons we keep the old name \"BatchId\"\n}"
       }
     },
     "/daprovider_sendChunk": {
@@ -419,7 +428,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `daprovider/server/provider_server.go:260`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/server/provider_server.go#L260"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 daprovider/server/provider_server.go:260\nfunc (s *WriterServer) SendChunk(ctx context.Context, messageId, chunkId hexutil.Uint64, chunk hexutil.Bytes, sig hexutil.Bytes) error"
       }
     },
     "/daprovider_commitChunkedStore": {
@@ -460,7 +470,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `daprovider/server/provider_server.go:264`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/server/provider_server.go#L264"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 daprovider/server/provider_server.go:264\nfunc (s *WriterServer) CommitChunkedStore(ctx context.Context, messageId hexutil.Uint64, sig hexutil.Bytes) (*server_api.StoreResult, error)\n\n// nitro v3.12.1 daprovider/server_api/types.go:21\ntype StoreResult struct {\n\tSerializedDACert hexutil.Bytes `json:\"serialized-da-cert,omitempty\"`\n}"
       }
     },
     "/das_startChunkedStore": {
@@ -501,7 +512,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:169`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/anytrust/rpc_server.go#L169"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 daprovider/anytrust/rpc_server.go:169\nfunc (s *RPCServer) StartChunkedStore(ctx context.Context, timestamp, nChunks, chunkSize, totalSize, timeout hexutil.Uint64, sig hexutil.Bytes) (*data_streaming.StartStreamingResult, error)\n\n// nitro v3.12.1 daprovider/data_streaming/receiver.go:88\ntype StartStreamingResult struct {\n\tMessageId hexutil.Uint64 `json:\"BatchId,omitempty\"` // For compatibility reasons we keep the old name \"BatchId\"\n}"
       }
     },
     "/das_sendChunk": {
@@ -542,7 +554,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:187`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/anytrust/rpc_server.go#L187"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 daprovider/anytrust/rpc_server.go:187\nfunc (s *RPCServer) SendChunk(ctx context.Context, messageId, chunkId hexutil.Uint64, chunk hexutil.Bytes, sig hexutil.Bytes) error"
       }
     },
     "/das_commitChunkedStore": {
@@ -583,7 +596,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:205`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/anytrust/rpc_server.go#L205"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 daprovider/anytrust/rpc_server.go:205\nfunc (s *RPCServer) CommitChunkedStore(ctx context.Context, messageId hexutil.Uint64, sig hexutil.Bytes) (*StoreResult, error)\n\n// nitro v3.12.1 daprovider/anytrust/rpc_server.go:117\ntype StoreResult struct {\n\tDataHash    hexutil.Bytes  `json:\"dataHash,omitempty\"`\n\tTimeout     hexutil.Uint64 `json:\"timeout,omitempty\"`\n\tSignersMask hexutil.Uint64 `json:\"signersMask,omitempty\"`\n\tKeysetHash  hexutil.Bytes  `json:\"keysetHash,omitempty\"`\n\tSig         hexutil.Bytes  `json:\"sig,omitempty\"`\n\tVersion     hexutil.Uint64 `json:\"version,omitempty\"`\n}"
       }
     },
     "/das_healthCheck": {
@@ -624,7 +638,8 @@
         "externalDocs": {
           "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:236`",
           "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/anytrust/rpc_server.go#L236"
-        }
+        },
+        "x-arbitrum-go": "// nitro v3.12.1 daprovider/anytrust/rpc_server.go:236\nfunc (s *RPCServer) HealthCheck(ctx context.Context) error"
       }
     }
   },

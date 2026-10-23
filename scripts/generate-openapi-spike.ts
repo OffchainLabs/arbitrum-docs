@@ -1,6 +1,6 @@
 // Spike: writes one MDX page per JSON-RPC method from content/openapi/arbitrum-json-rpc.json, and
 // the method → request URL map that the code samples read, and the method → types map that the
-// Result list and the TypeScript panel read.
+// Result list and the Go definition panel read.
 import { generateFiles } from 'fumadocs-openapi';
 import { createOpenAPI } from 'fumadocs-openapi/server';
 import { readFileSync, writeFileSync } from 'node:fs';

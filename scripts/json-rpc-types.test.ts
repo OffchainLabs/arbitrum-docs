@@ -1,6 +1,6 @@
 /**
- * Each JSON-RPC method page shows its params and result without the JSON-RPC envelope: a Result
- * list and TypeScript types, both derived from the OpenAPI document.
+ * Each JSON-RPC method page shows its result without the JSON-RPC envelope, as a Result list, and
+ * the method's Go definition, both derived from the OpenAPI document.
  */
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -8,16 +8,16 @@ import { test } from 'node:test';
 
 import { methodTypes } from '../lib/json-rpc-types.ts';
 
-function docWith(params: unknown, result: unknown, schemas: Record<string, unknown> = {}) {
+const GO = '// nitro v3.12.1 x.go:1\nfunc (a *API) GetThing(ctx context.Context) error';
+
+function docWith(result: unknown, schemas: Record<string, unknown> = {}, go: unknown = GO) {
   return {
     paths: {
       '/x_getThing': {
         post: {
-          operationId: 'x_getThing',
-          requestBody: {
-            content: { 'application/json': { schema: { $ref: '#/components/schemas/Req' } } },
-          },
-          responses: {
+          'operationId': 'x_getThing',
+          'x-arbitrum-go': go,
+          'responses': {
             200: {
               content: {
                 'application/json': {
@@ -29,40 +29,31 @@ function docWith(params: unknown, result: unknown, schemas: Record<string, unkno
         },
       },
     },
-    components: {
-      schemas: {
-        ...schemas,
-        Req: { type: 'object', properties: { params } },
-        Res: { type: 'object', properties: { result } },
-      },
-    },
+    components: { schemas: { ...schemas, Res: { type: 'object', properties: { result } } } },
   };
 }
 
 const HASH = { title: 'Hash', type: 'string', pattern: '^0x[0-9a-fA-F]{64}$' };
 
-test('types the params as a labeled tuple, optional after minItems', () => {
-  const doc = docWith(
-    {
-      type: 'array',
-      minItems: 1,
-      prefixItems: [
-        { $ref: '#/components/schemas/Hash', title: 'hash' },
-        { type: 'integer', title: 'timeoutMs' },
-      ],
-    },
-    { type: 'null' },
-    { Hash: HASH },
-  );
-  const { typescript } = methodTypes(doc, 'x_getThing');
-  assert.match(typescript, /^export type XGetThingParams = \[hash: Hash, timeoutMs\?: number\];$/m);
-  assert.match(typescript, /^export type XGetThingResult = null;$/m);
-  assert.match(typescript, /^export type Hash = string;$/m);
+test('returns the Go definition of the method', () => {
+  assert.equal(methodTypes(docWith({ type: 'null' }), 'x_getThing').go, GO);
 });
 
-test('types an object result, optional fields outside required', () => {
+test('throws for a method with no Go definition', () => {
+  assert.throws(
+    () => methodTypes(docWith({ type: 'null' }, {}, null), 'x_getThing'),
+    /x_getThing: no x-arbitrum-go/,
+  );
+});
+
+test('lists a null result as one row', () => {
+  assert.deepEqual(methodTypes(docWith({ type: 'null' }), 'x_getThing').result, [
+    { name: 'result', type: 'null', required: true, description: '' },
+  ]);
+});
+
+test('lists the fields of an object result, optional outside required', () => {
   const doc = docWith(
-    { type: 'array', prefixItems: [] },
     {
       type: 'object',
       required: ['tickets'],
@@ -73,13 +64,7 @@ test('types an object result, optional fields outside required', () => {
     },
     { Hash: HASH },
   );
-  const { typescript, result } = methodTypes(doc, 'x_getThing');
-  assert.match(typescript, /^export type XGetThingParams = \[\];$/m);
-  assert.match(
-    typescript,
-    /^export type XGetThingResult = \{\n {2}tickets: Hash\[\];\n {2}note\?: string;\n\};$/m,
-  );
-  assert.deepEqual(result, [
+  assert.deepEqual(methodTypes(doc, 'x_getThing').result, [
     { name: 'tickets', type: 'Hash[]', required: true, description: '' },
     { name: 'note', type: 'string', required: false, description: 'A note.' },
   ]);
@@ -87,7 +72,6 @@ test('types an object result, optional fields outside required', () => {
 
 test('lists the item fields of a nullable array result', () => {
   const doc = docWith(
-    { type: 'array', prefixItems: [] },
     { oneOf: [{ type: 'array', items: { $ref: '#/components/schemas/Item' } }, { type: 'null' }] },
     {
       Item: {
@@ -97,43 +81,35 @@ test('lists the item fields of a nullable array result', () => {
       },
     },
   );
-  const { typescript, result } = methodTypes(doc, 'x_getThing');
-  assert.match(typescript, /^export type XGetThingResult = Item\[\] \| null;$/m);
-  assert.match(typescript, /^export type Item = \{\n {2}n: number;\n\};$/m);
-  assert.deepEqual(result, [
+  assert.deepEqual(methodTypes(doc, 'x_getThing').result, [
     { name: 'result', type: 'Item[] | null', required: true, description: '' },
     { name: '[].n', type: 'number', required: true, description: 'Number.' },
   ]);
 });
 
-test('types enums, consts and maps', () => {
-  const doc = docWith(
-    {
-      type: 'array',
-      prefixItems: [
-        { title: 'tag', oneOf: [{ type: 'string' }, { type: 'string', enum: ['latest', 'safe'] }] },
-      ],
+test('labels enums, consts and maps', () => {
+  const doc = docWith({
+    type: 'object',
+    properties: {
+      tag: { oneOf: [{ type: 'string' }, { type: 'string', enum: ['latest', 'safe'] }] },
+      counts: { type: 'object', additionalProperties: { const: 1 } },
     },
-    { type: 'object', additionalProperties: { const: 1 } },
-  );
-  const { typescript } = methodTypes(doc, 'x_getThing');
-  assert.match(typescript, /Params = \[tag: string \| 'latest' \| 'safe'\];/);
-  assert.match(typescript, /Result = Record<string, 1>;/);
+  });
+  const [tag, counts] = methodTypes(doc, 'x_getThing').result;
+  assert.equal(tag?.type, "string | 'latest' | 'safe'");
+  assert.equal(counts?.type, 'Record<string, 1>');
 });
 
-test('throws for a schema construct it does not map', () => {
-  const doc = docWith(
-    { type: 'array', prefixItems: [{ title: 'x', allOf: [] }] },
-    { type: 'null' },
-  );
+test('throws for a schema keyword it does not map', () => {
+  const doc = docWith({ type: 'object', properties: { x: { allOf: [] } } });
   assert.throws(() => methodTypes(doc, 'x_getThing'), /x_getThing.*allOf/);
 });
 
 test('throws for an unknown method', () => {
-  assert.throws(() => methodTypes(docWith([], null), 'x_missing'), /x_missing/);
+  assert.throws(() => methodTypes(docWith({ type: 'null' }), 'x_missing'), /x_missing/);
 });
 
-test('every method in the OpenAPI document gets types, and json-rpc-types.json is current', () => {
+test('every method in the OpenAPI document gets rows, and json-rpc-types.json is current', () => {
   const doc = JSON.parse(readFileSync('content/openapi/arbitrum-json-rpc.json', 'utf8'));
   const ids = Object.values<{ post: { operationId: string } }>(doc.paths).map(
     ({ post }) => post.operationId,
@@ -143,8 +119,5 @@ test('every method in the OpenAPI document gets types, and json-rpc-types.json i
     readFileSync('components/widgets/OpenAPIPage/json-rpc-types.json', 'utf8'),
   );
   assert.deepEqual(actual, expected, 'stale map: run node scripts/generate-openapi-spike.ts');
-  assert.match(
-    expected.arbdebug_timeoutQueue.typescript,
-    /export type ArbdebugTimeoutQueueParams = \[blockNum: BlockNumber\];/,
-  );
+  assert.match(expected.arbdebug_timeoutQueue.go, /^type TimeoutQueue struct \{$/m);
 });
