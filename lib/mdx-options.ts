@@ -23,7 +23,7 @@ export const mdxOptions: DefaultMDXOptions = {
   ],
   // A local `/img/…` src is measured from `public/` and kept as a path, so the mirrors print the
   // real URL. Remote images are never measured: a markdown image with a remote src breaks the page,
-  // and `content:lint` rule `remote-image` blocks it. Wrap an `<img>` in `<ImageZoom>` for one.
+  // and ESLint rule `docs/remote-image` blocks it. Wrap an `<img>` in `<ImageZoom>` for one.
   remarkImageOptions: {
     external: false,
     useImport: false,
