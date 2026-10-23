@@ -14,9 +14,9 @@ This documentation is for production sequencer deployments. If you want to set u
 
 ## Introduction
 
-The [sequencer](/how-arbitrum-works/deep-dives/sequencer) is a critical component of your <Term id="arbitrum-chain">Arbitrum chain</Term> and is responsible for queuing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from <Term id="arbitrum-full-node">full nodes</Term>, queuing them, and returning <Term id="sequencer-feed">feed</Term> messages to those full nodes. It subsequently sends queued transactions to <Term id="batch-poster">batch posters</Term> for data posting.
+The [sequencer](/how-arbitrum-works/deep-dives/sequencer) is a critical component of your <Term id="arbitrum-chain">Arbitrum chain</Term> and queues transactions submitted to the network. it serves as the transaction-ordering engine, accepting transactions forwarded from <Term id="arbitrum-full-node">full nodes</Term>, queueing them, and returning <Term id="sequencer-feed">feed</Term> messages to the nodes. It subsequently sends queued transactions to <Term id="batch-poster">batch posters</Term> for data posting.
 
-If your sequencer goes offline, the network cannot process new transactions arriving at the <Term id="child-chain">child chain</Term>'s RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
+If your sequencer goes offline, the network cannot process new transactions arriving at the <Term id="child-chain">child chain's</Term> RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
 
 ## Prerequisites
 
@@ -59,7 +59,7 @@ In this configuration, full nodes forward transactions to a predefined endpoint 
 
 ## Using Helm charts for deployment
 
-We recommend using the [Offchain Labs community Helm charts](https://github.com/OffchainLabs/community-helm-charts) to deploy your high-availability sequencer setup. These charts provide pre-configured templates for all the necessary components and make it easier to maintain your deployment. Base configuration values are provided in the examples below. However, you should adjust them to fit your needs and use values files for production deployments.
+We recommend using the [Offchain Labs community Helm charts](https://github.com/OffchainLabs/community-helm-charts) to deploy your high-availability sequencer setup. These charts provide pre-configured templates for all the necessary components and make it easier to maintain your deployment. The examples below provide base configuration values. However, adjust them to fit your needs, and use values files for production deployments.
 
 ## Detailed component setup
 
@@ -114,7 +114,7 @@ helm install external-relay offchainlabs/relay \
   --set configmap.data.node.feed.input.url=ws://sequencer-relay:9642
 ```
 
-You can check [run a feed relay](/run-a-node/run-feed-relay) to see how to set up a relay node.
+Refer to the [Run a feed relay](/run-a-node/run-feed-relay) page to learn how to set up a relay node.
 
 ### 3. Nitro full node setup
 
@@ -145,6 +145,18 @@ helm install fullnode offchainlabs/nitro \
   --set configmap.data.execution.forwarder.redis-url=redis://<redis-url>:6379
 ```
 
+#### Health check routing (optional)
+
+If your full nodes forward to a single predefined endpoint, let your load balancer find the active sequencer. Each sequencer can serve a health check that reports whether it holds the lockout:
+
+- Set `node.seq-coordinator.chosen-healthcheck-addr` on every sequencer. Nitro starts an HTTP service on that address. The value is a listen address in the form `host:port` or `:port`, for example `:8080`. There is no default port.
+- The service returns `200` when it chooses a sequencer and `503` otherwise.
+- Point your load balancer's health check at this service. The load balancer then sends traffic only to the chosen sequencer.
+
+The health check switches to `503` as soon as the holder stops sequencing, which is `lockout-spare` before its lockout expires in Redis. See [What `lockout-spare` protects against](#what-lockout-spare-protects-against). This makes it a more accurate signal than inferring the active sequencer from logs or metrics.
+
+{/* SME: confirm whether the community Helm chart exposes `chosen-healthcheck-addr` as a container port and service. */}
+
 #### Mutating-only endpoint (optional)
 
 For high availability, we recommend routing mutating transactions to a fleet of `precheckers`, which forward them to the sequencer. To do this, set up a separate endpoint for mutating transactions and allow only calls such as `eth_sendRawTransaction` to route to the `precheckers`, which then route to the sequencer. This insulates the sequencer from unnecessary load and enables it to focus on transaction ordering. However, this configuration requires custom load-balancing logic and is out of scope for this guide.
@@ -156,7 +168,7 @@ Set up a highly available Redis cluster for sequencer coordination:
 #### Deployment options
 
 - Use a managed service like AWS ElastiCache (recommended)
-- Deploy within Kubernetes using a StatefulSet with PersistentVolumeClaims
+- Deploy within Kubernetes using a `StatefulSet` with `PersistentVolumeClaims`
 
 #### Requirements
 
@@ -191,7 +203,7 @@ helm install sequencer offchainlabs/nitro \
 
 #### Critical sequencer coordinator parameters
 
-The sequencer coordinator is the key component for high availability. These parameters are essential:
+The sequencer coordinator is the key to high availability. These parameters are essential:
 
 | Parameter                        | Description                  | Recommended Value    |
 | -------------------------------- | ---------------------------- | -------------------- |
@@ -199,30 +211,30 @@ The sequencer coordinator is the key component for high availability. These para
 | `node.seq-coordinator.redis-url` | Redis URL for coordination   | Your Redis URL       |
 | `node.seq-coordinator.my-url`    | URL for this sequencer       | Unique per sequencer |
 
-For the full set of coordinator flags and their defaults, see [Sequencer configuration reference](/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference#sequencer-coordinator-flags).
+For the full set of coordinator flags and their defaults, refer to the [Sequencer configuration reference](/launch-arbitrum-chain/chain-config/sequencer/sequencer-config-reference#sequencer-coordinator-flags) page.
 
 #### Redis priority registration
 
 Configuring `redis-url` and `my-url` is not enough to make a sequencer eligible. Each sequencer must also appear in the Redis priority list, stored under the key `coordinator.priorities` as a comma-separated list of URLs in priority order.
 
-Nitro treats this key as **read-only**. No sequencer can write itself into it. You populate it with the [Sequencer Coordination Manager (SQM)](/run-a-node/sequencer/run-sequencer-coordination-manager), which is the only component that writes the key.
+Nitro treats this key as **read-only**. No sequencer can write itself into it. The [Sequencer Coordination Manager (SQM)](/run-a-node/sequencer/run-sequencer-coordination-manager) populates it; it's the only component that writes the key.
 
-A sequencer that is not in the list starts cleanly, syncs, serves RPC, and broadcasts to the feed—but never becomes the active sequencer.
+A sequencer that is not in the list starts cleanly, syncs, serves RPC, and broadcasts to the feed—but never becomes the active sequencer. At startup, it logs `Sequencer did not find its URL in the priorities list in redis`.
 
 How the coordinator picks the active sequencer:
 
 1. It reads `coordinator.priorities` from Redis.
-2. It goes through the list in order and takes the first sequencer that has published a liveliness key at `coordinator.liveliness.<my-url>`. Each sequencer writes its own key when it is synced and ready.
+2. It goes through the list in order and takes the first sequencer that has published a liveliness key at `coordinator.liveliness.<my-url>`. Each sequencer writes its own key when it syncs and is ready.
 3. That sequencer acquires the lockout, recorded at `coordinator.chosen`, and activates. Everything else forwards to it.
 
 Two consequences follow from step 2:
 
-- **Order is priority.** The first entry that is healthy and synced wins. Put your preferred sequencer first.
-- **`my-url` must match its list entry exactly.** The comparison is a string match. A trailing slash, a different port form, or an IP address instead of a hostname all cause a silent mismatch.
+- **Order is priority**—the first healthy, synced entry wins. Put your preferred sequencer first.
+- **`my-url` must match its list entry exactly.** The comparison is a string match. A trailing slash, a different port format, or an IP address instead of a hostname all cause a silent mismatch.
 
 <Callout type="warn" title="Never register the batch poster">
 
-The batch poster runs with `node.seq-coordinator.enable=true` so it can follow coordination state, but it must stay out of `coordinator.priorities`. If it reaches the top of the list, it is selected as the active sequencer while having no sequencer to run, and the chain stops producing blocks. Nitro logs `myurl main sequencer, but no sequencer exists`.
+The batch poster runs with `node.seq-coordinator.enable=true` so it can follow coordination state, but it must stay out of `coordinator.priorities`. If it reaches the top of the list, it becomes the active sequencer with no sequencer to run, and the chain stops producing blocks. Nitro logs `myurl main sequencer, but not sequencer exists`.
 
 </Callout>
 
@@ -313,9 +325,113 @@ helm install batchposter offchainlabs/nitro \
 
 <Callout type="warn" title="Important">
 
-Do not add the batch poster to the sequencer priority list in the Sequencer Coordination Manager (SQM) to prevent it from becoming the active sequencer unintentionally.
+Do not add the batch poster to the sequencer priority list in the Sequencer Coordination Manager (SQM) to prevent it from unintentionally becoming the active sequencer.
 
 </Callout>
+
+## How failover works
+
+The active sequencer keeps its role by renewing a time-limited lockout in Redis. If it stops renewing, the lockout expires, and the next eligible sequencer takes over. You don’t need to act for this to happen.
+
+### Lockout renewal
+
+- A sequencer that acquires the lockout holds it for `lockout-duration` (default `1m`). This is the expiry Nitro sets on the `coordinator.chosen` key.
+- The holder renews the lockout every time it sequences a message. On a busy chain, the lockout is almost always fresh.
+- When the chain is idle, the holder renews the lockout shortly before its local deadline. With the defaults, it renews about every 18 seconds.
+- Each sequencer runs a coordinator update every `update-interval` (default `250ms`). After a Redis error, it waits `retry-interval` (default `50ms`) times the number of consecutive errors, up to `update-interval`.
+
+### What `lockout-spare` protects against
+
+The holder stops treating itself as chosen `lockout-spare` (default `30s`) before its lockout expires in Redis. At that moment, it stops sequencing and returns a `503` health check. This margin keeps two sequencers from being active at once: the old holder stops before another sequencer can acquire the lockout.
+
+Keep `lockout-spare` well below `lockout-duration`. A smaller margin shortens the gap between the old holder stopping and the lockout expiring.
+
+### Unplanned failover
+
+If the active sequencer crashes or loses its network, it stops renewing the lockout. Its liveliness key expires at the same moment as the lockout. The other sequencers then pick a new one the same way they picked the first:
+
+1. Each sequencer walks `coordinator.priorities` in order.
+2. It skips any sequencer that has no liveliness key. A sequencer publishes this key only while it is synced.
+3. The first sequencer with a liveliness key tries to acquire the lockout. It succeeds only if it holds every message stored in Redis and has processed all of them.
+
+Block production can stop for up to `lockout-duration` after the holder's last renewal, plus one `update-interval` and the time the new sequencer needs to start. With the defaults, plan for a gap of up to about one minute.
+
+Two failures stop the chain instead of failing over:
+
+- **Redis is unreachable.** The holder can’t renew, so it stops sequencing at its local deadline. With the defaults, that is at most 30 seconds after its last renewal. No other sequencer can acquire the lockout until Redis returns. Run Redis in a high-availability setup, as described in [Redis setup](#4-redis-setup).
+- **No listed sequencer is synced.** No sequencer publishes a liveliness key, so none acquires the lockout.
+
+During the switch, full nodes can briefly return `sequencer temporarily not available`. This is normal during a lockout handoff. If it lasts and every node returns it, no sequencer is chosen. See [Sequencer troubleshooting](/launch-arbitrum-chain/operate/sequencer-troubleshooting#1-no-sequencer-is-chosen).
+
+The sequencer relays listen to every sequencer's feeds. Feed subscribers keep receiving messages from whichever sequencer is active.
+
+### Automatic failback
+
+A sequencer that ranks higher than the current holder takes the role back as soon as it is eligible again. The holder sees that a higher-ranked sequencer wants the lockout, forwards transactions to it, and releases the lockout. This happens in two cases:
+
+- A crashed higher-ranked sequencer recovers and syncs.
+- You move a sequencer above the current holder in the SQM.
+
+### Planned handoff
+
+A sequencer that receives `SIGINT` or `SIGTERM` hands off the lockout before it stops. Nitro also hands off the lockout before a scheduled maintenance run. The handoff runs in four steps:
+
+1. The sequencer deletes its own liveliness key, so it is no longer eligible.
+2. The next eligible sequencer in `coordinator.priorities` becomes the recommended one. The holder forwards transactions to it and releases the lockout.
+3. The holder waits up to `handoff-timeout` for `coordinator.chosen` to name another sequencer.
+4. On shutdown, the sequencer then releases its liveliness key and the lockout, retrying each release on failure.
+
+If no other sequencer is eligible, the holder keeps the lockout. The handoff times out, and Nitro logs `timed out waiting for another sequencer to become chosen`. On shutdown, the sequencer then releases the lockout anyway, and the chain stops until another sequencer becomes eligible. Before you stop the active sequencer, confirm that at least one standby has a liveliness key.
+
+| Flag                  | Default | What it controls                                                                                                                                 |
+| --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `handoff-timeout`     | `30s`   | Longest wait for another sequencer to become chosen                                                                                              |
+| `release-retries`     | `4`     | Attempts to release the lockout on shutdown. Nitro tries to release the liveliness key one more time than this. A negative value retries forever |
+| `safe-shutdown-delay` | `5s`    | No effect in Nitro v3.12.1. Nitro logs the value but never waits on it                                                                           |
+
+{/* SME: is it intended that `safe-shutdown-delay` has no effect, or is this a Nitro bug? */}
+
+If you run on Kubernetes, set the pod's `terminationGracePeriodSeconds` higher than `handoff-timeout`. Nitro stops its other components after the handoff finishes. If Kubernetes kills the pod before the handoff ends, the lockout expires on its own, as in an unplanned failover.
+
+{/* SME: recommend a specific `terminationGracePeriodSeconds` value for sequencer pods. */}
+
+## Planned maintenance
+
+Use a planned handoff to upgrade or restart sequencers without stopping the chain. Upgrade the standby sequencers first, then move the active role, then upgrade the last one.
+
+Plan the order around [automatic failback](#automatic-failback). A sequencer ranked above the current holder takes the active role as soon as it syncs.
+
+{/* SME: is the maintenance-run handoff enabled by default on sequencers? */}
+
+1. Read the current state:
+
+   ```shell
+   redis-cli -u <redis-url> GET coordinator.chosen
+   redis-cli -u <redis-url> GET coordinator.priorities
+   ```
+
+2. Upgrade one standby sequencer that ranks below the chosen sequencer. Wait until it publishes its liveliness key again:
+
+   ```shell
+   redis-cli -u <redis-url> --scan --pattern 'coordinator.liveliness.*'
+   ```
+
+3. Repeat step 2 for each remaining standby sequencer.
+4. In the [Sequencer Coordination Manager (SQM)](/run-a-node/sequencer/run-sequencer-coordination-manager), move an upgraded sequencer to the top of the priority list. Press `s` to save the change to Redis. The current holder hands off the lockout right away.
+5. Confirm that `coordinator.chosen` now names the upgraded sequencer and that block height keeps rising.
+6. Upgrade the previously active sequencer. It now ranks lower, so it stays on standby when it returns. Wait for its liveliness key.
+7. Optional: restore your preferred priority order in the SQM. This triggers another handoff.
+
+### Test failover before production
+
+Test both failover paths on a testnet deployment before you go live:
+
+- **Planned handoff:** Follow the maintenance steps above, or stop the chosen sequencer normally. A normal pod deletion sends `SIGTERM`, so it tests the planned path. Confirm that `coordinator.chosen` changes within a few seconds and block production continues.
+- **Unplanned failover:** Stop the chosen sequencer without a graceful shutdown. For example, kill its process with `SIGKILL` or block its network access to Redis. Confirm that another sequencer acquires the lockout within about `lockout-duration` and block height keeps rising.
+
+For both tests, watch for `sequencer temporarily not available` on your full nodes and note how long it lasts.
+
+{/* SME: give measured failover times for each test so operators know what "pass" looks like. The values above come from the default timings in the code, not from measurements. */}
 
 ## Monitoring and maintenance
 
@@ -327,6 +443,24 @@ Implement comprehensive health checks for all components:
 - **Redis connectivity**: Ensure all components can access Redis
 - **Feed availability**: Verify feed connectivity between components
 - **Transaction processing**: Monitor end-to-end transaction flow
+
+### Failover monitoring
+
+Alert on these signals so you know when a failover happens or when none can:
+
+| Signal                                                               | What it tells you                                                                                                                                                            |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chosen-healthcheck-addr` responses                                  | Exactly one sequencer should return `200`. This is the most accurate signal of which sequencer is active                                                                     |
+| `arb/sequencer/active` metric                                        | Set to `1` when a sequencer acquires the lockout and to `0` only when it releases it. A sequencer that loses Redis can keep reporting `1`. Alert if no sequencer reports `1` |
+| `arb/sequencer/live` metric                                          | `1` while a sequencer's liveliness key is published. Alert if fewer than two sequencers report `1`, because then no standby can take over                                    |
+| `arb/sequencer/priority` metric                                      | The sequencer's rank in `coordinator.priorities`, where `0` is the highest. Alert on `-1`, which means the sequencer is not in the list                                      |
+| `coordinator.chosen` in Redis                                        | Changes when the active sequencer changes                                                                                                                                    |
+| Sustained `sequencer temporarily not available` on full nodes        | No sequencer is chosen                                                                                                                                                       |
+| `no sequencer appears to want the lockout on redis` log              | No listed sequencer is eligible. Escalates from `DEBUG` to `WARN` after 10 seconds and `ERROR` after 20                                                                      |
+| `timed out waiting for another sequencer to become chosen` log       | A planned handoff found no eligible standby                                                                                                                                  |
+| `Sequencer did not find its URL in the priorities list in redis` log | Logged at startup. The sequencer's `my-url` is missing from the list or does not match its entry                                                                             |
+
+For the full list of sequencer metrics, see [What to monitor, by component](/launch-arbitrum-chain/operate/monitoring#sequencer).
 
 ### Troubleshooting
 
