@@ -42,10 +42,6 @@ export interface ExpressionNode {
   expressions?: ExpressionNode[];
   quasis?: { value: { cooked?: string | null } }[];
   body?: ExpressionNode[];
-  specifiers?: { local?: { name?: string } }[];
-  declaration?: ExpressionNode | null;
-  declarations?: { id?: { type: string; name?: string } }[];
-  id?: { type: string; name?: string } | null;
   [key: string]: unknown;
 }
 
@@ -250,28 +246,6 @@ export function stringAttribute(element: ElementView, name: string): string | un
 export function isNullAttribute(element: ElementView, name: string): boolean {
   const expression = attributeExpression(element, name);
   return expression?.type === 'Literal' && expression.value === null;
-}
-
-/** Names a file brings into scope itself, with `import` or `export const|function|class`. */
-export function localNames(root: Root): Set<string> {
-  const names = new Set<string>();
-  for (const node of root.children) {
-    if (node.type !== 'mdxjsEsm') continue;
-    const program = (node as WithEstree).data?.estree;
-    for (const statement of program?.body ?? []) {
-      if (statement.type === 'ImportDeclaration') {
-        for (const s of statement.specifiers ?? []) if (s.local?.name) names.add(s.local.name);
-      }
-      if (statement.type === 'ExportNamedDeclaration' && statement.declaration) {
-        const declaration = statement.declaration;
-        if (declaration.type === 'VariableDeclaration') {
-          for (const d of declaration.declarations ?? [])
-            if (d.id?.type === 'Identifier' && d.id.name) names.add(d.id.name);
-        } else if (declaration.id?.name) names.add(declaration.id.name);
-      }
-    }
-  }
-  return names;
 }
 
 /**

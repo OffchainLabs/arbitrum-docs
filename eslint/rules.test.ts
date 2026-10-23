@@ -163,13 +163,23 @@ test('a quicklook anchor is reported; in a fence it is fine', () => {
   assert.deepEqual(rules("```html\n<a data-quicklook-from='dapp'>dApp</a>\n```\n"), []);
 });
 
-test('an @site or @theme import is reported; in a fence it is fine', () => {
-  assert.deepEqual(rules("import X from '@site/docs/partials/_x.mdx';\n"), ['site-import']);
-  assert.deepEqual(rules('import Tabs from "@theme/Tabs";\n'), ['site-import']);
+test('a top-level import or export is reported with its line; in code it is fine', () => {
+  assert.deepEqual(rules("import { Steps } from 'fumadocs-ui/components/steps';\n"), [
+    'esm-in-page',
+  ]);
+  assert.deepEqual(rules('export const Box = () => null;\n'), ['esm-in-page']);
   assert.deepEqual(rules("```js\nimport X from '@site/x';\n```\n"), []);
+  assert.deepEqual(rules("Run `import X from 'y'` first.\n"), []);
+  const found = lint("# Title\n\nimport X from '@site/docs/partials/_x.mdx';\n");
+  assert.deepEqual(
+    found.map((f) => [f.rule, f.line]),
+    [['esm-in-page', 3]],
+  );
+  assert.match(found[0].message, /^@site\/docs\/partials\/_x\.mdx is a Docusaurus alias/);
+  assert.match(lint('export const a = 1;\n')[0].message, /cannot import or export/);
 });
 
-test('an unregistered component is reported unless the file imports or exports it', () => {
+test('an unregistered component is reported even when the file imports or exports it', () => {
   const options = { 'unknown-component': { components: ['Callout', 'Tabs'] } };
   const ids = (source: string) => rules(source, { options });
   assert.deepEqual(ids('<Steps>\n\n<Step>a</Step>\n\n</Steps>\n'), [
@@ -178,11 +188,14 @@ test('an unregistered component is reported unless the file imports or exports i
   ]);
   assert.deepEqual(
     ids(
-      "import { Step, Steps as Steps } from 'fumadocs-ui/components/steps';\n\n<Steps>\n\n<Step>a</Step>\n\n</Steps>\n",
+      "import { Step, Steps } from 'fumadocs-ui/components/steps';\n\n<Steps>\n\n<Step>a</Step>\n\n</Steps>\n",
     ),
-    [],
+    ['esm-in-page', 'unknown-component', 'unknown-component'],
   );
-  assert.deepEqual(ids('export const Box = () => null;\n\n<Box />\n'), []);
+  assert.deepEqual(ids('export const Box = () => null;\n\n<Box />\n'), [
+    'esm-in-page',
+    'unknown-component',
+  ]);
   assert.deepEqual(ids('<Tabs items={[]}>\n</Tabs>\n\n`<Nope />` and <div>x</div>\n'), []);
 });
 

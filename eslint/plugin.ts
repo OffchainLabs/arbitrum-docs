@@ -11,12 +11,12 @@ import calloutType from './rules/callout-type.ts';
 import componentInHeading from './rules/component-in-heading.ts';
 import docusaurusDirective from './rules/docusaurus-directive.ts';
 import docusaurusVarToken from './rules/docusaurus-var-token.ts';
+import esmInPage from './rules/esm-in-page.ts';
 import frontmatterSchema from './rules/frontmatter-schema.ts';
 import linkInHeading from './rules/link-in-heading.ts';
 import markdownInTitle from './rules/markdown-in-title.ts';
 import quicklookAnchor from './rules/quicklook-anchor.ts';
 import remoteImage from './rules/remote-image.ts';
-import siteImport from './rules/site-import.ts';
 import tabsNullDefault from './rules/tabs-null-default.ts';
 import trInTable from './rules/tr-in-table.ts';
 import unknownComponent from './rules/unknown-component.ts';
@@ -31,12 +31,12 @@ export const rules = {
   'component-in-heading': componentInHeading,
   'docusaurus-directive': docusaurusDirective,
   'docusaurus-var-token': docusaurusVarToken,
+  'esm-in-page': esmInPage,
   'frontmatter-schema': frontmatterSchema,
   'link-in-heading': linkInHeading,
   'markdown-in-title': markdownInTitle,
   'quicklook-anchor': quicklookAnchor,
   'remote-image': remoteImage,
-  'site-import': siteImport,
   'tabs-null-default': tabsNullDefault,
   'tr-in-table': trInTable,
   'unknown-component': unknownComponent,

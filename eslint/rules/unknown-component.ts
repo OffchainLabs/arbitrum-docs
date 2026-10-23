@@ -1,14 +1,8 @@
 /**
- * A capitalised JSX tag that `components/mdx.tsx` does not register, that is not a Fumadocs
- * default and that the file neither imports nor exports. MDX throws at render for an undefined
- * component. Register it.
+ * A capitalised JSX tag that `components/mdx.tsx` does not register and that is not a Fumadocs
+ * default. MDX throws at render for an undefined component. Register it.
  */
-import {
-  type MdxRuleDefinition,
-  defaultKnownComponents,
-  jsxElements,
-  localNames,
-} from '../shared.ts';
+import { type MdxRuleDefinition, defaultKnownComponents, jsxElements } from '../shared.ts';
 
 type Options = [{ components?: string[] }?];
 
@@ -30,11 +24,10 @@ const rule: MdxRuleDefinition<'unknown', Options> = {
     const override = context.options[0]?.components;
     const known = override ? new Set(override) : defaultKnownComponents();
     return {
-      root(root) {
-        const local = localNames(root);
+      root() {
         for (const element of jsxElements(sourceCode)) {
           const rootName = element.name.split('.')[0];
-          if (/^[A-Z]/.test(rootName) && !known.has(rootName) && !local.has(rootName)) {
+          if (/^[A-Z]/.test(rootName) && !known.has(rootName)) {
             context.report({
               loc: sourceCode.getLocFromIndex(element.offset),
               messageId: 'unknown',
