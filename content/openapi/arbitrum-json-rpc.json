@@ -17,7 +17,7 @@
         "operationId": "arb_getRawBlockMetadata",
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arb_getRawBlockMetadata",
-        "description": "Returns the block number and the raw block metadata of each block in the range from `fromBlock` to `toBlock` that has metadata. Returns an error if the node does not serve block metadata, if `fromBlock` is greater than `toBlock`, or if the range exceeds the configured block limit. Source: nitro v3.12.1 `execution/gethexec/api.go:59`.",
+        "description": "Returns the block number and the raw block metadata of each block in the range from `fromBlock` to `toBlock` that has metadata. Returns an error if the node does not serve block metadata, if `fromBlock` is greater than `toBlock`, or if the range exceeds the configured block limit.",
         "requestBody": {
           "required": true,
           "content": {
@@ -46,6 +46,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `execution/gethexec/api.go:59`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L59"
         }
       }
     },
@@ -54,7 +58,7 @@
         "operationId": "arb_checkPublisherHealth",
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arb_checkPublisherHealth",
-        "description": "Returns an error if the transaction publisher of the node, such as its sequencer or its transaction forwarder, is not healthy. Returns `null` otherwise. Source: nitro v3.12.1 `execution/gethexec/api.go:55`.",
+        "description": "Returns an error if the transaction publisher of the node, such as its sequencer or its transaction forwarder, is not healthy. Returns `null` otherwise.",
         "requestBody": {
           "required": true,
           "content": {
@@ -83,6 +87,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `execution/gethexec/api.go:55`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L55"
         }
       }
     },
@@ -91,7 +99,7 @@
         "operationId": "arbdebug_pricingModel",
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arbdebug_pricingModel",
-        "description": "Returns the parent chain and child chain pricing state at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples. Source: nitro v3.12.1 `execution/gethexec/api.go:163`.",
+        "description": "Returns the parent chain and child chain pricing state at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples.",
         "requestBody": {
           "required": true,
           "content": {
@@ -120,6 +128,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `execution/gethexec/api.go:163`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L163"
         }
       }
     },
@@ -128,7 +140,7 @@
         "operationId": "arbdebug_timeoutQueueHistory",
         "x-arbitrum-request-url": "$NITRO_RPC_URL",
         "summary": "arbdebug_timeoutQueueHistory",
-        "description": "Returns the size of the retryable timeout queue at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples. Source: nitro v3.12.1 `execution/gethexec/api.go:257`.",
+        "description": "Returns the size of the retryable timeout queue at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples.",
         "requestBody": {
           "required": true,
           "content": {
@@ -157,6 +169,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `execution/gethexec/api.go:257`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L257"
         }
       }
     },
@@ -165,7 +181,7 @@
         "operationId": "arbdebug_timeoutQueue",
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arbdebug_timeoutQueue",
-        "description": "Returns the retryable tickets in the timeout queue at the given block, with the timeout of each queue entry in Unix seconds, or 0 if the retryable no longer exists. Returns at most one entry more than the configured timeout queue bound. Source: nitro v3.12.1 `execution/gethexec/api.go:290`.",
+        "description": "Returns the retryable tickets in the timeout queue at the given block, with the timeout of each queue entry in Unix seconds, or 0 if the retryable no longer exists. Returns at most one entry more than the configured timeout queue bound.",
         "requestBody": {
           "required": true,
           "content": {
@@ -194,6 +210,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `execution/gethexec/api.go:290`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/execution/gethexec/api.go#L290"
         }
       }
     },
@@ -202,7 +222,7 @@
         "operationId": "eth_sendRawTransactionSync",
         "x-arbitrum-request-url": "$NITRO_RPC_URL",
         "summary": "eth_sendRawTransactionSync",
-        "description": "Adds the signed transaction to the transaction pool, waits until it is included in a block, and returns the receipt. Returns an error if the timeout ends first. Source: go-ethereum 5eee8f5 (pinned by nitro v3.12.1) `internal/ethapi/api.go:2044`.",
+        "description": "Adds the signed transaction to the transaction pool, waits until it is included in a block, and returns the receipt. Returns an error if the timeout ends first.",
         "requestBody": {
           "required": true,
           "content": {
@@ -231,6 +251,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "go-ethereum 5eee8f5 `internal/ethapi/api.go:2044`",
+          "url": "https://github.com/OffchainLabs/go-ethereum/blob/5eee8f546e7602b7deeef7909f291bbebc77e233/internal/ethapi/api.go#L2044"
         }
       }
     },
@@ -239,7 +263,7 @@
         "operationId": "eth_sendRawTransactionConditional",
         "x-arbitrum-request-url": "$NITRO_RPC_URL",
         "summary": "eth_sendRawTransactionConditional",
-        "description": "Submits a signed raw transaction that the sequencer includes only if the given options hold: the parent chain block number and the block timestamp ranges, and the storage of the known accounts. Returns the transaction hash. Source: go-ethereum 5eee8f5 (pinned by nitro v3.12.1) `arbitrum/conditionaltx.go:25`.",
+        "description": "Submits a signed raw transaction that the sequencer includes only if the given options hold: the parent chain block number and the block timestamp ranges, and the storage of the known accounts. Returns the transaction hash.",
         "requestBody": {
           "required": true,
           "content": {
@@ -268,6 +292,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "go-ethereum 5eee8f5 `arbitrum/conditionaltx.go:25`",
+          "url": "https://github.com/OffchainLabs/go-ethereum/blob/5eee8f546e7602b7deeef7909f291bbebc77e233/arbitrum/conditionaltx.go#L25"
         }
       }
     },
@@ -276,7 +304,7 @@
         "operationId": "daprovider_store",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "daprovider_store",
-        "description": "Stores the message until the given timeout and returns the serialized data availability certificate. Source: nitro v3.12.1 `daprovider/server/provider_server.go:275`.",
+        "description": "Stores the message until the given timeout and returns the serialized data availability certificate.",
         "requestBody": {
           "required": true,
           "content": {
@@ -305,6 +333,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `daprovider/server/provider_server.go:275`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/server/provider_server.go#L275"
         }
       }
     },
@@ -313,7 +345,7 @@
         "operationId": "daprovider_startChunkedStore",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "daprovider_startChunkedStore",
-        "description": "Opens a chunked store of a message of `totalSize` bytes, sent as `nChunks` chunks of `chunkSize` bytes, and returns the message ID to pass to `daprovider_sendChunk` and `daprovider_commitChunkedStore`. Source: nitro v3.12.1 `daprovider/server/provider_server.go:256`.",
+        "description": "Opens a chunked store of a message of `totalSize` bytes, sent as `nChunks` chunks of `chunkSize` bytes, and returns the message ID to pass to `daprovider_sendChunk` and `daprovider_commitChunkedStore`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -342,6 +374,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `daprovider/server/provider_server.go:256`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/server/provider_server.go#L256"
         }
       }
     },
@@ -350,7 +386,7 @@
         "operationId": "daprovider_sendChunk",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "daprovider_sendChunk",
-        "description": "Adds the chunk with the given chunk ID to the chunked store opened for the given message ID. Returns `null`. Source: nitro v3.12.1 `daprovider/server/provider_server.go:260`.",
+        "description": "Adds the chunk with the given chunk ID to the chunked store opened for the given message ID. Returns `null`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -379,6 +415,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `daprovider/server/provider_server.go:260`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/server/provider_server.go#L260"
         }
       }
     },
@@ -387,7 +427,7 @@
         "operationId": "daprovider_commitChunkedStore",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "daprovider_commitChunkedStore",
-        "description": "Assembles the chunks received for the given message ID, stores the message and returns the serialized data availability certificate. Source: nitro v3.12.1 `daprovider/server/provider_server.go:264`.",
+        "description": "Assembles the chunks received for the given message ID, stores the message and returns the serialized data availability certificate.",
         "requestBody": {
           "required": true,
           "content": {
@@ -416,6 +456,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `daprovider/server/provider_server.go:264`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/server/provider_server.go#L264"
         }
       }
     },
@@ -424,7 +468,7 @@
         "operationId": "das_startChunkedStore",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_startChunkedStore",
-        "description": "Opens a chunked store of a message of `totalSize` bytes, sent as `nChunks` chunks of `chunkSize` bytes, and returns the message ID to pass to `das_sendChunk` and `das_commitChunkedStore`. Requests that are too old or replayed are rejected. Source: nitro v3.12.1 `daprovider/anytrust/rpc_server.go:169`.",
+        "description": "Opens a chunked store of a message of `totalSize` bytes, sent as `nChunks` chunks of `chunkSize` bytes, and returns the message ID to pass to `das_sendChunk` and `das_commitChunkedStore`. Requests that are too old or replayed are rejected.",
         "requestBody": {
           "required": true,
           "content": {
@@ -453,6 +497,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:169`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/anytrust/rpc_server.go#L169"
         }
       }
     },
@@ -461,7 +509,7 @@
         "operationId": "das_sendChunk",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_sendChunk",
-        "description": "Adds the chunk with the given chunk ID to the chunked store opened for the given message ID. Returns `null`. Source: nitro v3.12.1 `daprovider/anytrust/rpc_server.go:187`.",
+        "description": "Adds the chunk with the given chunk ID to the chunked store opened for the given message ID. Returns `null`.",
         "requestBody": {
           "required": true,
           "content": {
@@ -490,6 +538,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:187`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/anytrust/rpc_server.go#L187"
         }
       }
     },
@@ -498,7 +550,7 @@
         "operationId": "das_commitChunkedStore",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_commitChunkedStore",
-        "description": "Assembles the chunks received for the given message ID, stores the message and returns the signed data availability certificate. Source: nitro v3.12.1 `daprovider/anytrust/rpc_server.go:205`.",
+        "description": "Assembles the chunks received for the given message ID, stores the message and returns the signed data availability certificate.",
         "requestBody": {
           "required": true,
           "content": {
@@ -527,6 +579,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:205`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/anytrust/rpc_server.go#L205"
         }
       }
     },
@@ -535,7 +591,7 @@
         "operationId": "das_healthCheck",
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_healthCheck",
-        "description": "Returns an error if the storage backend of the data availability server is not healthy. Returns `null` otherwise. Source: nitro v3.12.1 `daprovider/anytrust/rpc_server.go:236`.",
+        "description": "Returns an error if the storage backend of the data availability server is not healthy. Returns `null` otherwise.",
         "requestBody": {
           "required": true,
           "content": {
@@ -564,6 +620,10 @@
               }
             }
           }
+        },
+        "externalDocs": {
+          "description": "nitro v3.12.1 `daprovider/anytrust/rpc_server.go:236`",
+          "url": "https://github.com/OffchainLabs/nitro/blob/v3.12.1/daprovider/anytrust/rpc_server.go#L236"
         }
       }
     }
