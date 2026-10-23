@@ -465,7 +465,7 @@ Returns the maximum message size your DA provider will accept. The batch poster 
 
 ### Method: `daprovider_store`
 
-Stores batch data and returns a certificate that will post to L1.
+Stores batch data and returns a certificate that will post to L1. For the reference entry, see [`daprovider_store`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/daprovider_store).
 
 **Parameters**:
 
@@ -675,9 +675,9 @@ While `ReferenceDA` uses Go, you can implement `daprovider_store` in any languag
 
 For large batches exceeding HTTP body limits (default: 5MB), you'll need to implement these three additional RPC methods:
 
-- `daprovider_startChunkedStore`: Initiates chunked storage session
-- `daprovider_sendChunk`: Sends individual chunks (can be sent in parallel)
-- `daprovider_commitChunkedStore`: Finalizes stream and returns certificate
+- [`daprovider_startChunkedStore`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/daprovider_startChunkedStore): Initiates chunked storage session
+- [`daprovider_sendChunk`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/daprovider_sendChunk): Sends individual chunks (can be sent in parallel)
+- [`daprovider_commitChunkedStore`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/daprovider_commitChunkedStore): Finalizes stream and returns certificate
 
 See [Appendix A: Streaming Protocol](#appendix-a-streaming-protocol) for complete specifications, parameter details, and implementation guidance.
 
