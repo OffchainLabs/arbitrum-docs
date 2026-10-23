@@ -127,7 +127,8 @@ export const OpenAPIPage = createOpenAPIPage({
   codeUsages,
   playground: { enabled: false },
   content: {
-    // Drops the `apiPlayground` slot, which holds the method and the fake path.
+    // Drops the `apiPlayground` slot, which holds the method and the fake path, and the `body`
+    // slot, the library's Request Body section (FR-006): PositionalParams lists the params.
     renderOperationLayout: (slots, { operation }) => (
       <div className="flex flex-col gap-x-6 gap-y-4 @4xl:flex-row @4xl:items-start">
         <div className="min-w-0 flex-1">
@@ -135,7 +136,6 @@ export const OpenAPIPage = createOpenAPIPage({
           {slots.description}
           {slots.parameters}
           <PositionalParams operation={operation} />
-          {slots.body}
           {slots.responses}
         </div>
         <div className="@4xl:sticky @4xl:top-[calc(var(--fd-docs-row-1,2rem)+1rem)] @4xl:w-[400px]">
