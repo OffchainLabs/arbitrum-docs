@@ -6,6 +6,8 @@
     "rpc-methods",
     "solidity-support",
     "nonce-management",
+    "transaction-submission",
+    "migrate-transaction-submission",
     "..."
   ]
 }

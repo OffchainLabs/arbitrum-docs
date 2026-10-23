@@ -1,0 +1,120 @@
+---
+title: 'Transaction submission behavior'
+description: 'Learn when eth_sendRawTransaction and eth_sendRawTransactionSync return on Arbitrum chains, which errors each method returns, why a transaction can be dropped without a receipt, and which method to use for latency-sensitive workflows.'
+sidebar_label: 'Transaction submission'
+content_type: 'concept'
+author: pete-vielhaber
+sme: leeederek
+target_audience: 'Traders, solvers, market makers, arbitrageurs, and DeFi teams that submit latency-sensitive transactions'
+---
+
+{/* SME NOTE: Drafted from the change announcement and engineering review comments. No Nitro PR yet. Send the SME QUESTION items to mglowack. */}
+
+Arbitrum chains give you two ways to submit a signed transaction. They differ in when they return and what they return:
+
+- **`eth_sendRawTransaction`** returns the transaction hash once the <Term id="sequencer">sequencer</Term> admits the transaction into its queue.
+- **`eth_sendRawTransactionSync`** returns a transaction receipt once the sequencer executes the transaction, before the block is complete.
+
+`eth_sendRawTransaction` tells you quickly that the sequencer has your transaction. `eth_sendRawTransactionSync` tells you the transaction's outcome in one call. Both help latency-sensitive teams, such as traders, solvers, market makers, arbitrageurs, and decentralized apps.
+
+To update your code for this behavior, see [Migrate your transaction submission code](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission).
+
+## Compare the two methods
+
+|                                    | `eth_sendRawTransaction`                                     | `eth_sendRawTransactionSync`                      |
+| ---------------------------------- | ------------------------------------------------------------ | ------------------------------------------------- |
+| Returns when                       | The sequencer admits the transaction into its queue          | The sequencer executes the transaction            |
+| Returns                            | Transaction hash                                             | Transaction receipt, with `blockHash` set to zero |
+| Errors from the admission checks   | Yes                                                          | Yes                                               |
+| Errors at inclusion time           | None. The sequencer drops the transaction without a receipt. | [Most of them](#eth_sendrawtransactionsync)       |
+| Matches other Ethereum-type chains | Yes                                                          | No. It doesn't comply with EIP-7966.              |
+
+## `eth_sendRawTransaction`
+
+`eth_sendRawTransaction` returns the transaction hash once the sequencer admits the transaction into its queue. It doesn't wait for the sequencer to execute the transaction or include it in a block. Ethereum, Base, Monad, and Polygon work the same way.
+
+A successful response means the sequencer admitted the transaction. It doesn't mean the transaction is in a block. You confirm inclusion separately, through a receipt, the <Term id="sequencer-feed">sequencer feed</Term>, or the sender's nonce.
+
+### Errors from the admission checks
+
+Before the sequencer admits a transaction, it runs a set of checks. If a check fails, `eth_sendRawTransaction` returns an error right away.
+
+| Check              | Fails when                                                                                                        |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Nonce already used | The sender has already used this nonce.                                                                           |
+| Insufficient funds | The sender can't pay for the transaction.                                                                         |
+| Fee cap            | The transaction's fee cap (`maxFeePerGas`, the most the sender pays per unit of gas) fails the sequencer's check. |
+| Queue full         | The sequencer's queue has no room for the transaction.                                                            |
+
+{/* SME QUESTION: What is the exact error string for each check? */}
+{/* SME QUESTION: What does the fee-cap check compare against at admission? */}
+
+### Transactions dropped without a receipt
+
+A transaction can pass every admission check and still fail when the sequencer builds the block. The sequencer then drops the transaction. `eth_sendRawTransaction` has already returned the hash, so you get no error. `eth_getTransactionReceipt` returns `null` for that hash.
+
+| Cause                  | What it means                                                                                                                                                                                                           |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nonce gap              | The transaction's nonce is higher than the sender's next nonce, and the missing transaction doesn't arrive within the retry window. See [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management). |
+| Fee cap below base fee | The transaction's fee cap is below the block's base fee.                                                                                                                                                                |
+| Queue timeout          | The transaction waits in the sequencer's queue longer than the queue timeout.                                                                                                                                           |
+
+{/* SME QUESTION: How long does the sequencer hold a nonce-gap transaction before it drops it? */}
+{/* SME QUESTION: Is the queue timeout still 12 seconds by default? */}
+{/* SME QUESTION: Does a dropped transaction leave a trace, such as a log line or metric? */}
+
+`eth_sendRawTransactionSync` returns most of these errors instead. To detect and resubmit dropped transactions, see [Handle transactions with no receipt](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission#handle-transactions-with-no-receipt).
+
+## `eth_sendRawTransactionSync`
+
+`eth_sendRawTransactionSync` returns a transaction receipt once the sequencer executes the transaction. One call gives you the transaction's status and logs.
+
+The method doesn't wait for the rest of the block. It skips these waits:
+
+- The time to execute the transactions that follow yours in the block.
+- Any later <Term id="priority-gas-auction">Priority Gas Auction (PGA)</Term> rounds in the same block. On Arbitrum One, PGA rounds run every 125 ms inside a 250 ms block.
+- The time to finalize the block and save it to disk.
+
+`eth_sendRawTransactionSync` also returns most of the inclusion-time errors that `eth_sendRawTransaction` doesn't report.
+
+{/* SME QUESTION: Which inclusion-time errors does `eth_sendRawTransactionSync` return, and which does it not? */}
+
+<Callout type="warn" title="The early receipt needs an upgraded Nitro node">
+
+The early receipt applies only when the node that serves your `eth_sendRawTransactionSync` call runs a <Term id="arbitrum-nitro">Nitro</Term> version with this behavior. A node that isn't upgraded still serves the call, but without the early receipt. This applies to your own nodes and to third-party RPC (remote procedure call) providers. If you use a provider, check its documentation.
+
+The public sequencer endpoint accepts only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional`. Send `eth_sendRawTransactionSync` calls to an RPC node.
+
+{/* SME QUESTION: What is the minimum Nitro version with this change? */}
+{/* SME QUESTION: Does the eth_sendRawTransaction change depend on the caller's node version, or only on the sequencer? */}
+{/* SME QUESTION: Does the public sequencer endpoint accept `eth_sendRawTransactionSync` after the change? */}
+
+</Callout>
+
+### The receipt has no block hash
+
+The node returns the receipt before the sequencer finishes building the block. The block doesn't exist yet, so the receipt's `blockHash` is `0x0000000000000000000000000000000000000000000000000000000000000000`.
+
+As a result, `eth_sendRawTransactionSync` on Arbitrum doesn't comply with [EIP-7966](https://eips.ethereum.org/EIPS/eip-7966). EIP-7966 is the Ethereum Improvement Proposal that defines this method, and it expects a real block hash.
+
+{/* SME QUESTION: Which other receipt fields are zeroed or omitted, such as `blockNumber` or `transactionIndex`? */}
+
+### A receipt can be retracted in rare cases
+
+Rarely, a block fails after the sequencer executes a transaction, for example after a disk write error or a sequencer crash. A receipt from `eth_sendRawTransactionSync` might then not match the canonical chain. The [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) has the same rare failure mode.
+
+`eth_getTransactionReceipt` returns the canonical receipt, including the `blockHash`.
+
+### Timeouts
+
+The node waits for the receipt up to a timeout. The caller sets the timeout, in milliseconds, as the method's optional second parameter. Node operators limit it with two flags:
+
+| Flag                                    | Default | Description                                  |
+| --------------------------------------- | ------- | -------------------------------------------- |
+| `execution.rpc.tx-sync-default-timeout` | `20s`   | The timeout when the caller doesn't set one. |
+| `execution.rpc.tx-sync-max-timeout`     | `1m0s`  | The longest timeout a caller can request.    |
+
+The [Nitro CLI flags reference](/run-a-node/nitro/cli-flags-reference) lists every flag.
+
+{/* SME QUESTION: Do these two flags and defaults still apply? */}
+{/* SME QUESTION: What does the method return when the timeout fires? */}

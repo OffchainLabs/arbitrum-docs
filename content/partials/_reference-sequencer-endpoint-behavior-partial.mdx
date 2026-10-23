@@ -19,13 +19,27 @@ Arbitrum One exposes two public endpoints with different roles, shown below: a g
 
 ### Latency and timeout behavior
 
-Under nominal load, transactions submitted to the sequencer endpoint are accepted in well under a second. Internally, the sequencer places submissions into a bounded in-memory queue (default capacity 1024). The queue timeout (default 12 seconds) bounds how long a submitted transaction may remain pending in the sequencer's background queue before being picked up or rejected; it does **not** provide a formal end-to-end inclusion latency guarantee. If the transaction is not picked up within that window, `eth_sendRawTransaction` returns `context deadline exceeded`, and the transaction was **not** accepted—it is safe to retry.
+Under nominal load, the sequencer endpoint accepts a submission in well under a second. The sequencer places each submission in a bounded in-memory queue, with a default capacity of 1024. The queue timeout, 12 seconds by default, limits how long a transaction can wait in that queue. It isn't a guarantee of end-to-end inclusion time.
+
+When a submission hits a queue limit, `eth_sendRawTransaction` behaves as follows:
+
+- **Queue full:** it returns an error right away.
+- **Queue timeout:** the sequencer drops the transaction. `eth_sendRawTransaction` has already returned the transaction hash, so you get no error and no receipt. The transaction is **not** included. Resubmit the same signed transaction, or re-sign it with the same nonce.
+
+{/* SME QUESTION: What error does `eth_sendRawTransactionSync` return on queue timeout? Is it still `context deadline exceeded`? */}
+{/* SME QUESTION: Does the sequencer endpoint accept `eth_sendRawTransactionSync` after the change? */}
 
 ### Recommended fallback patterns
 
 - Use a third-party node provider as your primary endpoint, or as a fallback when a direct sequencer submission fails.
-- Retry on transient errors only—`context deadline exceeded` and network/connection errors are safe to retry with backoff. Do not retry terminal errors such as `nonce too low` or contract reverts.
+- Retry on transient errors only. You can retry network and connection errors with backoff. Don't retry terminal errors such as `nonce too low`.
+- If a transaction has no receipt by your deadline, check the sender's nonce before you resubmit. See [Handle transactions with no receipt](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission#handle-transactions-with-no-receipt).
 
 ### Monitoring and alerting
 
-A successful `eth_sendRawTransaction` response means the sequencer has already sequenced your transaction into an L2 block—the call blocks until the block is created and returns only then, not merely when the transaction is enqueued. Treat this as the sequencer's soft confirmation that your transaction has been ordered and executed. It does **not** by itself mean the transaction has been posted to the parent chain in a batch or finalized there; if your application needs parent-chain finality guarantees, track that separately. For monitoring, alert on submission calls that return errors or exceed your expected latency ceiling rather than assuming a pending-but-unconfirmed state.
+A successful `eth_sendRawTransaction` response means the sequencer admitted your transaction into its queue. It does **not** mean the transaction is in a block. To confirm inclusion, poll `eth_getTransactionReceipt`. You can also send the transaction to an RPC node with `eth_sendRawTransactionSync`, which returns the receipt once the sequencer executes the transaction. For details, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission).
+
+Neither response means the transaction is posted to the parent chain in a batch or finalized there. If your application needs parent-chain finality guarantees, track that separately. For monitoring, alert on these cases:
+
+- Submission calls that return errors or exceed your expected latency ceiling.
+- Transaction hashes that never get a receipt.
