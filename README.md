@@ -47,6 +47,36 @@ purpose.
 **Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken.
 
+### Editor setup
+
+The content rules (`pnpm lint`, see [The content rules](INTERNALS.md#the-content-rules)) run in the
+editor as you type, through ESLint. In VS Code that takes two extensions and one setting:
+
+1. Install [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+   (`dbaeumer.vscode-eslint`) and [MDX](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx)
+   (`unifiedjs.vscode-mdx`). VS Code has no built-in `mdx` language, so without the second one a
+   page opens as plain text and ESLint never looks at it.
+2. The ESLint extension validates only JavaScript and TypeScript by default. Add the two content
+   languages in your user or workspace settings (`settings.json`):
+
+   ```json
+   {
+     "eslint.validate": ["javascript", "typescript", "mdx", "markdown"]
+   }
+   ```
+
+3. Open the repository root as the workspace folder, so the extension finds `eslint.config.ts` and
+   `node_modules/eslint`, and reload the window after changing settings.
+
+To check it works, paste `Text <Callout>Note.</Callout>` into any page: the tag gets a
+`docs/block-component-in-paragraph` squiggle within a second. If nothing appears, the Output panel's
+ESLint channel says why; "Failed to load the ESLint library" means the folder you opened has no
+`node_modules`. A deprecated `eslint.packageManager` key in your settings only produces a warning;
+delete it.
+
+Other editors with an ESLint integration (JetBrains, Neovim's `nvim-lspconfig`) work the same
+way: enable it for `mdx` and `markdown` files.
+
 Search and the AI chat panel are powered by [Inkeep](https://inkeep.com). Set the
 publishable search key in a local `.env` (gitignored):
 
@@ -97,21 +127,20 @@ reads the reader's IP address. See [Routing and `proxy.ts`](INTERNALS.md#routing
 
 ```bash
 pnpm types:check   # the main verification gate
-pnpm frontmatter:check # every documentation page satisfies the frontmatter schema
+pnpm lint          # ESLint over content/: MDX that renders wrong, variables, terms, frontmatter
 pnpm test          # tooling tests, including the sidebar and redirect checks
 pnpm check-links   # broken internal links and MDX fragments
-pnpm content:lint  # MDX that compiles but renders wrong
 pnpm faq:check     # the FAQ partials match their Notion snapshots
 pnpm format        # prettier, in place
 ```
 
-CI runs ten blocking checks, then a `pnpm build` that serves the built site and checks it over
+CI runs nine blocking checks, then a `pnpm build` that serves the built site and checks it over
 HTTP. `pnpm build` runs the same formatting and link checks first, so an unformatted file or a
 broken link fails the Vercel deploy too. See [The gates](INTERNALS.md#the-gates) for the full
 list. There is no pre-commit hook, so run these yourself.
 
-`types:check` checks TypeScript; `frontmatter:check` validates page metadata. Neither proves
-the render. Type checking passes on a page that serves literal `:::` or
+`types:check` checks TypeScript; `pnpm lint` validates page metadata and MDX shape. Neither
+proves the render. Type checking passes on a page that serves literal `:::` or
 `undefined`. **Always confirm content changes in a browser.**
 
 ## Layout
@@ -133,8 +162,9 @@ the render. Type checking passes on a page that serves literal `:::` or
 
 ## Write a page
 
-Every page needs a `title` and a `description`. A missing one fails `pnpm frontmatter:check` and
-the build. `pnpm types:check` does not see frontmatter, so run the check before you push.
+Every page needs a `title` and a `description`. A missing one fails `pnpm lint` (rule
+`docs/frontmatter-schema`) and the build. `pnpm types:check` does not see frontmatter, so run the
+lint before you push.
 
 ```mdx
 ---
@@ -200,7 +230,7 @@ The current Nitro release is <Var name="nitroVersionTag" />.
 or an inline code span, so `<Var name="…" />` there renders as a literal tag, not its value.
 Usually the value was never code to begin with, and dropping the backticks is the whole fix. When a
 reader is meant to copy the line, as in a `docker run` command, hardcode the current value in the
-code and reference the variable in the prose next to it. `pnpm content:lint` (rule `var-in-code`)
+code and reference the variable in the prose next to it. `pnpm lint` (rule `docs/var-in-code`)
 fails on any `<Var>` found inside code. To have a hardcoded copy of `latestNitroNodeImage` kept current for you,
 put `{/* sync-with-var: latestNitroNodeImage */}` anywhere in the page and
 `pnpm nitro:check-release --to <tag>` will rewrite it when it bumps that variable. Do not put that marker on a page that states a
@@ -221,10 +251,11 @@ expands before it resolves. Everywhere else on the page, the link text included,
 `<Var name="…" />`: a placeholder written in prose is read as a JavaScript expression and fails the
 build with an acorn parse error. The one destination it cannot do is a local image path
 (`![a](/img/…)`), which is imported before the placeholder is expanded, so write that path out in
-full. `pnpm content:lint` (rule `var-in-link`) fails on a `<Var>` left in a destination, and `pnpm vars:check`
-reads placeholders too, so a mistyped name is caught the way a mistyped `<Var>` name is.
+full. `pnpm lint` (rule `docs/var-in-link`) fails on a `<Var>` left in a destination, and rule
+`docs/unknown-var` reads placeholders too, so a mistyped name is caught the way a mistyped `<Var>`
+name is.
 
-**To update a value:** edit [`content/vars.json`](content/vars.json), then run `pnpm vars:check`.
+**To update a value:** edit [`content/vars.json`](content/vars.json), then run `pnpm lint`.
 
 **To add a new variable:** add the key to `content/vars.json`. No other file changes.
 ([Details](INTERNALS.md#global-variables).)
@@ -293,18 +324,17 @@ owns that block. ([Details](INTERNALS.md#redirects).)
 pnpm dev                 # pnpm install, pnpm clean, next dev on http://localhost:3000
 pnpm clean               # delete .next/ and .source/ (next dev regenerates .source/)
 pnpm types:check         # regenerate .source/, generate Next types, tsc --noEmit
-pnpm frontmatter:check   # every page's frontmatter satisfies lib/page-schema.ts
 pnpm build               # production build (runs format:check and check-links first)
 pnpm start               # serve the production build
 
 pnpm test                # tooling test suites, including the sidebar and redirects
 pnpm test:browser        # Chromium interactions against a running production server
 pnpm check-links         # broken internal doc links and MDX fragments
-pnpm vars:check          # every <Var name> and {var:name} resolves; banner keys are valid
-pnpm references:check    # every <Term id> resolves
+pnpm lint                # ESLint over content/: MDX structural defects, <Var> and <Term> names, frontmatter
+pnpm vars:check          # the announcement banner keys in content/vars.json are valid
+pnpm references:check    # glossary ids present and unique; no partial with a <Term> is ESM-imported
 pnpm contracts:check     # the contract-address partial is current
 pnpm faq:check           # the six FAQ partials match content/faq/*.json
-pnpm content:lint        # MDX structural defects
 pnpm format:check        # prettier (pnpm format writes)
 
 pnpm move-doc <from> <to>
