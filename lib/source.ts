@@ -1,4 +1,4 @@
-import { docs } from 'collections/server';
+import { docs } from 'collections/dynamic';
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 
@@ -40,6 +40,15 @@ export function getPageMarkdownUrl(page: (typeof source)['$inferPage']) {
   return {
     segments,
     url: `${docsContentRoute}/${segments.join('/')}`,
+  };
+}
+
+export function getPagePreviewUrl(page: (typeof source)['$inferPage']) {
+  const segments = [...page.slugs, 'preview.json'];
+
+  return {
+    segments,
+    url: `${docsPreviewRoute}/${segments.join('/')}`,
   };
 }
 

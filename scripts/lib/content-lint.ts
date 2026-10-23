@@ -26,12 +26,13 @@
  *                         it, so the reader sees the token. Write `<Var name="name" />`.
  *   quicklook-anchor      A Docusaurus `<a data-quicklook-from="…">` glossary anchor. It renders
  *                         with no link and no hover. Write `<Term id="…">…</Term>`.
- *   site-import           An `import … from '@site/…'` or `'@theme/…'` line. Those are Docusaurus
- *                         aliases and do not resolve here, so the build fails. Use an `<include>`
- *                         or a component registered in `components/mdx.tsx`.
- *   unknown-component     A capitalised JSX tag that `components/mdx.tsx` does not register, that
- *                         is not a Fumadocs default and that the file neither imports nor exports.
- *                         MDX throws at render for an undefined component. Register it.
+ *   esm-in-page           A top-level `import` or `export`. Pages compile on demand (dynamic
+ *                         collections), where Fumadocs supports neither: a relative import fails
+ *                         at request time and a package import escapes the bundler. Use an
+ *                         `<include>` or a component registered in `components/mdx.tsx`.
+ *   unknown-component     A capitalised JSX tag that `components/mdx.tsx` does not register and
+ *                         that is not a Fumadocs default. MDX throws at render for an undefined
+ *                         component. Register it.
  *   callout-type          `<Callout type>` outside `info|warn|error|idea|success`, the five
  *                         spellings the house style and CLAUDE.md name (Fumadocs also accepts
  *                         `warning` and `tip` as aliases, but an unknown type renders silently
@@ -69,7 +70,7 @@ export const RULES = {
   'remote-image': 'markdown image with a remote src renders broken',
   'docusaurus-var-token': 'Docusaurus @@variable@@ token renders as literal text',
   'quicklook-anchor': 'Docusaurus quicklook anchor renders with no link or hover',
-  'site-import': 'Docusaurus @site/@theme import does not resolve',
+  'esm-in-page': 'top-level import or export; a page cannot bring modules into scope',
   'unknown-component': 'JSX component is not registered, so the page throws at render',
   'callout-type': 'Callout type is not one of the five house types',
   'markdown-in-title': 'markdown in a title attribute renders as literal text',
@@ -160,24 +161,11 @@ function defaultKnownComponents(): Set<string> {
   return knownComponents;
 }
 
-/** Names a file brings into scope itself, with `import` or `export const|function|class`. */
-function localNames(text: string): Set<string> {
-  const names = new Set<string>();
-  for (const m of text.matchAll(/^import\s+([^'"]+?)\s+from\s+['"]/gm)) {
-    for (const part of m[1].replace(/[{}]/g, ',').split(',')) {
-      const name = part
-        .trim()
-        .split(/\s+as\s+/)
-        .pop()
-        ?.replace(/^\*\s*/, '')
-        .trim();
-      if (name) names.add(name);
-    }
-  }
-  for (const m of text.matchAll(/^export\s+(?:const|let|var|function|class)\s+([A-Za-z_]\w*)/gm)) {
-    names.add(m[1]);
-  }
-  return names;
+/** The message for an ESM node; a Docusaurus alias gets the hint its author needs. */
+function esmMessage(value: string | undefined): string {
+  const alias = /['"](@(?:site|theme)\/[^'"]*)['"]/.exec(value ?? '')?.[1];
+  if (alias) return `${alias} is a Docusaurus alias; use <include> or a registered component`;
+  return 'pages compile on demand and cannot import or export; use a registered component or <include>';
 }
 
 // Local structural types: mdast/estree are transitive dependencies, not importable here.
@@ -395,23 +383,14 @@ export function lintSource(source: string, options: LintOptions = {}): Finding[]
     add('quicklook-anchor', m.index, 'write <Term id="…">…</Term> instead');
   }
 
-  for (const m of text.matchAll(/(?:from|import)\s+['"](@(?:site|theme)\/[^'"]*)['"]/g)) {
-    add(
-      'site-import',
-      m.index,
-      `${m[1]} is a Docusaurus alias; use <include> or a registered component`,
-    );
-  }
-
   const known = options.components ?? defaultKnownComponents();
-  const local = localNames(text);
   const reportedHeadings = new Set<number>();
   function checkElement(node: MdxNode, inParagraph: boolean, headingOffset?: number): void {
     const name = node.name;
     const index = node.position?.start.offset;
     if (!name || index === undefined) return;
     const rootName = name.split('.')[0];
-    if (/^[A-Z]/.test(rootName) && !known.has(rootName) && !local.has(rootName)) {
+    if (/^[A-Z]/.test(rootName) && !known.has(rootName)) {
       add(
         'unknown-component',
         index,
@@ -453,6 +432,10 @@ export function lintSource(source: string, options: LintOptions = {}): Finding[]
   }
 
   function visit(node: MdxNode, inParagraph = false, headingOffset?: number): void {
+    if (node.type === 'mdxjsEsm') {
+      add('esm-in-page', node.position?.start.offset ?? 0, esmMessage(node.value));
+      return;
+    }
     if (node.type === 'paragraph') inParagraph = !unravels(node);
     if (node.type === 'heading') headingOffset = node.position?.start.offset;
     if (node.type === 'mdxJsxFlowElement') inParagraph = false;

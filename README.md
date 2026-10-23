@@ -24,6 +24,13 @@ pnpm install      # runs a postinstall that generates .source/
 pnpm dev          # install, clean, then http://localhost:3000 with hot reload
 ```
 
+The dev server compiles a page when it is first requested, not every page at start. The first
+page you open takes a few seconds; the next ones are instant. Two rules follow: no top-level
+`import` or `export` in a page, and images by URL (`/img/…`), never a relative path. An edit to a
+page shows on the next request. An edit to a partial, or to a `{var:…}` placeholder's value in
+`content/vars.json`, does not reach a page that is already compiled: save any page under
+`content/docs/` with a change, or restart `pnpm dev`. `<Var>` text in prose updates on its own.
+
 Node 22 (`>=22.18 <23`) · pnpm 10. Other Node majors are rejected by `engines`.
 
 Python 3.9 or newer must be available as `python3` for `pnpm test`, which runs the brand-helper
@@ -40,28 +47,31 @@ purpose.
 **Browse on `localhost:3000`, not `127.0.0.1`.** On `127.0.0.1` React does not hydrate and every
 component looks broken.
 
-Search and the "Ask AI" chat button are powered by [Inkeep](https://inkeep.com). Set the
-publishable key in a local `.env` (gitignored):
+Search and the AI chat panel are powered by [Inkeep](https://inkeep.com). Set the
+publishable search key in a local `.env` (gitignored):
 
 ```bash
 NEXT_PUBLIC_INKEEP_API_KEY=<inkeep-search-key>
 ```
 
-Config lives in `lib/inkeep.ts`; the widgets mount in `components/inkeep/` and are wired into
-`RootProvider` in `app/layout.tsx`.
+Config lives in `lib/inkeep.ts`; the search dialog mounts in `components/inkeep/` and is wired into
+`RootProvider` in `app/layout.tsx`. The chat panel is in `components/ai/`; see the two chat rows in
+the table below.
 
 ### Environment variables
 
 None of these are needed to run the site locally; everything that reads them degrades to a no-op
 or a documented fallback.
 
-| Variable                     | Used by                                                                             | Without it                                                                                                                                                              |
-| ---------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_INKEEP_API_KEY` | search and the "Ask AI" button                                                      | both are unavailable                                                                                                                                                    |
-| `NEXT_PUBLIC_SITE_URL`       | `metadataBase`, `app/sitemap.ts`, `app/robots.ts`, request tracking                 | `http://localhost:3000` locally; a **production build fails**                                                                                                           |
-| `NEXT_PUBLIC_POSTHOG_KEY`    | page feedback (`lib/posthog.ts`), web analytics, and request tracking in `proxy.ts` | feedback submissions and tracking events are dropped with a server-side log                                                                                             |
-| `NEXT_PUBLIC_VERCEL_ENV`     | the production gate on web analytics and the Inkeep event bridge                    | neither fires; Vercel sets this one, you never do                                                                                                                       |
-| `VERCEL_DEEP_CLONE`          | `hasFullGitHistory()` in `source.config.ts`, which gates the last-modified dates    | a shallow Vercel clone resolves no dates: no "Last updated" line, no `<lastmod>`, no `article:modified_time`, and nothing warns. Set it to `true` on the Vercel project |
+| Variable                      | Used by                                                                             | Without it                                                                                                                                                              |
+| ----------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_INKEEP_API_KEY`  | search                                                                              | search is unavailable                                                                                                                                                   |
+| `INKEEP_API_KEY`              | `/api/chat`, the server route behind the AI chat panel                              | `/api/chat` returns 503. With the key set, the route works without the flag: add the WAF rate limit first (INTERNALS.md)                                                |
+| `NEXT_PUBLIC_AI_CHAT_ENABLED` | the AI chat panel in `app/(docs)/layout.tsx`; routes search's "Ask AI" to the panel | no panel; `true` shows it                                                                                                                                               |
+| `NEXT_PUBLIC_SITE_URL`        | `metadataBase`, `app/sitemap.ts`, `app/robots.ts`, request tracking                 | `http://localhost:3000` locally; a **production build fails**                                                                                                           |
+| `NEXT_PUBLIC_POSTHOG_KEY`     | page feedback (`lib/posthog.ts`), web analytics, and request tracking in `proxy.ts` | feedback submissions and tracking events are dropped with a server-side log                                                                                             |
+| `NEXT_PUBLIC_VERCEL_ENV`      | the production gate on web analytics and the Inkeep event bridge                    | neither fires; Vercel sets this one, you never do                                                                                                                       |
+| `VERCEL_DEEP_CLONE`           | `hasFullGitHistory()` in `source.config.ts`, which gates the last-modified dates    | a shallow Vercel clone resolves no dates: no "Last updated" line, no `<lastmod>`, no `article:modified_time`, and nothing warns. Set it to `true` on the Vercel project |
 
 Set the PostHog token the same way as the Inkeep key, in a local `.env` (gitignored):
 
@@ -96,9 +106,9 @@ pnpm format        # prettier, in place
 ```
 
 CI runs ten blocking checks, then a `pnpm build` that serves the built site and checks it over
-HTTP. `pnpm build` runs the same link check first, so a broken link fails the Vercel deploy too. See
-[The gates](INTERNALS.md#the-gates) for the full list. There is no pre-commit hook, so run these
-yourself.
+HTTP. `pnpm build` runs the same formatting and link checks first, so an unformatted file or a
+broken link fails the Vercel deploy too. See [The gates](INTERNALS.md#the-gates) for the full
+list. There is no pre-commit hook, so run these yourself.
 
 `types:check` checks TypeScript; `frontmatter:check` validates page metadata. Neither proves
 the render. Type checking passes on a page that serves literal `:::` or
@@ -114,6 +124,7 @@ the render. Type checking passes on a page that serves literal `:::` or
 | `content/vars.json`     | Global variables                                           |
 | `app/(docs)/[...slug]/` | Docs route                                                 |
 | `components/mdx.tsx`    | The MDX component registry                                 |
+| `app/preview/`          | Static JSON behind the hover link previews                 |
 | `components/widgets/`   | The four interactive widgets, each used by one page        |
 | `lib/source.ts`         | Fumadocs source adapter                                    |
 | `proxy.ts`              | PostHog tracking for markdown and `llms*.txt` fetches      |
@@ -283,7 +294,7 @@ pnpm dev                 # pnpm install, pnpm clean, next dev on http://localhos
 pnpm clean               # delete .next/ and .source/ (next dev regenerates .source/)
 pnpm types:check         # regenerate .source/, generate Next types, tsc --noEmit
 pnpm frontmatter:check   # every page's frontmatter satisfies lib/page-schema.ts
-pnpm build               # production build (runs check-links first)
+pnpm build               # production build (runs format:check and check-links first)
 pnpm start               # serve the production build
 
 pnpm test                # tooling test suites, including the sidebar and redirects
