@@ -16,6 +16,17 @@ await generateFiles({
     description: (description ?? title).replaceAll('`', ''),
     content_type: 'reference',
   }),
+  // Pages are dynamic and cannot export, so the generated Layout export is reduced to its
+  // <OpenAPIPage> tag, which components/mdx.tsx registers.
+  beforeWrite(files) {
+    for (const file of files) {
+      const tag = /^export default function Layout[\s\S]*?(<OpenAPIPage [^\n]*\/>)[\s\S]*?^\}$/m;
+      if (!tag.test(file.content)) {
+        throw new Error(`${file.path}: generated page has no Layout export to replace`);
+      }
+      file.content = `${file.content.replace(tag, '$1')}\n`;
+    }
+  },
 });
 
 type Operation = { 'operationId': string; 'x-arbitrum-request-url'?: string };

@@ -61,6 +61,7 @@
     "d3-zoom": "3.0.0",
     "fumadocs-core": "16.17.1",
     "fumadocs-mdx": "15.4.7",
+    "fumadocs-openapi": "12.1.0",
     "fumadocs-ui": "16.17.1",
     "hast-util-to-jsx-runtime": "2.3.6",
     "katex": "0.19.0",
