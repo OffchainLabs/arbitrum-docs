@@ -32,6 +32,7 @@
     "faq:fetch": "node scripts/faq-fetch.ts",
     "faq:generate": "node scripts/generate-faq.ts",
     "format": "prettier --write .",
+    "json-rpc:generate": "node scripts/extract-go-definitions.ts",
     "move-doc": "node scripts/move-doc.ts",
     "nitro:check-release": "node scripts/check-nitro-release.ts",
     "precompiles:check": "node scripts/generate-precompile-tables.ts --check",

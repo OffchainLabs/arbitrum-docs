@@ -11,6 +11,33 @@ export function goMethodSignature(source: string, receiver: string, name: string
   return match[0].replace(/ \{$/, '');
 }
 
+/** The exported method names on `receiver`, in source order. go-ethereum's RPC server serves each. */
+export function goExportedMethods(source: string, receiver: string): string[] {
+  const pattern = new RegExp(`^func \\(\\w+ \\*?${receiver}\\) ([A-Z]\\w*)\\(`, 'gm');
+  return [...source.matchAll(pattern)].map((match) => match[1] as string);
+}
+
+/**
+ * Compares the JSON-RPC methods `found` in Nitro with the reference. One line per method that the
+ * reference neither documents nor leaves out on purpose, and per entry that Nitro no longer has.
+ */
+export function methodInventoryProblems(
+  found: Set<string>,
+  documented: Set<string>,
+  undocumented: Set<string>,
+): string[] {
+  const problems: string[] = [];
+  for (const id of found) {
+    if (!documented.has(id) && !undocumented.has(id)) {
+      problems.push(`${id} is new: document it in the spec, or add it to UNDOCUMENTED`);
+    }
+  }
+  for (const id of [...documented, ...undocumented]) {
+    if (!found.has(id)) problems.push(`${id} is gone: remove it from METHODS or UNDOCUMENTED`);
+  }
+  return problems;
+}
+
 /** The full `type <name> struct { … }` declaration. */
 export function goStructType(source: string, name: string): string {
   const start = new RegExp(`^type ${name} struct \\{$`, 'm').exec(source);
