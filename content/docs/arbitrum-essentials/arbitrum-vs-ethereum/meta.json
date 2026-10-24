@@ -6,6 +6,7 @@
     "rpc-methods",
     "solidity-support",
     "nonce-management",
+    "!json-rpc-spike",
     "..."
   ]
 }
