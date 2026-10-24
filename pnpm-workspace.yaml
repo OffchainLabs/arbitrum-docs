@@ -20,15 +20,33 @@ strictDepBuilds: true
 # package under `minimumReleaseAgeExclude` in the same change that bumps it, and remove it after.
 minimumReleaseAge: 10080
 
-# Security fixes for transitive packages that upstream dependency ranges still permit.
+# Security fixes for transitive packages whose parents pin a vulnerable version. CI runs
+# `pnpm audit`; drop an override once `pnpm why <package>` shows every parent allows the fix.
+# - ws@8: @ethersproject/providers 5.8.0 (ethers 5, through @arbitrum/sdk) pins ws 8.18.0
+#   (GHSA-96hv-2xvq-fx4p, GHSA-58qx-3vcg-4xpx). ethers 5.8.0 is the last v5 release.
+# - katex: rehype-katex 7.0.1 and micromark-extension-math 3.1.0 ask for ^0.16.0
+#   (GHSA-238p-pmpm-9mq7, fixed in 0.18.2). `$katex` follows the direct dependency in
+#   package.json, so rehype-katex renders with the version whose CSS app/layout.tsx imports.
+# - undici under @scalar/json-magic: 0.13.5 (through fumadocs-openapi 12.1.0) pins undici 7.24.4
+#   (GHSA-2gqq-gqf2-x968, GHSA-8436-99hf-9mmv and others, fixed in 7.29.1). 7.30.1 is the
+#   version @ai-sdk/provider-utils already resolves.
 overrides:
-  dompurify: 3.4.16
-  source-map-js: 1.2.2
   ws@8: 8.21.0
-  katex: 0.18.4
+  katex: $katex
+  '@scalar/json-magic>undici': 7.30.1
 
-# Recent security fixes: GHSA-p98j-92pf-mc4p, GHSA-6688-9rhm-gjv2 and
-# GHSA-68fv-2mgg-jv7q. Keep the release-age exceptions restricted to these versions.
-minimumReleaseAgeExclude:
-  - dompurify@3.4.16
-  - source-map-js@1.2.2
+# @offchainlabs/prettier-config 0.3.0 (the latest) declares a peer of
+# @trivago/prettier-plugin-sort-imports ^5.2.2. It never loads the plugin: it only sets
+# importOrder, importOrderSeparation and importOrderSortSpecifiers, which v6 still reads, and
+# prettier.config.ts registers the plugin. Drop this once the shared config accepts v6.
+peerDependencyRules:
+  allowedVersions:
+    '@offchainlabs/prettier-config>@trivago/prettier-plugin-sort-imports': '6'
+
+# Advisories `pnpm audit` skips, each with no patched release. Remove an entry when a fix ships.
+# - GHSA-848j-6mx2-7j84 (low): elliptic, every version. It comes from ethers 5 under the
+#   @arbitrum/sdk devDependency. Only scripts/generate-contract-addresses.ts calls the SDK, and
+#   only to read network addresses. Nothing signs with it.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-848j-6mx2-7j84
