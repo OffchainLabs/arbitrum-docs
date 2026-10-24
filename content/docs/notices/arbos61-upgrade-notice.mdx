@@ -34,10 +34,11 @@ The [Arbitrum DAO network upgrades table](https://docs.arbitrum.foundation/netwo
 
 The following dates are relevant for Arbitrum chain operators.
 
-| Date                                   | Network upgrade                       | Affected audience                        |
-| -------------------------------------- | ------------------------------------- | ---------------------------------------- |
-| Monday, June 29, 2026 at 15:00 UTC     | Arbitrum Sepolia upgrade to ArbOS 61  | Node operators running Arbitrum Sepolia  |
-| Thursday, August 20, 2026 at 17:00 UTC | Arbitrum One/Nova upgrade to ArbOS 61 | Node operators running Arbitrum One/Nova |
+| Date                                   | Network upgrade                         | Affected audience                                       |
+| -------------------------------------- | --------------------------------------- | ------------------------------------------------------- |
+| Monday, June 29, 2026 at 15:00 UTC     | Arbitrum Sepolia upgrade to ArbOS 61    | Node operators running Arbitrum Sepolia                 |
+| Thursday, August 20, 2026 at 17:00 UTC | Arbitrum One/Nova upgrade to ArbOS 61   | Node operators running Arbitrum One/Nova                |
+| Not yet announced                      | Ethereum mainnet upgrade to Glamsterdam | Owners of Arbitrum chains that post batches to Ethereum |
 
 ## Actions for Arbitrum chain owners
 
@@ -54,6 +55,28 @@ Do not call `setMultiGasPricingConstraints` on the `ArbOwner` precompile. ArbOS 
 You can now use multi-constraint pricing with a single gas dimension. To configure it, call `setGasPricingConstraints` as described in [Dynamic Pricing for Arbitrum chains](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing).
 
 </Callout>
+
+### Update the L1 pricing parameters for Ethereum Glamsterdam
+
+Ethereum's Glamsterdam upgrade changes the gas cost of posting batches to Ethereum. If your chain posts its batches to Ethereum, you must update two L1 pricing parameters after Glamsterdam activates on Ethereum mainnet. Without the update, the L1 fee your users pay no longer matches what your <Term id="batch-poster">batch poster</Term> spends.
+
+Offchain Labs proposed the same update for Arbitrum One and Arbitrum Nova in the [Glamsterdam L1 pricing AIP](https://forum.arbitrum.foundation/t/constitutional-aip-update-arbitrum-one-and-nova-l1-pricing-parameters-for-ethereum-glamsterdam/31555). Trail of Bits audited the governance payload. The [audit summary](/audit-reports/2026_10_19_trail_of_bits_glamsterdam_gas_parameters_summary_report.pdf) is on the [audit reports](/audit-reports) page.
+
+| Parameter                | Current value | Recommended value |
+| ------------------------ | ------------- | --------- |
+| `parentGasFloorPerToken` | `10`          | `16`      |
+| `perBatchGasCharge`      | `210,000`     | `480,000` |
+
+After Glamsterdam is live on Ethereum, call the `ArbOwner` precompile from a <Term id="chain-owner">chain owner</Term> account:
+
+```shell
+cast send --rpc-url $CHILD_CHAIN_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setParentGasFloorPerToken(uint64)" 16
+cast send --rpc-url $CHILD_CHAIN_RPC --private-key $OWNER_KEY 0x0000000000000000000000000000000000000070 "setPerBatchGasCharge(int64)" 480000
+```
+
+Do not apply the new values before Glamsterdam activates. Until then, the current values match what your batch poster pays. The recommended values come from measured Arbitrum One and Nova batch costs after Glamsterdam. If your chain posts calldata instead of blobs, or posts batches of a very different size, measure your own posting costs before you pick a value. To learn how the two parameters work, refer to [Parent chain data fee pricing](/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing) and [Configure and optimize gas](/launch-arbitrum-chain/chain-config/costs/gas-optimization).
+
+Ethereum has not announced the mainnet activation date for Glamsterdam. Offchain Labs updates this notice when the date is official.
 
 ## Context
 
