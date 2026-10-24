@@ -33,6 +33,11 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # Fails on an advisory of any severity in the lockfile. An advisory with no patched release
+      # goes under `auditConfig.ignoreGhsas` in pnpm-workspace.yaml, with its reason.
+      - name: Dependency audit
+        run: pnpm audit
+
       - name: Type check (regenerates .source/, then tsc)
         run: pnpm types:check
 

@@ -45,6 +45,7 @@ pnpm build             # check-links, then next build
 pnpm start             # serve the production build
 
 # The other CI gates
+pnpm audit             # no advisory in the lockfile beyond auditConfig.ignoreGhsas in pnpm-workspace.yaml
 pnpm lint              # ESLint over content/: MDX that renders wrong, every <Var> and <Term> resolving, the page frontmatter schema
 pnpm vars:check        # the announcement banner keys in content/vars.json are valid
 pnpm references:check  # glossary ids are present and unique; no partial holding a <Term> is ESM-imported
