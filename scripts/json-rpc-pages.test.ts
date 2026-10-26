@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
-const DIR = 'content/docs/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike';
+const DIR = 'content/docs/json-rpc-spike';
 const doc = JSON.parse(readFileSync('content/openapi/arbitrum-json-rpc.json', 'utf8'));
 const operations = Object.values<{ post: { operationId: string; description: string } }>(
   doc.paths,

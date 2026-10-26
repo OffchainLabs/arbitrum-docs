@@ -43,7 +43,7 @@ On RPC calls that return transactions, the following fields are added to the ret
 
 ## Arbitrum specific `eth` JSON-RPC additions
 
-- `eth_sendRawTransactionConditional` submits a raw signed transaction with extra preconditions that the sequencer must verify before accepting it. If any condition fails, the transaction is rejected with JSON-RPC error -32003 (rejected). For the parameters and the response, see [`eth_sendRawTransactionConditional`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/eth_sendRawTransactionConditional).
+- `eth_sendRawTransactionConditional` submits a raw signed transaction with extra preconditions that the sequencer must verify before accepting it. If any condition fails, the transaction is rejected with JSON-RPC error -32003 (rejected). For the parameters and the response, see [`eth_sendRawTransactionConditional`](/json-rpc-spike/eth_sendRawTransactionConditional).
 
 | `ConditionalOptions` payload        | Description                                                                                                                                                                               |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -51,7 +51,7 @@ On RPC calls that return transactions, the following fields are added to the ret
 | `blockNumberMin` / `blockNumberMax` | L1 block-number window the transaction is valid.                                                                                                                                          |
 | `timestampMin` / `timestampMax`     | L2 timestamp window.                                                                                                                                                                      |
 
-- `eth_sendRawTransactionSync` submits a raw signed transaction and blocks until the node sees its receipt (or a timeout fires), returning the full receipt instead of just the tx hash. For the parameters and the response, see [`eth_sendRawTransactionSync`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/eth_sendRawTransactionSync).
+- `eth_sendRawTransactionSync` submits a raw signed transaction and blocks until the node sees its receipt (or a timeout fires), returning the full receipt instead of just the tx hash. For the parameters and the response, see [`eth_sendRawTransactionSync`](/json-rpc-spike/eth_sendRawTransactionSync).
 
 ### Existing fields with different behavior
 

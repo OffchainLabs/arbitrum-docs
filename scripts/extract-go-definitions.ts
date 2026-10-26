@@ -27,7 +27,7 @@ const SPEC = './content/openapi/arbitrum-json-rpc.json';
 const NITRO_URL = 'https://github.com/OffchainLabs/nitro.git';
 /** What scripts/generate-openapi-spike.ts writes. */
 const GENERATED = [
-  './content/docs/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike',
+  './content/docs/json-rpc-spike',
   './components/widgets/OpenAPIPage/request-urls.json',
   './components/widgets/OpenAPIPage/json-rpc-types.json',
 ];

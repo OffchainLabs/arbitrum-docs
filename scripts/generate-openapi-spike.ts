@@ -36,7 +36,7 @@ function plainFrontmatter(content: string): string {
 
 await generateFiles({
   input: createOpenAPI({ input: [INPUT] }),
-  output: './content/docs/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike',
+  output: './content/docs/json-rpc-spike',
   per: 'operation',
   frontmatter: (title, description) => ({
     title,

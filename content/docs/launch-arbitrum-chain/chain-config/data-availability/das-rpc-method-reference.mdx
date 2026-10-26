@@ -38,7 +38,7 @@ These methods are used by the **RPC aggregator** (`node.da.anytrust.rpc-aggregat
 
 Initiates a chunked data stream for storing a large batch payload on the DAS server.
 
-For the parameters and the response, see [`das_startChunkedStore`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/das_startChunkedStore).
+For the parameters and the response, see [`das_startChunkedStore`](/json-rpc-spike/das_startChunkedStore).
 
 | Field               | Value                                                                             |
 | ------------------- | --------------------------------------------------------------------------------- |
@@ -61,7 +61,7 @@ For the parameters and the response, see [`das_startChunkedStore`](/arbitrum-ess
 
 Sends a single chunk of batch data within an active chunked store session.
 
-For the parameters and the response, see [`das_sendChunk`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/das_sendChunk).
+For the parameters and the response, see [`das_sendChunk`](/json-rpc-spike/das_sendChunk).
 
 | Field               | Value                                                                             |
 | ------------------- | --------------------------------------------------------------------------------- |
@@ -88,7 +88,7 @@ For the parameters and the response, see [`das_sendChunk`](/arbitrum-essentials/
 
 Finalizes a chunked store session, signaling that all chunks have been transmitted.
 
-For the parameters and the response, see [`das_commitChunkedStore`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/das_commitChunkedStore).
+For the parameters and the response, see [`das_commitChunkedStore`](/json-rpc-spike/das_commitChunkedStore).
 
 | Field               | Value                                                                                |
 | ------------------- | ------------------------------------------------------------------------------------ |
@@ -111,7 +111,7 @@ These methods are used by the DA provider client (`node.da.external-provider`)â€
 
 Initiates a chunked data stream on the DA provider server.
 
-For the parameters and the response, see [`daprovider_startChunkedStore`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/daprovider_startChunkedStore).
+For the parameters and the response, see [`daprovider_startChunkedStore`](/json-rpc-spike/daprovider_startChunkedStore).
 
 | Field               | Value                                                            |
 | ------------------- | ---------------------------------------------------------------- |
@@ -125,7 +125,7 @@ Functionally equivalent to `das_startChunkedStore` but routed through the DAProv
 
 Sends a chunk of data to the DA provider server.
 
-For the parameters and the response, see [`daprovider_sendChunk`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/daprovider_sendChunk).
+For the parameters and the response, see [`daprovider_sendChunk`](/json-rpc-spike/daprovider_sendChunk).
 
 | Field               | Value                                                            |
 | ------------------- | ---------------------------------------------------------------- |
@@ -139,7 +139,7 @@ Functionally equivalent to `das_sendChunk`. Max chunk body size is governed by `
 
 Finalizes a chunked store session on the DA provider server.
 
-For the parameters and the response, see [`daprovider_commitChunkedStore`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/daprovider_commitChunkedStore).
+For the parameters and the response, see [`daprovider_commitChunkedStore`](/json-rpc-spike/daprovider_commitChunkedStore).
 
 | Field               | Value                                                               |
 | ------------------- | ------------------------------------------------------------------- |
@@ -153,7 +153,7 @@ Functionally equivalent to `das_commitChunkedStore`.
 
 Single-shot store methodâ€”sends the entire payload in one RPC call. Used when data streaming is disabled. (`use-data-streaming: false`).
 
-For the parameters and the response, see [`daprovider_store`](/arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/daprovider_store).
+For the parameters and the response, see [`daprovider_store`](/json-rpc-spike/daprovider_store).
 
 | Field               | Value                                        |
 | ------------------- | -------------------------------------------- |

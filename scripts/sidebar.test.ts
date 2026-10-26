@@ -107,7 +107,7 @@ function linkEntries(url: string): string[] {
 
 // The JSON-RPC reference spike: its pages are linked from other pages, but kept off the sidebar
 // (`"!json-rpc-spike"` in the parent meta.json) until the reference has its final place.
-const HIDDEN_FOLDER = 'arbitrum-essentials/arbitrum-vs-ethereum/json-rpc-spike/';
+const HIDDEN_FOLDER = 'json-rpc-spike/';
 
 test('every article is on exactly one sidebar node; the root overview is hidden', () => {
   const count = new Map<string, number>();
