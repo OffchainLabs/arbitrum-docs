@@ -21,7 +21,7 @@ Create your contribution branch from `master` and open pull requests against `ma
 
 ```bash
 pnpm install      # runs a postinstall that generates .source/
-pnpm dev          # install, clean, then http://localhost:3000 with hot reload
+pnpm dev          # install, clean, then http://localhost:3000
 ```
 
 The dev server compiles a page when it is first requested, not every page at start. The first
