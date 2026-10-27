@@ -166,6 +166,7 @@ test('markdown mirrors carry no MDX comments', { skip: !baseUrl }, async (t) => 
     assert.equal(body.includes('{/*'), false, `${path} still serves an MDX comment`);
     const leak = prose(body).match(COMPONENT_TAG)?.[0];
     assert.equal(leak, undefined, `${path} still serves the component tag ${leak}`);
+    assert.equal(prose(body).includes('{var:'), false, `${path} still serves a {var:} placeholder`);
   };
 
   await t.test('a page mirror is clean and still carries its prose', async () => {
@@ -418,6 +419,28 @@ test('the llms index and the mirror route', { skip: !baseUrl }, async (t) => {
 
   await t.test('the mirror route 404s for paths it did not prerender', async () => {
     for (const path of ['/llms.mdx/docs/zz-junk/content.md', `/llms.mdx${livePath}/other.md`]) {
+      const response = await get(path);
+      assert.equal(response.status, 404, path);
+      await response.text();
+    }
+  });
+});
+
+test('the link-preview route', { skip: !baseUrl }, async (t) => {
+  await t.test('a page preview is JSON with its title and sections', async () => {
+    const response = await get(`/preview${livePath}/preview.json`);
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get('content-type') ?? '', /application\/json/);
+    const body = (await response.json()) as {
+      title: string;
+      sections: Record<string, { heading: string }>;
+    };
+    assert.equal(body.title, 'Prepare to run a node');
+    assert.equal(body.sections.prerequisites?.heading, 'Prerequisites');
+  });
+
+  await t.test('the preview route 404s for paths it did not prerender', async () => {
+    for (const path of ['/preview/zz-junk/preview.json', `/preview${livePath}/other.json`]) {
       const response = await get(path);
       assert.equal(response.status, 404, path);
       await response.text();

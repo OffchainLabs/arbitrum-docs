@@ -31,19 +31,19 @@ Grounding rule: State only what you read in a file, and cite it as `file:line`. 
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
-pnpm frontmatter:check # every documentation page satisfies lib/page-schema.ts
-pnpm test              # node --test over scripts/**/*.test.ts; helper tests require python3 >=3.9
+pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts; helper tests require python3 >=3.9
 pnpm test:browser      # Chromium interactions against a running production server; see README.md
-pnpm build             # check-links, then next build
+pnpm build             # format:check, check-links, then next build
 pnpm start             # serve the production build
 
 # The other CI gates
-pnpm vars:check        # every <Var name> and {var:name} resolves; banner keys are valid
-pnpm references:check  # every <Term id> resolves to a content/glossary entry
+pnpm audit             # no advisory in the lockfile beyond auditConfig.ignoreGhsas in pnpm-workspace.yaml
+pnpm lint              # ESLint over content/: the docs/* rules below, every <Var> and <Term> resolving, the page frontmatter schema
+pnpm vars:check        # the announcement banner keys in content/vars.json are valid
+pnpm references:check  # glossary ids are present and unique; no partial holding a <Term> is ESM-imported
 pnpm contracts:check   # the contract-address partial is current
 pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
-pnpm content:lint      # MDX that compiles but renders wrong
 pnpm format:check      # prettier (pnpm format writes)
 
 # By hand only
@@ -71,7 +71,7 @@ Optional: `sidebar_label`, `content_type`, `author`, `sme`,
 `third_party_content_owner` (the third-party maintainer's GitHub username), `target_audience`,
 `user_story`. The last two are authoring metadata; preserve existing values. `content_type`
 is one of `how-to | concept | quickstart | tutorial | reference | troubleshooting | faq`. A missing
-required field or an out-of-enum value fails `frontmatter:check` and the build. There is no
+required field or an out-of-enum value fails `pnpm lint` (rule `docs/frontmatter-schema`) and the build. There is no
 `draft` or date field; last-modified dates come from git. Partials and glossary
 entries do not carry this contract.
 
@@ -79,6 +79,11 @@ entries do not carry this contract.
 
 - **Fumadocs information comes from https://www.fumadocs.dev/llms.txt.** Do not guess its APIs.
 - **`.source/` is generated.** Never hand-edit it; run `pnpm types:check`.
+- **Both collections are `dynamic`.** A page compiles on first request; `body`, `toc` and
+  `lastModified` come from `await page.data.load()`, a glossary body from `await entry.load()`.
+  No top-level `import`/`export` in MDX (`pnpm lint` rule `docs/esm-in-page`; the build does not
+  reject one) and no relative image path. In `next dev`, a partial or `{var:…}` edit does not
+  reach an already compiled page: edit any page, or restart.
 - **Node 22 only** (`>=22.18 <23`), pnpm 10. Run `nvm use 22`; never bypass `engines`. Every script
   is TypeScript run directly by Node, and a relative import carries its `.ts` extension.
 - **Never use `next/font/google`.** Fonts are self-hosted in `public/fonts/` and loaded with
@@ -87,34 +92,39 @@ entries do not carry this contract.
   it. It pulls the compiled collection into the browser bundle. `pnpm test` walks the imports of
   every `'use client'` module.
 - **A `<Var>` does not evaluate inside a fenced block or inline code.** It ships as the literal tag
-  (`content:lint` rule `var-in-code`). In a link destination or `href`, write `{var:name}` instead
-  (rule `var-in-link`). A `{var:name}` in prose fails the build.
+  (ESLint rule `docs/var-in-code`). In a link destination or `href`, write `{var:name}` instead
+  (rule `docs/var-in-link`). A `{var:name}` in prose fails the build.
 - **A remote markdown image renders broken.** Commit it under `public/img/`, or write
   `<ImageZoom><img src="https://…" alt="…" /></ImageZoom>` (rule `remote-image`).
 - **Callouts are `<Callout type="info|warn|error|idea|success">`.** A Docusaurus `:::` line renders
   as text (rule `docusaurus-directive`); another type fails `callout-type`; markdown in `title`
   prints literally (`markdown-in-title`); a one-line Callout glued to the next paragraph breaks
   hydration (`block-component-in-paragraph`). Put a Callout on its own lines.
-- **Docusaurus habits fail `content:lint`.** `@@name@@` (`docusaurus-var-token`),
-  `<a data-quicklook-from>` (`quicklook-anchor`), `import … from '@site/…'` (`site-import`), a JSX
-  tag that is neither registered in `components/mdx.tsx` nor imported (`unknown-component`), and
-  `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
+- **Docusaurus habits fail `pnpm lint`.** `@@name@@` (`docusaurus-var-token`),
+  `<a data-quicklook-from>` (`quicklook-anchor`), any top-level `import`/`export`
+  (`esm-in-page`), a JSX tag that `components/mdx.tsx` does not register (`unknown-component`),
+  and `defaultValue={null}` on `<Tabs>` (`tabs-null-default`).
 - **A `<Term>` works inside a partial.** Includes are spliced at build time. `references:check`
-  rule R3 only forbids ESM-importing such a partial, which no component does.
+  rule R3 only forbids ESM-importing such a partial, which no component does. An id with no
+  glossary entry fails `pnpm lint` (rule `docs/unknown-term`).
 - **No link in a heading, and no `<tr>` directly in `<table>`.** Both break React hydration (rules
   `link-in-heading`, `tr-in-table`).
 - **A plain `.css` import in a component registered in `components/mdx.tsx` adds a render-blocking
   stylesheet to every docs page.** Use Tailwind utilities or `app/global.css`, or put the component
   behind `next/dynamic` like the widgets in `components/widgets/`. A docs page loads three
   stylesheets.
-- **`types:check` checks TypeScript; `frontmatter:check` validates page metadata.** Neither
+- **`types:check` checks TypeScript; `pnpm lint` validates page metadata and MDX shape.** Neither
   proves the render. Open changed pages on
   `http://localhost:3000`; on `127.0.0.1` React does not hydrate.
 
 ## Where things live
 
+- **Content lint.** `eslint.config.ts` and `eslint/`: `language.ts` parses MDX into the mdast tree
+  the site compiles and offers it to ESLint; `rules/` holds one file per `docs/*` rule;
+  `plugin.ts` registers them. The whole-repo checks (`check-links`, `references:check` R1/R3/R4,
+  `vars:check`, the sidebar test) stay scripts, since ESLint lints one file at a time.
 - **Pipeline.** `source.config.ts` (collections), `lib/page-schema.ts` (the frontmatter schema),
-  `lib/source.ts` (the single `loader()`, the only reader of `.source/`),
+  `lib/source.ts` (the single `loader()`, over `collections/dynamic`),
   `app/(docs)/[...slug]/page.tsx` (every page, prerendered, `dynamicParams = false`). MDX options
   are in `lib/mdx-options.ts`; `lib/llms-markdown.ts` decides how each component reads in the
   markdown mirrors.
@@ -129,7 +139,8 @@ entries do not carry this contract.
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
   The canonical branch is `master`, including after migration. Keep the variable and PR
   template links aimed at `master`, regardless of the current development branch.
-- **Components.** `components/mdx.tsx` is the registry.
+- **Components.** `components/mdx.tsx` is the registry. Its `a` override wraps resolvable internal links in
+  `components/LinkPreview`, a mouse-only hover card fed by `/preview/<slug>/preview.json`.
 - **Redirects.** `redirects.config.ts`, hand-maintained. Never hand-edit between the
   `AUTO-GENERATED` markers. `move-doc` appends one entry and touches no other; `pnpm test` names any
   entry left chaining, and fails when a URL in `scripts/data/master-routes.json` is neither a page
@@ -142,7 +153,8 @@ entries do not carry this contract.
 - **Routing.** `next.config.ts` rewrites `/<slug>.md` and `/index.md` to the `/llms.mdx/` mirror
   and sets the response headers from `lib/http-headers.ts` (security headers, report-only CSP,
   `Link` on `/`, CORS on the markdown surface). The `og/` and `llms.mdx/` routes have
-  `dynamicParams = false`. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
+  `dynamicParams = false`. `app/preview/` serves the static link-preview JSON, untracked and without
+  CORS. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
   production build without `NEXT_PUBLIC_SITE_URL`.
 - **Theme.** `app/global.css` only. Tokens are `--color-fd-*`, built on the `--color-arbitrum-*`

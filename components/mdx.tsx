@@ -7,6 +7,7 @@ import type { MDXComponents } from 'mdx/types';
 import type { ComponentProps, ElementType } from 'react';
 
 import { InLink } from '@/components/HoverPopover/in-link';
+import { LinkPreview } from '@/components/LinkPreview';
 import { Accordion } from '@/components/mdx/Accordion';
 import { AddressExplorerLink } from '@/components/mdx/AddressExplorerLink';
 import { Callout } from '@/components/mdx/Callout';
@@ -14,7 +15,6 @@ import { Tab } from '@/components/mdx/FindableTab';
 import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
 import { Var } from '@/components/mdx/Var';
-import { FlowChart } from '@/components/widgets/CentralizedAuction';
 import { EdgeChallengeFlow } from '@/components/widgets/EdgeChallengeFlow';
 import {
   ChecklistItem,
@@ -25,6 +25,7 @@ import {
 } from '@/components/widgets/Troubleshooting';
 import { VendingMachine } from '@/components/widgets/VendingMachine';
 import { cn } from '@/lib/cn';
+import { getPagePreviewUrl, source } from '@/lib/source';
 
 export function getMDXComponents(components?: MDXComponents) {
   const merged = {
@@ -34,7 +35,6 @@ export function getMDXComponents(components?: MDXComponents) {
     AEL: AddressExplorerLink,
     Callout,
     EdgeChallengeFlow,
-    FlowChart,
     ImageZoom,
     // Markdown images arrive with `src`, `width` and `height` that remark-image measured from
     // `public/`. `rounded-lg` matches the Fumadocs default `img` this mapping replaces.
@@ -66,10 +66,20 @@ export function getMDXComponents(components?: MDXComponents) {
       const content = typeof children === 'string' ? children : <InLink>{children}</InLink>;
       // Next's <Link> prefetches every same-origin href in the viewport, so a PDF under `public/`
       // renders as a plain anchor to keep the browser from downloading it ahead of a click.
-      return props.href?.startsWith('/') && /\.pdf$/i.test(props.href.split(/[?#]/)[0]) ? (
-        <a {...props}>{content}</a>
-      ) : (
-        <Link {...props}>{content}</Link>
+      if (props.href?.startsWith('/') && /\.pdf$/i.test(props.href.split(/[?#]/)[0])) {
+        return <a {...props}>{content}</a>;
+      }
+      // Hash-only and external hrefs do not start with `/`, so they never get a preview.
+      const target = props.href?.startsWith('/') ? source.getPageByHref(props.href) : undefined;
+      // `/` resolves to `content/docs/index.mdx`, which no route renders: the `(home)` page does.
+      if (!target || target.page.slugs.length === 0) return <Link {...props}>{content}</Link>;
+      return (
+        <LinkPreview
+          previewUrl={getPagePreviewUrl(target.page).url}
+          hash={target.hash || undefined}
+        >
+          <Link {...props}>{content}</Link>
+        </LinkPreview>
       );
     },
   } satisfies MDXComponents;

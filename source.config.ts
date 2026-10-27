@@ -2,7 +2,6 @@ import { metaSchema } from 'fumadocs-core/source/schema';
 import { defineCollections, defineConfig, defineDocs } from 'fumadocs-mdx/config';
 import { execFileSync } from 'node:child_process';
 
-import { llmsStringify } from './lib/llms-markdown.ts';
 import { mdxOptions } from './lib/mdx-options.ts';
 import { arbitrumPageSchema } from './lib/page-schema';
 import { referenceSchema } from './lib/reference-schema';
@@ -34,10 +33,17 @@ const lastModified = hasFullGitHistory() ? true : async () => undefined;
 export const docs = defineDocs({
   dir: 'content/docs',
   docs: {
+    // On-demand compilation: `next dev` compiles a page when it is first requested instead of
+    // every page before the first one renders. `page.data` keeps the frontmatter; `body`, `toc`,
+    // `lastModified` and the processed markdown come from `await page.data.load()`
+    // (fumadocs-mdx/runtime/dynamic.js). The production build prerenders every page as before.
+    // Dynamic mode forbids top-level `import`/`export` in MDX and relative image paths.
+    dynamic: true,
     schema: arbitrumPageSchema,
     postprocess: {
-      // The markdown mirrors and llms-full.txt: components read as markdown (lib/llms-markdown.ts).
-      includeProcessedMarkdown: { stringify: llmsStringify },
+      // The markdown mirrors and llms-full.txt, sliced from the authored source after the plugins
+      // in lib/mdx-options.ts have recorded their edits (lib/llms-markdown.ts).
+      includeProcessedMarkdown: true,
     },
     lastModified,
   },
@@ -56,6 +62,9 @@ export const docs = defineDocs({
 export const glossary = defineCollections({
   type: 'doc',
   dir: 'content/glossary',
+  // On demand like `docs`: the 167 entries otherwise compile with every route that renders a
+  // `<Term>`. The definition body comes from `await entry.load()` (lib/references.ts).
+  dynamic: true,
   schema: referenceSchema,
 });
 
