@@ -33,21 +33,21 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # Fails on an advisory of any severity in the lockfile. An advisory with no patched release
+      # goes under `auditConfig.ignoreGhsas` in pnpm-workspace.yaml, with its reason.
+      - name: Dependency audit
+        run: pnpm audit
+
       - name: Type check (regenerates .source/, then tsc)
         run: pnpm types:check
-
-      # types:check never applies the page schema; only compiling a page does. This applies it to
-      # every page, so a frontmatter mistake fails here instead of in the build job.
-      - name: Page frontmatter matches the schema
-        run: pnpm frontmatter:check
 
       - name: Script test suites
         run: pnpm test
 
-      - name: Global variables resolve
+      - name: Announcement banner keys are valid
         run: pnpm vars:check
 
-      - name: Glossary references resolve
+      - name: Glossary entries have unique ids and no partial with a term is imported
         run: pnpm references:check
 
       - name: Contract address reference is current
@@ -62,8 +62,11 @@ jobs:
       - name: Internal links
         run: pnpm check-links
 
-      - name: MDX that builds but renders wrong
-        run: pnpm content:lint
+      # ESLint over content/: MDX that builds but renders wrong, every <Var> and <Term> resolving,
+      # and the page frontmatter schema, which types:check never applies (only compiling a page
+      # does). A mistake fails here instead of in the build job.
+      - name: Content rules (ESLint)
+        run: pnpm lint
 
       # MDX is in Prettier's scope; files the tooling writes (meta.json) are in .prettierignore.
       - name: Formatting
