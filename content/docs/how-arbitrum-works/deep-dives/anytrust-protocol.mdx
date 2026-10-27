@@ -47,12 +47,12 @@ You can configure `H` per chain, so `N - 1` is the conventional choice rather th
 
 If fewer members stay honest than `H` assumes, the committee can withhold data. The table below separates what you lose from what you keep.
 
-| Outcome                                 | Committee withholds data | Committee signs for data it does not hold |
-| --------------------------------------- | ------------------------ | ----------------------------------------- |
-| <Term id="chain-state">Chain state</Term> stays correct               | Yes                      | Yes                                       |
-| Committee cannot steal funds            | Yes                      | Yes                                       |
-| Validators can reconstruct recent state | No                       | No                                        |
-| Validators can prove new <Term id="assertion">assertions</Term>     | No                       | No                                        |
+| Outcome                                                         | Committee withholds data | Committee signs for data it does not hold |
+| --------------------------------------------------------------- | ------------------------ | ----------------------------------------- |
+| <Term id="chain-state">Chain state</Term> stays correct         | Yes                      | Yes                                       |
+| Committee cannot steal funds                                    | Yes                      | Yes                                       |
+| Validators can reconstruct recent state                         | No                       | No                                        |
+| Validators can prove new <Term id="assertion">assertions</Term> | No                       | No                                        |
 
 In both cases the chain halts instead of settling a wrong result. Withheld data costs you liveness, not safety.
 
