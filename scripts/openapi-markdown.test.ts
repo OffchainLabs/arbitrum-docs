@@ -3,6 +3,7 @@
  * the result fields and the Go definition, without the JSON-RPC envelope.
  */
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
 import { openapiPageMarkdown } from '../lib/openapi.ts';
@@ -11,11 +12,14 @@ const SCHEMA = './content/openapi/arbitrum-json-rpc.json';
 
 test('arb_getRawBlockMetadata markdown documents the nested result fields', async () => {
   const md = await openapiPageMarkdown(SCHEMA, 'arb_getRawBlockMetadata');
+  const { nitroVersionTag } = JSON.parse(readFileSync('content/vars.json', 'utf8'));
   assert.match(md, /\| `\[\]\.blockNumber` \| number \| yes \|/);
   assert.match(md, /\| `result` \| NumberAndBlockMetadata\[\] \\\| null \| yes \|/);
-  assert.match(
-    md,
-    /```go\n\/\/ nitro v3\.12\.1 execution\/gethexec\/api\.go:59\nfunc \(a \*ArbAPI\) GetRawBlockMetadata\(/,
+  assert.ok(
+    md.includes(
+      `\`\`\`go\n// nitro ${nitroVersionTag} execution/gethexec/api.go:59\n` +
+        'func (a *ArbAPI) GetRawBlockMetadata(',
+    ),
   );
   assert.doesNotMatch(md, /\$ref|#\/components\//);
 });
