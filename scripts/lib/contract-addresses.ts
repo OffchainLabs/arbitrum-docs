@@ -86,7 +86,8 @@ export function cell(address: string | undefined, chainId: number): string {
 
 /**
  * Render a markdown table. `rows` is `[rowLabel, ...cellsPerChain]`, one cell per chain in
- * `chains` order. Column widths are left to Prettier, which the generator runs over the result.
+ * `chains` order, and the row label renders bold. Column widths are left to Prettier, which the
+ * generator runs over the result.
  *
  * @param cornerLabel text for the top-left header cell, usually empty
  */
@@ -95,7 +96,9 @@ export function table(cornerLabel: string, rows: string[][], chains: ReadonlyArr
   const divider = `| ${Array(chains.length + 1)
     .fill('---')
     .join(' | ')} |`;
-  const body = rows.map((r) => `| ${r.join(' | ')} |`).join('\n');
+  const body = rows
+    .map(([label, ...cells]) => `| **${label}** | ${cells.join(' | ')} |`)
+    .join('\n');
   return [header, divider, body].join('\n');
 }
 
