@@ -21,7 +21,7 @@ For how the protocol itself works, refer to [AnyTrust protocol](/how-arbitrum-wo
 
 Committee membership is permissioned, and you control it.
 
-- You pick the members. No one joins your committee by bonding funds or by running software.
+- You pick the members. No one joins your committee by <Term id="bonding">bonding</Term> funds or by running software.
 - Each member runs a <Term id="data-availability-server-das">Data Availability Server</Term> (DAS) and holds a <Term id="bls-signature">BLS</Term> key pair.
 - A <Term id="keyset">keyset</Term> lists every member's BLS public key along with `H`.
 - The <Term id="chain-owner">chain owner</Term> registers the keyset on the `SequencerInbox` contract by calling `setValidKeyset`. The contract rejects any <Term id="data-availability-certificate">Data Availability Certificate</Term> (DACert) signed under a keyset it does not hold.
@@ -67,7 +67,7 @@ Set `H` to 2 and work up the ladder.
 | `N - 1`           | 1              | Broken            | The malicious members reach `K` without the honest one. They can certify data they never store. |
 | `N`               | 0              | Broken            | Same as above.                                                                                  |
 
-The `N - 1` row is the case worth understanding, because it is where the assumption fails rather than bends. With `H` set to 2 and only one honest member left, the malicious majority produces `K = N - 1` signatures among themselves. They sign a DACert for a data block, the batch poster posts it to the <Term id="parent-chain">parent chain</Term>, and then they refuse to serve the data. The certificate is valid. The data is gone.
+The `N - 1` row is the case worth understanding, because it is where the assumption fails rather than bends. With `H` set to 2 and only one honest member left, the malicious majority produces `K = N - 1` signatures among themselves. They sign a DACert for a data block. The batch poster posts it to the <Term id="parent-chain">parent chain</Term>. Then they refuse to serve the data. The certificate is valid. The data is gone.
 
 Here is the precise damage in that case:
 
@@ -117,7 +117,7 @@ AnyTrust is a technical design. Whether a given configuration meets a specific r
 ## Related pages
 
 - [AnyTrust protocol](/how-arbitrum-works/deep-dives/anytrust-protocol) — how keysets, DACerts, and the DAS work
-- [Data availability options](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability) — choosing between <Term id="arbitrum-rollup-protocol">Rollup</Term>, AnyTrust, and alt-DA
+- [Data availability options](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability) — choosing between <Term id="arbitrum-rollup-protocol">Rollup</Term>, AnyTrust, and <Term id="alt-da">alt-DA</Term>
 - [Configure a DAC](/launch-arbitrum-chain/chain-config/data-availability/configure-dac) — generating and registering a keyset
 - [DAC and DAS operations](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations) — failure modes and fallback behavior
-- [Finality](/how-arbitrum-works/deep-dives/finality) — what each confirmation level guarantees
+- [Finality](/how-arbitrum-works/deep-dives/finality) — what each <Term id="confirmation">confirmation</Term> level guarantees
