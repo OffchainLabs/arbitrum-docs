@@ -16,7 +16,7 @@ When an Ethereum execution client receives a transaction whose nonce is higher t
 
 Arbitrum's sequencer behaves differently. It maintains an in-memory **nonce-failure retry buffer** rather than a long-lived pending pool:
 
-1. When a transaction arrives whose nonce is higher than the highest nonce the sequencer has already seen for that sender, the sequencer does **not** reject it immediately. Instead, it places the transaction in the retry buffer and starts a short expiry timer.
+1. When a transaction reaches execution with a nonce higher than the sender's state nonce (the next nonce the account expects, one more than the last executed nonce), the sequencer does **not** reject it immediately. Instead, it places the transaction in the retry buffer and starts a short expiry timer. A transaction whose nonce equals the state nonce is in order and executes, even if an earlier one is still queued.
 2. If the predecessor transaction arrives before the timer fires, the held transaction is revived and put back into the execution queue—it goes through normally, as if it had arrived in order.
 3. If the timer fires first, the held transaction is dropped, and the sender receives a `nonce too high` error in response to its original `eth_sendRawTransaction` call.
 
