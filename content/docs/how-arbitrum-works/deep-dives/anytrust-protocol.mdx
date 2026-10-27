@@ -9,7 +9,7 @@ sme: TucksonDev
 
 <Term id="arbitrum-anytrust-protocol">AnyTrust</Term> is a variant of the [Arbitrum Nitro technology](/how-arbitrum-works/inside-arbitrum-nitro) that lowers costs by accepting a mild trust assumption.
 
-The <Term id="arbitrum">Arbitrum</Term> protocol requires that all Arbitrum nodes, including [validators](/how-arbitrum-works/deep-dives/assertions) (nodes that verify the correctness of the chain and place bonds on correct results), have access to the data of every <Term id="child-chain">child chain</Term> <Term id="transaction">transaction</Term> in the <Term id="arbitrum-chain">Arbitrum chain</Term>'s inbox. An Arbitrum Rollup provides data access by [posting the data (in batched, compressed form) on the parent chain](/how-arbitrum-works/deep-dives/batchposter), Ethereum, as blobs or calldata. This Ethereum gas is the largest component of the cost of using Arbitrum.
+The <Term id="arbitrum">Arbitrum</Term> protocol requires that all Arbitrum nodes, including [validators](/how-arbitrum-works/deep-dives/assertions) (nodes that verify the correctness of the chain and place bonds on correct results), have access to the data of every <Term id="child-chain">child chain</Term> <Term id="transaction">transaction</Term> in the <Term id="arbitrum-chain">Arbitrum chain</Term>'s inbox. An Arbitrum Rollup provides data access by [posting the data (in batched, compressed form) on the parent chain](/how-arbitrum-works/deep-dives/batchposter), Ethereum, as <Term id="blob">blobs</Term> or calldata. This Ethereum gas is the largest component of the cost of using Arbitrum.
 
 AnyTrust relies instead on an external <Term id="data-availability-committee-dac">Data Availability Committee</Term> (DAC) to store data and provide it on demand. The DAC has `N` members. AnyTrust assumes that at least two of them are honest.
 
@@ -21,7 +21,7 @@ AnyTrust adds one trust assumption to Nitro, and that assumption covers data onl
 
 The committee stores data. It does not decide what is true.
 
-- **It cannot forge transactions or move funds.** The child chain's state comes from executing the data in the inbox. <Term id="validator">Validators</Term> prove the correct result on the <Term id="parent-chain">parent chain</Term> through [assertions and fraud proofs](/how-arbitrum-works/deep-dives/assertions). A committee that signs for false data does not change the state that honest validators prove.
+- **It cannot forge transactions or move funds.** The child chain's state comes from executing the data in the inbox. <Term id="validator">Validators</Term> prove the correct result on the <Term id="parent-chain">parent chain</Term> through [assertions and fraud proofs](/how-arbitrum-works/deep-dives/assertions). A committee that signs for false data does not change the state that <Term id="honest-validator">honest validators</Term> prove.
 - **It cannot censor you on its own.** If the <Term id="sequencer">Sequencer</Term> ignores your transaction, you can [force it in through the parent chain's delayed inbox](/how-arbitrum-works/deep-dives/transaction-lifecycle#force-inclusion-after-delays). That path does not involve the committee.
 - **It cannot rewrite history.** Every batch commits to the parent chain, either as full data or as a <Term id="data-availability-certificate">Data Availability Certificate</Term> (DACert).
 
@@ -33,6 +33,7 @@ Two numbers define the committee:
 
 - `N` is the number of committee members.
 - `H` is the number of members you assume are honest. The `assumed-honest` parameter sets it.
+- `K` is the number of required signatures for a DACert.
 
 A DACert needs `K` signatures, where `K = N + 1 - H`.
 
@@ -48,10 +49,10 @@ If fewer members stay honest than `H` assumes, the committee can withhold data. 
 
 | Outcome                                 | Committee withholds data | Committee signs for data it does not hold |
 | --------------------------------------- | ------------------------ | ----------------------------------------- |
-| Chain state stays correct               | Yes                      | Yes                                       |
+| <Term id="chain-state">Chain state</Term> stays correct               | Yes                      | Yes                                       |
 | Committee cannot steal funds            | Yes                      | Yes                                       |
 | Validators can reconstruct recent state | No                       | No                                        |
-| Validators can prove new assertions     | No                       | No                                        |
+| Validators can prove new <Term id="assertion">assertions</Term>     | No                       | No                                        |
 
 In both cases the chain halts instead of settling a wrong result. Withheld data costs you liveness, not safety.
 
@@ -67,7 +68,9 @@ A Keyset contains:
 - The BLS public key of each DAC member.
 - `H`, the number of members assumed honest.
 
-The Keyset stores `H` rather than `K`. Nodes derive `K` from `K = N + 1 - H` when they check a DACert. A Keyset holds at most 64 members, so `N` cannot exceed 64.
+The Keyset stores `H`, not `K`. Nodes derive `K` from `K = N + 1 - H` when they check a DACert. A Keyset holds at most 64 members, so `N` cannot exceed 64.
+
+For example, a committee of 7 members that assumes 2 are honest needs 6 signatures.
 
 Keysets are identified by their hashes. The parent chain `SequencerInbox` contract maintains the list of currently valid Keysets. The <Term id="chain-owner">chain owner</Term> adds a Keyset by calling `setValidKeyset` and removes one by calling `invalidateKeysetHash`. When a Keyset becomes valid, the contract emits a parent-chain Ethereum event that includes the Keyset's hash and full contents. Anyone can then recover the contents later, given only the Keyset hash.
 
