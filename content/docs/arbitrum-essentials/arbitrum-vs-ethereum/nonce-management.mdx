@@ -1,6 +1,6 @@
 ---
 title: 'Nonce management'
-description: 'Understand how Arbitrum handles nonces: the sequencer keeps a short retry window instead of a pending pool, so concurrent submitters must coordinate nonces.'
+description: 'Understand how Arbitrum handles nonces: the sequencer keeps a short retry window instead of a pending pool, so concurrent submitters must coordinate nonces, and a resubmitted nonce returns already known or replacement transaction underpriced.'
 content_type: 'concept'
 author: Jason-W123
 sme: Jason-W123
@@ -50,6 +50,55 @@ If you see this in production after migrating an Ethereum-based submission pipel
 On an Ethereum node, `eth_getTransactionCount(address, "pending")` returns a value that includes any transactions currently sitting in the pending pool waiting to be mined. Many concurrent-submission designs rely on this to allocate the next nonce.
 
 On Arbitrum, `eth_getTransactionCount(address, "pending")` returns the same value as `eth_getTransactionCount(address, "latest")`. The sequencer's retry buffer is an internal sequencer state and is not exposed through the RPC interface, so there is no way for an external caller to observe whether a higher-nonce transaction is currently being held. Services that previously relied on `"pending"` to coordinate concurrent submitters should track outstanding nonces themselves rather than fetch them from the RPC.
+
+## Submitting a transaction with a nonce that is already in flight
+
+While a transaction is in flight (queued, or held for a nonce gap), the sequencer rejects a second transaction from the same sender with the same nonce at admission, with one of two errors. The one exception is a PGA chain, where a copy that raises the priority fee enough is admitted instead; the table below covers it. Both error strings are the ones Ethereum clients use, but on Arbitrum the window behind them is seconds, not hours, and there is no mempool you can query to see the first transaction.
+
+### `already known`: the same transaction twice
+
+You get `already known` when the sequencer receives a transaction it already holds: same sender, same nonce, same transaction hash. As on Ethereum, the error means the transaction was received and is held, but has not executed and is not in a block.
+
+What differs from Ethereum is the hold:
+
+- The sequencer holds the transaction for seconds: up to `queue-timeout` if it is queued, or a short buffer on the order of seconds if it is parked behind a nonce gap. It never holds it for hours.
+- There is no pending pool to query, so you cannot check whether the first copy is still in flight.
+
+Do not treat `already known` as proof that the nonce is consumed. Wait for the receipt of the first copy. If no receipt arrives after the hold window has passed (`queue-timeout` plus the nonce-gap buffer), resend the same signed bytes. Do not increment the nonce on the retry: if the first copy was dropped, nothing used the nonce, and a transaction at the next nonce is held for the nonce-gap window and then dropped with `nonce too high`.
+
+<Callout type="info" title="How viem reports this error">
+
+viem surfaces `already known` as `NonceTooLowError`. The name is misleading here: the nonce is not consumed, and a retry at `nonce + 1` is dropped with `nonce too high` if the first copy was dropped.
+
+</Callout>
+
+### `replacement transaction underpriced`: a different transaction, same nonce
+
+You get `replacement transaction underpriced` when you submit a transaction that has the same sender and nonce as one in flight, but a different hash, and the sequencer rejects it. The sequencer returns the error at admission; the new transaction is rejected, and the first one still stands. On an FCFS chain every such transaction is rejected. On a PGA chain, only one whose priority fee is not high enough to compete is rejected.
+
+What happens next depends on the chain's <Term id="transaction-ordering-policy">transaction ordering policy</Term>:
+
+| Ordering policy                                                               | What a same-nonce resubmission does                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Term id="first-come-first-serve-fcfs">First-come, first-served (FCFS)</Term> | No fee bump replaces a queued transaction. Every same-nonce resubmission returns `replacement transaction underpriced` while the first transaction is in flight. A bump-and-retry loop, which works on Ethereum, does not succeed here.                                                                                                                                                                                                                        |
+| <Term id="priority-gas-auction">Priority gas auction (PGA)</Term>             | A copy whose <Term id="priority-fee">priority fee</Term> is at least 10% higher than the first transaction's is admitted and competes in the auction. It replaces the first transaction only if it enters before the first one executes and outbids the first one's tip plus the boost the first one has accumulated while waiting. A copy that is admitted but loses fails at execution with `nonce too low`, not with `replacement transaction underpriced`. |
+
+On an FCFS chain, wait for the receipt of the first transaction. If you want a different transaction to go through, submit it at the next nonce. On a PGA chain, wait for a receipt at that nonce, from either hash, to confirm which copy landed.
+
+<Callout type="info" title="How ethers.js reports this error">
+
+ethers.js classifies `replacement transaction underpriced` as `REPLACEMENT_UNDERPRICED`.
+
+</Callout>
+
+### Resync your nonce
+
+After either error, take your next nonce from the chain, not from a local counter:
+
+- When you receive the receipt for the transaction at nonce `N`, use `N + 1`, or
+- Call `eth_getTransactionCount(address, "latest")`. On Arbitrum, `"pending"` returns the same value, so it adds nothing.
+
+A locally incremented nonce drifts as soon as one in-flight transaction is dropped, and every later transaction is then held for the nonce-gap window and dropped with `nonce too high`.
 
 ## Further reading
 
