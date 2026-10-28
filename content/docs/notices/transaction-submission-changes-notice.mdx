@@ -46,7 +46,7 @@ The sequencer will complete prechecks before admitting a transaction. These erro
 
 <Callout type="warn" title="Some failed transactions no longer return an error">
 
-A transaction can pass the prechecks but still fail at block time. Examples are a nonce gap, a fee cap below the base fee, or a queue timeout. After the change, the sequencer drops these transactions without a receipt. `eth_sendRawTransaction` no longer returns an error for them.
+A transaction can pass the prechecks but still fail at block time. Examples are a nonce gap, a fee cap below the base fee, or a queue timeout. After the change, `eth_sendRawTransaction` no longer returns an error for these errors. Transactions that get dropped will not produce a receipt (unchanged from today's behavior). 
 
 If your path depends on these inclusion-time errors, use `eth_sendRawTransactionSync` instead.
 
