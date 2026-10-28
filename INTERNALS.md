@@ -34,7 +34,9 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 Fumadocs is a set of libraries on top of a Next.js App Router app that we own. There is no
 `fumadocs build`, no plugin system and no theme to eject from. `pnpm dev` runs `pnpm install`, then
 `pnpm clean` (deletes `.next/` and `.source/`), then `next dev`: the same sequence as master's
-`yarn start`, so the first page compiles cold on every start. Every route under `app/` is ordinary
+`yarn start`, so the first page compiles cold on every start. Both collections are `dynamic`
+(see [The pipeline](#the-pipeline)), so that first page compiles its own MDX and the glossary
+entries it cites, not every file under `content/`. Every route under `app/` is ordinary
 Next code. We get full control, and in exchange we own the pieces a
 monolithic docs framework would supply. Most of this document describes those pieces.
 
@@ -83,7 +85,7 @@ mistakes:
 | `:::note`, `:::caution`, `:::info` admonitions                       | `<Callout type="info\|warn\|error\|idea\|success">` on its own lines (`docusaurus-directive`)           |
 | `<a data-quicklook-from="id">text</a>`                               | `<Term id="id">text</Term>` (`quicklook-anchor`)                                                        |
 | `@@varName@@` preprocessing                                          | `<Var name="…" />` in prose, `{var:name}` in a URL, see [Global variables](#global-variables)           |
-| `import Partial from '@site/docs/partials/_x.mdx'` and `<Partial />` | `<include cwd>content/partials/_x.mdx</include>` (`site-import`)                                        |
+| `import Partial from '@site/docs/partials/_x.mdx'` and `<Partial />` | `<include cwd>content/partials/_x.mdx</include>` (`esm-in-page`)                                        |
 | `import Tabs from '@theme/Tabs'` and `<TabItem value label>`         | `<Tabs items={[…]}>` and `<Tab value>`; nothing is imported                                             |
 | `<details>`                                                          | `<Accordions><Accordion title="…">`                                                                     |
 | `className="img-600px"` on an image                                  | One prose cap (600px) in `app/global.css`, with a `data-wide` escape, see [Image sizing](#image-sizing) |
@@ -95,14 +97,42 @@ Read `source.config.ts`, `lib/source.ts` and `app/(docs)/[...slug]/page.tsx` tog
 reads the `docs` collection. The `glossary` collection has one reader, `lib/references.ts`.
 
 1. `fumadocs-mdx` scans `content/docs/**` and `content/glossary/**` and emits the `.source/`
-   collections. The frontmatter schema (`arbitrumPageSchema` in `lib/page-schema.ts`, applied by
-   the `docs` collection in `source.config.ts`) does not run here: the loader runs it when it
-   compiles a page, in `next build` and `next dev`. `pnpm frontmatter:check` runs the same schema
-   offline (`scripts/frontmatter-check.ts`).
-2. `lib/source.ts` runs `loader()` over that collection with the Lucide icons plugin and exports
-   `source`.
-3. Route handlers read `source`. The docs page renders pages; the `llms.txt`, `llms-full.txt`,
-   `llms.mdx/`, `og/` and sitemap routes derive from the same object.
+   collections. Both collections set `dynamic: true`, so `.source/dynamic.ts` lists each file with
+   its parsed frontmatter and nothing imports the MDX: a page compiles on first request, in the
+   server, through the same `buildMDX` and plugins as the bundler path
+   (`fumadocs-mdx/runtime/dynamic.js`). Under `next dev` the first page therefore waits for its own
+   MDX, not for every file; `next build` still prerenders every page. The frontmatter schema
+   (`arbitrumPageSchema` in `lib/page-schema.ts`, applied by the `docs` collection in
+   `source.config.ts`) runs when the index is generated. `pnpm lint` runs the same
+   schema offline (ESLint rule `docs/frontmatter-schema`, `eslint/rules/frontmatter-schema.ts`).
+2. `lib/source.ts` imports `docs` from `collections/dynamic` and runs `loader()` over it with the
+   Lucide icons plugin and exports `source`.
+3. Route handlers read `source`. `page.data` holds the frontmatter; `body`, `toc` and
+   `lastModified` come from `await page.data.load()`, which compiles once per process and caches.
+   The docs page renders pages; the `llms.txt`, `llms-full.txt`, `llms.mdx/`, `og/` and sitemap
+   routes derive from the same object. `getText('processed')` loads the same way.
+
+Dynamic mode supports neither a top-level `import` or `export` in an MDX page nor a relative
+image path (`./image.png`); components come from the registry in `components/mdx.tsx` and images
+from `public/`. Nothing in the build rejects an import: the compiled body runs as a function, so
+an import becomes a runtime `import()` from the page's directory. A relative one fails at request
+time with "Cannot find module"; a package import resolves through the repo's `node_modules` and
+renders, untraced by the bundler. `pnpm lint` rule `docs/esm-in-page` is the gate.
+
+Because `.source/dynamic.ts` imports `source.config.ts`, the plugins in `lib/mdx-options.ts` are
+bundled into the server. Two consequences in `lib/var-links.ts`: `VARS_PATH` is derived from
+`import.meta.url` as a string (Turbopack rewrites `new URL('…', import.meta.url)` into a static
+asset), and the read in `readVars` carries `turbopackIgnore` (a variable path otherwise makes
+Turbopack trace the whole project, `public/` included, into every server function). The server
+never reads the file in production: every page and mirror is prerendered.
+
+Hot reload under `next dev` follows the same cache. An edit to a page changes its hash in
+`.source/dynamic.ts`, Turbopack re-evaluates that module, and every page recompiles on its next
+request. An edit to a partial or to `content/vars.json` changes no hash, and the runtime compile
+records no dependencies (`compilerOf(file)` is undefined on that path), so a page already
+compiled keeps the old include and the old `{var:…}` link destinations until a page under
+`content/docs/` changes or the server restarts. `<Var>` in prose still updates: the component
+reads `@/content/vars` at render time.
 
 `.source/` is generated by `postinstall`, `types:check` and the build. Never hand-edit it.
 
@@ -135,8 +165,9 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
   node position. A plugin that only mutates or removes a node leaves the mirror unchanged, so
   `remarkLlmsMarkdown` (`lib/llms-markdown.ts`), `remarkVarLinks` and `remarkStripMdxComments`
   record their edits with `replaceSource()` from `fumadocs-core/mdx-plugins/stringifier`.
-- **Server only.** Never import `lib/source`, or a module that imports it, from a client
-  component. It drags the compiled collection into the browser bundle, and no gate notices.
+- **Server only.** Never import `lib/source`, `lib/references`, or a module that imports either,
+  from a client component. They reach `collections/dynamic`, which reads and compiles files on the
+  server; `scripts/lib/client-imports.test.ts` fails on such a chain.
 
 ## The frontmatter contract
 
@@ -155,8 +186,8 @@ collection in `source.config.ts` applies it (the schema has its own module becau
 | `target_audience`           | Optional string describing the intended readers and their assumed knowledge                           |
 | `user_story`                | Optional string describing the reader's goal and why it matters                                       |
 
-A missing title or description, or a `content_type` outside the enum, fails `frontmatter:check`
-and the build. `types:check` does not validate every page's frontmatter. Nothing renders
+A missing title or description, or a `content_type` outside the enum, fails `pnpm lint` (rule
+`docs/frontmatter-schema`) and the build. `types:check` does not validate every page's frontmatter. Nothing renders
 `content_type`; it is an editorial label kept to one enum so values stay
 comparable. Partials and glossary entries do not carry this contract.
 
@@ -168,7 +199,8 @@ writers and reviewers. They do not render on the page and are not required for a
 The `lastModified` option on the `docs` collection makes `fumadocs-mdx` read each file's date from
 git. The docs page prints it as "Last updated on …", the sitemap emits it as `<lastmod>`, and page
 metadata emits it as `article:modified_time`. It is not frontmatter, so never add a date field to a
-page.
+page. It is resolved when the page compiles, so it sits behind `await page.data.load()`; the
+sitemap loads every page to read it.
 
 The option is gated by `hasFullGitHistory()` in `source.config.ts`. A shallow clone reports its
 oldest commit as having added every file, which would stamp most pages with one wrong date, so a
@@ -295,13 +327,13 @@ Every address is EIP-55 checksummed, because `<AEL>` throws on a bad checksum.
 
 Values that move on a release cadence live in `content/vars.json`. `content/vars.ts` re-exports
 the JSON with a `VarKey` type, so adding a key needs no code change. `<Var name="…" />` renders a
-value inline. A few keys are read by code, not MDX, and `vars:check` does not complain about them.
+value inline. A few keys are read by code, not MDX, and nothing complains about them.
 
-`pnpm vars:check` fails when a `<Var name>` or `{var:name}` in `content/` names no key, because MDX
-is not type-checked and a missing key renders the string `undefined`.
+`pnpm lint` (rule `docs/unknown-var`) fails when a `<Var name>` or `{var:name}` in `content/` names
+no key, because MDX is not type-checked and a missing key renders the string `undefined`.
 
 **`<Var>` does not evaluate inside a fenced block or an inline code span.** The reader sees the
-literal tag. `content:lint` rule `var-in-code` fails on it. When a command must be copy-pasteable,
+literal tag. Rule `docs/var-in-code` fails on it. When a command must be copy-pasteable,
 hardcode the value in the code and put `<Var>` in the prose beside it. For `latestNitroNodeImage`,
 `pnpm nitro:check-release --to <tag>` keeps those copies current, but only in files that carry the
 marker `{/* sync-with-var: latestNitroNodeImage */}`. Never add the marker to a page that states a
@@ -323,8 +355,8 @@ resolves an internal `/<slug>` link. Two limits:
 - A placeholder in prose fails the build, because MDX reads the braces as an expression.
 - A local image path is imported before the plugin runs, so write it in full.
 
-`content:lint` rule `var-in-link` fails on a `<Var>` in a destination or URL attribute, and on a
-placeholder whose name is not an identifier. The plugin rereads `vars.json` on each compile and registers it
+Rule `docs/var-in-link` fails on a `<Var>` in a destination or URL attribute, and on a placeholder
+whose name is not an identifier. The plugin rereads `vars.json` on each compile and registers it
 as a dependency of the page, so `pnpm dev` hot-reloads a placeholder after an edit.
 
 ### This repository's own URL has one owner
@@ -384,14 +416,16 @@ runs only here, not in CI, because the gates stay offline.
 ## Glossary and inline references
 
 `content/glossary/*.mdx` is a reference collection (`{ id, title, sortAs? }`, body is the
-definition). `lib/references.ts` is the registry. `<Term id="…">text</Term>` renders the text with
+definition). `lib/references.ts` is the registry; the collection is dynamic, so an entry's body
+comes from `await entry.load()` and `Term` and `ReferenceList` are async server components. `<Term id="…">text</Term>` renders the text with
 the definition in a popover (`components/HoverPopover`, a non-modal dialog that opens on hover,
 focus or click, so the links inside a definition are reachable by keyboard), rendered on the server
 so each page ships only the definitions it cites. `<ReferenceList collection="glossary" />` renders the whole
 collection on the glossary page.
 
-`pnpm references:check` fails on an unknown id, a duplicate id, an entry with no `id` frontmatter,
-or an unknown `<Reference collection>`. A `<Term>` inside a partial is allowed: the include is
+`pnpm lint` (rule `docs/unknown-term`) fails on an unknown id or an unknown
+`<Reference collection>`; `pnpm references:check` fails on a duplicate id or an entry with no `id`
+frontmatter. A `<Term>` inside a partial is allowed: the include is
 spliced into the page at build time, so the server component renders in the page like any other.
 Rule R3 now only forbids ESM-importing (`import X from '…/_x.mdx'`) a partial that holds one,
 because an imported partial can end up in a client module where a server component is illegal; no
@@ -420,19 +454,45 @@ include `Callout`, `Card`, `Cards` and code blocks) and adds:
   label naming its type, so the type is not conveyed by colour alone.
 - `AEL`, an address explorer link (`components/mdx/AddressExplorerLink.tsx`).
 - `Term`, `ReferenceList` and `Var` from `components/mdx/`.
-- Four widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`
-  boundary in its `index.tsx`: `FlowChart` from `CentralizedAuction/` (the Timeboost auction), `EdgeChallengeFlow` (BoLD,
+- Three widgets under `components/widgets/`, each used by one page and each behind a `next/dynamic`
+  boundary in its `index.tsx`: `EdgeChallengeFlow` (BoLD,
   client only), `VendingMachine` (the cupcake demo, which pulls in viem) and the node
   troubleshooting set (`TroubleshootingChecklist`, `ChecklistItem`, `ConfigGuidance`,
   `TroubleshootingConfig`, `TroubleshootingReport`).
 
 Callouts are `<Callout type="info|warn|error|idea|success" title="…">`. Fumadocs also accepts
 `warning` as a spelling of `warn`; write `warn`. A Docusaurus `:::` line renders as text, and
-`content:lint` fails on one.
+`pnpm lint` fails on one.
 
 The registry also overrides `a`: an internal link ending in `.pdf` renders as a plain anchor so
 Next's `<Link>` does not prefetch the file. Every other link goes through Fumadocs' relative-link
 resolver.
+
+An internal link that `source.getPageByHref` resolves is wrapped in `components/LinkPreview`, a
+hover card in the style of Wikipedia's page previews. The card opens on mouse hover after 400 ms
+and closes on leave or Esc. It is one anchor that opens the previewed page, with its `#hash`, in a
+new tab. Touch and `(hover: none)` devices get no card. A link that wraps a `<Term>` keeps the Term
+popover and gets no card, and a link inside a glossary definition gets none either (the component
+checks for the `data-hover-popover` and `data-hover-popover-panel` attributes that
+`components/HoverPopover` sets). The two cards share a panel but differ on purpose: the Term card
+has a left accent and a "Glossary" kicker and is a reading surface; the preview card has a
+"Preview" kicker with an arrow, its title in the link colour, and a hover tint, because the whole
+card is a link. The card shows the page title, its frontmatter description and the lead, muted.
+For a `#section` link it shows the section heading and its text, with the page title as a caption.
+
+The data is the `structuredData` export, read through `await page.data.load()` because the
+collection is dynamic, which `remarkStructureOptions` in `lib/mdx-options.ts` limits to headings
+and paragraphs. `lib/preview-text.ts` runs before Fumadocs' `remarkStructure`
+and hands it the plain text of each one: a paragraph through the `node.data.structuredData` hook, a
+heading through `'search'`-namespaced `replaceSource` edits on its children, so a `<Var>` reads as
+its value and markers and `<Term>` wrappers are gone. `lib/link-preview.ts` turns it into one JSON
+per page: `description` (from frontmatter), `lead` (the text before the first heading) and
+`sections` (the text under each heading id), the last two clipped to 350 characters.
+`app/preview/[...slug]/route.ts` prerenders it at `/preview/<slug>/preview.json`; any other path
+404s. The component fetches the JSON on the first hover and caches the promise in memory for the
+session. A 404 or a failed fetch caches as no card. A page that opens with a heading has no
+lead text, so its card shows the title and description only. Tables and code never contribute
+text, so an excerpt can end on a colon.
 
 ### Image captions
 
@@ -480,7 +540,7 @@ renders broken. Commit the file under `public/img/`, or wrap a plain `<img>`:
 </ImageZoom>
 ```
 
-`content:lint` rule `remote-image` blocks the markdown form.
+Rule `docs/remote-image` blocks the markdown form.
 
 ## Page weight and what loads late
 
@@ -489,6 +549,10 @@ references. Every client component it reaches statically lands in every docs pag
 `.css` file one of them imports becomes a render-blocking stylesheet on all of them. That is why
 each widget sits behind `next/dynamic`, and why shared component styles live in `app/global.css`
 or as Tailwind utilities.
+
+`LinkPreview` is a small client module that every docs page carries. It reuses `@floating-ui/react`,
+which `HoverPopover` already ships. The preview JSON loads on hover only and is cached, so page
+weight does not grow with the number of links.
 
 A docs page loads three stylesheets. Check after any component change:
 
@@ -730,6 +794,9 @@ its tag so the typo stays visible, and the rendered page is unaffected because t
 beside the tree. The HTTP smoke suite asserts that no component tag or `{var:}` placeholder reaches
 `/llms-full.txt` or a mirror outside code.
 
+`/preview/<slug>/preview.json` is a third machine endpoint. It is static, `proxy.ts` does not track
+it, and `lib/http-headers.ts` gives it no CORS header.
+
 ### Response headers
 
 `headers()` in `next.config.ts` is the one place response headers are set, and `poweredByHeader`
@@ -856,31 +923,42 @@ workflow that sets up Node (`ci.yml`, `upstream-refresh.yml` and `nitro-bump.yml
 project's Node.js Version setting, which is set by hand.
 Never bypass `engines`.
 
+Dependencies in `package.json` take caret ranges; `pnpm-lock.yaml` decides what installs, and CI
+installs with `--frozen-lockfile`. `fumadocs-ui` and `fumadocs-core` stay exact, because the navbar
+CSS depends on Fumadocs' header DOM (see [Theme](#theme)).
+
 ## The gates
 
 `.github/workflows/ci.yml` runs on pushes and PRs to `main`, `master` and `fumadocs`, in two jobs.
 
 **`Gates`**, in order:
 
-| Step                | What it proves                                                                                                                                                                                                        |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `types:check`       | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                         |
-| `frontmatter:check` | Every page under `content/docs` satisfies the page schema in `lib/page-schema.ts`                                                                                                                                     |
-| `test`              | Every `scripts/**/*.test.ts` suite: the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import |
-| `vars:check`        | Every variable reference resolves, including a `<Var>` split across lines; the banner keys are valid                                                                                                                  |
-| `references:check`  | Every glossary id resolves and is unique                                                                                                                                                                              |
-| `contracts:check`   | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                |
-| `faq:check`         | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                       |
-| `check-links`       | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                      |
-| `content:lint`      | MDX that compiles but renders wrong (below)                                                                                                                                                                           |
-| `format:check`      | Prettier                                                                                                                                                                                                              |
+| Step               | What it proves                                                                                                                                                                                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `audit`            | No advisory in `pnpm-lock.yaml` beyond those listed under `auditConfig.ignoreGhsas` in `pnpm-workspace.yaml`                                                                                                                                                                         |
+| `types:check`      | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                                                                                        |
+| `test`             | Every `scripts/**/*.test.ts` and `eslint/**/*.test.ts` suite: the content rules on their fixtures, the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import |
+| `vars:check`       | The announcement banner keys in `content/vars.json` are valid                                                                                                                                                                                                                        |
+| `references:check` | Every glossary entry has an `id`, ids are unique, and no partial holding a `<Term>` is ESM-imported                                                                                                                                                                                  |
+| `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                                                                               |
+| `faq:check`        | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                                                                                      |
+| `check-links`      | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                                                                                     |
+| `lint`             | ESLint over `content/`: MDX that compiles but renders wrong, every `<Var>` and `<Term>` resolving, every page under `content/docs` satisfying the page schema in `lib/page-schema.ts` (below)                                                                                        |
+| `format:check`     | Prettier                                                                                                                                                                                                                                                                             |
 
-**`Build and HTTP smoke tests`** runs `pnpm build` (which runs `check-links` first), starts the
-server, and runs `scripts/static-docs-http.test.ts`. That suite checks what only a built site
-shows: prerendered pages, markdown URLs, the 404 shape, mirrors free of MDX comments and of `<Var>`,
-`<Term>` and `<Callout>` tags, the stylesheet count on a plain docs page, the MCP card, home and
-docs metadata, and the contribute guide's links home. The build also catches a page that compiles
-but throws at prerender. Nothing in the build reaches the network after `pnpm install`.
+`audit` asks the npm registry, so an advisory published today fails every PR, including one that
+touched no dependency. First bump the direct dependency that brings the package in. If a parent
+still pins a vulnerable version, add an `overrides` entry in `pnpm-workspace.yaml` and name that
+parent in its comment. If no patched release exists, add the GHSA id to `auditConfig.ignoreGhsas`
+with the reason. Drop an override once `pnpm why <package>` shows every parent allows the fix.
+
+**`Build and HTTP smoke tests`** runs `pnpm build` (which runs `format:check` and `check-links`
+first), starts the server, and runs `scripts/static-docs-http.test.ts`. That suite checks what only
+a built site shows: prerendered pages, markdown URLs, the 404 shape, mirrors free of MDX comments
+and of `<Var>`, `<Term>` and `<Callout>` tags, the stylesheet count on a plain docs page, the MCP
+card, home and docs metadata, and the contribute guide's links home. The build also catches a page
+that compiles but throws at prerender. Nothing in the build reaches the network after
+`pnpm install`.
 
 The same job installs Chromium and runs `pnpm test:browser` against the server at `localhost`.
 `tests/browser/findable-panels.test.ts` checks that native text search discovers inactive tab
@@ -898,31 +976,47 @@ secrets are absent, and it is the Docusaurus repo's workflow restored for pnpm.
 
 There is no pre-commit hook. Run the gates yourself before you push.
 
-### The content-lint rules
+### The content rules
 
-`scripts/lib/content-lint.ts` reads each MDX file under `content/` with code masked by
-`scripts/lib/strip-code.ts`, so an example inside a fence is never reported. The one exception is
-`var-in-code`, which looks only inside code.
+`pnpm lint` is ESLint 10 with one local plugin, `docs` (`eslint/plugin.ts`), configured in
+`eslint.config.ts` for every `.mdx` and `.md` file under `content/`. There is no parser package in
+between: `eslint/language.ts` is an ESLint language plugin, built the way `@eslint/markdown` builds
+its own, that parses a file with the MDX, GFM, math and frontmatter micromark extensions, the same
+tree `@mdx-js/mdx` gives the build. A rule is a file under `eslint/rules/` that visits mdast node
+types; `eslint/shared.ts` gives the text rules the source with every fence, inline code span and MDX
+comment blanked, so an example inside code is never reported, and gives the component rules every
+JSX element with its paragraph and heading context, real JSX inside `{expressions}` included. The
+one rule that looks inside code is `var-in-code`. A file that does not parse is one fatal finding
+with its line. The editor's ESLint integration reports the same findings while you type. There is
+no inline disable comment for these rules: fix the finding.
 
-| Rule                           | Catches                                                                                                                                 |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                       |
-| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                      |
-| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                            |
-| `site-import`                  | An `import … from '@site/…'` or `'@theme/…'` line, which has no module here and fails the build                                         |
-| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx`, nor a Fumadocs default, nor imported in the file, which throws at render |
-| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                   |
-| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                      |
-| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                         |
-| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                |
-| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                   |
-| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                    |
-| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                        |
-| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                |
-| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                |
+Per-file rules live here. What needs the whole repository stays a script: `check-links` (link
+targets and compiled anchors), `references:check` (ids present and unique, no imported partial with
+a term), `vars:check` (the banner keys in JSON) and the sidebar test. ESLint lints one file at a
+time, and the anchor check compiles every page.
 
-`strip-code.ts` is the one "ignore code" scanner for every script; import it rather than writing
-another.
+| Rule                           | Catches                                                                                                                                       |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `frontmatter-schema`           | A page under `content/docs` whose frontmatter breaks `lib/page-schema.ts`; one finding per field                                              |
+| `unknown-var`                  | A `<Var name>` or `{var:name}` that names no key in `content/vars.json`, a `<Var>` split across lines included; a `<Var>` with no static name |
+| `unknown-term`                 | A `<Term id>` with no glossary entry, or a `<Reference>` to an unregistered collection                                                        |
+| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                             |
+| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                            |
+| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                                  |
+| `esm-in-page`                  | A top-level `import` or `export`; pages compile on demand, where Fumadocs supports neither (a `@site/` or `@theme/` alias gets a hint)        |
+| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx` nor a Fumadocs default, which throws at render                                  |
+| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                         |
+| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                            |
+| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                               |
+| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                      |
+| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                         |
+| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                          |
+| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                              |
+| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                      |
+| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                      |
+
+`scripts/lib/strip-code.ts` is the "ignore code" scanner for the scripts that read MDX as text
+(`check-links`, `move-doc`); the ESLint rules take the same regions from the parsed tree.
 
 ### Hand-run tools
 
@@ -1007,7 +1101,7 @@ and the generators write them with `format: false`.
 
 ## What nothing catches
 
-- **Rendering.** `types:check` checks TypeScript; `frontmatter:check` validates page metadata.
+- **Rendering.** `types:check` checks TypeScript; `pnpm lint` validates page metadata and MDX shape.
   Neither proves the render. Open changed pages on
   `http://localhost:3000`, not `127.0.0.1`, where React does not hydrate.
 - **Runtime anchors.** `check-links` validates compiled heading ids but runs no components. Click
