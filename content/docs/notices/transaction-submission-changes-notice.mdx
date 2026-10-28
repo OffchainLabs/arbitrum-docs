@@ -32,7 +32,7 @@ These updates will help teams who rely on speed, like traders, DeFi app develope
 | Method                       | Returns today                                                                                                            | Returns after the change                                                                                                                      |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | `eth_sendRawTransaction`     | The transaction hash when the block is sealed, pre-check errors, or block inclusion errors | The transaction hash when it enters the sequencer's queue or pre-check errors. Inclusion errors will no longer be returned.                           |
-| `eth_sendRawTransactionSync` | The full receipt, after the block is built, alongside any inclusion or precheck errors.                                  | A receipt as soon as the sequencer executes the transaction, with `blockHash` set to `0x000…000`, alongside any inclusion or precheck errors. |
+| `eth_sendRawTransactionSync` | A full receipt when a block is sealed, pre-check errors, or block inclusion errors                                  | A partial receipt (`blockHash` set to `0x000…000`) when the transaction is executed, pre-check errors, or block inclusion errors |
 
 ### `eth_sendRawTransaction` returns on admission to the queue
 
