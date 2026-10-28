@@ -60,7 +60,6 @@ If your path depends on these inclusion-time errors, use `eth_sendRawTransaction
 
 These could occur in a very small window between transaction execution and the block being sealed. If you have concerns about these rare cases, it may be best not to rely on this method and instead use polling.
 
-- The receipt has no block hash like on the Fast Feed. The sequencer returns the receipt before the block exists, so `blockHash` is set to `0x000…000`. As a result, the method no longer complies with [EIP-7966](https://eips.ethereum.org/EIPS/eip-7966).
 - Similar to the fast feed, a receipt can be retracted. A block can still fail after the sequencer executes a transaction, for example because of a disk write error or a sequencer crash. To avoid these cases, or to get the `blockHash`, poll `eth_getTransactionReceipt` for the canonical receipt.
 
 </Callout>
