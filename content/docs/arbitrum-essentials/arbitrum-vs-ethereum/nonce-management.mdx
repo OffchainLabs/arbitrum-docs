@@ -43,6 +43,12 @@ This is the same literal error string used by Ethereum's execution layer, but th
 - **On Ethereum**, `nonce too high` usually means the gap between the sender’s current nonce and the pending pool's buffer is larger than the pending pool can or will buffer (often a multi-thousand-slot gap, configurable per client).
 - **On Arbitrum**, `nonce too high` simply means the predecessor transaction did not reach the sequencer within the retry window.
 
+The animation below shows step 3. Nonce 8 arrives before nonce 7 and waits in the retry buffer. The timer runs out before nonce 7 arrives, so the sequencer drops nonce 8 and returns `nonce too high` to your sender. When nonce 7 arrives late, it executes normally, because its nonce equals the state nonce. Nonce 8 is gone, so you must resend it.
+
+<ImageZoom>
+  <img src="/img/nonce-retry-buffer-expired.svg" alt="Animated diagram of the sequencer's nonce retry buffer when the timer expires. Transactions from other senders enter the sequencer queue from the left and land in a block on the right. Your transaction with nonce 8 arrives before nonce 7, so the sequencer moves it into the retry buffer and starts the expiry timer. Nonce 7 does not arrive and the timer runs out. The sequencer drops nonce 8 and returns the error nonce too high to your sender. Nonce 7 then arrives late and executes normally, so your sender must resend nonce 8." data-wide />
+</ImageZoom>
+
 A typical log line from a real out-of-order submission looks like:
 
 ```text
