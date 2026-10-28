@@ -61,7 +61,7 @@ If you see this in production after migrating an Ethereum-based submission pipel
 
 On an Ethereum node, `eth_getTransactionCount(address, "pending")` returns a value that includes any transactions currently sitting in the pending pool waiting to be mined. Many concurrent-submission designs rely on this to allocate the next nonce.
 
-On Arbitrum, `eth_getTransactionCount(address, "pending")` returns the same value as `eth_getTransactionCount(address, "latest")`. The sequencer's retry buffer is an internal sequencer state and is not exposed through the RPC interface, so there is no way for an external caller to observe whether a higher-nonce transaction is currently being held. Services that previously relied on `"pending"` to coordinate concurrent submitters should track outstanding nonces themselves rather than fetch them from the RPC.
+On Arbitrum, `eth_getTransactionCount(address, "pending")` returns the same value as `eth_getTransactionCount(address, "latest")`. The sequencer's retry buffer is an internal sequencer state and is not exposed through the RPC interface, so there is no way for an external caller to observe whether a higher-nonce transaction is currently being held. Services that previously relied on `"pending"` to coordinate concurrent submitters should track outstanding nonces themselves, using receipts or `eth_getTransactionCount(address, "latest")`, rather than fetching them using `eth_getTransactionCount(address, "pending")`.
 
 ## Submitting a transaction with a nonce that is already in flight
 
