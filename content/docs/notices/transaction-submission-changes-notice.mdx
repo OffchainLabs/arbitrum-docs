@@ -9,7 +9,7 @@ sme: leeederek
 
 We are changing how two transaction submission methods respond on <Term id="arbitrum-chain">Arbitrum chains</Term>. After the change, `eth_sendRawTransaction` and `eth_sendRawTransactionSync` will both return sooner than they do today. The changes are not live yet. We are posting this notice now so you have time to prepare. At this time, the precise latency gains/wins are unavailable; as soon as development and testing is complete, this page will be updated with this information.
 
-<Callout type="warn" title="What this means for you">
+<Callout type="info" title="What this means for you">
 
 - If you treat an `eth_sendRawTransaction` response as “**received**” and confirm the result later, you don’t need to change anything. You will get the transaction hash sooner.
 - If you treat an `eth_sendRawTransaction` response as “**included**,” or you retry based on the errors it returns, switch to `eth_sendRawTransactionSync`.
