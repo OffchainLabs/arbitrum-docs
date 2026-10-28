@@ -63,7 +63,6 @@ If your path depends on these inclusion-time errors, use `eth_sendRawTransaction
 - Similar to the fast feed, a receipt can be retracted. A block can still fail after the sequencer executes a transaction, for example because of a disk write error or a sequencer crash. To avoid these cases, or to get the `blockHash`, poll `eth_getTransactionReceipt` for the canonical receipt.
 
 ## Who benefits
-At this time, the precise latency gains/wins are unavailable; as soon as development and testing is complete, this page will be updated with this information.
 
 | If you currently…                                                                                                                                               | After the change…                                                                                                                                                           | Action required to get the benefit                                     |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
