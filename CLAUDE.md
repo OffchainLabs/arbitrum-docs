@@ -42,6 +42,7 @@ pnpm lint              # ESLint over content/: the docs/* rules below, every <Va
 pnpm vars:check        # the announcement banner keys in content/vars.json are valid
 pnpm references:check  # glossary ids are present and unique; no partial holding a <Term> is ESM-imported
 pnpm contracts:check   # the contract-address partial is current
+pnpm gas-target:check # the gas-target partial matches scripts/data/gas-target.json
 pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
 pnpm format:check      # prettier (pnpm format writes)
@@ -56,12 +57,15 @@ pnpm stylus:generate                   # Stylus by Example pages (:check compare
 pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
 pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN); then faq:generate
 pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
+pnpm gas-target:fetch                 # gas-target snapshot from ArbGasInfo over three public RPCs; then gas-target:generate
+pnpm gas-target:generate              # the gas-target partial from the snapshot (:check compares)
 ```
 
 CI (`.github/workflows/ci.yml`) runs the gates in one job, then `pnpm build` plus
 `scripts/static-docs-http.test.ts` against the running build in a second. There is no pre-commit
 hook. `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` on Mondays and
-opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mondays for the Notion FAQ snapshots.
+opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mondays for the Notion FAQ snapshots,
+and `gas-target-refresh.yml` for the gas-target snapshot.
 
 ## Frontmatter contract
 
