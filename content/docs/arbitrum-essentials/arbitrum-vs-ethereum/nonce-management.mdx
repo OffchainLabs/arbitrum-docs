@@ -76,7 +76,14 @@ What differs from Ethereum is the hold:
 - The sequencer holds the transaction for seconds: up to `queue-timeout` if it is queued, or a short buffer on the order of seconds if it is parked behind a nonce gap. It never holds it for hours.
 - There is no pending pool to query, so you cannot check whether the first copy is still in flight.
 
-Do not treat `already known` as proof that the nonce is consumed. Wait for the receipt of the first copy. If no receipt arrives after the hold window has passed (`queue-timeout` plus the nonce-gap buffer), resend the same signed bytes. Do not increment the nonce on the retry: if the first copy was dropped, nothing used the nonce, and a transaction at the next nonce is held for the nonce-gap window and then dropped with `nonce too high`.
+Don't treat `already known` as proof that the nonce is consumed. The receipt of the first copy is what gives you a clear signal:
+
+- If you receive a receipt, with status `success` or `reverted`, the transaction executed and consumed the nonce. Use `N + 1` next.
+- If no receipt arrives after the hold window has passed (`queue-timeout` plus the nonce-gap buffer), the sequencer dropped the transaction and the nonce is still free. Resend the same signed bytes at the same nonce.
+
+Drops are more frequent when the chain is busy. A queued transaction that waits longer than `queue-timeout` is dropped. The base fee can also rise above the transaction's max fee per gas before it executes, which makes the transaction invalid.
+
+Do not increment the nonce on the retry: if the first copy was dropped, nothing used the nonce, and a transaction at the next nonce is held for the nonce-gap window and then dropped with `nonce too high`.
 
 <Callout type="info" title="How viem reports this error">
 
