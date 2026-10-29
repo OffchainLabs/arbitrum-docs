@@ -26,8 +26,11 @@ export function baseOptions(): BaseLayoutProps {
       },
       {
         type: 'menu',
+        // The key is load-bearing, for the reason given in app/(docs)/layout.tsx: the notebook
+        // header puts this text in a literal `[item.text, <ChevronDown />]` array.
         text: (
           <NavLabel
+            key="build-apps"
             sections={[
               docHref('build-decentralized-apps'),
               docHref('stylus/quickstart'),
@@ -59,12 +62,6 @@ export function baseOptions(): BaseLayoutProps {
             text: 'Arbitrum essentials',
             description: 'Bridging, precompiles, the NodeInterface, and platform reference.',
             url: docHref('arbitrum-essentials'),
-          },
-          {
-            icon: <Coins />,
-            text: 'Machine Payments Protocol (MPP)',
-            description: 'Machine-to-machine payments on Arbitrum.',
-            url: docHref('build-decentralized-apps/machine-payments-protocol'),
           },
         ],
       },

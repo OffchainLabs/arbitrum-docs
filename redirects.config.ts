@@ -99,6 +99,39 @@ export const redirects: Redirect[] = [
     permanent: true,
   },
 
+  // Timeboost pages removed in 2026-10 (TW-1100). PGA replaced Timeboost; its pages explain the
+  // sunset and how to withdraw auction-contract funds. Routes master published, so 308.
+  {
+    source: '/how-arbitrum-works/timeboost',
+    destination: '/how-arbitrum-works/priority-gas-auction/pga',
+    permanent: true,
+  },
+  {
+    source: '/how-arbitrum-works/timeboost/gentle-introduction',
+    destination: '/how-arbitrum-works/priority-gas-auction/pga',
+    permanent: true,
+  },
+  {
+    source: '/how-arbitrum-works/timeboost/how-to-use-timeboost',
+    destination: '/how-arbitrum-works/priority-gas-auction/pga',
+    permanent: true,
+  },
+  {
+    source: '/how-arbitrum-works/timeboost/timeboost-faq',
+    destination: '/how-arbitrum-works/priority-gas-auction/pga',
+    permanent: true,
+  },
+  {
+    source: '/how-arbitrum-works/timeboost/troubleshoot-timeboost',
+    destination: '/how-arbitrum-works/priority-gas-auction/pga',
+    permanent: true,
+  },
+  {
+    source: '/launch-arbitrum-chain/chain-config/sequencer/timeboost',
+    destination: '/launch-arbitrum-chain/chain-config/sequencer/pga',
+    permanent: true,
+  },
+
   // Legacy docs.arbitrum.io URLs
   {
     source: '/anytrust',
@@ -354,6 +387,11 @@ export const redirects: Redirect[] = [
     source: '/build-decentralized-apps/how-to-get-l2block-on-l1',
     destination: '/arbitrum-essentials/how-to-get-l2block-on-l1',
     permanent: false,
+  },
+  {
+    source: '/build-decentralized-apps/machine-payments-protocol',
+    destination: '/arbitrum-essentials/machine-payments-protocol',
+    permanent: true,
   },
   {
     source: '/build-decentralized-apps/nodeinterface/overview',
@@ -1571,7 +1609,7 @@ export const redirects: Redirect[] = [
   {
     source:
       '/launch-arbitrum-chain/configure-your-chain/common-configurations/timeboost-for-arbitrum-chains',
-    destination: '/launch-arbitrum-chain/chain-config/sequencer/timeboost',
+    destination: '/launch-arbitrum-chain/chain-config/sequencer/pga',
     permanent: false,
   },
   {
@@ -1696,7 +1734,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/configure-your-chain/common/mev/timeboost-for-arbitrum-chains',
-    destination: '/launch-arbitrum-chain/chain-config/sequencer/timeboost',
+    destination: '/launch-arbitrum-chain/chain-config/sequencer/pga',
     permanent: false,
   },
   {
@@ -1906,7 +1944,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/features/common/mev/choose-timeboostburn',
-    destination: '/launch-arbitrum-chain/chain-config/sequencer/timeboost',
+    destination: '/launch-arbitrum-chain/chain-config/sequencer/pga',
     permanent: false,
   },
   {
@@ -2043,7 +2081,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/launch-arbitrum-chain/timeboost-for-arbitrum-chains',
-    destination: '/launch-arbitrum-chain/chain-config/sequencer/timeboost',
+    destination: '/launch-arbitrum-chain/chain-config/sequencer/pga',
     permanent: false,
   },
   {
@@ -2927,7 +2965,7 @@ export const redirects: Redirect[] = [
   },
   {
     source: '/run-arbitrum-node/how-to-use-timeboost',
-    destination: '/how-arbitrum-works/timeboost/how-to-use-timeboost',
+    destination: '/how-arbitrum-works/priority-gas-auction/pga',
     permanent: false,
   },
   {

@@ -4,12 +4,12 @@ import {
   DocsPage,
   DocsTitle,
   MarkdownCopyButton,
-  ViewOptionsPopover,
 } from 'fumadocs-ui/layouts/notebook/page';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { PageActionsPopover } from '@/components/PageActionsPopover';
 import { RequestUpdateLink } from '@/components/RequestUpdateLink';
 import { Feedback } from '@/components/feedback/client';
 import { getMDXComponents } from '@/components/mdx';
@@ -31,14 +31,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
   const page = source.getPage(slug);
   if (!page) notFound();
 
-  const MDX = page.data.body;
-  const { lastModified } = page.data;
+  const { body: MDX, toc, lastModified } = await page.data.load();
   const markdownUrl = getPageMarkdownUrl(page).url;
   const jsonLd = faqJsonLd(page.slugs);
 
   return (
     // Narrower gutters than the notebook layout's default `px-4 md:px-6 xl:px-8`.
-    <DocsPage toc={page.data.toc} full={page.data.full} className="md:px-4 xl:px-4">
+    <DocsPage toc={toc} full={page.data.full} className="md:px-4 xl:px-4">
       {jsonLd ? (
         <script
           type="application/ld+json"
@@ -58,8 +57,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
       ) : null}
       <div className="flex flex-row flex-wrap gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />
-        <ViewOptionsPopover
+        <PageActionsPopover
           markdownUrl={markdownUrl}
+          pageUrl={new URL(page.url, getSiteUrl()).toString()}
           githubUrl={`${gitConfig.url}/blob/${gitConfig.branch}/content/docs/${page.path}`}
         />
         <RequestUpdateLink pageUrl={page.url} />
@@ -95,7 +95,8 @@ export async function generateMetadata({
   const page = source.getPage(slug);
   if (!page) notFound();
 
-  const { title, description, lastModified } = page.data;
+  const { title, description } = page.data;
+  const { lastModified } = await page.data.load();
   const image = getPageImage(page).url;
   const canonical = new URL(page.url, getSiteUrl()).toString();
 

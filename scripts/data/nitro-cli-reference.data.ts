@@ -101,6 +101,10 @@ export const exclusions: readonly ExclusionRule[] = [
     reason: 'conf.reload-interval: periodic config reload knob',
     matches: (flag) => flag.flag === 'conf.reload-interval',
   },
+  {
+    reason: 'timeboost: retired ordering policy; Nitro code path removal is tracked in NIT-5913',
+    matches: (flag) => /(^|\.)timeboost(\.|$)/.test(flag.flag),
+  },
 ];
 
 /**
