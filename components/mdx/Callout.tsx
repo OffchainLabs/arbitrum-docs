@@ -112,7 +112,7 @@ export function Callout({
         <span className="inline-flex shrink-0 items-center">
           <Icon />
         </span>
-        <span className="text-[17px] leading-[1.3] font-semibold text-[#1f2328] dark:text-[#b5c2d3]">
+        <span className="font-mono text-[0.8125rem]/[1.3] tracking-[0.06em] uppercase text-[#1f2328] dark:text-[#b5c2d3]">
           {title || label}
         </span>
       </div>
