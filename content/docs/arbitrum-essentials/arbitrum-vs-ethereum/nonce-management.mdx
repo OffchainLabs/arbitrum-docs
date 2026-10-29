@@ -90,10 +90,30 @@ You get `replacement transaction underpriced` when you submit a transaction that
 
 What happens next depends on the chain's <Term id="transaction-ordering-policy">transaction ordering policy</Term>:
 
-| Ordering policy                                                               | What a same-nonce, different-transaction-hash resubmission does                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <Term id="first-come-first-serve-fcfs">First-come, first-served (FCFS)</Term> | Returns `replacement transaction underpriced` error while the first transaction is in flight. No fee bump will replace an alraedy queued transaction. A bump-and-retry loop, which works on Ethereum, does not succeed here.                                                                                                                                                                                                                        |
-| <Term id="priority-gas-auction">Priority gas auction (PGA)</Term>             | Replaces the first transaction only if it enters the queue before the first transaction executes and outbids the first transaction's <Term id="priority-fee">priority fee</Term> plus the virtual boost the first transaction has accumulated while waiting by 10%. A copy that is admitted but loses in the subsequent auction because the first transaction already got executed will return `nonce too low`, not with `replacement transaction underpriced`. |
+<table>
+  <thead>
+    <tr>
+      <th style={{ width: '25%', textAlign: 'left' }}>Ordering policy</th>
+      <th style={{ textAlign: 'left' }}>What a same-nonce, different-transaction-hash resubmission does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <Term id="first-come-first-serve-fcfs">First-come, first-served (FCFS)</Term>
+      </td>
+      <td>Returns `replacement transaction underpriced` error while the first transaction is in flight. No fee bump will replace an alraedy queued transaction. A bump-and-retry loop, which works on Ethereum, does not succeed here.</td>
+    </tr>
+    <tr>
+      <td>
+        <Term id="priority-gas-auction">Priority gas auction (PGA)</Term>
+      </td>
+      <td>
+        Replaces the first transaction only if it enters the queue before the first transaction executes and outbids the first transaction's <Term id="priority-fee">priority fee</Term> plus the virtual boost the first transaction has accumulated while waiting by 10%. A copy that is admitted but loses in the subsequent auction because the first transaction already got executed will return `nonce too low`, not with `replacement transaction underpriced`.
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 On an FCFS chain, wait for the receipt of the first transaction to increment the nonce. If you want a different transaction to go through, submit it at the next nonce. On a PGA chain, wait for a receipt at that nonce, from either hash, to confirm which copy landed.
 
@@ -102,7 +122,7 @@ On an FCFS chain, wait for the receipt of the first transaction to increment the
 ethers.js classifies `replacement transaction underpriced` as `REPLACEMENT_UNDERPRICED`.
 
 </Callout>
-
+    
 ### Resync your nonce
 
 After either error, take your next nonce from the chain, not from a local counter:
