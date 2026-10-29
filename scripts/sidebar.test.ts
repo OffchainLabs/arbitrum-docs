@@ -105,6 +105,10 @@ function linkEntries(url: string): string[] {
   });
 }
 
+// The JSON-RPC reference spike: its pages are linked from other pages, but kept off the sidebar
+// (`"!json-rpc-spike"` in the parent meta.json) until the reference has its final place.
+const HIDDEN_FOLDER = 'json-rpc-spike/';
+
 test('every article is on exactly one sidebar node; the root overview is hidden', () => {
   const count = new Map<string, number>();
   const visit = (nodes: Node[]) => {
@@ -119,7 +123,7 @@ test('every article is on exactly one sidebar node; the root overview is hidden'
   assert.equal(count.get('/'), undefined);
   const problems = source
     .getPages()
-    .filter((page) => page.url !== '/')
+    .filter((page) => page.url !== '/' && !page.path.startsWith(HIDDEN_FOLDER))
     .flatMap((page) => {
       const nodes = count.get(page.url) ?? 0;
       if (nodes === 1) return [];

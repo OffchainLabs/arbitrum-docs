@@ -8,12 +8,15 @@ import {
 import { createRelativeLink } from 'fumadocs-ui/mdx';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import type { ComponentProps } from 'react';
 
 import { PageActionsPopover } from '@/components/PageActionsPopover';
 import { RequestUpdateLink } from '@/components/RequestUpdateLink';
 import { Feedback } from '@/components/feedback/client';
 import { getMDXComponents } from '@/components/mdx';
+import { OpenAPIPage } from '@/components/widgets/OpenAPIPage';
 import { faqJsonLd } from '@/lib/faq';
+import { openapi } from '@/lib/openapi';
 import { onPageFeedbackAction } from '@/lib/posthog';
 import { appName, getSiteUrl, gitConfig, socialHandle } from '@/lib/shared';
 import { getPageImage, getPageMarkdownUrl, source } from '@/lib/source';
@@ -46,7 +49,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         />
       ) : null}
       <DocsTitle className="font-medium">{page.data.title}</DocsTitle>
-      <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
+      {/* A JSON-RPC method page carries its description in the body, with glossary links. */}
+      {page.data._openapi ? null : (
+        <DocsDescription className="mb-0">{page.data.description}</DocsDescription>
+      )}
       {lastModified ? (
         <p className="text-fd-muted-foreground text-sm">
           Last updated on{' '}
@@ -68,6 +74,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
         <MDX
           components={getMDXComponents({
             a: createRelativeLink(source, page),
+            OpenAPIPage: async (props: ComponentProps<typeof OpenAPIPage>) => (
+              <OpenAPIPage {...await openapi.preloadOpenAPIPage(page)} {...props} />
+            ),
           })}
         />
       </DocsBody>
