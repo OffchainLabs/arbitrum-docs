@@ -53,6 +53,9 @@ jobs:
       - name: Contract address reference is current
         run: pnpm contracts:check
 
+      - name: Gas-target partial matches its snapshot
+        run: pnpm gas-target:check
+
       - name: FAQ partials match their Notion snapshots
         run: pnpm faq:check
 
