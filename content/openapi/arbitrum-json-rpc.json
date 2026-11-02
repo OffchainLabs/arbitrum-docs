@@ -338,8 +338,8 @@
           },
           {
             "code": -32003,
-            "message": "conditions check failed for old state:TimestampMax condition not met",
-            "description": "The conditions hold on the latest state but not on the older state the node also checks."
+            "message": "conditions check failed for old state:TimestampMin condition not met",
+            "description": "The conditions hold on the latest state but not on the older state the node also checks, for example a `timestampMin` the older block has not reached."
           },
           {
             "code": -32000,
@@ -442,7 +442,7 @@
           {
             "code": -32000,
             "message": "too much time has elapsed since request was signed",
-            "description": "`timestamp` is too far in the past."
+            "description": "`timestamp` is too far from the server's clock, in the past or in the future."
           },
           {
             "code": -32000,
@@ -462,7 +462,7 @@
           {
             "code": -32000,
             "message": "signature does not match",
-            "description": "`sig` is not a valid signature of the request by an allowed signer."
+            "description": "`sig` is not the keccak256 commitment of the request payload."
           }
         ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
@@ -531,7 +531,7 @@
           {
             "code": -32000,
             "message": "signature does not match",
-            "description": "`sig` is not a valid signature of the request by an allowed signer."
+            "description": "`sig` is not the keccak256 commitment of the request payload."
           }
         ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
@@ -590,7 +590,7 @@
           {
             "code": -32000,
             "message": "signature does not match",
-            "description": "`sig` is not a valid signature of the request by an allowed signer."
+            "description": "`sig` is not the keccak256 commitment of the request payload."
           },
           {
             "code": -32000,
@@ -644,7 +644,7 @@
           {
             "code": -32000,
             "message": "too much time has elapsed since request was signed",
-            "description": "`timestamp` is too far in the past."
+            "description": "`timestamp` is too far from the server's clock, in the past or in the future."
           },
           {
             "code": -32000,
@@ -663,7 +663,7 @@
           },
           {
             "code": -32000,
-            "message": "signature does not match",
+            "message": "request not properly signed",
             "description": "`sig` is not a valid signature of the request by an allowed signer."
           }
         ],
@@ -732,7 +732,7 @@
           },
           {
             "code": -32000,
-            "message": "signature does not match",
+            "message": "request not properly signed",
             "description": "`sig` is not a valid signature of the request by an allowed signer."
           }
         ],
@@ -791,7 +791,7 @@
           },
           {
             "code": -32000,
-            "message": "signature does not match",
+            "message": "request not properly signed",
             "description": "`sig` is not a valid signature of the request by an allowed signer."
           },
           {
