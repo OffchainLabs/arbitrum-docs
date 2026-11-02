@@ -30,20 +30,19 @@ test('throws for a body with no method', () => {
   assert.throws(() => requestUrl(URLS, undefined), /no request URL/);
 });
 
-test('quotes a literal URL in TypeScript and Rust', () => {
-  assert.equal(
-    urlExpression('https://arb1.arbitrum.io/rpc', 'typescript'),
-    "'https://arb1.arbitrum.io/rpc'",
-  );
-  assert.equal(
-    urlExpression('https://arb1.arbitrum.io/rpc', 'rust'),
-    '"https://arb1.arbitrum.io/rpc"',
-  );
+test('quotes a literal URL in TypeScript, Rust, Python and Go', () => {
+  const url = 'https://arb1.arbitrum.io/rpc';
+  assert.equal(urlExpression(url, 'typescript'), "'https://arb1.arbitrum.io/rpc'");
+  assert.equal(urlExpression(url, 'rust'), '"https://arb1.arbitrum.io/rpc"');
+  assert.equal(urlExpression(url, 'python'), '"https://arb1.arbitrum.io/rpc"');
+  assert.equal(urlExpression(url, 'go'), '"https://arb1.arbitrum.io/rpc"');
 });
 
-test('reads a $NAME placeholder from the environment in TypeScript and Rust', () => {
+test('reads a $NAME placeholder from the environment in each language', () => {
   assert.equal(urlExpression('$NITRO_RPC_URL', 'typescript'), 'process.env.NITRO_RPC_URL!');
   assert.equal(urlExpression('$DA_SERVER_URL', 'rust'), 'std::env::var("DA_SERVER_URL")?');
+  assert.equal(urlExpression('$NITRO_RPC_URL', 'python'), 'os.environ["NITRO_RPC_URL"]');
+  assert.equal(urlExpression('$DA_SERVER_URL', 'go'), 'os.Getenv("DA_SERVER_URL")');
 });
 
 test('throws for a placeholder that is not a plain $NAME', () => {

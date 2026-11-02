@@ -32,15 +32,21 @@ export async function openapiPageMarkdown(schemaId: string, slug: string): Promi
   const server = op['x-arbitrum-request-url'] as string | undefined;
   if (!server) throw new Error(`${schemaId}: POST /${slug} has no x-arbitrum-request-url`);
   const body = resolve(doc, op.requestBody?.content?.['application/json']?.schema);
-  const params = (resolve(doc, body.properties?.params).prefixItems ?? []) as Json[];
-  const example = resolve(doc, body.properties?.params).examples?.[0] ?? [];
+  const paramsSchema = resolve(doc, body.properties?.params);
+  const params = (paramsSchema.prefixItems ?? []) as Json[];
+  const required = (paramsSchema.minItems ?? 0) as number;
+  const example = paramsSchema.examples?.[0] ?? [];
   const types = methodTypes(doc, op.operationId as string);
 
   const lines = ['', '## Parameters', ''];
-  lines.push('| # | Name | Type | Description |', '| --- | --- | --- | --- |');
+  lines.push('| # | Name | Type | Required | Description |', '| --- | --- | --- | --- | --- |');
   params.forEach((p, i) => {
     const type = p.$ref ? resolve(doc, { $ref: p.$ref }).title : p.type;
-    lines.push(`| ${i} | \`${p.title}\` | ${type} | ${p.description ?? ''} |`);
+    const fallback = 'default' in p ? ` Defaults to \`${JSON.stringify(p.default)}\`.` : '';
+    const description = `${p.description ?? ''}${fallback}`.trim();
+    lines.push(
+      `| ${i} | \`${p.title}\` | ${type} | ${i < required ? 'yes' : 'no'} | ${description} |`,
+    );
   });
   lines.push('', '## Result', '', '| Name | Type | Required | Description |');
   lines.push('| --- | --- | --- | --- |');

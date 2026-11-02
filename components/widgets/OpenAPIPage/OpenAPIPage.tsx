@@ -6,9 +6,13 @@ import { createOpenAPIPage } from 'fumadocs-openapi/ui';
 import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { type TypeNode, TypeTable } from 'fumadocs-ui/components/type-table';
+import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
+import { Check, Clipboard } from 'lucide-react';
 
+import { buttonVariants } from '@/components/ui/button';
 import jsonRpcTypes from '@/components/widgets/OpenAPIPage/json-rpc-types.json';
 import requestUrls from '@/components/widgets/OpenAPIPage/request-urls.json';
+import { cn } from '@/lib/cn';
 import { requestUrl, urlExpression } from '@/lib/json-rpc-request-url';
 import type { MethodTypes } from '@/lib/json-rpc-types';
 
@@ -81,15 +85,137 @@ codeUsages.add('jsonrpc-rust', {
     ].join('\n'),
 });
 
+/** The request body as a Python literal: JSON with Python's spelling of null and booleans. */
+function pythonLiteral(value: unknown, indent = ''): string {
+  if (value === null) return 'None';
+  if (typeof value === 'boolean') return value ? 'True' : 'False';
+  if (Array.isArray(value)) return `[${value.map((v) => pythonLiteral(v, indent)).join(', ')}]`;
+  if (typeof value !== 'object') return JSON.stringify(value);
+  const inner = `${indent}    `;
+  const entries = Object.entries(value).map(
+    ([key, v]) => `${inner}${JSON.stringify(key)}: ${pythonLiteral(v, inner)}`,
+  );
+  return entries.length === 0 ? '{}' : `{\n${entries.join(',\n')}\n${indent}}`;
+}
+
+codeUsages.add('jsonrpc-python', {
+  lang: 'python',
+  label: 'Python',
+  generate: (data) => {
+    const url = urlExpression(requestUrl(requestUrls, data.body), 'python');
+    return [
+      ...(url.startsWith('os.') ? ['import os'] : []),
+      `import requests`,
+      ``,
+      `body = ${pythonLiteral(data.body)}`,
+      `response = requests.post(${url}, json=body)`,
+      `response.raise_for_status()`,
+      `reply = response.json()`,
+      ``,
+      `# JSON-RPC returns HTTP 200 for errors too: check "error" before "result".`,
+      `if "error" in reply:`,
+      `    raise RuntimeError(f"{reply['error']['code']}: {reply['error']['message']}")`,
+      `print(reply["result"])`,
+    ].join('\n');
+  },
+});
+
+codeUsages.add('jsonrpc-go', {
+  lang: 'go',
+  label: 'Go',
+  generate: (data) => {
+    const url = urlExpression(requestUrl(requestUrls, data.body), 'go');
+    const imports = [
+      'bytes',
+      'encoding/json',
+      'fmt',
+      'net/http',
+      ...(url.startsWith('os.') ? ['os'] : []),
+    ];
+    return [
+      `package main`,
+      ``,
+      `import (`,
+      ...imports.map((name) => `\t"${name}"`),
+      `)`,
+      ``,
+      `func main() {`,
+      `\tbody := []byte(\`${JSON.stringify(data.body, null, 2).replaceAll('\n', '\n\t')}\`)`,
+      `\tresponse, err := http.Post(${url}, "application/json", bytes.NewReader(body))`,
+      `\tif err != nil {`,
+      `\t\tpanic(err)`,
+      `\t}`,
+      `\tdefer response.Body.Close()`,
+      ``,
+      `\t// JSON-RPC returns HTTP 200 for errors too: check "error" before "result".`,
+      `\tvar reply struct {`,
+      `\t\tResult json.RawMessage \`json:"result"\``,
+      `\t\tError  *struct {`,
+      `\t\t\tCode    int    \`json:"code"\``,
+      `\t\t\tMessage string \`json:"message"\``,
+      `\t\t} \`json:"error"\``,
+      `\t}`,
+      `\tif err := json.NewDecoder(response.Body).Decode(&reply); err != nil {`,
+      `\t\tpanic(err)`,
+      `\t}`,
+      `\tif reply.Error != nil {`,
+      `\t\tpanic(fmt.Sprintf("JSON-RPC error %d: %s", reply.Error.Code, reply.Error.Message))`,
+      `\t}`,
+      `\tfmt.Println(string(reply.Result))`,
+      `}`,
+    ].join('\n');
+  },
+});
+
+/** What a `$NAME` placeholder in a request URL stands for. */
+const PLACEHOLDERS: Record<string, string> = {
+  $NITRO_RPC_URL: 'the RPC URL of your Nitro node',
+  $DA_SERVER_URL: 'the URL of your data availability server',
+};
+
+/**
+ * The URL the method is served at, with a copy button. The playground is off, so this stands in
+ * for the library's method-and-path header, whose path is fake.
+ */
+function Endpoint({ operation }: { operation: OperationObject }) {
+  const url = requestUrl(requestUrls, { method: operation.operationId });
+  const [checked, copy] = useCopyButton(() => navigator.clipboard.writeText(url));
+  const hint = PLACEHOLDERS[url];
+
+  return (
+    <div className="not-prose flex flex-col gap-2 text-sm">
+      <div className="flex items-center gap-2 rounded-xl border bg-fd-card p-3 text-fd-card-foreground">
+        <code className="flex-1 overflow-auto text-nowrap text-[0.8125rem]">{url}</code>
+        <button
+          type="button"
+          aria-label={checked ? 'Copied URL' : 'Copy URL'}
+          className={cn(buttonVariants({ size: 'icon-xs' }), 'text-fd-muted-foreground')}
+          onClick={copy}
+        >
+          {checked ? <Check /> : <Clipboard />}
+        </button>
+      </div>
+      {hint ? (
+        <p className="text-fd-muted-foreground">
+          <code>{url}</code> is {hint}.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 interface ParamSchema {
   'title'?: string;
   'description'?: string;
+  'default'?: unknown;
   '$ref-value'?: ParamSchema;
 }
 
 /**
  * The positional `params` of the JSON-RPC envelope. fumadocs-openapi's schema UI reads only
- * `items`, never `prefixItems`, so each position is listed here: index, name, type, description.
+ * `items`, never `prefixItems`, so each position is listed here: index, name, type, description,
+ * whether it is required (its index is below `minItems`) and its default. Each item carries an
+ * anchor, `#params-<name>`.
  */
 function PositionalParams({ operation }: { operation: OperationObject }) {
   const { resolve } = useOpenAPI().doc;
@@ -98,13 +224,20 @@ function PositionalParams({ operation }: { operation: OperationObject }) {
   const schema = resolve(body?.content?.['application/json']?.schema) as
     { properties?: Record<string, unknown> } | undefined;
   const params = resolve(schema?.properties?.['params']) as
-    { prefixItems?: ParamSchema[] } | undefined;
-  const items = (params?.prefixItems ?? []).map((raw) => {
+    { prefixItems?: ParamSchema[]; minItems?: number } | undefined;
+  const required = params?.minItems ?? 0;
+  const items = (params?.prefixItems ?? []).map((raw, i) => {
     const item = resolve(raw) as ParamSchema;
     // `resolve` merges the sibling `title` over the target's, so the type name is read from the
     // reference target, which the document's magic proxy exposes as `$ref-value`.
     const type = raw['$ref-value']?.title;
-    return { name: item.title, type: type ?? 'any', description: item.description };
+    return {
+      name: item.title,
+      type: type ?? 'any',
+      description: item.description,
+      required: i < required,
+      default: item.default,
+    };
   });
   if (items.length === 0) return null;
 
@@ -113,13 +246,29 @@ function PositionalParams({ operation }: { operation: OperationObject }) {
       <h2 id="params">Params</h2>
       <ol className="not-prose flex flex-col divide-y border-y text-sm">
         {items.map((item, i) => (
-          <li key={item.name ?? i} className="flex flex-col gap-1 py-3">
+          <li
+            key={item.name ?? i}
+            id={`params-${item.name}`}
+            className="flex flex-col gap-1 py-3 scroll-mt-[calc(var(--fd-docs-row-3,56px)+24px)]"
+          >
             <span className="font-mono">
               <span className="text-fd-muted-foreground">[{i}] </span>
-              <span className="text-fd-primary">{item.name}</span> {item.type}
+              <a href={`#params-${item.name}`} className="text-fd-primary">
+                {item.name}
+              </a>{' '}
+              {item.type}
+              <span className="text-fd-muted-foreground">
+                {' '}
+                {item.required ? 'required' : 'optional'}
+              </span>
             </span>
             {item.description ? (
               <span className="text-fd-muted-foreground">{item.description}</span>
+            ) : null}
+            {item.default !== undefined ? (
+              <span className="text-fd-muted-foreground">
+                Defaults to <code>{JSON.stringify(item.default)}</code>
+              </span>
             ) : null}
           </li>
         ))}
@@ -215,11 +364,13 @@ export const OpenAPIPage = createOpenAPIPage({
     ),
     // Drops the `apiPlayground` slot, which holds the method and the fake path, the `body` slot,
     // the library's Request Body section (FR-006), and the `responses` slot, which shows the
-    // JSON-RPC envelope: PositionalParams, ResultFields and GoDefinition show the method alone.
+    // JSON-RPC envelope: Endpoint, PositionalParams, ResultFields and GoDefinition show the
+    // method alone.
     renderOperationLayout: (slots, { operation }) => (
       <div className="flex flex-col gap-x-6 gap-y-4 @4xl:flex-row @4xl:items-start">
         <div className="min-w-0 flex-1">
           {slots.header}
+          <Endpoint operation={operation} />
           {slots.description}
           {slots.parameters}
           <PositionalParams operation={operation} />

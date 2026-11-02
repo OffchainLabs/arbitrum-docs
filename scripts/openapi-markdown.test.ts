@@ -32,3 +32,9 @@ test('the curl example targets the URL of the method, not the first server', asy
   const da = await openapiPageMarkdown(SCHEMA, 'daprovider_store');
   assert.match(da, /curl -X POST \$DA_SERVER_URL \\/);
 });
+
+test('the parameters table marks required positions and states a default', async () => {
+  const md = await openapiPageMarkdown(SCHEMA, 'eth_sendRawTransactionSync');
+  assert.match(md, /\| 0 \| `input` \| Bytes \| yes \|/);
+  assert.match(md, /\| 1 \| `timeoutMs` \| Integer \| no \| .* Defaults to `20000`\. \|/);
+});

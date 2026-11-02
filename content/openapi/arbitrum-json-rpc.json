@@ -1363,7 +1363,8 @@
               {
                 "$ref": "#/components/schemas/Integer",
                 "title": "timeoutMs",
-                "description": "Optional. Time to wait for the receipt, in milliseconds. The node applies its default and maximum timeouts."
+                "description": "Optional. Time to wait for the receipt, in milliseconds. The default is the node's tx-sync-default-timeout; the node caps the wait at its tx-sync-max-timeout.",
+                "default": 20000
               }
             ],
             "description": "Positional parameters. Each position is listed under Params.",
