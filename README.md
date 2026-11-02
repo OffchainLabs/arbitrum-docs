@@ -335,6 +335,7 @@ pnpm lint                # ESLint over content/: MDX structural defects, <Var> a
 pnpm vars:check          # the announcement banner keys in content/vars.json are valid
 pnpm references:check    # glossary ids present and unique; no partial with a <Term> is ESM-imported
 pnpm contracts:check     # the contract-address partial is current
+pnpm gas-target:check   # the gas-target partial matches scripts/data/gas-target.json
 pnpm faq:check           # the six FAQ partials match content/faq/*.json
 pnpm format:check        # prettier (pnpm format writes)
 

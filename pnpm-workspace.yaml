@@ -43,6 +43,11 @@ peerDependencyRules:
 # - GHSA-848j-6mx2-7j84 (low): elliptic, every version. It comes from ethers 5 under the
 #   @arbitrum/sdk devDependency. Only scripts/generate-contract-addresses.ts calls the SDK, and
 #   only to read network addresses. Nothing signs with it.
+# - GHSA-g3hv-75wg-m249 (moderate): minimatch below 11.0.1, a denial of service through glob
+#   pattern expansion. 9.x and 10.x have no patched release. It comes from eslint (10.2.6) and
+#   @trivago/prettier-plugin-sort-imports (9.0.9), both dev tools that only match patterns from
+#   this repo's own config. Remove the entry once both parents allow minimatch 11.
 auditConfig:
   ignoreGhsas:
     - GHSA-848j-6mx2-7j84
+    - GHSA-g3hv-75wg-m249
