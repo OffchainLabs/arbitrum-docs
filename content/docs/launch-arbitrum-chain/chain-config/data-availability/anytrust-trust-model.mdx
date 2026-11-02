@@ -72,7 +72,7 @@ The `N - 1` row is the case worth understanding, because it is where the assumpt
 Here is the precise damage in that case:
 
 - **They cannot forge transactions, mint tokens, or move funds.** Validity comes from executing the data, and <Term id="validator">validators</Term> prove the correct result on the parent chain. Withholding data does not let anyone prove a false result.
-- **They can stop the chain.** Validators cannot reconstruct state from data they cannot read, so they cannot prove new <Term id="assertion">assertions</Term>. The chain halts at the last provable point.
+- **They can stop chain validating.** Validators cannot reconstruct state from data they cannot read, so they cannot prove new <Term id="assertion">assertions</Term>.
 - **Confirmed assertions stay confirmed.** Work already settled on the parent chain does not unwind.
 
 A committee that turns malicious costs you liveness. It does not let anyone steal from your users.
