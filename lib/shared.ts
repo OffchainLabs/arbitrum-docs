@@ -15,6 +15,7 @@ export const socialHandle = '@arbitrum';
 export const docsRoute = '';
 export const docsImageRoute = '/og/docs';
 export const docsContentRoute = '/llms.mdx/docs';
+export const docsPreviewRoute = '/preview';
 
 export { localSiteUrl };
 

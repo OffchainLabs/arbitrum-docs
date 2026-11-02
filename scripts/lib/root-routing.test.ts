@@ -13,7 +13,7 @@ const { byUrl } = buildIndex(repoRoot);
 
 test('root article URLs do not collide with machine routes or public files', () => {
   const reserved =
-    /^(?:\/(?:api|og|llms\.mdx|_next|\.well-known)(?:\/|$)|\/(?:llms\.txt|llms-full\.txt|sitemap\.xml|robots\.txt)$)/;
+    /^(?:\/(?:api|og|preview|llms\.mdx|_next|\.well-known)(?:\/|$)|\/(?:llms\.txt|llms-full\.txt|sitemap\.xml|robots\.txt)$)/;
   const collisions = [...byUrl.keys()].filter((url) => {
     const file = path.join(repoRoot, 'public', url);
     return reserved.test(url) || (existsSync(file) && statSync(file).isFile());

@@ -13,7 +13,7 @@ sidebar_position: 1
 
 That economic model is the core reason to choose Arbitrum: your business captures the fee revenue and priority-access value that L1s hand off to validators, because costs scale with usage ([gas targets](/launch-arbitrum-chain/chain-config/costs/dynamic-pricing#how-to-set-multiple-gas-targets)) rather than set (fixed) fees. You also control the economics directly—[custom gas tokens](/launch-arbitrum-chain/chain-config/costs/custom-gas-token-rollup), [fee policy](/launch-arbitrum-chain/chain-config/costs/fee-management), and revenue capture—while getting institution-grade settlement: sub-second soft finality for a responsive user experience, [configurable hard finality on Ethereum in minutes](/launch-arbitrum-chain/chain-config/sequencer/chain-finality), and [native withdrawals in as little as 15 minutes](/launch-arbitrum-chain/chain-config/validation/fast-withdrawals), backed by a clean, externally legible counterparty-risk story for your risk, audit, and compliance stakeholders.
 
-Beyond economics, an Arbitrum chain lets you launch fast and customize deeply. You get day-one configuration over high, fully tunable throughput and [block times (as low as 100ms)](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments), [data availability (Rollup, AnyTrust, or external DA)](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability), [sequencing and MEV rules](/how-arbitrum-works/timeboost/gentle-introduction), KYC/AML and permissioning, privacy, [precompiles](/launch-arbitrum-chain/extend-the-protocol/precompiles), governance, and multi-prover settlement—and you automatically inherit every future Ethereum and Arbitrum upgrade, including [Stylus](/stylus/gentle-introduction), without custom engineering.
+Beyond economics, an Arbitrum chain lets you launch fast and customize deeply. You get day-one configuration over high, fully tunable throughput and [block times (as low as 100ms)](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments), [data availability (Rollup, AnyTrust, or external DA)](/launch-arbitrum-chain/chain-config/data-availability/config-data-availability), [sequencing and MEV rules](/launch-arbitrum-chain/chain-config/sequencer/pga), KYC/AML and permissioning, privacy, [precompiles](/launch-arbitrum-chain/extend-the-protocol/precompiles), governance, and multi-prover settlement—and you automatically inherit every future Ethereum and Arbitrum upgrade, including [Stylus](/stylus/gentle-introduction), without custom engineering.
 
 Critically, your chain isn't siloed: it plugs directly into Ethereum's deep liquidity and the broader Arbitrum ecosystem. And you can de-risk your go-to-market with a phased ["launch-and-migrate" path](/launch-arbitrum-chain/migrate/from-another-stack)—prove your product on the shared, liquid <Term id="arbitrum-one">Arbitrum One</Term>, then graduate to your own dedicated Arbitrum chain as a seamless continuation on the same stack, not a costly replatforming.
 
@@ -173,17 +173,6 @@ For intuitive, simple <Term id="first-come-first-serve-fcfs">first-come, first-s
   - Built-in protection from front-running and sandwich attacks, so users aren't quietly taxed by MEV extractors on every trade.
 - **Guide**
   - [How the Sequencer works](/how-arbitrum-works/deep-dives/sequencer)
-
-#### Timeboost
-
-Enable <Term id="timeboost">Timeboost</Term> to auction an <Term id="express-lane">express lane</Term>, letting the chain owner capture MEV while preserving fair ordering for everyone else.
-
-- **Your benefit**
-  - You capture MEV as a revenue stream for the chain rather than leaking it to external searchers.
-- **User benefit**
-  - Non-express transactions keep their fair-ordering protections, while users who genuinely need priority have a transparent way to pay for it.
-- **Guide**
-  - [Timeboost configuration](/launch-arbitrum-chain/chain-config/sequencer/timeboost)
 
 ### Governance and data availability
 

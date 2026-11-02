@@ -4,8 +4,8 @@ import { z } from 'zod';
 /**
  * Frontmatter contract for every page under `content/docs`. The docs collection in
  * `source.config.ts` applies it when a page compiles (`next dev`, `next build`), and
- * `scripts/frontmatter-check.ts` applies it to every page up front, because `fumadocs-mdx` (what
- * `types:check` runs) only lists the files. In its own module because `source.config.ts` may only
+ * ESLint rule `docs/frontmatter-schema` (`eslint/rules/frontmatter-schema.ts`) applies it to every
+ * page up front, because `fumadocs-mdx` (what `types:check` runs) only lists the files. In its own module because `source.config.ts` may only
  * export collections.
  *
  * Every page needs a title and a description; `sidebar_label`, `user_story` and `content_type` are optional.

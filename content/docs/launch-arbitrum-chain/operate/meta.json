@@ -8,6 +8,7 @@
     "error-index",
     "key-rotation",
     "monitoring",
+    "nitro-contracts-upgrade",
     "ownership-and-access",
     "post-launch-deployments",
     "respond-to-sequencer-outage",
