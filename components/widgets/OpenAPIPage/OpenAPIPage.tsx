@@ -8,6 +8,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { type TypeNode, TypeTable } from 'fumadocs-ui/components/type-table';
 import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
 import { Check, Clipboard } from 'lucide-react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { buttonVariants } from '@/components/ui/button';
 import jsonRpcTypes from '@/components/widgets/OpenAPIPage/json-rpc-types.json';
@@ -286,13 +287,34 @@ function envelope(body: Record<string, unknown>): string {
   return JSON.stringify({ jsonrpc: '2.0', id: 1, ...body }, null, 2);
 }
 
+/** Every code block on the page, the library's request samples included, shows line numbers. */
+function NumberedCodeBlock(props: ComponentProps<typeof DynamicCodeBlock>) {
+  return (
+    <DynamicCodeBlock {...props} codeblock={{ ...props.codeblock, 'data-line-numbers': true }} />
+  );
+}
+
+/** A description with `code` spans, as the markdown mirror prints it, rendered inline. */
+function inlineCode(text: string): ReactNode[] {
+  return text.split('`').map((part, i) => (i % 2 === 1 ? <code key={i}>{part}</code> : part));
+}
+
+/** One `x-arbitrum-errors` entry of the operation: an error the method returns, and when. */
+interface ErrorCase {
+  code: number;
+  message: string;
+  description: string;
+  data?: unknown;
+}
+
 /**
- * The `result` of the JSON-RPC response, without the envelope, from `json-rpc-types.json`, and an
- * example response for success and for failure. The error is the one a Nitro node returns.
+ * The `result` of the JSON-RPC response, without the envelope, from `json-rpc-types.json`, an
+ * example success response, and one example error response per `x-arbitrum-errors` entry.
  */
 function ResultFields({ operation }: { operation: OperationObject }) {
   const types = typesOf(operation);
   if (!types) return null;
+  const errors = (operation as Record<string, unknown>)['x-arbitrum-errors'] as ErrorCase[];
   // TypeTable hides `type` in a narrow container and shows `typeDescription` when a row opens,
   // so the expanded content repeats the type, then the pattern.
   const fields: Record<string, TypeNode> = Object.fromEntries(
@@ -316,21 +338,24 @@ function ResultFields({ operation }: { operation: OperationObject }) {
       },
     ]),
   );
-  const error = {
-    code: -32601,
-    message: `the method ${operation.operationId} does not exist/is not available`,
-  };
-
   return (
     <section className="mt-10">
       <h2 id="result">Result</h2>
       <TypeTable type={fields} />
       <Tabs items={['Success', 'Error']}>
         <Tab value="Success">
-          <DynamicCodeBlock lang="json" code={envelope({ result: types.example })} />
+          <NumberedCodeBlock lang="json" code={envelope({ result: types.example })} />
         </Tab>
         <Tab value="Error">
-          <DynamicCodeBlock lang="json" code={envelope({ error })} />
+          {errors.map(({ code, message, description, ...rest }) => (
+            <div key={`${code} ${message}`}>
+              <p className="text-sm text-fd-muted-foreground">{inlineCode(description)}</p>
+              <NumberedCodeBlock
+                lang="json"
+                code={envelope({ error: { code, message, ...rest } })}
+              />
+            </div>
+          ))}
         </Tab>
       </Tabs>
     </section>
@@ -345,13 +370,14 @@ function GoDefinition({ operation }: { operation: OperationObject }) {
   return (
     <section className="mt-10">
       <h2 id="go-definition">Go definition</h2>
-      <DynamicCodeBlock lang="go" code={code} />
+      <NumberedCodeBlock lang="go" code={code} />
     </section>
   );
 }
 
 export const OpenAPIPage = createOpenAPIPage({
   codeUsages,
+  components: { CodeBlock: NumberedCodeBlock },
   playground: { enabled: false },
   content: {
     // Drops the `responseTabs` slot, one tab per HTTP status: JSON-RPC always answers 200, and

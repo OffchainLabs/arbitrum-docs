@@ -42,6 +42,16 @@ test('meta.json lists every method under its namespace, in document order', () =
   assert.deepEqual(meta.pages, pages, STALE);
 });
 
+test('every method documents at least one error it returns', () => {
+  for (const { post } of Object.values<{ post: Record<string, unknown> }>(doc.paths)) {
+    const errors = post['x-arbitrum-errors'];
+    assert.ok(
+      Array.isArray(errors) && errors.length > 0,
+      `${post.operationId}: add x-arbitrum-errors to content/openapi/arbitrum-json-rpc.json`,
+    );
+  }
+});
+
 test('at least one method description links a glossary term', () => {
   assert.ok(operations.some(({ description }) => description.includes('<Term id="')));
 });
