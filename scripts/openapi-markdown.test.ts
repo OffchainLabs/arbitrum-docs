@@ -33,6 +33,16 @@ test('the curl example targets the URL of the method, not the first server', asy
   assert.match(da, /curl -X POST \$DA_SERVER_URL \\/);
 });
 
+test('the errors table lists the codes and messages of the method', async () => {
+  const md = await openapiPageMarkdown(SCHEMA, 'eth_sendRawTransactionConditional');
+  assert.match(md, /## Errors\n\n\| Code \| Message \| When \|/);
+  assert.match(md, /\| -32003 \| `TimestampMax condition not met` \| A condition in `options`/);
+  assert.match(
+    md,
+    /\| -32000 \| `only replay-protected \(EIP-155\) transactions allowed over RPC` \|/,
+  );
+});
+
 test('the parameters table marks required positions and states a default', async () => {
   const md = await openapiPageMarkdown(SCHEMA, 'eth_sendRawTransactionSync');
   assert.match(md, /\| 0 \| `input` \| Bytes \| yes \|/);

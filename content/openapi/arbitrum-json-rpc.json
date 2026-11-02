@@ -15,6 +15,23 @@
     "/arb_getRawBlockMetadata": {
       "post": {
         "operationId": "arb_getRawBlockMetadata",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "arb_getRawBlockMetadata is not available",
+            "description": "The node is not configured to serve block metadata."
+          },
+          {
+            "code": -32000,
+            "message": "invalid inputs, fromBlock: 200 is greater than toBlock: 100",
+            "description": "`fromBlock` is greater than `toBlock`."
+          },
+          {
+            "code": -32000,
+            "message": "number of blocks requested for blockMetadata exceeded. Range requested- 2000, Limit- 1000",
+            "description": "The range has more blocks than the node allows in one call."
+          }
+        ],
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arb_getRawBlockMetadata",
         "description": "Returns the block number and the raw block metadata of each block in the range from `fromBlock` to `toBlock` that has metadata. Returns an error if the node does not serve block metadata, if `fromBlock` is greater than `toBlock`, or if the range exceeds the configured block limit.",
@@ -57,6 +74,18 @@
     "/arb_checkPublisherHealth": {
       "post": {
         "operationId": "arb_checkPublisherHealth",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "sequencer temporarily not available",
+            "description": "The node forwards transactions to a sequencer it cannot reach."
+          },
+          {
+            "code": -32000,
+            "message": "publishing transactions not supported by this endpoint",
+            "description": "The node does not accept transactions."
+          }
+        ],
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arb_checkPublisherHealth",
         "description": "Returns an error if the transaction publisher of the node, such as its <Term id=\"sequencer\">sequencer</Term> or its <Term id=\"forwarder\">transaction forwarder</Term>, is not healthy. Returns `null` otherwise.",
@@ -99,6 +128,13 @@
     "/arbdebug_pricingModel": {
       "post": {
         "operationId": "arbdebug_pricingModel",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "invalid block range: 200 to 100",
+            "description": "`start` is after `end`, or the range holds no block after the Nitro genesis."
+          }
+        ],
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arbdebug_pricingModel",
         "description": "Returns the <Term id=\"parent-chain\">parent chain</Term> and <Term id=\"child-chain\">child chain</Term> pricing state at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples.",
@@ -141,6 +177,13 @@
     "/arbdebug_timeoutQueueHistory": {
       "post": {
         "operationId": "arbdebug_timeoutQueueHistory",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "invalid block range: 200 to 100",
+            "description": "`start` is after `end`, or the range holds no block after the Nitro genesis."
+          }
+        ],
         "x-arbitrum-request-url": "$NITRO_RPC_URL",
         "summary": "arbdebug_timeoutQueueHistory",
         "description": "Returns the size of the <Term id=\"retryable-ticket\">retryable</Term> timeout queue at evenly spaced blocks between `start` and `end`, with at most the configured block range bound of samples.",
@@ -183,6 +226,13 @@
     "/arbdebug_timeoutQueue": {
       "post": {
         "operationId": "arbdebug_timeoutQueue",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "missing trie node 0000000000000000000000000000000000000000000000000000000000000000 (path ) <nil>",
+            "description": "The node has no state for the block. The message is the node's configured fallback error."
+          }
+        ],
         "x-arbitrum-request-url": "https://arb1.arbitrum.io/rpc",
         "summary": "arbdebug_timeoutQueue",
         "description": "Returns the <Term id=\"retryable-ticket\">retryable tickets</Term> in the timeout queue at the given block, with the timeout of each queue entry in Unix seconds, or 0 if the retryable no longer exists. Returns at most one entry more than the configured timeout queue bound.",
@@ -225,6 +275,19 @@
     "/eth_sendRawTransactionSync": {
       "post": {
         "operationId": "eth_sendRawTransactionSync",
+        "x-arbitrum-errors": [
+          {
+            "code": 4,
+            "message": "The transaction was added to the transaction pool but wasn't processed in 20s",
+            "description": "No receipt arrived within the timeout. `data` holds the transaction hash.",
+            "data": "<transaction hash>"
+          },
+          {
+            "code": -32000,
+            "message": "nonce too low",
+            "description": "The transaction pool rejected the transaction. The message says why."
+          }
+        ],
         "x-arbitrum-request-url": "$NITRO_RPC_URL",
         "summary": "eth_sendRawTransactionSync",
         "description": "Adds the signed transaction to the transaction pool, waits until it is included in a block, and returns the receipt. Returns an error if the timeout ends first.",
@@ -267,6 +330,23 @@
     "/eth_sendRawTransactionConditional": {
       "post": {
         "operationId": "eth_sendRawTransactionConditional",
+        "x-arbitrum-errors": [
+          {
+            "code": -32003,
+            "message": "TimestampMax condition not met",
+            "description": "A condition in `options` does not hold: `blockNumberMin`, `blockNumberMax`, `timestampMin`, `timestampMax`, a storage root hash or a storage slot value."
+          },
+          {
+            "code": -32003,
+            "message": "conditions check failed for old state:TimestampMax condition not met",
+            "description": "The conditions hold on the latest state but not on the older state the node also checks."
+          },
+          {
+            "code": -32000,
+            "message": "only replay-protected (EIP-155) transactions allowed over RPC",
+            "description": "The transaction is not EIP-155 signed and the node rejects unprotected transactions."
+          }
+        ],
         "x-arbitrum-request-url": "$NITRO_RPC_URL",
         "summary": "eth_sendRawTransactionConditional",
         "description": "Submits a signed raw transaction that the <Term id=\"sequencer\">sequencer</Term> includes only if the given options hold: the <Term id=\"parent-chain\">parent chain</Term> block number and the block timestamp ranges, and the storage of the known accounts. Returns the transaction hash.",
@@ -309,6 +389,13 @@
     "/daprovider_store": {
       "post": {
         "operationId": "daprovider_store",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "<error from the data availability writer>",
+            "description": "The message could not be stored. The message says why."
+          }
+        ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "daprovider_store",
         "description": "Stores the message until the given timeout and returns the serialized data availability certificate.",
@@ -351,6 +438,33 @@
     "/daprovider_startChunkedStore": {
       "post": {
         "operationId": "daprovider_startChunkedStore",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "too much time has elapsed since request was signed",
+            "description": "`timestamp` is too far in the past."
+          },
+          {
+            "code": -32000,
+            "message": "we have already seen this request; aborting replayed protocol",
+            "description": "The request repeats one the server already saw."
+          },
+          {
+            "code": -32000,
+            "message": "can't start collecting new message: neither number of chunks, total size or chunk size can be zero",
+            "description": "`nChunks`, `chunkSize` or `totalSize` is zero."
+          },
+          {
+            "code": -32000,
+            "message": "can't start collecting new message: already 10 pending",
+            "description": "The server has too many chunked stores open."
+          },
+          {
+            "code": -32000,
+            "message": "signature does not match",
+            "description": "`sig` is not a valid signature of the request by an allowed signer."
+          }
+        ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "daprovider_startChunkedStore",
         "description": "Opens a chunked store of a message of `totalSize` bytes, sent as `nChunks` chunks of `chunkSize` bytes, and returns the message ID to pass to `daprovider_sendChunk` and `daprovider_commitChunkedStore`.",
@@ -393,6 +507,33 @@
     "/daprovider_sendChunk": {
       "post": {
         "operationId": "daprovider_sendChunk",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "unknown message(7)",
+            "description": "`messageId` is not an open chunked store."
+          },
+          {
+            "code": -32000,
+            "message": "message(7): chunk(3) out of range - expected 3 chunks",
+            "description": "`chunkId` is not below `nChunks`."
+          },
+          {
+            "code": -32000,
+            "message": "message(7): chunk(2) has incorrect size (100 bytes) - expecting 512 bytes",
+            "description": "The chunk is not `chunkSize` bytes, or the last chunk is not the remaining bytes."
+          },
+          {
+            "code": -32000,
+            "message": "received different chunk data than previously; aborting protocol",
+            "description": "A resent chunk differs from the one already received."
+          },
+          {
+            "code": -32000,
+            "message": "signature does not match",
+            "description": "`sig` is not a valid signature of the request by an allowed signer."
+          }
+        ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "daprovider_sendChunk",
         "description": "Adds the chunk with the given chunk ID to the chunked store opened for the given message ID. Returns `null`.",
@@ -435,6 +576,28 @@
     "/daprovider_commitChunkedStore": {
       "post": {
         "operationId": "daprovider_commitChunkedStore",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "unknown message(7)",
+            "description": "`messageId` is not an open chunked store."
+          },
+          {
+            "code": -32000,
+            "message": "incomplete message(7): got 2/3 chunks",
+            "description": "Not every chunk has been sent."
+          },
+          {
+            "code": -32000,
+            "message": "signature does not match",
+            "description": "`sig` is not a valid signature of the request by an allowed signer."
+          },
+          {
+            "code": -32000,
+            "message": "<error from the data availability writer>",
+            "description": "The message could not be stored. The message says why."
+          }
+        ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "daprovider_commitChunkedStore",
         "description": "Assembles the chunks received for the given message ID, stores the message and returns the serialized data availability certificate.",
@@ -477,6 +640,33 @@
     "/das_startChunkedStore": {
       "post": {
         "operationId": "das_startChunkedStore",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "too much time has elapsed since request was signed",
+            "description": "`timestamp` is too far in the past."
+          },
+          {
+            "code": -32000,
+            "message": "we have already seen this request; aborting replayed protocol",
+            "description": "The request repeats one the server already saw."
+          },
+          {
+            "code": -32000,
+            "message": "can't start collecting new message: neither number of chunks, total size or chunk size can be zero",
+            "description": "`nChunks`, `chunkSize` or `totalSize` is zero."
+          },
+          {
+            "code": -32000,
+            "message": "can't start collecting new message: already 10 pending",
+            "description": "The server has too many chunked stores open."
+          },
+          {
+            "code": -32000,
+            "message": "signature does not match",
+            "description": "`sig` is not a valid signature of the request by an allowed signer."
+          }
+        ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_startChunkedStore",
         "description": "Opens a chunked store of a message of `totalSize` bytes, sent as `nChunks` chunks of `chunkSize` bytes, and returns the message ID to pass to `das_sendChunk` and `das_commitChunkedStore`. Requests that are too old or replayed are rejected.",
@@ -519,6 +709,33 @@
     "/das_sendChunk": {
       "post": {
         "operationId": "das_sendChunk",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "unknown message(7)",
+            "description": "`messageId` is not an open chunked store."
+          },
+          {
+            "code": -32000,
+            "message": "message(7): chunk(3) out of range - expected 3 chunks",
+            "description": "`chunkId` is not below `nChunks`."
+          },
+          {
+            "code": -32000,
+            "message": "message(7): chunk(2) has incorrect size (100 bytes) - expecting 512 bytes",
+            "description": "The chunk is not `chunkSize` bytes, or the last chunk is not the remaining bytes."
+          },
+          {
+            "code": -32000,
+            "message": "received different chunk data than previously; aborting protocol",
+            "description": "A resent chunk differs from the one already received."
+          },
+          {
+            "code": -32000,
+            "message": "signature does not match",
+            "description": "`sig` is not a valid signature of the request by an allowed signer."
+          }
+        ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_sendChunk",
         "description": "Adds the chunk with the given chunk ID to the chunked store opened for the given message ID. Returns `null`.",
@@ -561,6 +778,28 @@
     "/das_commitChunkedStore": {
       "post": {
         "operationId": "das_commitChunkedStore",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "unknown message(7)",
+            "description": "`messageId` is not an open chunked store."
+          },
+          {
+            "code": -32000,
+            "message": "incomplete message(7): got 2/3 chunks",
+            "description": "Not every chunk has been sent."
+          },
+          {
+            "code": -32000,
+            "message": "signature does not match",
+            "description": "`sig` is not a valid signature of the request by an allowed signer."
+          },
+          {
+            "code": -32000,
+            "message": "<error from the data availability writer>",
+            "description": "The message could not be stored. The message says why."
+          }
+        ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_commitChunkedStore",
         "description": "Assembles the chunks received for the given message ID, stores the message and returns the signed <Term id=\"data-availability-certificate\">data availability certificate</Term>.",
@@ -603,6 +842,13 @@
     "/das_healthCheck": {
       "post": {
         "operationId": "das_healthCheck",
+        "x-arbitrum-errors": [
+          {
+            "code": -32000,
+            "message": "<error from the storage backend>",
+            "description": "The storage backend failed its health check."
+          }
+        ],
         "x-arbitrum-request-url": "$DA_SERVER_URL",
         "summary": "das_healthCheck",
         "description": "Returns an error if the storage backend of the <Term id=\"data-availability-server-das\">data availability server</Term> is not healthy. Returns `null` otherwise.",

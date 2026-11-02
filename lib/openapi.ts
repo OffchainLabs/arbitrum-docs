@@ -58,6 +58,14 @@ export async function openapiPageMarkdown(schemaId: string, slug: string): Promi
   }
   lines.push('', 'On failure the response has an `error` object with `code`, `message` and an');
   lines.push('optional `data`, instead of `result`.', '');
+  const errors = (op['x-arbitrum-errors'] ?? []) as Json[];
+  if (errors.length > 0) {
+    lines.push('## Errors', '', '| Code | Message | When |', '| --- | --- | --- |');
+    for (const error of errors) {
+      lines.push(`| ${error.code} | \`${error.message}\` | ${error.description} |`);
+    }
+    lines.push('');
+  }
   lines.push('## Go definition', '', '```go', types.go, '```', '');
   const request = { jsonrpc: '2.0', id: 1, method: op.operationId, params: example };
   lines.push('## Example', '', '```bash', `curl -X POST ${server} \\`);
