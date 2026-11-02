@@ -87,6 +87,72 @@ test('lists the item fields of a nullable array result', () => {
   ]);
 });
 
+test('a single-value result row carries the description and pattern of the result', () => {
+  const doc = docWith({ ...HASH, description: 'Transaction hash.' });
+  assert.deepEqual(methodTypes(doc, 'x_getThing').result, [
+    {
+      name: 'result',
+      type: 'string',
+      required: true,
+      description: 'Transaction hash.',
+      pattern: '^0x[0-9a-fA-F]{64}$',
+    },
+  ]);
+});
+
+test('a field row carries the pattern of a referenced string', () => {
+  const doc = docWith(
+    { type: 'object', properties: { hash: { $ref: '#/components/schemas/Hash' } } },
+    { Hash: HASH },
+  );
+  assert.equal(methodTypes(doc, 'x_getThing').result[0]?.pattern, HASH.pattern);
+});
+
+test('the example of a hash result has the length of the pattern', () => {
+  assert.equal(methodTypes(docWith(HASH), 'x_getThing').example, `0x${'0'.repeat(64)}`);
+});
+
+test('the example of a nullable array result is one item with every field', () => {
+  const doc = docWith(
+    { oneOf: [{ type: 'array', items: { $ref: '#/components/schemas/Item' } }, { type: 'null' }] },
+    {
+      Item: {
+        type: 'object',
+        properties: {
+          n: { type: 'integer', minimum: 1 },
+          data: { type: 'string', pattern: '^0x[0-9a-fA-F]*$' },
+          ok: { type: 'boolean' },
+          kind: { enum: ['a', 'b'] },
+          note: { type: 'string' },
+          counts: { type: 'object', additionalProperties: { type: 'integer' } },
+        },
+      },
+    },
+  );
+  assert.deepEqual(methodTypes(doc, 'x_getThing').example, [
+    { n: 1, data: '0x00', ok: false, kind: 'a', note: 'string', counts: { key: 0 } },
+  ]);
+});
+
+test('the example takes the first entry of examples when there is one', () => {
+  const doc = docWith({ type: 'integer', examples: [42] });
+  assert.equal(methodTypes(doc, 'x_getThing').example, 42);
+});
+
+test('an empty examples list falls back to the placeholder', () => {
+  const doc = docWith({ type: 'integer', minimum: 3, examples: [] });
+  assert.equal(methodTypes(doc, 'x_getThing').example, 3);
+});
+
+test('the example of a null result is null', () => {
+  assert.equal(methodTypes(docWith({ type: 'null' }), 'x_getThing').example, null);
+});
+
+test('throws for a string pattern it cannot fill', () => {
+  const doc = docWith({ type: 'string', pattern: '^[a-z]+$' });
+  assert.throws(() => methodTypes(doc, 'x_getThing'), /x_getThing: cannot fill the pattern/);
+});
+
 test('labels enums, consts and maps', () => {
   const doc = docWith({
     type: 'object',

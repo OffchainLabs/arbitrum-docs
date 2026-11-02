@@ -1,6 +1,6 @@
 /**
- * Result rows and the Go definition of one JSON-RPC method of the OpenAPI document, without the
- * JSON-RPC envelope. Row types are labels in TypeScript notation, a neutral way to write a JSON
+ * Result rows, an example result and the Go definition of one JSON-RPC method of the OpenAPI
+ * document, without the JSON-RPC envelope. Row types are labels in TypeScript notation, a neutral way to write a JSON
  * shape. Maps only the JSON Schema keywords the result schemas use and throws on any other, so a
  * new keyword fails the generator instead of shipping a wrong label.
  */
@@ -11,11 +11,13 @@ export interface ResultRow {
   type: string;
   required: boolean;
   description: string;
+  pattern?: string;
 }
 
 export interface MethodTypes {
   go: string;
   result: ResultRow[];
+  example: unknown;
 }
 
 const KEYWORDS = new Set([
@@ -69,6 +71,41 @@ class TypeMapper {
     return type;
   }
 
+  /** A value of the schema: the first `examples` entry, else a placeholder of the right shape. */
+  example(node: Json): unknown {
+    const examples = node.examples as unknown[] | undefined;
+    if (examples && examples.length > 0) return examples[0];
+    if (node.$ref) return this.example(this.target(node.$ref as string).node);
+    if ('const' in node) return node.const;
+    if (node.enum) return (node.enum as unknown[])[0];
+    if (node.oneOf) {
+      const variant = (node.oneOf as Json[]).find((n) => this.resolve(n).type !== 'null');
+      return variant ? this.example(variant) : null;
+    }
+    if (node.type === 'array') return [this.example(node.items as Json)];
+    if (node.type === 'object') return this.objectExample(node);
+    if (node.type === 'string') return node.pattern ? this.hex(node.pattern as string) : 'string';
+    const values = { integer: (node.minimum as number | undefined) ?? 0, boolean: false };
+    if (node.type in values) return values[node.type as keyof typeof values];
+    if (node.type === 'null') return null;
+    throw new Error(`${this.method}: cannot make an example of ${JSON.stringify(node)}`);
+  }
+
+  private objectExample(node: Json): Json {
+    const properties = Object.entries((node.properties ?? {}) as Record<string, Json>);
+    if (properties.length > 0) {
+      return Object.fromEntries(properties.map(([key, value]) => [key, this.example(value)]));
+    }
+    const values = node.additionalProperties as Json | undefined;
+    return values ? { key: this.example(values) } : {};
+  }
+
+  private hex(pattern: string): string {
+    const match = /^\^0x\[0-9a-fA-F\](?:\{(\d+)\}|[*+])\$$/.exec(pattern);
+    if (!match) throw new Error(`${this.method}: cannot fill the pattern ${pattern}`);
+    return `0x${'0'.repeat(match[1] ? Number(match[1]) : 2)}`;
+  }
+
   private array(node: Json, indent: string): string {
     const item = this.label(node.items as Json, indent);
     return item.includes(' | ') ? `(${item})[]` : `${item}[]`;
@@ -90,22 +127,29 @@ class TypeMapper {
   }
 }
 
+function row(mapper: TypeMapper, name: string, value: Json, required: boolean): ResultRow {
+  const target = mapper.resolve(value);
+  const pattern = (value.pattern ?? target.pattern) as string | undefined;
+  return {
+    name,
+    type: mapper.label(value),
+    required,
+    description:
+      (value.description as string | undefined) ?? (target.description as string | undefined) ?? '',
+    ...(pattern ? { pattern } : {}),
+  };
+}
+
 function fields(mapper: TypeMapper, node: Json, prefix: string): ResultRow[] {
   const required = new Set((node.required ?? []) as string[]);
-  return Object.entries((node.properties ?? {}) as Record<string, Json>).map(([key, value]) => ({
-    name: `${prefix}${key}`,
-    type: mapper.label(value),
-    required: required.has(key),
-    description:
-      (value.description as string | undefined) ??
-      (mapper.resolve(value).description as string | undefined) ??
-      '',
-  }));
+  return Object.entries((node.properties ?? {}) as Record<string, Json>).map(([key, value]) =>
+    row(mapper, `${prefix}${key}`, value, required.has(key)),
+  );
 }
 
 /** Result rows: the fields of an object result, else the whole result plus any item fields. */
 function resultRows(mapper: TypeMapper, result: Json): ResultRow[] {
-  const top = { name: 'result', type: mapper.label(result), required: true, description: '' };
+  const top = row(mapper, 'result', result, true);
   const variants = (result.oneOf ?? [result]) as Json[];
   const values = variants.map((v) => mapper.resolve(v)).filter((v) => v.type !== 'null');
   const value = values.length === 1 ? values[0] : undefined;
@@ -139,5 +183,5 @@ export function methodTypes(doc: Json, id: string): MethodTypes {
   const response = op.responses['200'].content['application/json'].schema as Json;
   const result = mapper.resolve((response.oneOf as Json[])[0]).properties.result as Json;
 
-  return { go, result: resultRows(mapper, result) };
+  return { go, result: resultRows(mapper, result), example: mapper.example(result) };
 }

@@ -4,6 +4,8 @@ import { type OperationObject, useOpenAPI } from 'fumadocs-openapi';
 import { createCodeUsageGeneratorRegistry } from 'fumadocs-openapi/requests/generators';
 import { createOpenAPIPage } from 'fumadocs-openapi/ui';
 import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { type TypeNode, TypeTable } from 'fumadocs-ui/components/type-table';
 
 import jsonRpcTypes from '@/components/widgets/OpenAPIPage/json-rpc-types.json';
 import requestUrls from '@/components/widgets/OpenAPIPage/request-urls.json';
@@ -131,31 +133,57 @@ function typesOf(operation: OperationObject): MethodTypes | undefined {
   return id === undefined ? undefined : (jsonRpcTypes as Record<string, MethodTypes>)[id];
 }
 
-/** The `result` of the JSON-RPC response, without the envelope, from `json-rpc-types.json`. */
+function envelope(body: Record<string, unknown>): string {
+  return JSON.stringify({ jsonrpc: '2.0', id: 1, ...body }, null, 2);
+}
+
+/**
+ * The `result` of the JSON-RPC response, without the envelope, from `json-rpc-types.json`, and an
+ * example response for success and for failure. The error is the one a Nitro node returns.
+ */
 function ResultFields({ operation }: { operation: OperationObject }) {
-  const rows = typesOf(operation)?.result;
-  if (!rows) return null;
+  const types = typesOf(operation);
+  if (!types) return null;
+  // TypeTable hides `type` in a narrow container and shows `typeDescription` when a row opens,
+  // so the expanded content repeats the type, then the pattern.
+  const fields: Record<string, TypeNode> = Object.fromEntries(
+    types.result.map((row) => [
+      row.name,
+      {
+        type: row.type,
+        required: row.required,
+        description: row.description,
+        typeDescription: (
+          <span className="font-mono">
+            {row.type}
+            {row.pattern ? (
+              <>
+                <span className="font-sans text-fd-muted-foreground"> matching </span>
+                {row.pattern}
+              </>
+            ) : null}
+          </span>
+        ),
+      },
+    ]),
+  );
+  const error = {
+    code: -32601,
+    message: `the method ${operation.operationId} does not exist/is not available`,
+  };
 
   return (
     <section className="mt-10">
       <h2 id="result">Result</h2>
-      <ul className="not-prose flex flex-col divide-y border-y text-sm">
-        {rows.map((row) => (
-          <li key={row.name} className="flex flex-col gap-1 py-3">
-            <span className="font-mono">
-              <span className="text-fd-primary">{row.name}</span> {row.type}
-              {row.required ? null : <span className="text-fd-muted-foreground"> optional</span>}
-            </span>
-            {row.description ? (
-              <span className="text-fd-muted-foreground">{row.description}</span>
-            ) : null}
-          </li>
-        ))}
-      </ul>
-      <p className="text-sm text-fd-muted-foreground">
-        On failure the response has an <code>error</code> object with <code>code</code>,{' '}
-        <code>message</code> and an optional <code>data</code>, instead of <code>result</code>.
-      </p>
+      <TypeTable type={fields} />
+      <Tabs items={['Success', 'Error']}>
+        <Tab value="Success">
+          <DynamicCodeBlock lang="json" code={envelope({ result: types.example })} />
+        </Tab>
+        <Tab value="Error">
+          <DynamicCodeBlock lang="json" code={envelope({ error })} />
+        </Tab>
+      </Tabs>
     </section>
   );
 }
@@ -177,6 +205,14 @@ export const OpenAPIPage = createOpenAPIPage({
   codeUsages,
   playground: { enabled: false },
   content: {
+    // Drops the `responseTabs` slot, one tab per HTTP status: JSON-RPC always answers 200, and
+    // the Result section shows the success and error responses.
+    renderAPIExampleLayout: (slots) => (
+      <div className="prose-no-margin">
+        {slots.selector}
+        {slots.usageTabs}
+      </div>
+    ),
     // Drops the `apiPlayground` slot, which holds the method and the fake path, the `body` slot,
     // the library's Request Body section (FR-006), and the `responses` slot, which shows the
     // JSON-RPC envelope: PositionalParams, ResultFields and GoDefinition show the method alone.
