@@ -5,7 +5,6 @@ import {
   SidebarFolderContent,
   SidebarFolderTrigger,
   SidebarItem,
-  SidebarSeparator,
 } from 'fumadocs-ui/components/sidebar/base';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -60,10 +59,8 @@ export function SidebarResourceLinks({ children, ...props }: ComponentProps<'div
           <SidebarFolderContent className="relative before:absolute before:inset-s-2.5 before:inset-y-1 before:w-px before:bg-fd-border before:content-['']">
             <div className="fd-scroll-container flex max-h-[40vh] flex-col gap-0.5 overflow-y-auto pt-0.5">
               {apiRefs.map((group) => (
-                <div key={group.label} className="flex flex-col gap-0.5">
-                  <SidebarSeparator className="mt-3 mb-1.5 inline-flex items-center gap-2 px-2 ps-[calc(5*var(--spacing))] first:mt-1">
-                    {group.label}
-                  </SidebarSeparator>
+                // The method names carry their namespace prefix, so a group is a gap, not a label.
+                <div key={group.label} className="mt-3 flex flex-col gap-0.5 first:mt-0">
                   {group.items.map((item) => (
                     <SidebarItem
                       key={item.url}
