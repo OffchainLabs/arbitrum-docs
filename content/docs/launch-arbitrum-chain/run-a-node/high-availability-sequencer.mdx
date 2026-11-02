@@ -392,7 +392,6 @@ If no other sequencer is eligible, the holder keeps the lockout. The handoff tim
 
 If you run on Kubernetes, set the pod's `terminationGracePeriodSeconds` higher than `handoff-timeout`. Nitro stops its other components after the handoff finishes. If Kubernetes kills the pod before the handoff ends, the lockout expires on its own, as in an unplanned failover.
 
-
 ## Planned maintenance
 
 Use a planned handoff to upgrade or restart sequencers without stopping the chain. Upgrade the standby sequencers first, then move the active role, then upgrade the last one.
