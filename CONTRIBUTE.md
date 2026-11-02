@@ -344,7 +344,7 @@ pnpm format            # prettier, in place (CI runs format:check)
 ```
 
 These are the ones a content change usually trips. The `Gates` job in `.github/workflows/ci.yml`
-runs them all, plus `vars:check`, `contracts:check` and `pnpm audit`. A second job runs `pnpm build`, serves the result, and checks
+runs them all, plus `vars:check`, `contracts:check`, `gas-target:check` and `pnpm audit`. A second job runs `pnpm build`, serves the result, and checks
 it over HTTP. Both block. There is no pre-commit hook, so nothing runs on `git commit`.
 
 The build job also runs `pnpm test:browser` in Chromium to check tab and accordion reveal and

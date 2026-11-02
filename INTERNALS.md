@@ -307,7 +307,8 @@ A page includes one with the root-anchored form, which survives the page moving:
 ```
 
 Inside a partial, write the include file-relative (`<include>../_x.mdx</include>`), so the
-fragment resolves from its own location.
+fragment resolves from its own location. `_reference-chain-parameters.mdx` includes the generated
+`_reference-gas-target-partial.mdx` this way.
 
 The include is spliced in at build time, so its headings join the page's table of contents and
 `check-links` validates its `#anchors` per including page. Root-absolute links (`/section/page`) written
@@ -317,11 +318,13 @@ root-absolute. A missing include is reported as a finding with the including pag
 the `<include>`, and the other findings for that page still print. Writers find partials by
 browsing `content/partials/`; there is no catalog.
 
-Two partials are generated and carry a do-not-edit comment: `content/partials/precompile-tables/`
-(`pnpm precompiles:generate`) and `_reference-arbitrum-contract-addresses-partial.mdx`
+Three partials are generated and carry a do-not-edit comment: `content/partials/precompile-tables/`
+(`pnpm precompiles:generate`), `_reference-arbitrum-contract-addresses-partial.mdx`
 (`pnpm contracts:generate`, from the `@arbitrum/sdk` network registry plus
-`scripts/data/contract-addresses.data.ts`). Edit the generator or its data, never the output.
-Every address is EIP-55 checksummed, because `<AEL>` throws on a bad checksum.
+`scripts/data/contract-addresses.data.ts`) and `_reference-gas-target-partial.mdx`
+(`pnpm gas-target:generate`, from the snapshot `scripts/data/gas-target.json` that
+`pnpm gas-target:fetch` reads from the `ArbGasInfo` precompile). Edit the generator or its data,
+never the output. Every address is EIP-55 checksummed, because `<AEL>` throws on a bad checksum.
 
 ## Global variables
 
@@ -941,6 +944,7 @@ CSS depends on Fumadocs' header DOM (see [Theme](#theme)).
 | `vars:check`       | The announcement banner keys in `content/vars.json` are valid                                                                                                                                                                                                                        |
 | `references:check` | Every glossary entry has an `id`, ids are unique, and no partial holding a `<Term>` is ESM-imported                                                                                                                                                                                  |
 | `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                                                                               |
+| `gas-target:check` | The gas-target partial matches its `scripts/data/gas-target.json` snapshot; offline, CI never calls an RPC                                                                                                                                                                           |
 | `faq:check`        | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                                                                                      |
 | `check-links`      | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                                                                                     |
 | `lint`             | ESLint over `content/`: MDX that compiles but renders wrong, every `<Var>` and `<Term>` resolving, every page under `content/docs` satisfying the page schema in `lib/page-schema.ts` (below)                                                                                        |
@@ -1020,7 +1024,7 @@ time, and the anchor check compiles every page.
 
 ### Hand-run tools
 
-Only `faq:check` is also a CI gate. Three workflows run some of them (below):
+Only `faq:check` and `gas-target:check` are also CI gates. Four workflows run some of them (below):
 
 | Command                                 | Does                                                                                                                                                                                                                                                                                                                               |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1033,6 +1037,8 @@ Only `faq:check` is also a CI gate. Three workflows run some of them (below):
 | `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                  |
 | `pnpm faq:fetch`                        | The FAQ snapshots in `content/faq/` from the Notion "FAQ CMS" database (needs `NOTION_TOKEN`)                                                                                                                                                                                                                                      |
 | `pnpm faq:generate` / `:check`          | The six `_troubleshooting-*-partial.mdx` partials from the snapshots; offline                                                                                                                                                                                                                                                      |
+| `pnpm gas-target:fetch`                 | The gas-target snapshot `scripts/data/gas-target.json` from the `ArbGasInfo` precompile on Arbitrum One, Nova and Sepolia (three public RPCs, no credentials)                                                                                                                                                                      |
+| `pnpm gas-target:generate` / `:check`   | The `_reference-gas-target-partial.mdx` partial from the snapshot; offline                                                                                                                                                                                                                                                         |
 
 `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` every Monday at 08:00
 UTC. It never writes `content/vars.json`. It opens `automated/upstream-refresh` as a maintenance
@@ -1046,6 +1052,11 @@ either PR's diff and run the gates locally.
 `faq-refresh.yml` runs `faq:fetch` and `faq:generate` every Monday at 08:00 UTC with the
 `NOTION_TOKEN` repository secret, and opens `automated/faq-refresh` as a PR when a snapshot or a
 partial changed. It is the only place the token is used; `faq:check` in CI is offline.
+
+`gas-target-refresh.yml` runs `gas-target:fetch` and `gas-target:generate` every Monday at
+08:00 UTC against the three public RPCs, and opens `automated/gas-target-refresh` as a PR when the
+snapshot or the partial changed. It is the only place an RPC is called; `gas-target:check` in CI
+is offline.
 
 ### Generated pages
 
