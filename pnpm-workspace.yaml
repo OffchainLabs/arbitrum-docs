@@ -19,6 +19,12 @@ strictDepBuilds: true
 # For an urgent fix that cannot wait (a security release, as dependabot.yml also allows), list the
 # package under `minimumReleaseAgeExclude` in the same change that bumps it, and remove it after.
 minimumReleaseAge: 10080
+# - minimatch 11.0.3 and its new dependency @isaacs/nonrecursive-glob-match 1.0.3 carry the
+#   GHSA-g3hv-75wg-m249 fix (see overrides). Both clear the 7-day age on 2026-11-04; remove
+#   this list after that date.
+minimumReleaseAgeExclude:
+  - minimatch@11.0.3
+  - '@isaacs/nonrecursive-glob-match@1.0.3'
 
 # Security fixes for transitive packages whose parents pin a vulnerable version. CI runs
 # `pnpm audit`; drop an override once `pnpm why <package>` shows every parent allows the fix.
@@ -27,9 +33,15 @@ minimumReleaseAge: 10080
 # - katex: rehype-katex 7.0.1 and micromark-extension-math 3.1.0 ask for ^0.16.0
 #   (GHSA-238p-pmpm-9mq7, fixed in 0.18.2). `$katex` follows the direct dependency in
 #   package.json, so rehype-katex renders with the version whose CSS app/layout.tsx imports.
+# - minimatch@<11.0.1: eslint 10 and @eslint/config-array ask for ^10.2.x, and
+#   @trivago/prettier-plugin-sort-imports 6.0.2 asks for ^9.0.0 (GHSA-g3hv-75wg-m249, fixed
+#   only in 11.0.1; 9.x and 10.x have no patched release). 11 drops makeRe, the AST class and
+#   the debug option; these callers only use minimatch() and new Minimatch().match(). The
+#   selector stops matching once every parent allows 11.
 overrides:
   ws@8: 8.21.0
   katex: $katex
+  minimatch@<11.0.1: ^11.0.3
 
 # @offchainlabs/prettier-config 0.3.0 (the latest) declares a peer of
 # @trivago/prettier-plugin-sort-imports ^5.2.2. It never loads the plugin: it only sets
