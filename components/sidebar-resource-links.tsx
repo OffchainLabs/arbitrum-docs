@@ -11,12 +11,12 @@ import { usePathname } from 'next/navigation';
 import type { ComponentProps } from 'react';
 
 import jsonRpcMeta from '@/content/docs/json-rpc-spike/meta.json';
-import { apiRefsMenu } from '@/lib/api-refs-menu';
+import { apiRefsLinks } from '@/lib/api-refs-menu';
 import { sidebarResourceLinks } from '@/lib/shared';
 
 /**
  * Chain info, Glossary and Contribute shortcuts shared by the section sidebars, plus the
- * "API Refs" menu: the JSON-RPC method pages grouped by namespace, read from the generated
+ * "API Refs" menu: the JSON-RPC method pages in document order, read from the generated
  * `meta.json` of that folder so a regenerated reference updates the menu.
  * Keep these outside the page tree so they cannot claim their destination's sidebar root.
  *
@@ -35,7 +35,7 @@ const BUTTON_CLASS = `${ITEM_BASE} w-full transition-colors hover:bg-fd-accent/5
 const NESTED_ITEM_CLASS = `${ITEM_CLASS} ps-[calc(5*var(--spacing))] data-[active=true]:before:content-[''] data-[active=true]:before:bg-fd-primary data-[active=true]:before:absolute data-[active=true]:before:w-px data-[active=true]:before:inset-y-2.5 data-[active=true]:before:inset-s-2.5`;
 
 const API_REFS_BASE = '/json-rpc-spike';
-const apiRefs = apiRefsMenu(jsonRpcMeta, API_REFS_BASE);
+const apiRefs = apiRefsLinks(jsonRpcMeta, API_REFS_BASE);
 
 export function SidebarResourceLinks({ children, ...props }: ComponentProps<'div'>) {
   const pathname = usePathname();
@@ -58,20 +58,15 @@ export function SidebarResourceLinks({ children, ...props }: ComponentProps<'div
           <SidebarFolderTrigger className={BUTTON_CLASS}>API Refs</SidebarFolderTrigger>
           <SidebarFolderContent className="relative before:absolute before:inset-s-2.5 before:inset-y-1 before:w-px before:bg-fd-border before:content-['']">
             <div className="fd-scroll-container flex max-h-[40vh] flex-col gap-0.5 overflow-y-auto pt-0.5">
-              {apiRefs.map((group) => (
-                // The method names carry their namespace prefix, so a group is a gap, not a label.
-                <div key={group.label} className="mt-3 flex flex-col gap-0.5 first:mt-0">
-                  {group.items.map((item) => (
-                    <SidebarItem
-                      key={item.url}
-                      href={item.url}
-                      active={pathname === item.url}
-                      className={NESTED_ITEM_CLASS}
-                    >
-                      {item.text}
-                    </SidebarItem>
-                  ))}
-                </div>
+              {apiRefs.map((item) => (
+                <SidebarItem
+                  key={item.url}
+                  href={item.url}
+                  active={pathname === item.url}
+                  className={NESTED_ITEM_CLASS}
+                >
+                  {item.text}
+                </SidebarItem>
               ))}
             </div>
           </SidebarFolderContent>
