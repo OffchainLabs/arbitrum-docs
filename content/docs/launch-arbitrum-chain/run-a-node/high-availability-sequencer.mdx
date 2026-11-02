@@ -387,7 +387,6 @@ If no other sequencer is eligible, the holder keeps the lockout. The handoff tim
 | --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `handoff-timeout`     | `30s`   | Longest wait for another sequencer to become chosen                                                                                              |
 | `release-retries`     | `4`     | Attempts to release the lockout on shutdown. Nitro tries to release the liveliness key one more time than this. A negative value retries forever |
-| `safe-shutdown-delay` | `5s`    | No effect in Nitro v3.12.1. Nitro logs the value but never waits on it                                                                           |
 
 {/* SME: is it intended that `safe-shutdown-delay` has no effect, or is this a Nitro bug? */}
 
