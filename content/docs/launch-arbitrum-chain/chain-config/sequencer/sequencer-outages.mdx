@@ -50,10 +50,6 @@ A crashed host or cloud outage can also stop a sequencer unless a standby sequen
 | A node has no forwarding target, or its forwarder is turned off | `sequencer temporarily not available`                                        |
 | The sequencer is running but cannot build blocks                | An error after the transaction waits `queue-timeout` (12 seconds by default) |
 
-{/* SME gap: What exact error text do wallets see when the sequencer's queue times out? Do public RPC providers or load balancers in front of the node change these errors? */}
-
-{/* SME gap: What happens to a transaction a user sends to the RPC during the outage? Does any node queue it and send it when the sequencer returns, or is it dropped and must be resent? */}
-
 ### How your users get a transaction in
 
 Your users send their transaction through the Delayed Inbox on the parent chain instead of to the sequencer. What happens next depends on how long the outage lasts:
@@ -64,7 +60,6 @@ Your users send their transaction through the Delayed Inbox on the parent chain 
 | Longer than the force-inclusion window | Anyone can call `forceInclusion` on the Sequencer Inbox. The message enters the chain without the sequencer. |
 
 The sequencer cannot skip or reorder Delayed Inbox messages. For the user steps, see [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions). Users can also [withdraw ETH while the sequencer is down](/how-arbitrum-works/deep-dives/forced-transactions#withdraw-eth-while-the-sequencer-is-down).
-
 
 ## Batch posting outage
 
@@ -78,7 +73,6 @@ The longer a batch posting outage lasts, the more it puts at risk:
 - **Some dropped transactions are lost for good.** Only an active sequencer re-sequences dropped messages. It re-sequences up to 1,024 messages by default and skips any it fails to add. Some re-sequenced transactions revert because the chain state changed. See [When a force inclusion reorders the chain](/how-arbitrum-works/deep-dives/forced-transactions#when-a-force-inclusion-reorders-the-chain).
 - **Old messages reach the past edge of `maxTimeVariation`.** The batch poster stops posting when a batch's oldest message comes within `reorg-resistance-margin` (10 minutes by default) of the oldest time the Sequencer Inbox allows. See [Relationship with the batch poster](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments#relationship-with-the-batch-poster-reorg-resistance-margin).
 - **The first batch after a force inclusion can fail.** A force inclusion changes the message count the batch poster expects. [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery) explains the flag that lets the first batch through.
-
 
 ## Settings you control
 
@@ -100,8 +94,6 @@ The window trades your recovery time against your users' wait:
 
 The Censorship Timeout narrows the gap between the two. The first force-included message in an outage still waits the full `delayBlocks`. Later messages in a long outage, and messages in repeated outages, wait less. Set the buffer and its threshold above your chain's batch posting interval, or the feature does not work as intended. See [How the Censorship Timeout shortens the window](/how-arbitrum-works/deep-dives/forced-transactions#how-the-censorship-timeout-shortens-the-window).
 
-{/* SME gap: What force-inclusion window and Censorship Timeout values do we recommend for a new chain? */}
-
 ## When the parent chain's sequencer is down
 
 If your chain is an <Term id="layer-3-l3">L3</Term>, its parent chain has its own sequencer. When that sequencer stops, three things happen to your chain:
@@ -111,8 +103,6 @@ If your chain is an <Term id="layer-3-l3">L3</Term>, its parent chain has its ow
 - Your sequencer can stop too. It stops building blocks once the newest parent-chain block is more than 1 hour older than its local clock (`execution.sequencer.max-acceptable-timestamp-delta`).
 
 See the callout under [After the window ends](/how-arbitrum-works/deep-dives/forced-transactions#after-the-window-ends).
-
-{/* SME gap: What should an L3 chain owner do while the parent chain's sequencer is down? */}
 
 ## Example timeline
 
