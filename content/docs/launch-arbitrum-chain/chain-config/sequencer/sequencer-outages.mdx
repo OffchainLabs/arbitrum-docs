@@ -79,7 +79,6 @@ The longer a batch posting outage lasts, the more it puts at risk:
 - **Old messages reach the past edge of `maxTimeVariation`.** The batch poster stops posting when a batch's oldest message comes within `reorg-resistance-margin` (10 minutes by default) of the oldest time the Sequencer Inbox allows. See [Relationship with the batch poster](/launch-arbitrum-chain/chain-config/sequencer/sequencer-timing-adjustments#relationship-with-the-batch-poster-reorg-resistance-margin).
 - **The first batch after a force inclusion can fail.** A force inclusion changes the message count the batch poster expects. [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery) explains the flag that lets the first batch through.
 
-{/* SME gap: Is there a typical batch posting outage length at which chain owners should act, short of the force-inclusion window? */}
 
 ## Settings you control
 
