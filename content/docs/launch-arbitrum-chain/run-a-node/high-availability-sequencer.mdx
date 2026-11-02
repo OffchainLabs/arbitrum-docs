@@ -390,7 +390,7 @@ If no other sequencer is eligible, the holder keeps the lockout. The handoff tim
 
 {/* SME: is it intended that `safe-shutdown-delay` has no effect, or is this a Nitro bug? */}
 
-If you run on Kubernetes, set the pod's `terminationGracePeriodSeconds` higher than `handoff-timeout`. Nitro stops its other components after the handoff finishes. If Kubernetes kills the pod before the handoff ends, the lockout expires on its own, as in an unplanned failover.
+If you run on Kubernetes, set the pod's `terminationGracePeriodSeconds` (default: 30 seconds) higher than `handoff-timeout`. Nitro stops its other components after the handoff finishes. If Kubernetes kills the pod before the handoff ends, the lockout expires on its own, as in an unplanned failover.
 
 ## Planned maintenance
 
