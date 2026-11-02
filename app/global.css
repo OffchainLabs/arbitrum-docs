@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
+@import 'fumadocs-openapi/css/preset.css';
 
 /* Brand tokens. `--color-arbitrum-*` is the raw arbitrum.io palette, the same in both themes;
    `--color-fd-*` is the Fumadocs theme built on it and remapped in `.dark`. */

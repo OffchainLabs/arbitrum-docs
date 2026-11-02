@@ -27,9 +27,13 @@ minimumReleaseAge: 10080
 # - katex: rehype-katex 7.0.1 and micromark-extension-math 3.1.0 ask for ^0.16.0
 #   (GHSA-238p-pmpm-9mq7, fixed in 0.18.2). `$katex` follows the direct dependency in
 #   package.json, so rehype-katex renders with the version whose CSS app/layout.tsx imports.
+# - undici under @scalar/json-magic: 0.13.5 (through fumadocs-openapi 12.1.0) pins undici 7.24.4
+#   (GHSA-2gqq-gqf2-x968, GHSA-8436-99hf-9mmv and others, fixed in 7.29.1). 7.30.1 is the
+#   version @ai-sdk/provider-utils already resolves.
 overrides:
   ws@8: 8.21.0
   katex: $katex
+  '@scalar/json-magic>undici': 7.30.1
 
 # @offchainlabs/prettier-config 0.3.0 (the latest) declares a peer of
 # @trivago/prettier-plugin-sort-imports ^5.2.2. It never loads the plugin: it only sets
