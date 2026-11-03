@@ -135,21 +135,39 @@ export async function createAnchorCompiler(
     return cached;
   }
 
+  // The include plugin parses a partial from its text alone and never names the file. It does
+  // announce each file to `file.data._compiler` before reading it, so the text is matched back to
+  // an announced file. Two partials with identical text would both report the first one's path.
+  const announced = new Set<string>();
+  const compiler = {
+    addDependency(filePath: string): void {
+      announced.add(filePath);
+    },
+  };
+
+  function announcedPath(content: string): string {
+    for (const filePath of announced) {
+      if (source(filePath).content === content) return filePath;
+    }
+    throw new Error('the include plugin parsed text that matches no file it announced');
+  }
+
   // The include plugin calls this parser for every partial, including nested and selected
   // sections. Preserve its original location before splicing it into the containing page.
-  function parser(format: Format): { parse(file: VFile): ReturnType<Processor['parse']> } {
+  function parser(format: Format): Pick<Processor, 'parse'> {
     return {
-      parse(file) {
-        const tree = processor(format).parse(file);
+      parse(value) {
+        const tree = processor(format).parse(value);
+        const filePath = announcedPath(String(value));
         // Walked through the structural view; the typed tree is what `run` is handed.
         const nodes: TreeNode = tree;
-        const { lineOffset } = source(file.path);
+        const { lineOffset } = source(filePath);
         visit(nodes, (node) => {
           node.data ??= {};
           Object.assign(node.data, {
             anchorSource: {
-              file: file.path,
-              rel: path.relative(repoRoot, file.path).split(path.sep).join('/'),
+              file: filePath,
+              rel: path.relative(repoRoot, filePath).split(path.sep).join('/'),
               line: (node.position?.start.line ?? 1) + lineOffset,
             },
           });
@@ -220,7 +238,11 @@ export async function createAnchorCompiler(
       cached = createProcessor({
         ...options,
         format,
-        remarkPlugins: [remarkInclude, ...(options.remarkPlugins ?? []), collectLinks],
+        remarkPlugins: [
+          [remarkInclude, { getProcessor: parser }],
+          ...(options.remarkPlugins ?? []),
+          collectLinks,
+        ],
         // Code blocks never produce an id, so the slow syntax highlighter is skipped. A rename of
         // the plugin only un-matches this filter and slows the run; it cannot change the answer.
         rehypePlugins: [
@@ -240,11 +262,11 @@ export async function createAnchorCompiler(
       path: filePath,
       cwd: repoRoot,
       value: parsed.content,
-      // `_getProcessor` is the private hook fumadocs-mdx's include plugin reads from `file.data`
-      // (node_modules/fumadocs-mdx/dist/remark-include-*.js, `const { _getProcessor = () => this`).
-      // If a fumadocs-mdx bump renames it, partial links lose their source stamp and the
-      // "partial links are checked per containing page" test fails; look there first.
-      data: { frontmatter: parsed.data, _getProcessor: parser },
+      // `_compiler` is the hook the include plugin (fumadocs-core/mdx-plugins/remark-include)
+      // announces each included file to. If a fumadocs bump renames it or stops announcing, partial
+      // links lose their source stamp and the "partial links are checked per containing page" test
+      // fails; look there first.
+      data: { frontmatter: parsed.data, _compiler: compiler },
     });
     // Run the real remark -> rehype transforms; JavaScript output is unnecessary for checking.
     //
@@ -252,7 +274,7 @@ export async function createAnchorCompiler(
     // `Program` its recma stage emits as `run`'s input, but unified hands `run`'s tree to the first
     // transformer, and every one here (remark, then remark-rehype, then rehype) takes the parsed
     // mdast root, which is exactly what this passes.
-    const tree = parser(format).parse(file) as unknown as Parameters<Processor['run']>[0];
+    const tree = processor(format).parse(file) as unknown as Parameters<Processor['run']>[0];
     await processor(format).run(tree, file);
     const { anchorIds: ids, anchorLinks: links } = file.data;
     if (!ids || !links) throw new Error(`anchor collectors did not run on ${filePath}`);
