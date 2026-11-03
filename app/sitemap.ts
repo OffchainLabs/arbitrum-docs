@@ -22,13 +22,14 @@ import { source } from '@/lib/source';
  */
 const siteUrl = getSiteUrl();
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = source.getPages().map((page) => {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const pages = source.getPages().map(async (page) => {
     // `lastModified` comes from the `lastModified` option on the docs collection in
     // `source.config.ts`, which is gated behind a full-git-history probe (see INTERNALS, "Last
     // modified dates"). In a shallow checkout it resolves to `undefined` for every page and the
-    // sitemap omits `<lastmod>` entirely, which is valid.
-    const { lastModified } = page.data;
+    // sitemap omits `<lastmod>` entirely, which is valid. The docs collection compiles on demand,
+    // so the date sits behind `load()`.
+    const { lastModified } = await page.data.load();
 
     return {
       url: new URL(page.url, siteUrl).toString(),
@@ -37,5 +38,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
   });
 
   // The root overview already contributes `/`, whose HTML is the home page.
-  return pages;
+  return Promise.all(pages);
 }

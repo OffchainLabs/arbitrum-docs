@@ -206,16 +206,16 @@ ERROR Error checking memory limit  err=...  checker=CgroupsMemoryLimitChecker   
 
 A full node reaches out to a fixed set of endpoints. If you run on a cloud provider, outbound traffic is often restricted by default, so you'll likely need to allow these destinations explicitly in your cloud security group or firewall rules (for example, AWS security groups, GCP firewall rules, or an egress `NetworkPolicy`). The specific hostnames depend on the chain: for DAO-governed networks, they come from the chain's built-in chain info, and for your own Arbitrum chain, they come from the `chain.info-json`, `execution.forwarding-target`, and feed URLs you configure. The categories are the same across chains:
 
-| Purpose                       | Where the endpoint comes from                                       | When                                        |
-| ----------------------------- | ------------------------------------------------------------------- | ------------------------------------------- |
-| **Sequencer** (tx forwarding) | chain info `sequencer-url` / `execution.forwarding-target`          | Always—the node forwards user txs here      |
-| Sequencer fallbacks           | chain info `secondary-forwarding-target`                            | Failover                                    |
-| **Sequencer feed**            | chain info `feed-url` / `node.feed.input.url`                       | Always                                      |
-| Feed fallbacks / delayed      | chain info `secondary-feed-url` / `node.feed.input.secondary-url`   | Failover                                    |
-| Block metadata                | chain info `block-metadata-url`                                     | Only if tracking block metadata / Timeboost |
-| DB snapshot                   | the `init` source host                                              | Initial sync only                           |
-| **Parent chain**              | your parent-chain RPC + beacon (beacon only for an Ethereum parent) | Always                                      |
-| DA / REST endpoints           | `rest-aggregator` URL list                                          | AnyTrust chains only (e.g. Nova)            |
+| Purpose                       | Where the endpoint comes from                                       | When                                   |
+| ----------------------------- | ------------------------------------------------------------------- | -------------------------------------- |
+| **Sequencer** (tx forwarding) | chain info `sequencer-url` / `execution.forwarding-target`          | Always—the node forwards user txs here |
+| Sequencer fallbacks           | chain info `secondary-forwarding-target`                            | Failover                               |
+| **Sequencer feed**            | chain info `feed-url` / `node.feed.input.url`                       | Always                                 |
+| Feed fallbacks / delayed      | chain info `secondary-feed-url` / `node.feed.input.secondary-url`   | Failover                               |
+| Block metadata                | chain info `block-metadata-url`                                     | Only if tracking block metadata        |
+| DB snapshot                   | the `init` source host                                              | Initial sync only                      |
+| **Parent chain**              | your parent-chain RPC + beacon (beacon only for an Ethereum parent) | Always                                 |
+| DA / REST endpoints           | `rest-aggregator` URL list                                          | AnyTrust chains only (e.g. Nova)       |
 
 For **Arbitrum One**, those resolve to:
 
