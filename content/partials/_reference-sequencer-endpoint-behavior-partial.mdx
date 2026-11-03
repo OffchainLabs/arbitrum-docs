@@ -19,12 +19,23 @@ Arbitrum One has two public endpoints with different roles. The public RPC URL i
 
 ### Latency and timeout behavior
 
+<Callout type="info" title="Rollout status">
+
+This section and the two that follow describe the new transaction submission behavior. It reaches Arbitrum Sepolia first and Arbitrum One later. Until it reaches a chain, the sequencer endpoint on that chain works the old way:
+
+- `eth_sendRawTransaction` returns after the sequencer includes the transaction in a block.
+- On queue timeout, `eth_sendRawTransaction` returns `context deadline exceeded`. The sequencer didn't accept the transaction, so you can retry it.
+
+For details, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission).
+
+</Callout>
+
 Under nominal load, the sequencer endpoint accepts a submission in well under a second. The sequencer places each submission in a bounded in-memory queue, with a default capacity of 1024. The queue timeout, 12 seconds by default, limits how long a transaction can wait in that queue. It isn't a guarantee of end-to-end inclusion time.
 
 When a submission hits a queue limit, `eth_sendRawTransaction` behaves as follows:
 
 - **Queue full:** it returns an error right away.
-- **Queue timeout:** the sequencer drops the transaction. `eth_sendRawTransaction` has already returned the transaction hash, so you get no error and no receipt. The transaction is **not** included. Resubmit the same signed transaction, or re-sign it with the same nonce.
+- **Queue timeout:** the sequencer drops the transaction. `eth_sendRawTransaction` has already returned the transaction hash, so you get no error and no receipt. The transaction is **not** included. Check the sender's nonce, then resubmit the same signed transaction or re-sign it with the same nonce. See [Handle transactions with no receipt](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission#handle-transactions-with-no-receipt).
 
 {/* SME QUESTION: What error does `eth_sendRawTransactionSync` return on queue timeout? Is it still `context deadline exceeded`? */}
 {/* SME QUESTION: Does the sequencer endpoint accept `eth_sendRawTransactionSync` after the change? */}
@@ -33,6 +44,7 @@ When a submission hits a queue limit, `eth_sendRawTransaction` behaves as follow
 
 - Use a third-party node provider as your primary endpoint, or as a fallback when a direct sequencer submission fails.
 - Retry on transient errors only. You can retry network and connection errors with backoff. Don't retry terminal errors such as `nonce too low`.
+- Read reverts from the receipt. A revert isn't a submission error. The receipt shows it, with `status` set to `0x0`.
 - If a transaction has no receipt by your deadline, check the sender's nonce before you resubmit. See [Handle transactions with no receipt](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission#handle-transactions-with-no-receipt).
 
 ### Monitoring and alerting

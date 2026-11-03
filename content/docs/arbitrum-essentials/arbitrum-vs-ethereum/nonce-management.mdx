@@ -18,11 +18,12 @@ Arbitrum's sequencer behaves differently. It maintains an in-memory **nonce-fail
 
 1. When a transaction reaches execution with a nonce higher than the sender's state nonce (the next nonce the account expects, one more than the last executed nonce), the sequencer does **not** reject it immediately. Instead, it places the transaction in the retry buffer and starts a short expiry timer. A transaction whose nonce equals the state nonce is in order and executes, even if an earlier one is still queued.
 2. If the predecessor transaction arrives before the timer fires, the held transaction is revived and put back into the execution queue—it goes through normally, as if it had arrived in order.
-3. If the timer fires first, the sequencer drops the held transaction. What the sender sees depends on the submission method:
-   - `eth_sendRawTransaction` already returned the transaction hash when the sequencer admitted the transaction. The sender gets no error and no receipt.
+3. If the timer fires first, the sequencer drops the held transaction. What the sender sees depends on the submission method and on whether the new transaction submission behavior has reached the chain:
+   - `eth_sendRawTransaction`, after the change, already returned the transaction hash when the sequencer admitted the transaction. The sender gets no error and no receipt.
+   - `eth_sendRawTransaction`, before the change, returns a `nonce too high` error.
    - `eth_sendRawTransactionSync` returns an error instead of a receipt.
 
-   For details, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission#transactions-dropped-without-a-receipt).
+   The change reaches Arbitrum Sepolia first and Arbitrum One later. For details, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission#transactions-dropped-without-a-receipt).
 
 {/* SME QUESTION: Does `eth_sendRawTransactionSync` return `nonce too high` when the retry window expires? */}
 {/* SME QUESTION: Does the retry buffer still hold nonce-gap transactions sent with `eth_sendRawTransaction`? */}
@@ -39,7 +40,7 @@ The practical implication is that fire-and-forget concurrent submission patterns
 
 ## The `nonce too high` error
 
-When the retry window expires without the predecessor arriving, the sequencer reports the error string below. You see it only from `eth_sendRawTransactionSync`. `eth_sendRawTransaction` has already returned the transaction hash, so it reports no error:
+When the retry window expires without the predecessor arriving, the sequencer reports the error string below. `eth_sendRawTransactionSync` returns it. `eth_sendRawTransaction` returns it only on a chain that doesn't have the new transaction submission behavior yet. After the change, `eth_sendRawTransaction` has already returned the transaction hash, so it reports no error:
 
 ```
 nonce too high

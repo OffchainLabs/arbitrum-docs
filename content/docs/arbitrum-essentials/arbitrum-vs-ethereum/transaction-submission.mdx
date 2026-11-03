@@ -10,6 +10,18 @@ target_audience: 'Traders, solvers, market makers, arbitrageurs, and DeFi teams 
 
 {/* SME NOTE: Drafted from the change announcement and engineering review comments. No Nitro PR yet. Send the SME QUESTION items to mglowack. */}
 
+<Callout type="info" title="Rollout status">
+
+This behavior rolls out in stages. It reaches Arbitrum Sepolia first and Arbitrum One later. Until the change reaches a chain, the methods on that chain work the old way:
+
+- `eth_sendRawTransaction` returns after the sequencer executes the transaction and includes it in a block.
+- `eth_sendRawTransactionSync` returns the receipt, with its `blockHash`, after the block is complete.
+
+{/* NOTE: The notice's rollout table has no dates yet. Add dates here when the notice gets them. */}
+{/* SME QUESTION: When do other Arbitrum chains get this behavior? Does it depend only on each chain's sequencer Nitro version? */}
+
+</Callout>
+
 Arbitrum chains give you two ways to submit a signed transaction. They differ in when they return and what they return:
 
 - **`eth_sendRawTransaction`** returns the transaction hash once the <Term id="sequencer">sequencer</Term> admits the transaction into its queue.
@@ -34,6 +46,8 @@ To update your code for this behavior, see [Migrate your transaction submission 
 `eth_sendRawTransaction` returns the transaction hash once the sequencer admits the transaction into its queue. It doesn't wait for the sequencer to execute the transaction or include it in a block. Ethereum, Base, Monad, and Polygon work the same way.
 
 A successful response means the sequencer admitted the transaction. It doesn't mean the transaction is in a block. You confirm inclusion separately, through a receipt, the <Term id="sequencer-feed">sequencer feed</Term>, or the sender's nonce.
+
+A revert isn't a submission error. If the transaction reverts, the receipt shows it, with `status` set to `0x0`.
 
 ### Errors from the admission checks
 
@@ -69,24 +83,28 @@ A transaction can pass every admission check and still fail when the sequencer b
 
 `eth_sendRawTransactionSync` returns a transaction receipt once the sequencer executes the transaction. One call gives you the transaction's status and logs.
 
+It returns sooner than `eth_sendRawTransaction` did before this change. If your code relied on the old `eth_sendRawTransaction` returning after inclusion, you can switch to `eth_sendRawTransactionSync` without slowing your submission path.
+
 The method doesn't wait for the rest of the block. It skips these waits:
 
 - The time to execute the transactions that follow yours in the block.
 - Any later <Term id="priority-gas-auction">Priority Gas Auction (PGA)</Term> rounds in the same block. On Arbitrum One, PGA rounds run every 125 ms inside a 250 ms block.
 - The time to finalize the block and save it to disk.
 
+The gain is largest on a chain that runs more than one PGA round per block.
+
 `eth_sendRawTransactionSync` also returns most of the inclusion-time errors that `eth_sendRawTransaction` doesn't report.
 
-{/* SME QUESTION: Which inclusion-time errors does `eth_sendRawTransactionSync` return, and which does it not? */}
+{/* SME QUESTION: Which inclusion-time errors does `eth_sendRawTransactionSync` return, and which does it not? The announcement says "most." The notice's "What's changing" table says it returns block inclusion errors, with no qualifier. */}
 
 <Callout type="warn" title="The early receipt needs an upgraded Nitro node">
 
-The early receipt applies only when the node that serves your `eth_sendRawTransactionSync` call runs a <Term id="arbitrum-nitro">Nitro</Term> version with this behavior. A node that isn't upgraded still serves the call, but without the early receipt. This applies to your own nodes and to third-party RPC (remote procedure call) providers. If you use a provider, check its documentation.
+The early receipt applies only when the node that serves your `eth_sendRawTransactionSync` call runs <Term id="arbitrum-nitro">Nitro</Term> 3.14.x. Nitro 3.14.x isn't released yet. A node that isn't upgraded still serves the call, but without the early receipt. This applies to your own nodes and to third-party RPC (remote procedure call) providers. If you use a provider, call `web3_clientVersion` on its endpoint to check its Nitro version.
 
 The public sequencer endpoint accepts only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional`. Send `eth_sendRawTransactionSync` calls to an RPC node.
 
-{/* SME QUESTION: What is the minimum Nitro version with this change? */}
-{/* SME QUESTION: Does the eth_sendRawTransaction change depend on the caller's node version, or only on the sequencer? */}
+{/* SME QUESTION: The notice gives Nitro 3.14.x. Confirm the exact release and Docker image once it ships. */}
+{/* SME QUESTION: Does the eth_sendRawTransaction change depend on the caller's node version, or only on the sequencer? The notice ties only the eth_sendRawTransactionSync change to the node version. */}
 {/* SME QUESTION: Does the public sequencer endpoint accept `eth_sendRawTransactionSync` after the change? */}
 
 </Callout>

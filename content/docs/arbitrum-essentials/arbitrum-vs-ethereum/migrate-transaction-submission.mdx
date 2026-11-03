@@ -12,7 +12,15 @@ target_audience: 'Developers who maintain transaction submission code for Arbitr
 
 Update your transaction submission code for the new behavior of `eth_sendRawTransaction` and `eth_sendRawTransactionSync` on Arbitrum chains. For how each method behaves, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission).
 
+<Callout type="info" title="Rollout status">
+
+This behavior reaches Arbitrum Sepolia first and Arbitrum One later. Make and test your changes on Arbitrum Sepolia before the change reaches the chain you use in production.
+
+</Callout>
+
 `eth_sendRawTransactionConditional` doesn't change. If you submit only through that method, you don't need this guide.
+
+{/* SME QUESTION: Confirm that eth_sendRawTransactionConditional keeps its current behavior. The announcement doesn't mention it. */}
 
 ## Do you need to change anything?
 
@@ -30,11 +38,10 @@ Find the row that matches how you submit transactions today.
 
 ## Before you begin
 
-- **Find out which node serves your calls.** The early receipt from `eth_sendRawTransactionSync` needs an upgraded <Term id="arbitrum-nitro">Nitro</Term> version on that node. If you use a third-party RPC (remote procedure call) provider, ask the provider whether it has upgraded.
+- **Find out which node serves your calls.** The early receipt from `eth_sendRawTransactionSync` needs <Term id="arbitrum-nitro">Nitro</Term> 3.14.x on that node. Nitro 3.14.x isn't released yet. If you use a third-party RPC (remote procedure call) provider, call `web3_clientVersion` on its endpoint to check its Nitro version.
 - **Send `eth_sendRawTransactionSync` calls to an RPC node.** The public <Term id="sequencer">sequencer</Term> endpoint accepts only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional`.
 - **Have a funded test account on Arbitrum Sepolia.** You verify each change there before mainnet. The Arbitrum Sepolia RPC URL is `https://sepolia-rollup.arbitrum.io/rpc`.
 
-{/* SME QUESTION: What is the minimum Nitro version with this change? */}
 {/* SME QUESTION: When does the change reach Arbitrum Sepolia, and does the public Sepolia RPC URL serve eth_sendRawTransactionSync with the new behavior? */}
 
 The examples call the JSON-RPC API with `curl`, so they work with any library. JSON-RPC is the JSON-based remote procedure call interface that Ethereum nodes expose. Set these variables first:
@@ -50,7 +57,7 @@ A successful `eth_sendRawTransaction` response means the sequencer admitted the 
 
 ### Option 1: Switch to `eth_sendRawTransactionSync`
 
-If your next step needs the transaction's outcome, use this option.
+If your next step needs the transaction's outcome, use this option. `eth_sendRawTransactionSync` returns sooner than `eth_sendRawTransaction` did before the change, so switching doesn't slow your submission path.
 
 1. Replace the `eth_sendRawTransaction` call with `eth_sendRawTransactionSync`. The second parameter is an optional timeout in milliseconds:
 
@@ -109,7 +116,8 @@ If you only need to know that the sequencer admitted the transaction, and you ca
 5. Verify on Arbitrum Sepolia. Send a transaction whose nonce is one higher than the sender's next nonce. The call returns an error, not a receipt.
 
 {/* SME QUESTION: What are the exact error strings for each inclusion-time cause from eth_sendRawTransactionSync? */}
-{/* SME QUESTION: Which inclusion-time errors, if any, does eth_sendRawTransactionSync not return? */}
+{/* SME QUESTION: Is the "How to retry" guidance in the inclusion-time error table correct? It isn't in the announcement. */}
+{/* SME QUESTION: Which inclusion-time errors, if any, does eth_sendRawTransactionSync not return? The announcement says "most"; the notice's table has no qualifier. */}
 {/* SME QUESTION: Does Nitro return EIP-7966 error code 4 on timeout? */}
 {/* SME QUESTION: For a nonce gap, does eth_sendRawTransactionSync wait for the retry window before it returns the error? */}
 
@@ -155,7 +163,7 @@ If you poll `eth_getTransactionReceipt` after every submission and don't need th
 
 An upgraded Nitro node serves `eth_sendRawTransactionSync` calls natively. If you don't upgrade, the node still serves these calls, but without the early receipt.
 
-1. Upgrade Nitro on the node that serves your calls.
+1. Upgrade the node that serves your calls to Nitro 3.14.x.
 2. Send a test transaction with `eth_sendRawTransactionSync` directly to that node.
 3. Check that the receipt's `blockHash` is zero. A zero `blockHash` shows that the node returns the early receipt.
 4. Route your `eth_sendRawTransactionSync` traffic to the node, then retire the custom setup.

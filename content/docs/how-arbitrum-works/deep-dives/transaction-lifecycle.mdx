@@ -81,7 +81,7 @@ The Sequencer endpoint provides the fastest path to transaction submission by by
 
 Use this method when you need the lowest possible latency for time-sensitive transactions.
 
-A successful `eth_sendRawTransaction` response means the Sequencer admitted your transaction into its queue, not that the transaction is in a block. For when each submission method returns, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission).
+A change to `eth_sendRawTransaction` rolls out to Arbitrum Sepolia first, then Arbitrum One. After the change, a successful response means the Sequencer admitted your transaction into its queue, not that the transaction is in a block. For when each submission method returns, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission).
 
 The following diagram shows the four methods for submitting transactions to the Sequencer:
 
