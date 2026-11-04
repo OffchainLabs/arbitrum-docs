@@ -49,6 +49,10 @@ test('every step has non-empty text and all three failure parts', () => {
   }
 });
 
+test('every step has at least one citation', () => {
+  for (const step of flow.steps) assert.ok(step.citations.length > 0, step.id);
+});
+
 test('codeRefs returns each repo+path once', () => {
   const refs = codeRefs(flow);
   const keys = refs.map((r) => `${r.repo}:${r.path}`);
