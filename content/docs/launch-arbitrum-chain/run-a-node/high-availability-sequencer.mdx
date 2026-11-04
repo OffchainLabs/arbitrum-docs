@@ -383,10 +383,10 @@ A sequencer that receives `SIGINT` or `SIGTERM` hands off the lockout before it 
 
 If no other sequencer is eligible, the holder keeps the lockout. The handoff times out, and Nitro logs `timed out waiting for another sequencer to become chosen`. On shutdown, the sequencer then releases the lockout anyway, and the chain stops until another sequencer becomes eligible. Before you stop the active sequencer, confirm that at least one standby has a liveliness key.
 
-| Flag                  | Default | What it controls                                                                                                                                 |
-| --------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `handoff-timeout`     | `30s`   | Longest wait for another sequencer to become chosen                                                                                              |
-| `release-retries`     | `4`     | Attempts to release the lockout on shutdown. Nitro tries to release the liveliness key one more time than this. A negative value retries forever |
+| Flag              | Default | What it controls                                                                                                                                 |
+| ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `handoff-timeout` | `30s`   | Longest wait for another sequencer to become chosen                                                                                              |
+| `release-retries` | `4`     | Attempts to release the lockout on shutdown. Nitro tries to release the liveliness key one more time than this. A negative value retries forever |
 
 {/* SME: is it intended that `safe-shutdown-delay` has no effect, or is this a Nitro bug? */}
 
@@ -427,7 +427,6 @@ Test both failover paths on a testnet deployment before you go live:
 - **Unplanned failover:** Stop the chosen sequencer without a graceful shutdown. For example, kill its process with `SIGKILL` or block its network access to Redis. Confirm that another sequencer acquires the lockout within about `lockout-duration` and block height keeps rising.
 
 For both tests, watch for `sequencer temporarily not available` on your full nodes and note how long it lasts.
-
 
 ## Monitoring and maintenance
 
