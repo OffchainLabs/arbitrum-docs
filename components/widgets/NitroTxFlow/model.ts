@@ -105,7 +105,7 @@ export const transactionLifecycle: Flow = {
           'fee or a nonce that is too low.',
         impact: 'The full node does not forward the transaction, so the sequencer never sees it.',
         recovery:
-          '`--execution.tx-pre-checker.strictness` sets how much the full node checks. ' +
+          '--execution.tx-pre-checker.strictness sets how much the full node checks. ' +
           'At 0 the node skips the check. The default is 20.',
       },
       citations: [
@@ -132,20 +132,20 @@ export const transactionLifecycle: Flow = {
       text:
         'The full node forwards the transaction to the sequencer over JSON-RPC. ' +
         'It sends it to the URL in its forwarding target setting. ' +
-        'A full node with the target `null` does not forward and returns an error.',
+        'A full node with the target null does not forward and returns an error.',
       actors: ['fullnode', 'seq'],
       edges: ['forward'],
       flag: '--execution.forwarding-target',
       code: { repo: 'nitro', path: 'execution/gethexec/forwarder.go' },
       failure: {
         symptoms:
-          'The full node logs `error forwarding transaction` at warn level. ' +
+          'The full node logs error forwarding transaction at warn level. ' +
           'If no target accepts the transaction, it logs ' +
-          '`Failed to publish transaction to any of the forwarding targets`.',
+          'Failed to publish transaction to any of the forwarding targets.',
         impact:
           'The full node returns the error to the wallet, and the sequencer does not get the transaction.',
         recovery:
-          'Add backup targets with `--execution.secondary-forwarding-target`. ' +
+          'Add backup targets with --execution.secondary-forwarding-target. ' +
           'The node tries them in order when the error matches its retry list.',
       },
       citations: [
@@ -177,16 +177,16 @@ export const transactionLifecycle: Flow = {
         'It writes the result to its message log as the next message.',
       actors: ['seq'],
       edges: [],
-      flag: '--execution.sequencer.enable',
+      flag: '--node.sequencer and --execution.sequencer.enable',
       code: { repo: 'nitro', path: 'execution/gethexec/sequencer.go' },
       failure: {
         symptoms:
-          'The metric `arb/sequencer/transactions/dropped/queuetimeout` goes up. ' +
-          'If `--node.sequencer` and `--execution.sequencer.enable` differ, the node logs ' +
-          '`consensus and execution must agree if sequencing is enabled or not`.',
+          'The metric arb/sequencer/transactions/dropped/queuetimeout goes up. ' +
+          'If --node.sequencer and --execution.sequencer.enable differ, the node logs ' +
+          'consensus and execution must agree if sequencing is enabled or not.',
         impact:
           'The sequencer drops a transaction that waits in its queue longer than ' +
-          '`--execution.sequencer.queue-timeout`, 12 seconds by default. ' +
+          '--execution.sequencer.queue-timeout, 12 seconds by default. ' +
           'The submitter gets the timeout error back.',
         recovery: 'TODO: Nitro engineer',
       },
@@ -221,18 +221,18 @@ export const transactionLifecycle: Flow = {
         'A feed message never replaces a message the node already has from a batch.',
       actors: ['seq', 'relay', 'fullnode'],
       edges: ['publish', 'stream'],
-      flag: '--node.feed.input.url',
+      flag: '--node.feed.output.enable (sequencer), --node.feed.input.url (full node)',
       code: { repo: 'nitro', path: 'broadcaster/broadcaster.go' },
       finality: 'soft',
       failure: {
         symptoms:
-          'The full node logs `failed connect to sequencer broadcast, waiting and retrying` or ' +
-          '`Server connection timed out without receiving data`.',
+          'The full node logs failed connect to sequencer broadcast, waiting and retrying or ' +
+          'Server connection timed out without receiving data.',
         impact:
           'The node reconnects with a backoff that doubles up to a maximum. ' +
           'Until then, it gets new transactions only from batches on the parent chain.',
         recovery:
-          'Add backup feeds with `--node.feed.input.secondary-url`. ' +
+          'Add backup feeds with --node.feed.input.secondary-url. ' +
           'The node starts one when its primary feeds send nothing for 5 seconds.',
       },
       citations: [
@@ -274,11 +274,11 @@ export const transactionLifecycle: Flow = {
       code: { repo: 'nitro', path: 'arbnode/batch_poster.go' },
       failure: {
         symptoms:
-          'The batch poster logs `error getting message from streamer`, or `error posting batch` ' +
-          'with `error adding message to batch` in the error.',
+          'The batch poster logs error getting message from streamer, or error posting batch ' +
+          'with error adding message to batch in the error.',
         impact:
           'The batch poster drops the batch it was building and tries again after ' +
-          '`--node.batch-poster.error-delay`, 10 seconds by default. ' +
+          '--node.batch-poster.error-delay, 10 seconds by default. ' +
           'The transaction stays out of a batch until an attempt succeeds.',
         recovery: 'TODO: Nitro engineer',
       },
@@ -315,11 +315,11 @@ export const transactionLifecycle: Flow = {
       finality: 'batch-posted',
       failure: {
         symptoms:
-          'The batch poster logs `error posting batch`. ' +
+          'The batch poster logs error posting batch. ' +
           'For errors it does not treat as temporary, the metric ' +
-          '`arb/batchPoster/action/failure` goes up.',
+          'arb/batchPoster/action/failure goes up.',
         impact:
-          'SequencerInbox reverts with `NotBatchPoster` when the sender is not on its batch ' +
+          'SequencerInbox reverts with NotBatchPoster when the sender is not on its batch ' +
           'poster list. ' +
           'The batch does not reach the Bridge.',
         recovery: 'TODO: Nitro engineer',
@@ -357,13 +357,12 @@ export const transactionLifecycle: Flow = {
       flag: '--node.inbox-reader.read-mode',
       code: { repo: 'nitro', path: 'arbnode/inbox_reader.go' },
       failure: {
-        symptoms:
-          'The node logs `TransactionStreamer: Reorg detected!` with `confirmed` set to true.',
+        symptoms: 'The node logs TransactionStreamer: Reorg detected! with confirmed set to true.',
         impact:
           'The node replaces its stored messages from that point with the parent chain version. ' +
           'The result of a transaction it showed from the feed can change.',
         recovery:
-          'With `--node.inbox-reader.read-mode` set to `safe` or `finalized`, the node reads ' +
+          'With --node.inbox-reader.read-mode set to safe or finalized, the node reads ' +
           'batches only up to the latest safe or finalized parent chain block. ' +
           'That setting turns off feed input and output, and a sequencer cannot use it.',
       },
