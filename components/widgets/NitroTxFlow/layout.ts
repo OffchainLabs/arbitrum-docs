@@ -1,7 +1,7 @@
 import type { ElkNode } from 'elkjs/lib/elk-api';
 import ELK from 'elkjs/lib/elk.bundled.js';
 
-import type { Flow, FlowEdge } from './model.ts';
+import type { Flow, FlowEdge, Step } from './model.ts';
 
 export const NODE_WIDTH = 220;
 export const NODE_HEIGHT = 72;
@@ -60,7 +60,8 @@ export function firstInteractionRank(flow: Flow): Record<string, number> {
   return rank;
 }
 
-function stepNumbersByEdge(flow: Flow): Record<string, number[]> {
+// The 1-based numbers of the steps that use each edge. The label chips show them as badges.
+export function stepNumbersByEdge(flow: Flow): Record<string, number[]> {
   const numbers: Record<string, number[]> = {};
   flow.steps.forEach((step, index) => {
     for (const id of step.edges) (numbers[id] ??= []).push(index + 1);
@@ -159,4 +160,12 @@ export async function computeLayout(flow: Flow): Promise<FlowLayout> {
     width,
     height: graph.height ?? 0,
   };
+}
+
+// The boxes the camera frames and the band names avoid: active nodes and active edge labels.
+export function activeBoxes(layout: FlowLayout, step: Step): Box[] {
+  return [
+    ...step.actors.map((id) => ({ ...layout.nodes[id]!, width: NODE_WIDTH, height: NODE_HEIGHT })),
+    ...step.edges.map((id) => layout.edges[id]!.label),
+  ];
 }
