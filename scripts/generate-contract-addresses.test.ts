@@ -110,7 +110,12 @@ describe('table', () => {
         ],
         CHAINS,
       ),
-      ['| Function | Demo Chain |', '| --- | --- |', '| Rollup | a |', '| Bridge | b |'].join('\n'),
+      [
+        '| Function | Demo Chain |',
+        '| --- | --- |',
+        '| **Rollup** | a |',
+        '| **Bridge** | b |',
+      ].join('\n'),
     );
   });
 });
@@ -129,37 +134,37 @@ describe('buildContent', () => {
   it('renders the core contracts block against the parent chain id', () => {
     assert.match(
       content,
-      /\| Rollup \| <AEL address="0x4DCeB440657f21083db8aDd07665f8ddBe1DCfc0" chainID=\{1\} shortenAddress=\{true\} \/> \|/,
+      /\| \*\*Rollup\*\* \| <AEL address="0x4DCeB440657f21083db8aDd07665f8ddBe1DCfc0" chainID=\{1\} shortenAddress=\{true\} \/> \|/,
     );
     assert.match(
       content,
-      /\| CoreProxyAdmin \| <AEL address="0x554723262467F125Ac9e1cDFa9Ce15cc53822dbD" chainID=\{1\} shortenAddress=\{true\} \/> \|/,
+      /\| \*\*CoreProxyAdmin\*\* \| <AEL address="0x554723262467F125Ac9e1cDFa9Ce15cc53822dbD" chainID=\{1\} shortenAddress=\{true\} \/> \|/,
     );
   });
 
   it('renders token bridge child rows against the child chain id', () => {
     assert.match(
       content,
-      /\| L2 Weth \| <AEL address="0x82aF49447D8a07e3bd95BD0d56f35241523fBab1" chainID=\{42161\} shortenAddress=\{true\} \/> \|/,
+      /\| \*\*L2 Weth\*\* \| <AEL address="0x82aF49447D8a07e3bd95BD0d56f35241523fBab1" chainID=\{42161\} shortenAddress=\{true\} \/> \|/,
     );
   });
 
   it('stacks classic outboxes newest version first', () => {
     assert.match(
       content,
-      /\| Classic Outbox\\\*\\\*\\\* \| <AEL address="0x760723CD2e632826c38Fef8CD438A4CC7E7E1A40"[^|]*<br \/> <AEL address="0x667e23ABd27E623c11d4CC00ca3EC4d0bD63337a"/,
+      /\| \*\*Classic Outbox\\\*\\\*\\\*\*\* \| <AEL address="0x760723CD2e632826c38Fef8CD438A4CC7E7E1A40"[^|]*<br \/> <AEL address="0x667e23ABd27E623c11d4CC00ca3EC4d0bD63337a"/,
     );
   });
 
   it('renders precompiles against the child chain id', () => {
     assert.match(
       content,
-      /\| ArbSys \| <AEL address="0x0000000000000000000000000000000000000064" chainID=\{42161\} shortenAddress=\{true\} \/> \|/,
+      /\| \*\*ArbSys\*\* \| <AEL address="0x0000000000000000000000000000000000000064" chainID=\{42161\} shortenAddress=\{true\} \/> \|/,
     );
   });
 
   it('leaves a blank cell where an address is not deployed', () => {
-    assert.match(content, /\| `ResourceConstraintManager` \|\s*\|/);
+    assert.match(content, /\| \*\*`ResourceConstraintManager`\*\* \|\s*\|/);
   });
 
   it('links canonical factory contracts at this site’s root URL', () => {

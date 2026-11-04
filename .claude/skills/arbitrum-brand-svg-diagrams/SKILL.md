@@ -308,7 +308,7 @@ often too big to `Read`; move it to Trash (`trash …`) then write fresh. No
 
 ```bash
 npx prettier --write content/docs/path/to/page.mdx
-pnpm content:lint
+pnpm lint
 node --input-type=module -e "
 import {compile} from '@mdx-js/mdx'; import {readFileSync} from 'node:fs';
 await compile(readFileSync('content/docs/path/to/page.mdx','utf8').replace(/^---[\s\S]*?\n---\n/,''));

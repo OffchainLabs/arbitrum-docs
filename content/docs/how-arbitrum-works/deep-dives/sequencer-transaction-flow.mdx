@@ -48,23 +48,20 @@ Unlike Ethereum, there is **no public mempool**. Transactions are not gossiped b
 
 ### Ordering policies
 
-What the Sequencer does with a queued transaction depends on the chain's <Term id="transaction-ordering-policy">transaction ordering policy</Term>. Three exist, and a chain runs exactly one:
+What the Sequencer does with a queued transaction depends on the chain's <Term id="transaction-ordering-policy">transaction ordering policy</Term>. Two exist, and a chain runs exactly one:
 
-| Policy                                                                       | What decides the order                                                           | Where it runs                        |
-| ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------ |
-| <Term id="first-come-first-serve-fcfs">First-come, first-serve (FCFS)</Term> | Arrival time at the Sequencer                                                    | The default for a new Arbitrum chain |
-| [Priority Gas Auctions (PGA)](/how-arbitrum-works/priority-gas-auction/pga)  | The <Term id="priority-fee">priority fee</Term> each transaction pays            | Arbitrum One                         |
-| [Timeboost](/how-arbitrum-works/timeboost/gentle-introduction)               | An auctioned <Term id="express-lane">express lane</Term>, FCFS for everyone else | Available to any chain owner         |
+| Policy                                                                       | What decides the order                                                | Where it runs                        |
+| ---------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------ |
+| <Term id="first-come-first-serve-fcfs">First-come, first-serve (FCFS)</Term> | Arrival time at the Sequencer                                         | The default for a new Arbitrum chain |
+| [Priority Gas Auctions (PGA)](/how-arbitrum-works/priority-gas-auction/pga)  | The <Term id="priority-fee">priority fee</Term> each transaction pays | Arbitrum One                         |
 
-The FIFO behavior this page describes assumes FCFS. The two other policies change the order, not the intake path: the queue, the deadlines, and the `context deadline exceeded` behavior below apply the same way under all three.
+The FIFO behavior this page describes assumes FCFS. PGA changes the order, not the intake path: the queue, the deadlines, and the `context deadline exceeded` behavior below apply the same way under both.
 
 Under PGA, the queue described in the next section is the first stage of a two-stage mempool. Each ordering round moves the whole queue into a priority queue keyed on the priority fee, which <Term id="eip-1559">EIP-1559</Term> computes as `min(max_priority_fee_per_gas, max_fee_per_gas - base_fee_per_gas)`. Ties break on arrival time, and a transaction left waiting gains an anti-starvation boost each round, so a zero-fee transaction still lands within a small number of blocks. [Introduction to PGA](/how-arbitrum-works/priority-gas-auction/pga) covers the rounds and the boost.
 
-Under Timeboost, transactions from the current <Term id="express-lane-controller">express lane controller</Term> are sequenced as soon as they arrive, while every other transaction has its arrival timestamp delayed (by default, <Var name="timeboostNonExpressDelayMs" /> milliseconds) before taking its place in the queue.
-
 <Callout type="info" title="Arbitrum One runs PGA">
 
-Arbitrum One used <Term id="timeboost">Timeboost</Term> from April 2025 until PGA activated. PGA removes the 200ms delay that Timeboost applied to transactions outside the express lane, so no transaction waits on another's lane. Chain owners can still choose Timeboost, but a chain that enables both policies behaves unpredictably.
+Arbitrum One used Timeboost from April 2025 until PGA activated. PGA removes the 200ms delay that Timeboost applied to transactions outside the express lane, so no transaction waits on another's lane.
 
 </Callout>
 
@@ -86,7 +83,7 @@ Every transaction receives a deadline when it arrives, set by `--execution.seque
 In both cases, the caller receives an error containing the string `context deadline exceeded`. This error means exactly one thing: the chain could not sequence the transaction within `queue-timeout`, and the transaction **was not executed**. For a user or integration partner, the correct response is:
 
 - Treat it as backpressure, not as a permanent failure. It is safe to resubmit the same signed transaction (same nonce) with a backoff.
-- Make sure your client-side HTTP timeout is longer than the chain's `queue-timeout`; otherwise your client gives up before the Sequencer reports the outcome.
+- Make sure your client-side HTTP timeout is longer than the chain's `queue-timeout`; otherwise your client gives up before the Sequencer reports the outcome. If your client gave up early, the transaction can still be in flight, and resending the same bytes returns `already known`; see [Submitting a transaction with a nonce that is already in flight](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management#submitting-a-transaction-with-a-nonce-that-is-already-in-flight).
 - If you see this error persistently rather than in bursts, the chain's intake is saturated: see [Tuning guidance for chain operators](#tuning-guidance-for-chain-operators) below.
 
 ## Block creation and timing
