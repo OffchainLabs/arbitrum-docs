@@ -2,7 +2,7 @@
 
 import { ReactFlow, type ReactFlowInstance, type Viewport } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ActorNode, type ActorNodeType } from './ActorNode.tsx';
 import { BandLabels } from './BandLabels.tsx';
@@ -17,7 +17,7 @@ import { stepNumbersByEdge } from './layout.ts';
 import { transactionLifecycle } from './model.ts';
 import { useFlowLayout } from './useFlowLayout.ts';
 import { useStepCamera } from './useStepCamera.ts';
-import { SITE_HEADER, motionDuration, useStepNavigation } from './useStepNavigation.ts';
+import { SITE_HEADER, useStepNavigation } from './useStepNavigation.ts';
 
 const FLOW = transactionLifecycle;
 const STEP_COUNT = FLOW.steps.length;
@@ -39,7 +39,7 @@ export default function NitroTxFlow() {
   const barRef = useRef<HTMLElement>(null);
   const { index, started, goTo } = useStepNavigation(STEP_COUNT, canvasRef);
   const step = FLOW.steps[index]!;
-  useStepCamera(instance, layout, step, canvasRef);
+  const showAll = useStepCamera(instance, layout, step, canvasRef);
 
   useEffect(() => {
     const query = window.matchMedia(NARROW_QUERY);
@@ -48,17 +48,27 @@ export default function NitroTxFlow() {
     return () => query.removeEventListener('change', onChange);
   }, []);
 
-  const showAll = () => void instance?.fitView({ padding: 0.08, duration: motionDuration() });
   const nodes = useMemo(() => (layout ? flowNodes(FLOW, layout, step) : []), [layout, step]);
   const edges = useMemo(
     () => (layout ? flowEdges(FLOW, layout, step, STEP_NUMBERS) : []),
     [layout, step],
   );
   const stepLabel = `Step ${index + 1} of ${STEP_COUNT}: ${step.title}`;
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'ArrowRight' && index < STEP_COUNT - 1) goTo(index + 1);
+    if (event.key === 'ArrowLeft' && index > 0) goTo(index - 1);
+  };
 
   return (
     // overflow-clip, not overflow-hidden: hidden creates a scroll container and breaks the bar.
-    <div className="not-prose my-6 overflow-clip rounded-lg border border-fd-border">
+    // Focusable root, so ArrowLeft and ArrowRight step only while focus is inside the widget.
+    <div
+      role="region"
+      aria-label={`${FLOW.title} diagram`}
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+      className="not-prose my-6 overflow-clip rounded-lg border border-fd-border"
+    >
       <div
         ref={canvasRef}
         role="group"
@@ -83,7 +93,9 @@ export default function NitroTxFlow() {
           />
         )}
         {layout && (
-          <div className="absolute inset-0">
+          // React Flow sets `touch-action: none` on its pane, which stops a one-finger swipe from
+          // scrolling the page. `!` because the utility layer loses to the unlayered React Flow CSS.
+          <div className="absolute inset-0 [&_.react-flow\_\_pane]:touch-manipulation!">
             <ReactFlow
               nodes={nodes}
               edges={edges}
@@ -95,6 +107,8 @@ export default function NitroTxFlow() {
               }}
               onMove={(_, next) => setViewport(next)}
               minZoom={0.3}
+              // At the bottom right, the step bar covers it on phones.
+              attributionPosition="top-right"
               panOnDrag={false}
               zoomOnScroll={false}
               zoomOnDoubleClick={false}

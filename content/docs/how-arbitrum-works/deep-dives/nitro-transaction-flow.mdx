@@ -1,0 +1,18 @@
+---
+title: Nitro transaction flow
+description: 'Step through how a transaction moves through the Nitro processes and parent chain contracts on Arbitrum One, with the operator flag, code, and failure behavior for each step.'
+content_type: concept
+---
+
+This diagram follows one <Term id="transaction">transaction</Term> on Arbitrum One, from the user's wallet to the <Term id="parent-chain">parent chain</Term> and back to the full node. Each step lights the processes and contracts that do the work, and the card below the canvas explains the step.
+
+Press **Next** and **Back** to move between steps, or press the arrow keys while the diagram has focus. Select **Show operator details** on the card to see the config flag, the code, and what the operator sees when the step fails.
+
+<NitroTxFlow />
+
+## Related pages
+
+- [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle) explains the ways to submit a transaction, including bypassing the <Term id="sequencer">Sequencer</Term>.
+- [Sequencer transaction flow](/how-arbitrum-works/deep-dives/sequencer-transaction-flow) follows a transaction inside one Sequencer instance.
+- [Batch poster](/how-arbitrum-works/deep-dives/batchposter) explains how the <Term id="batch-poster">batch poster</Term> builds and posts batches.
+- [Finality](/how-arbitrum-works/deep-dives/finality) explains soft finality and parent chain finality.

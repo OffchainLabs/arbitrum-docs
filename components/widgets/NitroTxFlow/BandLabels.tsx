@@ -4,7 +4,7 @@ import { type RefObject, useEffect, useState } from 'react';
 import { BAND_STYLE, BRAND } from './brand.ts';
 import { type Band, type Box, type FlowLayout, activeBoxes } from './layout.ts';
 import type { Step } from './model.ts';
-import { SITE_HEADER } from './useStepNavigation.ts';
+import { siteHeaderPx } from './useStepNavigation.ts';
 
 const BAND_LABEL_INSET = 10;
 const BAND_LABEL_HEIGHT = 26;
@@ -24,8 +24,9 @@ function bandLabelWidth(chain: Band['chain']): number {
 
 /**
  * Band names, outside the React Flow transform. Each sits at the top right of the visible part
- * of its band, below the site header and above the step bar, and moves below any active node or
- * edge label it would cover. It is hidden when the visible part of the band is too thin.
+ * of its band, below the site header and above the step bar, and moves below any active node,
+ * edge label or the React Flow attribution it would cover. It is hidden when the visible part of
+ * the band is too thin.
  */
 export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLabelsProps) {
   const [, setScrollTick] = useState(0);
@@ -48,10 +49,18 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
     top: box.y * viewport.zoom + viewport.y,
     bottom: (box.y + box.height) * viewport.zoom + viewport.y,
   });
-  const obstacles = activeBoxes(layout, step)
-    .map(toCanvas)
-    .sort((a, b) => a.top - b.top);
-  const visibleTop = Math.max(0, SITE_HEADER - rect.top) + BAND_LABEL_INSET;
+  const obstacles = activeBoxes(layout, step).map(toCanvas);
+  const attribution = canvas.querySelector('.react-flow__attribution')?.getBoundingClientRect();
+  if (attribution) {
+    obstacles.push({
+      left: attribution.left - rect.left,
+      right: attribution.right - rect.left,
+      top: attribution.top - rect.top,
+      bottom: attribution.bottom - rect.top,
+    });
+  }
+  obstacles.sort((a, b) => a.top - b.top);
+  const visibleTop = Math.max(0, siteHeaderPx(canvas) - rect.top) + BAND_LABEL_INSET;
   const floor = Math.min(
     (barRef.current?.getBoundingClientRect().top ?? Infinity) - rect.top - 6,
     canvas.clientHeight,

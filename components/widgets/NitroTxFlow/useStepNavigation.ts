@@ -2,8 +2,14 @@ import { type RefObject, useEffect, useRef, useState } from 'react';
 
 import { parseStepHash, stepHash } from './navigation.ts';
 
-// Clears the sticky site header.
-export const SITE_HEADER = 72;
+// Clears the sticky site header, and the table of contents bar under it when Fumadocs shows one,
+// plus 16px. Fumadocs sets `--fd-docs-row-3` to their total height: 56px at 1280px, 96px at 375px.
+export const SITE_HEADER = 'calc(var(--fd-docs-row-3, 56px) + 16px)';
+
+/** `SITE_HEADER` in pixels, read back from the canvas, which uses it as its scroll margin. */
+export function siteHeaderPx(canvas: HTMLElement): number {
+  return parseFloat(getComputedStyle(canvas).scrollMarginTop);
+}
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
@@ -48,7 +54,7 @@ export function useStepNavigation(stepCount: number, canvasRef: RefObject<HTMLEl
     const canvas = canvasRef.current;
     if (!canvas) return;
     const box = canvas.getBoundingClientRect();
-    if (box.top < SITE_HEADER || box.bottom > window.innerHeight) {
+    if (box.top < siteHeaderPx(canvas) || box.bottom > window.innerHeight) {
       canvas.scrollIntoView({ block: 'start', behavior: motionDuration() ? 'smooth' : 'auto' });
     }
   };
