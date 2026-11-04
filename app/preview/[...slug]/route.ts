@@ -12,13 +12,15 @@ export async function GET(_req: Request, { params }: RouteContext<'/preview/[...
   if (slug.at(-1) !== 'preview.json') notFound();
   const page = source.getPage(slug.slice(0, -1));
   if (!page) notFound();
+  // The docs collection is dynamic: structured data is a compiled export, behind `load()`.
+  const { structuredData } = await page.data.load();
 
   return Response.json(
     buildLinkPreview({
       title: page.data.title,
       url: page.url,
       description: page.data.description,
-      structuredData: page.data.structuredData,
+      structuredData,
     }),
   );
 }

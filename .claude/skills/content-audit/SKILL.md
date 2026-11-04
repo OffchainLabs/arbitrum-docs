@@ -13,13 +13,13 @@ Orchestrate all doc quality checks into a single unified report.
 ### 1. MDX structure
 
 ```shell
-pnpm content:lint 2>&1
+pnpm lint 2>&1
 ```
 
 Reports structural MDX defects: stray `:::` fences left by the old Docusaurus site, malformed
 admonitions, Docusaurus habits (`@@var@@`, `data-quicklook-from`, `@site` imports, unregistered
 components) and other hydration-breaking or parser-ambiguous MDX shapes (the rule table is under
-"The content-lint rules" in `INTERNALS.md`). Not auto-fixable: each finding is an edit.
+"The content rules" in `INTERNALS.md`). Not auto-fixable: each finding is an edit.
 
 ### 2. Orphan pages
 
@@ -120,7 +120,7 @@ looks broken).
 ### 11. Frontmatter
 
 ```shell
-pnpm frontmatter:check 2>&1
+pnpm lint 2>&1   # rule docs/frontmatter-schema
 ```
 
 Validates every documentation page against `lib/page-schema.ts`. Required: `title` and
@@ -141,7 +141,7 @@ fixing findings, then run this once before calling the audit done.
 
 - **Doc manifest audit** (terminology consistency, missing metadata). The frontmatter contract
   (`title` and `description` required; `sidebar_label`, `content_type`, `author`, `sme` optional) is
-  enforced by `pnpm frontmatter:check` and when a page compiles during the build, using the Zod
+  enforced by `pnpm lint` (rule `docs/frontmatter-schema`) and when a page compiles during the build, using the Zod
   schema in `lib/page-schema.ts`. There is no `user_story` or `draft` field in this schema, so don't add
   one when scaffolding a page. Terminology consistency itself is a `STYLE-GUIDE.md` review-time rule,
   not a gate.

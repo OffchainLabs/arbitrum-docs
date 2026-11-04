@@ -63,12 +63,6 @@ export function baseOptions(): BaseLayoutProps {
             description: 'Bridging, precompiles, the NodeInterface, and platform reference.',
             url: docHref('arbitrum-essentials'),
           },
-          {
-            icon: <Coins />,
-            text: 'Machine Payments Protocol (MPP)',
-            description: 'Machine-to-machine payments on Arbitrum.',
-            url: docHref('build-decentralized-apps/machine-payments-protocol'),
-          },
         ],
       },
       {

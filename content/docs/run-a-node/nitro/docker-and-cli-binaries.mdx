@@ -19,7 +19,7 @@ Nitro is published as several Docker image targets, each building on the previou
 | Image target           | Repository tag                        | Entrypoint                                                                                                                     | Description                                                                                                                                                                                 |
 | ---------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `nitro-node-slim`      | `offchainlabs/nitro-node:*-slim`      | `/usr/local/bin/nitro`                                                                                                         | Minimal node image with `nitro`, `relay`, `nitro-val`, `seq-coordinator-manager`, `prover`, and `dbconv`. No legacy WASM module roots for validation.                                       |
-| `nitro-node`           | `offchainlabs/nitro-node:*`           | `/usr/local/bin/nitro --validation.wasm.allowed-wasm-module-roots /home/user/nitro-legacy/machines,/home/user/target/machines` | Full node image with DA tools, Timeboost binaries, and both legacy and current WASM module roots for validation.                                                                            |
+| `nitro-node`           | `offchainlabs/nitro-node:*`           | `/usr/local/bin/nitro --validation.wasm.allowed-wasm-module-roots /home/user/nitro-legacy/machines,/home/user/target/machines` | Full node image with DA tools and both legacy and current WASM module roots for validation.                                                                                                 |
 | `nitro-node-validator` | `offchainlabs/nitro-node:*-validator` | `/usr/local/bin/split-val-entry.sh`                                                                                            | Runs a single split validation server (`nitro-val`) alongside the main `nitro` process via `split-val-entry.sh`.                                                                            |
 | `nitro-node-dev`       | `offchainlabs/nitro-node:*-dev`       | `/usr/local/bin/split-val-entry.sh`                                                                                            | Extends `nitro-node-validator` with `deploy`, `seq-coordinator-invalidate`, `mockexternalsigner`, and the latest locally-built WASM module root. Intended for development and testing only. |
 
@@ -83,14 +83,6 @@ docker run offchainlabs/nitro-node:v3.12.1-70fa99a-validator \
 | `anytrusttool`   | CLI tool for AnyTrust key generation, keyset management, and certificate inspection. Formerly named `datool`; renamed in [nitro#4142](https://github.com/OffchainLabs/nitro/pull/4142). The old name is no longer present in the image.                   |
 | `daprovider`     | Unified data availability provider. Serves data from multiple backends (AnyTrust, blobs, or other DA layers).                                                                                                                                             |
 
-### Timeboost
-
-| Binary                  | Description                                                                                                                        |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `autonomous-auctioneer` | Runs the Timeboost express lane auction. Accepts bids and determines express lane controllers.                                     |
-| `bidder-client`         | Submits bids to the Timeboost express lane auction on behalf of a searcher or application.                                         |
-| `el-proxy`              | Express lane proxy for testing. Wraps `eth_sendRawTransaction` calls and forwards them as express lane transactions. Testing only. |
-
 ### Sequencer coordination
 
 | Binary                       | Description                                                                                                                                       |
@@ -123,9 +115,6 @@ Not all binaries are present in every image. The following table shows which ima
 | `anytrustserver`             |         No          |     Yes      |          Yes           |       Yes        |
 | `anytrusttool`               |         No          |     Yes      |          Yes           |       Yes        |
 | `daprovider`                 |         No          |     Yes      |          Yes           |       Yes        |
-| `autonomous-auctioneer`      |         No          |     Yes      |          Yes           |       Yes        |
-| `bidder-client`              |         No          |     Yes      |          Yes           |       Yes        |
-| `el-proxy`                   |         No          |     Yes      |          Yes           |       Yes        |
 | `genesis-generator`          |         No          |     Yes      |          Yes           |       Yes        |
 | `transaction-filterer`       |         No          |     Yes      |          Yes           |       Yes        |
 | `deploy`                     |         No          |      No      |           No           |       Yes        |

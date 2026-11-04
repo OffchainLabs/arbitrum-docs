@@ -37,10 +37,23 @@ the server allocates rather than by your request rate.
 
 Both are gRPC endpoints on port 443 and require an API key. Arbitrum Nova is not currently served.
 
-Blocks for both networks come from Nitro nodes running the Firehose execution tracer, so they carry
-full execution detail — call traces, internal transfers, balance changes, and storage diffs — rather
-than only what a JSON-RPC poller can observe. Modules that depend on state changes work as a result;
-the example below is one of them.
+Blocks come from Nitro nodes running the Firehose execution tracer, so they carry full execution
+detail — call traces, internal transfers, balance changes, and storage diffs — rather than only what
+a JSON-RPC poller can observe. Modules that depend on state changes work as a result; the example
+below is one of them.
+
+One caveat for full-history backfills. On Arbitrum One this detail begins at block **22,207,818**
+(31 August 2022); earlier blocks are served at Firehose's _base_ detail level, which carries
+transactions, receipts and logs but not traces or state changes. Arbitrum Sepolia is extended
+throughout. You can confirm the current boundary for yourself:
+
+```shell
+grpcurl -H "X-Api-Key: $PINAX_API_KEY" \
+  arbone.firehose.pinax.network:443 \
+  sf.firehose.v2.EndpointInfo/Info
+```
+
+The `blockFeatures` field reports `extended@<block>` for a chain whose history changes partway.
 
 ## Prerequisites
 
@@ -51,7 +64,7 @@ the example below is one of them.
 
 Substreams reads its key from the `SUBSTREAMS_API_KEY` environment variable:
 
-```bash
+```shell
 export SUBSTREAMS_API_KEY="<your-api-key>"
 ```
 
@@ -63,14 +76,14 @@ If you call Firehose directly over gRPC rather than through Substreams, pass the
 Substreams packages are distributed as `.spkg` files, so you can run one without writing any Rust.
 Inspect a package first to see its modules and the shape of their output:
 
-```bash
+```shell
 substreams info https://github.com/streamingfast/substreams-erc20-balance-changes/releases/download/v1.4.0/erc20-balance-changes-v1.4.0.spkg
 ```
 
 Then stream it against Arbitrum One. This follows ERC-20 balance changes from a thousand blocks
 behind the chain head:
 
-```bash
+```shell
 substreams run \
   -e arbone.substreams.pinax.network:443 \
   https://github.com/streamingfast/substreams-erc20-balance-changes/releases/download/v1.4.0/erc20-balance-changes-v1.4.0.spkg \
@@ -85,7 +98,7 @@ API key fails here, before any streaming starts.
 To process a fixed historical range instead, give absolute bounds. With a positive start block, a
 `+` prefix on `--stop-block` means "relative to the start block":
 
-```bash
+```shell
 substreams run \
   -e arbone.substreams.pinax.network:443 \
   https://github.com/streamingfast/substreams-erc20-balance-changes/releases/download/v1.4.0/erc20-balance-changes-v1.4.0.spkg \
@@ -100,14 +113,14 @@ Browse [substreams.dev](https://substreams.dev/) for other packages.
 
 To decode your own contract's events and calls, initialize a project:
 
-```bash
+```shell
 substreams init
 ```
 
 The CLI walks you through choosing a code generator, the network, and your contract address, and
 generates a Rust module from the contract's ABI. Build it and run it against the same endpoint:
 
-```bash
+```shell
 substreams build
 substreams run -e arbone.substreams.pinax.network:443 substreams.yaml map_events --start-block -1000
 ```
@@ -122,7 +135,7 @@ for stateful aggregation, and the Rust API in full.
 If you want raw blocks rather than a module's output, stream Firehose over gRPC. Each block arrives
 as a protobuf message with transaction traces, logs, and balance changes already extracted:
 
-```bash
+```shell
 grpcurl \
   -H "X-Api-Key: $PINAX_API_KEY" \
   -d '{"start_block_num": -10, "final_blocks_only": false}' \
