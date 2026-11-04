@@ -173,7 +173,7 @@ async function upstreamPathExists(repo: string, repoPath: string, ref: string): 
   throw new Error(`GitHub API ${endpoint} failed with status ${response.status}`);
 }
 
-/** The Nitro flow widget's code refs for `repo`, each labelled with the first step that cites it. */
+/** The Nitro flow widget's code refs for `repo`, each labelled with its first citing step. */
 function modelPaths(repo: 'nitro' | 'nitro-contracts'): Array<{ path: string; label: string }> {
   return codeRefs(transactionLifecycle)
     .filter((ref) => ref.repo === repo)
@@ -267,7 +267,8 @@ const stalePins = (vars: Record<string, unknown>, commits: SubmoduleCommits): st
 /**
  * Resolve the submodule commit at the target tag and verify every pin and link there. Default
  * mode then only reports: `updates_made=false`, plus `stale_pins=true` when `goEthereumCommit` or
- * `nitroContractsCommit` differs from the submodule commit at the pinned tag. `--to <tag>` is the only writer.
+ * `nitroContractsCommit` differs from the submodule commit at the pinned tag. `--to <tag>` is the
+ * only writer.
  */
 async function syncPins(
   vars: Record<string, unknown>,
@@ -287,7 +288,12 @@ async function syncPins(
       'https://github.com/OffchainLabs/nitro-contracts.git',
     ),
   };
-  await verifyUpstreamPaths(vars, tag, commits.nitroContractsCommit);
+  // Links point at the pinned contracts commit in default mode, at the resolved one on a bump.
+  const linkedContractsCommit =
+    target === undefined
+      ? (stringField(vars, 'nitroContractsCommit') ?? commits.nitroContractsCommit)
+      : commits.nitroContractsCommit;
+  await verifyUpstreamPaths(vars, tag, linkedContractsCommit);
 
   if (target === undefined) {
     setOutput('updates_made', 'false');
@@ -297,7 +303,8 @@ async function syncPins(
       return;
     }
     console.log(
-      `${stale.join(' and ')} is stale for ${pinnedTag}: run pnpm nitro:check-release --to ${pinnedTag}`,
+      `${stale.join(' and ')} ${stale.length > 1 ? 'are' : 'is'} stale for ${pinnedTag}: ` +
+        `run pnpm nitro:check-release --to ${pinnedTag}`,
     );
     setOutput('stale_pins', 'true');
     return;

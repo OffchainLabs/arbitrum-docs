@@ -6,6 +6,8 @@ import path from 'node:path';
 import { type TestContext, test } from 'node:test';
 import { URL, fileURLToPath } from 'node:url';
 
+import { codeRefs, transactionLifecycle } from '../components/widgets/NitroTxFlow/model.ts';
+
 const SCRIPT = fileURLToPath(new URL('./check-nitro-release.ts', import.meta.url));
 const OLD_SHA = '1'.repeat(40);
 const NEW_SHA = '2'.repeat(40);
@@ -20,6 +22,14 @@ const VARS: Record<string, string> = {
   nitroPathToArbos: 'arbos',
   unrelated: 'preserve me',
 };
+// The vars pin (arbos) and the linked file, plus every nitro path the flow model links.
+const EXPECTED_NITRO_PATHS =
+  2 +
+  new Set(
+    codeRefs(transactionLifecycle)
+      .filter((r) => r.repo === 'nitro')
+      .map((r) => r.path),
+  ).size;
 const LINKED_PAGE =
   '# Page\n' +
   '[link](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/arbos/block_processor.go)\n';
@@ -37,6 +47,9 @@ interface RunOptions {
   images?: Array<{ name: string }>;
   missing?: string[];
   rateLimited?: boolean;
+  contractsRateLimited?: boolean;
+  contractsStatus?: number;
+  contractsMetadata?: Record<string, unknown>;
 }
 
 // A bump while `releases/latest` still names the pinned tag: any lookup at v3.11.4 proves `--to`
@@ -62,6 +75,9 @@ function run(
     images,
     missing = [],
     rateLimited = false,
+    contractsRateLimited = false,
+    contractsStatus = 200,
+    contractsMetadata = {},
   }: RunOptions = {},
 ) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'nitro-release-'));
@@ -92,7 +108,10 @@ function run(
       type: 'submodule',
       submodule_git_url: 'https://github.com/OffchainLabs/nitro-contracts.git',
       sha: contractsSha,
+      ...contractsMetadata,
     },
+    contractsStatus,
+    contractsRateLimited,
     status,
     images: images ?? null,
     missing,
@@ -114,7 +133,12 @@ function run(
       if (url.includes('/contents/go-ethereum?ref=')) {
         return Response.json(data.submodule, { status: data.status });
       }
-      if (url.includes('/contents/contracts?ref=')) return Response.json(data.contracts);
+      if (url.includes('/contents/contracts?ref=')) {
+        return Response.json(data.contracts, { status: data.contractsStatus });
+      }
+      if (data.contractsRateLimited && url.includes('/nitro-contracts/contents/')) {
+        return Response.json({}, { status: 403 });
+      }
       const contents = /\\/contents\\/([^?]+)\\?ref=/.exec(url);
       if (contents) {
         const status = data.rateLimited ? 403 : data.missing.includes(contents[1]) ? 404 : 200;
@@ -257,7 +281,10 @@ test('--to verifies every path pin and source link at the new tag', (t) => {
     result.requests.some((url) => url.endsWith('contents/arbos/block_processor.go?ref=v3.11.4')),
   );
   assert.ok(result.requests.every((url) => !url.includes('?ref=v3.11.3')));
-  assert.match(result.stdout, /verified 7 upstream paths at v3\.11\.4/);
+  assert.match(
+    result.stdout,
+    new RegExp(`verified ${EXPECTED_NITRO_PATHS} upstream paths at v3\\.11\\.4`),
+  );
 });
 
 test('--to at the pinned tag repairs the submodule without an image lookup', (t) => {
@@ -425,4 +452,43 @@ test('fails when a model nitro-contracts path is missing at nitroContractsCommit
     result.stderr,
     /src\/bridge\/SequencerInbox\.sol \(components\/widgets\/NitroTxFlow\/model\.ts, step post\)/,
   );
+});
+
+test('default mode checks the contracts path at the pinned commit, not the resolved one', (t) => {
+  const result = run(t, { sha: OLD_SHA, contractsSha: NEW_CONTRACTS_SHA });
+  assert.equal(result.status, 0, result.stderr);
+  const contractsRequests = result.requests.filter((url) => url.includes('/nitro-contracts/'));
+  assert.ok(contractsRequests.length > 0);
+  assert.ok(contractsRequests.every((url) => url.endsWith(`?ref=${OLD_CONTRACTS_SHA}`)));
+});
+
+test('a rate-limited nitro-contracts lookup fails as an API error, not as a moved path', (t) => {
+  const result = run(t, { ...BUMP, contractsRateLimited: true });
+  assert.equal(result.status, 1);
+  assert.equal(result.raw, result.original);
+  assert.equal(result.outputs, '');
+  const message = result.stderr
+    .split('\n')
+    .filter((line) => !/^\s+at /.test(line))
+    .join('\n');
+  assert.match(message, /403/);
+  assert.doesNotMatch(message, /no longer has/);
+});
+
+test('a failed contracts submodule lookup fails without changing pins', (t) => {
+  const result = run(t, { contractsStatus: 404 });
+  assert.equal(result.status, 1);
+  assert.equal(result.raw, result.original);
+  assert.equal(result.outputs, '');
+  assert.ok(result.requests.some((url) => url.endsWith('contracts?ref=v3.11.3')));
+});
+
+test('an invalid contracts submodule fails naming it', (t) => {
+  const result = run(t, {
+    contractsMetadata: { submodule_git_url: 'https://github.com/other/repo.git' },
+  });
+  assert.equal(result.status, 1);
+  assert.equal(result.raw, result.original);
+  assert.equal(result.outputs, '');
+  assert.match(result.stderr, /Invalid contracts submodule at Nitro v3\.11\.3/);
 });
