@@ -16,6 +16,7 @@
   "nitroPrecompilesRepositorySlug": "nitro-precompile-interfaces",
   "nitroPrecompilesCommit": "7e88c8cc53c2e96201a23c638f1536557b9cb68b",
   "goEthereumCommit": "30456d24d3cff444d3b0f246e9c7609477c7d4a1",
+  "nitroContractsCommit": "4341b132cfbdcc980ead03765ca5224ff6cb5d97",
   "portalApplicationForm": "https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform",
   "arbOneNitroArchiveSnapshot": "https://snapshot.arbitrum.foundation/arb1/nitro-archive.tar",
   "arbOneClassicArchiveSnapshot": "https://snapshot.arbitrum.foundation/arb1/classic-archive.tar",

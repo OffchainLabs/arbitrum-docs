@@ -9,10 +9,13 @@ import { URL, fileURLToPath } from 'node:url';
 const SCRIPT = fileURLToPath(new URL('./check-nitro-release.ts', import.meta.url));
 const OLD_SHA = '1'.repeat(40);
 const NEW_SHA = '2'.repeat(40);
+const OLD_CONTRACTS_SHA = '3'.repeat(40);
+const NEW_CONTRACTS_SHA = '4'.repeat(40);
 const VARS: Record<string, string> = {
   nitroVersionTag: 'v3.11.3',
   latestNitroNodeImage: 'offchainlabs/nitro-node:v3.11.3-beb2108',
   goEthereumCommit: OLD_SHA,
+  nitroContractsCommit: OLD_CONTRACTS_SHA,
   nitroRepositorySlug: 'nitro',
   nitroPathToArbos: 'arbos',
   unrelated: 'preserve me',
@@ -27,6 +30,7 @@ interface RunOptions {
   latest?: string;
   published?: string[];
   sha?: string;
+  contractsSha?: string;
   status?: number;
   metadata?: Record<string, unknown>;
   vars?: Record<string, string>;
@@ -51,6 +55,7 @@ function run(
     latest = 'v3.11.4',
     published = [latest, VARS.nitroVersionTag],
     sha = NEW_SHA,
+    contractsSha = OLD_CONTRACTS_SHA,
     status = 200,
     metadata = {},
     vars = VARS,
@@ -83,6 +88,11 @@ function run(
       sha,
       ...metadata,
     },
+    contracts: {
+      type: 'submodule',
+      submodule_git_url: 'https://github.com/OffchainLabs/nitro-contracts.git',
+      sha: contractsSha,
+    },
     status,
     images: images ?? null,
     missing,
@@ -104,6 +114,7 @@ function run(
       if (url.includes('/contents/go-ethereum?ref=')) {
         return Response.json(data.submodule, { status: data.status });
       }
+      if (url.includes('/contents/contracts?ref=')) return Response.json(data.contracts);
       const contents = /\\/contents\\/([^?]+)\\?ref=/.exec(url);
       if (contents) {
         const status = data.rateLimited ? 403 : data.missing.includes(contents[1]) ? 404 : 200;
@@ -246,7 +257,7 @@ test('--to verifies every path pin and source link at the new tag', (t) => {
     result.requests.some((url) => url.endsWith('contents/arbos/block_processor.go?ref=v3.11.4')),
   );
   assert.ok(result.requests.every((url) => !url.includes('?ref=v3.11.3')));
-  assert.match(result.stdout, /verified 2 upstream paths at v3\.11\.4/);
+  assert.match(result.stdout, /verified 7 upstream paths at v3\.11\.4/);
 });
 
 test('--to at the pinned tag repairs the submodule without an image lookup', (t) => {
@@ -362,4 +373,56 @@ test('unpublished node image fails a bump without changing pins or commands', (t
   assert.equal(result.raw, result.original);
   assert.ok(result.page.includes(VARS.latestNitroNodeImage));
   assert.equal(result.outputs, '');
+});
+
+test('default mode reports a stale nitroContractsCommit without writing', (t) => {
+  const result = run(t, { sha: OLD_SHA, contractsSha: NEW_CONTRACTS_SHA });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.raw, result.original);
+  assert.ok(result.requests.some((url) => url.endsWith('contracts?ref=v3.11.3')));
+  assert.match(result.outputs, /stale_pins=true/);
+  assert.match(result.stdout, /nitroContractsCommit is stale for v3\.11\.3/);
+  assert.match(result.stdout, /--to v3\.11\.3/);
+});
+
+test('--to writes nitroContractsCommit', (t) => {
+  const result = run(t, { ...BUMP, contractsSha: NEW_CONTRACTS_SHA });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.vars.nitroContractsCommit, NEW_CONTRACTS_SHA);
+  assert.ok(result.requests.some((url) => url.endsWith('contracts?ref=v3.11.4')));
+  assert.match(result.outputs, /updates_made=true/);
+});
+
+test('--to checks the nitro-contracts path at the resolved contracts commit', (t) => {
+  const result = run(t, { ...BUMP, contractsSha: NEW_CONTRACTS_SHA });
+  assert.equal(result.status, 0, result.stderr);
+  assert.ok(
+    result.requests.some((url) =>
+      url.endsWith(
+        `nitro-contracts/contents/src/bridge/SequencerInbox.sol?ref=${NEW_CONTRACTS_SHA}`,
+      ),
+    ),
+  );
+});
+
+test('fails naming components/widgets/NitroTxFlow/model.ts and the step id when a model nitro path is missing', (t) => {
+  const result = run(t, { ...BUMP, missing: ['execution/gethexec/sequencer.go'] });
+  assert.equal(result.status, 1);
+  assert.equal(result.raw, result.original);
+  assert.equal(result.outputs, '');
+  assert.match(
+    result.stderr,
+    /execution\/gethexec\/sequencer\.go \(components\/widgets\/NitroTxFlow\/model\.ts, step sequence\)/,
+  );
+});
+
+test('fails when a model nitro-contracts path is missing at nitroContractsCommit', (t) => {
+  const result = run(t, { ...BUMP, missing: ['src/bridge/SequencerInbox.sol'] });
+  assert.equal(result.status, 1);
+  assert.equal(result.raw, result.original);
+  assert.equal(result.outputs, '');
+  assert.match(
+    result.stderr,
+    /src\/bridge\/SequencerInbox\.sol \(components\/widgets\/NitroTxFlow\/model\.ts, step post\)/,
+  );
 });
