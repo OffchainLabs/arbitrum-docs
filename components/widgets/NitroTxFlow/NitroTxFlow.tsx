@@ -1,14 +1,14 @@
 'use client';
 
-import { ReactFlow, type ReactFlowInstance, type Viewport } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
+import type { ReactFlowInstance, Viewport } from '@xyflow/react';
 import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 
-import { ActorNode, type ActorNodeType } from './ActorNode.tsx';
+import type { ActorNodeType } from './ActorNode.tsx';
 import { BandLabels } from './BandLabels.tsx';
-import { BandNode, type BandNodeType } from './BandNode.tsx';
+import type { BandNodeType } from './BandNode.tsx';
+import { FlowCanvas } from './FlowCanvas.tsx';
 import { Legend } from './Legend.tsx';
-import { RoutedEdge, type RoutedEdgeType } from './RoutedEdge.tsx';
+import type { RoutedEdgeType } from './RoutedEdge.tsx';
 import { StepBar } from './StepBar.tsx';
 import { StepCard } from './StepCard.tsx';
 import { BRAND } from './brand.ts';
@@ -23,9 +23,6 @@ const FLOW = transactionLifecycle;
 const STEP_COUNT = FLOW.steps.length;
 const STEP_NUMBERS = stepNumbersByEdge(FLOW);
 const NARROW_QUERY = '(max-width: 767px)';
-
-const nodeTypes = { actor: ActorNode, band: BandNode };
-const edgeTypes = { routed: RoutedEdge };
 
 export default function NitroTxFlow() {
   const { layout, failed } = useFlowLayout(FLOW);
@@ -55,8 +52,8 @@ export default function NitroTxFlow() {
   );
   const stepLabel = `Step ${index + 1} of ${STEP_COUNT}: ${step.title}`;
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'ArrowRight' && index < STEP_COUNT - 1) goTo(index + 1);
-    if (event.key === 'ArrowLeft' && index > 0) goTo(index - 1);
+    if (event.key === 'ArrowRight') goTo(index + 1);
+    if (event.key === 'ArrowLeft') goTo(index - 1);
   };
 
   return (
@@ -93,31 +90,15 @@ export default function NitroTxFlow() {
           />
         )}
         {layout && (
-          // React Flow sets `touch-action: none` on its pane, which stops a one-finger swipe from
-          // scrolling the page. `!` because the utility layer loses to the unlayered React Flow CSS.
-          <div className="absolute inset-0 [&_.react-flow\_\_pane]:touch-manipulation!">
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
-              onInit={(flow) => {
-                setInstance(flow);
-                setViewport(flow.getViewport());
-              }}
-              onMove={(_, next) => setViewport(next)}
-              minZoom={0.3}
-              // At the bottom right, the step bar covers it on phones.
-              attributionPosition="top-right"
-              panOnDrag={false}
-              zoomOnScroll={false}
-              zoomOnDoubleClick={false}
-              preventScrolling={false}
-              nodesDraggable={false}
-              nodesConnectable={false}
-              elementsSelectable={false}
-            />
-          </div>
+          <FlowCanvas
+            nodes={nodes}
+            edges={edges}
+            onInit={(flow) => {
+              setInstance(flow);
+              setViewport(flow.getViewport());
+            }}
+            onMove={setViewport}
+          />
         )}
         <StepBar
           index={index}

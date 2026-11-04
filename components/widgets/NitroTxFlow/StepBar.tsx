@@ -33,7 +33,7 @@ export function StepBar({ index, count, started, barRef, onGo, onShowAll }: Step
         className="rounded-md px-2 py-1 whitespace-nowrap aria-disabled:opacity-40 md:px-3"
         style={{ border: `1px solid ${BRAND.connector}` }}
         aria-disabled={index === 0}
-        onClick={() => index > 0 && onGo(index - 1)}
+        onClick={() => onGo(index - 1)}
       >
         ← Back
       </button>
@@ -48,7 +48,7 @@ export function StepBar({ index, count, started, barRef, onGo, onShowAll }: Step
           boxShadow: started ? 'none' : '0 0 0 3px rgba(18, 170, 255, 0.6)',
         }}
         aria-disabled={index === count - 1}
-        onClick={() => index < count - 1 && onGo(index + 1)}
+        onClick={() => onGo(index + 1)}
       >
         Next →
       </button>

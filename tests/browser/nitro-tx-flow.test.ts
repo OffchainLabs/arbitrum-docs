@@ -10,6 +10,7 @@ const baseUrl = process.env.STATIC_DOCS_TEST_URL ?? 'http://localhost:3000';
 const PAGE_PATH = '/how-arbitrum-works/deep-dives/nitro-transaction-flow';
 const STEPS = transactionLifecycle.steps;
 const WIDE: BrowserContextOptions = { viewport: { width: 1280, height: 800 } };
+const TABLET: BrowserContextOptions = { viewport: { width: 768, height: 1024 } };
 // Phone emulation: overlay scrollbars, so the page is 375px wide, and touch input.
 const PHONE: BrowserContextOptions = {
   viewport: { width: 375, height: 812 },
@@ -67,16 +68,52 @@ async function withFlow(
   }
 }
 
+/**
+ * Waits until the hash, scroll position, camera transform, card title and band names stay the same
+ * for five animation frames in a row.
+ */
 async function settle(page: Page) {
-  await page.evaluate(
-    () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+  await page.evaluate(() => {
+    delete (window as unknown as { settleProbe?: unknown }).settleProbe;
+  });
+  await page.waitForFunction(
+    (canvasSelector) => {
+      const probe = window as unknown as { settleProbe?: { state: string; frames: number } };
+      const canvas = document.querySelector(canvasSelector);
+      const viewport = document.querySelector<HTMLElement>('.react-flow__viewport');
+      const bandNames = [...(canvas?.querySelectorAll('div[aria-hidden="true"]') ?? [])];
+      const state = [
+        window.location.hash,
+        window.scrollY,
+        viewport?.style.transform,
+        canvas?.parentElement?.querySelector('h3')?.textContent,
+        ...bandNames.map((name) => name.getAttribute('style')),
+      ].join('|');
+      const frames = probe.settleProbe?.state === state ? probe.settleProbe.frames + 1 : 0;
+      probe.settleProbe = { state, frames };
+      return viewport !== null && frames >= 5;
+    },
+    CANVAS,
+    { polling: 'raf' },
   );
-  await page.waitForTimeout(150);
+}
+
+/** Waits until the card and the hash show step `index` (0-based), then until the view settles. */
+async function waitForStep(page: Page, index: number) {
+  await page.waitForFunction(
+    ({ canvasSelector, title, hash }) =>
+      document.querySelector(canvasSelector)?.parentElement?.querySelector('h3')?.textContent ===
+        title && window.location.hash === hash,
+    { canvasSelector: CANVAS, title: STEPS[index]!.title, hash: `#step-${index + 1}` },
+  );
+  await settle(page);
 }
 
 async function next(page: Page) {
+  const title = await cardTitle(page);
+  const index = STEPS.findIndex((step) => step.title === title);
   await page.getByRole('button', { name: 'Next →' }).click();
-  await settle(page);
+  await waitForStep(page, index + 1);
 }
 
 async function cardTitle(page: Page): Promise<string | null> {
@@ -173,6 +210,7 @@ test('a heading hash does not reset the step', async () => {
     await page.evaluate(() => {
       window.location.hash = '#related-pages';
     });
+    await page.waitForFunction(() => window.location.hash === '#related-pages');
     await settle(page);
     assert.equal(new URL(page.url()).hash, '#related-pages');
     assert.equal(await cardTitle(page), STEPS[2]!.title);
@@ -188,10 +226,10 @@ test('ArrowRight steps only when focus is inside the widget', async () => {
 
     await page.locator(CANVAS).locator('xpath=..').focus();
     await page.keyboard.press('ArrowRight');
-    await settle(page);
+    await waitForStep(page, 1);
     assert.equal(await cardTitle(page), STEPS[1]!.title);
     await page.keyboard.press('ArrowLeft');
-    await settle(page);
+    await waitForStep(page, 0);
     assert.equal(await cardTitle(page), STEPS[0]!.title);
     await page.keyboard.press('ArrowLeft');
     await settle(page);
@@ -204,7 +242,7 @@ test('reaching either end keeps keyboard focus inside the widget', async () => {
     const root = page.locator(CANVAS).locator('xpath=..');
     await page.getByRole('button', { name: 'Next →' }).focus();
     await page.keyboard.press('Enter');
-    await settle(page);
+    await waitForStep(page, 6);
     assert.equal(await cardTitle(page), STEPS[6]!.title);
     assert.ok(await root.evaluate((element) => element.contains(document.activeElement)));
     await page.keyboard.press('Enter');
@@ -215,7 +253,7 @@ test('reaching either end keeps keyboard focus inside the widget', async () => {
     const root = page.locator(CANVAS).locator('xpath=..');
     await page.getByRole('button', { name: '← Back' }).focus();
     await page.keyboard.press('Enter');
-    await settle(page);
+    await waitForStep(page, 0);
     assert.equal(await cardTitle(page), STEPS[0]!.title);
     assert.ok(await root.evaluate((element) => element.contains(document.activeElement)));
   });
@@ -400,7 +438,7 @@ test('at 375×812 the step bar fits inside the canvas', async () => {
   });
 });
 
-for (const device of [WIDE, PHONE]) {
+for (const device of [WIDE, TABLET, PHONE]) {
   const width = device.viewport!.width;
   test(`Next scrolls the canvas top below the site header at ${width}px`, async () => {
     await withFlow(device, '', async (page) => {
@@ -456,7 +494,9 @@ test('a one-finger vertical swipe over the canvas at 375px scrolls the page', as
       });
     }
     await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    await settle(page);
+    await page
+      .waitForFunction((start) => window.scrollY > start + 100, before, { timeout: 5_000 })
+      .catch(() => undefined);
     const after = await page.evaluate(() => window.scrollY);
     assert.ok(after - before > 100, `scrollY ${before} -> ${after}`);
   });

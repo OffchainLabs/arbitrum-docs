@@ -1,6 +1,6 @@
 import { type RefObject, useEffect, useRef, useState } from 'react';
 
-import { parseStepHash, stepHash } from './navigation.ts';
+import { clampStep, parseStepHash, stepHash } from './navigation.ts';
 
 // Clears the sticky site header, and the table of contents bar under it when Fumadocs shows one,
 // plus 16px. Fumadocs sets `--fd-docs-row-3` to their total height: 56px at 1280px, 96px at 375px.
@@ -48,9 +48,12 @@ export function useStepNavigation(stepCount: number, canvasRef: RefObject<HTMLEl
     window.history.replaceState(null, '', stepHash(index));
   }, [index]);
 
+  // Clamped: at the first or last step, Back or Next does nothing.
   const goTo = (next: number) => {
+    const target = clampStep(next, stepCount);
+    if (target === index) return;
     setStarted(true);
-    setIndex(next);
+    setIndex(target);
     const canvas = canvasRef.current;
     if (!canvas) return;
     const box = canvas.getBoundingClientRect();
