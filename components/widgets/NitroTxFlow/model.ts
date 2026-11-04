@@ -106,7 +106,8 @@ export const transactionLifecycle: Flow = {
         impact: 'The full node does not forward the transaction, so the sequencer never sees it.',
         recovery:
           '--execution.tx-pre-checker.strictness sets how much the full node checks. ' +
-          'At 0 the node skips the check. The default is 20.',
+          'Below 10 the node skips these checks but still runs its filtered address check. ' +
+          'The default is 20.',
       },
       citations: [
         { repo: 'nitro', path: 'execution/gethexec/arb_interface.go', line: 44 },
@@ -118,7 +119,9 @@ export const transactionLifecycle: Flow = {
         { repo: 'nitro', path: 'execution/gethexec/tx_pre_checker.go', line: 164 },
         { repo: 'nitro', path: 'execution/gethexec/tx_pre_checker.go', line: 251 },
         { repo: 'nitro', path: 'execution/gethexec/tx_pre_checker.go', line: 256 },
+        { repo: 'nitro', path: 'execution/gethexec/tx_pre_checker.go', line: 44 },
         { repo: 'nitro', path: 'execution/gethexec/tx_pre_checker.go', line: 138 },
+        { repo: 'nitro', path: 'execution/gethexec/tx_pre_checker.go', line: 253 },
         { repo: 'nitro', path: 'execution/gethexec/tx_pre_checker.go', line: 57 },
         { repo: 'nitro', path: 'cmd/nitro/config/config.go', line: 41 },
         { repo: 'nitro', path: 'execution/gethexec/node.go', line: 145 },
@@ -139,9 +142,10 @@ export const transactionLifecycle: Flow = {
       code: { repo: 'nitro', path: 'execution/gethexec/forwarder.go' },
       failure: {
         symptoms:
-          'The full node logs error forwarding transaction at warn level. ' +
-          'If no target accepts the transaction, it logs ' +
-          'Failed to publish transaction to any of the forwarding targets.',
+          'The full node logs "error forwarding transaction" at warn level. ' +
+          'If the error does not match its retry list, the node returns it at once. ' +
+          'If every target fails with a matching error, the node logs ' +
+          '"Failed to publish transaction to any of the forwarding targets".',
         impact:
           'The full node returns the error to the wallet, and the sequencer does not get the transaction.',
         recovery:
@@ -181,12 +185,13 @@ export const transactionLifecycle: Flow = {
       code: { repo: 'nitro', path: 'execution/gethexec/sequencer.go' },
       failure: {
         symptoms:
-          'The metric arb/sequencer/transactions/dropped/queuetimeout goes up. ' +
+          'The metric "arb/sequencer/transactions/dropped/queuetimeout" goes up. ' +
           'If --node.sequencer and --execution.sequencer.enable differ, the node logs ' +
-          'consensus and execution must agree if sequencing is enabled or not.',
+          '"consensus and execution must agree if sequencing is enabled or not".',
         impact:
           'The sequencer drops a transaction that waits in its queue longer than ' +
-          '--execution.sequencer.queue-timeout, 12 seconds by default. ' +
+          '--execution.sequencer.queue-timeout plus the Timeboost express lane advantage. ' +
+          'The queue timeout is 12 seconds by default. ' +
           'The submitter gets the timeout error back.',
         recovery: 'TODO: Nitro engineer',
       },
@@ -226,8 +231,8 @@ export const transactionLifecycle: Flow = {
       finality: 'soft',
       failure: {
         symptoms:
-          'The full node logs failed connect to sequencer broadcast, waiting and retrying or ' +
-          'Server connection timed out without receiving data.',
+          'The full node logs "failed connect to sequencer broadcast, waiting and retrying" or ' +
+          '"Server connection timed out without receiving data".',
         impact:
           'The node reconnects with a backoff that doubles up to a maximum. ' +
           'Until then, it gets new transactions only from batches on the parent chain.',
@@ -274,8 +279,8 @@ export const transactionLifecycle: Flow = {
       code: { repo: 'nitro', path: 'arbnode/batch_poster.go' },
       failure: {
         symptoms:
-          'The batch poster logs error getting message from streamer, or error posting batch ' +
-          'with error adding message to batch in the error.',
+          'The batch poster logs "error getting message from streamer", or "error posting batch" ' +
+          'with "error adding message to batch" in the error.',
         impact:
           'The batch poster drops the batch it was building and tries again after ' +
           '--node.batch-poster.error-delay, 10 seconds by default. ' +
@@ -304,9 +309,10 @@ export const transactionLifecycle: Flow = {
       id: 'post',
       title: 'Post',
       text:
-        'The batch poster sends the batch to SequencerInbox in a parent chain transaction. ' +
-        'The batch goes in EIP-4844 blobs when blob posting is on and the parent chain supports ' +
-        'blobs, and in calldata when blob posting is off. ' +
+        'The batch poster sends the batch to SequencerInbox in a parent chain transaction, ' +
+        'with the data in EIP-4844 blobs or in calldata. ' +
+        'It can choose blobs only when blob posting is on and the parent chain supports blobs, ' +
+        'and otherwise it uses calldata. ' +
         "SequencerInbox appends the batch to the Bridge's accumulator.",
       actors: ['poster', 'seqinbox', 'bridge'],
       edges: ['post', 'append'],
@@ -315,9 +321,9 @@ export const transactionLifecycle: Flow = {
       finality: 'batch-posted',
       failure: {
         symptoms:
-          'The batch poster logs error posting batch. ' +
+          'The batch poster logs "error posting batch". ' +
           'For errors it does not treat as temporary, the metric ' +
-          'arb/batchPoster/action/failure goes up.',
+          '"arb/batchPoster/action/failure" goes up.',
         impact:
           'SequencerInbox reverts with NotBatchPoster when the sender is not on its batch ' +
           'poster list. ' +
@@ -328,7 +334,12 @@ export const transactionLifecycle: Flow = {
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1897 },
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 88 },
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 89 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1455 },
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1458 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1466 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1467 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1509 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1520 },
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1248 },
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1254 },
         { repo: 'nitro-contracts', path: 'src/bridge/SequencerInbox.sol', line: 733 },
@@ -347,9 +358,9 @@ export const transactionLifecycle: Flow = {
       id: 'read-back',
       title: 'Read back',
       text:
-        'Every full node reads new batches from SequencerInbox on the parent chain. ' +
-        'It compares each batch message byte for byte with the message it stored from the feed, ' +
-        'and keeps the parent chain version when they differ. ' +
+        'Every full node reads new batches from SequencerInbox on the parent chain and compares ' +
+        'each batch message with the message it stored from the feed. ' +
+        'If they differ in more than the batch cost fields, it keeps the parent chain version. ' +
         'By default the node reads the latest parent chain blocks, so parent chain finality ' +
         'comes later, when the parent chain finalizes the block that holds the batch.',
       actors: ['seqinbox', 'fullnode'],
@@ -357,7 +368,8 @@ export const transactionLifecycle: Flow = {
       flag: '--node.inbox-reader.read-mode',
       code: { repo: 'nitro', path: 'arbnode/inbox_reader.go' },
       failure: {
-        symptoms: 'The node logs TransactionStreamer: Reorg detected! with confirmed set to true.',
+        symptoms:
+          'The node logs "TransactionStreamer: Reorg detected!" with confirmed set to true.',
         impact:
           'The node replaces its stored messages from that point with the parent chain version. ' +
           'The result of a transaction it showed from the feed can change.',
@@ -372,6 +384,8 @@ export const transactionLifecycle: Flow = {
         { repo: 'nitro', path: 'arbnode/inbox_tracker.go', line: 766 },
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1105 },
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1019 },
+        { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1032 },
+        { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1043 },
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1187 },
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1190 },
         { repo: 'nitro', path: 'arbnode/inbox_reader.go', line: 72 },
