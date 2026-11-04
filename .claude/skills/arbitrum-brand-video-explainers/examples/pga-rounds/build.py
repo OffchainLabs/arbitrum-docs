@@ -23,9 +23,22 @@ from xml.sax.saxutils import escape
 
 # Palette, contrast rules, and the brand background all come from the sibling
 # skill. Keep the two in sync rather than copying colour values around.
-SKILL = Path(
-    os.environ.get('SVG_SKILL', Path(__file__).resolve().parents[3] / 'arbitrum-brand-svg-diagrams')
-)
+#
+# Resolved from the repo root (the nearest ancestor holding `.claude/skills/`), so this file
+# works unchanged after it is copied out to `docs/explainers/<name>/build.py`. `SVG_SKILL`
+# overrides it.
+def _svg_skill() -> Path:
+    override = os.environ.get('SVG_SKILL')
+    if override:
+        return Path(override)
+    for parent in Path(__file__).resolve().parents:
+        candidate = parent / '.claude' / 'skills' / 'arbitrum-brand-svg-diagrams'
+        if candidate.is_dir():
+            return candidate
+    sys.exit('build.py: cannot find .claude/skills/arbitrum-brand-svg-diagrams above this file; set SVG_SKILL')
+
+
+SKILL = _svg_skill()
 
 
 def _work_dir():
