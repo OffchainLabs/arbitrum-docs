@@ -42,15 +42,114 @@ export interface Step {
   citations: CodeRef[];
   // Where the user's transaction is during this step; that chain's band is highlighted.
   txChain: 'child' | 'parent';
+  // SPIKE: an inner flow the reader opens by clicking `actor` on this step.
+  detail?: StepDetail;
+}
+
+export interface StepDetail {
+  actor: string;
+  flow: Flow;
 }
 
 export interface Flow {
   id: string;
   title: string;
+  // SPIKE: false for a detail flow inside one process, where the chain carries no information.
+  showChains?: boolean;
   actors: Actor[];
   edges: FlowEdge[];
   steps: Step[];
 }
+
+const SPIKE_FAILURE: Failure = {
+  symptoms: 'SPIKE placeholder.',
+  impact: 'SPIKE placeholder.',
+  recovery: 'SPIKE placeholder.',
+};
+
+// SPIKE: placeholder inner flow for the Sequencer on step 3. Content is not reviewed.
+export const sequencerStep3: Flow = {
+  id: 'sequencer-step-3',
+  title: 'Inside the Sequencer',
+  showChains: false,
+  actors: [
+    {
+      id: 'prechecker',
+      label: 'Transaction pre-checker',
+      tech: 'tx_pre_checker.go',
+      kind: 'process',
+      chain: 'child',
+    },
+    {
+      id: 'queue',
+      label: 'Transaction queue',
+      tech: 'sequencer.go',
+      kind: 'process',
+      chain: 'child',
+    },
+    {
+      id: 'engine',
+      label: 'Execution engine',
+      tech: 'ArbOS on geth',
+      kind: 'process',
+      chain: 'child',
+    },
+    {
+      id: 'streamer',
+      label: 'Transaction streamer',
+      tech: 'transaction_streamer.go',
+      kind: 'process',
+      chain: 'child',
+    },
+  ],
+  edges: [
+    { id: 'checked', source: 'prechecker', target: 'queue', label: 'Checked transaction' },
+    { id: 'ordered', source: 'queue', target: 'engine', label: 'Ordered batch of transactions' },
+    { id: 'block', source: 'engine', target: 'streamer', label: 'Block and message' },
+  ],
+  steps: [
+    {
+      id: 'pre-check',
+      title: 'Pre-check',
+      text: 'SPIKE: the pre-checker rejects a transaction that cannot pay or has a bad nonce.',
+      actors: ['prechecker'],
+      edges: [],
+      failure: SPIKE_FAILURE,
+      citations: [],
+      txChain: 'child',
+    },
+    {
+      id: 'queue',
+      title: 'Queue',
+      text: 'SPIKE: the transaction waits in the queue until the sequencer takes it.',
+      actors: ['prechecker', 'queue'],
+      edges: ['checked'],
+      failure: SPIKE_FAILURE,
+      citations: [],
+      txChain: 'child',
+    },
+    {
+      id: 'execute',
+      title: 'Order and execute',
+      text: 'SPIKE: the sequencer orders the queued transactions and ArbOS executes them into a block.',
+      actors: ['queue', 'engine'],
+      edges: ['ordered'],
+      failure: SPIKE_FAILURE,
+      citations: [],
+      txChain: 'child',
+    },
+    {
+      id: 'record',
+      title: 'Record',
+      text: 'SPIKE: the transaction streamer stores the message and hands it to the feed and the batch poster.',
+      actors: ['engine', 'streamer'],
+      edges: ['block'],
+      failure: SPIKE_FAILURE,
+      citations: [],
+      txChain: 'child',
+    },
+  ],
+};
 
 export const transactionLifecycle: Flow = {
   id: 'transaction-lifecycle',
@@ -175,6 +274,7 @@ export const transactionLifecycle: Flow = {
     },
     {
       id: 'sequence',
+      detail: { actor: 'seq', flow: sequencerStep3 },
       title: 'Sequence',
       text:
         'The sequencer puts the transaction in its queue, orders it, and executes it into a ' +

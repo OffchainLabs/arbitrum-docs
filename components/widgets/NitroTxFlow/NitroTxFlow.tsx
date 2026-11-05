@@ -6,6 +6,7 @@ import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react'
 import type { ActorNodeType } from './ActorNode.tsx';
 import { BandLabels } from './BandLabels.tsx';
 import type { BandNodeType } from './BandNode.tsx';
+import { DetailOverlay } from './DetailOverlay.tsx';
 import { FlowCanvas } from './FlowCanvas.tsx';
 import { Legend } from './Legend.tsx';
 import type { RoutedEdgeType } from './RoutedEdge.tsx';
@@ -37,6 +38,19 @@ export default function NitroTxFlow() {
   const { index, started, goTo } = useStepNavigation(STEP_COUNT, canvasRef);
   const step = FLOW.steps[index]!;
   const showAll = useStepCamera(instance, layout, step, canvasRef);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [detailSeen, setDetailSeen] = useState(false);
+  const trigger = useMemo(
+    () => ({
+      label: `Look inside the ${FLOW.actors.find((a) => a.id === step.detail?.actor)?.label}`,
+      blink: !detailSeen,
+      onOpen: () => {
+        setDetailSeen(true);
+        setDetailOpen(true);
+      },
+    }),
+    [step, detailSeen],
+  );
 
   useEffect(() => {
     const query = window.matchMedia(NARROW_QUERY);
@@ -45,7 +59,10 @@ export default function NitroTxFlow() {
     return () => query.removeEventListener('change', onChange);
   }, []);
 
-  const nodes = useMemo(() => (layout ? flowNodes(FLOW, layout, step) : []), [layout, step]);
+  const nodes = useMemo(
+    () => (layout ? flowNodes(FLOW, layout, step, trigger) : []),
+    [layout, step, trigger],
+  );
   const edges = useMemo(
     () => (layout ? flowEdges(FLOW, layout, step, STEP_NUMBERS) : []),
     [layout, step],
@@ -113,6 +130,9 @@ export default function NitroTxFlow() {
         {stepLabel}
       </div>
       <StepCard step={step} />
+      {detailOpen && step.detail && (
+        <DetailOverlay flow={step.detail.flow} onClose={() => setDetailOpen(false)} />
+      )}
     </div>
   );
 }

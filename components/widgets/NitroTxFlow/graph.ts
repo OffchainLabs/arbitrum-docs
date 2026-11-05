@@ -1,4 +1,4 @@
-import type { ActorNodeType } from './ActorNode.tsx';
+import type { ActorNodeType, NodeTrigger } from './ActorNode.tsx';
 import type { BandNodeType } from './BandNode.tsx';
 import type { RoutedEdgeType } from './RoutedEdge.tsx';
 import { BRAND } from './brand.ts';
@@ -10,8 +10,10 @@ export function flowNodes(
   flow: Flow,
   layout: FlowLayout,
   step: Step,
+  trigger?: NodeTrigger,
 ): (ActorNodeType | BandNodeType)[] {
-  const bands: BandNodeType[] = layout.bands.map((band, i) => ({
+  const bandList = flow.showChains === false ? [] : layout.bands;
+  const bands: BandNodeType[] = bandList.map((band, i) => ({
     id: `band-${band.chain}-${i}`,
     type: 'band',
     position: { x: band.box.x, y: band.box.y },
@@ -26,7 +28,15 @@ export function flowNodes(
     id: actor.id,
     type: 'actor',
     position: layout.nodes[actor.id]!,
-    data: { actor, active: step.actors.includes(actor.id) },
+    // React Flow sets pointer-events: none on a node that is not selectable or draggable, so a
+    // mouse click would fall through to the pane. Only the trigger node takes clicks.
+    ...(trigger && step.detail?.actor === actor.id ? { style: { pointerEvents: 'all' } } : {}),
+    data: {
+      actor,
+      active: step.actors.includes(actor.id),
+      showChain: flow.showChains !== false,
+      trigger: step.detail?.actor === actor.id ? trigger : undefined,
+    },
     draggable: false,
     connectable: false,
   }));

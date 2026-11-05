@@ -64,6 +64,7 @@ export function useStepCamera<N extends Node, E extends Edge>(
   layout: FlowLayout | null,
   step: Step,
   canvasRef: RefObject<HTMLDivElement | null>,
+  frameAll = false,
 ) {
   const [canvasSize, setCanvasSize] = useState('');
 
@@ -80,8 +81,8 @@ export function useStepCamera<N extends Node, E extends Edge>(
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!instance || !layout || !canvas) return;
-    frame(instance, canvas, activeBoxes(layout, step));
-  }, [instance, layout, step, canvasRef, canvasSize]);
+    frame(instance, canvas, frameAll ? allBoxes(layout) : activeBoxes(layout, step));
+  }, [instance, layout, step, canvasRef, canvasSize, frameAll]);
 
   return () => {
     const canvas = canvasRef.current;
