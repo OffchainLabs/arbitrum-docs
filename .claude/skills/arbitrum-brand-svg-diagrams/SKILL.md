@@ -22,8 +22,7 @@ scales perfectly; the draw.io exports it replaces are often >1MB.
 - "This diagram is too heavy / make it more efficient" — a `public/img/*.svg`
   that is really a draw.io export with a base64 PNG inside (often 1–2 MB).
 - Replacing an **ASCII / box-drawing diagram** in an MDX page with a real image.
-  These often carry a `{/* TODO: replace with an SVG diagram asset */}` marker
-  and a `<div className="ascii-diagram">` wrapper — remove both.
+  Remove the ASCII art and any marker comment or wrapper element around it.
 - Creating a new **conceptual** diagram (layers, boxes, flows, brackets) for a
   docs page, especially `content/docs/how-arbitrum-works/**`.
 - You have the Arbitrum brand asset kit as a source and want palette/style
@@ -33,7 +32,7 @@ scales perfectly; the draw.io exports it replaces are often >1MB.
 
 - **Complex or interactive diagrams** (animated flows, clickable nodes, the
   transaction-lifecycle visualizers). Those are React widgets under
-  `components/widgets/` (see `EdgeChallengeFlow` and `CentralizedAuction`). This
+  `components/widgets/` (see `EdgeChallengeFlow`). This
   skill is for **static concept art only**.
 - Photographic / screenshot content — keep as PNG/WebP.
 - Never propose Mermaid or any text-DSL diagram tool (standing preference).
@@ -191,8 +190,8 @@ gradient stops as a plain `linearGradient` over a **full-bleed rect**:
 
 That lands at **~2 KB**, stays opaque under `<ImageZoom>`, and reads as the same
 family as the 1600×900 diagrams because the stops are identical. Size the canvas
-to the content and pick a `className` near it (`img-600px` for an 800-wide
-canvas keeps type crisp at 0.75× rather than 0.5625×).
+to the content: an 800-wide canvas shown at 600px keeps type crisp at 0.75×
+rather than 0.5625×.
 
 **The stroke trap — why transparent still fails.** Gotcha 2 above says "no text
 floating on transparency", but **strokes have the same problem and are easier to
@@ -365,7 +364,7 @@ Write the `alt` text to the same standard; it is page prose.
   the check whenever you bump a font size — that is exactly when a label that
   used to fit starts overflowing.
 - **Size text for the DISPLAYED width, not the canvas.** A 1600-wide diagram
-  shown with `className="img-900px"` is scaled to 0.5625×, so 16px type lands at
+  shown at 900px wide is scaled to 0.5625×, so 16px type lands at
   9px on the page. Floors for a 1600×900 canvas: **≥21px** box titles, **≥18px**
   sublabels, **≥17px** supplementary chips. Confirm with the display-width
   render (Verification step 4) — not the 1:1 render, which flatters everything.
@@ -390,12 +389,10 @@ Write the `alt` text to the same standard; it is page prose.
 ## Syntax-highlight code blocks (not plain orange)
 
 When a diagram shows function signatures, render them as a **palenight code
-block** (the docs' own dark Prism `darkTheme`) rather than white text on an
-orange box — the highlighting then matches the real code blocks on the page,
-and it fixes an accessibility bug: **white on `#f97316` is 2.80:1 and fails
-WCAG**, so the legacy orange treatment was never readable to begin with.
-Box fill `#292d3e`; token colors pulled from the installed renderer
-(`node -e 'console.log(require("prism-react-renderer").themes.palenight)'`):
+block** (the dark palenight palette) rather than white text on an
+orange box. It reads as code at a glance, and it fixes an accessibility bug:
+**white on `#f97316` is 2.80:1 and fails WCAG**, so the legacy orange treatment
+was never readable to begin with. Box fill `#292d3e`; token colors:
 
 | Token                         | Hex              |
 | ----------------------------- | ---------------- |
@@ -614,8 +611,8 @@ header borrowed from the prose (e.g. `1 · Native token bridging`). Mirror the
 doc's own section structure. Route the convergence/consumption flow into a
 visually separate zone below a divider.
 
-Two worked examples: `haw-l1-to-l2.svg` (on the `haw-svg-diagrams` branch — see
-Reference examples) and `arb-chain-fee-lifecycle.svg`, which uses two lanes to
+Two worked examples: `haw-l1-to-l2.svg` (see Reference examples) and
+`arb-chain-fee-lifecycle.svg`, which uses two lanes to
 separate fees paid in the same transaction from fees paid after a batch posting
 report — mirroring the split the page's own fee table makes.
 
@@ -656,13 +653,13 @@ python3 -c "import xml.dom.minidom as m; m.parse('$S'); print('XML ok')"
 stat -f%z "$S"     # a few KB transparent; ~50 KB with the baked background
 # 3. render on WHITE (simulates the <ImageZoom> overlay) and on page-dark
 rsvg-convert -b '#ffffff' -z 1 "$S" -o /tmp/light.png
-rsvg-convert -b '#1b1b1d' -z 1 "$S" -o /tmp/dark.png
+rsvg-convert -b '#000000' -z 1 "$S" -o /tmp/dark.png
 # 3b. OBJECTIVE opacity test — for a baked-background diagram these must be
 #     byte-identical. Any difference means a transparent region that will wash
 #     out under zoom. Beats eyeballing the two images.
 shasum -a 256 /tmp/light.png /tmp/dark.png | awk '{print $1}' | sort -u | wc -l
 #     -> 1 = fully opaque (correct).  2 = transparency present, go find it.
-# 4. render at the REAL DISPLAY WIDTH from the className (img-900px -> 900)
+# 4. render at the REAL DISPLAY WIDTH the page shows the image at (for example 900)
 rsvg-convert -b '#ffffff' -w 900 "$S" -o /tmp/display.png
 ```
 
@@ -794,7 +791,8 @@ Their color choices predate the measured contrast table above. Copy their
 ### Current-generation exemplars
 
 Copy these for colour and type; both pass `check_contrast.py` clean and both sit in `public/img/`.
-No gradient-backdrop exemplar is committed on this branch.
+This list has no gradient-backdrop exemplar yet, though `haw-pga-tie-breaking.svg` and
+`haw-pga-two-stage-mempool.svg` use that backdrop.
 
 | Diagram                       |  Size | Canvas   | Backdrop         | Shows                                                      |
 | ----------------------------- | ----: | -------- | ---------------- | ---------------------------------------------------------- |
@@ -829,18 +827,18 @@ In this repo:
   Docusaurus' `src/css/custom.css`, which this tree does not have. `app/global.css`
   caps prose images at 600px and `data-wide` on the image lifts the cap (CONTRIBUTE.md,
   "Image sizing"). Don't add new `img-*px` classes or per-image widths.
-- **Finding the next candidate.** Raster-in-SVG files declare themselves in the
-  first few KB. As of `origin/master` this finds **26 files totalling 101.5 MB**
-  — the backlog this skill exists to work through:
+- **Finding the next candidate.** Raster-in-SVG files carry a base64 payload that
+  can start well past the draw.io preamble, so grep the whole file. This lists
+  the backlog this skill exists to work through:
 
 ```bash
 for f in public/img/*.svg; do
-  head -c 4000 "$f" | grep -q 'image/png;base64' && stat -f'%z %N' "$f"
+  grep -q 'image/png;base64' "$f" && stat -f'%z %N' "$f"
 done | sort -rn
 ```
 
-(Scan 4 KB, not 400 bytes — the base64 payload starts after the draw.io
-preamble, so a short window silently reports zero hits.)
+(A header-only scan under-reports, because the payload can start past the first
+few KB.)
 
 Standing team conventions this skill assumes:
 

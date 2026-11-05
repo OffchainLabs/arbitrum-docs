@@ -56,7 +56,7 @@ pnpm check-links 2>&1
 ```
 
 Every internal doc link resolves to a real page. This is the gate that supplies Fumadocs'
-`onBrokenLinks: 'throw'`, and `pnpm build` runs it first, so a failure here also fails the Vercel
+`onBrokenLinks: 'throw'`, and `pnpm build` runs it before `next build`, so a failure here also fails the Vercel
 deploy. It also validates `#anchor` fragments against the compiled heading ids, so a dead anchor
 fails; only anchors created at runtime are outside its reach.
 
@@ -66,8 +66,9 @@ fails; only anchors created at runtime are outside its reach.
 pnpm references:check 2>&1
 ```
 
-Every `<Term>` (and `<Reference>`) id resolves to a real `content/glossary/` entry, and entry ids
-are unique.
+Every glossary entry has an `id`, entry ids are unique, and no partial holding a `<Term>` is
+ESM-imported. That every `<Term>` and `<Reference>` id resolves to an entry is `pnpm lint` (rule
+`docs/unknown-term`).
 
 ### 6. Contract addresses
 
@@ -85,8 +86,9 @@ the committed partial is stale. Never hand-edit that partial; edit the generator
 pnpm vars:check 2>&1
 ```
 
-Every `<Var name="…" />` and `{var:name}` resolves to a key in `content/vars.json`, and the banner
-keys (`announcementId`, `announcementLinkHref`) are valid.
+The banner keys (`announcementId`, `announcementLinkHref`) in `content/vars.json` are valid. That
+every `<Var name="…" />` and `{var:name}` resolves to a key is `pnpm lint` (rule
+`docs/unknown-var`).
 
 ### 8. Formatting
 
@@ -102,7 +104,7 @@ Prettier across content and app code without modifying files. `pnpm format` writ
 pnpm test 2>&1
 ```
 
-`node --test` over `scripts/**/*.test.ts`: unit coverage for the gate scripts themselves (link
+`node --test` over `scripts/**/*.test.ts` and `eslint/**/*.test.ts`: unit coverage for the gate scripts and lint rules themselves (link
 resolution, redirects, variable expansion, and so on), plus `scripts/sidebar.test.ts`, which
 builds the real sidebar tree and fails when a page is on no `meta.json` node or on two.
 
@@ -140,9 +142,9 @@ fixing findings, then run this once before calling the audit done.
 ## Not available
 
 - **Doc manifest audit** (terminology consistency, missing metadata). The frontmatter contract
-  (`title` and `description` required; `sidebar_label`, `content_type`, `author`, `sme` optional) is
+  (`title` and `description` required; every other field optional) is
   enforced by `pnpm lint` (rule `docs/frontmatter-schema`) and when a page compiles during the build, using the Zod
-  schema in `lib/page-schema.ts`. There is no `user_story` or `draft` field in this schema, so don't add
+  schema in `lib/page-schema.ts`. There is no `draft` field in this schema, so don't add
   one when scaffolding a page. Terminology consistency itself is a `STYLE-GUIDE.md` review-time rule,
   not a gate.
 
@@ -162,7 +164,6 @@ Produce a summary table first, then details per check:
 | Variables          | PASS/FAIL | N unresolved    |
 | Formatting         | PASS/FAIL | N unformatted   |
 | Tests              | PASS/FAIL | N failures      |
-| Frontmatter        | PASS/FAIL | N violations    |
 | TypeScript         | PASS/FAIL | N errors        |
 | Frontmatter        | PASS/FAIL | N invalid pages |
 | Build              | PASS/FAIL | N errors        |
