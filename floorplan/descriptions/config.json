@@ -1,0 +1,24 @@
+{
+  "files": {
+    "package.json": {
+      "name": "Package manifest",
+      "description": "Declares the Node 22 and pnpm 10 engines, every pnpm script the gates and generators run, and the Next, Fumadocs and script dependencies."
+    },
+    "pnpm-workspace.yaml": {
+      "name": "pnpm install rules",
+      "description": "Allowlists dependency build scripts, enforces a 7-day minimum release age, overrides ws and katex for advisories and lists ignored GHSAs."
+    },
+    "prettier.config.ts": {
+      "name": "Prettier config",
+      "description": "Extends the Offchain Labs shared config, registers the import-sort plugin for code files and keeps MDX unwrapped at a 9999 print width."
+    },
+    "svgo.config.ts": {
+      "name": "SVGO config",
+      "description": "Tunes preset-default for brand diagrams: keeps viewBox, ids, title and desc, and rounds path data to 2 decimals."
+    },
+    "tsconfig.json": {
+      "name": "TypeScript config",
+      "description": "Strict bundler-resolution config with erasableSyntaxOnly and .ts imports so Node 22 runs scripts directly; maps @/ and collections/ paths."
+    }
+  }
+}

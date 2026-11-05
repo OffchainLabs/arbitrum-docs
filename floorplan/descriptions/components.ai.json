@@ -1,0 +1,32 @@
+{
+  "files": {
+    "components/ai/chat/conversation.tsx": {
+      "name": "Chat scroll follower",
+      "description": "Scrolls the chat to follow a streaming answer until the reader scrolls up, and offers a jump-to-end button; Turn wraps one exchange."
+    },
+    "components/ai/chat/index.tsx": {
+      "name": "AI chat panel",
+      "description": "Holds the chat state provider, the panel, header, messages, sources and search parts, and the input whose draft survives reloads."
+    },
+    "components/ai/chat/markdown.tsx": {
+      "name": "Answer markdown renderer",
+      "description": "Renders an answer with remark and hast-util-to-jsx-runtime, re-rendering only the last block while streaming and mending unclosed syntax."
+    },
+    "components/ai/chat/open.tsx": {
+      "name": "Chat open state",
+      "description": "Provides the open flag, Ctrl+/ and Escape shortcuts, the pending askAI prompt and the floating trigger button, separate from chat state."
+    },
+    "components/ai/layout.tsx": {
+      "name": "Layouts with AI chat",
+      "description": "Wraps the Fumadocs notebook and home layouts with the chat provider, trigger and a next/dynamic panel loaded on first open."
+    },
+    "components/ai/search.tsx": {
+      "name": "Chat transport and panel",
+      "description": "Binds useChat to /api/chat with the last ten messages, maps HTTP errors to plain text, logs PostHog events and renders Inkeep source links."
+    },
+    "components/inkeep/inkeep-search.tsx": {
+      "name": "Inkeep search dialog",
+      "description": "Replaces the Fumadocs SearchDialog with Inkeep's modal, loaded via next/dynamic, and hands Ask AI queries to the chat panel."
+    }
+  }
+}

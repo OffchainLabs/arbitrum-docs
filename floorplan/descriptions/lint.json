@@ -1,0 +1,20 @@
+{
+  "files": {
+    "eslint.config.ts": {
+      "name": "Content lint config",
+      "description": "Enables every docs/* rule on content/**/*.mdx and *.md through the docs/mdx and docs/markdown languages, plus frontmatter-schema on pages."
+    },
+    "eslint/language.ts": {
+      "name": "MDX language for ESLint",
+      "description": "Parses a file with micromark plus MDX, GFM, math and frontmatter into the mdast tree the site compiles, offered to rules as node visitors."
+    },
+    "eslint/plugin.ts": {
+      "name": "Docs rule plugin",
+      "description": "Registers the eighteen docs/* rules and the two content languages as the docs ESLint plugin; CONTENT_RULES leaves out frontmatter-schema."
+    },
+    "eslint/shared.ts": {
+      "name": "Rule helpers",
+      "description": "Supplies what the rules share: the rule type, code-masked source text, a flat list of JSX elements with context, and the registered component set."
+    }
+  }
+}

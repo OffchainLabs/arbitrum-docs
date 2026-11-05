@@ -1,0 +1,16 @@
+{
+  "files": {
+    "components/HoverPopover/in-link.tsx": {
+      "name": "In-link marker",
+      "description": "Provides a context flag marking its subtree as link content, so a HoverPopover inside renders no nested button."
+    },
+    "components/HoverPopover/index.tsx": {
+      "name": "Hover popover",
+      "description": "Client popover on floating-ui opening on hover, focus or click as a non-modal dialog kept in tab order; the primitive behind Term."
+    },
+    "components/LinkPreview/index.tsx": {
+      "name": "Link preview card",
+      "description": "Pointer-only hover card for internal links that fetches the static preview JSON once per target and opens the page in a new tab."
+    }
+  }
+}

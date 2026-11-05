@@ -1,0 +1,112 @@
+{
+  "files": {
+    ".agents/skills/arbitrum-brand-svg-diagrams/tools/check_contrast.py": {
+      "name": "SVG contrast check (.agents)",
+      "description": "Renders a brand SVG with and without its text, samples the true backdrop under each label and fails any below WCAG AA; the .agents copy."
+    },
+    ".agents/skills/arbitrum-brand-svg-diagrams/tools/excalidraw_bridge.py": {
+      "name": "Excalidraw bridge (.agents)",
+      "description": "Converts brand SVG rect, text and line diagrams to deterministic Excalidraw scenes and back; the .agents copy."
+    },
+    ".agents/skills/arbitrum-brand-svg-diagrams/tools/round_arrows.py": {
+      "name": "Round arrow elbows (.agents)",
+      "description": "Rewrites the elbows of straight marker-end arrow paths in an SVG into quadratic curves with round joins, in place; the .agents copy."
+    },
+    ".agents/skills/arbitrum-brand-svg-diagrams/tools/test_security.py": {
+      "name": "Skill tool security tests (.agents)",
+      "description": "Unit-tests the bridge, contrast and build.py helpers for colour injection and path escapes using private temp fixtures; the .agents copy."
+    },
+    ".agents/skills/arbitrum-brand-video-explainers/examples/pga-rounds/build.py": {
+      "name": "PGA explainer generator (.agents)",
+      "description": "Worked example that renders the priority gas auction explainer as per-frame SVGs with a keyframe and tween engine; the .agents copy."
+    },
+    ".agents/skills/arbitrum-brand-video-explainers/tools/render.sh": {
+      "name": "Render explainer MP4 (.agents)",
+      "description": "Rasterises transparent frame SVGs in parallel, composites them over the brand background and encodes H.264 yuv420p with ffmpeg; the .agents copy."
+    },
+    ".agents/skills/image-debt-scan/scan.sh": {
+      "name": "Image debt scan",
+      "description": "Lists rasters over a size threshold and SVGs embedding base64 rasters under public/img, each with the MDX pages that reference it."
+    },
+    ".claude/hooks/optimize-svg.sh": {
+      "name": "SVG optimize hook (Claude)",
+      "description": "PostToolUse: runs svgo with the repo config on an edited public/img SVG read from the hook's file_path; a no-op until svgo is installed."
+    },
+    ".claude/hooks/require-pattern-guide.sh": {
+      "name": "Style guide gate (Claude)",
+      "description": "PreToolUse: denies the session's first write to a prose doc or partial and returns STYLE-GUIDE.md; generated trees are exempt."
+    },
+    ".claude/settings.json": {
+      "name": "Claude Code hooks",
+      "description": "Wires the style-guide gate as a PreToolUse hook and the svgo optimizer as a PostToolUse hook on Edit, Write and MultiEdit."
+    },
+    ".claude/skills/arbitrum-brand-svg-diagrams/tools/check_contrast.py": {
+      "name": "SVG contrast check (.claude)",
+      "description": "Renders a brand SVG with and without its text, samples the true backdrop under each label and fails any below WCAG AA; the .claude copy."
+    },
+    ".claude/skills/arbitrum-brand-svg-diagrams/tools/excalidraw_bridge.py": {
+      "name": "Excalidraw bridge (.claude)",
+      "description": "Converts brand SVG rect, text and line diagrams to deterministic Excalidraw scenes and back; the .claude copy."
+    },
+    ".claude/skills/arbitrum-brand-svg-diagrams/tools/round_arrows.py": {
+      "name": "Round arrow elbows (.claude)",
+      "description": "Rewrites the elbows of straight marker-end arrow paths in an SVG into quadratic curves with round joins, in place; the .claude copy."
+    },
+    ".claude/skills/arbitrum-brand-svg-diagrams/tools/test_security.py": {
+      "name": "Skill tool security tests (.claude)",
+      "description": "Unit-tests the bridge, contrast and build.py helpers for colour injection and path escapes using private temp fixtures; the .claude copy."
+    },
+    ".claude/skills/arbitrum-brand-video-explainers/examples/pga-rounds/build.py": {
+      "name": "PGA explainer generator (.claude)",
+      "description": "Worked example that renders the priority gas auction explainer as per-frame SVGs with a keyframe and tween engine; the .claude copy."
+    },
+    ".claude/skills/arbitrum-brand-video-explainers/tools/render.sh": {
+      "name": "Render explainer MP4 (.claude)",
+      "description": "Rasterises transparent frame SVGs in parallel, composites them over the brand background and encodes H.264 yuv420p with ffmpeg; the .claude copy."
+    },
+    ".codex/agents/diagram-converter.toml": {
+      "name": "Diagram converter agent",
+      "description": "Codex agent brief for converting one raster diagram in public/img into a brand SVG and updating the MDX that references it; parallel-safe."
+    },
+    ".codex/config.toml": {
+      "name": "Codex shell settings",
+      "description": "Sets the Codex shell environment: core inheritance plus bash timeout, output cap, NODE_ENV=development and the output-token limit."
+    },
+    ".codex/environments/environment.toml": {
+      "name": "Codex environment",
+      "description": "Autogenerated Codex environment record naming the repo with an empty setup script; not hand-edited."
+    },
+    ".codex/hooks/changed-paths.sh": {
+      "name": "Changed paths helper",
+      "description": "Prints the absolute paths a hook event touched, from tool_input.file_path or the apply_patch headers in tool_input.command."
+    },
+    ".codex/hooks/format-changed.sh": {
+      "name": "Prettier on edit",
+      "description": "PostToolUse: runs Prettier --write on every file the edit touched, mirroring the format:check gate; never blocks."
+    },
+    ".codex/hooks/guard-generated-content.sh": {
+      "name": "Generated content guard",
+      "description": "PreToolUse: exits 2 on an edit to a generated page or partial and names the pnpm generator to run instead."
+    },
+    ".codex/hooks/guard-raster-assets.py": {
+      "name": "Raster asset guard",
+      "description": "PreToolUse: blocks a Write or Edit that adds a raster under static/img or an SVG that embeds a base64 raster."
+    },
+    ".codex/hooks/optimize-svg.sh": {
+      "name": "SVG optimize hook (Codex)",
+      "description": "PostToolUse: runs svgo on every edited public/img SVG listed by changed-paths.sh; a no-op until svgo is installed."
+    },
+    ".codex/hooks/require-pattern-guide.sh": {
+      "name": "Style guide gate (Codex)",
+      "description": "PreToolUse: denies the session's first prose-doc write found via changed-paths.sh and returns STYLE-GUIDE.md; fails open."
+    },
+    ".codex/hooks/run-colocated-tests.sh": {
+      "name": "Colocated test runner",
+      "description": "PostToolUse: runs the sibling *.test.ts with node --test when a script under scripts/ changes and exits 2 on failure."
+    },
+    ".claude/skills/arbitrum-brand-video-explainers/examples/nonce-retry-buffer/build.py": {
+      "name": "Nonce retry buffer animation",
+      "description": "Example for the video-explainers skill: a Python script that writes a 15-second looping CSS-animated SVG of the sequencer nonce retry buffer expiring. Keyframe tables per chip (other senders, nonce 8, nonce 7, the error, the boot) become @keyframes rules; a second CLI argument bakes a static frame at time t for verification, and base attributes hold the end state so prefers-reduced-motion and rsvg-convert show a sensible still."
+    }
+  }
+}

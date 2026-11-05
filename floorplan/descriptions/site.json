@@ -1,0 +1,16 @@
+{
+  "files": {
+    "app/global.css": {
+      "name": "Theme stylesheet",
+      "description": "Builds the Fumadocs --color-fd-* theme on the --color-arbitrum-* palette tokens, remapped under .dark, plus the brand shadows."
+    },
+    "app/layout.tsx": {
+      "name": "Root layout",
+      "description": "Mounts PostHog and the Fumadocs RootProvider, loads the self-hosted Aeonik fonts, and shows the announcement banner from content/vars.json."
+    },
+    "app/not-found.tsx": {
+      "name": "Site 404 page",
+      "description": "Renders the root 404 under HomeLayout with a search trigger and section cards, and mounts the not-found analytics tracker."
+    }
+  }
+}

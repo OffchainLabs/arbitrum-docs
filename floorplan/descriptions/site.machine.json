@@ -1,0 +1,54 @@
+{
+  "files": {
+    "app/llms-full.txt/route.ts": {
+      "name": "Full corpus text",
+      "description": "Joins the processed markdown of every docs page into one build-time text response."
+    },
+    "app/llms.mdx/docs/[[...slug]]/route.ts": {
+      "name": "Page markdown mirror",
+      "description": "Serves a page's processed markdown at /llms.mdx/docs/<slug>/content.md; only prerendered paths exist, anything else 404s."
+    },
+    "app/llms.txt/route.ts": {
+      "name": "Site index for LLMs",
+      "description": "Serves /llms.txt from Fumadocs' page index, reshaped to master's title, summary and one .md link per page."
+    },
+    "app/og/docs/[...slug]/route.tsx": {
+      "name": "Docs social cards",
+      "description": "Prerenders a page's Open Graph PNG at /og/docs/<slug>/image.png from its title and description."
+    },
+    "app/preview/[...slug]/route.ts": {
+      "name": "Link preview JSON",
+      "description": "Prerenders the hover-card JSON for a page at /preview/<slug>/preview.json from its compiled structured data."
+    },
+    "app/robots.ts": {
+      "name": "Robots rules",
+      "description": "Emits robots.txt that allows every crawler, signals search and AI input yes but AI training no, and names the sitemap."
+    },
+    "app/sitemap.ts": {
+      "name": "Page sitemap",
+      "description": "Emits sitemap.xml with one absolute URL per routed page and its git last-modified date when the checkout has history."
+    }
+  },
+  "routes": {
+    "GET /llms-full.txt": {
+      "name": "Fetch the whole docs",
+      "description": "Returns every page's title, URL and processed markdown in one text body."
+    },
+    "GET /llms.mdx/docs/[[...slug]]": {
+      "name": "Fetch page markdown",
+      "description": "Returns the markdown twin of one docs page; /<slug>.md rewrites here."
+    },
+    "GET /llms.txt": {
+      "name": "Fetch llms index",
+      "description": "Returns the llms.txt index: title, summary and a link to each page's markdown mirror, each page listed once."
+    },
+    "GET /og/docs/[...slug]": {
+      "name": "Fetch page social card",
+      "description": "Returns the 1200x630 PNG social card for one docs page."
+    },
+    "GET /preview/[...slug]": {
+      "name": "Fetch link preview",
+      "description": "Returns the title, description, lead text and per-heading text a hover card shows for a page."
+    }
+  }
+}

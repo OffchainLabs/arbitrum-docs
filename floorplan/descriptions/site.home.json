@@ -1,0 +1,16 @@
+{
+  "files": {
+    "app/(home)/layout.tsx": {
+      "name": "Home layout",
+      "description": "Wraps the landing page in Fumadocs' HomeLayout with the docs navbar header, or the AI chat layout when NEXT_PUBLIC_AI_CHAT_ENABLED is true."
+    },
+    "app/(home)/opengraph-image.tsx": {
+      "name": "Home social card",
+      "description": "Emits the landing page's Open Graph image through Next's opengraph-image convention, drawn by the same renderer as the docs cards."
+    },
+    "app/(home)/page.tsx": {
+      "name": "Landing page",
+      "description": "Renders the hero and the section card grid, with the site-level canonical, Open Graph and Twitter card metadata."
+    }
+  }
+}

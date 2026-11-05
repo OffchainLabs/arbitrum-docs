@@ -1,0 +1,24 @@
+{
+  "files": {
+    "lib/page-schema.ts": {
+      "name": "Page frontmatter schema",
+      "description": "Extends the Fumadocs page schema: title and description required, content_type one of seven values, author and audience fields optional."
+    },
+    "lib/reference-schema.ts": {
+      "name": "Glossary frontmatter schema",
+      "description": "Requires id and title and allows sortAs on every reference collection entry; the MDX body is the definition."
+    },
+    "lib/references.ts": {
+      "name": "Glossary registry",
+      "description": "Registers the glossary collection for Term hover references and looks an entry up by id or lists them sorted by sortAs."
+    },
+    "lib/source.ts": {
+      "name": "Content loader",
+      "description": "Creates the single Fumadocs loader every route reads, applies sidebar_label to the page tree, and names each page's image, markdown and preview URLs."
+    },
+    "source.config.ts": {
+      "name": "Collection definitions",
+      "description": "Defines the dynamic docs and glossary collections with their frontmatter schemas and the shared MDX options."
+    }
+  }
+}

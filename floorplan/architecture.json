@@ -1,0 +1,564 @@
+{
+  "$schema": "floorplan/architecture@1",
+  "audience": "developers",
+  "include": ["code", "config"],
+  "project": {
+    "name": "Arbitrum docs",
+    "summary": "The Arbitrum documentation portal. MDX pages under content/docs compile on request through Fumadocs on Next.js, and a set of TypeScript scripts generates partials from upstream sources and gates every change in CI. Deployed on Vercel.",
+    "entrypoints": [
+      "app/layout.tsx",
+      "app/(docs)/[...slug]/page.tsx",
+      "source.config.ts",
+      "lib/source.ts"
+    ]
+  },
+  "ignore": ["**/*.d.ts", ".next/**", ".source/**"],
+  "nodes": [
+    {
+      "id": "site",
+      "label": "Website",
+      "kind": "ui",
+      "summary": "The Next.js App Router routes: the docs pages, the landing page, and the machine-readable outputs (markdown mirrors, llms.txt, link previews, OG images).",
+      "paths": ["app"]
+    },
+    {
+      "id": "site.docs",
+      "parent": "site",
+      "label": "Docs pages",
+      "kind": "feature",
+      "summary": "Renders every documentation page from the compiled collection, with the sidebar layout, feedback form and page actions.",
+      "paths": ["app/(docs)"]
+    },
+    {
+      "id": "site.home",
+      "parent": "site",
+      "label": "Landing page",
+      "kind": "feature",
+      "summary": "The home page, its layout and its OpenGraph image.",
+      "paths": ["app/(home)"]
+    },
+    {
+      "id": "site.machine",
+      "parent": "site",
+      "label": "Machine-readable outputs",
+      "kind": "feature",
+      "summary": "Serves the markdown mirror of every page, llms.txt and llms-full.txt, link-preview JSON, OG images, the sitemap and robots.txt for crawlers and AI agents.",
+      "paths": [
+        "app/llms.txt",
+        "app/llms-full.txt",
+        "app/llms.mdx",
+        "app/preview",
+        "app/og",
+        "app/robots.ts",
+        "app/sitemap.ts"
+      ]
+    },
+    {
+      "id": "site.chat",
+      "parent": "site",
+      "label": "AI chat request",
+      "kind": "service",
+      "summary": "The /api/chat route that forwards a chat question to Inkeep and streams the answer back, behind a feature flag and a server-side key.",
+      "paths": ["app/api"]
+    },
+
+    {
+      "id": "pipeline",
+      "label": "Content pipeline",
+      "kind": "library",
+      "summary": "Turns content/ into pages: the two Fumadocs collections, the frontmatter schema, the remark plugins, and the helpers that build the markdown mirrors and link previews.",
+      "paths": ["lib", "source.config.ts"]
+    },
+    {
+      "id": "pipeline.collections",
+      "parent": "pipeline",
+      "label": "Collections and schema",
+      "kind": "data",
+      "summary": "Defines the docs and glossary collections, validates page frontmatter, and exposes the single loader every route reads from.",
+      "paths": [
+        "source.config.ts",
+        "lib/source.ts",
+        "lib/page-schema.ts",
+        "lib/reference-schema.ts",
+        "lib/references.ts"
+      ]
+    },
+    {
+      "id": "pipeline.mdx",
+      "parent": "pipeline",
+      "label": "MDX plugins",
+      "kind": "library",
+      "summary": "The remark plugins that run on every page: variable placeholders in links, comment stripping, preview text, and the markdown-mirror rewrite of custom components.",
+      "paths": [
+        "lib/mdx-options.ts",
+        "lib/var-links.ts",
+        "lib/mdx-comments.ts",
+        "lib/preview-text.ts",
+        "lib/llms-markdown.ts"
+      ]
+    },
+    {
+      "id": "pipeline.llms",
+      "parent": "pipeline",
+      "label": "Markdown mirrors",
+      "kind": "library",
+      "summary": "Builds the llms.txt index, the per-page markdown twins and their redirects, the link-preview JSON, and records markdown fetches for analytics.",
+      "paths": [
+        "lib/llms-index.ts",
+        "lib/llms-tracking.ts",
+        "lib/markdown-redirects.ts",
+        "lib/link-preview.ts"
+      ]
+    },
+    {
+      "id": "pipeline.faq",
+      "parent": "pipeline",
+      "label": "FAQ data",
+      "kind": "data",
+      "summary": "Reads the Notion FAQ snapshots in content/faq and shapes them for the troubleshooting pages and JSON-LD.",
+      "paths": ["lib/faq.ts", "lib/faq-pages.ts"]
+    },
+    {
+      "id": "pipeline.ai",
+      "parent": "pipeline",
+      "label": "AI chat bridge",
+      "kind": "library",
+      "summary": "Validates chat requests, maps Inkeep's answer stream to the UI, and emits chat events to PostHog.",
+      "paths": ["lib/ai", "lib/inkeep.ts"]
+    },
+
+    {
+      "id": "routing",
+      "label": "Routing and headers",
+      "kind": "config",
+      "summary": "The Next config: redirects from every legacy URL, the markdown-twin rewrites, security headers and CORS, plus the proxy that records markdown fetches.",
+      "paths": [
+        "next.config.ts",
+        "redirects.config.ts",
+        "redirects.current.mjs",
+        "proxy.ts",
+        "lib/compact-redirects.ts",
+        "lib/http-headers.ts",
+        "lib/site-url.ts",
+        "lib/shared.ts"
+      ]
+    },
+
+    {
+      "id": "components",
+      "label": "Page components",
+      "kind": "ui",
+      "summary": "Everything rendered inside a page: the MDX component registry, interactive widgets, the AI chat panel, link previews, feedback and the page chrome.",
+      "paths": ["components"]
+    },
+    {
+      "id": "components.mdx",
+      "parent": "components",
+      "label": "MDX components",
+      "kind": "library",
+      "summary": "The registry that maps MDX tags to React: Callout, Tabs, Var, Term, Accordion, address links and the link override that adds hover previews.",
+      "paths": [
+        "components/mdx.tsx",
+        "components/mdx",
+        "components/tabs",
+        "components/codeblock.tsx"
+      ]
+    },
+    {
+      "id": "components.widgets",
+      "parent": "components",
+      "label": "Interactive widgets",
+      "kind": "feature",
+      "summary": "Client-only widgets loaded on demand: the BoLD edge-challenge visualizer, the node troubleshooting checklist, and the Stylus vending-machine demo.",
+      "paths": ["components/widgets"]
+    },
+    {
+      "id": "components.ai",
+      "parent": "components",
+      "label": "Search and AI chat",
+      "kind": "feature",
+      "summary": "The Inkeep search box and the AI chat panel UI that talks to the /api/chat route.",
+      "paths": ["components/ai", "components/inkeep"]
+    },
+    {
+      "id": "components.previews",
+      "parent": "components",
+      "label": "Hover previews",
+      "kind": "library",
+      "summary": "The hover card for glossary terms and the link-preview card fed by the static preview JSON.",
+      "paths": ["components/HoverPopover", "components/LinkPreview"]
+    },
+    {
+      "id": "components.feedback",
+      "parent": "components",
+      "label": "Feedback and analytics",
+      "kind": "feature",
+      "summary": "The page feedback form with its rate limits, the PostHog provider, and the 404 tracker.",
+      "paths": ["components/feedback", "components/analytics"]
+    },
+
+    {
+      "id": "lint",
+      "label": "Content lint",
+      "kind": "library",
+      "summary": "The ESLint language that parses MDX into the same tree the site compiles, and one rule per Docusaurus habit or MDX shape that would break a page.",
+      "paths": ["eslint", "eslint.config.ts"]
+    },
+    {
+      "id": "lint.rules",
+      "parent": "lint",
+      "label": "Rules",
+      "kind": "library",
+      "summary": "One file per docs/* rule: unknown components, variables and terms, callout types, links in headings, ESM in pages, and the rest.",
+      "paths": ["eslint/rules"]
+    },
+
+    {
+      "id": "scripts",
+      "label": "Generators and gates",
+      "kind": "script",
+      "summary": "TypeScript run directly by Node: generators that write partials from upstream sources, checks that gate CI, and the move-doc tool.",
+      "paths": ["scripts"],
+      "exclude": ["**/*.test.ts", "**/*.test.mjs"]
+    },
+    {
+      "id": "scripts.generators",
+      "parent": "scripts",
+      "label": "Generators and fetchers",
+      "kind": "script",
+      "summary": "Write the precompile tables, CLI flags page, contract addresses, gas-target and FAQ partials, and Stylus examples; each has a check mode that CI compares against.",
+      "paths": [
+        "scripts/generate-*.ts",
+        "scripts/generate-*.mjs",
+        "scripts/*-fetch.ts",
+        "scripts/fetch-*.ts",
+        "scripts/lib/generated-partial.ts",
+        "scripts/lib/precompile-tables.ts",
+        "scripts/lib/stylus-examples.ts",
+        "scripts/lib/nitro-cli-flags.ts",
+        "scripts/lib/cli-reference-page.ts",
+        "scripts/lib/contract-addresses.ts",
+        "scripts/lib/gas-target.ts",
+        "scripts/lib/go-source.ts",
+        "scripts/lib/faq-partial.ts",
+        "scripts/lib/faq-snapshot.ts",
+        "scripts/lib/faq-links.ts",
+        "scripts/lib/notion-mdx.ts",
+        "scripts/lib/partials.ts",
+        "scripts/lib/strip-code.ts",
+        "scripts/lib/line-diff.ts",
+        "scripts/lib/legacy-redirect-literals.ts",
+        "scripts/lib/current-redirects.mjs"
+      ]
+    },
+    {
+      "id": "scripts.checks",
+      "parent": "scripts",
+      "label": "Checks",
+      "kind": "script",
+      "summary": "The offline gates: internal links and anchors, glossary ids, banner variables, client-import boundaries, and the Nitro release check that verifies upstream paths.",
+      "paths": [
+        "scripts/check-*.ts",
+        "scripts/*-check.ts",
+        "scripts/lib/doc-links.ts",
+        "scripts/lib/doc-anchors.ts",
+        "scripts/lib/announcement-link.ts",
+        "scripts/lib/nitro-node-image.ts",
+        "scripts/lib/nitro-upstream-paths.ts",
+        "scripts/lib/module-imports.ts"
+      ]
+    },
+    {
+      "id": "scripts.data",
+      "parent": "scripts",
+      "label": "Pinned inputs",
+      "kind": "data",
+      "summary": "The pinned data the generators read: contract addresses, Nitro CLI flags, precompile metadata, Stylus example list, the gas-target snapshot and the master route list.",
+      "paths": ["scripts/data"]
+    },
+
+    {
+      "id": "tests",
+      "label": "Tests",
+      "kind": "test",
+      "summary": "Node test files beside the scripts and lint rules, plus Playwright browser checks against a production build.",
+      "paths": ["scripts/**/*.test.ts", "scripts/**/*.test.mjs", "eslint/**/*.test.ts", "tests"]
+    },
+
+    {
+      "id": "ci",
+      "label": "CI and refresh workflows",
+      "kind": "infra",
+      "summary": "GitHub Actions: the gate job and build job on every PR, and the Monday workflows that refresh Nitro pins, precompiles, FAQ snapshots and the gas target.",
+      "paths": [".github"]
+    },
+
+    {
+      "id": "config",
+      "label": "Project config",
+      "kind": "config",
+      "summary": "Package manifest, TypeScript, Prettier and SVGO settings, and the pnpm workspace rules for dependency builds.",
+      "paths": [
+        "package.json",
+        "pnpm-workspace.yaml",
+        "tsconfig.json",
+        "prettier.config.ts",
+        "svgo.config.ts"
+      ]
+    },
+
+    {
+      "id": "agent-tooling",
+      "label": "Agent skills and hooks",
+      "kind": "script",
+      "summary": "Claude Code and Codex skills checked into the repo: brand SVG diagram tools, video explainer renderer, and the hooks that enforce the pattern guide and optimize SVGs.",
+      "paths": [".claude", ".agents", ".codex"]
+    },
+
+    {
+      "id": "content",
+      "label": "Content",
+      "kind": "data",
+      "summary": "The MDX pages, partials, glossary entries, FAQ snapshots and vars.json that every page is built from. Only its data files appear on the map.",
+      "paths": ["content"]
+    },
+
+    {
+      "id": "fumadocs",
+      "label": "Fumadocs",
+      "kind": "external",
+      "summary": "The docs framework on Next.js: collections, page tree, layouts and the header DOM the theme CSS depends on. Pinned to exact versions.",
+      "packages": ["fumadocs-core", "fumadocs-ui", "fumadocs-mdx", "npm:@fuma-translate/*"]
+    },
+    {
+      "id": "inkeep",
+      "label": "Inkeep",
+      "kind": "external",
+      "summary": "Hosted search and the AI answer engine behind the chat panel.",
+      "packages": ["npm:@inkeep/*"],
+      "hosts": ["api.inkeep.com"]
+    },
+    {
+      "id": "posthog",
+      "label": "PostHog",
+      "kind": "external",
+      "summary": "Analytics: pageviews, page feedback, chat events and markdown-fetch events, production only.",
+      "packages": ["posthog-js", "posthog-node"],
+      "hosts": ["us.i.posthog.com"]
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "kind": "external",
+      "summary": "The Nitro and nitro-contracts repositories the generators read source from, and the contents API the release check verifies paths against.",
+      "hosts": ["github.com", "api.github.com", "raw.githubusercontent.com"]
+    },
+    {
+      "id": "notion",
+      "label": "Notion",
+      "kind": "external",
+      "summary": "The FAQ database the Monday workflow snapshots into content/faq.",
+      "packages": ["npm:@notionhq/*"],
+      "hosts": ["api.notion.com", "www.notion.so"]
+    },
+    {
+      "id": "arbitrum-rpc",
+      "label": "Arbitrum RPC",
+      "kind": "external",
+      "summary": "Public Arbitrum RPC endpoints the fetch scripts read on-chain data from: the gas target and the BoLD edge-challenge snapshot.",
+      "hosts": ["*.arbitrum.io"]
+    }
+  ],
+  "edges": [
+    {
+      "from": "ci",
+      "to": "scripts.checks",
+      "kind": "call",
+      "label": "gates on every PR",
+      "description": "ci.yml runs audit, types:check, test, vars:check, references:check, contracts:check, gas-target:check, faq:check, lint, format:check and check-links in one job, then builds in a second."
+    },
+    {
+      "from": "ci",
+      "to": "scripts.generators",
+      "kind": "call",
+      "label": "Monday refreshes",
+      "description": "upstream-refresh.yml, faq-refresh.yml and gas-target-refresh.yml run the fetchers and generators and open a PR."
+    },
+    {
+      "from": "scripts.generators",
+      "to": "content",
+      "kind": "data",
+      "label": "writes partials",
+      "description": "Generated partials under content/partials and the Stylus by Example pages. Check mode compares instead of writing."
+    },
+    {
+      "from": "scripts.checks",
+      "to": "content",
+      "kind": "data",
+      "label": "reads pages",
+      "description": "check-links, references-check and vars-check walk content/ offline."
+    },
+    {
+      "from": "scripts.generators",
+      "to": "notion",
+      "kind": "http",
+      "label": "FAQ snapshot",
+      "description": "faq-fetch.ts reads the FAQ database with NOTION_TOKEN."
+    },
+    {
+      "from": "scripts.generators",
+      "to": "arbitrum-rpc",
+      "kind": "http",
+      "label": "on-chain reads",
+      "description": "gas-target-fetch.ts reads ArbGasInfo; fetch-edge-challenge-data.ts reads the BoLD challenge state."
+    },
+    {
+      "from": "scripts.checks",
+      "to": "github",
+      "kind": "http",
+      "label": "verify Nitro paths",
+      "description": "check-nitro-release.ts checks every nitroPathTo* pin and content link against the contents API at the target tag."
+    },
+    {
+      "from": "pipeline.collections",
+      "to": "content",
+      "kind": "data",
+      "label": "reads content/docs and content/glossary"
+    },
+    {
+      "from": "site.chat",
+      "to": "inkeep",
+      "kind": "http",
+      "label": "chat completion",
+      "description": "The route forwards the question with the server-side INKEEP_API_KEY and streams the answer."
+    },
+    {
+      "from": "routing",
+      "to": "posthog",
+      "kind": "http",
+      "label": "llms_file_fetched",
+      "description": "proxy.ts records a markdown-mirror fetch, production only."
+    },
+    { "from": "lint", "to": "content", "kind": "data", "label": "lints every MDX file" }
+  ],
+  "annotations": [
+    {
+      "path": "redirects.config.ts",
+      "note": "Hand-maintained redirect list, 3.5k lines. Never edit between the AUTO-GENERATED markers; move-doc appends one entry.",
+      "tags": ["hotspot"]
+    },
+    {
+      "path": "lib/source.ts",
+      "note": "The single loader() over the dynamic collections. Never import it from a client component; a test walks every 'use client' module's imports.",
+      "tags": ["hotspot"]
+    },
+    {
+      "path": "components/mdx.tsx",
+      "note": "A JSX tag not registered here fails lint rule docs/unknown-component. A plain .css import here would add a render-blocking stylesheet to every page."
+    }
+  ],
+  "flows": [
+    {
+      "id": "page-render",
+      "title": "A docs page is served",
+      "description": "From an MDX file on disk to HTML in the browser.",
+      "steps": [
+        {
+          "node": "content",
+          "note": "An author edits a page under content/docs with title and description frontmatter."
+        },
+        {
+          "node": "pipeline.collections",
+          "note": "source.config.ts validates the frontmatter against arbitrumPageSchema; lib/source.ts exposes the page tree."
+        },
+        {
+          "node": "pipeline.mdx",
+          "note": "The remark plugins expand {var:…} placeholders in links, strip comments and capture preview text."
+        },
+        {
+          "node": "site.docs",
+          "note": "The catch-all route calls page.data.load() on first request and renders the body."
+        },
+        {
+          "node": "components.mdx",
+          "note": "The registry turns Callout, Var, Term and the other tags into React components."
+        }
+      ]
+    },
+    {
+      "id": "nitro-bump",
+      "title": "A Nitro release bump",
+      "description": "How a new Nitro tag reaches the pages.",
+      "steps": [
+        {
+          "node": "ci",
+          "note": "nitro-bump.yml, or a maintainer by hand, runs pnpm nitro:check-release --to <tag>."
+        },
+        {
+          "node": "scripts.checks",
+          "note": "check-nitro-release.ts verifies every pinned path and content link at the new tag."
+        },
+        { "node": "github", "note": "The contents API answers for each path." },
+        {
+          "node": "content",
+          "note": "vars.json gets the new version and image; files with the sync-with-var marker get their hardcoded copies rewritten."
+        },
+        {
+          "node": "scripts.generators",
+          "note": "precompiles:generate and cli:generate rebuild the tables from the new tag's source."
+        }
+      ]
+    },
+    {
+      "id": "ai-chat",
+      "title": "An AI chat question",
+      "steps": [
+        { "node": "components.ai", "note": "The chat panel posts the conversation to /api/chat." },
+        { "node": "site.chat", "note": "The route checks the request shape and the feature flag." },
+        {
+          "node": "pipeline.ai",
+          "note": "The bridge forwards it to Inkeep and maps the answer stream."
+        },
+        { "node": "inkeep", "note": "Inkeep answers from the indexed docs." },
+        { "node": "posthog", "note": "Chat events are recorded, production only." }
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "node": "content",
+      "title": "The pages start here",
+      "note": "Every doc is an MDX file under content/docs. Partials, glossary entries, FAQ snapshots and vars.json sit beside them."
+    },
+    {
+      "node": "pipeline",
+      "title": "How a page compiles",
+      "note": "The collections, the frontmatter schema and the remark plugins turn an MDX file into a page. Both collections are dynamic, so a page compiles on first request."
+    },
+    {
+      "node": "site",
+      "title": "What the browser hits",
+      "note": "The App Router routes: docs pages, the landing page, and the markdown mirrors and llms.txt that AI agents read."
+    },
+    {
+      "node": "components",
+      "title": "What renders inside a page",
+      "note": "The MDX registry, the hover previews, the AI chat panel and the lazy-loaded widgets."
+    },
+    {
+      "node": "scripts",
+      "title": "What keeps the content current",
+      "note": "Generators write partials from Nitro, Notion and the chain; checks gate every PR offline."
+    },
+    {
+      "node": "ci",
+      "title": "The gates",
+      "note": "One CI job runs every check, a second builds. Monday workflows open refresh PRs."
+    },
+    {
+      "node": "lib/source.ts",
+      "title": "The one file to respect",
+      "note": "The single loader over the collections. Every route reads from it and no client component may import it."
+    }
+  ]
+}

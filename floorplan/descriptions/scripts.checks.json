@@ -1,0 +1,44 @@
+{
+  "files": {
+    "scripts/check-links.ts": {
+      "name": "Check internal links",
+      "description": "Walks every doc, partial and glossary entry and fails on an internal link, include or #fragment that resolves to nothing."
+    },
+    "scripts/check-nitro-release.ts": {
+      "name": "Nitro release check",
+      "description": "Reports the pinned versus latest Nitro release and verifies every pinned upstream path; --to <tag> is the only writer of the pins."
+    },
+    "scripts/lib/announcement-link.ts": {
+      "name": "Banner link check",
+      "description": "Validates the announcement banner href from vars.json against the docs index, a public/ file or an https URL."
+    },
+    "scripts/lib/doc-anchors.ts": {
+      "name": "Fragment link check",
+      "description": "Compiles each page through the site's MDX preset and include pass to collect rendered ids, then flags #fragment links with no target."
+    },
+    "scripts/lib/doc-links.ts": {
+      "name": "Docs link index",
+      "description": "Indexes every content doc, extracts links from markdown, JSX hrefs and includes, resolves them and applies byte-range rewrites."
+    },
+    "scripts/lib/module-imports.ts": {
+      "name": "Client module imports",
+      "description": "Parses a module with Babel to recognise a 'use client' directive and list its runtime imports, for the client-boundary test."
+    },
+    "scripts/lib/nitro-node-image.ts": {
+      "name": "Node image sync",
+      "description": "Rewrites the hardcoded Nitro node image tag in every content file that opts in with a sync-with-var marker."
+    },
+    "scripts/lib/nitro-upstream-paths.ts": {
+      "name": "Nitro path pins",
+      "description": "Collects the nitroPathTo* pins and every Nitro source link in content, and names the ones absent at the pinned tag."
+    },
+    "scripts/references-check.ts": {
+      "name": "Glossary reference check",
+      "description": "Fails when a glossary entry lacks an id or repeats one, or when a partial holding a Term is ESM-imported instead of included."
+    },
+    "scripts/vars-check.ts": {
+      "name": "Banner vars check",
+      "description": "Fails when the announcement banner id is not a valid HTML id or its link points at nothing that exists."
+    }
+  }
+}

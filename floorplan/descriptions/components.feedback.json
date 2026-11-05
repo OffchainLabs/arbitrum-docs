@@ -1,0 +1,24 @@
+{
+  "files": {
+    "components/analytics/not-found-tracker.tsx": {
+      "name": "404 tracker",
+      "description": "Captures a 404_error PostHog event with the landed URL in production, retrying with backoff until the client is loaded."
+    },
+    "components/analytics/posthog-provider.tsx": {
+      "name": "PostHog provider",
+      "description": "Initialises posthog-js in production only, cookieless with memory persistence and recordings, flags, surveys and tours disabled."
+    },
+    "components/feedback/client.tsx": {
+      "name": "Page feedback bar",
+      "description": "Client thumbs up/down form that expands to a text box, posts through a server action and remembers a sent rating per pathname."
+    },
+    "components/feedback/limits.ts": {
+      "name": "Feedback message limit",
+      "description": "Exports the 2000-character message cap shared by the form and the schema, kept apart so the client chunk skips zod."
+    },
+    "components/feedback/schema.ts": {
+      "name": "Feedback payload schema",
+      "description": "Defines the zod contract the feedback server action re-parses: an opinion, a site-relative pathname and a bounded message."
+    }
+  }
+}

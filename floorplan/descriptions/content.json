@@ -1,0 +1,8 @@
+{
+  "files": {
+    "content/vars.ts": {
+      "name": "Site variables",
+      "description": "Re-exports vars.json as the typed vars object and VarKey union the site and <Var> read; writers add keys in the JSON only."
+    }
+  }
+}

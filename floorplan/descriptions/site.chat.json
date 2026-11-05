@@ -1,0 +1,14 @@
+{
+  "files": {
+    "app/api/chat/route.ts": {
+      "name": "Chat API route",
+      "description": "Validates a chat request, forwards it to Inkeep's inkeep-qa-expert model through the AI SDK, and streams the answer back as a UI message stream."
+    }
+  },
+  "routes": {
+    "POST /api/chat": {
+      "name": "Ask the docs AI",
+      "description": "Streams Inkeep's answer with provideLinks citations; rejects unconfigured, cross-origin, oversized or malformed requests."
+    }
+  }
+}

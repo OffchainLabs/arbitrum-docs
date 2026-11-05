@@ -1,0 +1,44 @@
+{
+  "files": {
+    "components/brand-button.tsx": {
+      "name": "Brand pill button",
+      "description": "Renders the arbitrum.io pill button as a Fumadocs Link with primary, secondary and on-dark variants sharing the cyan-glow hover."
+    },
+    "components/footer.tsx": {
+      "name": "Site footer",
+      "description": "Renders the arbitrum.io-style link columns as a sibling of the layout, dark in both modes and styled with brand tokens."
+    },
+    "components/home-header.tsx": {
+      "name": "Home navbar",
+      "description": "Client navbar for the landing page and 404, matching the notebook header DOM so the shared navbar CSS applies; copied from fumadocs-ui 16.15.9."
+    },
+    "components/home-hero.tsx": {
+      "name": "Home hero",
+      "description": "Renders the landing hero panel: gradient, scan texture, seven navy slashes and the copy, with the texture preloaded as the LCP image."
+    },
+    "components/nav-label.tsx": {
+      "name": "Nav section label",
+      "description": "Marks a top nav item active when the current page's root sidebar folder contains any of the given section URLs."
+    },
+    "components/PageActionsPopover.tsx": {
+      "name": "Open page menu",
+      "description": "Server-rendered Open menu with GitHub, Markdown, ChatGPT, Claude and Cursor links, replacing Fumadocs' hard-coded ViewOptionsPopover."
+    },
+    "components/RequestUpdateLink.tsx": {
+      "name": "Request update link",
+      "description": "Server component linking to a prefilled GitHub issue for the current page, built from gitConfig and NEXT_PUBLIC_SITE_URL."
+    },
+    "components/sidebar-collapse-button.tsx": {
+      "name": "Sidebar collapse toggle",
+      "description": "Client toggle placed in the docs navbar via nav.children; needs DocsLayout's SidebarProvider, so it must stay off the home layout."
+    },
+    "components/sidebar-resource-links.tsx": {
+      "name": "Sidebar resource links",
+      "description": "Renders the Chain info, Glossary and Contribute shortcuts under the sidebar tree, outside the page tree so they claim no root."
+    },
+    "components/ui/button.tsx": {
+      "name": "Button variants",
+      "description": "Defines the cva buttonVariants class builder with primary, outline, ghost and secondary styles plus sm and icon sizes."
+    }
+  }
+}

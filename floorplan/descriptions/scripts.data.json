@@ -1,0 +1,24 @@
+{
+  "files": {
+    "scripts/data/contract-addresses.data.ts": {
+      "name": "Pinned contract addresses",
+      "description": "Hand-maintained addresses @arbitrum/sdk does not expose: proxy admin, fraud-proof, resource-constraint, factory and precompile addresses per chain."
+    },
+    "scripts/data/gas-target.data.ts": {
+      "name": "Gas-target chain list",
+      "description": "Lists the chains whose gas targets are fetched and rendered, in rendering order, with the key each snapshot entry uses."
+    },
+    "scripts/data/nitro-cli-reference.data.ts": {
+      "name": "CLI flags editorial inputs",
+      "description": "Pins where the flag walk starts, which flags are excluded and why, the guide link per namespace, and the flags whose type the Go reader cannot infer."
+    },
+    "scripts/data/precompiles-information.ts": {
+      "name": "Precompile overrides",
+      "description": "Hand-curated method and event overrides for the generated precompile tables, plus the separate NodeInterface entry."
+    },
+    "scripts/data/stylus-examples.data.ts": {
+      "name": "Stylus example pins",
+      "description": "Pins the stylus-by-example commit SHA, the published sections and page order, and the frontmatter defaults upstream cannot supply."
+    }
+  }
+}
