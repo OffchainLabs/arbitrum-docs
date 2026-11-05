@@ -1,0 +1,184 @@
+---
+title: 'Due-diligence summary'
+description: 'Dated, sourced answers to the questions a risk or compliance reviewer asks about Arbitrum One: guarantees, trust assumptions, upgrade keys, audits and support commitments.'
+content_type: reference
+author: gblanchemain
+sme: gblanchemain
+target_audience: 'Risk, compliance and architecture reviewers at institutions evaluating Arbitrum.'
+---
+
+This page is for risk, compliance and architecture reviewers at a financial institution. It answers the recurring due-diligence questions about Arbitrum One with a value, a source page in this documentation and the date that source states.
+
+Last verified: 2026-10-15 against the linked pages.
+
+The page covers Arbitrum One. Where a chain you launch yourself differs, the section [On your own Arbitrum chain](#on-your-own-arbitrum-chain) says how.
+
+## What Arbitrum One is
+
+Arbitrum One is a Rollup that executes transactions offchain and settles to Ethereum. The <Term id="arbitrum-rollup-protocol">Arbitrum Rollup protocol</Term> confirms its state on Ethereum.
+
+| Claim               | Value                                                                                                                                                                             | Source                                                                            | Date stated by source |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | --------------------- |
+| Chain type          | The first permissionless Ethereum parent-chain Rollup with full Ethereum smart contract functionality, live on mainnet.                                                           | [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks) | none stated           |
+| Data availability   | Rollup mode: all transaction data goes into the calldata or blobs of transactions submitted to the parent chain, so anyone can download and verify it.                            | [Data Availability](/run-a-node/data-availability)                                | none stated           |
+| Data availability   | In the default Rollup mode, all transaction data is recorded onchain through calldata or blobs.                                                                                   | [Finality](/how-arbitrum-works/deep-dives/finality)                               | none stated           |
+| Settlement          | Arbitrum executes offchain and uses Ethereum for settlement and data availability. Ethereum nodes store the compressed data and accept the result unless someone proves it wrong. | [Arbitrum introduction](/get-started/arbitrum-introduction)                       | none stated           |
+| Contract deployment | Arbitrum is permissionless. Anyone can deploy any smart contract code.                                                                                                            | [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks) | none stated           |
+
+## Guarantees
+
+The protocol gives you these guarantees without trusting the operator. One honest <Term id="validator">validator</Term> is enough to keep the chain correct, and the <Term id="fraud-proof">fraud proof</Term> system makes that property <Term id="trustless">trustless</Term>.
+
+| Claim                     | Value                                                                                                                                                                                                                                                               | Source                                                                                  | Date stated by source |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------- |
+| Correct execution         | Any one honest validator can force the correct execution of the chain to be confirmed. Under <Term id="bold">BoLD</Term> this holds within a known, fixed time, regardless of how many adversaries take part.                                                       | [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro)                      | none stated           |
+| Correct execution         | The fraud proof system needs only one honest validator, and that validator can catch several malicious actors.                                                                                                                                                      | [Arbitrum introduction](/get-started/arbitrum-introduction)                             | none stated           |
+| Censorship                | The <Term id="sequencer">sequencer</Term> can delay messages but cannot censor them. After the maximum delay interval, anyone can force a message from the <Term id="delayed-inbox">delayed inbox</Term> into the main inbox.                                       | [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro)                      | none stated           |
+| Force-inclusion window    | `delayBlocks` is <Var name="arbOneForceIncludePeriodBlocks" /> Ethereum blocks on Arbitrum One, which is <Var name="arbOneForceIncludePeriodHours" /> hours at 12 seconds per block. After that, anyone can call <Term id="forceinclusion">`forceInclusion`</Term>. | [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions)               | none stated           |
+| Force-inclusion exception | The <Term id="chain-owner">chain owner</Term> can allowlist or pause the Inbox.                                                                                                                                                                                     | [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions)               | none stated           |
+| Withdrawal delay          | Withdrawing funds from Arbitrum to Ethereum typically waits <Var name="arbOneDisputeWindowDays" /> days. Transactions inside Arbitrum are not delayed.                                                                                                              | [Arbitrum introduction](/get-started/arbitrum-introduction)                             | none stated           |
+| Withdrawal delay          | A BoLD challenge adds at most one more <Term id="challenge-period">challenge period</Term> before an <Term id="assertion">assertion</Term> confirms.                                                                                                                | [Arbitrum glossary](/glossary#challenge-period)                                         | none stated           |
+| Dispute bound             | Disputes resolve within a fixed period: two challenge periods, plus a two-day grace period for the Security Council to intervene, plus a small delta for computation.                                                                                               | [Overview of BoLD](/how-arbitrum-works/bold/gentle-introduction)                        | none stated           |
+| Challenge period control  | Ethereum confirms an honest claim after <Var name="arbOneDisputeWindowDays" /> days. The DAO can change this period.                                                                                                                                                | [BoLD: a technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive)        | none stated           |
+| Reorgs                    | Once a batch is posted, only a reorg of the parent chain can reorganize the chain. Fraud proofs and dispute resolution never cause a reorg.                                                                                                                         | [Finality and chain reorganizations](/how-arbitrum-works/reference/finality-and-reorgs) | none stated           |
+| Reorg depth               | Child-chain reorg depth is bounded by parent-chain reorg depth.                                                                                                                                                                                                     | [Finality and chain reorganizations](/how-arbitrum-works/reference/finality-and-reorgs) | none stated           |
+| Confirmation levels       | `latest` is a sequencer promise and can revert. `safe` and `finalized` mean the batch reached the parent chain's `safe` or `finalized` block and revert only with the parent chain.                                                                                 | [Finality and chain reorganizations](/how-arbitrum-works/reference/finality-and-reorgs) | none stated           |
+
+## Trust assumptions
+
+You trust one operator for speed and the parent chain for settlement. [Threat model and trust boundaries](/evaluate/threat-model) covers each assumption and its failure modes.
+
+| Claim                 | Value                                                                                                                                                       | Source                                                                              | Date stated by source |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------------------- |
+| Sequencer operator    | On Arbitrum One, Offchain Labs currently runs the sequencer. There is no built-in mechanism to punish a misbehaving sequencer.                              | [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro)                  | none stated           |
+| Sequencer operator    | The sequencer is currently a single party on Arbitrum One.                                                                                                  | [Arbitrum glossary](/glossary#sequencer)                                            | none stated           |
+| Soft finality         | A <Term id="soft-confirmation">soft confirmation</Term> is a sub-second provisional confirmation that depends on the sequencer behaving honestly.           | [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer) | none stated           |
+| Soft finality         | A malicious sequencer could reorder or censor transactions before they reach hard finality.                                                                 | [Finality](/how-arbitrum-works/deep-dives/finality)                                 | none stated           |
+| Hard finality         | Security rests on the parent chain. Even if the sequencer misbehaves, transactions in posted batches are secured once finalized on the parent chain.        | [Finality](/how-arbitrum-works/deep-dives/finality)                                 | none stated           |
+| Execution environment | <Term id="arbos">ArbOS</Term> is a trusted system component inside the State Transition Function. Every node and fraud prover replays it deterministically. | [ArbOS](/how-arbitrum-works/deep-dives/arbos)                                       | none stated           |
+
+## Who holds the upgrade keys
+
+The <Term id="arbitrum-dao">Arbitrum DAO</Term> owns Arbitrum One and approves protocol upgrades. A Security Council can act outside the vote process.
+
+| Claim                     | Value                                                                                                                                                                                                                                                                                                                                                | Source                                                                                        | Date stated by source                               |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| Owner                     | The Arbitrum DAO system is the owner of Arbitrum One.                                                                                                                                                                                                                                                                                                | [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks)             | none stated                                         |
+| Owner                     | Holders of the ARB token vote on protocol upgrades, treasury actions and revenue distributions.                                                                                                                                                                                                                                                      | [Arbitrum glossary](/glossary#arbitrum-dao)                                                   | none stated                                         |
+| Upgrade mechanism         | Chain ownership runs through <Term id="upgrade-executor">Upgrade Executor</Term> contracts, one on the chain and one on the parent chain. Only chain owners can call them. DAO-governed chains use both a governance token and a multisig, the Security Council, as chain owners.                                                                    | [Ownership structure and access control](/launch-arbitrum-chain/operate/ownership-and-access) | none stated                                         |
+| ArbOS upgrades            | An ArbOS upgrade is Arbitrum's equivalent of a hard fork. On Arbitrum One the owner is the Arbitrum DAO, so an upgrade requires a governance proposal and vote.                                                                                                                                                                                      | [ArbOS software releases: Overview](/run-a-node/arbos-releases/overview)                      | none stated                                         |
+| Upgrade process, example  | ArbOS 61 was approved by Constitutional AIP. The onchain vote opened July 16, 2026, closed July 30, 2026 and passed, then the timelock set out in the ArbitrumDAO Constitution ran. Activation on Arbitrum One: August 20, 2026 at 17:00 UTC.                                                                                                        | [ArbOS 61 Elara](/run-a-node/arbos-releases/arbos61)                                          | July 16, 2026; July 30, 2026; August 20, 2026       |
+| Delegated parameter       | ArbOS 61 lets Offchain Labs set `minimumL2BaseFee` and `L2BaseFee` on Arbitrum One to any value between 0.01 and 0.10 gwei through a `BaseFeeManager` contract. The privilege expires two years after mainnet activation. The DAO can revoke it at any time. The contract has no timelock or execution delay. Each change is announced on the forum. | [ArbOS 61 Elara](/run-a-node/arbos-releases/arbos61)                                          | January 8, 2026 (minimum base fee set to 0.02 gwei) |
+| Security Council powers   | The DAO-elected Arbitrum Security Council can, at any time, perform Emergency Actions or Non-Emergency Actions to execute software upgrades, perform routine maintenance and adjust parameters, within its existing powers.                                                                                                                          | [Troubleshoot Timeboost](/how-arbitrum-works/timeboost/troubleshoot-timeboost)                | none stated                                         |
+| Emergency action, example | The Security Council paused new Stylus contract activations on Arbitrum One as a security measure.                                                                                                                                                                                                                                                   | [Temporary pause on new Stylus activations](/notices/stylus-activation-pause-notice)          | 2/10/2026 (forum post title)                        |
+| Dispute grace period      | BoLD includes a two-day grace period for the Security Council to intervene in a dispute if necessary.                                                                                                                                                                                                                                                | [Overview of BoLD](/how-arbitrum-works/bold/gentle-introduction)                              | none stated                                         |
+| Scope of the Council      | BoLD can limit the scope of Arbitrum One's reliance on the Security Council.                                                                                                                                                                                                                                                                         | [BoLD FAQ](/how-arbitrum-works/bold/bold-faq)                                                 | none stated                                         |
+
+<Callout type="warn" title="SME to confirm">
+
+The timelock length, the Security Council composition and signing thresholds, and the Upgrade Executor and Security Council contract addresses are not stated in these docs.
+
+</Callout>
+
+The linked pages point to the Arbitrum Foundation for these items: the [ArbitrumDAO Constitution](https://docs.arbitrum.foundation/dao-constitution), the [Security Council](https://docs.arbitrum.foundation/concepts/security-council), the [State of progressive decentralization](https://docs.arbitrum.foundation/state-of-progressive-decentralization) and the [network upgrades table](https://docs.arbitrum.foundation/network-upgrades).
+
+## Dispute economics
+
+An attacker must bond ETH to post a claim and loses all of it when the claim is wrong.
+
+| Claim                    | Value                                                                                                                                                                                              | Source                                                                           | Date stated by source |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------- |
+| Assertion bond           | <Var name="arbOneBaesStakeEth" /> ETH to post an assertion on Arbitrum One. Sub-challenge assertions require 555 ETH and 79 ETH per level. The cost applies to honest and malicious parties alike. | [BoLD FAQ](/how-arbitrum-works/bold/bold-faq)                                    | none stated           |
+| Attacker outcome         | Honest parties are always refunded. Malicious actors always lose 100% of their bond, at each challenge.                                                                                            | [BoLD FAQ](/how-arbitrum-works/bold/bold-faq)                                    | none stated           |
+| Above-budget attack      | An attacker can post several invalid assertions and open several challenges. One honest party can defend all of them in parallel, and extra challenges do not extend the delay.                    | [BoLD FAQ](/how-arbitrum-works/bold/bold-faq)                                    | none stated           |
+| Honest party always wins | Arbitrum chains are deterministic, so only one history is correct. Anyone who knows the correct state can challenge a malicious claim and always win within a challenge period plus a small delta. | [BoLD: a technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive) | none stated           |
+| Bond pooling             | A bonding pool contract lets anyone crowdsource the bond from parties who want to help defend the chain.                                                                                           | [BoLD: a technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive) | none stated           |
+
+## Audits
+
+The audit page lists 48 reports from five firms. Each row links the report PDF.
+
+| Claim             | Value                                                                                                              | Source                                                                            | Date stated by source                  |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- | -------------------------------------- |
+| Report count      | 48 audit reports.                                                                                                  | [Security audit reports](/audit-reports)                                          | November 5, 2021 to September 15, 2026 |
+| Auditors          | Trail of Bits (41), Open Zeppelin (3), ConsenSys Diligence (2), Code4rena (1), Chainsecurity (1).                  | [Security audit reports](/audit-reports)                                          | November 5, 2021 to September 15, 2026 |
+| Latest report     | Trail of Bits, OSP Soundness Guard.                                                                                | [Security audit reports](/audit-reports)                                          | September 15, 2026                     |
+| Continuous audits | The Nitro implementation is perpetually audited by several independent firms and continuously reviewed and tested. | [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks) | none stated                            |
+| Bug bounty        | Offchain Labs sponsors a multi-million dollar bug bounty at https://immunefi.com/bounty/arbitrum/.                 | [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks) | none stated                            |
+| BaseFeeManager    | The ArbOS 61 `BaseFeeManager` contract was audited by Trail of Bits. The final report is published.                | [ArbOS 61 Elara](/run-a-node/arbos-releases/arbos61)                              | none stated                            |
+
+<Callout type="warn" title="SME to confirm">
+
+No page summarizes audit scope or findings; the audit page links the reports only.
+
+</Callout>
+
+## Support commitments
+
+Offchain Labs supports at most two Nitro minor releases at a time and patches only the ArbOS version active on Arbitrum One.
+
+| Claim                  | Value                                                                                                                                                                                       | Source                                                         | Date stated by source |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- | --------------------- |
+| Latest Nitro release   | <Var name="nitroVersionTag" />                                                                                                                                                              | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| Supported versions     | Nitro 3.12.x, supported until 30 calendar days after the next 3.12.x release. Nitro 3.11.5, supported until October 28, 2026. Supported deployment: Docker.                                 | [Nitro support policy](/run-a-node/nitro-support-policy)       | October 28, 2026      |
+| Support window         | The current minor release is always supported. The previous minor release is supported for 30 calendar days after a newer minor release is available. At most two minor releases at a time. | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| Early cut-off          | For stability or security fixes, Offchain Labs may cut a new minor release within 30 days and immediately drop support for the previous one.                                                | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| ArbOS security updates | Only the ArbOS release activated on Arbitrum One receives security updates and urgent vulnerability patches.                                                                                | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| Active ArbOS           | ArbOS 61 "Elara" is active on Arbitrum One.                                                                                                                                                 | [Upgrade notice for ArbOS 61](/notices/arbos61-upgrade-notice) | August 20, 2026       |
+| What "supported" means | Offchain Labs responds to bug reports, ships fixes and security patches, helps debug operational issues and treats the release as a baseline for compatibility testing.                     | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| Unsupported versions   | Offchain Labs may decline to investigate issues, does not back-port non-critical fixes or features, and you assume the operational, consensus and security risk.                            | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| ArbOS backports        | Offchain Labs does not commit to porting ArbOS changes, including security changes, back to any Nitro version. Operators must upgrade Nitro first.                                          | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| Security-fix sequence  | Private disclosure to chain operators when actionable, then a coordinated release across all in-window versions, then public disclosure after operators have had time to upgrade.           | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| Out of scope           | Third-party forks or custom builds, builds from non-release commits, and configurations or patches not in the upstream release.                                                             | [Nitro support policy](/run-a-node/nitro-support-policy)       | none stated           |
+| Beta and RC builds     | Running beta or release candidate versions is not supported and can cause unexpected behavior or database corruption.                                                                       | [Prepare to run a node](/run-a-node/start-here)                | none stated           |
+
+## On your own Arbitrum chain
+
+When you launch an Arbitrum chain, you hold the powers that the DAO holds on Arbitrum One. [Threat model and trust boundaries](/evaluate/threat-model), [Operational assurance](/evaluate/operational-assurance) and [Compliance controls](/evaluate/compliance-controls) say what that means for your controls.
+
+| Claim                | Value                                                                                                                                                                                  | Source                                                                                        | Date stated by source |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------- |
+| Chain owner powers   | A chain owner can upgrade protocol contracts, set core system parameters, and add and remove other chain owners.                                                                       | [Ownership structure and access control](/launch-arbitrum-chain/operate/ownership-and-access) | none stated           |
+| Initial owner        | The chain's creator sets the initial chain owner at deployment.                                                                                                                        | [Ownership structure and access control](/launch-arbitrum-chain/operate/ownership-and-access) | none stated           |
+| Owner identity       | A chain owner is an address. It can be an EOA, a multisig or a governance token system.                                                                                                | [Ownership structure and access control](/launch-arbitrum-chain/operate/ownership-and-access) | none stated           |
+| License              | Nitro is licensed under a Business Source License with an "Additional Use Grant" so that everyone can use and run nodes on all public Arbitrum chains.                                 | [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license)                           | none stated           |
+| Zero-cost deployment | The Additional Use Grant permits permissionless, zero-cost deployment of Nitro as a new chain that settles to Arbitrum One. Such L3s have no obligation to share revenue with the DAO. | [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license)                           | none stated           |
+| Governance           | Arbitrum chains are not required to be governed by the Arbitrum DAO.                                                                                                                   | [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license)                           | none stated           |
+| Stack changes        | Arbitrum chains can modify any part of the stack, including custom gas tokens, alternative data availability, sequencing mechanisms and account abstraction.                           | [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license)                           | none stated           |
+| Other parent chains  | The Arbitrum Expansion Program is a self-service license for other parent chains. L3s that settle elsewhere contribute net chain revenue: 8% to the DAO and 2% to the developer guild. | [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license)                           | none stated           |
+
+## Known risks
+
+[Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks) names three risks. Progressive decentralization: the Arbitrum DAO system owns Arbitrum One, and the Foundation's "State of Progressive Decentralization" page tracks what remains centralized. Software bugs: the codebase is audited and reviewed continuously, yet a non-zero chance of undiscovered vulnerabilities remains, so you decide how much value to entrust to the system. Scams: anyone can deploy any contract, so you interact with a contract on Arbitrum only when you have good reason to trust it, as on Ethereum.
+
+## Related resources
+
+- [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks)
+- [Data Availability](/run-a-node/data-availability)
+- [Finality](/how-arbitrum-works/deep-dives/finality)
+- [Arbitrum introduction](/get-started/arbitrum-introduction)
+- [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro)
+- [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions)
+- [Finality and chain reorganizations](/how-arbitrum-works/reference/finality-and-reorgs)
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer)
+- [ArbOS](/how-arbitrum-works/deep-dives/arbos)
+- [Ownership structure and access control](/launch-arbitrum-chain/operate/ownership-and-access)
+- [ArbOS software releases: Overview](/run-a-node/arbos-releases/overview)
+- [ArbOS 61 Elara](/run-a-node/arbos-releases/arbos61)
+- [Troubleshoot Timeboost](/how-arbitrum-works/timeboost/troubleshoot-timeboost)
+- [Temporary pause on new Stylus activations](/notices/stylus-activation-pause-notice)
+- [Overview of BoLD](/how-arbitrum-works/bold/gentle-introduction)
+- [BoLD FAQ](/how-arbitrum-works/bold/bold-faq)
+- [BoLD: a technical deep dive](/how-arbitrum-works/bold/bold-technical-deep-dive)
+- [Security audit reports](/audit-reports)
+- [Nitro support policy](/run-a-node/nitro-support-policy)
+- [Upgrade notice for ArbOS 61](/notices/arbos61-upgrade-notice)
+- [Prepare to run a node](/run-a-node/start-here)
+- [Arbitrum chain licensing](/launch-arbitrum-chain/overview/license)
+- [Arbitrum glossary](/glossary)
+
+## Next steps
+
+- [Threat model and trust boundaries](/evaluate/threat-model)
+- [Operational assurance](/evaluate/operational-assurance)
+- [Compliance controls](/evaluate/compliance-controls)
