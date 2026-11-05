@@ -49,5 +49,8 @@ content/docs/stylus/concepts/gas-metering.mdx
 content/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das.mdx
 content/docs/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx
 
-# Floorplan map export: one generated HTML file, not formatted.
+# Floorplan: the exported map page and the plugin's untracked outputs. The JSON inputs stay checked.
 floorplan/*.html
+floorplan/*.mjs
+floorplan/graph.json
+floorplan/.cache
