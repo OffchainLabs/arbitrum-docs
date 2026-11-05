@@ -28,10 +28,6 @@ Write down the time the outage started. You need it in step 4.
 2. **If you run the sequencer coordinator, confirm that a sequencer holds the lockout.** Read `coordinator.chosen` in Redis. If you set `chosen-healthcheck-addr`, you can query that endpoint instead. It returns `200` on the chosen sequencer and `503` on the others. If no sequencer is chosen, see [No sequencer is chosen](/launch-arbitrum-chain/operate/sequencer-troubleshooting#1-no-sequencer-is-chosen).
 3. **If the sequencer logs `cannot sequence`, check the parent-chain connection first, then the host clock.** See [The sequencer refuses to build a block](/launch-arbitrum-chain/operate/sequencer-troubleshooting#2-the-sequencer-refuses-to-build-a-block).
 
-{/* SME gap: Steps to restart or replace the sequencer for a chain owner who runs a single sequencer with no coordinator. */}
-
-{/* SME gap: Steps for a manual failover when the coordinator does not pick a standby on its own. */}
-
 ## 3. Restore batch posting
 
 1. **Check the <Term id="batch-poster">batch poster</Term> balance.** If `arb/batchposter/wallet/eth` is below your funding threshold, fund the account.
@@ -41,8 +37,6 @@ Write down the time the outage started. You need it in step 4.
 5. **If someone force-included a message during the outage, the first batch can fail.** A force inclusion does not update the message count the batch poster expects. If the first batch fails, set `dangerous.allow-posting-first-batch-when-sequencer-message-count-mismatch` for the first batch. See [Recovery mechanism 2](/launch-arbitrum-chain/operate/bp-recovery#recovery-mechanism-2-revert--halt-and-force-inclusion-recovery).
 
 For other causes, see [Batch poster troubleshooting](/launch-arbitrum-chain/operate/batch-poster-troubleshooting).
-
-{/* SME gap: What to do when the batch poster halts because the oldest unposted message is within reorg-resistance-margin of the maxTimeVariation past edge. Is setting the margin to 0 the expected fix, and when is it safe? */}
 
 ## 4. Tell your users
 
@@ -54,15 +48,9 @@ Tell your users what is down and how they can still reach the chain:
 - **How to withdraw ETH.** Point users to [Withdraw ETH while the sequencer is down](/how-arbitrum-works/deep-dives/forced-transactions#withdraw-eth-while-the-sequencer-is-down).
 - **During a batch-posting outage, recent transactions can change.** A force inclusion can drop <Term id="soft-confirmation">soft-confirmed</Term> transactions. Tell users which transactions might need to be resent.
 
-{/* SME gap: Recommended channels for outage notices (status page, X, Discord) and a template message. */}
-
 ## 5. After recovery
 
 1. **Confirm that blocks and batches are flowing.** Watch `arb/batchposter/estimated_batch_backlog` and `arb/feed/backlog/messages` drain back to normal.
 2. **Check for a reorg.** If someone force-included a message while blocks were unposted, nodes that follow the feed dropped those blocks. The sequencer re-sequences up to 1,024 dropped messages, and only while it is active. See [When a force inclusion reorders the chain](/how-arbitrum-works/deep-dives/forced-transactions#when-a-force-inclusion-reorders-the-chain).
 3. **Check the Censorship Timeout buffer if you enabled it.** A long outage drains the buffer, so the force-inclusion window stays shorter until it refills. The buffer refills about 1 day for every 20 days without long delays. See [How the Censorship Timeout shortens the window](/how-arbitrum-works/deep-dives/forced-transactions#how-the-censorship-timeout-shortens-the-window).
 4. **Review your setup.** Decide whether you need a standby sequencer, a standby batch poster, new alerts, or a different force-inclusion window. See [Sequencer outages](/launch-arbitrum-chain/chain-config/sequencer/sequencer-outages#settings-you-control).
-
-{/* SME gap: How a chain owner finds the transactions that a reorg dropped, so they can tell the affected users. */}
-
-{/* SME gap: Should a chain owner write an incident report, and is there a template or a place to share it with Offchain Labs? */}
