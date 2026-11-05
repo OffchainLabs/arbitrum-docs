@@ -237,6 +237,33 @@ test('ArrowRight steps only when focus is inside the widget', async () => {
   });
 });
 
+test('Space scrolls the page while focus is on the page body', async () => {
+  await withFlow(WIDE, '', async (page) => {
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    await settle(page);
+    assert.equal(await page.evaluate(() => document.activeElement === document.body), true);
+    const before = await page.evaluate(() => window.scrollY);
+    await page.keyboard.press('Space');
+    await page
+      .waitForFunction((start) => window.scrollY > start, before, { timeout: 5_000 })
+      .catch(() => undefined);
+    const after = await page.evaluate(() => window.scrollY);
+    assert.ok(after > before, `scrollY ${before} -> ${after}`);
+  });
+});
+
+test('Tab from the widget root reaches Back within 3 presses', async () => {
+  await withFlow(WIDE, '', async (page) => {
+    await page.locator(CANVAS).locator('xpath=..').focus();
+    const visited: string[] = [];
+    for (let press = 0; press < 3 && !visited.includes('← Back'); press++) {
+      await page.keyboard.press('Tab');
+      visited.push(await page.evaluate(() => document.activeElement?.textContent ?? ''));
+    }
+    assert.ok(visited.includes('← Back'), `focus went to ${JSON.stringify(visited)}`);
+  });
+});
+
 test('reaching either end keeps keyboard focus inside the widget', async () => {
   await withFlow(WIDE, '#step-6', async (page) => {
     const root = page.locator(CANVAS).locator('xpath=..');
@@ -314,6 +341,8 @@ test('each step frames its active nodes and labels at zoom ≥0.6 at 1280×900',
 test('at 375×812 every active node and label is inside the canvas on every step', async () => {
   await withFlow(PHONE, '', async (page) => {
     await eachStep(page, (shot, index) => {
+      // Step 7 frames at zoom 0.45; the spec accepts that.
+      assert.ok(index === 6 || shot.zoom >= 0.6, `step ${index + 1} zoom ${shot.zoom}`);
       for (const box of activeBoxes(shot, index)) {
         assert.ok(inside(box, shot.canvas), `step ${index + 1}: ${JSON.stringify(box)}`);
       }
