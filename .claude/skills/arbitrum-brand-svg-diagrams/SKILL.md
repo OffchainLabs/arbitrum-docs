@@ -63,9 +63,8 @@ process step). Add a small color key when you use three or more.
 
 ### Text color is measured, not chosen
 
-An earlier version of this skill said "white text on cyan/magenta boxes" for
-baked-background diagrams. **White on cyan is 2.55:1 and fails WCAG at every
-size.** Use this table instead — every figure below is computed, not estimated:
+**White on cyan is 2.55:1 and fails WCAG at every size.** Use this table for text
+color on baked-background diagrams — every figure below is computed, not estimated:
 
 | Box fill                | Title text         | Sublabel text     | Never use                  |
 | ----------------------- | ------------------ | ----------------- | -------------------------- |
@@ -320,9 +319,7 @@ you changed a doc **link**.
 
 6. **Check what the removal orphaned.** Retiring an ASCII diagram can strip the
    last consumer of a helper CSS class. Grep for it and _report_ it — don't
-   delete shared CSS unasked. (The known Docusaurus case, `.ascii-diagram` in
-   `src/css/partials/_misc-classes.scss`, no longer applies: this tree has no
-   `src/`, and the class is defined nowhere.)
+   delete shared CSS unasked.
 
 ### Diagram labels are prose: the style guide applies
 
@@ -561,8 +558,7 @@ settle before you place a single box:
   down. Guessing wrong throws away the whole diagram, so it is worth one
   question with two ASCII mockups rather than a full build.
 - **Drop the invisible edges.** `~~~` is a layout hint that exists only to steer
-  Mermaid's auto-layout. Hand placement makes them meaningless — one source this
-  session had 12 of them against 14 real `-->` edges.
+  Mermaid's auto-layout. Hand placement makes them meaningless, so leave them out.
 - **Mermaid's per-subgraph `style fill:` has no brand equivalent.** Don't try to
   map five arbitrary subgraph tints onto the palette. Let lanes carry the
   grouping and let fill carry **role** (see the key below); you usually delete a
@@ -684,11 +680,10 @@ It prints a ratio per label, applies the correct threshold (3:1 only for genuine
 large text: ≥24px, or ≥18.66px bold — **otherwise 4.5:1**), and exits non-zero on
 any failure, so it can gate a commit.
 
-Run it, don't reason about it. On its first run against a finished diagram it
-caught **four** failures across two rounds — including two that hand-sampling had
-already missed, because manual checks cover the labels you think to check and
-skip small chips and legend headings. A later diagram opened at **8 failures of
-14** connector labels, so treat a clean first run as luck, not skill.
+Run it, don't reason about it. Manual checks cover the labels you think to check
+and skip small chips and legend headings, and a first run on a finished diagram
+often fails several connector labels, so treat a clean first run as luck, not
+skill.
 
 It checks `<text>` and nothing else. Arrowheads, strokes and panel borders have
 no automated gate at all — see "Arrowheads: three failures no tool catches".

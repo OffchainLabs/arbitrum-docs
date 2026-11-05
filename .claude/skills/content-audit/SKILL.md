@@ -29,13 +29,13 @@ node --test scripts/sidebar.test.ts
 
 Builds the Fumadocs sidebar from `content/docs/**/meta.json` and checks that every article
 appears on exactly one sidebar node and belongs to a section. The root overview is intentionally
-hidden. Failures name the page and the `meta.json` entry to fix. This replaces the old
-`yarn find-orphan-pages` check; it also runs as part of `pnpm test`.
+hidden. Failures name the page and the `meta.json` entry to fix. It also runs as part of
+`pnpm test`.
 
 ### 3. Orphaned files
 
-The legacy `scripts/find-orphaned-files.js` is absent from this checkout. Keep this audit step,
-but report it as a manual review; the link and sidebar gates do not prove assets or partials are used.
+No script covers this step, so run it as a manual review; the link and sidebar gates do not
+prove assets or partials are used.
 
 1. Inventory images and partials with `rg --files public/img content/partials`.
 2. For each candidate, search its filename and repository/URL path with `rg -n -F` across

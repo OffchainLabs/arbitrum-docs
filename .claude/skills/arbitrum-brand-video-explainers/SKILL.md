@@ -56,20 +56,20 @@ docs/explainers/<name>/render.json        MP4 only: SPEED, fps, frame count, dur
 ```
 
 `render.json` is what makes "keep the same pace as last time" a lookup instead of
-a reverse-engineering job. A shipped MP4 with no recorded tempo cost a session
-solving for `SPEED` by frame count.
+a reverse-engineering job: without it, the tempo has to be recovered from the
+frame count.
 
 `examples/` under this skill is read-only reference. Copy an example out to
-`docs/explainers/<name>/` before changing a line; an example edited in place was
-reverted by the next checkout and the committed MP4 lost its generator.
+`docs/explainers/<name>/` before changing a line, so the committed MP4 keeps a
+generator that a checkout cannot revert.
 
 ## The failure this skill exists to prevent
 
-Three independent agents were given "restyle and slow down this explainer" with
-no guidance. All three correctly chose to rebuild as a generator. **All three
-shipped fabricated numbers anyway**, in a video that looked entirely plausible:
+An agent asked to restyle or slow down an explainer with no guidance correctly
+rebuilds it as a generator and still **ships fabricated numbers**, in a video
+that looks entirely plausible:
 
-| What they did                                                   | Result                                                                                    |
+| What goes wrong                                                 | Result                                                                                    |
 | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | Re-simulated the concept instead of transcribing it             | Every transaction value in all six blocks was invented                                    |
 | Mis-read one chip and moved on                                  | `4+7` rendered where the source shows `11`                                                |
@@ -130,9 +130,9 @@ single image, and cropping to a status region to recover a state machine cheaply
 ## Labels are prose: read STYLE-GUIDE.md before you draft them
 
 `STYLE-GUIDE.md` at the repo root governs every label and caption. Read it
-before writing the first label, not after the render: both earlier sessions
-skipped this step, and the write hook only fires on an MDX edit, so nothing else
-catches it. Sentence case, active voice, no "e.g.". Restyling is the moment to
+before writing the first label, not after the render: the write hook only fires
+on an MDX edit, so nothing else catches it. Sentence case, active voice, no
+"e.g.". Restyling is the moment to
 fix copy such as `HEAVY LOAD` and `skipped — block filled in round 1`, not to
 preserve it.
 
@@ -180,12 +180,11 @@ time _t_ for verification. The recipe it follows:
 3. **Captions are chips**: a `#152c4e` rect at 92% opacity under `#eaf5ff`
    text, one per phase, stepped with `animation-timing-function: step-end`.
 4. **A label shares the group of the thing it describes.** A label placed as a
-   sibling is visible from frame 0; the correction "Returned to your sender was
-   visible before anything was returned" came from exactly that.
+   sibling is visible from frame 0, before the thing it names has happened.
 5. **The loop resolves the story.** End on the state the reader must act on,
-   and let it hold for a second before the fade. A loop that stopped at the
-   error drew the question "and what if nonce 7 arrives late?" — the answer had
-   to be animated in.
+   and let it hold for a second before the fade. A loop that stops at the
+   error leaves the obvious follow-up question ("and what if nonce 7 arrives
+   late?") unanswered, so animate the answer in.
 6. Wire it into the page as `<ImageZoom><img src="/img/<name>.svg" alt="…"
 data-wide /></ImageZoom>`, with the full description in `alt` and the same
    text in the SVG's `<desc>`.
@@ -268,13 +267,13 @@ close the tab when done.
 
 ## Common mistakes
 
-| Mistake                                   | Fix                                                                                                                                                                                                                  |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Editing the MP4 with ffmpeg filters       | You cannot change baked-in text. Rebuild as a generator.                                                                                                                                                             |
-| Editing `examples/*/build.py` in place    | Copy it to `docs/explainers/<name>/` first. The example is reference; the copy is the project's generator and is committed with the deliverable.                                                                     |
-| Writing the deliverable to the repo root  | `public/img/<name>.svg` or `.mp4`, like every other docs image.                                                                                                                                                      |
-| Keeping the source's aspect ratio         | Re-lay out to 1600×900 unless asked otherwise.                                                                                                                                                                       |
-| Bottom panel spanning full width          | Clips the logomark. Start it at x≥340.                                                                                                                                                                               |
-| Deciding pace/styling/canvas yourself     | These are expensive to redo. Ask first — they materially change the layout. If you cannot ask, default to about 2x the source duration; a tested agent left to its own judgement shipped 4x, which reads as stalled. |
-| Rendering before checking contrast        | Probe two frames first; a 700-frame render is 40 s wasted otherwise.                                                                                                                                                 |
-| Animating `width`/`height` on an SVG rect | Browsers differ; `scaleX()`/`scaleY()` with `transform-box: fill-box` is uniform.                                                                                                                                    |
+| Mistake                                   | Fix                                                                                                                                                                  |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Editing the MP4 with ffmpeg filters       | You cannot change baked-in text. Rebuild as a generator.                                                                                                             |
+| Editing `examples/*/build.py` in place    | Copy it to `docs/explainers/<name>/` first. The example is reference; the copy is the project's generator and is committed with the deliverable.                     |
+| Writing the deliverable to the repo root  | `public/img/<name>.svg` or `.mp4`, like every other docs image.                                                                                                      |
+| Keeping the source's aspect ratio         | Re-lay out to 1600×900 unless asked otherwise.                                                                                                                       |
+| Bottom panel spanning full width          | Clips the logomark. Start it at x≥340.                                                                                                                               |
+| Deciding pace/styling/canvas yourself     | These are expensive to redo. Ask first — they materially change the layout. If you cannot ask, default to about 2x the source duration, because 4x reads as stalled. |
+| Rendering before checking contrast        | Probe two frames first; a 700-frame render is 40 s wasted otherwise.                                                                                                 |
+| Animating `width`/`height` on an SVG rect | Browsers differ; `scaleX()`/`scaleY()` with `transform-box: fill-box` is uniform.                                                                                    |
