@@ -17,7 +17,10 @@ interface FlowCanvasProps {
   onMove: (viewport: Viewport) => void;
 }
 
-/** The React Flow graph, with dragging, panning and wheel or double-click zoom turned off. */
+/**
+ * The React Flow graph, with dragging, panning, wheel or double-click zoom, key bindings and node
+ * or edge focus turned off.
+ */
 export function FlowCanvas({ nodes, edges, onInit, onMove }: FlowCanvasProps) {
   return (
     // React Flow sets `touch-action: none` on its pane, which stops a one-finger swipe from
@@ -40,6 +43,17 @@ export function FlowCanvas({ nodes, edges, onInit, onMove }: FlowCanvasProps) {
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={false}
+        // React Flow listens for these keys on window and calls preventDefault, so Space would
+        // not scroll the page.
+        panActivationKeyCode={null}
+        selectionKeyCode={null}
+        multiSelectionKeyCode={null}
+        deleteKeyCode={null}
+        zoomActivationKeyCode={null}
+        // No tab stop on nodes or edges: focusing one pans the camera off the step.
+        nodesFocusable={false}
+        edgesFocusable={false}
+        disableKeyboardA11y
       />
     </div>
   );
