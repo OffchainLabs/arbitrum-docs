@@ -36,6 +36,7 @@ export function getMDXComponents(components?: MDXComponents) {
     AEL: AddressExplorerLink,
     Callout,
     EdgeChallengeFlow,
+    NitroTxFlow,
     ImageZoom,
     NitroTxFlow,
     // Markdown images arrive with `src`, `width` and `height` that remark-image measured from
