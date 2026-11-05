@@ -7,15 +7,15 @@ content_type: how-to
 author: pete-vielhaber
 ---
 
-Use this page when your <Term id="arbitrum-chain">Arbitrum chain</Term> stops producing blocks or stops posting batches to the <Term id="parent-chain">parent chain</Term>. Work through the steps in order. Each step links to the page that holds the fix. For background on what happens during an outage, see [Sequencer outages](/launch-arbitrum-chain/chain-config/sequencer/sequencer-outages).
+Use this page when your <Term id="arbitrum-chain">Arbitrum chain</Term> stops producing blocks or stops posting <Term id="batch">batches</Term> to the <Term id="parent-chain">parent chain</Term>. Work through the steps in order. Each step links to the page that holds the fix. For background on what happens during an outage, see [Sequencer outages](/launch-arbitrum-chain/chain-config/sequencer/sequencer-outages).
 
 ## 1. Find out which outage you have
 
-Check two things: whether blocks are still being produced, and whether batches are still landing on the parent chain.
+Check two things: whether the chain is still producing blocks, and whether batches are still landing on the parent chain.
 
 | What you see                                                                                                              | Outage               | Next step                                                  |
 | ------------------------------------------------------------------------------------------------------------------------- | -------------------- | ---------------------------------------------------------- |
-| The block height is the same across two samples.                                                                          | Sequencer downtime   | [2. Restore block production](#2-restore-block-production) |
+| The block height is the same across two samples.                                                                          | <Term id="sequencer">Sequencer</Term> downtime   | [2. Restore block production](#2-restore-block-production) |
 | Blocks keep coming, but `arb/inbox/latest/batch` stops rising, or no `SequencerBatchDelivered` event arrives on schedule. | Batch posting outage | [3. Restore batch posting](#3-restore-batch-posting)       |
 
 For the metrics and alert thresholds, see the [Sequencer](/launch-arbitrum-chain/operate/monitoring#sequencer) and [Batch poster](/launch-arbitrum-chain/operate/monitoring#batch-poster) sections of the monitoring guide.
@@ -34,7 +34,7 @@ Write down the time the outage started. You need it in step 4.
 
 ## 3. Restore batch posting
 
-1. **Check the batch poster balance.** If `arb/batchposter/wallet/eth` is below your funding threshold, fund the account.
+1. **Check the <Term id="batch-poster">batch poster</Term> balance.** If `arb/batchposter/wallet/eth` is below your funding threshold, fund the account.
 2. **Check for a reverted batch.** If the batch poster logs `batch was reverted, not posting any more batches`, find the cause of the revert, then restart the batch poster. See [Recovery mechanism 2](/launch-arbitrum-chain/operate/bp-recovery#recovery-mechanism-2-revert--halt-and-force-inclusion-recovery).
 3. **If the batch poster key is lost or compromised, rotate it.** See [Batch poster key rotation](/launch-arbitrum-chain/operate/key-rotation#1-batch-poster-key-rotation).
 4. **If you run a standby batch poster, confirm that it took the lock.** The lock works only when you set `node.batch-poster.redis-url`. It expires 1 minute after the active batch poster stops. See [Redis failover](/launch-arbitrum-chain/operate/bp-recovery#recovery-mechanism-3-redis-failover-high-availability).
@@ -48,11 +48,11 @@ For other causes, see [Batch poster troubleshooting](/launch-arbitrum-chain/oper
 
 Tell your users what is down and how they can still reach the chain:
 
-- **Which job stopped.** Say whether the chain has stopped producing blocks or has stopped posting batches.
-- **How to send a transaction anyway.** Point users to [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions). They can now send a transaction through the <Term id="delayed-inbox">Delayed Inbox</Term>.
-- **When force inclusion opens.** A message sent to the Delayed Inbox can be force-included one force-inclusion window after the parent-chain block it landed in. To get the exact block, call `forceInclusionDeadline(blockNumber)` on the Sequencer Inbox with that block number. The result accounts for the Censorship Timeout. Give your users the window in hours, and the deadline block if you have it. See [Settings you control](/launch-arbitrum-chain/chain-config/sequencer/sequencer-outages#settings-you-control).
+- **Which job stopped.** Say whether the chain stopped producing blocks or stopped posting batches.
+- **How to send a <Term id="transaction">transaction</Term> anyway.** Point users to [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions). They can now send a transaction through the <Term id="delayed-inbox">Delayed Inbox</Term>.
+- **When force inclusion opens.** A message sent to the Delayed Inbox can be force-included one <Term id="forceinclusion">force-inclusion</Term> window after the parent-chain block it landed in. To get the exact block, call `forceInclusionDeadline(blockNumber)` on the Sequencer Inbox with that block number. The result accounts for the Censorship Timeout. Give your users the window in hours, and the deadline block if you have it. See [Settings you control](/launch-arbitrum-chain/chain-config/sequencer/sequencer-outages#settings-you-control).
 - **How to withdraw ETH.** Point users to [Withdraw ETH while the sequencer is down](/how-arbitrum-works/deep-dives/forced-transactions#withdraw-eth-while-the-sequencer-is-down).
-- **During a batch-posting outage, recent transactions can change;** a force inclusion can drop <Term id="soft-confirmation">soft-confirmed</Term> transactions. Tell users which transactions might need to be resent.
+- **During a batch-posting outage, recent transactions can change.** A force inclusion can drop <Term id="soft-confirmation">soft-confirmed</Term> transactions. Tell users which transactions might need to be resent.
 
 {/* SME gap: Recommended channels for outage notices (status page, X, Discord) and a template message. */}
 
