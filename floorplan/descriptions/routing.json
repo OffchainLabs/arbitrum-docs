@@ -1,0 +1,36 @@
+{
+  "files": {
+    "lib/compact-redirects.ts": {
+      "name": "Redirect grouping",
+      "description": "Merges literal redirects with the same destination and status into one regex alternative, never across a pattern route, to cut Next's route count."
+    },
+    "lib/http-headers.ts": {
+      "name": "Response headers",
+      "description": "Lists the header rules next.config.ts applies in order: the CSP directives, the service-doc Link header on /, and the tracked markdown paths."
+    },
+    "lib/shared.ts": {
+      "name": "Site constants",
+      "description": "Holds the site name, titles, social handle, route prefixes, GitHub identity from vars.json, sidebar footer links and getSiteUrl."
+    },
+    "lib/site-url.ts": {
+      "name": "Site URL rule",
+      "description": "Resolves the absolute origin from NEXT_PUBLIC_SITE_URL, throwing in a production build when it is missing or not a URL, else localhost."
+    },
+    "next.config.ts": {
+      "name": "Next config",
+      "description": "Wires fumadocs-mdx, the compacted redirects with their .md twins, the /<slug>.md rewrites to the markdown mirror, and the site headers."
+    },
+    "proxy.ts": {
+      "name": "Markdown fetch proxy",
+      "description": "Records markdown and llms*.txt fetches as PostHog llms_file_fetched events in production; the matcher admits only tracked paths."
+    },
+    "redirects.config.ts": {
+      "name": "Redirect list",
+      "description": "Lists every redirect: move-doc entries between the AUTO-GENERATED markers, then hand-maintained legacy docs.arbitrum.io URLs with their permanence."
+    },
+    "redirects.current.mjs": {
+      "name": "Stale Docusaurus redirect map",
+      "description": "Maps old root-level docs.arbitrum.io URLs to /docs paths from a generator that no longer exists; nothing imports it."
+    }
+  }
+}

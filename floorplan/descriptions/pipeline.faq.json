@@ -1,0 +1,12 @@
+{
+  "files": {
+    "lib/faq-pages.ts": {
+      "name": "FAQ page registry",
+      "description": "Maps the six Notion FAQ slugs to their docs page paths, partial and snapshot files, and holds the Notion database ids."
+    },
+    "lib/faq.ts": {
+      "name": "FAQ structured data",
+      "description": "Builds FAQPage JSON-LD for the six Notion-backed pages from the content/faq snapshots, with answers reduced to plain text."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "files": {
+    "app/(docs)/[...slug]/page.tsx": {
+      "name": "Docs page",
+      "description": "Prerenders every content/docs page: compiled MDX body, FAQ JSON-LD, last-updated date, markdown copy button and page actions."
+    },
+    "app/(docs)/layout.tsx": {
+      "name": "Docs layout",
+      "description": "Wraps docs pages in the Fumadocs notebook layout with the meta.json page tree and resource-link footer, or the AI chat layout when the flag is on."
+    }
+  }
+}

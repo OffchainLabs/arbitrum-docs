@@ -1,0 +1,76 @@
+{
+  "files": {
+    "eslint/rules/block-component-in-paragraph.ts": {
+      "name": "Block component in paragraph",
+      "description": "Rejects a Callout, Tabs or Cards inside a paragraph whose other content stops Fumadocs from removing the paragraph wrapper."
+    },
+    "eslint/rules/callout-type.ts": {
+      "name": "Callout type check",
+      "description": "Rejects a <Callout type> outside info, warn, error, idea and success."
+    },
+    "eslint/rules/component-in-heading.ts": {
+      "name": "Component in heading",
+      "description": "Rejects a JSX component such as <Var> or <Term> inside a heading."
+    },
+    "eslint/rules/docusaurus-directive.ts": {
+      "name": "Docusaurus admonition",
+      "description": "Rejects a :::note style directive line, which nothing converts so readers see the colons."
+    },
+    "eslint/rules/docusaurus-var-token.ts": {
+      "name": "Docusaurus var token",
+      "description": "Rejects a Docusaurus @@name@@ or @@name=value@@ variable token."
+    },
+    "eslint/rules/esm-in-page.ts": {
+      "name": "ESM in page",
+      "description": "Rejects a top-level import or export statement in a content file."
+    },
+    "eslint/rules/frontmatter-schema.ts": {
+      "name": "Frontmatter schema check",
+      "description": "Rejects a content/docs page whose frontmatter fails arbitrumPageSchema: missing title or description, or an out-of-enum content_type."
+    },
+    "eslint/rules/link-in-heading.ts": {
+      "name": "Link in heading",
+      "description": "Rejects a markdown link or bare URL inside a heading."
+    },
+    "eslint/rules/markdown-in-title.ts": {
+      "name": "Markdown in title",
+      "description": "Rejects bold, italic, backticks or a link in the title attribute of a <Callout> or <Accordion>."
+    },
+    "eslint/rules/quicklook-anchor.ts": {
+      "name": "Quicklook anchor",
+      "description": "Rejects a Docusaurus <a data-quicklook-from> glossary anchor."
+    },
+    "eslint/rules/remote-image.ts": {
+      "name": "Remote image",
+      "description": "Rejects a markdown image whose src is an http(s) URL."
+    },
+    "eslint/rules/tabs-null-default.ts": {
+      "name": "Tabs null default",
+      "description": "Rejects <Tabs defaultValue={null}>, a Docusaurus-era prop."
+    },
+    "eslint/rules/tr-in-table.ts": {
+      "name": "Row directly in table",
+      "description": "Rejects a <tr> placed directly inside <table>."
+    },
+    "eslint/rules/unknown-component.ts": {
+      "name": "Unknown component",
+      "description": "Rejects a capitalised JSX tag that components/mdx.tsx does not register and Fumadocs does not provide by default."
+    },
+    "eslint/rules/unknown-term.ts": {
+      "name": "Unknown term",
+      "description": "Rejects a <Term id> or <Reference collection id> whose id has no entry in the collection, or whose collection is not registered."
+    },
+    "eslint/rules/unknown-var.ts": {
+      "name": "Unknown variable",
+      "description": "Rejects a <Var name> or {var:name} whose name is not a key in content/vars.json."
+    },
+    "eslint/rules/var-in-code.ts": {
+      "name": "Var in code",
+      "description": "Rejects a <Var> inside a fenced block or inline code span."
+    },
+    "eslint/rules/var-in-link.ts": {
+      "name": "Var in link",
+      "description": "Rejects a <Var> in a link destination or href, to or src attribute, and a {var:…} placeholder whose name is not an identifier."
+    }
+  }
+}

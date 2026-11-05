@@ -1,0 +1,12 @@
+{
+  "files": {
+    "scripts/clean.ts": {
+      "name": "Clean build output",
+      "description": "Deletes the .next cache and the fumadocs-mdx .source output before pnpm dev, as docusaurus clear did on master."
+    },
+    "scripts/move-doc.ts": {
+      "name": "Move a doc",
+      "description": "Moves a page with git mv, rewrites every link and include that pointed at it, updates meta.json and appends a redirect entry."
+    }
+  }
+}

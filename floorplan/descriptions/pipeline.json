@@ -1,0 +1,24 @@
+{
+  "files": {
+    "lib/cn.ts": {
+      "name": "Class name merge",
+      "description": "Re-exports tailwind-merge as cn so components combine Tailwind class lists without conflicting utilities."
+    },
+    "lib/layout.shared.tsx": {
+      "name": "Shared navbar options",
+      "description": "Builds the Fumadocs BaseLayoutProps every layout spreads: the logo title and the top navbar links to each section landing page."
+    },
+    "lib/merge-refs.ts": {
+      "name": "Ref merging",
+      "description": "Returns one callback ref that hands the element to several React refs, callback or object."
+    },
+    "lib/og.tsx": {
+      "name": "Social card renderer",
+      "description": "Renders the single 1200x630 Open Graph card with literal colours Satori can resolve, shared by the docs and home image routes."
+    },
+    "lib/posthog.ts": {
+      "name": "Page feedback action",
+      "description": "Server action that re-validates a page rating and posts it to PostHog as an anonymous docs_feedback event; never throws."
+    }
+  }
+}

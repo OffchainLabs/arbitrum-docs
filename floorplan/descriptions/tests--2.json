@@ -1,0 +1,68 @@
+{
+  "files": {
+    "scripts/lib/notion-mdx.test.ts": {
+      "name": "Notion block renderer tests",
+      "description": "Checks, fixture by fixture, how the Notion block renderer turns FAQ blocks and rich text into MDX."
+    },
+    "scripts/lib/page-schema.test.ts": {
+      "name": "Page frontmatter schema tests",
+      "description": "Checks arbitrumPageSchema keeps third_party_content_owner, target_audience and user_story optional and intact through parsing."
+    },
+    "scripts/lib/precompile-tables.test.ts": {
+      "name": "Precompile table tests",
+      "description": "Checks the parser that reads Nitro precompile sources and the renderer that writes the precompile method tables."
+    },
+    "scripts/lib/redirects-config.test.ts": {
+      "name": "Redirects config tests",
+      "description": "Runs offline checks over redirects.config.ts and the .md twins next.config.ts derives from it."
+    },
+    "scripts/lib/references-check.test.ts": {
+      "name": "References check tests",
+      "description": "Spawns scripts/references-check.ts in throwaway trees to check glossary id rules R1 and R4 and the ESM-imported partial rule R3."
+    },
+    "scripts/lib/root-routing.test.ts": {
+      "name": "Root routing tests",
+      "description": "Checks root-level article URLs never collide with machine routes or public files and the markdown rewrite still accepts them."
+    },
+    "scripts/lib/shared.test.ts": {
+      "name": "Sidebar resource link tests",
+      "description": "Tripwire that each sidebarResourceLinks entry pinned in the sidebar footer resolves to a real page and has a label."
+    },
+    "scripts/lib/site-url.test.ts": {
+      "name": "Site URL rule tests",
+      "description": "Checks resolveSiteUrl throws in a production build without NEXT_PUBLIC_SITE_URL, and that getSiteUrl and next.config.ts apply it."
+    },
+    "scripts/lib/strip-code.test.ts": {
+      "name": "Code stripper tests",
+      "description": "Checks stripCode blanks fences and code spans by CommonMark rules while preserving source length and line count."
+    },
+    "scripts/lib/var-links.test.ts": {
+      "name": "Var link tests",
+      "description": "Checks expandVarPlaceholders and remarkVarLinks rewrite {var:} link, href and src destinations and register vars.json as a dependency."
+    },
+    "scripts/move-doc.test.ts": {
+      "name": "Move doc tests",
+      "description": "Runs the real move-doc CLI against a throwaway fixture repo and checks the pages, links, meta.json and redirect it leaves on disk."
+    },
+    "scripts/sidebar.test.ts": {
+      "name": "Sidebar tree tests",
+      "description": "Builds the Fumadocs page tree from the real meta.json files and fails on an unlisted page, a duplicated node or a page outside every root."
+    },
+    "scripts/static-docs-http.test.ts": {
+      "name": "Static docs HTTP tests",
+      "description": "Fetches a running next start build to check routing, legacy URLs, headers, metadata, markdown mirrors and page weight."
+    },
+    "tests/browser/ai-chat.test.ts": {
+      "name": "AI chat panel browser tests",
+      "description": "Drives Chromium against next start to check the AI panel opens, lazy-loads once and takes hand-offs from Inkeep search."
+    },
+    "tests/browser/findable-panels.test.ts": {
+      "name": "Findable panel browser tests",
+      "description": "Drives Chromium against next start to check browser find reveals collapsed tabs and accordions without breaking manual toggling."
+    },
+    "tests/browser/link-preview.test.ts": {
+      "name": "Link preview browser tests",
+      "description": "Drives Chromium against next start to check hovering an internal link shows its card, Term popovers win, and Escape closes it."
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "files": {
+    ".github/dependabot.yml": {
+      "name": "Dependabot schedule",
+      "description": "Batches weekly npm minor and patch bumps and GitHub Actions SHA bumps into grouped PRs after a 7-day cooldown; ignores @types/node majors."
+    },
+    ".github/workflows/check-undocumented-issues.yml": {
+      "name": "Close empty docs requests",
+      "description": "On an opened issue titled 'Docs update request:' whose body is only the template, comments and closes it as not planned."
+    },
+    ".github/workflows/ci.yml": {
+      "name": "CI gates and build",
+      "description": "On push or PR to master, main or fumadocs: runs audit, types, tests, every content gate and lint, then builds and smoke-tests the served site."
+    },
+    ".github/workflows/faq-refresh.yml": {
+      "name": "FAQ refresh",
+      "description": "Mondays 08:00 UTC or by hand: fetches the Notion FAQ rows with NOTION_TOKEN, regenerates the partials and opens a PR when anything changed."
+    },
+    ".github/workflows/gas-target-refresh.yml": {
+      "name": "Gas-target refresh",
+      "description": "Mondays 08:00 UTC or by hand: reads ArbGasInfo over the public RPCs, regenerates the gas-target partial and opens a PR on change."
+    },
+    ".github/workflows/merge-controlled.yml": {
+      "name": "Merge-controlled label gate",
+      "description": "Fails the PR check while the merge-controlled label is present, re-running on label changes; blocks only once made a required check."
+    },
+    ".github/workflows/nitro-bump.yml": {
+      "name": "Nitro bump",
+      "description": "Manual dispatch with a release tag: runs nitro:check-release --to, regenerates precompile tables and the CLI page, and opens the bump PR."
+    },
+    ".github/workflows/sbom-export.yaml": {
+      "name": "SBOM export",
+      "description": "On push to master and Tuesdays: builds a CycloneDX SBOM from pnpm-lock.yaml with cdxgen and uploads it to Dependency-Track; skips without secrets."
+    },
+    ".github/workflows/upstream-refresh.yml": {
+      "name": "Upstream refresh",
+      "description": "Mondays 08:00 UTC: checks the pinned Nitro release, PRs regenerated precompile tables, and opens a 'Nitro vX.Y.Z is available' issue when one exists."
+    }
+  }
+}

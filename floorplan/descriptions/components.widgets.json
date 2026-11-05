@@ -1,0 +1,88 @@
+{
+  "files": {
+    "components/widgets/EdgeChallengeFlow/constants.ts": {
+      "name": "Challenge replay settings",
+      "description": "Holds the five flow-step labels, the playback speed options, the Sepolia Arbiscan base URL and the path of the decoded log JSON."
+    },
+    "components/widgets/EdgeChallengeFlow/ControlBar.tsx": {
+      "name": "Replay controls",
+      "description": "Renders the Play, Pause, Next, Show all and Reset buttons plus the speed picker that drive the challenge replay."
+    },
+    "components/widgets/EdgeChallengeFlow/D3EdgeTree.tsx": {
+      "name": "Edge tree diagram",
+      "description": "Draws one challenge level as a zoomable d3 tree, importing only the d3 sub-packages it needs and keeping keyboard focus across redraws."
+    },
+    "components/widgets/EdgeChallengeFlow/edge-challenge-flow.css": {
+      "name": "Challenge replay styles",
+      "description": "Styles the replay with Fumadocs theme tokens and the four ecf status hues from global.css, so no hex colour lives here."
+    },
+    "components/widgets/EdgeChallengeFlow/EdgeChallengeFlow.tsx": {
+      "name": "BoLD challenge replay",
+      "description": "Client component that fetches the decoded Arbitrum Sepolia event log on mount and composes the controls, trees, timeline and details panel."
+    },
+    "components/widgets/EdgeChallengeFlow/edgeChallengeLogic.ts": {
+      "name": "Challenge event reducer",
+      "description": "Applies EdgeAdded, EdgeBisected and one-step-proof events into edge state, builds range and level indexes, and formats hex and ranges."
+    },
+    "components/widgets/EdgeChallengeFlow/EventTimeline.tsx": {
+      "name": "Event timeline",
+      "description": "Lists the onchain events replayed so far and scrolls the current one to the middle of its log section."
+    },
+    "components/widgets/EdgeChallengeFlow/FlowSteps.tsx": {
+      "name": "Flow step strip",
+      "description": "Shows the five challenge phases as a strip, marking the current step active and earlier steps done."
+    },
+    "components/widgets/EdgeChallengeFlow/index.tsx": {
+      "name": "Challenge replay lazy boundary",
+      "description": "Exposes the MDX tag as a next/dynamic chunk with SSR off, so d3 and the sub-components load only on the page that renders it."
+    },
+    "components/widgets/EdgeChallengeFlow/NodeDetailsPanel.tsx": {
+      "name": "Edge details panel",
+      "description": "Shows the selected edge's ids, range and status with Arbiscan links and copy buttons that report a refused clipboard write."
+    },
+    "components/widgets/EdgeChallengeFlow/types.ts": {
+      "name": "Challenge replay types",
+      "description": "Declares the decoded event union, the applied edge state, the range and level indexes, and the tree node shape the replay shares."
+    },
+    "components/widgets/EdgeChallengeFlow/useEdgeChallengeState.ts": {
+      "name": "Challenge replay state hook",
+      "description": "Owns playback position, timer, speed, collapsed nodes and selection, and memoises the derived state the panels read."
+    },
+    "components/widgets/Troubleshooting/Checklist.tsx": {
+      "name": "Troubleshooting checklist",
+      "description": "Renders the Step 1 checklist; ticking an item highlights it and registers its label in the shared store for the report."
+    },
+    "components/widgets/Troubleshooting/ConfigGuidance.tsx": {
+      "name": "Config doc guidance",
+      "description": "Links to the right run-a-node guide for the node type and network currently selected in the troubleshooting store."
+    },
+    "components/widgets/Troubleshooting/index.tsx": {
+      "name": "Troubleshooting lazy boundaries",
+      "description": "Wraps the five troubleshooting components in next/dynamic with SSR on, so the MDX registry does not pull them into every page."
+    },
+    "components/widgets/Troubleshooting/store.ts": {
+      "name": "Troubleshooting page store",
+      "description": "Keeps the OS, network, node type and checklist selection in a module-level useSyncExternalStore store, persisted under a localStorage key."
+    },
+    "components/widgets/Troubleshooting/TroubleshootingConfig.tsx": {
+      "name": "Node config selector",
+      "description": "Renders the OS, Network and Node type radio groups as native fieldsets and writes each choice into the shared store."
+    },
+    "components/widgets/Troubleshooting/TroubleshootingReport.tsx": {
+      "name": "Troubleshooting report generator",
+      "description": "Builds the plain-text report support channels expect from the selection, checklist, command and output, with a copy button."
+    },
+    "components/widgets/VendingMachine/abi.ts": {
+      "name": "Vending machine ABI",
+      "description": "Holds the ABI of the quickstart's VendingMachine.sol that the cupcake demo passes to viem."
+    },
+    "components/widgets/VendingMachine/index.tsx": {
+      "name": "Cupcake demo lazy boundary",
+      "description": "Exposes the MDX tag as a next/dynamic chunk with SSR on, so viem loads only on the quickstart page."
+    },
+    "components/widgets/VendingMachine/VendingMachine.tsx": {
+      "name": "Cupcake vending machine demo",
+      "description": "Runs the quickstart's free-cupcake demo in web2, local devnet or Arbitrum Sepolia mode, refusing other chains and timing out receipts."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "files": {
+    "lib/llms-markdown.ts": {
+      "name": "Component markdown rewrite",
+      "description": "Records, for every site component, the markdown the mirror prints instead: Var values, Callouts as blockquotes, Cards as link lists."
+    },
+    "lib/mdx-comments.ts": {
+      "name": "Comment stripping",
+      "description": "Removes comment-only MDX expressions from the compiled tree and from the markdown mirrors."
+    },
+    "lib/mdx-options.ts": {
+      "name": "Shared MDX options",
+      "description": "Lists the remark plugins the site and check-links both compile with, so anchor validation sees the transforms the reader gets."
+    },
+    "lib/preview-text.ts": {
+      "name": "Preview plain text",
+      "description": "Hands remarkStructure plain text for each paragraph and heading, with Var values expanded, so link previews carry no tags or markers."
+    },
+    "lib/var-links.ts": {
+      "name": "Var placeholders in links",
+      "description": "Expands {var:name} in link, image and definition URLs and JSX URL attributes from content/vars.json; an unknown name passes through."
+    }
+  }
+}

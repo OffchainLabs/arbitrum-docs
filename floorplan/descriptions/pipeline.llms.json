@@ -1,0 +1,20 @@
+{
+  "files": {
+    "lib/link-preview.ts": {
+      "name": "Hover card data",
+      "description": "Builds a page's hover-card JSON: description, the lead before the first heading, and clipped text per heading id."
+    },
+    "lib/llms-index.ts": {
+      "name": "llms.txt formatter",
+      "description": "Reshapes Fumadocs' llms index to master's title and summary, links each page's .md mirror, and lists every page once."
+    },
+    "lib/llms-tracking.ts": {
+      "name": "Markdown fetch tracking",
+      "description": "Classifies a markdown or llms*.txt request by bot user agent and path, and builds the PostHog llms_file_fetched payload."
+    },
+    "lib/markdown-redirects.ts": {
+      "name": "Markdown redirect twins",
+      "description": "Derives a .md redirect twin for each redirect that lands on a docs page, skipping public files, external and pattern sources."
+    }
+  }
+}

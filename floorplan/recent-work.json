@@ -1,0 +1,29 @@
+{
+  "updatedAt": "2026-11-04T23:35:00Z",
+  "tasks": [
+    {
+      "title": "Classic node image bump",
+      "request": "Update the docs once vars.json has the new Arbitrum Classic image, then open a draft PR",
+      "summary": "latestClassicNodeImage in content/vars.json now reads offchainlabs/arb-node:v1.4.7-dd4595f8, and the three hardcoded copies in the Classic and archive node pages match it. Draft PR #3787 holds the change; the MDX pages themselves are not on this map.",
+      "items": [
+        {
+          "ref": "content",
+          "change": "changed",
+          "note": "vars.json carries the new Classic image tag. The Var component renders it in prose, but code blocks on two run-a-node pages needed a hand edit because Var does not evaluate inside code."
+        }
+      ]
+    },
+    {
+      "title": "check-links include fix",
+      "request": "Latest commit on master, not from this session",
+      "summary": "fumadocs-mdx 15.4.10 moved include handling to fumadocs-core and stopped passing a VFile to the parser, so check-links lost each partial's path. The anchor compiler now passes the parser as a plugin option and recovers the path from the plugin's addDependency call. Fixed the Gates job on the Dependabot bump.",
+      "items": [
+        {
+          "ref": "scripts/lib/doc-anchors.ts",
+          "change": "changed",
+          "note": "Matches the text the include plugin parses back to the file it announced through addDependency, so links inside partials are still reported with their real source line."
+        }
+      ]
+    }
+  ]
+}

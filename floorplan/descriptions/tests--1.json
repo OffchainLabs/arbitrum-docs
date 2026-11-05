@@ -1,0 +1,164 @@
+{
+  "files": {
+    "eslint/rules.test.ts": {
+      "name": "Content lint rule tests",
+      "description": "Runs the docs/* ESLint rules through Linter on the fixtures the retired content-lint, vars, references and frontmatter gates used."
+    },
+    "scripts/ai-bridge.test.ts": {
+      "name": "AI chat bridge tests",
+      "description": "Checks the Ask-AI event bridge delivers each prompt to one listener and survives a StrictMode double subscribe and unsubscribe."
+    },
+    "scripts/ai-chat-request.test.ts": {
+      "name": "AI chat request guard tests",
+      "description": "Checks the /api/chat request guard returns 400, 403, 413, 415 or 503 for bad origins, sizes, part types, counts and config."
+    },
+    "scripts/brand-helper-security.test.ts": {
+      "name": "Brand diagram helper tests",
+      "description": "Spawns the brand-SVG skill's Python security test under .agents and .claude so injected markup and redirected writes stay rejected."
+    },
+    "scripts/check-links.test.ts": {
+      "name": "Link checker tests",
+      "description": "Checks link extraction, public asset resolution, placeholder expansion and broken-link and missing-include reporting in temp trees."
+    },
+    "scripts/check-nitro-release.test.ts": {
+      "name": "Nitro release checker tests",
+      "description": "Runs check-nitro-release against mocked GitHub and Docker Hub: default mode only reports, --to bumps pins, any miss fails before writing."
+    },
+    "scripts/clean.test.ts": {
+      "name": "Clean script tests",
+      "description": "Runs clean.ts in a temp dir and checks it deletes .next and .source, keeps every other file, and exits clean with nothing to remove."
+    },
+    "scripts/generate-cli-reference.test.ts": {
+      "name": "Nitro CLI flags generator tests",
+      "description": "Checks the reader that parses Nitro's CLI flag output and the renderer that writes the cli-flags-reference page."
+    },
+    "scripts/generate-contract-addresses.test.ts": {
+      "name": "Contract address generator tests",
+      "description": "Checks the contract-address partial renderer plus the stale-file comparison and printed line diff behind --check."
+    },
+    "scripts/generate-gas-target.test.ts": {
+      "name": "Gas target generator tests",
+      "description": "Checks the gas-target partial renderer and the validator that rejects a malformed gas-target snapshot."
+    },
+    "scripts/generate-stylus-examples.test.ts": {
+      "name": "Stylus example transform tests",
+      "description": "Checks, fixture by fixture, the transform that turns Stylus-by-Example sources into committed docs pages."
+    },
+    "scripts/generate-stylus-source.test.ts": {
+      "name": "Stylus source checkout tests",
+      "description": "Exercises the Stylus source runner's checkout boundary through a local Git archive, with no network access."
+    },
+    "scripts/image-debt-scan.test.ts": {
+      "name": "Image debt scanner tests",
+      "description": "Checks the image-debt scan.sh keeps newline filenames and threshold values out of bash arithmetic and rejects non-numeric stat output."
+    },
+    "scripts/lib/announcement-link.test.ts": {
+      "name": "Announcement link tests",
+      "description": "Checks the banner link validator accepts https and resolvable docs paths and rejects http, relative, anchor-only and {var:} hrefs."
+    },
+    "scripts/lib/client-imports.test.ts": {
+      "name": "Client import boundary tests",
+      "description": "Walks every 'use client' module's imports and fails if one reaches lib/source.ts or a collections module, directly or transitively."
+    },
+    "scripts/lib/compact-redirects.test.ts": {
+      "name": "Compact redirects tests",
+      "description": "Checks compactRedirects groups exact aliases by destination and permanence, keeps every alias resolving in Next's matcher, and fits its regex limit."
+    },
+    "scripts/lib/contribute-repo-links.test.ts": {
+      "name": "Contribute repo link tests",
+      "description": "Tripwire that gitConfig matches content/vars.json and no content file or PR template spells this repo's GitHub URL out in full."
+    },
+    "scripts/lib/current-redirects.test.mjs": {
+      "name": "Docusaurus redirect builder tests",
+      "description": "Checks the Docusaurus route derivation, destination resolution by slug and title, and collision and loop detection in the redirect builder."
+    },
+    "scripts/lib/doc-anchors.test.ts": {
+      "name": "Doc anchor tests",
+      "description": "Checks heading ids from real MDX transforms with includes, duplicates and explicit ids, and that check-links fails on missing fragments."
+    },
+    "scripts/lib/faq-jsonld.test.ts": {
+      "name": "FAQ JSON-LD tests",
+      "description": "Checks the FAQPage structured data emitted on the six FAQ pages."
+    },
+    "scripts/lib/faq-links.test.ts": {
+      "name": "FAQ answer link tests",
+      "description": "Checks every site-relative link in a rendered FAQ answer points at a real page."
+    },
+    "scripts/lib/faq-pages.test.ts": {
+      "name": "FAQ page mapping tests",
+      "description": "Checks the FAQ page mapping, the single place Notion slugs meet page paths."
+    },
+    "scripts/lib/faq-partial.test.ts": {
+      "name": "FAQ partial generator tests",
+      "description": "Checks buildPartial's marker and headings and generateFaq's write and check modes against a temp root, never the committed partials."
+    },
+    "scripts/lib/faq-security.test.ts": {
+      "name": "FAQ content safety tests",
+      "description": "Renders Notion FAQ fixtures through MDX to prove imported text stays inert and the generator rejects ESM, unsafe schemes and table escapes."
+    },
+    "scripts/lib/faq-snapshot.test.ts": {
+      "name": "FAQ snapshot tests",
+      "description": "Checks how Notion rows are grouped and ordered into per-page FAQ snapshots."
+    },
+    "scripts/lib/fonts.test.ts": {
+      "name": "Self-hosted font tests",
+      "description": "Tripwire that no module Next compiles imports next/font/google, and that the walk reaches the layout that once did."
+    },
+    "scripts/lib/generated-partial.test.ts": {
+      "name": "Generated partial helper tests",
+      "description": "Checks the shared generator helpers: the do-not-edit marker, assertInertMdx, writeOrCheck, symlink-refusing readRegularFile and setOutput."
+    },
+    "scripts/lib/http-headers.test.ts": {
+      "name": "HTTP header tests",
+      "description": "Checks siteHeaders sends master's root Link header, baseline security headers, CORS on the markdown routes and a report-only CSP."
+    },
+    "scripts/lib/legacy-redirect-literals.test.ts": {
+      "name": "Legacy redirect literal tests",
+      "description": "Checks the legacy redirect generator drops /sdk destinations and serializes quotes, expressions and newlines as inert literals."
+    },
+    "scripts/lib/link-preview-structure.test.ts": {
+      "name": "Link preview structure tests",
+      "description": "Compiles MDX fixtures through preview-text and Fumadocs' remarkStructure in build order and checks the structured data a preview gets."
+    },
+    "scripts/lib/link-preview.test.ts": {
+      "name": "Link preview JSON tests",
+      "description": "Checks buildLinkPreview turns a page's structured data into the JSON the hover card renders."
+    },
+    "scripts/lib/llms-index.test.ts": {
+      "name": "LLMs index tests",
+      "description": "Checks formatLlmsIndex opens with master's title and summary and links each page's .md mirror exactly once."
+    },
+    "scripts/lib/llms-markdown.test.ts": {
+      "name": "LLMs markdown tests",
+      "description": "Compiles MDX fixtures through remarkLlmsMarkdown then Fumadocs' remarkLLMs, in postprocess order, and checks the stored markdown."
+    },
+    "scripts/lib/llms-tracking.test.ts": {
+      "name": "LLMs tracking tests",
+      "description": "Imports lib/llms-tracking.ts directly under node --test and checks how markdown fetches are recorded."
+    },
+    "scripts/lib/markdown-redirects.test.ts": {
+      "name": "Markdown redirect twin tests",
+      "description": "Checks markdownTwins derives a .md redirect for every entry landing on a doc page and none for external, asset, pattern or .md sources."
+    },
+    "scripts/lib/master-routes.test.ts": {
+      "name": "Master route tests",
+      "description": "Checks every page route live on master before the Fumadocs cutover is still a page or matches a redirect in redirects.config.ts."
+    },
+    "scripts/lib/mdx-comments.test.ts": {
+      "name": "MDX comment tests",
+      "description": "Runs the real @mdx-js/mdx processor with remarkLLMs in fumadocs-mdx order to check MDX comments stay out of the processed markdown."
+    },
+    "scripts/lib/module-imports.test.ts": {
+      "name": "Module import scanner tests",
+      "description": "Checks importSpecifiers finds ESM and CommonJS dependencies, skips comments and type-only imports, and isClientModule reads the directive."
+    },
+    "scripts/lib/nitro-node-image.test.ts": {
+      "name": "Nitro node image sync tests",
+      "description": "Checks rewriteImage, the sync-with-var marker and syncImageInContent update only opted-in pages and never the _versions archive."
+    },
+    "scripts/lib/nitro-upstream-paths.test.ts": {
+      "name": "Nitro upstream path tests",
+      "description": "Checks nitroPathPins and nitroSourcePaths collect pinned Nitro paths and findMissingUpstreamPaths looks each up once, sequentially."
+    }
+  }
+}

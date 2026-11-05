@@ -1,0 +1,24 @@
+{
+  "files": {
+    "lib/ai/bridge.ts": {
+      "name": "Ask AI bridge",
+      "description": "Keeps a listener set so a button outside the chat panel can send it an Ask AI prompt, and reports whether a panel is listening."
+    },
+    "lib/ai/chat-request.ts": {
+      "name": "Chat request guard",
+      "description": "Rejects a chat request that is unconfigured, cross-origin, over 32 KB or 20 messages, or off the message schema."
+    },
+    "lib/ai/events.ts": {
+      "name": "Chat analytics events",
+      "description": "Sends chat panel events to PostHog under the inkeep_ names lib/inkeep.ts uses, with the component type and never message text."
+    },
+    "lib/ai/inkeep-qa-schema.ts": {
+      "name": "Inkeep tool schemas",
+      "description": "Declares the Zod schemas for Inkeep's provideLinks and provideAIAnnotations tool calls: source links and answer confidence."
+    },
+    "lib/inkeep.ts": {
+      "name": "Inkeep widget settings",
+      "description": "Builds the shared Inkeep search and chat settings (brand colour, cookie opt-outs, no Google Fonts) and forwards widget events to PostHog."
+    }
+  }
+}

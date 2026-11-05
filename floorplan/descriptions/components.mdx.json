@@ -1,0 +1,48 @@
+{
+  "files": {
+    "components/codeblock.tsx": {
+      "name": "Code block figure",
+      "description": "Client component rendering a Shiki code figure with title, copy button and tabbed variants; the AI chat uses it for streamed code."
+    },
+    "components/mdx.tsx": {
+      "name": "MDX component registry",
+      "description": "Maps every MDX tag to its React component and wraps resolvable internal links in the hover LinkPreview card."
+    },
+    "components/mdx/Accordion.tsx": {
+      "name": "Accordion",
+      "description": "Keeps a closed Fumadocs accordion panel mounted with hidden=until-found, so its text is in server HTML and browser Find opens it."
+    },
+    "components/mdx/AddressExplorerLink.tsx": {
+      "name": "Address explorer link",
+      "description": "Links a checksummed address to its block explorer by chain id, throwing on a bad checksum or unknown chain; the AEL tag."
+    },
+    "components/mdx/Callout.tsx": {
+      "name": "Callout",
+      "description": "Renders the five callout types with a coloured left border, tint and Octicon, each as role=note so none announce as a live region."
+    },
+    "components/mdx/FindableTab.tsx": {
+      "name": "Findable tab",
+      "description": "Force-mounts an inactive Fumadocs Tab panel at zero height so browser Find can reveal and select it."
+    },
+    "components/mdx/ReferenceList.tsx": {
+      "name": "Reference list",
+      "description": "Async server component that renders a whole reference collection as anchored sections, backing the glossary index page."
+    },
+    "components/mdx/Term.tsx": {
+      "name": "Glossary term",
+      "description": "Async server component that renders a glossary entry's MDX definition into a HoverPopover; nested terms render as plain text."
+    },
+    "components/mdx/use-findable-panel.ts": {
+      "name": "Findable panel hook",
+      "description": "Sets hidden=until-found on an inactive Radix panel and opens it on beforematch, so browser Find reaches hidden tab and accordion text."
+    },
+    "components/mdx/Var/index.tsx": {
+      "name": "Global variable",
+      "description": "Server component that prints a value from content/vars.json inline; an unknown name renders undefined and fails vars:check."
+    },
+    "components/tabs/ui.tsx": {
+      "name": "Tabs primitive",
+      "description": "Client tabs on Base UI with groupId sharing across instances, persisted selection and URL-hash sync; the code block tabs build on it."
+    }
+  }
+}
