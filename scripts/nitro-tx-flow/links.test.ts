@@ -33,13 +33,15 @@ test('a nitro ref uses the repository slug var', () => {
 test('a nitro-contracts ref links to the pinned commit', () => {
   assert.equal(
     codeUrl({ repo: 'nitro-contracts', path: 'src/bridge/SequencerInbox.sol' }, pins),
-    'https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/bridge/SequencerInbox.sol',
+    'https://github.com/OffchainLabs/nitro-contracts/blob/' +
+      '4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/bridge/SequencerInbox.sol',
   );
 });
 
 test('a nitro-contracts ref with a line adds an L anchor', () => {
   assert.equal(
     codeUrl({ repo: 'nitro-contracts', path: 'src/bridge/SequencerInbox.sol', line: 7 }, pins),
-    'https://github.com/OffchainLabs/nitro-contracts/blob/4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/bridge/SequencerInbox.sol#L7',
+    'https://github.com/OffchainLabs/nitro-contracts/blob/' +
+      '4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/bridge/SequencerInbox.sol#L7',
   );
 });

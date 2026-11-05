@@ -11,7 +11,10 @@ export function BandNode({ data }: NodeProps<BandNodeType>) {
   const style = BAND_STYLE[band.chain];
   return (
     <div
-      className="pointer-events-none motion-safe:transition-[background-color,border-color] motion-safe:duration-200"
+      className={[
+        'pointer-events-none',
+        'motion-safe:transition-[background-color,border-color] motion-safe:duration-200',
+      ].join(' ')}
       style={{
         width: band.box.width,
         height: band.box.height,

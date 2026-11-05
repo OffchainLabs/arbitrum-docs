@@ -13,7 +13,12 @@ export function StepCard({ step }: { step: Step }) {
   return (
     <div className="border-t border-fd-border p-4">
       {step.finality && (
-        <span className="mb-3 inline-block rounded-full bg-fd-primary/15 px-2 py-0.5 text-xs font-medium text-fd-primary">
+        <span
+          className={[
+            'mb-3 inline-block rounded-full bg-fd-primary/15 px-2 py-0.5 text-xs font-medium',
+            'text-fd-primary',
+          ].join(' ')}
+        >
           {FINALITY_LABEL[step.finality]}
         </span>
       )}

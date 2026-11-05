@@ -432,14 +432,17 @@ test('--to checks the nitro-contracts path at the resolved contracts commit', (t
   );
 });
 
-test('fails naming components/widgets/NitroTxFlow/model.ts and the step id when a model nitro path is missing', (t) => {
+test('names model.ts and the step id when a model nitro path is missing', (t) => {
   const result = run(t, { ...BUMP, missing: ['execution/gethexec/sequencer.go'] });
   assert.equal(result.status, 1);
   assert.equal(result.raw, result.original);
   assert.equal(result.outputs, '');
   assert.match(
     result.stderr,
-    /execution\/gethexec\/sequencer\.go \(components\/widgets\/NitroTxFlow\/model\.ts, step sequence\)/,
+    new RegExp(
+      String.raw`execution/gethexec/sequencer\.go ` +
+        String.raw`\(components/widgets/NitroTxFlow/model\.ts, step sequence\)`,
+    ),
   );
 });
 

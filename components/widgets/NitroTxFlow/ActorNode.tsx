@@ -15,7 +15,10 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
   const style = KIND_STYLE[actor.kind];
   return (
     <div
-      className="flex flex-col justify-center px-3.5 motion-safe:transition-[opacity,box-shadow,border-color] motion-safe:duration-200"
+      className={[
+        'flex flex-col justify-center px-3.5',
+        'motion-safe:transition-[opacity,box-shadow,border-color] motion-safe:duration-200',
+      ].join(' ')}
       style={{
         width: NODE_WIDTH,
         height: NODE_HEIGHT,

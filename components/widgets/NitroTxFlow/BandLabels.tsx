@@ -17,7 +17,8 @@ interface BandLabelsProps {
   barRef: RefObject<HTMLElement | null>;
 }
 
-// Same width estimate as the edge chips, at 13px, plus padding and the accent bar.
+// 0.55 em per character at 13px, plus padding and the accent bar. The edge chips in layout.ts use
+// 0.52 em at 12px.
 function bandLabelWidth(chain: Band['chain']): number {
   return Math.ceil(BAND_STYLE[chain].name.length * 0.55 * 13) + 34;
 }
@@ -86,7 +87,10 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
       <div
         key={`${band.chain}-${index}`}
         aria-hidden="true"
-        className="pointer-events-none absolute z-10 flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[13px] font-semibold whitespace-nowrap"
+        className={[
+          'pointer-events-none absolute z-10 flex items-center gap-1.5 rounded-md px-2 py-0.5',
+          'text-[13px] font-semibold whitespace-nowrap',
+        ].join(' ')}
         style={{
           left: x,
           top: y,

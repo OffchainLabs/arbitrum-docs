@@ -64,7 +64,9 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
           className={`nodrag nopan flex items-center gap-1.5 whitespace-nowrap ${TRANSITION}`}
           style={{
             position: 'absolute',
-            transform: `translate(-50%, -50%) translate(${box.x + box.width / 2}px, ${box.y + box.height / 2}px)`,
+            transform:
+              'translate(-50%, -50%) ' +
+              `translate(${box.x + box.width / 2}px, ${box.y + box.height / 2}px)`,
             opacity: active ? 1 : BRAND.dimmed,
             padding: '2px 8px 2px 3px',
             borderRadius: 6,

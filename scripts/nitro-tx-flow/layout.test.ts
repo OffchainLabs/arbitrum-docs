@@ -29,7 +29,7 @@ function nodeBoxes(l: FlowLayout): Box[] {
   return Object.values(l.nodes).map((p) => ({ ...p, width: NODE_WIDTH, height: NODE_HEIGHT }));
 }
 
-test('firstInteractionRank gives wallet 0, fullnode 1, seq 2, relay 3, poster 4, seqinbox 5, bridge 6', () => {
+test('firstInteractionRank ranks each actor by its first step and edge', () => {
   assert.deepEqual(firstInteractionRank(flow), {
     wallet: 0,
     fullnode: 1,
@@ -97,7 +97,7 @@ test('layout is identical across two runs', async () => {
   assert.deepEqual(await computeLayout(flow), layout);
 });
 
-test('bands: one child band holding fullnode, seq, relay, poster and one parent band holding seqinbox, bridge', () => {
+test('bands: one child band and one parent band, each holding its own actors', () => {
   assert.equal(layout.bands.length, 2);
   const child = layout.bands.find((b) => b.chain === 'child');
   const parent = layout.bands.find((b) => b.chain === 'parent');
