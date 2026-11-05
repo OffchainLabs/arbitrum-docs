@@ -48,3 +48,6 @@ content/docs/launch-arbitrum-chain/configuration/data-availability/data-availabi
 content/docs/stylus/concepts/gas-metering.mdx
 content/docs/launch-arbitrum-chain/configuration/data-availability/data-availability-committees/deploy-das.mdx
 content/docs/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx
+
+# Floorplan map export: one generated HTML file, not formatted.
+floorplan/*.html
