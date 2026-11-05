@@ -147,10 +147,11 @@ export const transactionLifecycle: Flow = {
           'If every target fails with a matching error, the node logs ' +
           '"Failed to publish transaction to any of the forwarding targets".',
         impact:
-          'The full node returns the error to the wallet, and the sequencer does not get the transaction.',
+          'The full node returns the error to the wallet, ' +
+          'and the sequencer does not get the transaction.',
         recovery:
           'Add backup targets with --execution.secondary-forwarding-target. ' +
-          'The node tries them in order when the error matches its retry list.',
+          'If the error matches its retry list, the node tries them in order.',
       },
       citations: [
         { repo: 'nitro', path: 'execution/gethexec/node.go', line: 463 },
@@ -220,8 +221,7 @@ export const transactionLifecycle: Flow = {
       id: 'feed',
       title: 'Feed',
       text:
-        'The sequencer publishes each new message on its feed, and feed relays pass the feed on ' +
-        'to full nodes over WebSocket. ' +
+        "Feed relays pass each new message on the sequencer's feed to full nodes over WebSocket. " +
         'Each full node that reads the feed adds the message to its message log as unconfirmed. ' +
         'A feed message never replaces a message the node already has from a batch.',
       actors: ['seq', 'relay', 'fullnode'],
@@ -309,10 +309,9 @@ export const transactionLifecycle: Flow = {
       id: 'post',
       title: 'Post',
       text:
-        'The batch poster sends the batch to SequencerInbox in a parent chain transaction, ' +
-        'with the data in EIP-4844 blobs or in calldata. ' +
-        'It can choose blobs only when blob posting is on and the parent chain supports blobs, ' +
-        'and otherwise it uses calldata. ' +
+        'The batch poster sends the batch to SequencerInbox in a parent chain transaction. ' +
+        'Only when blob posting is on and the parent chain supports blobs can it put the data ' +
+        'in EIP-4844 blobs instead of calldata. ' +
         "SequencerInbox appends the batch to the Bridge's accumulator.",
       actors: ['poster', 'seqinbox', 'bridge'],
       edges: ['post', 'append'],
@@ -322,8 +321,9 @@ export const transactionLifecycle: Flow = {
       failure: {
         symptoms:
           'The batch poster logs "error posting batch". ' +
-          'For errors it does not treat as temporary, the metric ' +
-          '"arb/batchPoster/action/failure" goes up.',
+          'If posting keeps failing for more than a minute, the metric ' +
+          '"arb/batchPoster/action/failure" goes up. ' +
+          'For some known errors, that wait is 5 minutes.',
         impact:
           'SequencerInbox reverts with NotBatchPoster when the sender is not on its batch ' +
           'poster list. ' +
@@ -344,7 +344,15 @@ export const transactionLifecycle: Flow = {
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 1254 },
         { repo: 'nitro-contracts', path: 'src/bridge/SequencerInbox.sol', line: 733 },
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 2171 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 2105 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 2162 },
+        { repo: 'nitro', path: 'util/log.go', line: 62 },
+        { repo: 'nitro', path: 'util/log.go', line: 65 },
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 2173 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 2174 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 2106 },
+        { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 2166 },
+        { repo: 'nitro', path: 'util/log.go', line: 55 },
         { repo: 'nitro', path: 'arbnode/batch_poster.go', line: 79 },
         { repo: 'nitro-contracts', path: 'src/bridge/SequencerInbox.sol', line: 352 },
         { repo: 'nitro-contracts', path: 'src/bridge/SequencerInbox.sol', line: 368 },
@@ -358,11 +366,12 @@ export const transactionLifecycle: Flow = {
       id: 'read-back',
       title: 'Read back',
       text:
-        'Every full node reads new batches from SequencerInbox on the parent chain and compares ' +
-        'each batch message with the message it stored from the feed. ' +
-        'If they differ in more than the batch cost fields, it keeps the parent chain version. ' +
-        'By default the node reads the latest parent chain blocks, so parent chain finality ' +
-        'comes later, when the parent chain finalizes the block that holds the batch.',
+        'By default, every full node reads new batches from SequencerInbox in the latest parent ' +
+        'chain blocks. ' +
+        'If a batch message differs from the message the node stored from the feed, the node ' +
+        'keeps the parent chain version. ' +
+        'Parent chain finality comes later, when the parent chain finalizes the block that holds ' +
+        'the batch.',
       actors: ['seqinbox', 'fullnode'],
       edges: ['read'],
       flag: '--node.inbox-reader.read-mode',
@@ -384,8 +393,7 @@ export const transactionLifecycle: Flow = {
         { repo: 'nitro', path: 'arbnode/inbox_tracker.go', line: 766 },
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1105 },
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1019 },
-        { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1032 },
-        { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1043 },
+        { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1062 },
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1187 },
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1190 },
         { repo: 'nitro', path: 'arbnode/inbox_reader.go', line: 72 },
