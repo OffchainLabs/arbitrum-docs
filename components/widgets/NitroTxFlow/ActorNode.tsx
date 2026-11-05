@@ -39,7 +39,7 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
         'flex flex-col justify-center px-3.5',
         'motion-safe:transition-[opacity,box-shadow,border-color] motion-safe:duration-200',
         trigger ? 'cursor-pointer focus-visible:outline-[#eaf5ff]' : '',
-        trigger?.blink ? 'motion-safe:animate-pulse' : '',
+        trigger?.blink ? 'motion-safe:animate-trigger-pulse' : '',
       ].join(' ')}
       style={{
         width: NODE_WIDTH,
