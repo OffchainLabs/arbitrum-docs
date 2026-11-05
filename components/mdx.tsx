@@ -38,7 +38,6 @@ export function getMDXComponents(components?: MDXComponents) {
     EdgeChallengeFlow,
     NitroTxFlow,
     ImageZoom,
-    NitroTxFlow,
     // Markdown images arrive with `src`, `width` and `height` that remark-image measured from
     // `public/`. `rounded-lg` matches the Fumadocs default `img` this mapping replaces.
     img: (props: ComponentProps<'img'>) => (
