@@ -14,7 +14,11 @@ export function Legend({ narrow }: { narrow: boolean }) {
           type="button"
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
-          className="absolute top-3 left-3 z-20 rounded-md px-3 py-1 text-xs"
+          className={[
+            'absolute top-3 left-3 z-20 rounded-md px-3 py-1 text-xs',
+            // The site focus ring, #016be5, has about 2.8:1 contrast on the chip color.
+            'focus-visible:outline-[#eaf5ff]',
+          ].join(' ')}
           style={CHIP_STYLE}
         >
           Key
@@ -23,7 +27,10 @@ export function Legend({ narrow }: { narrow: boolean }) {
       {/* Rendered conditionally: the `hidden` attribute loses to the `flex` class. */}
       {(!narrow || open) && (
         <div
-          className={`absolute left-3 z-20 flex flex-col gap-1 rounded-md p-2 text-xs ${narrow ? 'top-12' : 'top-3'}`}
+          className={[
+            'absolute left-3 z-20 flex flex-col gap-1 rounded-md p-2 text-xs',
+            narrow ? 'top-12' : 'top-3',
+          ].join(' ')}
           style={CHIP_STYLE}
         >
           {Object.values(KIND_STYLE).map((kind) => (

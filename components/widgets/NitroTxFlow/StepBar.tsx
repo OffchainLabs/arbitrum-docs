@@ -2,6 +2,9 @@ import type { RefObject } from 'react';
 
 import { BRAND } from './brand.ts';
 
+// The site focus ring, #016be5, has about 2.8:1 contrast on the chip color; chipText is lighter.
+const FOCUS = 'focus-visible:outline-[#eaf5ff]';
+
 interface StepBarProps {
   index: number;
   count: number;
@@ -20,7 +23,10 @@ export function StepBar({ index, count, started, barRef, onGo, onShowAll }: Step
     <nav
       ref={barRef}
       aria-label="Transaction steps"
-      className="sticky bottom-3 z-20 mx-auto mt-auto mb-3 flex items-center gap-1 rounded-lg p-1.5 text-sm md:gap-2"
+      className={[
+        'sticky bottom-3 z-20 mx-auto mt-auto mb-3 flex items-center gap-1 rounded-lg p-1.5',
+        'text-sm md:gap-2',
+      ].join(' ')}
       style={{
         background: BRAND.chip,
         color: BRAND.chipText,
@@ -30,7 +36,10 @@ export function StepBar({ index, count, started, barRef, onGo, onShowAll }: Step
     >
       <button
         type="button"
-        className="rounded-md px-2 py-1 whitespace-nowrap aria-disabled:opacity-40 md:px-3"
+        className={[
+          'rounded-md px-2 py-1 whitespace-nowrap aria-disabled:opacity-40 md:px-3',
+          FOCUS,
+        ].join(' ')}
         style={{ border: `1px solid ${BRAND.connector}` }}
         aria-disabled={index === 0}
         onClick={() => onGo(index - 1)}
@@ -42,7 +51,11 @@ export function StepBar({ index, count, started, barRef, onGo, onShowAll }: Step
       </span>
       <button
         type="button"
-        className={`rounded-md px-2 py-1 font-semibold whitespace-nowrap aria-disabled:opacity-40 md:px-3 ${started ? '' : 'motion-safe:animate-pulse'}`}
+        className={[
+          'rounded-md px-2 py-1 font-semibold whitespace-nowrap aria-disabled:opacity-40 md:px-3',
+          FOCUS,
+          started ? '' : 'motion-safe:animate-pulse',
+        ].join(' ')}
         style={{
           border: `1px solid ${BRAND.active}`,
           boxShadow: started ? 'none' : '0 0 0 3px rgba(18, 170, 255, 0.6)',
@@ -54,7 +67,7 @@ export function StepBar({ index, count, started, barRef, onGo, onShowAll }: Step
       </button>
       <button
         type="button"
-        className="px-1 py-1 text-xs whitespace-nowrap underline md:px-2"
+        className={`px-1 py-1 text-xs whitespace-nowrap underline md:px-2 ${FOCUS}`}
         onClick={onShowAll}
       >
         Show all
