@@ -50,6 +50,7 @@ content/docs/launch-arbitrum-chain/configuration/data-availability/data-availabi
 content/docs/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx
 
 # Floorplan: the exported map page and the plugin's untracked outputs. The JSON inputs stay checked.
+public/floorplan.html
 floorplan/*.html
 floorplan/*.mjs
 floorplan/graph.json
