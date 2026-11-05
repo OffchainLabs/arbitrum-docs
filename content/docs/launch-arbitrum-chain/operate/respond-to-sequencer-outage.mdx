@@ -13,10 +13,10 @@ Use this page when your <Term id="arbitrum-chain">Arbitrum chain</Term> stops pr
 
 Check two things: whether the chain is still producing blocks, and whether batches are still landing on the parent chain.
 
-| What you see                                                                                                              | Outage               | Next step                                                  |
-| ------------------------------------------------------------------------------------------------------------------------- | -------------------- | ---------------------------------------------------------- |
-| The block height is the same across two samples.                                                                          | <Term id="sequencer">Sequencer</Term> downtime   | [2. Restore block production](#2-restore-block-production) |
-| Blocks keep coming, but `arb/inbox/latest/batch` stops rising, or no `SequencerBatchDelivered` event arrives on schedule. | Batch posting outage | [3. Restore batch posting](#3-restore-batch-posting)       |
+| What you see                                                                                                              | Outage                                         | Next step                                                  |
+| ------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------- |
+| The block height is the same across two samples.                                                                          | <Term id="sequencer">Sequencer</Term> downtime | [2. Restore block production](#2-restore-block-production) |
+| Blocks keep coming, but `arb/inbox/latest/batch` stops rising, or no `SequencerBatchDelivered` event arrives on schedule. | Batch posting outage                           | [3. Restore batch posting](#3-restore-batch-posting)       |
 
 For the metrics and alert thresholds, see the [Sequencer](/launch-arbitrum-chain/operate/monitoring#sequencer) and [Batch poster](/launch-arbitrum-chain/operate/monitoring#batch-poster) sections of the monitoring guide.
 

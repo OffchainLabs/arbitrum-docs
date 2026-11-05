@@ -19,10 +19,10 @@ See [Respond to a sequencer outage](/launch-arbitrum-chain/operate/respond-to-se
 
 An outage stops one of two jobs. The <Term id="sequencer">sequencer</Term> orders transactions into blocks. The <Term id="batch-poster">batch poster</Term> posts those blocks to the <Term id="sequencer-inbox">Sequencer Inbox</Term> on the parent chain. Each job can fail without the other.
 
-| Outage               | What stops                         | What keeps working                                                                                   | Main risk                                                                                   |
-| -------------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Sequencer downtime   | Block production                   | The Delayed Inbox accepts messages. Nodes serve the existing <Term id="chain-state">chain state</Term>.                            | Users wait up to the <Term id="forceinclusion">force-inclusion</Term> window for inclusion. |
-| <Term id="batch">Batch</Term> posting outage | Posting blocks to the parent chain | The sequencer produces blocks, and users get <Term id="soft-confirmation">soft confirmations</Term>. | Blocks that never reach the parent chain can be reorganized.                                |
+| Outage                                       | What stops                         | What keeps working                                                                                      | Main risk                                                                                   |
+| -------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Sequencer downtime                           | Block production                   | The Delayed Inbox accepts messages. Nodes serve the existing <Term id="chain-state">chain state</Term>. | Users wait up to the <Term id="forceinclusion">force-inclusion</Term> window for inclusion. |
+| <Term id="batch">Batch</Term> posting outage | Posting blocks to the parent chain | The sequencer produces blocks, and users get <Term id="soft-confirmation">soft confirmations</Term>.    | Blocks that never reach the parent chain can be reorganized.                                |
 
 A batch posting outage does not stop the sequencer. As [Sequencer troubleshooting](/launch-arbitrum-chain/operate/sequencer-troubleshooting#what-does-not-halt-block-production) puts it for an unfunded batch poster: "Posting stops; sequencing does not."
 
@@ -44,11 +44,11 @@ Unless a standby sequencer takes over, a crashed host or cloud outage can also s
 - The chain stops producing blocks. The block height stays the same.
 - Remote procedure call (RPC) nodes cannot forward new transactions. The error a user gets depends on where the transaction stops:
 
-| Where the transaction stops                                     | What the node returns                                                        |
-| --------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| A node forwards it, but no forwarding target answers            | `failed to publish transaction to any of the forwarding targets`             |
-| A node has no forwarding target, or its <Term id="forwarder">forwarder</Term> is turned off | `sequencer temporarily not available`                                        |
-| The sequencer is running but cannot build blocks                | An error after the transaction waits for `queue-timeout` (12 seconds by default) |
+| Where the transaction stops                                                                 | What the node returns                                                            |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| A node forwards it, but no forwarding target answers                                        | `failed to publish transaction to any of the forwarding targets`                 |
+| A node has no forwarding target, or its <Term id="forwarder">forwarder</Term> is turned off | `sequencer temporarily not available`                                            |
+| The sequencer is running but cannot build blocks                                            | An error after the transaction waits for `queue-timeout` (12 seconds by default) |
 
 ### How your users get a transaction in
 
