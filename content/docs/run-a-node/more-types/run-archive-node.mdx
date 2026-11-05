@@ -146,7 +146,7 @@ To run both <Term id="arbitrum-nitro">Arbitrum Nitro</Term> and/or Arbitrum Clas
   ```
 - **Arbitrum One Classic archive node**:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.6-551a39b3 --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000 --core.lazy-load-core-machine
+  docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.7-dd4595f8 --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000 --core.lazy-load-core-machine
   ```
 - **Arbitrum One Nitro archive node with forwarding classic execution support**:
   ```shell
