@@ -66,11 +66,11 @@ Both are hot-reloadable, so you can change them without restarting.
 
 Four behaviors matter more than the values you pick:
 
-1. **Soft must be at or above hard.** The sequencer refuses to start if `expected-surplus-soft-threshold cannot be lower than expected-surplus-hard-threshold`. Setting only the hard threshold leaves soft at `default`, which is treated as `0` in the comparison—so any positive hard threshold fails this check. Set both together.
+1. **Soft must be at or above hard.** The sequencer refuses to start with `expected-surplus-soft-threshold cannot be lower than expected-surplus-hard-threshold`. Setting only the hard threshold leaves soft at `default`, which is treated as `0` in the comparison—so any positive hard threshold fails this check. Set both together.
 
 2. **Neither works without a parent chain reader.** The calculation needs parent chain headers. Enabling either threshold without a parent chain reader makes the sequencer fail to start with `expected surplus soft/hard thresholds are enabled but l1Reader is nil`.
 
-3. **The hard threshold stops the sequencer from starting if the first reading fails.** When the hard threshold is enabled, and the initial surplus fetch fails, startup aborts with `expected-surplus-hard-threshold is enabled but error fetching initial expected surplus value`. With only the soft threshold set, the same failure logs at `ERROR` and the sequencer continues. Enabling the hard threshold makes your sequencer's startup depend on parent chain RPC availability.
+3. **The hard threshold stops the sequencer from starting if the first reading fails.** When the hard threshold is enabled and the initial surplus fetch fails, startup aborts with `expected-surplus-hard-threshold is enabled but error fetching initial expected surplus value`. With only the soft threshold set, the same failure logs at `ERROR` and the sequencer continues. Enabling the hard threshold makes your sequencer's startup depend on parent chain RPC availability.
 
 4. **The hard threshold fails open, not closed.** The rejection applies only while the sequencer holds a reading it believes is current. If a refresh fails, the sequencer marks the value stale and stops rejecting transactions until a refresh succeeds. Repeated refresh failures log `expected surplus soft/hard thresholds are enabled but unable to fetch latest expected surplus, retrying` at `WARN` for the first 20 consecutive failures, then at `ERROR`. Treat that escalation as a signal that your surplus protection is not active.
 
@@ -103,7 +103,7 @@ These apply when you run more than one sequencer with `--node.seq-coordinator.en
 | `redis-url`               | —       | Redis instance used for coordination                                    |
 | `my-url`                  | invalid | This sequencer's own address. Must match its entry in the priority list |
 | `lockout-duration`        | `1m`    | How long a sequencer holds the lockout after acquiring it               |
-| `lockout-spare`           | `30s`   | How long before the lockout expires that the holder stops sequencing    |
+| `lockout-spare`           | `30s`   | How long before the lockout expires the holder stops sequencing         |
 | `update-interval`         | `250ms` | Time between coordinator update attempts                                |
 | `retry-interval`          | `50ms`  | Wait before retrying after a Redis error                                |
 | `handoff-timeout`         | `30s`   | Longest wait for another sequencer to accept the lockout during handoff |
@@ -116,7 +116,7 @@ These apply when you run more than one sequencer with `--node.seq-coordinator.en
 | `chosen-healthcheck-addr` | —       | Address serving `200` while chosen and `503` otherwise                  |
 | `delete-finalized-msgs`   | `true`  | Delete finalized messages from Redis                                    |
 
-{/* SME: Nitro's own help text for `msg-per-poll` says "will only be marked as wanting the lockout if not too far behind", but the code uses it as the read batch size per update. Should Nitro fix the help text? */}
+{/* SME: Nitro's own help text for `msg-per-poll` says "will only be marked as wanting the lockout if not too far behind", but the code uses it as the read <Term id="batch">batch</Term> size per update. Should Nitro fix the help text? */}
 
 Three notes on tuning these:
 

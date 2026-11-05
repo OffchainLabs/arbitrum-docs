@@ -14,7 +14,7 @@ This documentation is for production sequencer deployments. If you want to set u
 
 ## Introduction
 
-The [sequencer](/how-arbitrum-works/deep-dives/sequencer) is a critical component of your <Term id="arbitrum-chain">Arbitrum chain</Term> and queues transactions submitted to the network. it serves as the transaction-ordering engine, accepting transactions forwarded from <Term id="arbitrum-full-node">full nodes</Term>, queueing them, and returning <Term id="sequencer-feed">feed</Term> messages to the nodes. It subsequently sends queued transactions to <Term id="batch-poster">batch posters</Term> for data posting.
+The [sequencer](/how-arbitrum-works/deep-dives/sequencer) is a critical component of your <Term id="arbitrum-chain">Arbitrum chain</Term> and queues transactions submitted to the network. It serves as the transaction-ordering engine, accepting transactions forwarded from <Term id="arbitrum-full-node">full nodes</Term>, queuing them, and returning <Term id="sequencer-feed">feed</Term> messages to the nodes. It subsequently sends queued transactions to <Term id="batch-poster">batch posters</Term> for data posting.
 
 If your sequencer goes offline, the network cannot process new transactions arriving at the <Term id="child-chain">child chain's</Term> RPC nodes, impacting the user experience. This guide provides detailed instructions for setting up a high-availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
 
@@ -234,7 +234,7 @@ Two consequences follow from step 2:
 
 <Callout type="warn" title="Never register the batch poster">
 
-The batch poster runs with `node.seq-coordinator.enable=true` so it can follow coordination state, but it must stay out of `coordinator.priorities`. If it reaches the top of the list, it becomes the active sequencer with no sequencer to run, and the chain stops producing blocks. Nitro logs `myurl main sequencer, but not sequencer exists`.
+The batch poster runs with `node.seq-coordinator.enable=true` so it can follow coordination state, but it must stay out of `coordinator.priorities`. If it reaches the top of the list, it becomes the active sequencer with no sequencer to run, and the chain stops producing blocks. Nitro logs `myurl main sequencer, but no sequencer exists`.
 
 </Callout>
 
