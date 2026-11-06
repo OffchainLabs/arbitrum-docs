@@ -43,6 +43,19 @@
   --text-shadow-cyan-glow: 0 0 6px rgb(16 225 255 / 0.8);
   /* FK Screamer, for the home hero heading. */
   --font-display: var(--font-fk-screamer), var(--font-sans);
+  /* The Nitro flow node that opens a detail view: its border and glow shift from cyan to blue. */
+  --animate-trigger-pulse: trigger-pulse 2s ease-in-out infinite;
+  @keyframes trigger-pulse {
+    0%,
+    100% {
+      border-color: rgb(16 225 255);
+      box-shadow: 0 0 0 5px rgb(16 225 255 / 0.45);
+    }
+    50% {
+      border-color: rgb(27 74 221);
+      box-shadow: 0 0 0 9px rgb(27 74 221 / 0.6);
+    }
+  }
 }
 
 .dark {
