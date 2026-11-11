@@ -1,0 +1,164 @@
+---
+title: 'Operational assurance'
+description: 'How Arbitrum software is supported and patched, how you learn about changes, what the protocol does when a component fails, and what you must operate yourself on Arbitrum One or on your own Arbitrum chain.'
+content_type: concept
+author: gblanchemain
+sme: gblanchemain
+target_audience: 'Operations, risk and vendor-management reviewers at institutions evaluating Arbitrum.'
+---
+
+This page describes how <Term id="offchain-labs">Offchain Labs</Term> supports and patches Arbitrum software, and what the protocol does when a component fails. It also lists what you must operate yourself and what the documentation does not state. The scope is <Term id="arbitrum-one">Arbitrum One</Term>, as a user or as a node operator, and an <Term id="arbitrum-chain">Arbitrum chain</Term> that your institution launches. The companion page is [Due-diligence summary](/evaluate/due-diligence-summary).
+
+## Version lifecycle and support window
+
+You can plan upgrades around a fixed rule. Offchain Labs supports the current minor release of Nitro. The previous minor release stays supported for 30 calendar days after a newer minor release becomes available. At most two minor releases are supported at the same time, for a maximum of 30 calendar days.
+
+<Callout type="warn">
+
+For stability or security fixes, Offchain Labs may cut a new minor release within 30 days of the previous one and drop support for the previous release at once. When this happens, Offchain Labs may ask you to upgrade sooner.
+
+</Callout>
+
+The [Nitro support policy](/run-a-node/nitro-support-policy) lists the supported versions. At the time of writing it states:
+
+| Release      | Supported until                           | Supported deployment |
+| ------------ | ----------------------------------------- | -------------------- |
+| Nitro 3.12.x | 30 calendar days after 3.12.x is released | Docker               |
+| Nitro 3.11.5 | October 28, 2026                          | Docker               |
+
+The current release tag is <Var name="nitroVersionTag" />. Beta and release candidate (RC) versions are not supported, and running them can cause unexpected behavior or database corruption.
+
+<Term id="arbos">ArbOS</Term> follows a separate rule. Only the ArbOS release that is active on Arbitrum One receives security updates and urgent vulnerability patches. An ArbOS upgrade is Arbitrum's equivalent to a hard fork: it changes a node's ability to produce valid blocks, so <Term id="validator">validator</Term> nodes must update Nitro when a new ArbOS version is released and adopted. Every Nitro release is backwards compatible, so your node's Nitro version must be at or above the version that includes the latest ArbOS upgrade. Offchain Labs does not commit to porting an ArbOS change, including a security change, back to any older Nitro version. An operator on unsupported Nitro must upgrade Nitro first.
+
+On Arbitrum One, the <Term id="chain-owner">chain owner</Term> is the Arbitrum DAO (decentralized autonomous organization). An ArbOS upgrade on Arbitrum One requires a governance proposal and a vote to pass. On your own chain, you are the chain owner. Offchain Labs recommends that you wait at least four weeks after a new ArbOS release becomes active on Arbitrum One before you upgrade your own chain.
+
+### What supported means
+
+When you run a supported Nitro version, Offchain Labs works to:
+
+- Respond to bug reports and ship fixes and security patches against that version
+- Work with you to debug operational issues you uncover
+- Treat the release as a valid baseline for compatibility testing
+
+When you run an unsupported Nitro version:
+
+- Offchain Labs may decline to investigate issues and will recommend an upgrade first
+- Offchain Labs will not back-port non-critical fixes or features
+- You assume responsibility for any operational, consensus, or security risk
+
+You can run any version of the software. The policy states that it "describes where we will spend our time, not what we will permit."
+
+### Out of scope
+
+The policy covers the upstream release of Nitro by Offchain Labs. It does not cover forks or custom builds maintained by third parties, builds compiled from non-release commits, or configurations and patches that are not present in the upstream release. Offchain Labs cannot commit to a support level on builds other than official releases.
+
+## Security fixes and disclosure
+
+You receive security fixes only inside the supported window. The process has three steps:
+
+1. Private disclosure to chain operators when the fix is actionable
+2. Coordinated release across all in-window versions, which means the current minor release and the prior minor release still in its window
+3. Public disclosure after operators have had time to upgrade
+
+A client version exception does not extend support for older versions. If you are out of support when a fix lands, your path forward is to upgrade.
+
+Offchain Labs sponsors a bug bounty program at https://immunefi.com/bounty/arbitrum/ to reward responsible disclosure of critical bugs. The documentation also states that the codebase is audited by several independent firms, and that a non-zero chance of undiscovered vulnerabilities remains. See [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks).
+
+<Callout type="warn" title="SME to confirm">
+
+The documentation states no security contact address and no disclosure email for reporting a vulnerability outside the bug bounty program.
+
+</Callout>
+
+## How you learn about changes
+
+You learn about required actions from the [Notices](/notices) section and from the announcement channels below. A notice follows one pattern. For example, [Upgrade notice for ArbOS 61](/notices/arbos61-upgrade-notice) opens with an "Action required" callout. The callout names the minimum Nitro version that a node must run to sync, the Docker image, the release notes, and the WebAssembly (WASM) module root. An "Important dates" table lists each activation with a UTC (Coordinated Universal Time) timestamp and the affected audience. The testnet activates first: ArbOS 61 activated on Arbitrum Sepolia on June 29, 2026, at 15:00 UTC, and on Arbitrum One on August 20, 2026, at 17:00 UTC. The Arbitrum DAO approved the upgrade in a Constitutional onchain vote, and activation followed the waiting periods set out in the Arbitrum DAO Constitution. A later section tells chain owners when the release has run on Arbitrum One for more than 30 days and their own upgrade can proceed.
+
+The documentation names these channels for release and upgrade announcements:
+
+| Channel                                                                                        | What it carries                                                  |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [Nitro GitHub repository](https://github.com/OffchainLabs/nitro)                               | New releases, through GitHub notifications                       |
+| Telegram `@arbitrumnodeupgrade`                                                                | Node software upgrade notices and announcements                  |
+| Telegram `@arbitrum` and `@OffchainLabsannouncements`                                          | Ecosystem announcements and Offchain Labs-specific notices       |
+| [Arbitrum Discord server](https://discord.com/invite/arbitrum)                                 | All announcements, with `#dev-announcements` and `#node-runners` |
+| X accounts `@Arbitrum` and `@ArbitrumDevs`                                                     | Network and developer announcements                              |
+| [Arbitrum Foundation network upgrades page](https://docs.arbitrum.foundation/network-upgrades) | Activation timestamps for ArbOS upgrades on Arbitrum One         |
+
+## What the protocol does when a component fails
+
+The failure behavior below applies to Arbitrum One and to your own chain. The <Term id="sequencer">sequencer</Term> orders transactions. The <Term id="delayed-inbox">delayed inbox</Term> accepts transactions on the parent chain without the sequencer. The <Term id="forceinclusion">`forceInclusion`</Term> method moves a delayed message into the sequencer inbox after a waiting period. On an AnyTrust chain, the <Term id="batch-poster">batch poster</Term> asks the <Term id="data-availability-committee-dac">Data Availability Committee (DAC)</Term> to sign the batch data.
+
+| Failure                                | Effect on users                                                                                                                  | What the protocol guarantees                                                                                                                                                                                                                                           | Source                                                                                                                                                                                                   |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sequencer offline                      | The RPC nodes cannot process new transactions through the sequencer.                                                             | Transactions still reach the chain through the delayed inbox. On Arbitrum One the full force-inclusion window is <Var name="arbOneForceIncludePeriodHours" /> hours. The first force-included message of an outage gets the full window when the delay buffer is full. | [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions)                                                                                                                                |
+| Sequencer censoring                    | The sequencer refuses your transaction.                                                                                          | You can still get it included. With Censorship Timeout, the window is the lesser of `delayBuffer` and `delayBlocks`. `delayBuffer` ranges from 30 minutes to 48 hours, and the threshold on Arbitrum One is 30 minutes.                                                | [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer#censorship-timeout)                                                                                                   |
+| DAC outage on an AnyTrust chain        | With fallback enabled, which is the default, batches cost more to post for a while. With fallback disabled, batch posting halts. | The batch poster stops waiting after a few minutes and posts the full batch data to the parent chain as calldata. The chain keeps producing and finalizing blocks. Disabling the fallback in production is documented as dangerous.                                    | [Finality and chain reorganizations](/how-arbitrum-works/reference/finality-and-reorgs), [DAC/DAS Operations Guide](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations)            |
+| Validator inactivity on your own chain | Withdrawals wait on assertions that no validator posts or confirms.                                                              | If assertions stop being confirmed for `validatorAfkBlocks` parent-chain blocks, anyone can disable the validator allowlist. On Arbitrum One the value is `201600` blocks, about 28 days. A value of `0` disables the mechanism.                                       | [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring), [BoLD upgrade playbook for multisig and security council chains](/launch-arbitrum-chain/operate/bold-upgrade-playbook) |
+
+## On Arbitrum One: what a node operator runs
+
+You run a node from a published snapshot, and you recover a broken node by re-syncing. The documentation states:
+
+- Database snapshots for Arbitrum One are published in the [snapshot explorer](https://snapshot-explorer.arbitrum.io/). A snapshot is required on the first start of an Arbitrum One node, because it provides the Classic-era data. See [Prepare to run a node](/run-a-node/start-here).
+- Nitro downloads the snapshot, looks for a SHA256 checksum on the remote server, and verifies the checksum after the download. To create your own snapshot, you must stop the process gracefully first. See [Nitro database snapshots](/run-a-node/nitro/nitro-database-snapshots).
+- A node that shut down ungracefully recovers in a few minutes in most cases. If it does not, you re-sync the node. An inconsistent state database is recovered by restarting without pruning, and then by re-syncing from a recent official snapshot. See [Troubleshooting: Run a node](/run-a-node/troubleshooting).
+- The `nitro` binary does not expose a `/health` endpoint. Node health is inferred from RPC (remote procedure call) availability: an HTTP 200 response to a valid JSON-RPC request on the HTTP RPC port, default `8547`. Alert on `container_memory_rss`, not on Go heap metrics, and watch `arb_feed_backlog_messages`, because a growing feed backlog means the node is falling behind the sequencer feed. See [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring).
+
+## On your own Arbitrum chain: what you must build
+
+You operate every component of your chain, and the documentation gives you runbooks for each. The table lists what you must run or plan.
+
+| Component               | What you must run or plan                                                                                                                                                                                                                                                                                                                                                                                          | Source                                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| Sequencer               | If your sequencer goes offline, the network cannot process new transactions arriving at the child chain's RPC nodes. Run a high-availability (HA) sequencer. The priority list lives only in Redis, so include `coordinator.priorities` in your backup and disaster recovery plan. Implement health checks for sequencer logs and metrics, Redis connectivity, feed availability, and end-to-end transaction flow. | [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer) |
+| Batch poster            | The batch poster recovers after a crash, restart, or bad state; its checkpoint lives on the parent chain. Keep the recovery cheat-sheet in your runbook: a corrupt queue, a reverted batch, a message-count mismatch after force inclusion, HA failover after `lockout-duration`, and a lost data-poster database, which rebuilds from the parent chain.                                                           | [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery)                                          |
+| Upgrades and rollback   | An activated ArbOS version has no downgrade path. Recovery means rolling forward: restore node availability first, do not downgrade Nitro below the active ArbOS version, and escalate rather than improvise. Treat a `nitro-contracts` rollback as an incident that requires support involvement, not a routine operation.                                                                                        | [Arbitrum chain upgrade runbook](/launch-arbitrum-chain/operate/upgrade-runbook#rollback-options)            |
+| Keys                    | Back up your configuration and private keys before a rotation. Test key rotation on a testnet first. Plan for brief service interruptions during a rotation.                                                                                                                                                                                                                                                       | [Arbitrum Node Key Rotation Guide](/launch-arbitrum-chain/operate/key-rotation)                              |
+| DAC (AnyTrust chains)   | Plan for the documented failure modes: fewer than `K` members respond, a wrong BLS key, all DAS backends down, a keyset invalidated onchain, and a network partition. In each case except the invalidated keyset, the batch poster falls back to onchain posting. An invalidated keyset requires you to set a new valid keyset.                                                                                    | [DAC/DAS Operations Guide](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations)         |
+| Monitoring and alerting | Run the `arbitrum-monitoring` suite: retryable, batch poster, assertion, ArbOS version, and node sync monitors, with alerts to Slack. Alert on the documented signals: sequencer backlog, feed backlog, batch poster backlog and account balance, `SequencerBatchDelivered` events, assertion posting and confirmation, validator balance, and base fee. Suggested thresholds are starting points to tune.         | [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring)                             |
+
+## What the documentation does not state
+
+You must request the following items from Offchain Labs directly. The documentation does not state them:
+
+- An incident-response process for Arbitrum One
+- A status page for Arbitrum One
+- A service-level agreement (SLA) or a recovery-time objective (RTO) for any component
+- A security contact for vulnerability reports outside the bug bounty program
+- A support channel. The upgrade runbook says "Contact Offchain Labs support" and names no channel
+
+<Callout type="warn" title="SME to confirm">
+
+The documentation states no incident-response process, no status page, no service-level agreement, and no recovery-time objective for Arbitrum One.
+
+</Callout>
+
+<Callout type="warn" title="SME to confirm">
+
+The documentation names no support channel for a chain owner who must escalate an upgrade incident.
+
+</Callout>
+
+## Related resources
+
+- [Nitro support policy](/run-a-node/nitro-support-policy)
+- [ArbOS software releases: Overview](/run-a-node/arbos-releases/overview)
+- [How to upgrade ArbOS on your Arbitrum chain](/launch-arbitrum-chain/operate/arbos-upgrade)
+- [Prepare to run a node](/run-a-node/start-here)
+- [Arbitrum: Understanding the risks](/arbitrum-essentials/reference/mainnet-risks)
+- [Notices](/notices)
+- [Upgrade notice for ArbOS 61](/notices/arbos61-upgrade-notice)
+- [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions)
+- [The Sequencer and censorship resistance](/how-arbitrum-works/deep-dives/sequencer)
+- [Finality and chain reorganizations](/how-arbitrum-works/reference/finality-and-reorgs)
+- [DAC/DAS Operations Guide](/launch-arbitrum-chain/chain-config/data-availability/dac-das-operations)
+- [Nitro database snapshots](/run-a-node/nitro/nitro-database-snapshots)
+- [Troubleshooting: Run a node](/run-a-node/troubleshooting)
+- [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+- [How to set up a high-availability sequencer](/launch-arbitrum-chain/run-a-node/high-availability-sequencer)
+- [Batch poster recovery](/launch-arbitrum-chain/operate/bp-recovery)
+- [Arbitrum chain upgrade runbook](/launch-arbitrum-chain/operate/upgrade-runbook)
+- [Arbitrum Node Key Rotation Guide](/launch-arbitrum-chain/operate/key-rotation)
+- [Monitoring tools and considerations](/launch-arbitrum-chain/operate/monitoring)
+- [BoLD upgrade playbook for multisig and security council chains](/launch-arbitrum-chain/operate/bold-upgrade-playbook)
