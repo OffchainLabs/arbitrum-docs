@@ -6,9 +6,9 @@ author: Jason-W123
 sme: Jason-W123
 ---
 
-Arbitrum does not maintain a long-lived "pending" mempool as an Ethereum node does. Transactions submitted to the [Sequencer](/how-arbitrum-works/deep-dives/sequencer) are ordered and executed almost immediately, so out-of-order nonces cannot wait minutes or hours for their predecessor to arrive — they are held only briefly, then rejected.
+Arbitrum does not maintain a long-lived "pending" mempool as an Ethereum node does. Transactions submitted to the [Sequencer](/how-arbitrum-works/deep-dives/sequencer) are ordered and executed almost immediately, so out-of-order nonces cannot wait minutes or hours for their predecessor to arrive — they are held only briefly, then dropped.
 
-This page explains how Arbitrum's sequencer handles out-of-order nonces, the error you will see when the wait window expires, what `eth_getTransactionCount("pending")` returns, and the submission patterns that work safely under these constraints.
+This page explains how Arbitrum's sequencer handles out-of-order nonces, what happens when the wait window expires, what `eth_getTransactionCount("pending")` returns, and the submission patterns that work safely under these constraints.
 
 ## How Arbitrum handles out-of-order nonces
 
@@ -18,7 +18,15 @@ Arbitrum's sequencer behaves differently. It maintains an in-memory **nonce-fail
 
 1. When a transaction reaches execution with a nonce higher than the sender's state nonce (the next nonce the account expects, one more than the last executed nonce), the sequencer does **not** reject it immediately. Instead, it places the transaction in the retry buffer and starts a short expiry timer. A transaction whose nonce equals the state nonce is in order and executes, even if an earlier one is still queued.
 2. If the predecessor transaction arrives before the timer fires, the held transaction is revived and put back into the execution queue—it goes through normally, as if it had arrived in order.
-3. If the timer fires first, the held transaction is dropped, and the sender receives a `nonce too high` error in response to its original `eth_sendRawTransaction` call.
+3. If the timer fires first, the sequencer drops the held transaction. What the sender sees depends on the submission method and on whether the new transaction submission behavior has reached the chain:
+   - `eth_sendRawTransaction`, after the change, already returned the transaction hash when the sequencer admitted the transaction. The sender gets no error and no receipt.
+   - `eth_sendRawTransaction`, before the change, returns a `nonce too high` error.
+   - `eth_sendRawTransactionSync` returns an error instead of a receipt.
+
+   The change reaches Arbitrum Sepolia first and Arbitrum One later. For details, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission#transactions-dropped-without-a-receipt).
+
+{/* SME QUESTION: Does `eth_sendRawTransactionSync` return `nonce too high` when the retry window expires? */}
+{/* SME QUESTION: Does the retry buffer still hold nonce-gap transactions sent with `eth_sendRawTransaction`? */}
 
 The animation below shows step 2. Transactions from other senders pass through the queue in arrival order. Your transaction with nonce 8 arrives before nonce 7, so the sequencer holds it in the retry buffer and starts the timer. Nonce 7 arrives inside the window and executes, and the sequencer then revives nonce 8 and executes it next.
 
@@ -30,9 +38,9 @@ The exact wait window and buffer capacity are configured by the operator running
 
 The practical implication is that fire-and-forget concurrent submission patterns that work on Ethereum will not work reliably on Arbitrum. If you submit transactions `N` and `N+1` from two different processes at the same time, you cannot rely on the sequencer holding `N+1` while it waits for `N` to land — the window is too short.
 
-## The error you will see
+## The `nonce too high` error
 
-When the retry window expires without the predecessor arriving, the call that submitted the out-of-order transaction returns the error string:
+When the retry window expires without the predecessor arriving, the sequencer reports the error string below. `eth_sendRawTransactionSync` returns it. `eth_sendRawTransaction` returns it only on a chain that doesn't have the new transaction submission behavior yet. After the change, `eth_sendRawTransaction` has already returned the transaction hash, so it reports no error:
 
 ```
 nonce too high
@@ -41,7 +49,7 @@ nonce too high
 This is the same literal error string used by Ethereum's execution layer, but the meaning is different:
 
 - **On Ethereum**, `nonce too high` usually means the gap between the sender’s current nonce and the pending pool's buffer is larger than the pending pool can or will buffer (often a multi-thousand-slot gap, configurable per client).
-- **On Arbitrum**, `nonce too high` simply means the predecessor transaction did not reach the sequencer within the retry window.
+- **On Arbitrum**, `nonce too high` means the predecessor transaction did not reach the sequencer within the retry window.
 
 The animation below shows step 3. Nonce 8 arrives before nonce 7 and waits in the retry buffer. The timer runs out before nonce 7 arrives, so the sequencer drops nonce 8 and returns `nonce too high` to your sender. When nonce 7 arrives late, it executes normally, because its nonce equals the state nonce. Nonce 8 is gone, so you must resend it.
 
@@ -55,7 +63,7 @@ A typical log line from a real out-of-order submission looks like:
 reqid=… err="nonce too high"
 ```
 
-If you see this in production after migrating an Ethereum-based submission pipeline to Arbitrum, the most likely cause is that two or more workers are submitting transactions for the same sender address without coordinating nonce allocation between them—not that any individual nonce is wrong.
+If you see this error, or transactions with no receipt, in production after migrating an Ethereum-based submission pipeline to Arbitrum, the most likely cause is that two or more workers are submitting transactions for the same sender address without coordinating nonce allocation between them—not that any individual nonce is wrong.
 
 ## `eth_getTransactionCount("pending")` on Arbitrum
 
@@ -141,5 +149,6 @@ A locally incremented nonce drifts as soon as one in-flight transaction is dropp
 
 ## Further reading
 
+- [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission) — when each submission method returns, and which errors it reports.
 - [RPC methods](/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods) — full list of RPC method differences between Arbitrum and Ethereum.
 - [The Sequencer and Censorship Resistance](/how-arbitrum-works/deep-dives/sequencer) — how the sequencer orders and processes transactions in Arbitrum.

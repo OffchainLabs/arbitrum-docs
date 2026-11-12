@@ -19,17 +19,39 @@ Arbitrum One has two public endpoints with different roles. The public RPC URL i
 
 ### Latency and timeout behavior
 
-Under normal load, the sequencer endpoint accepts a transaction in less than a second. The sequencer puts each submission in a bounded in-memory queue. By default, the queue holds 1,024 transactions.
+<Callout type="info" title="Rollout status">
 
-The queue timeout is 12 seconds by default. It limits how long a transaction can wait in the queue before the sequencer picks it up or rejects it. The timeout is **not** an end-to-end inclusion latency guarantee. If the sequencer does not pick up the transaction before the timeout, `eth_sendRawTransaction` returns `context deadline exceeded`. In that case, the sequencer did **not** accept the transaction, and you can safely retry it.
+This section and the two that follow describe the new transaction submission behavior. It reaches Arbitrum Sepolia first and Arbitrum One later. Until it reaches a chain, the sequencer endpoint on that chain works the old way:
+
+- `eth_sendRawTransaction` returns after the sequencer includes the transaction in a block.
+- On queue timeout, `eth_sendRawTransaction` returns `context deadline exceeded`. The sequencer didn't accept the transaction, so you can retry it.
+
+For details, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission).
+
+</Callout>
+
+Under nominal load, the sequencer endpoint accepts a submission in well under a second. The sequencer places each submission in a bounded in-memory queue, with a default capacity of 1024. The queue timeout, 12 seconds by default, limits how long a transaction can wait in that queue. It isn't a guarantee of end-to-end inclusion time.
+
+When a submission hits a queue limit, `eth_sendRawTransaction` behaves as follows:
+
+- **Queue full:** it returns an error right away.
+- **Queue timeout:** the sequencer drops the transaction. `eth_sendRawTransaction` has already returned the transaction hash, so you get no error and no receipt. The transaction is **not** included. Check the sender's nonce, then resubmit the same signed transaction or re-sign it with the same nonce. See [Handle transactions with no receipt](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission#handle-transactions-with-no-receipt).
+
+{/* SME QUESTION: What error does `eth_sendRawTransactionSync` return on queue timeout? Is it still `context deadline exceeded`? */}
+{/* SME QUESTION: Does the sequencer endpoint accept `eth_sendRawTransactionSync` after the change? */}
 
 ### Recommended fallback patterns
 
 - Use a third-party node provider as your primary endpoint, or as a fallback when a direct sequencer submission fails.
-- Retry only on transient errors. You can safely retry `context deadline exceeded` and network or connection errors with backoff. Do not retry terminal errors, such as `nonce too low` or contract reverts.
+- Retry on transient errors only. You can retry network and connection errors with backoff. Don't retry terminal errors such as `nonce too low`.
+- Read reverts from the receipt. A revert isn't a submission error. The receipt shows it, with `status` set to `0x0`.
+- If a transaction has no receipt by your deadline, check the sender's nonce before you resubmit. See [Handle transactions with no receipt](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission#handle-transactions-with-no-receipt).
 
 ### Monitoring and alerting
 
-A successful `eth_sendRawTransaction` response means that the sequencer has already put your transaction in an L2 block. The call returns only after the sequencer creates the block, not when it adds the transaction to the queue. Treat this response as the sequencer's <Term id="soft-confirmation">soft confirmation</Term>: the sequencer has ordered and executed your transaction.
+A successful `eth_sendRawTransaction` response means the sequencer admitted your transaction into its queue. It does **not** mean the transaction is in a block. To confirm inclusion, poll `eth_getTransactionReceipt`. You can also send the transaction to an RPC node with `eth_sendRawTransactionSync`, which returns the receipt once the sequencer executes the transaction. For details, see [Transaction submission behavior](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission).
 
-The response does **not** mean that the transaction is posted in a batch to the <Term id="parent-chain">parent chain</Term>, or final there. If your app needs parent-chain finality, track it separately. For monitoring, alert on submission calls that return errors or take longer than your latency limit. Do not assume a pending-but-unconfirmed state.
+Neither response means the transaction is posted to the parent chain in a batch or finalized there. If your application needs parent-chain finality guarantees, track that separately. For monitoring, alert on these cases:
+
+- Submission calls that return errors or exceed your expected latency ceiling.
+- Transaction hashes that never get a receipt.
