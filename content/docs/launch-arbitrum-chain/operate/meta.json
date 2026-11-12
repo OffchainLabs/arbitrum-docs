@@ -11,6 +11,7 @@
     "nitro-contracts-upgrade",
     "ownership-and-access",
     "post-launch-deployments",
+    "respond-to-sequencer-outage",
     "sequencer-troubleshooting",
     "state-growth",
     "upgrade-runbook",
