@@ -1,0 +1,84 @@
+---
+title: 'Node monitoring'
+description: 'Enable the Nitro metrics server, scrape Prometheus metrics, monitor key metrics, and run health checks'
+user_story: 'As a node operator, I want to monitor my Nitro node health and expose metrics'
+content_type: 'how-to'
+author: 'gzeoneth'
+sme: 'gzeoneth'
+---
+
+Nitro exposes Prometheus-compatible metrics through a dedicated metrics server. Each Nitro binary reports its health through its own mechanism.
+
+## Metrics server
+
+### Enable the metrics server
+
+Pass the `--metrics` flag when you start the node. Configure the server with these flags:
+
+| Flag                               | Default     | Description                                |
+| ---------------------------------- | ----------- | ------------------------------------------ |
+| `--metrics-server.addr`            | `127.0.0.1` | Listen address for the metrics server      |
+| `--metrics-server.port`            | `6070`      | Listen port for the metrics server         |
+| `--metrics-server.update-interval` | `3s`        | How often Nitro refreshes internal metrics |
+
+Example:
+
+```shell
+nitro --metrics \
+  --metrics-server.addr 0.0.0.0 \
+  --metrics-server.port 6070
+```
+
+### Prometheus scrape endpoint
+
+After you enable metrics, Nitro exposes a Prometheus-compatible endpoint at:
+
+```shell
+http://<metrics-server.addr>:<metrics-server.port>/debug/metrics/prometheus
+```
+
+`pprof` runs as a separate server at `/debug/pprof/` for CPU and memory profiling. Enable it with `--pprof`, and configure it with `--pprof-cfg.addr` and `--pprof-cfg.port` (default `127.0.0.1:6071`). The metrics port does not serve `pprof`.
+
+## Key metrics to monitor
+
+Group your alerts by concern. The metric names below are Nitro's Prometheus metric names.
+
+| Concern        | Metric                            | What it tells you                                                                                                      |
+| -------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Memory         | `container_memory_rss`            | Actual container RSS (resident memory). Alert on this, not Go heap. Most Nitro memory is invisible to Go.              |
+| Sequencer feed | `arb_feed_backlog_messages`       | Messages in the feed backlog. A growing backlog means the batch poster is not posting message batches to parent chain. |
+| Sequencing     | `arb_sequencer_backlog`           | Backlog at the <Term id="sequencer">sequencer</Term>. Sustained growth means the sequencer can't keep up with load.    |
+| Batch posting  | `arb_batchposter_wallet_eth`      | <Term id="batch-poster">Batch poster</Term> wallet balance. If the wallet runs dry, batches stop posting.              |
+| Batch posting  | `arb_batchposter_suggestedtipcap` | Suggested tip cap the batch poster pays. It tracks <Term id="parent-chain">parent chain</Term> fee pressure.           |
+| RPC protection | `arb_rpc_limitcheck_failure`      | Increments when the memory free-limit throttle rejects an RPC call (HTTP 429).                                         |
+
+<Callout type="idea">
+
+Always alert on `container_memory_rss`, not Go heap metrics. Most of Nitro's memory is invisible to Go's runtime. To learn why, see [Memory allocators in Nitro](/run-a-node/nitro/node-tuning#memory-allocators-in-nitro).
+
+</Callout>
+
+## Health checks
+
+Each Nitro component exposes health information through a mechanism specific to its binary.
+
+### Main Nitro node
+
+The main `nitro` binary does not expose a dedicated `/health` endpoint. Infer node health from RPC availability. If the HTTP RPC port (default `8547`) returns HTTP 200 for a valid JSON-RPC request, the node is healthy.
+
+Example liveness check:
+
+```shell
+curl -sf -X POST http://localhost:8547 \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1}'
+```
+
+### Auxiliary components
+
+- **Transaction filterer**: Exposes a `/liveness` endpoint for health checks.
+- **DA server**: Exposes a `/health` endpoint.
+
+## Kubernetes
+
+If you run Nitro on Kubernetes, the community Helm chart sets up the `ServiceMonitor`, startup and liveness probes, and a Grafana dashboard for you. To enable metrics scraping and configure probes on Kubernetes, see [Enable monitoring](/launch-arbitrum-chain/run-a-node/run-full-node-with-helm#step-4-enable-monitoring) and [Probes](/launch-arbitrum-chain/run-a-node/run-full-node-with-helm#probes) in the Helm guide.
