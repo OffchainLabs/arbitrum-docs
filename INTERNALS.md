@@ -884,26 +884,119 @@ flight payload. `scripts/static-docs-http.test.ts` asserts this against a runnin
 ## Analytics
 
 Five paths send events to one PostHog project. They share only the project token and the ingest
-host.
+host. A sixth integration, HubSpot tracking, reports to the Offchain Labs HubSpot portal.
 
-| Path                                   | Where                                               | Runs            |
-| -------------------------------------- | --------------------------------------------------- | --------------- |
-| Page feedback (`docs_feedback`)        | `lib/posthog.ts`, a server action                   | everywhere      |
-| Web analytics (`$pageview`)            | `components/analytics/posthog-provider.tsx`, client | production only |
-| Inkeep search (`inkeep_*`)             | `lib/inkeep.ts`, through the same client            | production only |
-| AI chat panel (`inkeep_*`)             | `lib/ai/events.ts`, through the same client         | production only |
-| Markdown fetches (`llms_file_fetched`) | `proxy.ts`, server                                  | production only |
+| Path                                   | Where                                                   | Runs                                 |
+| -------------------------------------- | ------------------------------------------------------- | ------------------------------------ |
+| Page feedback (`docs_feedback`)        | `lib/posthog.ts`, a server action                       | everywhere                           |
+| Web analytics (`$pageview`)            | `lib/posthog-consent.ts`, client                        | production, under consent            |
+| Inkeep search (`inkeep_*`)             | `lib/inkeep.ts`, through `captureConsentedPosthogEvent` | production, consent only             |
+| AI chat panel (`inkeep_*`)             | `lib/ai/events.ts`, through the same helper             | production, consent only             |
+| 404 reports (`404_error`)              | `components/analytics/not-found-tracker.tsx`            | production, stripped without consent |
+| Markdown fetches (`llms_file_fetched`) | `proxy.ts`, server                                      | production only                      |
+| HubSpot tracking                       | `lib/hubspot.ts`, client                                | production, consent only             |
 
-The client gate is `NEXT_PUBLIC_VERCEL_ENV === 'production'` plus a key; Vercel sets that
-variable. The client runs cookieless and in memory, with no session recording or feature flags, and
-a pinned `defaults` date so an SDK upgrade cannot change what is captured. The 404 page reports `404_error` through
-`components/analytics/not-found-tracker.tsx`, which retries until the client is ready and snapshots
-the URL at mount. Those events show inbound URLs the redirect map misses.
+The two server paths carry no visitor identifier and are outside the consent banner. Everything in
+the browser goes through CookieYes.
 
-The AI chat panel sends `inkeep_user_message_submitted`, `inkeep_assistant_message_received` and
-`inkeep_assistant_source_item_clicked` from `lib/ai/events.ts`. The two message events set
-`component_type` to `ChatButton` or `SearchBar`. A source click always sets `ChatButton` and adds
-`source_link`. It never sends message text.
+### CookieYes
+
+`components/analytics/cookie-consent.tsx` loads the CookieYes banner after hydration (`next/script`
+`afterInteractive`). Loading it earlier lets CookieYes insert its banner before hydration finishes,
+and React's recovery can then remove the banner while CookieYes considers itself initialized,
+leaving the visitor unable to choose. The website key is `NEXT_PUBLIC_COOKIEYES_ID`, scoped per
+Vercel environment: the production key for Production, the staging key for Preview and Development.
+Without a key there is no banner, HubSpot never loads, and PostHog counts every visit cookieless
+after its timeout.
+
+CookieYes shows one of two banners by visitor location and reports which as `activeLaw`: `gdpr` (opt
+in: the EU/EEA, the UK and the other regions in its geo rules) or `ccpa` (opt out: everywhere else,
+and its fallback when geolocation fails). Regions are configured in the CookieYes dashboard.
+`lib/analytics-consent.ts` reads the `analytics` category by law. The opt-in banner needs an
+explicit acceptance. The opt-out banner counts as accepted until the visitor opts out. A missing
+or unknown law is read like the opt-in banner: only an explicit acceptance of the category counts,
+and missing CookieYes counts as no consent. CookieYes fires its update event for the opt-out banner's defaults too, and the
+payload carries neither the law nor whether the visitor acted, so the reader reads saved consent
+back from `getCkyConsent()` on every update.
+
+`app/global.css` restores the banner's paragraph margins (Tailwind's preflight zeroes them) and
+repaints it in dark mode from the `--color-fd-*` tokens.
+
+### PostHog
+
+`lib/posthog-consent.ts`, connected by `components/analytics/posthog-analytics.tsx`, is the same
+consent integration Offchain Labs runs on its other sites. Keep a change to the consent rules in
+step with them. It starts only when
+`NEXT_PUBLIC_VERCEL_ENV` is `production` and `NEXT_PUBLIC_POSTHOG_KEY` is set.
+
+- PostHog runs with `cookieless_mode: 'on_reject'`. Without analytics consent it counts the visit
+  cookieless and stores nothing. Consent switches to cookie-backed analytics. Withdrawal removes the
+  cookie, the SDK's window id and its opt-out flag, and returns to cookieless.
+- Without consent only `$pageview`, `$pageleave` and `404_error` leave; `before_send` drops every
+  other event, whatever the project's remote config turns on. Those events lose the device, locale,
+  viewport and scroll-depth properties, the ad click ids (`gclid`, `fbclid` and the rest, also inside
+  the URL properties), `ph_keyword`, and every referrer path: `$referrer` and the 404 report's
+  `referrer` are reduced to their origin. The 404 report also drops `userAgent`. `$ip` and
+  `$raw_user_agent` stay for PostHog's server-side cookieless hash.
+- Autocapture runs only with consent. Session replay, heatmaps and dead clicks stay off for
+  everyone. Surveys, product tours and conversations stay off because they load remote scripts
+  configured outside code review. Feature flags load only with consent: `advanced_disable_flags`
+  follows consent, since the `/flags` request skips `before_send` and sends the timezone.
+- PostHog waits up to 3 seconds (`COOKIEYES_LAW_TIMEOUT_MS`) for CookieYes to report its law, so
+  opt-out banner visitors start on cookies with their landing attribution. If CookieYes never
+  reports, it starts cookieless. A visitor who navigates during the wait still gets a landing
+  pageview with the original URL and its `utm_*` parameters (not the ad click ids).
+- Client-side navigations are captured by the SDK (`capture_pageview: { path: true, search: true }`). The
+  SDK's `'history_change'` shorthand tracks the path only and would miss a query-only navigation.
+- `defaults` stays pinned (`'2026-08-30'`) so an SDK upgrade cannot change what is captured. From
+  `'2026-05-30'` the SDK debounces persistence writes by 250ms; the tests flush that before reading
+  storage.
+
+`inkeep_*` events go through `captureConsentedPosthogEvent`. Events raised before CookieYes reports
+wait in memory (at most 100, with their original time and page). Once CookieYes reports a law
+without consent, the queue is emptied and later events are dropped, so a later acceptance sends
+nothing from the refused period. Inkeep's `search_query` is text the visitor typed, which is why
+these events need consent. `lib/ai/events.ts` never sends message text: `inkeep_user_message_submitted`,
+`inkeep_assistant_message_received` and `inkeep_assistant_source_item_clicked` set `component_type`
+to `ChatButton` or `SearchBar`, and a source click adds `source_link`.
+
+Autocapture must not read visitor input either. The chat panel's message list
+(`components/ai/chat/conversation.tsx`) carries `ph-no-capture`. The Inkeep modal renders inside an
+open shadow root, where PostHog follows a click through `composedPath()` but its `ph-no-capture`
+check stops at the shadow root. `lib/posthog-consent.ts` therefore marks DOM events whose path
+passes through an `inkeep-shadow*` host (a capture listener on `window`, which runs before PostHog's
+on `document`) and drops the autocapture events they produce in `before_send`. A pointer pressed
+inside the modal and released just outside it fires a click on `<body>`, which PostHog attributes
+back to the pressed element; the exclusion carries over from the Inkeep pointer-down to that click.
+
+The 404 page reports `404_error` through `captureNotFoundEvent`, which waits for PostHog to start
+and sends with or without consent (stripped as above without it). Those events show inbound URLs
+the redirect map misses.
+
+The PostHog project needs cookieless server hash mode turned on; without it, cookieless events are
+dropped.
+
+### HubSpot
+
+`lib/hubspot.ts`, connected by `components/analytics/hubspot-tracking.tsx`, inserts the HubSpot
+loader (`js.hs-scripts.com/50627473.js?businessUnitId=4314583`, the Offchain Labs portal and the
+Arbitrum business unit, as arbitrum.io loads it) only once CookieYes reports analytics consent,
+and only in production. It is never a static tag or a React `<Script>`: React can hoist an async
+script ahead of CookieYes. Withdrawal pushes `doNotTrack` and `setHubSpotConsent`; HubSpot's own
+banner is disabled and only analytics is ever granted. The script stays in the page after
+withdrawal, since removing it would not unload code that already ran. HubSpot's automatic pageview
+covers the first view; client-side navigations are sent with `setPath` and `trackPageView`.
+Accepting again after a withdrawal, once HubSpot has loaded, counts the current page once. CookieYes must list `hubspotutk`, `__hstc`, `__hssc`
+and `__hssrc` under Analytics so it deletes them on opt-out.
+
+### Tests
+
+`lib/analytics-consent.test.ts`, `lib/hubspot.test.ts`, `lib/posthog-consent.test.ts` (mocked SDK)
+and `lib/posthog-consent.sdk.test.ts` (the real SDK in jsdom) run on vitest, the second half of
+`pnpm test`. They are the only vitest suites; `vitest.config.ts` pins the PostHog env to dummy
+values, and `vitest.setup.ts` fails any test that reaches `*.posthog.com`. The real-SDK suite runs
+on `https://docs.arbitrum.io/`: on `localhost` the SDK marks the visitor as a test user during init,
+which no production visit does.
 
 `NEXT_PUBLIC_POSTHOG_KEY` is the publishable, write-only `phc_` token. Page feedback posts
 server-side, so it works locally with the key set.
@@ -911,7 +1004,8 @@ server-side, so it works locally with the key set.
 ## Scripts are TypeScript, run by Node
 
 Every script, test, data table and root config is TypeScript that Node 22.18 or later runs
-directly (`node scripts/x.ts`). There is no tsx, ts-node, `.mjs` or `.js`.
+directly (`node scripts/x.ts`). There is no tsx, ts-node, `.mjs` or `.js`. The one exception is the
+analytics consent suites in `lib/*.test.ts`, which vitest runs (see [Analytics](#tests)).
 
 - `package.json` has `"type": "module"`.
 - `tsconfig.json` sets `erasableSyntaxOnly` (no enums, namespaces or parameter properties),
@@ -936,19 +1030,19 @@ CSS depends on Fumadocs' header DOM (see [Theme](#theme)).
 
 **`Gates`**, in order:
 
-| Step               | What it proves                                                                                                                                                                                                                                                                       |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `audit`            | No advisory in `pnpm-lock.yaml` beyond those listed under `auditConfig.ignoreGhsas` in `pnpm-workspace.yaml`                                                                                                                                                                         |
-| `types:check`      | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                                                                                        |
-| `test`             | Every `scripts/**/*.test.ts` and `eslint/**/*.test.ts` suite: the content rules on their fixtures, the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import |
-| `vars:check`       | The announcement banner keys in `content/vars.json` are valid                                                                                                                                                                                                                        |
-| `references:check` | Every glossary entry has an `id`, ids are unique, and no partial holding a `<Term>` is ESM-imported                                                                                                                                                                                  |
-| `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                                                                               |
-| `gas-target:check` | The gas-target partial matches its `scripts/data/gas-target.json` snapshot; offline, CI never calls an RPC                                                                                                                                                                           |
-| `faq:check`        | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                                                                                      |
-| `check-links`      | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                                                                                     |
-| `lint`             | ESLint over `content/`: MDX that compiles but renders wrong, every `<Var>` and `<Term>` resolving, every page under `content/docs` satisfying the page schema in `lib/page-schema.ts` (below)                                                                                        |
-| `format:check`     | Prettier                                                                                                                                                                                                                                                                             |
+| Step               | What it proves                                                                                                                                                                                                                                                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `audit`            | No advisory in `pnpm-lock.yaml` beyond those listed under `auditConfig.ignoreGhsas` in `pnpm-workspace.yaml`                                                                                                                                                                                                                                           |
+| `types:check`      | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                                                                                                                                                          |
+| `test`             | Every `scripts/**/*.test.ts` and `eslint/**/*.test.ts` suite: the content rules on their fixtures, the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import; then vitest over the analytics consent suites in `lib/*.test.ts` |
+| `vars:check`       | The announcement banner keys in `content/vars.json` are valid                                                                                                                                                                                                                                                                                          |
+| `references:check` | Every glossary entry has an `id`, ids are unique, and no partial holding a `<Term>` is ESM-imported                                                                                                                                                                                                                                                    |
+| `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                                                                                                                                                 |
+| `gas-target:check` | The gas-target partial matches its `scripts/data/gas-target.json` snapshot; offline, CI never calls an RPC                                                                                                                                                                                                                                             |
+| `faq:check`        | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                                                                                                                                                        |
+| `check-links`      | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                                                                                                                                                       |
+| `lint`             | ESLint over `content/`: MDX that compiles but renders wrong, every `<Var>` and `<Term>` resolving, every page under `content/docs` satisfying the page schema in `lib/page-schema.ts` (below)                                                                                                                                                          |
+| `format:check`     | Prettier                                                                                                                                                                                                                                                                                                                                               |
 
 `audit` asks the npm registry, so an advisory published today fails every PR, including one that
 touched no dependency. First bump the direct dependency that brings the package in. If a parent

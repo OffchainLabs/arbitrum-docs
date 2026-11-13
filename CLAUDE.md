@@ -31,7 +31,7 @@ Grounding rule: State only what you read in a file, and cite it as `file:line`. 
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
-pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts; helper tests require python3 >=3.9
+pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts, then vitest over lib/**/*.test.ts (analytics consent); helper tests require python3 >=3.9
 pnpm test:browser      # Chromium interactions against a running production server; see README.md
 pnpm build             # format:check, check-links, then next build
 pnpm start             # serve the production build
@@ -159,6 +159,13 @@ entries do not carry this contract.
   `Link` on `/`, CORS on the markdown surface). The `og/` and `llms.mdx/` routes have
   `dynamicParams = false`. `app/preview/` serves the static link-preview JSON, untracked and without
   CORS. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
+- **Analytics consent.** CookieYes (`components/analytics/cookie-consent.tsx`, keyed by
+  `NEXT_PUBLIC_COOKIEYES_ID`) owns the banner. `lib/analytics-consent.ts` reads consent by banner
+  law; `lib/posthog-consent.ts` and `lib/hubspot.ts` gate PostHog and HubSpot on it, in production
+  only. Never import `posthog-js` elsewhere or call `posthog.capture` directly: send browser events
+  through `captureConsentedPosthogEvent` (or `captureNotFoundEvent` for the 404 report). Add
+  `ph-no-capture` to any element that renders visitor input. The suites in `lib/*.test.ts` run on
+  vitest with the real SDK. See [INTERNALS.md](INTERNALS.md#analytics).
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
   production build without `NEXT_PUBLIC_SITE_URL`.
 - **Theme.** `app/global.css` only. Tokens are `--color-fd-*`, built on the `--color-arbitrum-*`

@@ -39,7 +39,7 @@ These commands come from `package.json`; see CLAUDE.md and README.md for the wor
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
-pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts
+pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts, then vitest over lib/**/*.test.ts
 pnpm test:browser      # Chromium interactions against a running production server; see README.md
 pnpm build             # check-links, then next build
 pnpm start             # serve the production build
