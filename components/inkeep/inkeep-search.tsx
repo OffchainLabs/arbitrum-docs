@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { useState } from 'react';
 
 import { askAI, canAskAI } from '@/lib/ai/bridge';
-import { inkeepAiChatSettings, inkeepSearchSettings, useInkeepBaseSettings } from '@/lib/inkeep';
+import { inkeepAiChatSettings, inkeepBaseSettings, inkeepSearchSettings } from '@/lib/inkeep';
 
 // The Inkeep widget bundle is large; load it only in the browser and only once
 // the dialog is first opened by Fumadocs.
@@ -20,7 +20,6 @@ const InkeepModalSearchAndChat = dynamic(
  * open state (and the Cmd/Ctrl+K hotkey), so Inkeep's own shortcut is disabled.
  */
 export default function InkeepSearchDialog({ open, onOpenChange }: SharedProps) {
-  const baseSettings = useInkeepBaseSettings();
   // cxkit sets its own view to 'chat' after `onToggleView`; a new key remounts it in search view.
   const [mount, setMount] = useState(0);
   const panel = canAskAI();
@@ -28,7 +27,7 @@ export default function InkeepSearchDialog({ open, onOpenChange }: SharedProps) 
   return (
     <InkeepModalSearchAndChat
       key={mount}
-      baseSettings={baseSettings}
+      baseSettings={inkeepBaseSettings}
       aiChatSettings={inkeepAiChatSettings}
       searchSettings={inkeepSearchSettings}
       modalSettings={{ isOpen: open, onOpenChange, shortcutKey: null }}

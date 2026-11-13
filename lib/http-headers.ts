@@ -52,14 +52,22 @@ export function contentSecurityPolicy(isProduction: boolean): string {
   const toolbar = isProduction ? '' : ' https://vercel.live';
   return [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline' https://us-assets.i.posthog.com${toolbar}`,
+    // CookieYes serves its loader, banner and config from cdn-cookieyes.com and logs consent to
+    // log.cookieyes.com (https://www.cookieyes.com/documentation/content-security-policy/). The
+    // HubSpot tracking loader pulls its analytics and cookie scripts from the three hs-* hosts
+    // (https://knowledge.hubspot.com/domains-and-urls/ssl-and-domain-security-in-hubspot).
+    'script-src ' +
+      "'self' 'unsafe-inline' https://us-assets.i.posthog.com https://cdn-cookieyes.com " +
+      `https://*.hs-scripts.com https://*.hs-analytics.net https://*.hs-banner.com${toolbar}`,
     `style-src 'self' 'unsafe-inline'${toolbar}`,
     `font-src 'self' data:${toolbar}`,
     // Any https image: Inkeep answers can carry remote images, and a blocked image only reports.
     `img-src 'self' data: blob: https:`,
     'connect-src ' +
       "'self' https://us.i.posthog.com https://us-assets.i.posthog.com " +
-      `https://api.inkeep.com https://api.io.inkeep.com${toolbar}`,
+      'https://api.inkeep.com https://api.io.inkeep.com ' +
+      'https://cdn-cookieyes.com https://*.cookieyes.com ' +
+      `https://*.hs-banner.com https://*.hubspot.com${toolbar}`,
     "worker-src 'self' blob:",
     `frame-src 'self'${toolbar}`,
     "frame-ancestors 'none'",

@@ -298,3 +298,68 @@ h3:has(> button[data-state]) {
     }
   }
 }
+
+/* CookieYes banner (components/analytics/cookie-consent.tsx). Its colors come from the CookieYes
+   dashboard and assume a light page, so dark mode repaints it from the theme tokens. CookieYes sets
+   inline and high-specificity styles, hence `!important`. */
+
+/* Tailwind's preflight zeroes paragraph margins inside the banner and the preference center. */
+.cky-notice-group p,
+.cky-modal p {
+  margin: 1rem 0;
+}
+
+.dark .cky-consent-bar,
+.dark .cky-preference-center {
+  background: var(--color-fd-background) !important;
+  border-color: var(--color-fd-border) !important;
+}
+
+.dark .cky-notice .cky-title,
+.dark .cky-preference-header .cky-preference-title,
+.dark .cky-preference-content-wrapper,
+.dark .cky-gpc-wrapper .cky-gpc-desc,
+.dark .cky-opt-out-checkbox-wrapper .cky-opt-out-checkbox-label,
+.dark .cky-accordion-header .cky-accordion-btn {
+  color: var(--color-fd-foreground) !important;
+}
+
+.dark .cky-accordion-header-des,
+.dark .cky-notice-des {
+  color: var(--color-fd-muted-foreground) !important;
+}
+
+.dark .cky-notice-des a.cky-policy,
+.dark .cky-notice-des button.cky-policy,
+.dark .cky-notice-des a.cky-link-default,
+.dark .cky-dma-content-wrapper a.cky-policy,
+.dark .cky-dma-content-wrapper button.cky-policy {
+  color: var(--color-fd-primary) !important;
+}
+
+.dark .cky-notice-btn-wrapper .cky-btn,
+.dark .cky-prefrence-btn-wrapper .cky-btn,
+.dark .cky-opt-out-btn-wrapper .cky-btn-cancel {
+  color: var(--color-fd-background) !important;
+  border-color: var(--color-fd-foreground) !important;
+  background: var(--color-fd-foreground) !important;
+}
+
+.dark .cky-notice-btn-wrapper .cky-btn.cky-btn-do-not-sell {
+  background: transparent !important;
+  color: var(--color-fd-primary) !important;
+}
+
+.dark .cky-notice-btn-wrapper .cky-btn.cky-btn-customize {
+  color: var(--color-fd-primary) !important;
+  border-color: var(--color-fd-primary) !important;
+  background: transparent !important;
+}
+
+.dark .cky-footer-shadow {
+  background: transparent !important;
+}
+
+.dark .cky-switch input[type='checkbox']:checked {
+  background: var(--color-arbitrum-blue) !important;
+}
