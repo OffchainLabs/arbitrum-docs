@@ -22,6 +22,7 @@ import { SITE_HEADER, useStepNavigation } from './useStepNavigation.ts';
 
 const FLOW = transactionLifecycle;
 const STEP_COUNT = FLOW.steps.length;
+const PATHS = [{ id: '', stepCount: STEP_COUNT }];
 const STEP_NUMBERS = stepNumbersByEdge(FLOW.steps);
 const NARROW_QUERY = '(max-width: 767px)';
 
@@ -35,7 +36,7 @@ export default function NitroTxFlow() {
   const [narrow, setNarrow] = useState(() => window.matchMedia(NARROW_QUERY).matches);
   const canvasRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLElement>(null);
-  const { index, started, goTo } = useStepNavigation(STEP_COUNT, canvasRef);
+  const { index, started, goTo } = useStepNavigation(PATHS, canvasRef);
   const step = FLOW.steps[index]!;
   const showAll = useStepCamera(instance, layout, step, canvasRef);
   const [detailOpen, setDetailOpen] = useState(false);

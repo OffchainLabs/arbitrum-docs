@@ -7,28 +7,37 @@ import {
   stepHash,
 } from '../../components/widgets/NitroTxFlow/navigation.ts';
 
-test('parseStepHash maps a 1-based hash to a 0-based index', () => {
-  assert.equal(parseStepHash('#step-4', 7), 3);
-  assert.equal(parseStepHash('#step-1', 7), 0);
-});
+const ONE = [{ id: '', stepCount: 7 }];
+const TWO = [
+  { id: 'direct', stepCount: 9 },
+  { id: 'retryable', stepCount: 10 },
+];
 
-test('parseStepHash clamps out-of-range step numbers', () => {
-  assert.equal(parseStepHash('#step-0', 7), 0);
-  assert.equal(parseStepHash('#step-99', 7), 6);
+test('#step-4 opens step 4 of an unnamed path', () => {
+  assert.deepEqual(parseStepHash('#step-4', ONE), { path: 0, index: 3 });
 });
-
-test('parseStepHash returns null for non-step hashes', () => {
-  assert.equal(parseStepHash('#step-x', 7), null);
-  assert.equal(parseStepHash('#how-it-works', 7), null);
-  assert.equal(parseStepHash('', 7), null);
-  assert.equal(parseStepHash('#step-', 7), null);
-  assert.equal(parseStepHash('#step-1.5', 7), null);
-  assert.equal(parseStepHash('step-2', 7), null);
+test('#retryable-step-5 opens step 5 of the second path', () => {
+  assert.deepEqual(parseStepHash('#retryable-step-5', TWO), { path: 1, index: 4 });
 });
-
-test('stepHash returns the 1-based hash for a 0-based index', () => {
-  assert.equal(stepHash(0), '#step-1');
-  assert.equal(stepHash(6), '#step-7');
+test('a step number past the end clamps to the last step of that path', () => {
+  assert.deepEqual(parseStepHash('#direct-step-99', TWO), { path: 0, index: 8 });
+  assert.deepEqual(parseStepHash('#step-0', ONE), { path: 0, index: 0 });
+});
+test('#step-3 does not match a flow whose paths are named', () => {
+  assert.equal(parseStepHash('#step-3', TWO), null);
+});
+test('an unknown path id or a heading hash gives null', () => {
+  assert.equal(parseStepHash('#unknown-step-2', TWO), null);
+  assert.equal(parseStepHash('#related-pages', TWO), null);
+});
+test('parseStepHash returns null for malformed hashes', () => {
+  for (const hash of ['#step-x', '', '#step-', '#step-1.5', 'step-2']) {
+    assert.equal(parseStepHash(hash, ONE), null, hash);
+  }
+});
+test('stepHash writes the path id only when it is not empty', () => {
+  assert.equal(stepHash({ path: 0, index: 0 }, ONE), '#step-1');
+  assert.equal(stepHash({ path: 1, index: 4 }, TWO), '#retryable-step-5');
 });
 
 test('clampStep keeps the index inside the step range', () => {

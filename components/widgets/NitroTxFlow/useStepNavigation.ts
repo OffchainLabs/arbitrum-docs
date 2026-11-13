@@ -1,6 +1,12 @@
 import { type RefObject, useEffect, useRef, useState } from 'react';
 
-import { clampStep, parseStepHash, stepHash } from './navigation.ts';
+import {
+  clampStep,
+  parseStepHash,
+  type PathCount,
+  type StepPosition,
+  stepHash,
+} from './navigation.ts';
 
 // Clears the sticky site header, and the table of contents bar under it when Fumadocs shows one,
 // plus 16px. Fumadocs sets `--fd-docs-row-3` to their total height: 56px at 1280px, 96px at 375px.
@@ -19,41 +25,49 @@ export function motionDuration(): number {
 }
 
 /**
- * The current step, synced with the `#step-n` hash. A hash that is not a step hash (a heading
- * link) keeps the current step. `goTo` also scrolls the canvas on screen when it is not fully
- * visible, so the step bar does not cover the active step.
+ * The current path and step, synced with the `#step-n` or `#<path>-step-n` hash. A hash that is
+ * not a step hash (a heading link) keeps the current position. `goTo` also scrolls the canvas on
+ * screen when it is not fully visible, so the step bar does not cover the active step.
  */
-export function useStepNavigation(stepCount: number, canvasRef: RefObject<HTMLElement | null>) {
-  const [index, setIndex] = useState(() => parseStepHash(window.location.hash, stepCount) ?? 0);
+export function useStepNavigation(paths: PathCount[], canvasRef: RefObject<HTMLElement | null>) {
+  const [position, setPosition] = useState<StepPosition>(
+    () => parseStepHash(window.location.hash, paths) ?? { path: 0, index: 0 },
+  );
+  const { path, index } = position;
   // Start cue: shown on first load at step 1 until the reader moves once.
-  const [started, setStarted] = useState(index > 0);
-  const hashStep = useRef(index);
+  const [started, setStarted] = useState(path > 0 || index > 0);
+  const hashed = useRef(position);
 
   useEffect(() => {
     const onHashChange = () => {
-      const next = parseStepHash(window.location.hash, stepCount);
+      const next = parseStepHash(window.location.hash, paths);
       if (next === null) return;
       setStarted(true);
-      setIndex(next);
+      setPosition(next);
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
-  }, [stepCount]);
+  }, [paths]);
 
   // On a step change only, so a heading hash on load stays in the URL. A ref of the last written
-  // step, not a first-run flag, because Strict Mode runs the effect twice on mount.
+  // position, not a first-run flag, because Strict Mode runs the effect twice on mount.
   useEffect(() => {
-    if (hashStep.current === index) return;
-    hashStep.current = index;
-    window.history.replaceState(null, '', stepHash(index));
-  }, [index]);
+    if (hashed.current.path === path && hashed.current.index === index) return;
+    hashed.current = { path, index };
+    window.history.replaceState(null, '', stepHash({ path, index }, paths));
+  }, [path, index, paths]);
+
+  const selectPath = (next: number) => {
+    setStarted(true);
+    setPosition({ path: next, index: 0 });
+  };
 
   // Clamped: at the first or last step, Back or Next does nothing.
   const goTo = (next: number) => {
-    const target = clampStep(next, stepCount);
+    const target = clampStep(next, paths[path]!.stepCount);
     if (target === index) return;
     setStarted(true);
-    setIndex(target);
+    setPosition({ path, index: target });
     const canvas = canvasRef.current;
     if (!canvas) return;
     const box = canvas.getBoundingClientRect();
@@ -62,5 +76,5 @@ export function useStepNavigation(stepCount: number, canvasRef: RefObject<HTMLEl
     }
   };
 
-  return { index, started, goTo };
+  return { path, index, started, goTo, selectPath };
 }
