@@ -50,4 +50,13 @@ export const CHAIN_LABEL: Record<Chain, string> = {
 export const FINALITY_LABEL: Record<Finality, string> = {
   'soft': 'Soft finality',
   'batch-posted': 'Batch posted on parent chain',
+  'soft-confirmation': 'Soft confirmation',
+  'hard': 'Hard finality',
+  'settled': 'Settlement',
+};
+
+export const FINALITY_TERM: Partial<Record<Finality, string>> = {
+  'soft-confirmation': 'soft-confirmation',
+  'hard': 'hard-finality',
+  'settled': 'settlement',
 };

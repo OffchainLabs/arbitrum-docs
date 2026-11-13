@@ -37,7 +37,7 @@ export function DetailOverlay({ flow, onClose }: DetailOverlayProps) {
   const step = flow.steps[index]!;
   // A detail graph is small: keep every part in view and let the highlight show the sub-step.
   const showAll = useStepCamera(instance, layout, step, canvasRef, true);
-  const stepNumbers = useMemo(() => stepNumbersByEdge(flow), [flow]);
+  const stepNumbers = useMemo(() => stepNumbersByEdge(flow.steps), [flow]);
   const nodes = useMemo(() => (layout ? flowNodes(flow, layout, step) : []), [flow, layout, step]);
   const edges = useMemo(
     () => (layout ? flowEdges(flow, layout, step, stepNumbers) : []),

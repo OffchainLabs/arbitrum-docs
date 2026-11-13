@@ -22,7 +22,7 @@ import { SITE_HEADER, useStepNavigation } from './useStepNavigation.ts';
 
 const FLOW = transactionLifecycle;
 const STEP_COUNT = FLOW.steps.length;
-const STEP_NUMBERS = stepNumbersByEdge(FLOW);
+const STEP_NUMBERS = stepNumbersByEdge(FLOW.steps);
 const NARROW_QUERY = '(max-width: 767px)';
 
 export default function NitroTxFlow() {

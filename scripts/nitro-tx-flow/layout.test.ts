@@ -9,6 +9,8 @@ import {
   computeBands,
   computeLayout,
   firstInteractionRank,
+  labelBadgeCounts,
+  stepNumbersByEdge,
 } from '../../components/widgets/NitroTxFlow/layout.ts';
 import {
   type Flow,
@@ -139,4 +141,17 @@ test('a chain whose rows are not adjacent gets two bands', () => {
       ['child', ['c']],
     ],
   );
+});
+
+test('labelBadgeCounts takes the largest count over paths', () => {
+  const twoPaths = {
+    ...flow,
+    paths: [
+      { id: 'a', label: 'A', steps: [flow.steps[0]!.id] },
+      { id: 'b', label: 'B', steps: flow.steps.map((s) => s.id) },
+    ],
+  };
+  const counts = labelBadgeCounts(twoPaths);
+  const all = stepNumbersByEdge(flow.steps);
+  for (const id of Object.keys(all)) assert.equal(counts[id], all[id]!.length);
 });

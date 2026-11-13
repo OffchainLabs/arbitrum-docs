@@ -52,9 +52,13 @@ export function StepCard({ step }: { step: Step }) {
               }
             />
           )}
-          <Detail term="What the operator sees" value={step.failure.symptoms} />
-          <Detail term="Impact on the transaction" value={step.failure.impact} />
-          <Detail term="Recovery" value={step.failure.recovery} />
+          {step.failure && (
+            <>
+              <Detail term="What the operator sees" value={step.failure.symptoms} />
+              <Detail term="Impact on the transaction" value={step.failure.impact} />
+              <Detail term="Recovery" value={step.failure.recovery} />
+            </>
+          )}
         </dl>
       )}
     </div>

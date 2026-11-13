@@ -1,7 +1,7 @@
 import type { ElkNode } from 'elkjs/lib/elk-api';
 import ELK from 'elkjs/lib/elk.bundled.js';
 
-import type { Flow, FlowEdge, Step } from './model.ts';
+import { type Flow, type FlowEdge, type Step, flowPaths } from './model.ts';
 
 export const NODE_WIDTH = 220;
 export const NODE_HEIGHT = 72;
@@ -44,8 +44,8 @@ export interface FlowLayout {
 const elk = new ELK();
 
 // Chip width estimate from the brand skill: 0.52 em/char at 12px, 12px padding, 26px per badge.
-export function labelWidth(edge: FlowEdge, stepNumbers: number[]): number {
-  return Math.ceil(edge.label.length * 0.52 * 12) + 12 + stepNumbers.length * 26;
+export function labelWidth(edge: FlowEdge, badgeCount: number): number {
+  return Math.ceil(edge.label.length * 0.52 * 12) + 12 + badgeCount * 26;
 }
 
 // One row per actor, ordered by the first step that lists it.
@@ -61,12 +61,23 @@ export function firstInteractionRank(flow: Flow): Record<string, number> {
 }
 
 // The 1-based numbers of the steps that use each edge. The label chips show them as badges.
-export function stepNumbersByEdge(flow: Flow): Record<string, number[]> {
+export function stepNumbersByEdge(steps: readonly Step[]): Record<string, number[]> {
   const numbers: Record<string, number[]> = {};
-  flow.steps.forEach((step, index) => {
+  steps.forEach((step, index) => {
     for (const id of step.edges) (numbers[id] ??= []).push(index + 1);
   });
   return numbers;
+}
+
+// Per edge, the largest badge count over the flow's paths, so one chip width fits every path.
+export function labelBadgeCounts(flow: Flow): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const path of flowPaths(flow)) {
+    for (const [id, numbers] of Object.entries(stepNumbersByEdge(path.steps))) {
+      counts[id] = Math.max(counts[id] ?? 0, numbers.length);
+    }
+  }
+  return counts;
 }
 
 // One band per run of adjacent rows on the same chain. A chain whose rows are not adjacent gets
@@ -101,7 +112,7 @@ export function computeBands(flow: Flow, nodes: Record<string, Point>, width: nu
 
 export async function computeLayout(flow: Flow): Promise<FlowLayout> {
   const rank = firstInteractionRank(flow);
-  const stepNumbers = stepNumbersByEdge(flow);
+  const badgeCounts = labelBadgeCounts(flow);
   const input: ElkNode = {
     id: 'root',
     layoutOptions: {
@@ -130,7 +141,7 @@ export async function computeLayout(flow: Flow): Promise<FlowLayout> {
         {
           id: `${edge.id}-label`,
           text: edge.label,
-          width: labelWidth(edge, stepNumbers[edge.id] ?? []),
+          width: labelWidth(edge, badgeCounts[edge.id] ?? 0),
           height: LABEL_HEIGHT,
         },
       ],
