@@ -1,10 +1,10 @@
 import { type RefObject, useEffect, useRef, useState } from 'react';
 
 import {
-  clampStep,
-  parseStepHash,
   type PathCount,
   type StepPosition,
+  clampStep,
+  parseStepHash,
   stepHash,
 } from './navigation.ts';
 
