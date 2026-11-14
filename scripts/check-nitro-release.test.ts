@@ -6,7 +6,9 @@ import path from 'node:path';
 import { type TestContext, test } from 'node:test';
 import { URL, fileURLToPath } from 'node:url';
 
-import { codeRefs, transactionLifecycle } from '../components/widgets/NitroTxFlow/model.ts';
+import { FLOWS } from '../components/widgets/NitroTxFlow/flows.ts';
+import { codeRefs } from '../components/widgets/NitroTxFlow/model.ts';
+import { modelPaths } from './check-nitro-release.ts';
 
 const SCRIPT = fileURLToPath(new URL('./check-nitro-release.ts', import.meta.url));
 const OLD_SHA = '1'.repeat(40);
@@ -22,14 +24,15 @@ const VARS: Record<string, string> = {
   nitroPathToArbos: 'arbos',
   unrelated: 'preserve me',
 };
-// The vars pin (arbos) and the linked file, plus every nitro path the flow model links.
-const EXPECTED_NITRO_PATHS =
-  2 +
-  new Set(
-    codeRefs(transactionLifecycle)
-      .filter((r) => r.repo === 'nitro')
-      .map((r) => r.path),
-  ).size;
+// The vars pin (arbos) and the linked file, deduplicated against every nitro path the flow models link.
+const EXPECTED_NITRO_PATHS = new Set([
+  'arbos',
+  'arbos/block_processor.go',
+  ...Object.values(FLOWS)
+    .flatMap((flow) => codeRefs(flow))
+    .filter((r) => r.repo === 'nitro')
+    .map((r) => r.path),
+]).size;
 const LINKED_PAGE =
   '# Page\n' +
   '[link](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/arbos/block_processor.go)\n';
@@ -432,7 +435,7 @@ test('--to checks the nitro-contracts path at the resolved contracts commit', (t
   );
 });
 
-test('names model.ts and the step id when a model nitro path is missing', (t) => {
+test('names the flow and the step id when a model nitro path is missing', (t) => {
   const result = run(t, { ...BUMP, missing: ['execution/gethexec/sequencer.go'] });
   assert.equal(result.status, 1);
   assert.equal(result.raw, result.original);
@@ -441,7 +444,7 @@ test('names model.ts and the step id when a model nitro path is missing', (t) =>
     result.stderr,
     new RegExp(
       String.raw`execution/gethexec/sequencer\.go ` +
-        String.raw`\(components/widgets/NitroTxFlow/model\.ts, step sequence\)`,
+        String.raw`\(transaction-lifecycle, step sequence\)`,
     ),
   );
 });
@@ -453,7 +456,7 @@ test('fails when a model nitro-contracts path is missing at nitroContractsCommit
   assert.equal(result.outputs, '');
   assert.match(
     result.stderr,
-    /src\/bridge\/SequencerInbox\.sol \(components\/widgets\/NitroTxFlow\/model\.ts, step post\)/,
+    /src\/bridge\/SequencerInbox\.sol \(transaction-lifecycle, step post\)/,
   );
 });
 
@@ -494,4 +497,28 @@ test('an invalid contracts submodule fails naming it', (t) => {
   assert.equal(result.raw, result.original);
   assert.equal(result.outputs, '');
   assert.match(result.stderr, /Invalid contracts submodule at Nitro v3\.11\.3/);
+});
+
+test('modelPaths covers the contracts the submission flow cites', () => {
+  const want = codeRefs(FLOWS['transaction-submission-flow'])
+    .filter((r) => r.repo === 'nitro-contracts')
+    .map((r) => r.path);
+  const got = new Set(modelPaths('nitro-contracts').map((p) => p.path));
+  assert.ok(want.length > 0);
+  for (const p of want) assert.ok(got.has(p), p);
+});
+
+test('modelPaths names the step for a ref cited only inside a detail flow', () => {
+  for (const flow of Object.values(FLOWS)) {
+    for (const step of flow.steps) {
+      if (!step.detail) continue;
+      const own = new Set([step.code, ...step.citations].map((r) => r && `${r.repo}:${r.path}`));
+      for (const ref of codeRefs(step.detail.flow)) {
+        if (own.has(`${ref.repo}:${ref.path}`)) continue;
+        const entry = modelPaths(ref.repo).find((p) => p.path === ref.path);
+        assert.ok(entry, ref.path);
+        assert.ok(!entry.label.includes('step undefined'), entry.label);
+      }
+    }
+  }
 });

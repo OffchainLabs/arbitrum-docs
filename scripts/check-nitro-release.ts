@@ -12,7 +12,7 @@
  * `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/` against the GitHub
  * contents API at the pinned tag (see scripts/lib/nitro-upstream-paths.ts; `check-links` skips
  * external URLs). It also verifies the code paths the Nitro flow widget links
- * (components/widgets/NitroTxFlow/model.ts): `nitro` paths at the tag, `nitro-contracts` paths at
+ * (every flow in components/widgets/NitroTxFlow/flows.ts): `nitro` paths at the tag, `nitro-contracts` paths at
  * the resolved contracts commit. When a newer release exists it says so and sets the
  * `newer_release` step output, which the weekly workflow turns into an issue. It never writes:
  * which release the docs describe, and every pin under it, is a human decision, taken after
@@ -33,8 +33,10 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { codeRefs, transactionLifecycle } from '../components/widgets/NitroTxFlow/model.ts';
+import { FLOWS } from '../components/widgets/NitroTxFlow/flows.ts';
+import { type CodeRef, type Step, codeRefs } from '../components/widgets/NitroTxFlow/model.ts';
 import { runScript, setOutput, writeOrCheck } from './lib/generated-partial.ts';
 import { syncImageInContent } from './lib/nitro-node-image.ts';
 import {
@@ -47,7 +49,6 @@ import { toPosix, walk } from './lib/partials.ts';
 const VARS_PATH = path.join('content', 'vars.json');
 const NITRO_REPO = 'OffchainLabs/nitro';
 const CONTRACTS_REPO = 'OffchainLabs/nitro-contracts';
-const MODEL_PATH = 'components/widgets/NitroTxFlow/model.ts';
 
 /** Narrows a parsed JSON value (vars.json, an API response) to an object whose fields can be read. */
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -173,16 +174,32 @@ async function upstreamPathExists(repo: string, repoPath: string, ref: string): 
   throw new Error(`GitHub API ${endpoint} failed with status ${response.status}`);
 }
 
-/** The Nitro flow widget's code refs for `repo`, each labelled with its first citing step. */
-function modelPaths(repo: 'nitro' | 'nitro-contracts'): Array<{ path: string; label: string }> {
-  return codeRefs(transactionLifecycle)
-    .filter((ref) => ref.repo === repo)
-    .map((ref) => {
-      const step = transactionLifecycle.steps.find((s) =>
-        [s.code, ...s.citations].some((r) => r?.repo === ref.repo && r.path === ref.path),
+/** Every code ref a step cites, including those inside its detail flow. */
+function stepRefs(step: Step): CodeRef[] {
+  const own = [...(step.code ? [step.code] : []), ...step.citations];
+  return step.detail ? [...own, ...step.detail.flow.steps.flatMap(stepRefs)] : own;
+}
+
+/**
+ * The code refs of every flow in the Nitro flow widget for `repo`, each labelled with the flow and
+ * the first top-level step that cites it, directly or in its detail flow.
+ */
+export function modelPaths(
+  repo: 'nitro' | 'nitro-contracts',
+): Array<{ path: string; label: string }> {
+  const seen = new Set<string>();
+  const result: Array<{ path: string; label: string }> = [];
+  for (const flow of Object.values(FLOWS)) {
+    for (const ref of codeRefs(flow)) {
+      if (ref.repo !== repo || seen.has(ref.path)) continue;
+      seen.add(ref.path);
+      const step = flow.steps.find((s) =>
+        stepRefs(s).some((r) => r.repo === ref.repo && r.path === ref.path),
       );
-      return { path: ref.path, label: `${ref.path} (${MODEL_PATH}, step ${step?.id})` };
-    });
+      result.push({ path: ref.path, label: `${ref.path} (${flow.id}, step ${step?.id})` });
+    }
+  }
+  return result;
 }
 
 /**
@@ -409,4 +426,4 @@ async function main(): Promise<void> {
   }
 }
 
-runScript(main);
+if (process.argv[1] === fileURLToPath(import.meta.url)) runScript(main);
