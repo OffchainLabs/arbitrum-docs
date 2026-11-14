@@ -9,7 +9,7 @@ import type { BandNodeType } from './BandNode.tsx';
 import { DetailOverlay } from './DetailOverlay.tsx';
 import { FlowCanvas } from './FlowCanvas.tsx';
 import { Legend } from './Legend.tsx';
-import { PathTabs } from './PathTabs.tsx';
+import { PathTabs, panelId, tabId } from './PathTabs.tsx';
 import type { RoutedEdgeType } from './RoutedEdge.tsx';
 import { StepBar } from './StepBar.tsx';
 import { StepCard } from './StepCard.tsx';
@@ -110,6 +110,62 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
     if (event.key === 'ArrowLeft') goTo(index - 1);
   };
 
+  const canvas = (
+    <div
+      ref={canvasRef}
+      role="group"
+      aria-roledescription="diagram"
+      aria-label={`${flow.title}. ${stepLabel}`}
+      className="relative flex h-[520px] w-full flex-col md:h-[720px]"
+      style={{ background: BRAND.gradient, scrollMarginTop: SITE_HEADER }}
+    >
+      <Legend flow={flow} narrow={narrow} />
+      {failed && (
+        <p className="m-auto px-4 text-center" style={{ color: BRAND.chipText }}>
+          The diagram could not be drawn.
+        </p>
+      )}
+      {layout && (
+        <BandLabels
+          layout={layout}
+          step={step}
+          viewport={viewport}
+          canvasRef={canvasRef}
+          barRef={barRef}
+        />
+      )}
+      {layout && (
+        <FlowCanvas
+          nodes={nodes}
+          edges={edges}
+          onInit={(reactFlow) => {
+            setInstance(reactFlow);
+            setViewport(reactFlow.getViewport());
+          }}
+          onMove={setViewport}
+        />
+      )}
+      <StepBar
+        index={index}
+        count={stepCount}
+        started={started}
+        barRef={barRef}
+        onGo={goTo}
+        onShowAll={showAll}
+      />
+    </div>
+  );
+
+  const body = (
+    <>
+      {canvas}
+      <div className="sr-only" aria-live="polite">
+        {stepLabel}
+      </div>
+      <StepCard step={step} labels={labels} />
+    </>
+  );
+
   return (
     // overflow-clip, not overflow-hidden: hidden creates a scroll container and breaks the bar.
     // Focusable root, so ArrowLeft and ArrowRight step only while focus is inside the widget.
@@ -121,59 +177,24 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
       className="not-prose my-6 overflow-clip rounded-lg border border-fd-border"
     >
       <PathTabs
+        flowId={flow.id}
         paths={paths.map((view) => view.path)}
         selected={path}
         onSelect={(next) => {
           if (next !== path) selectPath(next);
         }}
       />
-      <div
-        ref={canvasRef}
-        role="group"
-        aria-roledescription="diagram"
-        aria-label={`${flow.title}. ${stepLabel}`}
-        className="relative flex h-[520px] w-full flex-col md:h-[720px]"
-        style={{ background: BRAND.gradient, scrollMarginTop: SITE_HEADER }}
-      >
-        <Legend flow={flow} narrow={narrow} />
-        {failed && (
-          <p className="m-auto px-4 text-center" style={{ color: BRAND.chipText }}>
-            The diagram could not be drawn.
-          </p>
-        )}
-        {layout && (
-          <BandLabels
-            layout={layout}
-            step={step}
-            viewport={viewport}
-            canvasRef={canvasRef}
-            barRef={barRef}
-          />
-        )}
-        {layout && (
-          <FlowCanvas
-            nodes={nodes}
-            edges={edges}
-            onInit={(reactFlow) => {
-              setInstance(reactFlow);
-              setViewport(reactFlow.getViewport());
-            }}
-            onMove={setViewport}
-          />
-        )}
-        <StepBar
-          index={index}
-          count={stepCount}
-          started={started}
-          barRef={barRef}
-          onGo={goTo}
-          onShowAll={showAll}
-        />
-      </div>
-      <div className="sr-only" aria-live="polite">
-        {stepLabel}
-      </div>
-      <StepCard step={step} labels={labels} />
+      {paths.length > 1 ? (
+        <div
+          role="tabpanel"
+          id={panelId(flow.id)}
+          aria-labelledby={tabId(flow.id, paths[path]!.path.id)}
+        >
+          {body}
+        </div>
+      ) : (
+        body
+      )}
       {detailOpen && step.detail && (
         <DetailOverlay
           flow={step.detail.flow}

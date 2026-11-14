@@ -35,7 +35,8 @@ const EXPECTED_NITRO_PATHS = new Set([
 ]).size;
 const LINKED_PAGE =
   '# Page\n' +
-  '[link](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}/arbos/block_processor.go)\n';
+  '[link](https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/' +
+  '{var:nitroVersionTag}/arbos/block_processor.go)\n';
 
 /** What a test can vary about the CLI arguments and the mocked GitHub and Docker Hub responses. */
 interface RunOptions {

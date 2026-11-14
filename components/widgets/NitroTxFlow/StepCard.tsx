@@ -13,7 +13,7 @@ const BADGE_CLASS = [
   'text-fd-primary',
 ].join(' ');
 
-/** The card below the canvas: finality, title, text, docs link, and the details with flow labels. */
+/** The card below the canvas: finality, title, text, docs link, and the details with labels. */
 export function StepCard({ step, labels }: { step: Step; labels: CardLabels }) {
   const [showDetails, setShowDetails] = useState(false);
   const showFlag = labels.showFlag && step.flag !== undefined;

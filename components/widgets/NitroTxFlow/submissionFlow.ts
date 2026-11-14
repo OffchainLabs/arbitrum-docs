@@ -234,7 +234,12 @@ export const transactionSubmission: Flow = {
     { id: 'create', source: 'dapp', target: 'inbox', label: 'createRetryableTicket' },
     { id: 'enqueue', source: 'inbox', target: 'bridge', label: 'Delayed message' },
     { id: 'delayed', source: 'bridge', target: 'seq', label: 'Delayed message' },
-    { id: 'ticket', source: 'seq', target: 'retryable', label: 'TicketCreated' },
+    {
+      id: 'ticket',
+      source: 'seq',
+      target: 'retryable',
+      label: 'Delayed message (ArbOS creates ticket)',
+    },
   ],
   steps: [
     {
@@ -448,7 +453,10 @@ export const transactionSubmission: Flow = {
       edges: [],
       code: { repo: 'nitro-contracts', path: 'src/rollup/RollupUserLogic.sol' },
       finality: 'settled',
-      docs: docs.assertions,
+      docs: {
+        href: '/how-arbitrum-works/reference/finality-and-reorgs#the-reorg-model',
+        label: 'The reorg model',
+      },
       citations: [
         { repo: 'nitro-contracts', path: 'src/rollup/RollupUserLogic.sol', line: 75 },
         { repo: 'nitro-contracts', path: 'src/rollup/RollupUserLogic.sol', line: 82 },
@@ -537,8 +545,8 @@ export const transactionSubmission: Flow = {
         'The ArbRetryableTx precompile emits TicketCreated with the ticket ID. ' +
         "The ticket's sender on the child chain is an alias, the parent chain address plus " +
         '0x1111000000000000000000000000000000001111. ' +
-        "If a contract sent the message, call AddressAliasHelper.undoL1ToL2Alias to get the contract's " +
-        'address back. ' +
+        'If a contract sent the message, call AddressAliasHelper.undoL1ToL2Alias to get the ' +
+        "contract's address back. " +
         'Inbox also aliases a refund address that is a contract.',
       actors: ['seq', 'retryable'],
       edges: ['ticket'],
@@ -563,8 +571,8 @@ export const transactionSubmission: Flow = {
       title: 'Auto-redeem',
       text:
         "ArbOS checks the sender's child chain balance, which includes the ETH you deposited. " +
-        'If it covers gasLimit × maxFeePerGas and maxFeePerGas is at least the base fee, ArbOS ' +
-        'schedules a redeem. ' +
+        'If it covers gasLimit × maxFeePerGas, maxFeePerGas is at least the base fee, and ' +
+        'gasLimit is at least 21,000, ArbOS schedules a redeem. ' +
         'The redeem runs in the same block, right after the ticket. ' +
         'ArbOS refunds the unused fees to excessFeeRefundAddress.',
       actors: ['retryable'],
