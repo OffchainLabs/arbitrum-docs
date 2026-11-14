@@ -92,7 +92,14 @@ test('every var token names a vars.json key, and only step text holds them', () 
     for (const field of other)
       assert.doesNotMatch(field ?? '', token, `${step.id}: var outside text`);
   }
-  for (const name of ['arbOneDisputeWindowDays', 'arbOnePgaRoundsPerBlock', 'arbOnePgaRoundMs']) {
+  const required = [
+    'arbOneDisputeWindowDays',
+    'arbOnePgaRoundsPerBlock',
+    'arbOnePgaRoundMs',
+    'arbOneBlockGasLimit',
+    'arbOneBlockCalldataLimitBytes',
+  ];
+  for (const name of required) {
     assert.ok(used.has(name), `no step uses ${name}`);
   }
 });

@@ -29,6 +29,7 @@
   "arbOneBlockGasLimit": "32,000,000",
   "arbOnePgaRoundsPerBlock": 2,
   "arbOnePgaRoundMs": 125,
+  "arbOneBlockCalldataLimitBytes": "95,000",
   "novaDisputeWindowBlocks": 45818,
   "novaDisputeWindowDays": "6.4",
   "novaForceIncludePeriodBlocks": 7200,

@@ -101,8 +101,8 @@ export const pgaRound: Flow = {
       title: 'Fill the block',
       text:
         'The Sequencer takes transactions from the queue into the block, highest priority first. ' +
-        'It stops when the queue is empty, the round ends, or the block reaches 32 million gas ' +
-        'or 95,000 bytes of calldata. ' +
+        'It stops when the queue is empty, the round ends, or the block reaches ' +
+        '{var:arbOneBlockGasLimit} gas or {var:arbOneBlockCalldataLimitBytes} bytes of calldata. ' +
         'Anything left in the queue waits for the next round.',
       actors: ['queue', 'block'],
       edges: ['fill'],
@@ -269,10 +269,6 @@ export const transactionSubmission: Flow = {
         { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 614 },
         { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 617 },
         { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 782 },
-        { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 1072 },
-        { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 1018 },
-        { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 1168 },
-        { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 625 },
       ],
       txChain: 'child',
     },
