@@ -6,18 +6,22 @@
  *   pnpm nitro:check-release --to v3.11.5 # bump to that published release
  *
  * Default mode is read-only. It prints the pinned and the latest published release, reports when
- * `goEthereumCommit` (the go-ethereum submodule commit at the pinned `nitroVersionTag`) is stale
- * or missing and sets the `stale_pins` step output, and verifies every `nitroPathTo*` pin and
- * every content link under `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/`
- * against the GitHub contents API at the pinned tag (see scripts/lib/nitro-upstream-paths.ts;
- * `check-links` skips external URLs). When a newer release exists it says so and sets the
+ * `goEthereumCommit` or `nitroContractsCommit` (the go-ethereum and contracts submodule commits at
+ * the pinned `nitroVersionTag`) is stale or missing and sets the `stale_pins` step output, and
+ * verifies every `nitroPathTo*` pin and every content link under
+ * `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/` against the GitHub
+ * contents API at the pinned tag (see scripts/lib/nitro-upstream-paths.ts; `check-links` skips
+ * external URLs). It also verifies the code paths the Nitro flow widget links
+ * (components/widgets/NitroTxFlow/model.ts): `nitro` paths at the tag, `nitro-contracts` paths at
+ * the resolved contracts commit. When a newer release exists it says so and sets the
  * `newer_release` step output, which the weekly workflow turns into an issue. It never writes:
  * which release the docs describe, and every pin under it, is a human decision, taken after
  * reading the release notes and updating the support policy page.
  *
  * `--to <tag>` is that decision and the only writer. It confirms the release is published, then
  * at that tag resolves the submodule commit, verifies the same pins and links, reads the node
- * image from Docker Hub, writes `nitroVersionTag`, `latestNitroNodeImage` and `goEthereumCommit`,
+ * image from Docker Hub, writes `nitroVersionTag`, `latestNitroNodeImage`, `goEthereumCommit` and
+ * `nitroContractsCommit`,
  * and rewrites the outgoing image tag in files that opt in with a
  * `sync-with-var: latestNitroNodeImage` marker (see scripts/lib/nitro-node-image.ts). `--to` at
  * the pinned tag repairs a stale submodule pin and skips the Docker Hub lookup. Every pin is
@@ -30,6 +34,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { codeRefs, transactionLifecycle } from '../components/widgets/NitroTxFlow/model.ts';
 import { runScript, setOutput, writeOrCheck } from './lib/generated-partial.ts';
 import { syncImageInContent } from './lib/nitro-node-image.ts';
 import {
@@ -41,6 +46,8 @@ import { toPosix, walk } from './lib/partials.ts';
 
 const VARS_PATH = path.join('content', 'vars.json');
 const NITRO_REPO = 'OffchainLabs/nitro';
+const CONTRACTS_REPO = 'OffchainLabs/nitro-contracts';
+const MODEL_PATH = 'components/widgets/NitroTxFlow/model.ts';
 
 /** Narrows a parsed JSON value (vars.json, an API response) to an object whose fields can be read. */
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -62,8 +69,12 @@ function githubHeaders(): Record<string, string> {
 }
 
 /** A GitHub API response body. `notFound` replaces the generic message when the status is 404. */
-async function githubJson(endpoint: string, notFound?: string): Promise<Record<string, unknown>> {
-  const response = await fetch(`https://api.github.com/repos/${NITRO_REPO}/${endpoint}`, {
+async function githubJson(
+  endpoint: string,
+  notFound?: string,
+  repo = NITRO_REPO,
+): Promise<Record<string, unknown>> {
+  const response = await fetch(`https://api.github.com/repos/${repo}/${endpoint}`, {
     headers: githubHeaders(),
   });
   if (response.status === 404 && notFound !== undefined) throw new Error(notFound);
@@ -151,10 +162,10 @@ async function resolvePublishedNodeImage(tag: string): Promise<string> {
   return `offchainlabs/nitro-node:${matches[0].name}`;
 }
 
-/** Whether Nitro has `repoPath` at `ref`. Only a 404 is absence; a rate-limit 403 must throw. */
-async function upstreamPathExists(repoPath: string, ref: string): Promise<boolean> {
+/** Whether `repo` has `repoPath` at `ref`. Only a 404 is absence; a rate-limit 403 must throw. */
+async function upstreamPathExists(repo: string, repoPath: string, ref: string): Promise<boolean> {
   const endpoint = `contents/${repoPath}?ref=${encodeURIComponent(ref)}`;
-  const response = await fetch(`https://api.github.com/repos/${NITRO_REPO}/${endpoint}`, {
+  const response = await fetch(`https://api.github.com/repos/${repo}/${endpoint}`, {
     headers: githubHeaders(),
   });
   if (response.ok) return true;
@@ -162,14 +173,28 @@ async function upstreamPathExists(repoPath: string, ref: string): Promise<boolea
   throw new Error(`GitHub API ${endpoint} failed with status ${response.status}`);
 }
 
+/** The Nitro flow widget's code refs for `repo`, each labelled with its first citing step. */
+function modelPaths(repo: 'nitro' | 'nitro-contracts'): Array<{ path: string; label: string }> {
+  return codeRefs(transactionLifecycle)
+    .filter((ref) => ref.repo === repo)
+    .map((ref) => {
+      const step = transactionLifecycle.steps.find((s) =>
+        [s.code, ...s.citations].some((r) => r?.repo === ref.repo && r.path === ref.path),
+      );
+      return { path: ref.path, label: `${ref.path} (${MODEL_PATH}, step ${step?.id})` };
+    });
+}
+
 /**
- * Fail before anything is written when a `nitroPathTo*` pin or a content link into Nitro does not
- * resolve at `targetTag`. Links are read at the target tag, not the pinned one, so a bump checks
- * where the docs are about to point.
+ * Fail before anything is written when a `nitroPathTo*` pin, a content link into Nitro or a path
+ * the Nitro flow widget links does not resolve at `targetTag` (Nitro) or `contractsCommit`
+ * (nitro-contracts). Links are read at the target tag, not the pinned one, so a bump checks where
+ * the docs are about to point.
  */
 async function verifyUpstreamPaths(
   vars: Record<string, unknown>,
   targetTag: string,
+  contractsCommit: string,
 ): Promise<void> {
   const pins = nitroPathPins(vars).map(({ key, path: pinned }) => ({
     path: pinned,
@@ -183,38 +208,67 @@ async function verifyUpstreamPaths(
     ({ path: linked, rel, line }) => ({ path: linked, label: `${linked} (${rel}:${line})` }),
   );
 
-  const paths = [...pins, ...links];
-  const missing = await findMissingUpstreamPaths(paths, (p) => upstreamPathExists(p, targetTag));
-  if (missing.length > 0) {
-    throw new Error(
-      [
-        `Nitro ${targetTag} no longer has ${missing.length} path(s) the docs pin or link:`,
-        ...missing.map((label) => `  - ${label}`),
-      ].join('\n'),
-    );
-  }
+  const paths = [...pins, ...links, ...modelPaths('nitro')];
+  const missing = await findMissingUpstreamPaths(paths, (p) =>
+    upstreamPathExists(NITRO_REPO, p, targetTag),
+  );
+  const contractsPaths = modelPaths('nitro-contracts');
+  const contractsMissing = await findMissingUpstreamPaths(contractsPaths, (p) =>
+    upstreamPathExists(CONTRACTS_REPO, p, contractsCommit),
+  );
+  const failures = [
+    ...(missing.length > 0
+      ? [`Nitro ${targetTag} no longer has ${missing.length} path(s) the docs pin or link:`]
+      : []),
+    ...missing.map((label) => `  - ${label}`),
+    ...(contractsMissing.length > 0
+      ? [
+          `nitro-contracts ${contractsCommit} no longer has ${contractsMissing.length} path(s) ` +
+            `the docs link:`,
+        ]
+      : []),
+    ...contractsMissing.map((label) => `  - ${label}`),
+  ];
+  if (failures.length > 0) throw new Error(failures.join('\n'));
   console.log(`verified ${new Set(paths.map((p) => p.path)).size} upstream paths at ${targetTag}`);
+  console.log(
+    `verified ${new Set(contractsPaths.map((p) => p.path)).size} nitro-contracts paths at ` +
+      contractsCommit,
+  );
 }
 
-/** The go-ethereum submodule commit Nitro pins at `tag`. */
-async function submoduleCommitAt(tag: string): Promise<string> {
-  const submodule = await githubJson(`contents/go-ethereum?ref=${encodeURIComponent(tag)}`);
+/** The commit of the Nitro submodule `name` (cloned from `gitUrl`) at `tag`. */
+async function submoduleCommitAt(tag: string, name: string, gitUrl: string): Promise<string> {
+  const submodule = await githubJson(`contents/${name}?ref=${encodeURIComponent(tag)}`);
   const sha = stringField(submodule, 'sha');
   if (
     submodule.type !== 'submodule' ||
-    submodule.submodule_git_url !== 'https://github.com/OffchainLabs/go-ethereum.git' ||
+    submodule.submodule_git_url !== gitUrl ||
     sha === undefined ||
     !/^[0-9a-f]{40}$/.test(sha)
   ) {
-    throw new Error(`Invalid go-ethereum submodule at Nitro ${tag}`);
+    throw new Error(`Invalid ${name} submodule at Nitro ${tag}`);
   }
   return sha;
 }
 
+/** The submodule commits Nitro pins at one tag, as stored in vars.json. */
+interface SubmoduleCommits {
+  goEthereumCommit: string;
+  nitroContractsCommit: string;
+}
+
+/** The names of the pins in `commits` that differ from `vars`. */
+const stalePins = (vars: Record<string, unknown>, commits: SubmoduleCommits): string[] =>
+  Object.entries(commits)
+    .filter(([key, sha]) => vars[key] !== sha)
+    .map(([key]) => key);
+
 /**
  * Resolve the submodule commit at the target tag and verify every pin and link there. Default
- * mode then only reports: `updates_made=false`, plus `stale_pins=true` when `goEthereumCommit`
- * differs from the submodule commit at the pinned tag. `--to <tag>` is the only writer.
+ * mode then only reports: `updates_made=false`, plus `stale_pins=true` when `goEthereumCommit` or
+ * `nitroContractsCommit` differs from the submodule commit at the pinned tag. `--to <tag>` is the
+ * only writer.
  */
 async function syncPins(
   vars: Record<string, unknown>,
@@ -222,23 +276,41 @@ async function syncPins(
   target: string | undefined,
 ): Promise<void> {
   const tag = target ?? pinnedTag;
-  const submoduleSha = await submoduleCommitAt(tag);
-  await verifyUpstreamPaths(vars, tag);
+  const commits = {
+    goEthereumCommit: await submoduleCommitAt(
+      tag,
+      'go-ethereum',
+      'https://github.com/OffchainLabs/go-ethereum.git',
+    ),
+    nitroContractsCommit: await submoduleCommitAt(
+      tag,
+      'contracts',
+      'https://github.com/OffchainLabs/nitro-contracts.git',
+    ),
+  };
+  // Links point at the pinned contracts commit in default mode, at the resolved one on a bump.
+  const linkedContractsCommit =
+    target === undefined
+      ? (stringField(vars, 'nitroContractsCommit') ?? commits.nitroContractsCommit)
+      : commits.nitroContractsCommit;
+  await verifyUpstreamPaths(vars, tag, linkedContractsCommit);
 
   if (target === undefined) {
     setOutput('updates_made', 'false');
-    if (vars.goEthereumCommit === submoduleSha) {
-      console.log('nitro and go-ethereum pins are up to date.');
+    const stale = stalePins(vars, commits);
+    if (stale.length === 0) {
+      console.log('nitro, go-ethereum and nitro-contracts pins are up to date.');
       return;
     }
     console.log(
-      `goEthereumCommit is stale for ${pinnedTag}: run pnpm nitro:check-release --to ${pinnedTag}`,
+      `${stale.join(' and ')} ${stale.length > 1 ? 'are' : 'is'} stale for ${pinnedTag}: ` +
+        `run pnpm nitro:check-release --to ${pinnedTag}`,
     );
     setOutput('stale_pins', 'true');
     return;
   }
 
-  const changed = await writePins(vars, pinnedTag, target, submoduleSha);
+  const changed = await writePins(vars, pinnedTag, target, commits);
   setOutput('updates_made', String(changed));
   if (changed) setOutput('updated_version', target);
 }
@@ -251,7 +323,7 @@ async function writePins(
   vars: Record<string, unknown>,
   pinnedTag: string,
   tag: string,
-  submoduleSha: string,
+  commits: SubmoduleCommits,
 ): Promise<boolean> {
   // Every key is spread back into the rewritten file below, so only the ones read here are narrowed.
   const pinnedImage = stringField(vars, 'latestNitroNodeImage');
@@ -260,8 +332,8 @@ async function writePins(
   }
   const bump = tag !== pinnedTag;
 
-  if (!bump && vars.goEthereumCommit === submoduleSha) {
-    console.log('nitro and go-ethereum pins are up to date.');
+  if (!bump && stalePins(vars, commits).length === 0) {
+    console.log('nitro, go-ethereum and nitro-contracts pins are up to date.');
     return false;
   }
 
@@ -269,13 +341,14 @@ async function writePins(
     ...vars,
     nitroVersionTag: tag,
     latestNitroNodeImage: bump ? await resolvePublishedNodeImage(tag) : pinnedImage,
-    goEthereumCommit: submoduleSha,
+    ...commits,
   };
   await writeOrCheck(VARS_PATH, JSON.stringify(updated, null, 2), { check: false });
 
   console.log(`updated nitroVersionTag      → ${updated.nitroVersionTag}`);
   console.log(`updated latestNitroNodeImage → ${updated.latestNitroNodeImage}`);
   console.log(`updated goEthereumCommit    → ${updated.goEthereumCommit}`);
+  console.log(`updated nitroContractsCommit → ${updated.nitroContractsCommit}`);
 
   const synced = syncImageInContent(process.cwd(), pinnedImage, updated.latestNitroNodeImage);
   const total = synced.reduce((n, f) => n + f.count, 0);
