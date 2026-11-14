@@ -27,6 +27,8 @@
   "arbOneBaesStakeEth": 3600,
   "arbOneGasFloorGwei": "0.02",
   "arbOneBlockGasLimit": "32,000,000",
+  "arbOnePgaRoundsPerBlock": 2,
+  "arbOnePgaRoundMs": 125,
   "novaDisputeWindowBlocks": 45818,
   "novaDisputeWindowDays": "6.4",
   "novaForceIncludePeriodBlocks": 7200,

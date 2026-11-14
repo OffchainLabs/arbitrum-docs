@@ -7,39 +7,14 @@ import {
   transactionLifecycle as flow,
   flowPaths,
 } from '../../components/widgets/NitroTxFlow/model.ts';
+import { checkFlowShape } from './flow-shape.ts';
 
-test('actor and edge ids are unique', () => {
-  const actorIds = flow.actors.map((a) => a.id);
-  const edgeIds = flow.edges.map((e) => e.id);
-  assert.equal(new Set(actorIds).size, actorIds.length);
-  assert.equal(new Set(edgeIds).size, edgeIds.length);
-});
-
-test('every edge source and target is an actor', () => {
-  const actorIds = new Set(flow.actors.map((a) => a.id));
-  for (const edge of flow.edges) {
-    assert.ok(actorIds.has(edge.source), `${edge.id} source ${edge.source}`);
-    assert.ok(actorIds.has(edge.target), `${edge.id} target ${edge.target}`);
-  }
-});
-
-test("every step's actors and edges exist", () => {
-  const actorIds = new Set(flow.actors.map((a) => a.id));
-  const edgeIds = new Set(flow.edges.map((e) => e.id));
-  for (const step of flow.steps) {
-    for (const id of step.actors) assert.ok(actorIds.has(id), `${step.id} actor ${id}`);
-    for (const id of step.edges) assert.ok(edgeIds.has(id), `${step.id} edge ${id}`);
-  }
+test('the flow has a valid shape', () => {
+  checkFlowShape(flow);
 });
 
 test('step count is between 6 and 8', () => {
   assert.ok(flow.steps.length >= 6 && flow.steps.length <= 8, `got ${flow.steps.length}`);
-});
-
-test('step ids are unique kebab-case', () => {
-  const ids = flow.steps.map((s) => s.id);
-  assert.equal(new Set(ids).size, ids.length);
-  for (const id of ids) assert.match(id, /^[a-z0-9]+(-[a-z0-9]+)*$/);
 });
 
 test('every step has non-empty text and all three failure parts', () => {

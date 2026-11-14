@@ -143,15 +143,19 @@ test('a chain whose rows are not adjacent gets two bands', () => {
   );
 });
 
-test('labelBadgeCounts takes the largest count over paths', () => {
+test('labelBadgeCounts takes the largest count over paths, not the last path', () => {
+  // The first path uses step 1 twice, so its edges count 2 there and 1 in the later path.
+  const first = flow.steps[0]!;
+  const longest = [...flow.steps, first];
   const twoPaths = {
     ...flow,
     paths: [
-      { id: 'a', label: 'A', steps: [flow.steps[0]!.id] },
-      { id: 'b', label: 'B', steps: flow.steps.map((s) => s.id) },
+      { id: 'b', label: 'B', steps: longest.map((s) => s.id) },
+      { id: 'a', label: 'A', steps: [first.id] },
     ],
   };
   const counts = labelBadgeCounts(twoPaths);
-  const all = stepNumbersByEdge(flow.steps);
-  for (const id of Object.keys(all)) assert.equal(counts[id], all[id]!.length);
+  const want = stepNumbersByEdge(longest);
+  for (const id of first.edges) assert.equal(want[id]!.length, 2, id);
+  for (const id of Object.keys(want)) assert.equal(counts[id], want[id]!.length, id);
 });
