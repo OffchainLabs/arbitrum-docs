@@ -5,11 +5,15 @@ import { BRAND } from './brand.ts';
 import type { FlowLayout } from './layout.ts';
 import type { Flow, Step } from './model.ts';
 
-/** React Flow nodes: one band per chain run behind the actors, then the actors. */
+/**
+ * React Flow nodes: one band per chain run behind the actors, then the actors. An actor that no
+ * step of the selected path lists is muted.
+ */
 export function flowNodes(
   flow: Flow,
   layout: FlowLayout,
   step: Step,
+  pathActors: Set<string>,
   trigger?: NodeTrigger,
 ): (ActorNodeType | BandNodeType)[] {
   const bandList = flow.showChains === false ? [] : layout.bands;
@@ -34,6 +38,7 @@ export function flowNodes(
     data: {
       actor,
       active: step.actors.includes(actor.id),
+      muted: !pathActors.has(actor.id),
       showChain: flow.showChains !== false,
       trigger: step.detail?.actor === actor.id ? trigger : undefined,
     },
@@ -43,12 +48,16 @@ export function flowNodes(
   return [...bands, ...actors];
 }
 
-/** React Flow edges, routed by the layout, with the step numbers that size their label boxes. */
+/**
+ * React Flow edges, routed by the layout, with the step numbers that size their label boxes. An
+ * edge that no step of the selected path uses is muted.
+ */
 export function flowEdges(
   flow: Flow,
   layout: FlowLayout,
   step: Step,
   stepNumbers: Record<string, number[]>,
+  pathEdges: Set<string>,
 ): RoutedEdgeType[] {
   return flow.edges.map((edge) => {
     const active = step.edges.includes(edge.id);
@@ -61,6 +70,7 @@ export function flowEdges(
         label: edge.label,
         stepNumbers: stepNumbers[edge.id] ?? [],
         active,
+        muted: !pathEdges.has(edge.id),
         route: layout.edges[edge.id]!,
       },
       markerEnd: {

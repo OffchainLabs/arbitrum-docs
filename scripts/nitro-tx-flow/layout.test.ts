@@ -16,6 +16,7 @@ import {
   type Flow,
   transactionLifecycle as flow,
 } from '../../components/widgets/NitroTxFlow/model.ts';
+import { transactionSubmission } from '../../components/widgets/NitroTxFlow/submissionFlow.ts';
 
 let layout: FlowLayout;
 
@@ -158,4 +159,22 @@ test('labelBadgeCounts takes the largest count over paths, not the last path', (
   const want = stepNumbersByEdge(longest);
   for (const id of first.edges) assert.equal(want[id]!.length, 2, id);
   for (const id of Object.keys(want)) assert.equal(counts[id], want[id]!.length, id);
+});
+
+test('firstInteractionRank groups the submission flow by chain: off-chain, child, parent', () => {
+  const rank = firstInteractionRank(transactionSubmission);
+  const chainOf = new Map(transactionSubmission.actors.map((actor) => [actor.id, actor.chain]));
+  const chains = Object.keys(rank)
+    .sort((a, b) => rank[a]! - rank[b]!)
+    .map((id) => chainOf.get(id));
+  const runs = chains.filter((chain, i) => chain !== chains[i - 1]);
+  assert.deepEqual(runs, ['off-chain', 'child', 'parent']);
+});
+
+test('the submission flow layout has exactly one band per chain', async () => {
+  const submission = await computeLayout(transactionSubmission);
+  assert.deepEqual(
+    submission.bands.map((band) => band.chain),
+    ['child', 'parent'],
+  );
 });

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 
-import { BRAND, KIND_STYLE } from './brand.ts';
+import { BRAND, KIND_STYLE, contractKey } from './brand.ts';
+import type { Flow } from './model.ts';
 
 const CHIP_STYLE = { background: BRAND.chip, color: BRAND.chipText, fontFamily: BRAND.font };
 
 /** The color key. Below 768px it folds into a "Key" button at the top left of the canvas. */
-export function Legend({ narrow }: { narrow: boolean }) {
+export function Legend({ flow, narrow }: { flow: Flow; narrow: boolean }) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -33,13 +34,13 @@ export function Legend({ narrow }: { narrow: boolean }) {
           ].join(' ')}
           style={CHIP_STYLE}
         >
-          {Object.values(KIND_STYLE).map((kind) => (
-            <span key={kind.key} className="flex items-center gap-2">
+          {Object.entries(KIND_STYLE).map(([id, kind]) => (
+            <span key={id} className="flex items-center gap-2">
               <span
                 className="inline-block size-3 rounded-sm"
                 style={{ background: kind.fill, outline: `1px solid ${BRAND.connector}` }}
               />
-              {kind.key}
+              {id === 'contract' ? contractKey(flow) : kind.key}
             </span>
           ))}
         </div>

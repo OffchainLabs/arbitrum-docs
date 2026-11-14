@@ -28,6 +28,7 @@ export function motionDuration(): number {
  * The current path and step, synced with the `#step-n` or `#<path>-step-n` hash. A hash that is
  * not a step hash (a heading link) keeps the current position. `goTo` also scrolls the canvas on
  * screen when it is not fully visible, so the step bar does not cover the active step.
+ * `paths` must be a stable array: it is an effect dependency.
  */
 export function useStepNavigation(paths: PathCount[], canvasRef: RefObject<HTMLElement | null>) {
   const [position, setPosition] = useState<StepPosition>(

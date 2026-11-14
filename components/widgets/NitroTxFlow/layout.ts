@@ -1,7 +1,7 @@
 import type { ElkNode } from 'elkjs/lib/elk-api';
 import ELK from 'elkjs/lib/elk.bundled.js';
 
-import { type Flow, type FlowEdge, type Step, flowPaths } from './model.ts';
+import { type Chain, type Flow, type FlowEdge, type Step, flowPaths } from './model.ts';
 
 export const NODE_WIDTH = 220;
 export const NODE_HEIGHT = 72;
@@ -48,16 +48,22 @@ export function labelWidth(edge: FlowEdge, badgeCount: number): number {
   return Math.ceil(edge.label.length * 0.52 * 12) + 12 + badgeCount * 26;
 }
 
-// One row per actor, ordered by the first step that lists it.
+const CHAIN_ORDER: Record<Chain, number> = { 'off-chain': 0, 'child': 1, 'parent': 2 };
+
+// One row per actor. Rows are grouped by chain (off-chain, child, parent), so each chain gets one
+// band; within a chain, actors are ordered by the first step that lists them.
 export function firstInteractionRank(flow: Flow): Record<string, number> {
-  const rank: Record<string, number> = {};
-  let next = 0;
+  const chainOf = new Map(flow.actors.map((actor) => [actor.id, actor.chain]));
+  const order: string[] = [];
   for (const step of flow.steps) {
     for (const id of step.actors) {
-      if (!(id in rank)) rank[id] = next++;
+      if (!order.includes(id)) order.push(id);
     }
   }
-  return rank;
+  const sorted = order
+    .map((id, first) => ({ id, first, chain: CHAIN_ORDER[chainOf.get(id)!] }))
+    .sort((a, b) => a.chain - b.chain || a.first - b.first);
+  return Object.fromEntries(sorted.map(({ id }, row) => [id, row]));
 }
 
 // The 1-based numbers of the steps that use each edge. The label chips show them as badges.
@@ -119,6 +125,8 @@ export async function computeLayout(flow: Flow): Promise<FlowLayout> {
       'elk.algorithm': 'layered',
       'elk.direction': 'DOWN',
       'elk.partitioning.activate': 'true',
+      // One graph, so the row order holds across actors that share no edge.
+      'elk.separateConnectedComponents': 'false',
       'elk.edgeRouting': 'ORTHOGONAL',
       'elk.edgeLabels.placement': 'CENTER',
       'elk.spacing.nodeNode': '60',

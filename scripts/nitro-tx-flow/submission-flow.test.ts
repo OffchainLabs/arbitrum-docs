@@ -3,8 +3,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
 
-import { FINALITY_TERM } from '../../components/widgets/NitroTxFlow/brand.ts';
-import { type ResolvedPath, flowPaths } from '../../components/widgets/NitroTxFlow/model.ts';
+import { FINALITY_TERM, contractKey } from '../../components/widgets/NitroTxFlow/brand.ts';
+import {
+  type ResolvedPath,
+  flowPaths,
+  transactionLifecycle,
+} from '../../components/widgets/NitroTxFlow/model.ts';
 import {
   transactionSubmission as flow,
   pgaRound,
@@ -117,4 +121,9 @@ test('every finality term has a glossary entry with that id', () => {
 test('no step text calls settlement hard finality', () => {
   const settle = flow.steps.find((s) => s.id === 'settle')!;
   assert.doesNotMatch(settle.text, /hard finality/i);
+});
+
+test('the legend names contracts by chain only when every contract is on the parent chain', () => {
+  assert.equal(contractKey(transactionLifecycle), 'Parent chain contract');
+  assert.equal(contractKey(flow), 'Contract');
 });

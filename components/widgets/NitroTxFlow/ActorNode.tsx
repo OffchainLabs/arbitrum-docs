@@ -12,7 +12,13 @@ export interface NodeTrigger {
 }
 
 export type ActorNodeType = Node<
-  { actor: Actor; active: boolean; showChain: boolean; trigger?: NodeTrigger | undefined },
+  {
+    actor: Actor;
+    active: boolean;
+    muted: boolean;
+    showChain: boolean;
+    trigger?: NodeTrigger | undefined;
+  },
   'actor'
 >;
 
@@ -21,7 +27,7 @@ export type ActorNodeType = Node<
 const HIDDEN_HANDLE = { opacity: 0, pointerEvents: 'none' } as const;
 
 export function ActorNode({ data }: NodeProps<ActorNodeType>) {
-  const { actor, active, showChain, trigger } = data;
+  const { actor, active, muted, showChain, trigger } = data;
   const style = KIND_STYLE[actor.kind];
   return (
     <div
@@ -48,7 +54,7 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
         borderRadius: 10,
         border: `3px solid ${active ? BRAND.active : 'transparent'}`,
         boxShadow: active ? BRAND.activeGlow : 'none',
-        opacity: active ? 1 : BRAND.dimmed,
+        opacity: active ? 1 : muted ? BRAND.muted : BRAND.dimmed,
         fontFamily: BRAND.font,
       }}
     >

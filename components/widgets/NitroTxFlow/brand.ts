@@ -1,4 +1,4 @@
-import type { ActorKind, Chain, Finality } from './model.ts';
+import type { ActorKind, Chain, Finality, Flow } from './model.ts';
 
 // Brand palette and measured text colors: .claude/skills/arbitrum-brand-svg-diagrams/SKILL.md
 export const BRAND = {
@@ -10,6 +10,8 @@ export const BRAND = {
   chipText: '#eaf5ff',
   font: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif",
   dimmed: 0.35,
+  // An actor or edge that no step of the selected path uses.
+  muted: 0.35,
 };
 
 export const KIND_STYLE: Record<
@@ -40,6 +42,14 @@ export const BAND_STYLE: Record<
     border: ['rgba(230, 0, 122, 0.5)', 'rgba(255, 120, 190, 0.95)'],
   },
 };
+
+/** The contract key: "Parent chain contract" when every contract in the flow is on that chain. */
+export function contractKey(flow: Flow): string {
+  const contracts = flow.actors.filter((actor) => actor.kind === 'contract');
+  return contracts.every((actor) => actor.chain === 'parent')
+    ? KIND_STYLE.contract.key
+    : 'Contract';
+}
 
 export const CHAIN_LABEL: Record<Chain, string> = {
   'child': 'child chain',

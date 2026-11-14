@@ -13,18 +13,20 @@ import { StepCard } from './StepCard.tsx';
 import { BRAND } from './brand.ts';
 import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
-import type { Flow } from './model.ts';
+import type { CardLabels, Flow } from './model.ts';
 import { useFlowLayout } from './useFlowLayout.ts';
 import { useStepCamera } from './useStepCamera.ts';
 
 interface DetailOverlayProps {
   flow: Flow;
+  // The card labels of the flow that opens this one.
+  labels: CardLabels;
   onClose: () => void;
 }
 
 // SPIKE: a second diagram in a dialog, with its own sub-steps. Full screen below 768px; a centered
 // panel over a backdrop above.
-export function DetailOverlay({ flow, onClose }: DetailOverlayProps) {
+export function DetailOverlay({ flow, labels, onClose }: DetailOverlayProps) {
   const { layout } = useFlowLayout(flow);
   const [instance, setInstance] = useState<ReactFlowInstance<
     ActorNodeType | BandNodeType,
@@ -38,10 +40,16 @@ export function DetailOverlay({ flow, onClose }: DetailOverlayProps) {
   // A detail graph is small: keep every part in view and let the highlight show the sub-step.
   const showAll = useStepCamera(instance, layout, step, canvasRef, true);
   const stepNumbers = useMemo(() => stepNumbersByEdge(flow.steps), [flow]);
-  const nodes = useMemo(() => (layout ? flowNodes(flow, layout, step) : []), [flow, layout, step]);
+  // A detail flow has one path that uses every actor and edge, so nothing is muted.
+  const actorIds = useMemo(() => new Set(flow.actors.map((actor) => actor.id)), [flow]);
+  const edgeIds = useMemo(() => new Set(flow.edges.map((edge) => edge.id)), [flow]);
+  const nodes = useMemo(
+    () => (layout ? flowNodes(flow, layout, step, actorIds) : []),
+    [flow, layout, step, actorIds],
+  );
   const edges = useMemo(
-    () => (layout ? flowEdges(flow, layout, step, stepNumbers) : []),
-    [flow, layout, step, stepNumbers],
+    () => (layout ? flowEdges(flow, layout, step, stepNumbers, edgeIds) : []),
+    [flow, layout, step, stepNumbers, edgeIds],
   );
   const goTo = (next: number) => setIndex(Math.min(Math.max(next, 0), flow.steps.length - 1));
 
@@ -105,7 +113,7 @@ export function DetailOverlay({ flow, onClose }: DetailOverlayProps) {
             onShowAll={showAll}
           />
         </div>
-        <StepCard step={step} />
+        <StepCard step={step} labels={labels} />
       </div>
     </div>,
     document.body,

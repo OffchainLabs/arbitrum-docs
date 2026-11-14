@@ -4,7 +4,7 @@ import { BRAND, KIND_STYLE } from './brand.ts';
 import type { EdgeLayout, Point } from './layout.ts';
 
 export type RoutedEdgeType = Edge<
-  { label: string; stepNumbers: number[]; active: boolean; route: EdgeLayout },
+  { label: string; stepNumbers: number[]; active: boolean; muted: boolean; route: EdgeLayout },
   'routed'
 >;
 
@@ -44,7 +44,8 @@ const TRANSITION = 'motion-safe:transition-[opacity,stroke] motion-safe:duration
 
 export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
   if (!data) return null;
-  const { label, stepNumbers, active, route } = data;
+  const { label, stepNumbers, active, muted, route } = data;
+  const opacity = active ? 1 : muted ? BRAND.muted : BRAND.dimmed;
   const box = route.label;
   return (
     <>
@@ -56,7 +57,7 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
         style={{
           stroke: active ? BRAND.active : BRAND.connector,
           strokeWidth: active ? 3 : 1.5,
-          opacity: active ? 1 : BRAND.dimmed,
+          opacity,
         }}
       />
       <EdgeLabelRenderer>
@@ -67,7 +68,7 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
             transform:
               'translate(-50%, -50%) ' +
               `translate(${box.x + box.width / 2}px, ${box.y + box.height / 2}px)`,
-            opacity: active ? 1 : BRAND.dimmed,
+            opacity,
             padding: '2px 8px 2px 3px',
             borderRadius: 6,
             background: BRAND.chip,
