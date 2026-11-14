@@ -8,7 +8,7 @@ import { URL, fileURLToPath } from 'node:url';
 
 import { FLOWS } from '../components/widgets/NitroTxFlow/flows.ts';
 import { codeRefs } from '../components/widgets/NitroTxFlow/model.ts';
-import { modelPaths } from './check-nitro-release.ts';
+import { modelPaths } from './lib/nitro-flow-paths.ts';
 
 const SCRIPT = fileURLToPath(new URL('./check-nitro-release.ts', import.meta.url));
 const OLD_SHA = '1'.repeat(40);
