@@ -4,11 +4,11 @@ import type {
   InkeepCallbackEvent,
   InkeepSearchSettings,
 } from '@inkeep/cxkit-react';
-import type { PostHog } from 'posthog-js';
-import { usePostHog } from 'posthog-js/react';
-import { useMemo } from 'react';
 
-// Shared Inkeep configuration for search and chat; tracked widget events are forwarded to PostHog.
+import { captureConsentedPosthogEvent } from '@/lib/posthog-consent';
+
+// Shared Inkeep configuration for search and chat. Tracked widget events are forwarded to PostHog
+// only with analytics consent (lib/posthog-consent.ts); `search_query` is text the visitor typed.
 
 const trackedEvents = [
   // Chat events
@@ -24,9 +24,7 @@ const trackedEvents = [
   'search_query_response_received',
 ];
 
-function handleInkeepEvent(event: InkeepCallbackEvent, posthog: PostHog): void {
-  if (!posthog.__loaded) return;
-
+function handleInkeepEvent(event: InkeepCallbackEvent): void {
   const { eventName } = event;
   if (!trackedEvents.includes(eventName)) return;
 
@@ -54,10 +52,10 @@ function handleInkeepEvent(event: InkeepCallbackEvent, posthog: PostHog): void {
     eventProperties.source_link = properties.link;
   }
 
-  posthog.capture(`inkeep_${eventName}`, eventProperties);
+  captureConsentedPosthogEvent(`inkeep_${eventName}`, eventProperties);
 }
 
-const baseSettings = {
+export const inkeepBaseSettings = {
   apiKey: process.env.NEXT_PUBLIC_INKEEP_API_KEY,
   // The brand navy, `--color-arbitrum-navy` in app/global.css. Inkeep takes a literal, not a token.
   primaryBrandColor: '#05163d',
@@ -78,16 +76,8 @@ const baseSettings = {
       isDarkMode: (attributes) => /\bdark\b/.test(attributes.class ?? ''),
     },
   },
+  onEvent: handleInkeepEvent,
 } satisfies InkeepBaseSettings;
-
-export function useInkeepBaseSettings(): InkeepBaseSettings {
-  const posthog = usePostHog();
-
-  return useMemo(
-    () => ({ ...baseSettings, onEvent: (event) => handleInkeepEvent(event, posthog) }),
-    [posthog],
-  );
-}
 
 export const inkeepAiChatSettings: InkeepAIChatSettings = {
   aiAssistantName: 'Arbitrum Assistant',

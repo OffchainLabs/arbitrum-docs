@@ -4,9 +4,11 @@ import 'katex/dist/katex.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import Link from 'next/link';
-import type { ReactNode } from 'react';
+import { type ReactNode, Suspense } from 'react';
 
-import { PostHogProvider } from '@/components/analytics/posthog-provider';
+import { CookieConsent } from '@/components/analytics/cookie-consent';
+import { HubspotTracking } from '@/components/analytics/hubspot-tracking';
+import { PosthogAnalytics } from '@/components/analytics/posthog-analytics';
 import { Footer } from '@/components/footer';
 import InkeepSearchDialog from '@/components/inkeep/inkeep-search';
 import { vars } from '@/content/vars';
@@ -126,21 +128,27 @@ export default function Layout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <body className="flex flex-col min-h-screen font-sans" suppressHydrationWarning>
-        <PostHogProvider>
-          <RootProvider
-            // `hotKey: false` disables Fumadocs' theme shortcut, a bare `d` that fires whenever
-            // focus is outside a text field. The visible theme toggle is the intended path.
-            theme={{ attribute: 'class', defaultTheme: 'light', hotKey: false }}
-            // Fumadocs preloads the dialog by default, which would fetch the Inkeep bundle on every
-            // page load instead of on the first open. Without a key there is no search: the Orama
-            // route Fumadocs' own dialog would call is not part of this site.
-            search={
-              inkeepEnabled
-                ? { SearchDialog: InkeepSearchDialog, preload: false }
-                : { enabled: false }
-            }
-          >
-            {/* Announcement bar. Above the navbar because it is a sibling rendered before
+        {/* Analytics under CookieYes consent. See INTERNALS.md#analytics. HubspotTracking reads
+          the search params, so it sits in its own Suspense boundary and the pages stay static. */}
+        <CookieConsent />
+        <PosthogAnalytics />
+        <Suspense fallback={null}>
+          <HubspotTracking />
+        </Suspense>
+        <RootProvider
+          // `hotKey: false` disables Fumadocs' theme shortcut, a bare `d` that fires whenever
+          // focus is outside a text field. The visible theme toggle is the intended path.
+          theme={{ attribute: 'class', defaultTheme: 'light', hotKey: false }}
+          // Fumadocs preloads the dialog by default, which would fetch the Inkeep bundle on every
+          // page load instead of on the first open. Without a key there is no search: the Orama
+          // route Fumadocs' own dialog would call is not part of this site.
+          search={
+            inkeepEnabled
+              ? { SearchDialog: InkeepSearchDialog, preload: false }
+              : { enabled: false }
+          }
+        >
+          {/* Announcement bar. Above the navbar because it is a sibling rendered before
               {children}, and every layout's header lives inside those.
 
               Writers control it from content/vars.json: text, link, and the
@@ -150,9 +158,9 @@ export default function Layout({ children }: { children: ReactNode }) {
               banner has that id written to localStorage, so a new message
               needs a new id or it stays hidden from everyone who dismissed
               the last one. */}
-            {vars.announcementEnabled && announcementId && announcementLinkHref ? (
-              <>
-                {/* Banner puts `height` in an inline style AND in
+          {vars.announcementEnabled && announcementId && announcementLinkHref ? (
+            <>
+              {/* Banner puts `height` in an inline style AND in
                   --fd-banner-height, which the docs layout feeds to calc() and
                   a sticky `top`. So it has to be a real length, never `auto`.
                   The message fits one line from 640px up and wraps to two
@@ -164,45 +172,44 @@ export default function Layout({ children }: { children: ReactNode }) {
                   overflows and nothing catches it. The budget is written down
                   in README next to the key. Raising a height here means
                   raising the budget there too. */}
-                <style>{`:root{--fd-announcement-height:4rem}@media (min-width:640px){:root{--fd-announcement-height:3rem}}`}</style>
-                {/* Fumadocs styles the close button `text-fd-muted-foreground/50` with an
+              <style>{`:root{--fd-announcement-height:4rem}@media (min-width:640px){:root{--fd-announcement-height:3rem}}`}</style>
+              {/* Fumadocs styles the close button `text-fd-muted-foreground/50` with an
                   `fd-ring` focus ring, which is the banner's own colour here: both measured under
                   1.5:1. The `[&>button]` utilities restyle that one button in the banner's
                   foreground colour, which clears 4.5:1 in both themes. */}
-                <Banner
-                  id={announcementId}
-                  height="var(--fd-announcement-height)"
-                  className="bg-fd-primary text-fd-primary-foreground [&>button]:text-fd-primary-foreground [&>button]:hover:bg-fd-primary-foreground/15 [&>button]:hover:text-fd-primary-foreground [&>button]:focus-visible:ring-fd-primary-foreground"
-                >
-                  <span className="pe-8 text-balance">
-                    {vars.announcementText}{' '}
-                    <Link
-                      href={announcementLinkHref}
-                      // vars:check permits an https target as well as an internal
-                      // path, so the href may leave the site. `rel` is set only
-                      // then, because Next already omits it for internal routes
-                      // and an unconditional one would be noise on every page.
-                      rel={
-                        announcementLinkHref.startsWith('https://')
-                          ? 'noopener noreferrer'
-                          : undefined
-                      }
-                      className="underline underline-offset-2 hover:no-underline"
-                    >
-                      {vars.announcementLinkText}
-                    </Link>
-                  </span>
-                </Banner>
-              </>
-            ) : null}
-            {children}
-            {/* Fumadocs exposes no footer slot, so the site footer is a sibling of
+              <Banner
+                id={announcementId}
+                height="var(--fd-announcement-height)"
+                className="bg-fd-primary text-fd-primary-foreground [&>button]:text-fd-primary-foreground [&>button]:hover:bg-fd-primary-foreground/15 [&>button]:hover:text-fd-primary-foreground [&>button]:focus-visible:ring-fd-primary-foreground"
+              >
+                <span className="pe-8 text-balance">
+                  {vars.announcementText}{' '}
+                  <Link
+                    href={announcementLinkHref}
+                    // vars:check permits an https target as well as an internal
+                    // path, so the href may leave the site. `rel` is set only
+                    // then, because Next already omits it for internal routes
+                    // and an unconditional one would be noise on every page.
+                    rel={
+                      announcementLinkHref.startsWith('https://')
+                        ? 'noopener noreferrer'
+                        : undefined
+                    }
+                    className="underline underline-offset-2 hover:no-underline"
+                  >
+                    {vars.announcementLinkText}
+                  </Link>
+                </span>
+              </Banner>
+            </>
+          ) : null}
+          {children}
+          {/* Fumadocs exposes no footer slot, so the site footer is a sibling of
               the layout inside the flex column body. See components/footer.tsx. */}
-            <Footer />
-            {/* Keeps the child count React's useId hashes; the removed chat button held this slot. */}
-            {null}
-          </RootProvider>
-        </PostHogProvider>
+          <Footer />
+          {/* Keeps the child count React's useId hashes; the removed chat button held this slot. */}
+          {null}
+        </RootProvider>
       </body>
     </html>
   );
