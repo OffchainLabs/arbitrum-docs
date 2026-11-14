@@ -11,7 +11,7 @@ export const BRAND = {
   font: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif",
   dimmed: 0.35,
   // An actor or edge that no step of the selected path uses.
-  muted: 0.35,
+  muted: 0.15,
 };
 
 export const KIND_STYLE: Record<
