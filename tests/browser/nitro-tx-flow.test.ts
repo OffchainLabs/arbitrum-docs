@@ -5,8 +5,8 @@ import { type Browser, type BrowserContextOptions, type Page, chromium } from 'p
 
 import { BAND_STYLE } from '../../components/widgets/NitroTxFlow/brand.ts';
 import { transactionLifecycle } from '../../components/widgets/NitroTxFlow/model.ts';
+import { CANVAS, cardTitle, openFlow, settle } from './flow-page.ts';
 
-const baseUrl = process.env.STATIC_DOCS_TEST_URL ?? 'http://localhost:3000';
 const PAGE_PATH = '/how-arbitrum-works/deep-dives/nitro-transaction-flow';
 const STEPS = transactionLifecycle.steps;
 const WIDE: BrowserContextOptions = { viewport: { width: 1280, height: 800 } };
@@ -17,7 +17,6 @@ const PHONE: BrowserContextOptions = {
   isMobile: true,
   hasTouch: true,
 };
-const CANVAS = '[aria-roledescription="diagram"]';
 let browser: Browser;
 
 before(async () => {
@@ -47,55 +46,13 @@ interface Snapshot {
   innerHeight: number;
 }
 
-/** Opens the page with reduced motion, so the camera and the scroll move without animation. */
-async function withFlow(
+function withFlow(
   options: BrowserContextOptions,
   hash: string,
   run: (page: Page) => Promise<void>,
 ) {
-  const context = await browser.newContext({ reducedMotion: 'reduce', ...options });
-  const page = await context.newPage();
-  try {
-    await page.goto(new URL(PAGE_PATH + hash, baseUrl).href);
-    await page
-      .locator('.react-flow__node-actor')
-      .nth(transactionLifecycle.actors.length - 1)
-      .waitFor();
-    await settle(page);
-    await run(page);
-  } finally {
-    await context.close();
-  }
-}
-
-/**
- * Waits until the hash, scroll position, camera transform, card title and band names stay the same
- * for five animation frames in a row.
- */
-async function settle(page: Page) {
-  await page.evaluate(() => {
-    delete (window as unknown as { settleProbe?: unknown }).settleProbe;
-  });
-  await page.waitForFunction(
-    (canvasSelector) => {
-      const probe = window as unknown as { settleProbe?: { state: string; frames: number } };
-      const canvas = document.querySelector(canvasSelector);
-      const viewport = document.querySelector<HTMLElement>('.react-flow__viewport');
-      const bandNames = [...(canvas?.querySelectorAll('div[aria-hidden="true"]') ?? [])];
-      const state = [
-        window.location.hash,
-        window.scrollY,
-        viewport?.style.transform,
-        canvas?.parentElement?.querySelector('h3')?.textContent,
-        ...bandNames.map((name) => name.getAttribute('style')),
-      ].join('|');
-      const frames = probe.settleProbe?.state === state ? probe.settleProbe.frames + 1 : 0;
-      probe.settleProbe = { state, frames };
-      return viewport !== null && frames >= 5;
-    },
-    CANVAS,
-    { polling: 'raf' },
-  );
+  const flowPage = { path: PAGE_PATH, actorCount: transactionLifecycle.actors.length };
+  return openFlow(browser, flowPage, options, hash, run);
 }
 
 /** Waits until the card and the hash show step `index` (0-based), then until the view settles. */
@@ -114,10 +71,6 @@ async function next(page: Page) {
   const index = STEPS.findIndex((step) => step.title === title);
   await page.getByRole('button', { name: 'Next →' }).click();
   await waitForStep(page, index + 1);
-}
-
-async function cardTitle(page: Page): Promise<string | null> {
-  return page.locator(CANVAS).locator('xpath=..').locator('h3').textContent();
 }
 
 async function snapshot(page: Page): Promise<Snapshot> {
