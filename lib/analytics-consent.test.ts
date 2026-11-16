@@ -1,10 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  type AnalyticsConsent,
-  hasAnalyticsConsent,
-  subscribeAnalyticsConsent,
-} from './analytics-consent.ts';
+import { type AnalyticsConsent, subscribeAnalyticsConsent } from './analytics-consent.ts';
 import { consentUpdateDetail, cookieYesConsent } from './cookieyes.fixture.ts';
 
 let documentEvents: EventTarget;
@@ -24,6 +20,13 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+// The first report a subscriber gets is the saved consent.
+function savedConsentAccepted(): boolean {
+  const reports: AnalyticsConsent[] = [];
+  subscribeAnalyticsConsent((consent) => reports.push(consent))();
+  return reports[0].accepted;
+}
+
 describe('analytics consent', () => {
   it.each([
     // Opt-out banner: analytics is on until the visitor opts out, with or without banner action.
@@ -37,7 +40,7 @@ describe('analytics consent', () => {
     [{ law: 'gdpr', analytics: true, acted: true }, true],
   ] as const)('reads %j as accepted: %s', (options, accepted) => {
     window.getCkyConsent = () => cookieYesConsent(options);
-    expect(hasAnalyticsConsent()).toBe(accepted);
+    expect(savedConsentAccepted()).toBe(accepted);
   });
 
   it.each([
@@ -66,7 +69,7 @@ describe('analytics consent', () => {
     [undefined, false],
   ])('falls back to opt-in rules for degraded consent %j: %s', (consent, accepted) => {
     window.getCkyConsent = () => consent;
-    expect(hasAnalyticsConsent()).toBe(accepted);
+    expect(savedConsentAccepted()).toBe(accepted);
   });
 
   it.each([
@@ -94,11 +97,11 @@ describe('analytics consent', () => {
   });
 
   it('fails closed when CookieYes is missing or throws', () => {
-    expect(hasAnalyticsConsent()).toBe(false);
+    expect(savedConsentAccepted()).toBe(false);
     window.getCkyConsent = () => {
       throw new Error('unavailable');
     };
-    expect(hasAnalyticsConsent()).toBe(false);
+    expect(savedConsentAccepted()).toBe(false);
   });
 
   it('reports the law with saved consent, banner load, and updates', () => {
@@ -156,14 +159,14 @@ describe('analytics consent', () => {
     expect(received).toHaveLength(1);
   });
 
-  it('reads the advertisement category independently of analytics', () => {
+  it.each([
+    [{ analytics: true, advertisement: false }, true],
+    [{ analytics: false, advertisement: true }, false],
+  ])('reads only the analytics category: %j', (categories, accepted) => {
     window.getCkyConsent = () => ({
       ...cookieYesConsent({ law: 'gdpr', analytics: true, acted: true }),
-      categories: { analytics: true, advertisement: false },
+      categories,
     });
-    expect(hasAnalyticsConsent()).toBe(true);
-    expect(hasAnalyticsConsent('advertisement')).toBe(false);
-    cleanup = subscribeAnalyticsConsent((consent) => received.push(consent), 'advertisement');
-    expect(received).toEqual([{ law: 'gdpr', accepted: false }]);
+    expect(savedConsentAccepted()).toBe(accepted);
   });
 });
