@@ -12,11 +12,8 @@ export function HubspotTracking() {
   const [tracking] = useState(createHubspotTracking);
   const query = searchParams.toString();
 
-  // The portal is production's, so previews and local builds never load the tracker. The same
-  // gate as PostHog's (lib/posthog-consent.ts).
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') return tracking.connect();
-  }, [tracking]);
+  // `connect` does nothing off production.
+  useEffect(() => tracking.connect(), [tracking]);
 
   useEffect(() => {
     tracking.trackPage(query ? `${pathname}?${query}` : pathname);

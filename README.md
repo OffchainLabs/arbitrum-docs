@@ -116,8 +116,8 @@ though two of its three consumers read it on the server. Set it on Vercel for Pr
 Production.
 
 Page feedback needs the key locally. Web analytics and HubSpot do not run locally or on a preview
-deployment no matter what you set, because `lib/posthog-consent.ts` and
-`components/analytics/hubspot-tracking.tsx` also require `NEXT_PUBLIC_VERCEL_ENV` to be
+deployment no matter what you set, because `lib/posthog-consent.ts` and `lib/hubspot.ts` also
+require `NEXT_PUBLIC_VERCEL_ENV` to be
 `production` and only Vercel sets that. The CookieYes banner does show wherever
 `NEXT_PUBLIC_COOKIEYES_ID` is set. Request tracking is gated the
 same way, on the server-side `VERCEL_ENV`, so nothing is sent locally or from a preview and no key

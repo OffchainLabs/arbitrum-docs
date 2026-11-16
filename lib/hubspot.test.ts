@@ -122,9 +122,23 @@ afterEach(() => {
   cleanup?.();
   cleanup = undefined;
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
 });
 
 describe('HubSpot tracking', () => {
+  it.each(['preview', 'development', undefined])(
+    'never loads the tracker on a %s build',
+    (environment) => {
+      vi.stubEnv('NEXT_PUBLIC_VERCEL_ENV', environment);
+      savedConsent(true);
+      cleanup = tracking.connect();
+      tracking.trackPage('/');
+      updateConsent(true);
+      expect(scripts).toEqual([]);
+      expect(window._hsq).toBeUndefined();
+      expect(window._hsp).toBeUndefined();
+    },
+  );
   it.each(['privacy-first', 'analytics-first'])(
     'prevents late cookie writes after withdrawal with %s loading',
     (order) => {

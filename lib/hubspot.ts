@@ -79,6 +79,9 @@ export function createHubspotTracking() {
   }
 
   function connect() {
+    // The portal is production's, so previews and local builds never load the tracker. The same
+    // gate as PostHog's (`posthogProjectToken` in lib/posthog-consent.ts).
+    if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') return () => {};
     const unsubscribe = subscribeAnalyticsConsent(({ accepted }) => applyConsent(accepted));
 
     return () => {
