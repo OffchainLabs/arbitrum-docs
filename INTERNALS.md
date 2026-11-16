@@ -940,8 +940,9 @@ step with them. It starts only when
   `$raw_user_agent` stay for PostHog's server-side cookieless hash.
 - Autocapture runs only with consent. Session replay, heatmaps and dead clicks stay off for
   everyone. Surveys, product tours and conversations stay off because they load remote scripts
-  configured outside code review. Feature flags load only with consent: `advanced_disable_flags`
-  follows consent, since the `/flags` request skips `before_send` and sends the timezone.
+  configured outside code review. Feature flags never load: the site reads none, and the `/flags`
+  request skips `before_send` and sends the timezone. `advanced_disable_flags` is set straight
+  after `init`, not in it, because in `init` it would also turn off remote config.
 - PostHog waits up to 3 seconds (`COOKIEYES_LAW_TIMEOUT_MS`) for CookieYes to report its law, so
   opt-out banner visitors start on cookies with their landing attribution. If CookieYes never
   reports, it starts cookieless. A visitor who navigates during the wait still gets a landing
@@ -965,7 +966,9 @@ Autocapture must not read visitor input either. The chat panel's message list
 open shadow root, where PostHog follows a click through `composedPath()` but its `ph-no-capture`
 check stops at the shadow root. `lib/posthog-consent.ts` therefore marks DOM events whose path
 passes through an `inkeep-shadow*` host (a capture listener on `window`, which runs before PostHog's
-on `document`) and drops the autocapture events they produce in `before_send`. A pointer pressed
+on `document`) and drops the autocapture events they produce in `before_send`. The listener is
+attached only while analytics consent turns autocapture on, and skips `pointermove` and
+`pointerup`, which PostHog only uses to track a press and never captures from. A pointer pressed
 inside the modal and released just outside it fires a click on `<body>`, which PostHog attributes
 back to the pressed element; the exclusion carries over from the Inkeep pointer-down to that click.
 

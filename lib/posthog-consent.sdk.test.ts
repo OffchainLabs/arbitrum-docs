@@ -237,7 +237,7 @@ describe('PostHog CookieYes consent with the real SDK', () => {
   );
 
   it.each(['gdpr', 'ccpa', 'timeout'] as const)(
-    'loads feature flags only with consent after %s startup',
+    'never loads feature flags, with or without consent, after %s startup',
     async (mode) => {
       visibleBrowser();
       // Answer requests, so a finished flags load cannot mask a later one.
@@ -265,16 +265,20 @@ describe('PostHog CookieYes consent with the real SDK', () => {
       await reloadFlags();
       // The /flags request bypasses before_send and always carries the timezone.
       expect(flagRequests()).toBe(0);
+      // Turning flags off after init leaves remote config on. It loads as a script tag.
+      expect(
+        [...document.scripts].some((script) => script.src.endsWith(`/array/${KEY}/config.js`)),
+      ).toBe(true);
 
+      // The site reads no flags, so consent does not load them either.
       update(cookieYesConsent({ law, analytics: true, acted: true }));
       await vi.advanceTimersByTimeAsync(1000);
-      expect(flagRequests()).toBe(1);
       await reloadFlags();
-      expect(flagRequests()).toBe(2);
+      expect(flagRequests()).toBe(0);
 
       update(cookieYesConsent({ law, analytics: false, acted: true }));
       await reloadFlags();
-      expect(flagRequests()).toBe(2);
+      expect(flagRequests()).toBe(0);
     },
   );
 
@@ -1231,6 +1235,29 @@ describe('PostHog CookieYes consent with the real SDK', () => {
         : [`${origin}/`, `${origin}/about`],
     );
   });
+
+  it.each(['ccpa', 'timeout'] as const)(
+    'sends one landing view after an in-page link before %s startup',
+    async (mode) => {
+      vi.useFakeTimers();
+      vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible');
+      vi.spyOn(navigator, 'userAgent', 'get').mockReturnValue(
+        'Mozilla/5.0 Chrome/140.0.0.0 Safari/537.36',
+      );
+      window.history.replaceState({}, '', '/guide?utm_source=campaign');
+      setConsent(undefined);
+      const views: unknown[] = [];
+      posthog.on('eventCaptured', (event) => {
+        if (event.event === '$pageview') views.push(event.properties.$current_url);
+      });
+      cleanup = connect(KEY);
+      window.history.pushState({}, '', '/guide?utm_source=campaign#section');
+      if (mode === 'timeout') await vi.advanceTimersByTimeAsync(3000);
+      else update(cookieYesConsent({ law: 'ccpa', analytics: true, acted: false }));
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(views).toEqual([`${window.location.origin}/guide?utm_source=campaign`]);
+    },
+  );
 
   it.each([
     ['without', false],

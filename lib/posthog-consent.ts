@@ -144,21 +144,22 @@ function stripCookielessProperties(properties: Record<string, unknown>) {
 // A pointer pressed inside the dialog and released just outside it yields a click targeted at
 // <html> or <body>, which PostHog attributes back to the pressed element. That click's path no
 // longer passes through the host, so the exclusion carries over from an Inkeep pointer-down.
+// The listeners run only while autocapture is on, that is with analytics consent.
 const INKEEP_HOST_ID_PREFIX = 'inkeep-shadow';
 const AUTOCAPTURE_EVENTS = ['$autocapture', '$rageclick', '$copy_autocapture'];
-// Every DOM event PostHog's autocapture listens to.
+// The DOM events PostHog's autocapture captures from, and the pointer events that start and cancel
+// a press. PostHog's other pointer events only track the press and never capture.
 const AUTOCAPTURE_DOM_EVENTS = [
   'click',
   'change',
   'submit',
   'pointerdown',
-  'pointermove',
-  'pointerup',
   'pointercancel',
   'copy',
   'cut',
   'paste',
 ];
+let inkeepTracking = false;
 let inkeepInteraction = false;
 let inkeepPointerDown = false;
 
@@ -179,6 +180,17 @@ function trackInkeepInteraction(event: Event) {
       inkeepInteraction = true;
     }
     inkeepPointerDown = false;
+  }
+}
+
+function setInkeepTracking(on: boolean) {
+  if (on === inkeepTracking) return;
+  inkeepTracking = on;
+  inkeepInteraction = false;
+  inkeepPointerDown = false;
+  for (const type of AUTOCAPTURE_DOM_EVENTS) {
+    if (on) window.addEventListener(type, trackInkeepInteraction, { capture: true, passive: true });
+    else window.removeEventListener(type, trackInkeepInteraction, { capture: true });
   }
 }
 
@@ -283,6 +295,21 @@ function landingProperties() {
   };
 }
 
+function sessionEntryProperties(properties: Record<string, unknown>) {
+  return Object.fromEntries(
+    Object.entries(properties).map(([key, value]) => [
+      `$session_entry_${key === '$current_url' ? 'url' : key.replace(/^\$/, '')}`,
+      value,
+    ]),
+  );
+}
+
+// An in-page `#section` link changes the URL but not the page, so it is not a navigation.
+function pageAddress(href: string): string {
+  const { origin, pathname, search } = new URL(href);
+  return origin + pathname + search;
+}
+
 function cookieCaptureConfig(accepted: boolean) {
   return {
     autocapture: accepted,
@@ -294,15 +321,12 @@ function cookieCaptureConfig(accepted: boolean) {
 
 function start(apiKey: string, accepted: boolean) {
   const snapshot = landing!;
-  pendingStartupViews = window.location.href !== snapshot.url.href;
+  pendingStartupViews = pageAddress(window.location.href) !== pageAddress(snapshot.url.href);
   const correctStartupLanding = pendingStartupViews;
   let firstView = true;
-  const sessionProperties = Object.fromEntries(
-    Object.entries(landingProperties()).map(([key, value]) => [
-      `$session_entry_${key === '$current_url' ? 'url' : key.replace(/^\$/, '')}`,
-      value,
-    ]),
-  );
+  const sessionProperties = sessionEntryProperties(landingProperties());
+  // Read after init, from the persistence init loads.
+  let existingSessionId: unknown;
   // The opt-out defaults do not override a stored SDK opt-in. Gate persistence during
   // initialization too, before the SDK can write cookies or session storage.
   posthog.init(apiKey, {
@@ -363,7 +387,11 @@ function start(apiKey: string, accepted: boolean) {
     opt_out_persistence_by_default: true,
     cookieless_mode: 'on_reject',
   });
-  const existingSessionId: unknown = posthog.persistence?.props.$client_session_props?.sessionId;
+  existingSessionId = posthog.persistence?.props.$client_session_props?.sessionId;
+  // The site reads no feature flags, and the /flags request bypasses before_send and always sends
+  // the visitor's timezone. Set here rather than in init, before any debounced flags load fires:
+  // in init it would also turn off remote config, which init has already loaded by now.
+  posthog.set_config({ advanced_disable_flags: true });
   initialized = true;
 }
 
@@ -371,12 +399,8 @@ function syncConsent(apiKey: string, accepted: boolean) {
   posthog.set_config({
     disable_persistence: !accepted,
     ...cookieCaptureConfig(accepted),
-    // The /flags request bypasses before_send and always sends the visitor's timezone, so flags
-    // load only with consent. This runs straight after init, before any debounced flags load
-    // fires, and before opting in or out, whose reset reloads flags. Flags are not set in init:
-    // the SDK would then ignore this toggle, and they would also turn off remote config.
-    advanced_disable_flags: !accepted,
   });
+  setInkeepTracking(accepted);
   // The SDK still considers its own first view unsent after manual startup views, and opting in or
   // out would send it. Pause automatic pageviews around the switch.
   if (manualStartupViews) posthog.set_config({ capture_pageview: false });
@@ -415,12 +439,7 @@ function captureStartupViews() {
   const properties = landingProperties();
   const cookielessSessionProperties = posthog.sessionManager
     ? undefined
-    : Object.fromEntries(
-        Object.entries(properties).map(([key, value]) => [
-          `$session_entry_${key === '$current_url' ? 'url' : key.replace(/^\$/, '')}`,
-          value,
-        ]),
-      );
+    : sessionEntryProperties(properties);
   const initialProperties = Object.fromEntries(
     Object.entries(properties).map(([key, value]) => [`$initial_${key.replace(/^\$/, '')}`, value]),
   );
@@ -433,7 +452,7 @@ function captureStartupViews() {
       $set_once: initialProperties,
     },
   );
-  if (window.location.href !== snapshot.url.href) {
+  if (pageAddress(window.location.href) !== pageAddress(snapshot.url.href)) {
     posthog.capture('$pageview', cookielessSessionProperties, {
       send_instantly: true,
     });
@@ -495,18 +514,13 @@ export function connectPosthogConsent(apiKey: string): () => void {
   }
 
   document.addEventListener('visibilitychange', captureStartupViews);
-  for (const type of AUTOCAPTURE_DOM_EVENTS) {
-    window.addEventListener(type, trackInkeepInteraction, { capture: true, passive: true });
-  }
   const unsubscribe = subscribeAnalyticsConsent(applyConsent);
 
   return () => {
     analyticsEventConsent = false;
     unsubscribe();
     document.removeEventListener('visibilitychange', captureStartupViews);
-    for (const type of AUTOCAPTURE_DOM_EVENTS) {
-      window.removeEventListener(type, trackInkeepInteraction, { capture: true });
-    }
+    setInkeepTracking(false);
     clearTimeout(fallback);
     fallback = undefined;
   };

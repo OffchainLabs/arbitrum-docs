@@ -110,11 +110,11 @@ describe('PostHog CookieYes consent', () => {
     window.getCkyConsent = () => consent;
     cleanup = connect('test-key');
     expect(posthog.init).toHaveBeenCalledWith('test-key', baseConfig);
+    expect(posthog.set_config).toHaveBeenCalledWith({ advanced_disable_flags: true });
     expect(posthog.opt_in_capturing).not.toHaveBeenCalled();
     expect(posthog.set_config).toHaveBeenLastCalledWith({
       disable_persistence: true,
       ...cookielessCaptureConfig,
-      advanced_disable_flags: true,
     });
     expect(optedIn).toBe(false);
   });
@@ -197,7 +197,6 @@ describe('PostHog CookieYes consent', () => {
     expect(posthog.set_config).toHaveBeenLastCalledWith({
       disable_persistence: false,
       ...cookieCaptureConfig,
-      advanced_disable_flags: false,
     });
     expect(posthog.init).toHaveBeenCalledTimes(1);
   });
@@ -229,6 +228,33 @@ describe('PostHog CookieYes consent', () => {
     expect(posthog.opt_in_capturing).toHaveBeenCalledTimes(1);
   });
 
+  it('listens for Inkeep interactions only while autocapture runs', () => {
+    const types = [
+      'click',
+      'change',
+      'submit',
+      'pointerdown',
+      'pointercancel',
+      'copy',
+      'cut',
+      'paste',
+    ];
+    const added = () => vi.mocked(window.addEventListener).mock.calls.map(([type]) => type);
+    const removed = () => vi.mocked(window.removeEventListener).mock.calls.map(([type]) => type);
+    cleanup = connect('test-key');
+    update(cookieYesConsent({ law: 'gdpr', analytics: false, acted: false }));
+    expect(added()).toEqual([]);
+    accept();
+    expect(added()).toEqual(types);
+    update(cookieYesConsent({ law: 'gdpr', analytics: false, acted: true }));
+    expect(removed()).toEqual(types);
+    accept();
+    expect(added()).toEqual([...types, ...types]);
+    cleanup();
+    cleanup = undefined;
+    expect(removed()).toEqual([...types, ...types]);
+  });
+
   it('returns to cookieless on withdrawal and to cookies on reacceptance', () => {
     cleanup = connect('test-key');
     accept();
@@ -237,7 +263,6 @@ describe('PostHog CookieYes consent', () => {
     expect(posthog.set_config).toHaveBeenLastCalledWith({
       disable_persistence: true,
       ...cookielessCaptureConfig,
-      advanced_disable_flags: true,
     });
     expect(posthog.opt_out_capturing).toHaveBeenCalledTimes(1);
     accept();
@@ -245,7 +270,6 @@ describe('PostHog CookieYes consent', () => {
     expect(posthog.set_config).toHaveBeenLastCalledWith({
       disable_persistence: false,
       ...cookieCaptureConfig,
-      advanced_disable_flags: false,
     });
     expect(posthog.init).toHaveBeenCalledTimes(1);
     expect(posthog.opt_in_capturing).toHaveBeenCalledTimes(2);
