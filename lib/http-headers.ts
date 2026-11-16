@@ -54,11 +54,16 @@ export function contentSecurityPolicy(isProduction: boolean): string {
     "default-src 'self'",
     // CookieYes serves its loader, banner and config from cdn-cookieyes.com and logs consent to
     // log.cookieyes.com (https://www.cookieyes.com/documentation/content-security-policy/). The
-    // HubSpot tracking loader pulls its analytics and cookie scripts from the three hs-* hosts
-    // (https://knowledge.hubspot.com/domains-and-urls/ssl-and-domain-security-in-hubspot).
+    // portal's HubSpot loader (js.hs-scripts.com) injects four scripts: analytics, the cookie
+    // banner, web interactives (js.hubspot.com) and the ads pixel (js.hsadspixel.net)
+    // (https://knowledge.hubspot.com/domains-and-urls/ssl-and-domain-security-in-hubspot). The
+    // pixel loads third-party ad scripts only with HubSpot advertisement consent, which
+    // lib/hubspot.ts never grants. The portal loads no chat (usemessages.com) or non-HubSpot
+    // form collection (hscollectedforms.net); add those hosts if it starts to.
     'script-src ' +
       "'self' 'unsafe-inline' https://us-assets.i.posthog.com https://cdn-cookieyes.com " +
-      `https://*.hs-scripts.com https://*.hs-analytics.net https://*.hs-banner.com${toolbar}`,
+      'https://*.hs-scripts.com https://*.hs-analytics.net https://*.hs-banner.com ' +
+      `https://js.hubspot.com https://js.hsadspixel.net${toolbar}`,
     `style-src 'self' 'unsafe-inline'${toolbar}`,
     `font-src 'self' data:${toolbar}`,
     // Any https image: Inkeep answers can carry remote images, and a blocked image only reports.
