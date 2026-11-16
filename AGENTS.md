@@ -41,7 +41,7 @@ pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev o
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
 pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts
 pnpm test:browser      # Chromium interactions against a running production server; see README.md
-pnpm build             # check-links, then next build
+pnpm build             # format:check, check-links, then next build
 pnpm start             # serve the production build
 
 # The other CI gates
@@ -50,6 +50,7 @@ pnpm lint              # ESLint over content/: MDX that renders wrong, every <Va
 pnpm vars:check        # the announcement banner keys in content/vars.json are valid
 pnpm references:check  # glossary ids are present and unique; no partial holding a <Term> is ESM-imported
 pnpm contracts:check   # the contract-address partial is current
+pnpm gas-target:check  # the gas-target partial matches scripts/data/gas-target.json
 pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
 pnpm format:check      # prettier (pnpm format writes)
@@ -64,6 +65,8 @@ pnpm stylus:generate                   # Stylus by Example pages (:check compare
 pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
 pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN); then faq:generate
 pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
+pnpm gas-target:fetch                  # gas-target snapshot from ArbGasInfo over three public RPCs; then gas-target:generate
+pnpm gas-target:generate               # the gas-target partial from the snapshot (:check compares)
 ```
 
 ## Skills

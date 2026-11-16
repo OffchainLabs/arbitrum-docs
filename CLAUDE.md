@@ -137,8 +137,9 @@ entries do not carry this contract.
   `"../path"` entry. `scripts/sidebar.test.ts` checks the tree.
 - **Partials.** `content/partials/`, included with `<include cwd>content/partials/…</include>`
   from a page and file-relative from another partial. Write links inside a partial root-absolute;
-  `check-links` checks those and reports a missing include with its line. Two are generated; edit
-  their generators.
+  `check-links` checks those and reports a missing include with its line. Generated partials are
+  `precompile-tables/`, the contract-address partial, the gas-target partial, and the six FAQ
+  partials; edit their generators.
 - **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
   The canonical branch is `master`, including after migration. Keep the variable and PR
