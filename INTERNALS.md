@@ -265,6 +265,14 @@ The root's card is
 `app/(home)/opengraph-image.tsx`, Next's file convention. Both cards come from `renderOgImage` in
 `lib/og.tsx`, so they cannot drift.
 
+The shared card uses the homepage hero's FK Screamer heading and Aeonik body face. Its background
+is a 1200×630 capture of the actual hero gradient, color-dodge scan texture and navy slashes:
+Satori cannot render the blend itself. After changing the hero background, start the dev server
+and run `node scripts/generate-og-background.ts` (set `DOCS_BASE_URL` if it is not on port 3000).
+Commit the resulting `public/img/og-hero-background.jpg`. The OG renderer reads that image and
+the local fonts directly, without an HTTP request. `public/fonts/aeonik-regular.otf` is an
+uncompressed copy of the site's WOFF2 face, since Satori does not support WOFF2.
+
 **Do not add a `title.template` to `app/layout.tsx`.** Keep page titles as written in frontmatter,
 without an automatic suffix.
 
