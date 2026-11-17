@@ -43,10 +43,11 @@ The essentials:
   MDX `src="…"` from the old extension to `.svg`. Confirm there are no remaining
   references to the old file (`grep -rn OLDNAME content/docs`) before removing it.
   Move the old raster to Trash (`trash …`), never `rm`.
-- Verify all four: valid XML (`python3 -c "import xml.dom.minidom as m; m.parse('…')"`),
-  size is single-digit KB, render on light AND dark (`rsvg-convert -b '#ffffff'` and
-  `-b '#12141c'`) and Read both PNGs to check legibility, and the dev server serves
-  it (`curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/img/NAME.svg`).
+- Run every check in the skill's "Verification" section (valid XML, size, light and dark
+  renders, the display-width render, and `check_contrast.py`) and Read the PNGs to check
+  legibility. A transparent canvas weighs a few KB and a baked-background diagram about 50 KB.
+  Then confirm the dev server serves it
+  (`curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/img/NAME.svg`).
 
 ## Return
 
