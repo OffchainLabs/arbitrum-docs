@@ -19,12 +19,12 @@ Understanding where memory lives, which configuration knobs control it, and how 
 
 Nitro's total resident memory (RSS) is the sum of four distinct categories:
 
-| Allocator               | What uses it                                                                           | Visible in Go `memstats`? | Controlled by                                 |
-| ----------------------- | -------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------- |
-| **Go heap**             | State trie (dirty), transaction processing, goroutine stacks, general application data | Yes                       | `GOMEMLIMIT`, `trie-dirty-cache`              |
-| **calloc**              | <Term id="pebble">Pebble</Term> block cache, Pebble memtables, <Term id="stylus">Stylus</Term> WASM cache       | No                        | `database-cache`, `stylus-lru-cache-capacity` |
-| **mmap**                | fastcache (trie-clean and snapshot caches)                                             | No                        | `trie-clean-cache`, `snapshot-cache`          |
-| **glibc malloc arenas** | Per-thread arena overhead for CGO allocations                                          | No                        | `MALLOC_ARENA_MAX`                            |
+| Allocator               | What uses it                                                                                              | Visible in Go `memstats`? | Controlled by                                 |
+| ----------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------- | --------------------------------------------- |
+| **Go heap**             | State trie (dirty), transaction processing, goroutine stacks, general application data                    | Yes                       | `GOMEMLIMIT`, `trie-dirty-cache`              |
+| **calloc**              | <Term id="pebble">Pebble</Term> block cache, Pebble memtables, <Term id="stylus">Stylus</Term> WASM cache | No                        | `database-cache`, `stylus-lru-cache-capacity` |
+| **mmap**                | fastcache (trie-clean and snapshot caches)                                                                | No                        | `trie-clean-cache`, `snapshot-cache`          |
+| **glibc malloc arenas** | Per-thread arena overhead for CGO allocations                                                             | No                        | `MALLOC_ARENA_MAX`                            |
 
 Only the Go heap is subject to Go's garbage collector and `GOMEMLIMIT`. The CGO and `mmap` allocations are invisible to Go's runtime. They don't appear in `runtime.MemStats` or standard Go memory profiles, but they still consume container memory and count toward your memory limit.
 
@@ -94,16 +94,16 @@ Nitro spawns native threads for CGO operations (Pebble, compression libraries) a
 
 These are the flags and environment variables that bound Nitro's memory. All cache flags live under `execution.caching`.
 
-| Flag or variable                                | Default         | Allocator          | What it controls                                                                                              |
-| ----------------------------------------------- | --------------- | ------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `--execution.caching.database-cache`            | 2048 MB         | CGO (`calloc`)     | Pebble block cache. Also sets memtable sizes (`database-cache / 2`).                                          |
-| `--execution.caching.trie-dirty-cache`          | 1024 MB         | Go heap            | Modified trie nodes awaiting flush to disk.                                                                   |
-| `--execution.caching.trie-clean-cache`          | 600 MB          | `mmap` (fastcache) | Unchanged trie nodes cached for read performance.                                                             |
-| `--execution.caching.snapshot-cache`            | 400 MB          | `mmap` (fastcache) | State snapshot data for fast lookups.                                                                         |
-| `--execution.caching.stylus-lru-cache-capacity` | 256 MB          | Rust (via CGO)     | Compiled Stylus WASM modules.                                                                                 |
-| `GOMEMLIMIT` (env var)                          | unset           | Go heap            | Soft memory ceiling for the Go runtime. See below.                                                            |
-| `MALLOC_ARENA_MAX` (env var)                    | unset           | glibc arenas       | Caps glibc malloc arenas. Set to `2` on every containerized node.                                             |
-| `--node.resource-mgmt.mem-free-limit`           | empty (off)     | —                  | Declines RPC calls when free memory (excluding page cache) drops below this.                                  |
+| Flag or variable                                | Default         | Allocator          | What it controls                                                                  |
+| ----------------------------------------------- | --------------- | ------------------ | --------------------------------------------------------------------------------- |
+| `--execution.caching.database-cache`            | 2048 MB         | CGO (`calloc`)     | Pebble block cache. Also sets memtable sizes (`database-cache / 2`).              |
+| `--execution.caching.trie-dirty-cache`          | 1024 MB         | Go heap            | Modified trie nodes awaiting flush to disk.                                       |
+| `--execution.caching.trie-clean-cache`          | 600 MB          | `mmap` (fastcache) | Unchanged trie nodes cached for read performance.                                 |
+| `--execution.caching.snapshot-cache`            | 400 MB          | `mmap` (fastcache) | State snapshot data for fast lookups.                                             |
+| `--execution.caching.stylus-lru-cache-capacity` | 256 MB          | Rust (via CGO)     | Compiled Stylus WASM modules.                                                     |
+| `GOMEMLIMIT` (env var)                          | unset           | Go heap            | Soft memory ceiling for the Go runtime. See below.                                |
+| `MALLOC_ARENA_MAX` (env var)                    | unset           | glibc arenas       | Caps glibc malloc arenas. Set to `2` on every containerized node.                 |
+| `--node.resource-mgmt.mem-free-limit`           | empty (off)     | —                  | Declines RPC calls when free memory (excluding page cache) drops below this.      |
 | `--node.block-validator.memory-free-limit`      | `default` (1GB) | —                  | Pauses block validation when free memory drops below this. Empty string disables. |
 
 <Callout type="idea">All of the `execution.caching` values are bounded by configuration and won't grow beyond their configured limits, so total non-Go memory is predictable and can be calculated from your configuration.</Callout>

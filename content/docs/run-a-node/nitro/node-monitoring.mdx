@@ -43,14 +43,14 @@ http://<metrics-server.addr>:<metrics-server.port>/debug/metrics/prometheus
 
 Group your alerts by concern. The metric names below are Nitro's Prometheus metric names.
 
-| Concern        | Metric                            | What it tells you                                                                                                      |
-| -------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Memory         | `container_memory_rss`            | Actual container RSS (resident memory). Alert on this, not Go heap. Most Nitro memory is invisible to Go.              |
+| Concern        | Metric                            | What it tells you                                                                                                                                                                        |
+| -------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Memory         | `container_memory_rss`            | Actual container RSS (resident memory). Alert on this, not Go heap. Most Nitro memory is invisible to Go.                                                                                |
 | Sequencer feed | `arb_feed_backlog_messages`       | Messages in the feed backlog. A growing backlog means the <Term id="batch-poster">batch poster</Term> is not posting message batches to the <Term id="parent-chain">parent chain</Term>. |
-| Sequencing     | `arb_sequencer_backlog`           | Backlog at the <Term id="sequencer">sequencer</Term>. Sustained growth means the sequencer can't keep up with load.    |
-| Batch posting  | `arb_batchposter_wallet_eth`      | Batch poster wallet balance. If the wallet runs dry, batches stop posting.              |
-| Batch posting  | `arb_batchposter_suggestedtipcap` | Suggested tip cap the batch poster pays. It tracks parent chain fee pressure.           |
-| RPC protection | `arb_rpc_limitcheck_failure`      | Increments when the memory free-limit throttle rejects an RPC call (HTTP 429).                                         |
+| Sequencing     | `arb_sequencer_backlog`           | Backlog at the <Term id="sequencer">sequencer</Term>. Sustained growth means the sequencer can't keep up with load.                                                                      |
+| Batch posting  | `arb_batchposter_wallet_eth`      | Batch poster wallet balance. If the wallet runs dry, batches stop posting.                                                                                                               |
+| Batch posting  | `arb_batchposter_suggestedtipcap` | Suggested tip cap the batch poster pays. It tracks parent chain fee pressure.                                                                                                            |
+| RPC protection | `arb_rpc_limitcheck_failure`      | Increments when the memory free-limit throttle rejects an RPC call (HTTP 429).                                                                                                           |
 
 <Callout type="idea">
 
