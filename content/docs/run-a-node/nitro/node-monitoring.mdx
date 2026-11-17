@@ -46,10 +46,10 @@ Group your alerts by concern. The metric names below are Nitro's Prometheus metr
 | Concern        | Metric                            | What it tells you                                                                                                      |
 | -------------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | Memory         | `container_memory_rss`            | Actual container RSS (resident memory). Alert on this, not Go heap. Most Nitro memory is invisible to Go.              |
-| Sequencer feed | `arb_feed_backlog_messages`       | Messages in the feed backlog. A growing backlog means the batch poster is not posting message batches to parent chain. |
+| Sequencer feed | `arb_feed_backlog_messages`       | Messages in the feed backlog. A growing backlog means the <Term id="batch-poster">batch poster</Term> is not posting message batches to the <Term id="parent-chain">parent chain</Term>. |
 | Sequencing     | `arb_sequencer_backlog`           | Backlog at the <Term id="sequencer">sequencer</Term>. Sustained growth means the sequencer can't keep up with load.    |
-| Batch posting  | `arb_batchposter_wallet_eth`      | <Term id="batch-poster">Batch poster</Term> wallet balance. If the wallet runs dry, batches stop posting.              |
-| Batch posting  | `arb_batchposter_suggestedtipcap` | Suggested tip cap the batch poster pays. It tracks <Term id="parent-chain">parent chain</Term> fee pressure.           |
+| Batch posting  | `arb_batchposter_wallet_eth`      | Batch poster wallet balance. If the wallet runs dry, batches stop posting.              |
+| Batch posting  | `arb_batchposter_suggestedtipcap` | Suggested tip cap the batch poster pays. It tracks parent chain fee pressure.           |
 | RPC protection | `arb_rpc_limitcheck_failure`      | Increments when the memory free-limit throttle rejects an RPC call (HTTP 429).                                         |
 
 <Callout type="idea">
@@ -76,7 +76,7 @@ curl -sf -X POST http://localhost:8547 \
 
 ### Auxiliary components
 
-- **Transaction filterer**: Exposes a `/liveness` endpoint for health checks.
+- **<Term id="transaction">Transaction</Term> filterer**: Exposes a `/liveness` endpoint for health checks.
 - **DA server**: Exposes a `/health` endpoint.
 
 ## Kubernetes
