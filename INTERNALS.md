@@ -764,9 +764,8 @@ one exists. The list comes from the September 2026 review's sweep of 1,609 maste
   Docusaurus routed every partial because master's `exclude` replaced the default underscore
   exclusion, and master itself classed them as non-canonical and kept them out of its sitemap and
   `llms.txt`. Partials live outside the docs collection here and cannot be routed. No redirect,
-  except for two former modal pages that still get inbound links:
-  `/launch-arbitrum-chain/partials/config-data-posting-costs` and
-  `/launch-arbitrum-chain/partials/config-l1-challenge-period`.
+  except for the former Docusaurus modal pages under `/launch-arbitrum-chain/partials/` that still
+  get inbound links. They are grouped under one comment in `redirects.config.ts`.
 - **The three `.otf` and `.woff` fonts** under `/fonts/`. Renamed to the `.woff2` files in
   `public/fonts/`; no page links a font file.
 - **`/.nojekyll`** (a GitHub Pages artefact) and **`/img/devdocs.png`** (only ever the
