@@ -279,6 +279,21 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/build-arbitrum-dapps/cross-chain-messaging',
+    destination: '/arbitrum-essentials/bridging/cross-chain-messaging',
+    permanent: false,
+  },
+  {
+    source: '/build-decentralized-apps/02-arbitrum-vs-ethereum',
+    destination: '/arbitrum-essentials/arbitrum-vs-ethereum',
+    permanent: false,
+  },
+  {
+    source: '/build-decentralized-apps/arbitrum-vs-ethereum/02-public-chains',
+    destination: '/arbitrum-essentials/public-chains',
+    permanent: false,
+  },
+  {
     source: '/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
     destination: '/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time',
     permanent: false,
@@ -424,6 +439,16 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/build-decentralized-apps/precompiles/01-overview',
+    destination: '/arbitrum-essentials/precompiles/overview',
+    permanent: false,
+  },
+  {
+    source: '/build-decentralized-apps/precompiles/02-reference',
+    destination: '/arbitrum-essentials/precompiles/reference',
+    permanent: false,
+  },
+  {
     source: '/build-decentralized-apps/precompiles/overview',
     destination: '/arbitrum-essentials/precompiles/overview',
     permanent: false,
@@ -476,6 +501,11 @@ export const redirects: Redirect[] = [
   {
     source: '/build-decentralized-apps/reference/node-providers',
     destination: '/arbitrum-essentials/reference/node-providers',
+    permanent: false,
+  },
+  {
+    source: '/build-decentralized-apps/reference/rpc-methods',
+    destination: '/arbitrum-essentials/arbitrum-vs-ethereum/rpc-methods',
     permanent: false,
   },
   {
@@ -604,6 +634,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/build-decentralized-apps/token-bridging/overview',
+    destination: '/arbitrum-essentials/bridging/overview',
+    permanent: false,
+  },
+  {
     source: '/build-decentralized-apps/token-bridging/token-bridge-erc20',
     destination: '/how-arbitrum-works/deep-dives/token-bridging',
     permanent: false,
@@ -681,6 +716,11 @@ export const redirects: Redirect[] = [
   {
     source: '/devs-how-tos/how-to-use-oracles',
     destination: '/oracles/overview-oracles',
+    permanent: false,
+  },
+  {
+    source: '/devs-how-tos/public-chains',
+    destination: '/arbitrum-essentials/public-chains',
     permanent: false,
   },
   {
@@ -769,8 +809,18 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/for-devs/concepts/bridging',
+    destination: '/arbitrum-essentials/bridging',
+    permanent: false,
+  },
+  {
     source: '/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time',
     destination: '/arbitrum-essentials/arbitrum-vs-ethereum/block-numbers-and-time',
+    permanent: false,
+  },
+  {
+    source: '/for-devs/concepts/differences-between-arbitrum-ethereum/oracles',
+    destination: '/oracles',
     permanent: false,
   },
   {
@@ -826,6 +876,11 @@ export const redirects: Redirect[] = [
   {
     source: '/for-devs/concepts/token-bridge/token-bridge-overview',
     destination: '/arbitrum-essentials/bridging/overview',
+    permanent: false,
+  },
+  {
+    source: '/for-devs/concepts/token-bridging',
+    destination: '/how-arbitrum-works/deep-dives/token-bridging',
     permanent: false,
   },
   {
@@ -917,6 +972,12 @@ export const redirects: Redirect[] = [
     source: '/for-devs/oracles/oracles-content-map',
     destination: '/oracles',
     permanent: true,
+  },
+  // Section landing: the Quex oracle page was deleted (a1dda5040) and has no successor.
+  {
+    source: '/for-devs/oracles/quex',
+    destination: '/oracles',
+    permanent: false,
   },
   {
     source: '/for-devs/oracles/supra/supras-price-feed',
@@ -1159,6 +1220,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/how-arbitrum-works/arbos/l2-to-l1-messaging',
+    destination: '/how-arbitrum-works/deep-dives/l2-to-l1-messaging',
+    permanent: false,
+  },
+  {
     source: '/how-arbitrum-works/assertion-tree',
     destination: '/how-arbitrum-works/deep-dives/assertions',
     permanent: false,
@@ -1186,6 +1252,11 @@ export const redirects: Redirect[] = [
   {
     source: '/how-arbitrum-works/fees',
     destination: '/how-arbitrum-works/deep-dives/gas-and-fees',
+    permanent: false,
+  },
+  {
+    source: '/how-arbitrum-works/finality',
+    destination: '/how-arbitrum-works/deep-dives/finality',
     permanent: false,
   },
   {
@@ -1258,6 +1329,12 @@ export const redirects: Redirect[] = [
     destination: '/how-arbitrum-works/inside-arbitrum-nitro',
     permanent: false,
   },
+  // Section landing: the "How it works overview" index page was never merged or ported.
+  {
+    source: '/how-arbitrum-works/overview',
+    destination: '/how-arbitrum-works',
+    permanent: false,
+  },
   {
     source: '/how-arbitrum-works/reference/parent-chain-pricing',
     destination: '/how-arbitrum-works/deep-dives/gas-and-fees#parent-chain-gas-pricing',
@@ -1319,6 +1396,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/how-arbitrum-works/validation-and-proving',
+    destination: '/how-arbitrum-works/bold/gentle-introduction',
+    permanent: false,
+  },
+  {
     source: '/how-arbitrum-works/validation-and-proving/proving-and-challenges',
     destination: '/how-arbitrum-works/bold/gentle-introduction',
     permanent: false,
@@ -1371,6 +1453,12 @@ export const redirects: Redirect[] = [
   {
     source: '/l1_l2_messages',
     destination: '/how-arbitrum-works/deep-dives/l1-to-l2-messaging',
+    permanent: false,
+  },
+  {
+    source:
+      '/launch-arbitrum-chain/02-configure-your-chain/common/validation-and-security/config-smart-contract-size-limit',
+    destination: '/launch-arbitrum-chain/chain-config/execution/smart-contract-size-limit',
     permanent: false,
   },
   {
@@ -1557,6 +1645,12 @@ export const redirects: Redirect[] = [
   {
     source: '/launch-arbitrum-chain/configure-your-chain/advanced/da-api-integration-guide',
     destination: '/launch-arbitrum-chain/extend-the-protocol/da-api-guide',
+    permanent: false,
+  },
+  // Section landing: the Layer Leap page was removed (44ef561bf) and has no successor.
+  {
+    source: '/launch-arbitrum-chain/configure-your-chain/advanced/layer-leap',
+    destination: '/launch-arbitrum-chain/overview/introduction',
     permanent: false,
   },
   {
@@ -1953,6 +2047,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/launch-arbitrum-chain/features/common/mev/choose-timeboost',
+    destination: '/launch-arbitrum-chain/chain-config/sequencer/pga',
+    permanent: false,
+  },
+  {
     source: '/launch-arbitrum-chain/features/common/mev/choose-timeboostburn',
     destination: '/launch-arbitrum-chain/chain-config/sequencer/pga',
     permanent: false,
@@ -1992,6 +2091,11 @@ export const redirects: Redirect[] = [
   {
     source: '/launch-arbitrum-chain/how-tos/customize-deployment-configuration',
     destination: '/launch-arbitrum-chain/deploy/deploy-chain',
+    permanent: false,
+  },
+  {
+    source: '/launch-arbitrum-chain/introduction',
+    destination: '/launch-arbitrum-chain/overview/introduction',
     permanent: false,
   },
   {
@@ -2049,7 +2153,7 @@ export const redirects: Redirect[] = [
     destination: '/launch-arbitrum-chain/chain-config/costs/gas-target',
     permanent: false,
   },
-  // Two Docusaurus modal pages that still get inbound links. Other partial routes get no redirect
+  // Docusaurus modal pages that still get inbound links. Other partial routes get no redirect
   // (INTERNALS.md#removed-at-the-migration).
   {
     source: '/launch-arbitrum-chain/partials/config-data-posting-costs',
@@ -2057,8 +2161,23 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/launch-arbitrum-chain/partials/config-data-posting-costs/how-to-choose',
+    destination: '/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing',
+    permanent: false,
+  },
+  {
+    source: '/launch-arbitrum-chain/partials/config-force-inclusion',
+    destination: '/how-arbitrum-works/deep-dives/forced-transactions',
+    permanent: false,
+  },
+  {
     source: '/launch-arbitrum-chain/partials/config-l1-challenge-period',
     destination: '/launch-arbitrum-chain/chain-config/validation/challenge-period',
+    permanent: false,
+  },
+  {
+    source: '/launch-arbitrum-chain/partials/config-other-language-support',
+    destination: '/stylus/gentle-introduction',
     permanent: false,
   },
   {
@@ -2139,6 +2258,12 @@ export const redirects: Redirect[] = [
   {
     source: '/launch-orbit-chain/bold-adoption-for-orbit-chains',
     destination: '/launch-arbitrum-chain/chain-config/validation/bold',
+    permanent: false,
+  },
+  // Section landing: the AnyTrust keyset generation page was archived (0bb041a91) and never ported.
+  {
+    source: '/launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
+    destination: '/launch-arbitrum-chain/chain-config/data-availability',
     permanent: false,
   },
   {
@@ -2585,6 +2710,11 @@ export const redirects: Redirect[] = [
     permanent: true,
   },
   {
+    source: '/learn-more/glossary',
+    destination: '/glossary',
+    permanent: false,
+  },
+  {
     source: '/learnmore/faq',
     destination: '/get-started/faq',
     permanent: false,
@@ -2739,6 +2869,12 @@ export const redirects: Redirect[] = [
     destination: '/arbitrum-essentials/reference/node-providers',
     permanent: false,
   },
+  // Section landing: the node-running content map was removed (8ec849c07); /run-a-node replaced it.
+  {
+    source: '/node-running/node-running-content-map',
+    destination: '/run-a-node',
+    permanent: false,
+  },
   {
     source: '/node-running/quickstart-running-a-node',
     destination: '/run-a-node/overview',
@@ -2825,6 +2961,12 @@ export const redirects: Redirect[] = [
     destination: '/notices/arbos51-upgrade-notice',
     permanent: false,
   },
+  // Section landing: the ArbOS 60 notice was removed (942780058) and has no successor.
+  {
+    source: '/notices/arbos60-upgrade-notice',
+    destination: '/notices',
+    permanent: false,
+  },
   {
     source: '/notices/glamsterdam-sepolia-notice',
     destination: '/notices',
@@ -2903,6 +3045,11 @@ export const redirects: Redirect[] = [
   {
     source: '/rollup_protocol',
     destination: '/how-arbitrum-works/inside-arbitrum-nitro',
+    permanent: false,
+  },
+  {
+    source: '/run-arbitrum-node',
+    destination: '/run-a-node',
     permanent: false,
   },
   {
@@ -2986,6 +3133,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/run-arbitrum-node/data-availability-committees/get-started',
+    destination: '/launch-arbitrum-chain/chain-config/data-availability/dac-get-started',
+    permanent: false,
+  },
+  {
     source: '/run-arbitrum-node/how-to-use-timeboost',
     destination: '/how-arbitrum-works/priority-gas-auction/pga',
     permanent: false,
@@ -3065,6 +3217,12 @@ export const redirects: Redirect[] = [
     destination: '/run-a-node/nitro/nitro-database-snapshots',
     permanent: true,
   },
+  // Section landing: the Nitro memory management page was a stub, removed in 37fe5f339.
+  {
+    source: '/run-arbitrum-node/nitro/nitro-memory-management',
+    destination: '/run-a-node/nitro',
+    permanent: false,
+  },
   {
     source: '/run-arbitrum-node/nitro/node-tuning-and-monitoring',
     destination: '/run-a-node/nitro/node-tuning',
@@ -3083,6 +3241,11 @@ export const redirects: Redirect[] = [
   {
     source: '/run-arbitrum-node/quickstart',
     destination: '/run-a-node/overview',
+    permanent: false,
+  },
+  {
+    source: '/run-arbitrum-node/read-sequencer-feed',
+    destination: '/run-a-node/sequencer/read-sequencer-feed',
     permanent: false,
   },
   {
@@ -3404,6 +3567,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/stylus/how-tos/testing-contracts',
+    destination: '/stylus/fundamentals/testing-contracts',
+    permanent: false,
+  },
+  {
     source: '/stylus/how-tos/using-stylus-cli',
     destination: '/stylus/cli-tools/overview',
     permanent: false,
@@ -3421,6 +3589,11 @@ export const redirects: Redirect[] = [
   {
     source: '/stylus/reference/cargo-stylus',
     destination: '/stylus/gentle-introduction',
+    permanent: false,
+  },
+  {
+    source: '/stylus/reference/project-structure',
+    destination: '/stylus/fundamentals/project-structure',
     permanent: false,
   },
   {
