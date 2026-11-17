@@ -71,8 +71,8 @@ The essence of Nitro, and its key innovations, lie in four big ideas. We'll list
 
 This diagram summarizes how transactions are processed in Nitro.
 
-<ImageZoom src="/img/haw-transaction-lifecycle.svg" className="img-800px" alt="Transaction lifecycle">
-  Transaction lifecycle
+<ImageZoom>
+  <img src="/img/haw-transaction-lifecycle.svg" alt="A signed transaction reaches the Sequencer over JSON-RPC. A retryable ticket enters the delayed inbox on the parent chain, and the Sequencer reads delayed messages from it. The Sequencer orders transactions and publishes them in its feed as soft confirmations. The state transition function runs the ordered transactions, reads and writes the chain state, and produces child chain blocks. The batch poster compresses the ordered transactions and posts them to the sequencer inbox as blobs or calldata. The proposer asserts the resulting state to the Rollup contract. The Rollup contract reads a batch commitment from the sequencer inbox and binds each assertion to it. If the Sequencer does not include a delayed message, anyone can force-include it into the sequencer inbox after the delay." data-wide />
 </ImageZoom>
 
 Let's [follow a user's transaction](/how-arbitrum-works/deep-dives/transaction-lifecycle) through this process.
