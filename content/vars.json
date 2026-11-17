@@ -5,7 +5,7 @@
   "novaChainId": 42170,
   "nitroDocsRepo": "https://github.com/OffchainLabs/nitro",
   "latestNitroNodeImage": "offchainlabs/nitro-node:v3.12.2-5f02f3f",
-  "latestClassicNodeImage": "offchainlabs/arb-node:v1.4.6-551a39b3",
+  "latestClassicNodeImage": "offchainlabs/arb-node:v1.4.7-dd4595f8",
   "nitroVersionTag": "v3.12.2",
   "nitroRepositorySlug": "nitro",
   "nitroPathToArbos": "arbos",

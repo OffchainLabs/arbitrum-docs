@@ -31,7 +31,7 @@ Grounding rule: State only what you read in a file, and cite it as `file:line`. 
 pnpm install           # postinstall runs fumadocs-mdx, which regenerates .source/
 pnpm dev               # pnpm install, pnpm clean (.next/, .source/), next dev on :3000
 pnpm types:check       # fumadocs-mdx && next typegen && tsc --noEmit
-pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts; helper tests require python3 >=3.9
+pnpm test              # node --test over scripts/**/*.test.ts and eslint/**/*.test.ts, then vitest over lib/**/*.test.ts (analytics consent); helper tests require python3 >=3.9
 pnpm test:browser      # Chromium interactions against a running production server; see README.md
 pnpm build             # format:check, check-links, then next build
 pnpm start             # serve the production build
@@ -42,6 +42,7 @@ pnpm lint              # ESLint over content/: the docs/* rules below, every <Va
 pnpm vars:check        # the announcement banner keys in content/vars.json are valid
 pnpm references:check  # glossary ids are present and unique; no partial holding a <Term> is ESM-imported
 pnpm contracts:check   # the contract-address partial is current
+pnpm gas-target:check # the gas-target partial matches scripts/data/gas-target.json
 pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
 pnpm format:check      # prettier (pnpm format writes)
@@ -56,12 +57,15 @@ pnpm stylus:generate                   # Stylus by Example pages (:check compare
 pnpm edge-challenge:fetch              # BoLD challenge snapshot in public/data/
 pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN); then faq:generate
 pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
+pnpm gas-target:fetch                 # gas-target snapshot from ArbGasInfo over three public RPCs; then gas-target:generate
+pnpm gas-target:generate              # the gas-target partial from the snapshot (:check compares)
 ```
 
 CI (`.github/workflows/ci.yml`) runs the gates in one job, then `pnpm build` plus
 `scripts/static-docs-http.test.ts` against the running build in a second. There is no pre-commit
 hook. `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` on Mondays and
-opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mondays for the Notion FAQ snapshots.
+opens a PR that gets no CI run of its own. `faq-refresh.yml` does the same on Mondays for the Notion FAQ snapshots,
+and `gas-target-refresh.yml` for the gas-target snapshot.
 
 ## Frontmatter contract
 
@@ -133,8 +137,9 @@ entries do not carry this contract.
   `"../path"` entry. `scripts/sidebar.test.ts` checks the tree.
 - **Partials.** `content/partials/`, included with `<include cwd>content/partials/…</include>`
   from a page and file-relative from another partial. Write links inside a partial root-absolute;
-  `check-links` checks those and reports a missing include with its line. Two are generated; edit
-  their generators.
+  `check-links` checks those and reports a missing include with its line. Generated partials are
+  `precompile-tables/`, the contract-address partial, the gas-target partial, and the six FAQ
+  partials; edit their generators.
 - **Variables.** `content/vars.json`; no schema edit is needed to add a key. `docsRepositoryUrl`
   and `docsRepositoryBranch` are this repo's own GitHub identity, read by `gitConfig`.
   The canonical branch is `master`, including after migration. Keep the variable and PR
@@ -155,6 +160,13 @@ entries do not carry this contract.
   `Link` on `/`, CORS on the markdown surface). The `og/` and `llms.mdx/` routes have
   `dynamicParams = false`. `app/preview/` serves the static link-preview JSON, untracked and without
   CORS. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
+- **Analytics consent.** CookieYes (`components/analytics/cookie-consent.tsx`, keyed by
+  `NEXT_PUBLIC_COOKIEYES_ID`) owns the banner. `lib/analytics-consent.ts` reads consent by banner
+  law; `lib/posthog-consent.ts` and `lib/hubspot.ts` gate PostHog and HubSpot on it, in production
+  only. Never import `posthog-js` elsewhere or call `posthog.capture` directly: send browser events
+  through `captureConsentedPosthogEvent` (or `captureNotFoundEvent` for the 404 report). Add
+  `ph-no-capture` to any element that renders visitor input. The suites in `lib/*.test.ts` run on
+  vitest with the real SDK. See [INTERNALS.md](INTERNALS.md#analytics).
 - **Site URL.** Absolute URLs come from `getSiteUrl()` in `lib/shared.ts`, which throws in a
   production build without `NEXT_PUBLIC_SITE_URL`.
 - **Theme.** `app/global.css` only. Tokens are `--color-fd-*`, built on the `--color-arbitrum-*`

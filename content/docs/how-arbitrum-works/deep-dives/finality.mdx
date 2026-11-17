@@ -35,7 +35,7 @@ The following table summarizes the approximate latency and guarantee at each sta
 
 <Callout type="info" title="The Fast Feed publishes all transactions in a PGA round">
 
-On <Term id="arbitrum-one">Arbitrum One</Term>, the [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) publishes all transactions within a the Priority Gas Auction (PGA) round, before the block closes and before the Sequencer feed carries it. It is faster than soft finality and guarantees less: the block number it reports is tentative, it carries no block hash, and inclusion is not guaranteed. It is not a finality stage. Read it as an early signal, then confirm against the Sequencer feed or a node.
+On <Term id="arbitrum-one">Arbitrum One</Term>, the [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed) publishes each transaction in a Priority Gas Auction (PGA) round before the block closes and before the Sequencer feed carries it. It is faster than soft finality and guarantees less: the block number it reports is tentative, it carries no block hash, and inclusion is not guaranteed. It is not a finality stage. Read it as an early signal, then confirm against the Sequencer feed or a node.
 
 </Callout>
 
@@ -67,7 +67,7 @@ The practical consequence is that the Sequencer can _delay_ a transaction but ca
 
 ## Hard finality
 
-Hard finality occurs when batched transactions are posted to the parent chain and the corresponding assertions are <Term id="confirmation">confirmed</Term> by the Rollup protocol. Posting a batch to the parent chain is not itself final settlement: the transaction data becomes available and inherits the parent chain’s data-layer security, but final settlement of the resulting L2 state occurs once assertions are confirmed (see "Final settlement" above). Key characteristics include:
+Hard finality occurs when the batch poster posts a batch to the parent chain and the parent-chain block that carries it is final. After that, only a parent-chain reorg can revert the transactions in the batch. Hard finality is not full settlement. Full settlement happens later, when the Rollup protocol <Term id="confirmation">confirms</Term> the assertion that covers the batch. Only then can L2→L1 withdrawals execute (see [Finality at a glance](#finality-at-a-glance)). Key characteristics include:
 
 - **Strong security guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain’s security assurances.
 - **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
@@ -81,7 +81,7 @@ Hard finality occurs when batched transactions are posted to the parent chain an
 
 ### Limitations of hard finality
 
-- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. The <Term id="challenge-protocol">challenge protocol</Term> that backs this guarantee is described in <Term id="bold">BoLD</Term>.
+- **High latency**: Achieving hard finality takes longer because the parent chain must process and finalize batches. On Ethereum, this takes about 12–15 minutes.
 
 ## Trust considerations
 

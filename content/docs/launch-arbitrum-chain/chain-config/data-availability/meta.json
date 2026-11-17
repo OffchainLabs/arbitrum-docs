@@ -3,6 +3,7 @@
   "pages": [
     "config-data-availability",
     "dac-get-started",
+    "anytrust-trust-model",
     "dac-configuration-defaults",
     "configure-dac",
     "dac-das-operations",
