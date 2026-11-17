@@ -18,7 +18,7 @@
     "format:check": "prettier --check .",
     "lint": "eslint",
     "references:check": "node scripts/references-check.ts",
-    "test": "node --test \"scripts/**/*.test.ts\" \"eslint/**/*.test.ts\"",
+    "test": "node --test \"scripts/**/*.test.ts\" \"eslint/**/*.test.ts\" && vitest run",
     "test:browser": "node --test \"tests/browser/*.test.ts\"",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "vars:check": "node scripts/vars-check.ts",
@@ -108,6 +108,7 @@
     "@types/unist": "^3.0.3",
     "eslint": "^10.13.0",
     "jiti": "^2.7.0",
+    "jsdom": "^28.1.0",
     "mdast-util-from-markdown": "^2.1.0",
     "mdast-util-frontmatter": "^2.0.1",
     "mdast-util-gfm": "^3.1.0",
@@ -124,6 +125,7 @@
     "prettier": "^3.9.10",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vfile": "^6.0.3"
+    "vfile": "^6.0.3",
+    "vitest": "^4.1.12"
   }
 }
