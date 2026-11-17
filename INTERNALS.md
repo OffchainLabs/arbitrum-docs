@@ -709,7 +709,7 @@ That test asserts that every internal destination names a page under `content/do
 (case-sensitively), a file under `public/` or a markdown mirror, that no source is a live page, that
 nothing chains or loops, and that no source is listed twice; it runs over the hand-written list and
 the derived `.md` twins together, and every pattern entry (today, the audit-report PDFs) needs a
-dedicated test of its own. Never hand-write a `.md` entry: the twin is derived. The 19 legacy
+dedicated test of its own. Never hand-write a `.md` entry: the twin is derived. The 18 legacy
 `features/` sources point at the `chain-config/**` and `extend-the-protocol/**` pages that replaced
 the retired decision pages; two point at the Arbitrum Foundation's AEP fee calculator, as master's
 own redirects did.
@@ -763,7 +763,10 @@ one exists. The list comes from the September 2026 review's sweep of 1,609 maste
 - **234 partial routes** such as `/arbitrum-essentials/bridging/partials/_token-compatibility`.
   Docusaurus routed every partial because master's `exclude` replaced the default underscore
   exclusion, and master itself classed them as non-canonical and kept them out of its sitemap and
-  `llms.txt`. Partials live outside the docs collection here and cannot be routed. No redirect.
+  `llms.txt`. Partials live outside the docs collection here and cannot be routed. No redirect,
+  except for two former modal pages that still get inbound links:
+  `/launch-arbitrum-chain/partials/config-data-posting-costs` and
+  `/launch-arbitrum-chain/partials/config-l1-challenge-period`.
 - **The three `.otf` and `.woff` fonts** under `/fonts/`. Renamed to the `.woff2` files in
   `public/fonts/`; no page links a font file.
 - **`/.nojekyll`** (a GitHub Pages artefact) and **`/img/devdocs.png`** (only ever the

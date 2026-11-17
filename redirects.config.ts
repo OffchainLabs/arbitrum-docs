@@ -1170,6 +1170,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/get-started/overview',
+    destination: '/get-started',
+    permanent: false,
+  },
+  {
     source: '/getting-started-devs',
     destination: '/build-decentralized-apps/quickstart-solidity-remix',
     permanent: false,
@@ -1967,6 +1972,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/launch-arbitrum-chain/features/advanced/choose-chain-precompiles',
+    destination: '/launch-arbitrum-chain/extend-the-protocol/precompiles',
+    permanent: false,
+  },
+  {
     source: '/launch-arbitrum-chain/features/advanced/choose-custom-behavior',
     destination: '/launch-arbitrum-chain/extend-the-protocol/stf',
     permanent: false,
@@ -2138,7 +2148,13 @@ export const redirects: Redirect[] = [
     destination: '/launch-arbitrum-chain/chain-config/costs/gas-target',
     permanent: false,
   },
-  // Docusaurus modal pages that still get inbound links. Other partial routes get no redirect.
+  // Docusaurus modal pages that still get inbound links. Other partial routes get no redirect
+  // (INTERNALS.md#removed-at-the-migration).
+  {
+    source: '/launch-arbitrum-chain/partials/config-data-posting-costs',
+    destination: '/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing',
+    permanent: false,
+  },
   {
     source: '/launch-arbitrum-chain/partials/config-data-posting-costs/how-to-choose',
     destination: '/launch-arbitrum-chain/chain-config/costs/parent-chain-data-fee-pricing',
@@ -2147,6 +2163,11 @@ export const redirects: Redirect[] = [
   {
     source: '/launch-arbitrum-chain/partials/config-force-inclusion',
     destination: '/how-arbitrum-works/deep-dives/forced-transactions',
+    permanent: false,
+  },
+  {
+    source: '/launch-arbitrum-chain/partials/config-l1-challenge-period',
+    destination: '/launch-arbitrum-chain/chain-config/validation/challenge-period',
     permanent: false,
   },
   {
@@ -3556,6 +3577,11 @@ export const redirects: Redirect[] = [
     permanent: false,
   },
   {
+    source: '/stylus/how-tos/verifying-contracts',
+    destination: '/stylus/cli-tools/verify-contracts',
+    permanent: false,
+  },
+  {
     source: '/stylus/reference/cargo-stylus',
     destination: '/stylus/gentle-introduction',
     permanent: false,
@@ -3578,6 +3604,11 @@ export const redirects: Redirect[] = [
   {
     source: '/stylus/stylus-gentle-introduction',
     destination: '/stylus/gentle-introduction',
+    permanent: false,
+  },
+  {
+    source: '/stylus/stylus-overview',
+    destination: '/stylus',
     permanent: false,
   },
   {
