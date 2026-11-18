@@ -1,16 +1,57 @@
 ---
-title: 'PGA and Fast feed'
-description: 'Detailed explanations of Priority Gas Auction (PGA) and Fast Feed.'
+title: 'PGA, the Fast Feed, and transaction submission'
+description: 'Dated changes to transaction ordering, the Fast Feed, and transaction submission on Arbitrum One, with links to the pages that explain each one.'
 content_type: concept
 author: pete-vielhaber
 sme: pete-vielhaber
 ---
 
-Detailed explanations of PGA and fast feed.
+This page lists the changes to how <Term id="arbitrum-one">Arbitrum One</Term> orders, publishes, and accepts transactions, newest first. Each section after the list links to the pages that explain one topic.
+
+## What changed
+
+All dates are in UTC.
+
+- **2026-10-28**: Offchain Labs announced changes to how `eth_sendRawTransaction` and `eth_sendRawTransactionSync` respond. The changes are not live yet. Read the [transaction submission notice](/notices/transaction-submission-changes-notice).
+- **2026-09-23**: <Term id="priority-gas-auction">Priority Gas Auction (PGA)</Term> became the ordering policy on Arbitrum One.
+- **2026-09-23**: The first <Term id="fast-feed">Fast Feed</Term> ticket round started at 17:00.
+- **2026-09-23**: Offchain Labs turned off Timeboost on Arbitrum One. Until PGA became active the same day, the <Term id="sequencer">sequencer</Term> ordered transactions <Term id="first-come-first-serve-fcfs">first-come, first-served (FCFS)</Term>.
+- **April 2025**: Timeboost started on Arbitrum One.
+
+PGA replaces Timeboost on Arbitrum One only. Other Arbitrum chains can still use FCFS ordering.
+
+## Transaction ordering
+
+With PGA, you bid for an earlier position in the order: you attach a priority fee to your transaction. The sequencer orders transactions in rounds of 125ms.
 
 <Cards>
-  <Card title="Fast Feed" description="How the fast feed works." href="/how-arbitrum-works/priority-gas-auction/fast-feed" />
-  <Card title="Buy Fast Feed access" description="How to buy Fast Feed tickets." href="/how-arbitrum-works/priority-gas-auction/use-fast-feed" />
-  <Card title="Consume the Fast Feed" description="How to connect to the Fast Feed and read its messages." href="/how-arbitrum-works/priority-gas-auction/consume-fast-feed" />
-  <Card title="PGA" description="How PGA works." href="/how-arbitrum-works/priority-gas-auction/pga" />
+  <Card title="Introduction to PGA" description="How PGA orders transactions, and what changed on Arbitrum One." href="/how-arbitrum-works/priority-gas-auction/pga" />
+</Cards>
+
+## The Fast Feed
+
+The Fast Feed is a paid WebSocket stream. It publishes each transaction after the sequencer orders and executes it, before the block reaches the standard <Term id="sequencer-feed">sequencer feed</Term>. The Fast Feed does not change the order of transactions.
+
+<Cards>
+  <Card title="Introduction to the Fast Feed" description="What the Fast Feed publishes, who it serves, and how access works." href="/how-arbitrum-works/priority-gas-auction/fast-feed" />
+  <Card title="Buy Fast Feed access" description="Buy a ticket each round from the Tickets contract." href="/how-arbitrum-works/priority-gas-auction/use-fast-feed" />
+  <Card title="Consume the Fast Feed" description="Connect to the Fast Feed and read its messages." href="/how-arbitrum-works/priority-gas-auction/consume-fast-feed" />
+</Cards>
+
+## The sequencer feed and the feed relay
+
+The sequencer feed is free and publishes each block. A Nitro node reads it to follow the chain. A <Term id="feed-relay">feed relay</Term> receives the sequencer feed and passes it on to your own nodes.
+
+<Cards>
+  <Card title="Read the sequencer feed" description="The message format of the sequencer feed." href="/run-a-node/sequencer/read-sequencer-feed" />
+  <Card title="Run a feed relay" description="Run a feed relay, and connect nodes to it for reliable feed reads." href="/run-a-node/run-feed-relay" />
+  <Card title="Sequencer transaction flow" description="How the sequencer queues, orders, and publishes transactions." href="/how-arbitrum-works/deep-dives/sequencer-transaction-flow" />
+</Cards>
+
+## Transaction submission
+
+After an upcoming change, two RPC methods return sooner. If your code treats an `eth_sendRawTransaction` response as proof of inclusion, read the notice before the change goes live.
+
+<Cards>
+  <Card title="Upcoming changes to transaction submission" description="What changes for eth_sendRawTransaction and eth_sendRawTransactionSync, and what to do." href="/notices/transaction-submission-changes-notice" />
 </Cards>
