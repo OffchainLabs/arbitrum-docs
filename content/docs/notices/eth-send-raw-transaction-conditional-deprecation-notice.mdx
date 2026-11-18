@@ -9,7 +9,7 @@ sme: leeederek
 
 This notice is for traders who submit transactions to the <Term id="arbitrum-one">Arbitrum One</Term> or <Term id="arbitrum-nova">Arbitrum Nova</Term> <Term id="sequencer">sequencer</Term> endpoints, and for chain operators who run their own <Term id="arbitrum-nitro">Nitro</Term> sequencer.
 
-Offchain Labs plans to disable `eth_sendRawTransactionConditional` (ERC-7796) at the public sequencer endpoints of Arbitrum One and Arbitrum Nova on **January 17, 2027**. A later Nitro release removes the method from the client.
+Offchain Labs plans to disable `eth_sendRawTransactionConditional` ([ERC-7796](https://ercs.ethereum.org/ERCS/erc-7796)) at the public sequencer endpoints of Arbitrum One and Arbitrum Nova on **January 17, 2027**. A later Nitro release removes the method from the client.
 
 <Callout type="info" title="What this means for you">
 
@@ -21,7 +21,7 @@ Offchain Labs plans to disable `eth_sendRawTransactionConditional` (ERC-7796) at
 
 ## What changes
 
-`eth_sendRawTransactionConditional` is `eth_sendRawTransaction` with preconditions: storage-slot values and block or timestamp bounds that must still hold when the sequencer includes the transaction. The method was activated in 2023 through [AIP-2](https://forum.arbitrum.foundation/t/aip-2-activate-support-for-account-abstraction-endpoint-on-one-and-nova/14790) for ERC-4337 bundlers. Offchain Labs reviewed recent usage on Arbitrum One and found no ERC-4337 bundler use of the method.
+`eth_sendRawTransactionConditional` is `eth_sendRawTransaction` with preconditions: storage-slot values and block or timestamp bounds that must still hold when the sequencer includes the transaction. The method was activated in 2023 through [AIP-2](https://forum.arbitrum.foundation/t/aip-2-activate-support-for-account-abstraction-endpoint-on-one-and-nova/14790) for [ERC-4337](https://ercs.ethereum.org/ERCS/erc-4337) bundlers. Offchain Labs reviewed recent usage on Arbitrum One and found no [ERC-4337](https://ercs.ethereum.org/ERCS/erc-4337) bundler use of the method.
 
 After the method is disabled:
 
