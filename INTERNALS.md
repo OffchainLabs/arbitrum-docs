@@ -34,7 +34,9 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 Fumadocs is a set of libraries on top of a Next.js App Router app that we own. There is no
 `fumadocs build`, no plugin system and no theme to eject from. `pnpm dev` runs `pnpm install`, then
 `pnpm clean` (deletes `.next/` and `.source/`), then `next dev`: the same sequence as master's
-`yarn start`, so the first page compiles cold on every start. Every route under `app/` is ordinary
+`yarn start`, so the first page compiles cold on every start. Both collections are `dynamic`
+(see [The pipeline](#the-pipeline)), so that first page compiles its own MDX and the glossary
+entries it cites, not every file under `content/`. Every route under `app/` is ordinary
 Next code. We get full control, and in exchange we own the pieces a
 monolithic docs framework would supply. Most of this document describes those pieces.
 
@@ -83,7 +85,7 @@ mistakes:
 | `:::note`, `:::caution`, `:::info` admonitions                       | `<Callout type="info\|warn\|error\|idea\|success">` on its own lines (`docusaurus-directive`)           |
 | `<a data-quicklook-from="id">text</a>`                               | `<Term id="id">text</Term>` (`quicklook-anchor`)                                                        |
 | `@@varName@@` preprocessing                                          | `<Var name="…" />` in prose, `{var:name}` in a URL, see [Global variables](#global-variables)           |
-| `import Partial from '@site/docs/partials/_x.mdx'` and `<Partial />` | `<include cwd>content/partials/_x.mdx</include>` (`site-import`)                                        |
+| `import Partial from '@site/docs/partials/_x.mdx'` and `<Partial />` | `<include cwd>content/partials/_x.mdx</include>` (`esm-in-page`)                                        |
 | `import Tabs from '@theme/Tabs'` and `<TabItem value label>`         | `<Tabs items={[…]}>` and `<Tab value>`; nothing is imported                                             |
 | `<details>`                                                          | `<Accordions><Accordion title="…">`                                                                     |
 | `className="img-600px"` on an image                                  | One prose cap (600px) in `app/global.css`, with a `data-wide` escape, see [Image sizing](#image-sizing) |
@@ -95,14 +97,42 @@ Read `source.config.ts`, `lib/source.ts` and `app/(docs)/[...slug]/page.tsx` tog
 reads the `docs` collection. The `glossary` collection has one reader, `lib/references.ts`.
 
 1. `fumadocs-mdx` scans `content/docs/**` and `content/glossary/**` and emits the `.source/`
-   collections. The frontmatter schema (`arbitrumPageSchema` in `lib/page-schema.ts`, applied by
-   the `docs` collection in `source.config.ts`) does not run here: the loader runs it when it
-   compiles a page, in `next build` and `next dev`. `pnpm frontmatter:check` runs the same schema
-   offline (`scripts/frontmatter-check.ts`).
-2. `lib/source.ts` runs `loader()` over that collection with the Lucide icons plugin and exports
-   `source`.
-3. Route handlers read `source`. The docs page renders pages; the `llms.txt`, `llms-full.txt`,
-   `llms.mdx/`, `og/` and sitemap routes derive from the same object.
+   collections. Both collections set `dynamic: true`, so `.source/dynamic.ts` lists each file with
+   its parsed frontmatter and nothing imports the MDX: a page compiles on first request, in the
+   server, through the same `buildMDX` and plugins as the bundler path
+   (`fumadocs-mdx/runtime/dynamic.js`). Under `next dev` the first page therefore waits for its own
+   MDX, not for every file; `next build` still prerenders every page. The frontmatter schema
+   (`arbitrumPageSchema` in `lib/page-schema.ts`, applied by the `docs` collection in
+   `source.config.ts`) runs when the index is generated. `pnpm lint` runs the same
+   schema offline (ESLint rule `docs/frontmatter-schema`, `eslint/rules/frontmatter-schema.ts`).
+2. `lib/source.ts` imports `docs` from `collections/dynamic` and runs `loader()` over it with the
+   Lucide icons plugin and exports `source`.
+3. Route handlers read `source`. `page.data` holds the frontmatter; `body`, `toc` and
+   `lastModified` come from `await page.data.load()`, which compiles once per process and caches.
+   The docs page renders pages; the `llms.txt`, `llms-full.txt`, `llms.mdx/`, `og/` and sitemap
+   routes derive from the same object. `getText('processed')` loads the same way.
+
+Dynamic mode supports neither a top-level `import` or `export` in an MDX page nor a relative
+image path (`./image.png`); components come from the registry in `components/mdx.tsx` and images
+from `public/`. Nothing in the build rejects an import: the compiled body runs as a function, so
+an import becomes a runtime `import()` from the page's directory. A relative one fails at request
+time with "Cannot find module"; a package import resolves through the repo's `node_modules` and
+renders, untraced by the bundler. `pnpm lint` rule `docs/esm-in-page` is the gate.
+
+Because `.source/dynamic.ts` imports `source.config.ts`, the plugins in `lib/mdx-options.ts` are
+bundled into the server. Two consequences in `lib/var-links.ts`: `VARS_PATH` is derived from
+`import.meta.url` as a string (Turbopack rewrites `new URL('…', import.meta.url)` into a static
+asset), and the read in `readVars` carries `turbopackIgnore` (a variable path otherwise makes
+Turbopack trace the whole project, `public/` included, into every server function). The server
+never reads the file in production: every page and mirror is prerendered.
+
+Hot reload under `next dev` follows the same cache. An edit to a page changes its hash in
+`.source/dynamic.ts`, Turbopack re-evaluates that module, and every page recompiles on its next
+request. An edit to a partial or to `content/vars.json` changes no hash, and the runtime compile
+records no dependencies (`compilerOf(file)` is undefined on that path), so a page already
+compiled keeps the old include and the old `{var:…}` link destinations until a page under
+`content/docs/` changes or the server restarts. `<Var>` in prose still updates: the component
+reads `@/content/vars` at render time.
 
 `.source/` is generated by `postinstall`, `types:check` and the build. Never hand-edit it.
 
@@ -135,8 +165,9 @@ Seven files under `app/` import `source`: the docs page and layout, the `llms.tx
   node position. A plugin that only mutates or removes a node leaves the mirror unchanged, so
   `remarkLlmsMarkdown` (`lib/llms-markdown.ts`), `remarkVarLinks` and `remarkStripMdxComments`
   record their edits with `replaceSource()` from `fumadocs-core/mdx-plugins/stringifier`.
-- **Server only.** Never import `lib/source`, or a module that imports it, from a client
-  component. It drags the compiled collection into the browser bundle, and no gate notices.
+- **Server only.** Never import `lib/source`, `lib/references`, or a module that imports either,
+  from a client component. They reach `collections/dynamic`, which reads and compiles files on the
+  server; `scripts/lib/client-imports.test.ts` fails on such a chain.
 
 ## The frontmatter contract
 
@@ -155,8 +186,8 @@ collection in `source.config.ts` applies it (the schema has its own module becau
 | `target_audience`           | Optional string describing the intended readers and their assumed knowledge                           |
 | `user_story`                | Optional string describing the reader's goal and why it matters                                       |
 
-A missing title or description, or a `content_type` outside the enum, fails `frontmatter:check`
-and the build. `types:check` does not validate every page's frontmatter. Nothing renders
+A missing title or description, or a `content_type` outside the enum, fails `pnpm lint` (rule
+`docs/frontmatter-schema`) and the build. `types:check` does not validate every page's frontmatter. Nothing renders
 `content_type`; it is an editorial label kept to one enum so values stay
 comparable. Partials and glossary entries do not carry this contract.
 
@@ -168,7 +199,8 @@ writers and reviewers. They do not render on the page and are not required for a
 The `lastModified` option on the `docs` collection makes `fumadocs-mdx` read each file's date from
 git. The docs page prints it as "Last updated on …", the sitemap emits it as `<lastmod>`, and page
 metadata emits it as `article:modified_time`. It is not frontmatter, so never add a date field to a
-page.
+page. It is resolved when the page compiles, so it sits behind `await page.data.load()`; the
+sitemap loads every page to read it.
 
 The option is gated by `hasFullGitHistory()` in `source.config.ts`. A shallow clone reports its
 oldest commit as having added every file, which would stamp most pages with one wrong date, so a
@@ -233,6 +265,14 @@ The root's card is
 `app/(home)/opengraph-image.tsx`, Next's file convention. Both cards come from `renderOgImage` in
 `lib/og.tsx`, so they cannot drift.
 
+The shared card uses the homepage hero's FK Screamer heading and Aeonik body face. Its background
+is a 1200×630 capture of the actual hero gradient, color-dodge scan texture and navy slashes:
+Satori cannot render the blend itself. After changing the hero background, start the dev server
+and run `node scripts/generate-og-background.ts` (set `DOCS_BASE_URL` if it is not on port 3000).
+Commit the resulting `public/img/og-hero-background.jpg`. The OG renderer reads that image and
+the local fonts directly, without an HTTP request. `public/fonts/aeonik-regular.otf` is an
+uncompressed copy of the site's WOFF2 face, since Satori does not support WOFF2.
+
 **Do not add a `title.template` to `app/layout.tsx`.** Keep page titles as written in frontmatter,
 without an automatic suffix.
 
@@ -275,7 +315,8 @@ A page includes one with the root-anchored form, which survives the page moving:
 ```
 
 Inside a partial, write the include file-relative (`<include>../_x.mdx</include>`), so the
-fragment resolves from its own location.
+fragment resolves from its own location. `_reference-chain-parameters.mdx` includes the generated
+`_reference-gas-target-partial.mdx` this way.
 
 The include is spliced in at build time, so its headings join the page's table of contents and
 `check-links` validates its `#anchors` per including page. Root-absolute links (`/section/page`) written
@@ -285,23 +326,25 @@ root-absolute. A missing include is reported as a finding with the including pag
 the `<include>`, and the other findings for that page still print. Writers find partials by
 browsing `content/partials/`; there is no catalog.
 
-Two partials are generated and carry a do-not-edit comment: `content/partials/precompile-tables/`
-(`pnpm precompiles:generate`) and `_reference-arbitrum-contract-addresses-partial.mdx`
+Three partials are generated and carry a do-not-edit comment: `content/partials/precompile-tables/`
+(`pnpm precompiles:generate`), `_reference-arbitrum-contract-addresses-partial.mdx`
 (`pnpm contracts:generate`, from the `@arbitrum/sdk` network registry plus
-`scripts/data/contract-addresses.data.ts`). Edit the generator or its data, never the output.
-Every address is EIP-55 checksummed, because `<AEL>` throws on a bad checksum.
+`scripts/data/contract-addresses.data.ts`) and `_reference-gas-target-partial.mdx`
+(`pnpm gas-target:generate`, from the snapshot `scripts/data/gas-target.json` that
+`pnpm gas-target:fetch` reads from the `ArbGasInfo` precompile). Edit the generator or its data,
+never the output. Every address is EIP-55 checksummed, because `<AEL>` throws on a bad checksum.
 
 ## Global variables
 
 Values that move on a release cadence live in `content/vars.json`. `content/vars.ts` re-exports
 the JSON with a `VarKey` type, so adding a key needs no code change. `<Var name="…" />` renders a
-value inline. A few keys are read by code, not MDX, and `vars:check` does not complain about them.
+value inline. A few keys are read by code, not MDX, and nothing complains about them.
 
-`pnpm vars:check` fails when a `<Var name>` or `{var:name}` in `content/` names no key, because MDX
-is not type-checked and a missing key renders the string `undefined`.
+`pnpm lint` (rule `docs/unknown-var`) fails when a `<Var name>` or `{var:name}` in `content/` names
+no key, because MDX is not type-checked and a missing key renders the string `undefined`.
 
 **`<Var>` does not evaluate inside a fenced block or an inline code span.** The reader sees the
-literal tag. `content:lint` rule `var-in-code` fails on it. When a command must be copy-pasteable,
+literal tag. Rule `docs/var-in-code` fails on it. When a command must be copy-pasteable,
 hardcode the value in the code and put `<Var>` in the prose beside it. For `latestNitroNodeImage`,
 `pnpm nitro:check-release --to <tag>` keeps those copies current, but only in files that carry the
 marker `{/* sync-with-var: latestNitroNodeImage */}`. Never add the marker to a page that states a
@@ -323,8 +366,8 @@ resolves an internal `/<slug>` link. Two limits:
 - A placeholder in prose fails the build, because MDX reads the braces as an expression.
 - A local image path is imported before the plugin runs, so write it in full.
 
-`content:lint` rule `var-in-link` fails on a `<Var>` in a destination or URL attribute, and on a
-placeholder whose name is not an identifier. The plugin rereads `vars.json` on each compile and registers it
+Rule `docs/var-in-link` fails on a `<Var>` in a destination or URL attribute, and on a placeholder
+whose name is not an identifier. The plugin rereads `vars.json` on each compile and registers it
 as a dependency of the page, so `pnpm dev` hot-reloads a placeholder after an edit.
 
 ### This repository's own URL has one owner
@@ -384,14 +427,16 @@ runs only here, not in CI, because the gates stay offline.
 ## Glossary and inline references
 
 `content/glossary/*.mdx` is a reference collection (`{ id, title, sortAs? }`, body is the
-definition). `lib/references.ts` is the registry. `<Term id="…">text</Term>` renders the text with
+definition). `lib/references.ts` is the registry; the collection is dynamic, so an entry's body
+comes from `await entry.load()` and `Term` and `ReferenceList` are async server components. `<Term id="…">text</Term>` renders the text with
 the definition in a popover (`components/HoverPopover`, a non-modal dialog that opens on hover,
 focus or click, so the links inside a definition are reachable by keyboard), rendered on the server
 so each page ships only the definitions it cites. `<ReferenceList collection="glossary" />` renders the whole
 collection on the glossary page.
 
-`pnpm references:check` fails on an unknown id, a duplicate id, an entry with no `id` frontmatter,
-or an unknown `<Reference collection>`. A `<Term>` inside a partial is allowed: the include is
+`pnpm lint` (rule `docs/unknown-term`) fails on an unknown id or an unknown
+`<Reference collection>`; `pnpm references:check` fails on a duplicate id or an entry with no `id`
+frontmatter. A `<Term>` inside a partial is allowed: the include is
 spliced into the page at build time, so the server component renders in the page like any other.
 Rule R3 now only forbids ESM-importing (`import X from '…/_x.mdx'`) a partial that holds one,
 because an imported partial can end up in a client module where a server component is illegal; no
@@ -428,7 +473,7 @@ include `Callout`, `Card`, `Cards` and code blocks) and adds:
 
 Callouts are `<Callout type="info|warn|error|idea|success" title="…">`. Fumadocs also accepts
 `warning` as a spelling of `warn`; write `warn`. A Docusaurus `:::` line renders as text, and
-`content:lint` fails on one.
+`pnpm lint` fails on one.
 
 The registry also overrides `a`: an internal link ending in `.pdf` renders as a plain anchor so
 Next's `<Link>` does not prefetch the file. Every other link goes through Fumadocs' relative-link
@@ -446,8 +491,9 @@ has a left accent and a "Glossary" kicker and is a reading surface; the preview 
 card is a link. The card shows the page title, its frontmatter description and the lead, muted.
 For a `#section` link it shows the section heading and its text, with the page title as a caption.
 
-The data is `page.data.structuredData`, which `remarkStructureOptions` in `lib/mdx-options.ts`
-limits to headings and paragraphs. `lib/preview-text.ts` runs before Fumadocs' `remarkStructure`
+The data is the `structuredData` export, read through `await page.data.load()` because the
+collection is dynamic, which `remarkStructureOptions` in `lib/mdx-options.ts` limits to headings
+and paragraphs. `lib/preview-text.ts` runs before Fumadocs' `remarkStructure`
 and hands it the plain text of each one: a paragraph through the `node.data.structuredData` hook, a
 heading through `'search'`-namespaced `replaceSource` edits on its children, so a `<Var>` reads as
 its value and markers and `<Term>` wrappers are gone. `lib/link-preview.ts` turns it into one JSON
@@ -505,7 +551,7 @@ renders broken. Commit the file under `public/img/`, or wrap a plain `<img>`:
 </ImageZoom>
 ```
 
-`content:lint` rule `remote-image` blocks the markdown form.
+Rule `docs/remote-image` blocks the markdown form.
 
 ## Page weight and what loads late
 
@@ -663,7 +709,7 @@ That test asserts that every internal destination names a page under `content/do
 (case-sensitively), a file under `public/` or a markdown mirror, that no source is a live page, that
 nothing chains or loops, and that no source is listed twice; it runs over the hand-written list and
 the derived `.md` twins together, and every pattern entry (today, the audit-report PDFs) needs a
-dedicated test of its own. Never hand-write a `.md` entry: the twin is derived. The 19 legacy
+dedicated test of its own. Never hand-write a `.md` entry: the twin is derived. The 18 legacy
 `features/` sources point at the `chain-config/**` and `extend-the-protocol/**` pages that replaced
 the retired decision pages; two point at the Arbitrum Foundation's AEP fee calculator, as master's
 own redirects did.
@@ -717,7 +763,9 @@ one exists. The list comes from the September 2026 review's sweep of 1,609 maste
 - **234 partial routes** such as `/arbitrum-essentials/bridging/partials/_token-compatibility`.
   Docusaurus routed every partial because master's `exclude` replaced the default underscore
   exclusion, and master itself classed them as non-canonical and kept them out of its sitemap and
-  `llms.txt`. Partials live outside the docs collection here and cannot be routed. No redirect.
+  `llms.txt`. Partials live outside the docs collection here and cannot be routed. No redirect,
+  except for the former Docusaurus modal pages under `/launch-arbitrum-chain/partials/` that still
+  get inbound links. They are grouped under one comment in `redirects.config.ts`.
 - **The three `.otf` and `.woff` fonts** under `/fonts/`. Renamed to the `.woff2` files in
   `public/fonts/`; no page links a font file.
 - **`/.nojekyll`** (a GitHub Pages artefact) and **`/img/devdocs.png`** (only ever the
@@ -846,26 +894,122 @@ flight payload. `scripts/static-docs-http.test.ts` asserts this against a runnin
 ## Analytics
 
 Five paths send events to one PostHog project. They share only the project token and the ingest
-host.
+host. A sixth integration, HubSpot tracking, reports to the Offchain Labs HubSpot portal.
 
-| Path                                   | Where                                               | Runs            |
-| -------------------------------------- | --------------------------------------------------- | --------------- |
-| Page feedback (`docs_feedback`)        | `lib/posthog.ts`, a server action                   | everywhere      |
-| Web analytics (`$pageview`)            | `components/analytics/posthog-provider.tsx`, client | production only |
-| Inkeep search (`inkeep_*`)             | `lib/inkeep.ts`, through the same client            | production only |
-| AI chat panel (`inkeep_*`)             | `lib/ai/events.ts`, through the same client         | production only |
-| Markdown fetches (`llms_file_fetched`) | `proxy.ts`, server                                  | production only |
+| Path                                   | Where                                                   | Runs                                 |
+| -------------------------------------- | ------------------------------------------------------- | ------------------------------------ |
+| Page feedback (`docs_feedback`)        | `lib/posthog.ts`, a server action                       | everywhere                           |
+| Web analytics (`$pageview`)            | `lib/posthog-consent.ts`, client                        | production, under consent            |
+| Inkeep search (`inkeep_*`)             | `lib/inkeep.ts`, through `captureConsentedPosthogEvent` | production, consent only             |
+| AI chat panel (`inkeep_*`)             | `lib/ai/events.ts`, through the same helper             | production, consent only             |
+| 404 reports (`404_error`)              | `components/analytics/not-found-tracker.tsx`            | production, stripped without consent |
+| Markdown fetches (`llms_file_fetched`) | `proxy.ts`, server                                      | production only                      |
+| HubSpot tracking                       | `lib/hubspot.ts`, client                                | production, consent only             |
 
-The client gate is `NEXT_PUBLIC_VERCEL_ENV === 'production'` plus a key; Vercel sets that
-variable. The client runs cookieless and in memory, with no session recording or feature flags, and
-a pinned `defaults` date so an SDK upgrade cannot change what is captured. The 404 page reports `404_error` through
-`components/analytics/not-found-tracker.tsx`, which retries until the client is ready and snapshots
-the URL at mount. Those events show inbound URLs the redirect map misses.
+The two server paths carry no visitor identifier and are outside the consent banner. Everything in
+the browser goes through CookieYes.
 
-The AI chat panel sends `inkeep_user_message_submitted`, `inkeep_assistant_message_received` and
-`inkeep_assistant_source_item_clicked` from `lib/ai/events.ts`. The two message events set
-`component_type` to `ChatButton` or `SearchBar`. A source click always sets `ChatButton` and adds
-`source_link`. It never sends message text.
+### CookieYes
+
+`components/analytics/cookie-consent.tsx` loads the CookieYes banner after hydration (`next/script`
+`afterInteractive`). Loading it earlier lets CookieYes insert its banner before hydration finishes,
+and React's recovery can then remove the banner while CookieYes considers itself initialized,
+leaving the visitor unable to choose. The website key is `NEXT_PUBLIC_COOKIEYES_ID`, scoped per
+Vercel environment: the production key for Production, the staging key for Preview and Development.
+Without a key there is no banner, HubSpot never loads, and PostHog counts every visit cookieless
+after its timeout.
+
+CookieYes shows one of two banners by visitor location and reports which as `activeLaw`: `gdpr` (opt
+in: the EU/EEA, the UK and the other regions in its geo rules) or `ccpa` (opt out: everywhere else,
+and its fallback when geolocation fails). Regions are configured in the CookieYes dashboard.
+`lib/analytics-consent.ts` reads the `analytics` category by law. The opt-in banner needs an
+explicit acceptance. The opt-out banner counts as accepted until the visitor opts out. A missing
+or unknown law is read like the opt-in banner: only an explicit acceptance of the category counts,
+and missing CookieYes counts as no consent. CookieYes fires its update event for the opt-out banner's defaults too, and the
+payload carries neither the law nor whether the visitor acted, so the reader reads saved consent
+back from `getCkyConsent()` on every update.
+
+`app/global.css` restores the banner's paragraph margins (Tailwind's preflight zeroes them) and
+repaints it in dark mode from the `--color-fd-*` tokens.
+
+### PostHog
+
+`lib/posthog-consent.ts`, connected by `components/analytics/posthog-analytics.tsx`, is the same
+consent integration Offchain Labs runs on its other sites. Keep a change to the consent rules in
+step with them. It starts only when
+`NEXT_PUBLIC_VERCEL_ENV` is `production` and `NEXT_PUBLIC_POSTHOG_KEY` is set.
+
+- PostHog runs with `cookieless_mode: 'on_reject'`. Without analytics consent it counts the visit
+  cookieless and stores nothing. Consent switches to cookie-backed analytics. Withdrawal removes the
+  cookie, the SDK's window id and its opt-out flag, and returns to cookieless.
+- Without consent only `$pageview`, `$pageleave` and `404_error` leave; `before_send` drops every
+  other event, whatever the project's remote config turns on. Those events lose the device, locale,
+  viewport and scroll-depth properties, the ad click ids (`gclid`, `fbclid` and the rest, also inside
+  the URL properties), `ph_keyword`, and every referrer path: `$referrer` and the 404 report's
+  `referrer` are reduced to their origin. The 404 report also drops `userAgent`. `$ip` and
+  `$raw_user_agent` stay for PostHog's server-side cookieless hash.
+- Autocapture runs only with consent. Session replay, heatmaps and dead clicks stay off for
+  everyone. Surveys, product tours and conversations stay off because they load remote scripts
+  configured outside code review. Feature flags never load: the site reads none, and the `/flags`
+  request skips `before_send` and sends the timezone. `advanced_disable_flags` is set straight
+  after `init`, not in it, because in `init` it would also turn off remote config.
+- PostHog waits up to 3 seconds (`COOKIEYES_LAW_TIMEOUT_MS`) for CookieYes to report its law, so
+  opt-out banner visitors start on cookies with their landing attribution. If CookieYes never
+  reports, it starts cookieless. A visitor who navigates during the wait still gets a landing
+  pageview with the original URL and its `utm_*` parameters (not the ad click ids).
+- Client-side navigations are captured by the SDK (`capture_pageview: { path: true, search: true }`). The
+  SDK's `'history_change'` shorthand tracks the path only and would miss a query-only navigation.
+- `defaults` stays pinned (`'2026-08-30'`) so an SDK upgrade cannot change what is captured. From
+  `'2026-05-30'` the SDK debounces persistence writes by 250ms; the tests flush that before reading
+  storage.
+
+`inkeep_*` events go through `captureConsentedPosthogEvent`. Events raised before CookieYes reports
+wait in memory (at most 100, with their original time and page). Once CookieYes reports a law
+without consent, the queue is emptied and later events are dropped, so a later acceptance sends
+nothing from the refused period. Inkeep's `search_query` is text the visitor typed, which is why
+these events need consent. `lib/ai/events.ts` never sends message text: `inkeep_user_message_submitted`,
+`inkeep_assistant_message_received` and `inkeep_assistant_source_item_clicked` set `component_type`
+to `ChatButton` or `SearchBar`, and a source click adds `source_link`.
+
+Autocapture must not read visitor input either. The chat panel's message list
+(`components/ai/chat/conversation.tsx`) carries `ph-no-capture`. The Inkeep modal renders inside an
+open shadow root, where PostHog follows a click through `composedPath()` but its `ph-no-capture`
+check stops at the shadow root. `lib/posthog-consent.ts` therefore marks DOM events whose path
+passes through an `inkeep-shadow*` host (a capture listener on `window`, which runs before PostHog's
+on `document`) and drops the autocapture events they produce in `before_send`. The listener is
+attached only while analytics consent turns autocapture on, and skips `pointermove` and
+`pointerup`, which PostHog only uses to track a press and never captures from. A pointer pressed
+inside the modal and released just outside it fires a click on `<body>`, which PostHog attributes
+back to the pressed element; the exclusion carries over from the Inkeep pointer-down to that click.
+
+The 404 page reports `404_error` through `captureNotFoundEvent`, which waits for PostHog to start
+and sends with or without consent (stripped as above without it). Those events show inbound URLs
+the redirect map misses.
+
+The PostHog project needs cookieless server hash mode turned on; without it, cookieless events are
+dropped.
+
+### HubSpot
+
+`lib/hubspot.ts`, connected by `components/analytics/hubspot-tracking.tsx`, inserts the HubSpot
+loader (`js.hs-scripts.com/50627473.js?businessUnitId=4314583`, the Offchain Labs portal and the
+Arbitrum business unit, as arbitrum.io loads it) only once CookieYes reports analytics consent,
+and only in production. It is never a static tag or a React `<Script>`: React can hoist an async
+script ahead of CookieYes. Withdrawal pushes `doNotTrack` and `setHubSpotConsent`; HubSpot's own
+banner is disabled and only analytics is ever granted. The script stays in the page after
+withdrawal, since removing it would not unload code that already ran. HubSpot's automatic pageview
+covers the first view; client-side navigations are sent with `setPath` and `trackPageView`.
+Accepting again after a withdrawal, once HubSpot has loaded, counts the current page once. CookieYes must list `hubspotutk`, `__hstc`, `__hssc`
+and `__hssrc` under Analytics so it deletes them on opt-out.
+
+### Tests
+
+`lib/analytics-consent.test.ts`, `lib/hubspot.test.ts`, `lib/posthog-consent.test.ts` (mocked SDK)
+and `lib/posthog-consent.sdk.test.ts` (the real SDK in jsdom) run on vitest, the second half of
+`pnpm test`. They are the only vitest suites; `vitest.config.ts` pins the PostHog env to dummy
+values, and `vitest.setup.ts` fails any test that reaches `*.posthog.com`. The real-SDK suite runs
+on `https://docs.arbitrum.io/`: on `localhost` the SDK marks the visitor as a test user during init,
+which no production visit does.
 
 `NEXT_PUBLIC_POSTHOG_KEY` is the publishable, write-only `phc_` token. Page feedback posts
 server-side, so it works locally with the key set.
@@ -873,7 +1017,8 @@ server-side, so it works locally with the key set.
 ## Scripts are TypeScript, run by Node
 
 Every script, test, data table and root config is TypeScript that Node 22.18 or later runs
-directly (`node scripts/x.ts`). There is no tsx, ts-node, `.mjs` or `.js`.
+directly (`node scripts/x.ts`). There is no tsx, ts-node, `.mjs` or `.js`. The one exception is the
+analytics consent suites in `lib/*.test.ts`, which vitest runs (see [Analytics](#tests)).
 
 - `package.json` has `"type": "module"`.
 - `tsconfig.json` sets `erasableSyntaxOnly` (no enums, namespaces or parameter properties),
@@ -888,24 +1033,35 @@ workflow that sets up Node (`ci.yml`, `upstream-refresh.yml` and `nitro-bump.yml
 project's Node.js Version setting, which is set by hand.
 Never bypass `engines`.
 
+Dependencies in `package.json` take caret ranges; `pnpm-lock.yaml` decides what installs, and CI
+installs with `--frozen-lockfile`. `fumadocs-ui` and `fumadocs-core` stay exact, because the navbar
+CSS depends on Fumadocs' header DOM (see [Theme](#theme)).
+
 ## The gates
 
 `.github/workflows/ci.yml` runs on pushes and PRs to `main`, `master` and `fumadocs`, in two jobs.
 
 **`Gates`**, in order:
 
-| Step                | What it proves                                                                                                                                                                                                        |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `types:check`       | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                         |
-| `frontmatter:check` | Every page under `content/docs` satisfies the page schema in `lib/page-schema.ts`                                                                                                                                     |
-| `test`              | Every `scripts/**/*.test.ts` suite: the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import |
-| `vars:check`        | Every variable reference resolves, including a `<Var>` split across lines; the banner keys are valid                                                                                                                  |
-| `references:check`  | Every glossary id resolves and is unique                                                                                                                                                                              |
-| `contracts:check`   | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                |
-| `faq:check`         | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                       |
-| `check-links`       | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                      |
-| `content:lint`      | MDX that compiles but renders wrong (below)                                                                                                                                                                           |
-| `format:check`      | Prettier                                                                                                                                                                                                              |
+| Step               | What it proves                                                                                                                                                                                                                                                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `audit`            | No advisory in `pnpm-lock.yaml` beyond those listed under `auditConfig.ignoreGhsas` in `pnpm-workspace.yaml`                                                                                                                                                                                                                                           |
+| `types:check`      | `.source/` regenerates, generated Next types, and `tsc` over the project. Not the frontmatter                                                                                                                                                                                                                                                          |
+| `test`             | Every `scripts/**/*.test.ts` and `eslint/**/*.test.ts` suite: the content rules on their fixtures, the sidebar and redirect tests, the frozen master-route fixture (`scripts/data/master-routes.json`), no `'use client'` module reaching `lib/source`, no `next/font/google` import; then vitest over the analytics consent suites in `lib/*.test.ts` |
+| `vars:check`       | The announcement banner keys in `content/vars.json` are valid                                                                                                                                                                                                                                                                                          |
+| `references:check` | Every glossary entry has an `id`, ids are unique, and no partial holding a `<Term>` is ESM-imported                                                                                                                                                                                                                                                    |
+| `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                                                                                                                                                 |
+| `gas-target:check` | The gas-target partial matches its `scripts/data/gas-target.json` snapshot; offline, CI never calls an RPC                                                                                                                                                                                                                                             |
+| `faq:check`        | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                                                                                                                                                        |
+| `check-links`      | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                                                                                                                                                       |
+| `lint`             | ESLint over `content/`: MDX that compiles but renders wrong, every `<Var>` and `<Term>` resolving, every page under `content/docs` satisfying the page schema in `lib/page-schema.ts` (below)                                                                                                                                                          |
+| `format:check`     | Prettier                                                                                                                                                                                                                                                                                                                                               |
+
+`audit` asks the npm registry, so an advisory published today fails every PR, including one that
+touched no dependency. First bump the direct dependency that brings the package in. If a parent
+still pins a vulnerable version, add an `overrides` entry in `pnpm-workspace.yaml` and name that
+parent in its comment. If no patched release exists, add the GHSA id to `auditConfig.ignoreGhsas`
+with the reason. Drop an override once `pnpm why <package>` shows every parent allows the fix.
 
 **`Build and HTTP smoke tests`** runs `pnpm build` (which runs `format:check` and `check-links`
 first), starts the server, and runs `scripts/static-docs-http.test.ts`. That suite checks what only
@@ -931,35 +1087,51 @@ secrets are absent, and it is the Docusaurus repo's workflow restored for pnpm.
 
 There is no pre-commit hook. Run the gates yourself before you push.
 
-### The content-lint rules
+### The content rules
 
-`scripts/lib/content-lint.ts` reads each MDX file under `content/` with code masked by
-`scripts/lib/strip-code.ts`, so an example inside a fence is never reported. The one exception is
-`var-in-code`, which looks only inside code.
+`pnpm lint` is ESLint 10 with one local plugin, `docs` (`eslint/plugin.ts`), configured in
+`eslint.config.ts` for every `.mdx` and `.md` file under `content/`. There is no parser package in
+between: `eslint/language.ts` is an ESLint language plugin, built the way `@eslint/markdown` builds
+its own, that parses a file with the MDX, GFM, math and frontmatter micromark extensions, the same
+tree `@mdx-js/mdx` gives the build. A rule is a file under `eslint/rules/` that visits mdast node
+types; `eslint/shared.ts` gives the text rules the source with every fence, inline code span and MDX
+comment blanked, so an example inside code is never reported, and gives the component rules every
+JSX element with its paragraph and heading context, real JSX inside `{expressions}` included. The
+one rule that looks inside code is `var-in-code`. A file that does not parse is one fatal finding
+with its line. The editor's ESLint integration reports the same findings while you type. There is
+no inline disable comment for these rules: fix the finding.
 
-| Rule                           | Catches                                                                                                                                 |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                       |
-| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                      |
-| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                            |
-| `site-import`                  | An `import … from '@site/…'` or `'@theme/…'` line, which has no module here and fails the build                                         |
-| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx`, nor a Fumadocs default, nor imported in the file, which throws at render |
-| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                   |
-| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                      |
-| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                         |
-| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                |
-| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                   |
-| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                    |
-| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                        |
-| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                |
-| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                |
+Per-file rules live here. What needs the whole repository stays a script: `check-links` (link
+targets and compiled anchors), `references:check` (ids present and unique, no imported partial with
+a term), `vars:check` (the banner keys in JSON) and the sidebar test. ESLint lints one file at a
+time, and the anchor check compiles every page.
 
-`strip-code.ts` is the one "ignore code" scanner for every script; import it rather than writing
-another.
+| Rule                           | Catches                                                                                                                                       |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `frontmatter-schema`           | A page under `content/docs` whose frontmatter breaks `lib/page-schema.ts`; one finding per field                                              |
+| `unknown-var`                  | A `<Var name>` or `{var:name}` that names no key in `content/vars.json`, a `<Var>` split across lines included; a `<Var>` with no static name |
+| `unknown-term`                 | A `<Term id>` with no glossary entry, or a `<Reference>` to an unregistered collection                                                        |
+| `docusaurus-directive`         | A `:::note` line, which renders as literal colons                                                                                             |
+| `docusaurus-var-token`         | A Docusaurus `@@name@@` or `@@name=value@@` token outside code, which renders as the literal token                                            |
+| `quicklook-anchor`             | A Docusaurus `<a data-quicklook-from="…">` anchor, which renders with no `href` and no hover; write `<Term>`                                  |
+| `esm-in-page`                  | A top-level `import` or `export`; pages compile on demand, where Fumadocs supports neither (a `@site/` or `@theme/` alias gets a hint)        |
+| `unknown-component`            | A capitalised JSX tag that is neither in `components/mdx.tsx` nor a Fumadocs default, which throws at render                                  |
+| `callout-type`                 | A `<Callout type>` outside `info`, `warn`, `error`, `idea`, `success`                                                                         |
+| `markdown-in-title`            | Markdown (`**`, backticks, a link) in a `<Callout title>`, where JSX attributes print it literally                                            |
+| `block-component-in-paragraph` | A one-line `<Callout>` glued to the paragraph after it, which renders `<div>` inside `<p>` and breaks hydration                               |
+| `tabs-null-default`            | `defaultValue={null}` on `<Tabs>`, which selects no tab so every panel is hidden on load                                                      |
+| `var-in-code`                  | `<Var>` inside a fence or inline code, which renders as a literal tag                                                                         |
+| `var-in-link`                  | `<Var>` in a link destination or URL attribute, or a malformed `{var:…}` placeholder                                                          |
+| `link-in-heading`              | A link or bare URL in a heading, which nests `<a>` in `<a>` and breaks hydration                                                              |
+| `tr-in-table`                  | `<tr>` directly in `<table>`, where the browser inserts a `<tbody>` and hydration breaks                                                      |
+| `remote-image`                 | A markdown image with a remote src, which renders broken                                                                                      |
+
+`scripts/lib/strip-code.ts` is the "ignore code" scanner for the scripts that read MDX as text
+(`check-links`, `move-doc`); the ESLint rules take the same regions from the parsed tree.
 
 ### Hand-run tools
 
-Only `faq:check` is also a CI gate. Three workflows run some of them (below):
+Only `faq:check` and `gas-target:check` are also CI gates. Four workflows run some of them (below):
 
 | Command                                 | Does                                                                                                                                                                                                                                                                                                                               |
 | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -972,6 +1144,8 @@ Only `faq:check` is also a CI gate. Three workflows run some of them (below):
 | `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                  |
 | `pnpm faq:fetch`                        | The FAQ snapshots in `content/faq/` from the Notion "FAQ CMS" database (needs `NOTION_TOKEN`)                                                                                                                                                                                                                                      |
 | `pnpm faq:generate` / `:check`          | The six `_troubleshooting-*-partial.mdx` partials from the snapshots; offline                                                                                                                                                                                                                                                      |
+| `pnpm gas-target:fetch`                 | The gas-target snapshot `scripts/data/gas-target.json` from the `ArbGasInfo` precompile on Arbitrum One, Nova and Sepolia (three public RPCs, no credentials)                                                                                                                                                                      |
+| `pnpm gas-target:generate` / `:check`   | The `_reference-gas-target-partial.mdx` partial from the snapshot; offline                                                                                                                                                                                                                                                         |
 
 `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` every Monday at 08:00
 UTC. It never writes `content/vars.json`. It opens `automated/upstream-refresh` as a maintenance
@@ -985,6 +1159,11 @@ either PR's diff and run the gates locally.
 `faq-refresh.yml` runs `faq:fetch` and `faq:generate` every Monday at 08:00 UTC with the
 `NOTION_TOKEN` repository secret, and opens `automated/faq-refresh` as a PR when a snapshot or a
 partial changed. It is the only place the token is used; `faq:check` in CI is offline.
+
+`gas-target-refresh.yml` runs `gas-target:fetch` and `gas-target:generate` every Monday at
+08:00 UTC against the three public RPCs, and opens `automated/gas-target-refresh` as a PR when the
+snapshot or the partial changed. It is the only place an RPC is called; `gas-target:check` in CI
+is offline.
 
 ### Generated pages
 
@@ -1040,7 +1219,7 @@ and the generators write them with `format: false`.
 
 ## What nothing catches
 
-- **Rendering.** `types:check` checks TypeScript; `frontmatter:check` validates page metadata.
+- **Rendering.** `types:check` checks TypeScript; `pnpm lint` validates page metadata and MDX shape.
   Neither proves the render. Open changed pages on
   `http://localhost:3000`, not `127.0.0.1`, where React does not hydrate.
 - **Runtime anchors.** `check-links` validates compiled heading ids but runs no components. Click

@@ -1,18 +1,16 @@
 /**
- * references-check: build-time guardrail for the glossary hover references, so an unknown term
- * fails the gate instead of rendering plainly with a runtime warning.
+ * references-check: the whole-repository half of the glossary reference gate. The per-file half,
+ * that every `<Term id>` and `<Reference collection id>` in content resolves to a real entry of a
+ * registered collection, is ESLint rule `docs/unknown-term` (`eslint/rules/unknown-term.ts`), run
+ * by `pnpm lint`.
  *
  * Errors (exit 1):
- *   R1  every <Term id> / <Reference collection id> in content resolves to a real collection entry
- *   R2  <Reference> names a registered collection
+ *   R1  every collection entry carries an `id` frontmatter
  *   R3  a partial that holds <Term>/<Reference> is never ESM-imported. A partial spliced into a
  *       page by <include> compiles as part of that server-rendered page, so these server
  *       components are legal there; an imported partial can end up in a client module, where
  *       they are not
  *   R4  collection entry ids are unique
- *
- * `<Reference collection id>` is matched although `components/mdx.tsx` registers only `<Term>`
- * today, so a future collection gets the same check without a change here.
  *
  *   node scripts/references-check.ts
  */
@@ -25,11 +23,11 @@ const repoRoot = process.cwd();
 const rel = (abs: string): string => path.relative(repoRoot, abs);
 const errors: string[] = [];
 
-// Keep in sync with lib/references.ts (the registry the app uses).
+// Keep in sync with lib/references.ts (the registry the app uses) and eslint/rules/unknown-term.ts.
 const COLLECTION_DIRS: Readonly<Record<string, string>> = { glossary: 'content/glossary' };
 
-/** id → source file for a collection, erroring on duplicates (R4). */
-function collectionIds(name: string): Set<string> {
+/** The entry count of a collection, erroring on a missing id (R1) or a duplicate (R4). */
+function checkCollection(name: string): number {
   const ids = new Map<string, string>();
   for (const abs of walk(path.join(repoRoot, COLLECTION_DIRS[name]), (p) => /\.mdx?$/i.test(p))) {
     const m = /^---\n([\s\S]*?)\n---/.exec(readFileSync(abs, 'utf8'));
@@ -49,7 +47,7 @@ function collectionIds(name: string): Set<string> {
       );
     else ids.set(id, rel(abs));
   }
-  return new Set(ids.keys());
+  return ids.size;
 }
 
 /** Partials that some file pulls in with an ESM `import` instead of `<include>` (R3). */
@@ -70,43 +68,18 @@ function importedPartials(): Set<string> {
   return out;
 }
 
-/** Every <Term id> and <Reference collection id> occurrence in `src`, as {collection, id}. */
-function referencesIn(src: string): { collection: string; id: string }[] {
-  const out: { collection: string; id: string }[] = [];
-  for (const m of src.matchAll(/<Term\s+id="([^"]+)"/g))
-    out.push({ collection: 'glossary', id: m[1] });
-  for (const m of src.matchAll(/<Reference\b([^>]*?)>/g)) {
-    const attrs = m[1];
-    const collection = /collection="([^"]+)"/.exec(attrs)?.[1];
-    const id = /id="([^"]+)"/.exec(attrs)?.[1];
-    if (collection && id) out.push({ collection, id });
-  }
-  return out;
-}
+const HOLDS_REFERENCE = /<Term\s+id="|<Reference\b/;
 
 function main(): void {
-  const ids = Object.fromEntries(
-    Object.keys(COLLECTION_DIRS).map((name) => [name, collectionIds(name)]),
-  );
+  const counts = Object.keys(COLLECTION_DIRS).map((name) => `${checkCollection(name)} ${name}`);
 
   const imported = importedPartials();
-
-  for (const abs of walk(path.join(repoRoot, 'content'), (p) => /\.mdx?$/i.test(p))) {
-    const src = readFileSync(abs, 'utf8');
-    const inPartials =
-      rel(abs).startsWith(`content${path.sep}partials`) || rel(abs).startsWith('content/partials');
-    const refs = referencesIn(src);
-    if (inPartials && refs.length && imported.has(rel(abs))) {
+  const partialsDir = path.join(repoRoot, 'content', 'partials');
+  for (const abs of walk(partialsDir, (p) => /\.mdx?$/i.test(p))) {
+    if (imported.has(rel(abs)) && HOLDS_REFERENCE.test(readFileSync(abs, 'utf8'))) {
       errors.push(
         `R3 ${rel(abs)}: <Term>/<Reference> in a partial that is ESM-imported. Include it with <include> instead; an imported partial can be compiled into a client module, where these server components are illegal.`,
       );
-      continue;
-    }
-    for (const { collection, id } of refs) {
-      if (!ids[collection])
-        errors.push(`R2 ${rel(abs)}: unknown reference collection "${collection}".`);
-      else if (!ids[collection].has(id))
-        errors.push(`R1 ${rel(abs)}: no "${collection}" entry for id "${id}".`);
     }
   }
 
@@ -115,10 +88,7 @@ function main(): void {
     console.error(`\nreferences-check: ${errors.length} error(s).`);
     process.exit(1);
   }
-  const total = Object.entries(ids)
-    .map(([n, s]) => `${s.size} ${n}`)
-    .join(', ');
-  console.log(`references-check: passed (${total}).`);
+  console.log(`references-check: passed (${counts.join(', ')}).`);
 }
 
 main();

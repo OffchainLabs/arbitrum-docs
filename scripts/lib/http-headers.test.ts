@@ -93,11 +93,21 @@ test('the CSP allows the origins the site talks to', () => {
     'https://us-assets.i.posthog.com',
     'https://api.inkeep.com',
     'https://api.io.inkeep.com',
+    'https://cdn-cookieyes.com',
+    'https://*.cookieyes.com',
+    'https://*.hs-banner.com',
+    'https://*.hubspot.com',
   ]);
   assert.deepEqual(directives.get('script-src'), [
     "'self'",
     "'unsafe-inline'",
     'https://us-assets.i.posthog.com',
+    'https://cdn-cookieyes.com',
+    'https://*.hs-scripts.com',
+    'https://*.hs-analytics.net',
+    'https://*.hs-banner.com',
+    'https://js.hubspot.com',
+    'https://js.hsadspixel.net',
   ]);
   assert.deepEqual(directives.get('frame-ancestors'), ["'none'"]);
   assert.deepEqual(directives.get('style-src'), ["'self'", "'unsafe-inline'"]);

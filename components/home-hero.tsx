@@ -29,7 +29,10 @@ export function HomeHero() {
 
   return (
     <div className="w-full px-5 pt-2">
-      <section className="relative overflow-hidden rounded-[24px] bg-linear-to-b from-arbitrum-blue to-arbitrum-navy text-white">
+      <section
+        data-home-hero
+        className="relative overflow-hidden rounded-[24px] bg-linear-to-b from-arbitrum-blue to-arbitrum-navy text-white"
+      >
         <div aria-hidden className="absolute inset-0 mix-blend-color-dodge">
           {/* The page's Largest Contentful Paint element. `preload` alone emits the `<link>` with
               no `fetchPriority`, so all three hints are set on purpose. */}

@@ -1,6 +1,6 @@
 ---
 title: 'Monitoring tools and considerations'
-description: 'Tools available to monitor an Arbitrum chain, and a component-by-component reference of the metrics, signals, and thresholds to watch for the sequencer, batch poster, validator, and chain fees.'
+description: 'Tools to monitor an Arbitrum chain, plus the metrics, signals, and thresholds to watch for the sequencer, batch poster, validator, and chain fees.'
 content_type: reference
 author: jose-franco
 sme: jose-franco
@@ -64,7 +64,7 @@ nitro --metrics \
   --metrics-server.port 6070
 ```
 
-For metrics-server flags, memory-related metrics, health-check patterns, and Kubernetes `ServiceMonitor` examples, see [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring).
+For metrics-server flags, memory-related metrics, health-check patterns, and Kubernetes `ServiceMonitor` examples, see [Node monitoring](/run-a-node/nitro/node-monitoring).
 
 The signals that are not Nitro metrics — onchain events and account balances on the parent chain — are called out explicitly in each table below.
 

@@ -110,8 +110,8 @@ Four rules:
 - **Once per file, on the first mention.** Leave every later mention of the same term as plain text.
   A second popover on the same term tells the reader nothing new and turns the page into a field of
   links.
-- **Only for terms that have an entry.** `pnpm references:check` is a blocking CI gate and fails
-  on an id with no matching file, so a typo is caught rather than silently dropped. (`pnpm build`
+- **Only for terms that have an entry.** `pnpm lint` (rule `docs/unknown-term`) is a blocking CI
+  gate and fails on an id with no matching file, so a typo is caught rather than silently dropped. (`pnpm build`
   itself runs only `check-links`; the other gates run in CI and by hand.)
 - **Add the entry rather than skipping the link** when a term deserves one and has none. A new file
   under `content/glossary/` needs only `id` and `title` in its frontmatter, plus the definition as
@@ -156,10 +156,10 @@ so leave both spellings alone until it is decided.
 - **Document types.** Which of `how-to`, `concept`, `quickstart`, `tutorial`, `reference`,
   `troubleshooting` or `faq` a page is, and what each one owes the reader, is in
   [CONTRIBUTE.md](CONTRIBUTE.md#document-type-conventions). The enum itself is enforced by the
-  frontmatter schema in `lib/page-schema.ts`, through `pnpm frontmatter:check` and the build.
+  frontmatter schema in `lib/page-schema.ts`, through `pnpm lint` and the build.
 - **Callout syntax.** Use `<Callout type="…">`, with `type` set to `info`, `warn`, `error`, `idea`
-  or `success`. Docusaurus `:::` directives do not render here, and `pnpm content:lint` rule
-  `docusaurus-directive` is a blocking gate that fails on one.
+  or `success`. Docusaurus `:::` directives do not render here, and `pnpm lint` rule
+  `docs/docusaurus-directive` is a blocking gate that fails on one.
 - **Diagrams.** Prefer SVG for scalable, editable diagrams; use PNG when SVG is unsuitable. Concept
   diagrams follow the `arbitrum-brand-svg-diagrams` skill under `.claude/skills/`, which covers the
   palette, asset location, and an Excalidraw editing workflow.

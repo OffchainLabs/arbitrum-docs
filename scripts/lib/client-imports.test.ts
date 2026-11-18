@@ -1,7 +1,8 @@
 /**
- * No client component may reach `lib/source.ts` or `collections/server`, directly or through any
- * module it imports. Either pulls the compiled content collection into the browser bundle, and the
- * build still succeeds, so nothing else notices (CLAUDE.md, INTERNALS.md#what-nothing-catches).
+ * No client component may reach `lib/source.ts`, `collections/server` or `collections/dynamic`,
+ * directly or through any module it imports. Either pulls the compiled content collection into the
+ * browser bundle, and the build still succeeds, so nothing else notices (CLAUDE.md,
+ * INTERNALS.md#what-nothing-catches).
  *
  * This walks every module under `app/`, `components/` and `lib/` whose directive prologue contains
  * `'use client'`, follows its relative and `@/` runtime dependencies (the `tsconfig.json` alias)
@@ -44,7 +45,7 @@ const EXTENSIONS = [
   '/index.mjs',
   '/index.cjs',
 ];
-const FORBIDDEN_SPECIFIER = /^collections\/server(?:\.[cm]?[jt]s)?$/;
+const FORBIDDEN_SPECIFIER = /^collections\/(?:server|dynamic)(?:\.[cm]?[jt]s)?$/;
 
 function resolveImport(specifier: string, fromAbs: string, root: string): string | null {
   let base: string;
@@ -134,7 +135,7 @@ test('the graph reports direct and transitive forbidden dependency chains', (t) 
   assert.equal(forbiddenChain(path.join(root, 'components/safe.tsx'), root), null);
 });
 
-test("no 'use client' module reaches lib/source or collections/server", () => {
+test("no 'use client' module reaches lib/source or a collections/ entry", () => {
   const clients = ['app', 'components', 'lib']
     .flatMap((dir) => walk(path.join(repoRoot, dir), (p) => SOURCE_FILE.test(p)))
     .filter((abs) => isClientModule(readFileSync(abs, 'utf8'), abs));

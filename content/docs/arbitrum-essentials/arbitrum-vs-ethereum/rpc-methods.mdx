@@ -1,6 +1,6 @@
 ---
 title: 'RPC methods'
-description: 'Compare Arbitrum and Ethereum RPC method responses, including additional transaction types, fields, and blocks returned by Arbitrum nodes. Covers eth_getTransactionByHash, eth_getBlockByHash, and other JSON-RPC methods.'
+description: 'Compare Arbitrum and Ethereum JSON-RPC responses, including the extra transaction types, fields, and blocks that Arbitrum nodes return.'
 content_type: 'concept'
 author: dzgoldman
 sme: dzgoldman
@@ -215,7 +215,7 @@ The result of this call will be something along the lines of:
 
 Nitro's default HTTP API namespaces are `net`, `web3`, `eth`, and `arb`. The `txpool` namespace is **not** among them, so `txpool_content`, `txpool_contentFrom`, `txpool_status`, and `txpool_inspect` return a method-not-found error on a default node.
 
-Enabling the namespace (by adding `txpool` to the node's `--http.api` list) changes less than you might expect, because Arbitrum has no transaction pool at all — the concept does not exist in Nitro's architecture. On Ethereum, the pool holds transactions waiting to be picked up by whichever validator builds the next block. An Arbitrum chain has no equivalent: the <Term id="sequencer">sequencer</Term> receives transactions and orders them directly through its internal queue, other nodes simply forward transactions to it, and no node ever holds a pool of pending transactions. Nitro ships only a compatibility stub for tooling that probes this namespace: with it enabled, `txpool_content` responds but always returns empty `pending` and `queued` sets, and `txpool_contentFrom`, `txpool_status`, and `txpool_inspect` remain unavailable. Do not build tooling that expects these methods to show the sequencer's intake. Nonce handling differs for the same reason — to learn more, see [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management).
+Enabling the namespace (by adding `txpool` to the node's `--http.api` list) changes less than you might expect, because Arbitrum has no transaction pool at all — the concept does not exist in Nitro's architecture. On Ethereum, the pool holds transactions waiting to be picked up by whichever validator builds the next block. An Arbitrum chain has no equivalent: the <Term id="sequencer">sequencer</Term> receives transactions and orders them directly through its internal queue, other nodes simply forward transactions to it, and no node ever holds a pool of pending transactions. Nitro ships only a compatibility stub for tooling that probes this namespace: with it enabled, `txpool_content` responds but always returns empty `pending` and `queued` sets, and `txpool_contentFrom`, `txpool_status`, and `txpool_inspect` remain unavailable. Do not build tooling that expects these methods to show the sequencer's intake. Nonce handling differs for the same reason — to learn more, see [Nonce management](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management), including what `already known` and `replacement transaction underpriced` mean when you [resubmit a nonce that is already in flight](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management#submitting-a-transaction-with-a-nonce-that-is-already-in-flight).
 
 ### `eth_getLogs` block ranges
 

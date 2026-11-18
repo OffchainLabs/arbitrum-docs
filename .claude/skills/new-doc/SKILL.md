@@ -173,18 +173,18 @@ repo: it puts the page on two sidebar nodes and `pnpm test` fails.
 
 Before writing any content, apply these substitutions:
 
-| Write this                 | Not this               |
-| -------------------------- | ---------------------- |
-| Parent chain / Child chain | L1/L2, Layer 1/Layer 2 |
-| app                        | dapp, dApp             |
-| onchain                    | on-chain               |
-| cross-chain                | crosschain             |
-| Rollup                     | rollup                 |
-| AnyTrust                   | anytrust               |
-| `ERC-20`, `ERC-721`        | ERC20                  |
-| allowlist/denylist         | whitelist/blacklist    |
-| bond                       | stake (for proposing)  |
-| Your Arbitrum chain        | L3 Orbit chain         |
+| Write this                                   | Not this               |
+| -------------------------------------------- | ---------------------- |
+| Parent chain / Child chain                   | L1/L2, Layer 1/Layer 2 |
+| decentralized app on first mention, then app | dapp, dApp             |
+| onchain                                      | on-chain               |
+| cross-chain                                  | crosschain             |
+| Rollup                                       | rollup                 |
+| AnyTrust                                     | anytrust               |
+| `ERC-20`, `ERC-721`                          | ERC20                  |
+| allowlist/denylist                           | whitelist/blacklist    |
+| bond                                         | stake (for proposing)  |
+| Your Arbitrum chain                          | L3 Orbit chain         |
 
 ## Post-creation checklist
 
@@ -193,8 +193,8 @@ After creating the file:
 1. Verify the sidebar entry and the page render: `pnpm dev`, then browse
    `http://localhost:3000/{section}/{slug}`. Use `localhost`, not `127.0.0.1` — on
    `127.0.0.1` React does not hydrate and every component looks broken.
-2. Run `pnpm content:lint`, `pnpm frontmatter:check`, and `pnpm types:check`.
-   `frontmatter:check` validates every page against `lib/page-schema.ts`: a missing `title` or
+2. Run `pnpm lint` and `pnpm types:check`.
+   Rule `docs/frontmatter-schema` validates every page against `lib/page-schema.ts`: a missing `title` or
    `description` fails this gate (the other fields are optional). `types:check` regenerates the
    collection and checks TypeScript; it does not validate every page's frontmatter.
 3. Confirm no broken links: `pnpm check-links`. It also validates `#anchor` fragments against the

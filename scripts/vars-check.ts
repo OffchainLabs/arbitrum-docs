@@ -1,33 +1,25 @@
 /**
- * vars-check: fail when a variable reference in content has no value, or when the announcement
- * banner is misconfigured.
+ * vars-check: fail when the announcement banner is misconfigured in `content/vars.json`.
  *
- * - Every `<Var name="…">` and `{var:name}` under `content/` names a key in `content/vars.json`.
- *   A missing key renders the literal string `undefined`, and nothing else sees it, since MDX is
- *   not type-checked.
  * - `announcementId` is a valid HTML id, because the banner uses it as an element id and as its
  *   dismissal key.
  * - `announcementLinkHref` points at a real page, a `public/` file or an https URL. `check-links`
  *   walks MDX only, and this value lives in JSON.
+ *
+ * That every `<Var name="…">` and `{var:name}` under `content/` names a key is ESLint rule
+ * `docs/unknown-var` (`eslint/rules/unknown-var.ts`), run by `pnpm lint`.
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { checkAnnouncementLink } from './lib/announcement-link.ts';
 import { buildIndex } from './lib/doc-links.ts';
-import { toPosix, walk } from './lib/partials.ts';
-import { checkVarReferences } from './lib/vars-check.ts';
 
 const repoRoot = process.cwd();
 const vars: Record<string, unknown> = JSON.parse(
   readFileSync(path.join(repoRoot, 'content', 'vars.json'), 'utf8'),
 );
 const errors: string[] = [];
-
-for (const abs of walk(path.join(repoRoot, 'content'), (p) => /\.mdx?$/i.test(p))) {
-  const rel = toPosix(path.relative(repoRoot, abs));
-  errors.push(...checkVarReferences(rel, readFileSync(abs, 'utf8'), vars));
-}
 
 if ('announcementId' in vars && (vars.announcementEnabled || vars.announcementId !== null)) {
   const id = vars.announcementId;
@@ -55,4 +47,4 @@ if (errors.length) {
   for (const e of errors) console.error(`  ${e}`);
   process.exit(1);
 }
-console.log('vars-check: every variable resolves.');
+console.log('vars-check: the banner keys are valid.');

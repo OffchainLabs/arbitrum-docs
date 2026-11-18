@@ -83,7 +83,7 @@ Every transaction receives a deadline when it arrives, set by `--execution.seque
 In both cases, the caller receives an error containing the string `context deadline exceeded`. This error means exactly one thing: the chain could not sequence the transaction within `queue-timeout`, and the transaction **was not executed**. For a user or integration partner, the correct response is:
 
 - Treat it as backpressure, not as a permanent failure. It is safe to resubmit the same signed transaction (same nonce) with a backoff.
-- Make sure your client-side HTTP timeout is longer than the chain's `queue-timeout`; otherwise your client gives up before the Sequencer reports the outcome.
+- Make sure your client-side HTTP timeout is longer than the chain's `queue-timeout`; otherwise your client gives up before the Sequencer reports the outcome. If your client gave up early, the transaction can still be in flight, and resending the same bytes returns `already known`; see [Submitting a transaction with a nonce that is already in flight](/arbitrum-essentials/arbitrum-vs-ethereum/nonce-management#submitting-a-transaction-with-a-nonce-that-is-already-in-flight).
 - If you see this error persistently rather than in bursts, the chain's intake is saturated: see [Tuning guidance for chain operators](#tuning-guidance-for-chain-operators) below.
 
 ## Block creation and timing

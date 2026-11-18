@@ -1,4 +1,4 @@
-import { glossary } from 'collections/server';
+import { glossary } from 'collections/dynamic';
 import type { MDXContent } from 'mdx/types';
 
 import { docsRoute } from './shared';
@@ -6,14 +6,16 @@ import { docsRoute } from './shared';
 /**
  * Registry for the glossary hover references. A reference collection is a `defineCollections` doc
  * collection (`{ id, title, sortAs? }` plus the definition body); to add one, define it in
- * `source.config.ts` and add an entry here. `scripts/references-check.ts` reads the files directly.
+ * `source.config.ts` and add an entry here. `scripts/references-check.ts` and ESLint rule
+ * `docs/unknown-term` read the files directly.
  */
 /** Declared explicitly: the generated collection module is `@ts-nocheck` and types as `any`. */
 export interface ReferenceEntry {
   id: string;
   title: string;
   sortAs?: string;
-  body: MDXContent;
+  /** Compiles the definition on first call (the collection is dynamic) and caches it. */
+  load(): Promise<{ body: MDXContent }>;
 }
 
 interface ReferenceCollection {
