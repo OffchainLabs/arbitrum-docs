@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -13,10 +14,12 @@ import type {
   Step,
 } from '../components/widgets/NitroTxFlow/model.ts';
 import { loadProject } from './diagrams/load.ts';
+import { renderSvg } from './diagrams/render-svg.ts';
 import type {
   CodeRef as DiagramCodeRef,
   DiagramFlow,
   DiagramStep,
+  LoadedProject,
   Part,
 } from './diagrams/types.ts';
 import { isCheckMode, runScript, writeOrCheck } from './lib/generated-partial.ts';
@@ -186,10 +189,33 @@ function buildContent(flows: Map<string, DiagramFlow>): string {
   );
 }
 
+const DIAGRAMS_DIR = path.join(import.meta.dirname, '..', 'diagrams');
+const SVG_DIR = path.join('public', 'img');
+
+/** Render every flow with `static:` positions to `public/img/<svg>.svg`. */
+async function writeStaticSvgs({ config, flows }: LoadedProject, check: boolean) {
+  const written = new Set<string>();
+  for (const flow of flows.values()) {
+    if (flow.static === undefined && flow.svg === undefined) continue;
+    if (flow.static === undefined || flow.svg === undefined) {
+      throw new Error(`${flow.file}: a static SVG needs both static: and svg:`);
+    }
+    if (written.has(flow.svg)) throw new Error(`${flow.file}: svg "${flow.svg}" is used twice`);
+    written.add(flow.svg);
+    if (config.svg.background === undefined) {
+      throw new Error(`${flow.file}: project.yaml svg.background is required to render an SVG`);
+    }
+    const background = await readFile(path.join(DIAGRAMS_DIR, config.svg.background), 'utf8');
+    const file = path.join(SVG_DIR, `${flow.svg}.svg`);
+    await writeOrCheck(file, renderSvg(flow, config, background), { check, format: false });
+  }
+}
+
 async function main(): Promise<void> {
   const check = isCheckMode();
-  const { flows } = await loadProject(path.join(import.meta.dirname, '..', 'diagrams'));
-  await writeOrCheck(OUTPUT_PATH, buildContent(flows), { check });
+  const project = await loadProject(DIAGRAMS_DIR);
+  await writeOrCheck(OUTPUT_PATH, buildContent(project.flows), { check });
+  await writeStaticSvgs(project, check);
   console.log(check ? 'diagrams: up to date.' : `diagrams: wrote ${OUTPUT_PATH}`);
 }
 

@@ -3,13 +3,13 @@ lanes:
     label: Child chain · Arbitrum One
   parent:
     label: Parent chain · Ethereum
-    svg: { fill: '#6b1d2a', stroke: '#f3a5b0' }
+    svg: { fill: '#6b1d2a', stroke: '#f3a5b0', label: Parent chain }
   off-chain:
     label: Off-chain
 kinds:
   process:
     label: Nitro process
-    svg: { fill: '#12aaff', title: '#0b1b2e', sub: '#0b2438' }
+    svg: { fill: '#12aaff', title: '#0b1b2e', sub: '#0b2438', key: Process }
   data:
     label: Data
     svg: { fill: '#213147', title: '#ffffff', sub: '#c9dcef', stroke: '#9dcced' }
@@ -32,3 +32,7 @@ svg:
   box: [210, 84]
   scale: 1.15
   offset: [47, 30]
+  background: assets/bg-frag.svg
+  ink: '#eaf5ff'
+  chip: '#152c4e'
+  font: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"

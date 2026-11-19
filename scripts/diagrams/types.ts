@@ -64,14 +64,20 @@ export interface DiagramFlow {
   paths?: FlowPath[];
   card?: Record<string, string | boolean>;
   static?: Record<string, [number, number]>;
+  /** Output file name, without `.svg`, of the static SVG. */
+  svg?: string;
+  alt?: string;
   file: string;
 }
 
 export interface ProjectConfig {
-  lanes: Record<string, { label: string; svg?: { fill: string; stroke: string } }>;
+  lanes: Record<string, { label: string; svg?: { fill: string; stroke: string; label?: string } }>;
   kinds: Record<
     string,
-    { label: string; svg: { fill: string; title: string; sub: string; stroke?: string } }
+    {
+      label: string;
+      svg: { fill: string; title: string; sub: string; stroke?: string; key?: string };
+    }
   >;
   repos: Record<string, { url: string }>;
   svg: {
@@ -82,6 +88,10 @@ export interface ProjectConfig {
     box: [number, number];
     scale: number;
     offset: [number, number];
+    background?: string;
+    ink?: string;
+    chip?: string;
+    font?: string;
   };
 }
 

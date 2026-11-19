@@ -1,0 +1,28 @@
+lanes:
+  top:
+    label: Top lane
+  bottom:
+    label: Bottom lane long name
+    svg: { fill: '#555555', stroke: '#999999', label: Bottom }
+kinds:
+  box:
+    label: Box kind
+    svg: { fill: '#dddddd', title: '#111111', sub: '#333333', key: Box }
+  store:
+    label: Store
+    svg: { fill: '#444444', title: '#ffffff', sub: '#eeeeee', stroke: '#bbbbbb' }
+  unused:
+    label: Unused
+    svg: { fill: '#777777', title: '#ffffff', sub: '#ffffff' }
+repos: {}
+svg:
+  theme: neutral
+  canvas: [1600, 900]
+  cols: [40, 295, 550, 805, 1060]
+  rows: [40, 200, 350, 570]
+  box: [210, 84]
+  scale: 1.15
+  offset: [47, 30]
+  ink: '#eeeeee'
+  chip: '#333333'
+  font: "Arial, 'Helvetica Neue', sans-serif"

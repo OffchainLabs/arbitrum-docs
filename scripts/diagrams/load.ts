@@ -16,7 +16,8 @@ function resolveFlow(header: FlowHeader, parts: Map<string, Part>): DiagramFlow 
     if (!base) throw new Error(`${header.file}:${ref.line}: unknown part "${ref.id}"`);
     const part = { ...base };
     if (ref.label !== undefined) part.label = ref.label;
-    if (ref.tech !== undefined) part.tech = ref.tech;
+    if (ref.tech === null) delete part.tech;
+    else if (ref.tech !== undefined) part.tech = ref.tech;
     listed.set(ref.id, part);
   }
   for (const edge of header.edges) {
@@ -44,6 +45,8 @@ function resolveFlow(header: FlowHeader, parts: Map<string, Part>): DiagramFlow 
   if (header.paths) flow.paths = header.paths;
   if (header.card) flow.card = header.card;
   if (header.static) flow.static = header.static;
+  if (header.svg !== undefined) flow.svg = header.svg;
+  if (header.alt !== undefined) flow.alt = header.alt;
   return flow;
 }
 

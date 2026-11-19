@@ -1,0 +1,5 @@
+a: { label: Alpha, tech: Tech A, kind: box, lane: top }
+b: { label: A rather long box title, kind: store, lane: top }
+e: { label: Epsilon, kind: box, lane: top }
+c: { label: Gamma, kind: box, lane: bottom }
+d: { label: Delta, tech: Tech D, kind: store, lane: bottom }

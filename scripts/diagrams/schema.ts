@@ -78,12 +78,18 @@ export const numberPair = z.tuple([z.number(), z.number()]);
 
 const lane = z.strictObject({
   label: text,
-  svg: z.strictObject({ fill: text, stroke: text }).optional(),
+  svg: z.strictObject({ fill: text, stroke: text, label: text.optional() }).optional(),
 });
 
 const kind = z.strictObject({
   label: text,
-  svg: z.strictObject({ fill: text, title: text, sub: text, stroke: text.optional() }),
+  svg: z.strictObject({
+    fill: text,
+    title: text,
+    sub: text,
+    stroke: text.optional(),
+    key: text.optional(),
+  }),
 });
 
 const projectConfig = z.strictObject({
@@ -98,6 +104,10 @@ const projectConfig = z.strictObject({
     box: numberPair,
     scale: z.number(),
     offset: numberPair,
+    background: text.optional(),
+    ink: text.optional(),
+    chip: text.optional(),
+    font: text.optional(),
   }),
 });
 

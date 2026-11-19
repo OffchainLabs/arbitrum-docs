@@ -108,3 +108,43 @@ block:
   tech: 'ArbOS on geth'
   kind: process
   lane: child
+json-rpc:
+  label: 'JSON-RPC'
+  tech: 'signed transaction'
+  kind: data
+  lane: child
+retryable-ticket:
+  label: 'Retryable ticket'
+  tech: 'from the parent chain'
+  kind: data
+  lane: child
+sequencer-feed:
+  label: 'Sequencer feed'
+  tech: 'soft confirmation'
+  kind: data
+  lane: child
+ordered:
+  label: 'Ordered transactions'
+  kind: data
+  lane: child
+state:
+  label: 'State'
+  kind: data
+  lane: child
+stf:
+  label: 'State transition function'
+  kind: process
+  lane: child
+child-block:
+  label: 'Child chain block'
+  kind: data
+  lane: child
+proposer:
+  label: 'Proposer'
+  tech: 'asserts the state'
+  kind: process
+  lane: child
+delayed-inbox:
+  label: 'Delayed inbox'
+  kind: contract
+  lane: parent

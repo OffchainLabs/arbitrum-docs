@@ -19,7 +19,8 @@ import type {
 export interface PartRef {
   id: string;
   label?: string;
-  tech?: string;
+  /** `null` removes the part's tech in this flow. */
+  tech?: string | null;
   line: number;
 }
 
@@ -35,6 +36,8 @@ export interface FlowHeader {
   paths?: FlowPath[];
   card?: Record<string, string | boolean>;
   static?: Record<string, [number, number]>;
+  svg?: string;
+  alt?: string;
   source: YamlSource;
 }
 
@@ -72,7 +75,7 @@ export function parseEdge(source: YamlSource, id: string, text: string, line: nu
   return edge;
 }
 
-const override = z.strictObject({ label: text.optional(), tech: text.optional() });
+const override = z.strictObject({ label: text.optional(), tech: text.nullable().optional() });
 
 const partEntry = z.union(
   [
@@ -98,6 +101,11 @@ const headerSchema = z.strictObject({
   paths: z.array(z.strictObject({ id: text, label: text, steps: z.array(text) })).optional(),
   card: z.record(z.string(), z.union([z.string(), z.boolean()])).optional(),
   static: z.record(z.string(), numberPair).optional(),
+  svg: z
+    .string()
+    .regex(/^[a-z0-9][a-z0-9-]*$/, 'must be a file name of lowercase letters, digits and dashes')
+    .optional(),
+  alt: text.optional(),
 });
 
 function toPartRef(entry: z.infer<typeof partEntry>, line: number): PartRef {
@@ -116,6 +124,7 @@ export function parseFlowHeader(file: string, text: string): FlowHeader {
     throw new Error(`${file}:1: a flow file must start with a YAML header`);
   const src = new YamlSource(file, (node as Yaml).value, node.position?.start.line ?? 1);
   const data = src.parse(headerSchema, src.value ?? {});
+  if (data.svg !== undefined && data.alt === undefined) src.fail(['svg'], 'svg needs alt');
   const header: FlowHeader = {
     id: path.basename(file, '.md'),
     file,
@@ -131,6 +140,8 @@ export function parseFlowHeader(file: string, text: string): FlowHeader {
   if (data.paths) header.paths = data.paths;
   if (data.card) header.card = data.card;
   if (data.static) header.static = data.static;
+  if (data.svg !== undefined) header.svg = data.svg;
+  if (data.alt !== undefined) header.alt = data.alt;
   return header;
 }
 

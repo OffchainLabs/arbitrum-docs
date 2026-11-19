@@ -222,3 +222,26 @@ test('rejects a detail cycle', () =>
     },
     /detail cycle: a\.md -> b\.md -> a\.md/,
   ));
+
+const SVG_HEADER = (extra: string) => `---
+title: Demo
+parts: [a, { b: { tech: ~ } }]
+${extra}
+---
+`;
+
+test('reads svg and alt, and a null tech removes the part tech', async () => {
+  const { flows } = await loadProject(
+    await project({ demo: SVG_HEADER('svg: demo-out\nalt: The whole picture.') }),
+  );
+  const demo = flows.get('demo')!;
+  assert.equal(demo.svg, 'demo-out');
+  assert.equal(demo.alt, 'The whole picture.');
+  assert.equal('tech' in demo.parts[1]!, false);
+});
+
+test('rejects an svg name that is not a plain file name', () =>
+  rejects({ demo: SVG_HEADER('svg: ../out\nalt: Alt.') }, /demo\.md:4: svg: /));
+
+test('rejects svg without alt', () =>
+  rejects({ demo: SVG_HEADER('svg: demo-out') }, /svg needs alt/));
