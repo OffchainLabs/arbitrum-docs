@@ -7,7 +7,7 @@ author: anegg0
 sme: leeederek
 ---
 
-This notice is for traders who submit transactions to the <Term id="arbitrum-one">Arbitrum One</Term> or <Term id="arbitrum-nova">Arbitrum Nova</Term> <Term id="sequencer">sequencer</Term> endpoints, and for chain operators who run their own <Term id="arbitrum-nitro">Nitro</Term> sequencer.
+This notice is for anyone who submits transactions to the <Term id="arbitrum-one">Arbitrum One</Term> or <Term id="arbitrum-nova">Arbitrum Nova</Term> <Term id="sequencer">sequencer</Term> endpoints, and for chain operators who run their own <Term id="arbitrum-nitro">Nitro</Term> sequencer.
 
 Offchain Labs plans to disable `eth_sendRawTransactionConditional` ([ERC-7796](https://ercs.ethereum.org/ERCS/erc-7796)) at the public sequencer endpoints of Arbitrum One and Arbitrum Nova on **January 17, 2027**. A later Nitro release removes the method from the client.
 
@@ -27,7 +27,7 @@ After the method is disabled:
 
 - A call to `eth_sendRawTransactionConditional` at the Arbitrum One or Arbitrum Nova sequencer endpoint returns the method-not-found error `-32601`.
 - `eth_sendRawTransaction` and the existing rate limits on failing submissions do not change.
-- If you run your own Nitro sequencer, the method keeps working until the Nitro release that removes it. The release notes for that version will say so.
+- If you run your own Nitro sequencer, the method keeps working until the Nitro release that removes it. The release notes for that version will say so. Move any production or public traffic off this method before then.
 
 ## Timeline
 
