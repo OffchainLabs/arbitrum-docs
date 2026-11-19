@@ -3,8 +3,9 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 import { frontmatterFromMarkdown } from 'mdast-util-frontmatter';
 import { frontmatter } from 'micromark-extension-frontmatter';
 import path from 'node:path';
+import { z } from 'zod';
 
-import { YamlSource, expectNumberPair, expectObj, expectString, isObj } from './schema.ts';
+import { YamlSource, numberPair, text } from './schema.ts';
 import type { DiagramEdge, EdgeStyle, FlowPath } from './types.ts';
 
 export interface PartRef {
@@ -51,72 +52,41 @@ export function parseEdge(source: YamlSource, id: string, text: string, line: nu
   return edge;
 }
 
-function parsePartRefs(src: YamlSource, raw: unknown): PartRef[] {
-  if (!Array.isArray(raw)) src.fail(['parts'], '"parts" must be a list');
-  return raw.map((item, i) => {
-    const at = ['parts', i];
-    const line = src.line(at);
-    if (typeof item === 'string') return { id: item, line };
-    const map = expectObj(src, item, at, 'a part entry');
-    const [id, ...rest] = Object.keys(map);
-    if (id === undefined || rest.length > 0) {
-      src.fail(at, 'a part override must be a mapping with one part id');
-    }
-    const override = expectObj(src, map[id], [...at, id], `override of part "${id}"`);
-    const ref: PartRef = { id, line };
-    for (const [key, value] of Object.entries(override)) {
-      if (key !== 'label' && key !== 'tech') {
-        src.fail([...at, id, key], `part "${id}" override may set label or tech, not "${key}"`);
-      }
-      ref[key] = expectString(src, value, [...at, id, key], `override ${key}`);
-    }
-    return ref;
-  });
-}
+const override = z.strictObject({ label: text.optional(), tech: text.optional() });
 
-function parsePaths(src: YamlSource, raw: unknown): FlowPath[] {
-  if (!Array.isArray(raw)) src.fail(['paths'], '"paths" must be a list');
-  return raw.map((item, i) => {
-    const at = ['paths', i];
-    const map = expectObj(src, item, at, 'a path');
-    const steps = map['steps'];
-    if (!Array.isArray(steps) || !steps.every((s) => typeof s === 'string')) {
-      src.fail([...at, 'steps'], 'path steps must be a list of step ids');
-    }
-    return {
-      id: expectString(src, map['id'], [...at, 'id'], 'path id'),
-      label: expectString(src, map['label'], [...at, 'label'], 'path label'),
-      steps,
-    };
-  });
-}
+const partEntry = z.union(
+  [
+    text,
+    z
+      .record(z.string(), override)
+      .refine((entry) => Object.keys(entry).length === 1, 'a part override names exactly one part'),
+  ],
+  { error: 'a part entry must be a part id or a mapping of one part id to label or tech' },
+);
 
-function parseCard(src: YamlSource, raw: unknown): Record<string, string | boolean> {
-  const card = expectObj(src, raw, ['card'], '"card"');
-  for (const [key, value] of Object.entries(card)) {
-    if (typeof value !== 'string' && typeof value !== 'boolean') {
-      src.fail(['card', key], `card "${key}" must be a string or a boolean`);
-    }
-  }
-  return card as Record<string, string | boolean>;
-}
+const headerSchema = z.strictObject({
+  title: text,
+  widget: text.optional(),
+  showLanes: z.boolean().default(true),
+  parts: z.array(partEntry),
+  edges: z
+    .record(
+      z.string(),
+      z.string({ error: 'an edge must be a string: <source> -> <target> "label"' }),
+    )
+    .default({}),
+  paths: z.array(z.strictObject({ id: text, label: text, steps: z.array(text) })).optional(),
+  card: z.record(z.string(), z.union([z.string(), z.boolean()])).optional(),
+  static: z.record(z.string(), numberPair).optional(),
+});
 
-function parseStatic(src: YamlSource, raw: unknown): Record<string, [number, number]> {
-  const positions = expectObj(src, raw, ['static'], '"static"');
-  const out: Record<string, [number, number]> = {};
-  for (const [id, value] of Object.entries(positions)) {
-    out[id] = expectNumberPair(src, value, ['static', id], `static position of "${id}"`);
-  }
-  return out;
-}
-
-function parseEdges(src: YamlSource): FlowHeader['edges'] {
-  const seen = new Set<string>();
-  return src.entries(['edges']).map(({ key, value, line }) => {
-    if (seen.has(key)) throw new Error(`${src.file}:${line}: duplicate edge id "${key}"`);
-    seen.add(key);
-    return parseEdge(src, key, value, line);
-  });
+function toPartRef(entry: z.infer<typeof partEntry>, line: number): PartRef {
+  if (typeof entry === 'string') return { id: entry, line };
+  const [[id, fields]] = Object.entries(entry) as [[string, z.infer<typeof override>]];
+  const ref: PartRef = { id, line };
+  if (fields.label !== undefined) ref.label = fields.label;
+  if (fields.tech !== undefined) ref.tech = fields.tech;
+  return ref;
 }
 
 /** Read the YAML header of one flow file. The file name, without `.md`, is the flow id. */
@@ -129,28 +99,21 @@ export function parseFlowHeader(file: string, text: string): FlowHeader {
   if (node?.type !== 'yaml')
     throw new Error(`${file}:1: a flow file must start with a YAML header`);
   const src = new YamlSource(file, (node as Yaml).value, node.position?.start.line ?? 1);
-  const root = expectObj(src, src.value ?? {}, [], 'the header');
+  const data = src.parse(headerSchema, src.value ?? {});
   const header: FlowHeader = {
     id: path.basename(file, '.md'),
     file,
-    title: expectString(src, root['title'], ['title'], '"title"'),
-    showLanes: root['showLanes'] === true,
-    partRefs: parsePartRefs(src, root['parts']),
-    edges: [],
+    title: data.title,
+    showLanes: data.showLanes,
+    partRefs: data.parts.map((entry, i) => toPartRef(entry, src.line(['parts', i]))),
+    edges: Object.entries(data.edges).map(([id, value]) =>
+      parseEdge(src, id, value, src.line(['edges', id])),
+    ),
     source: src,
   };
-  if (root['showLanes'] !== undefined && typeof root['showLanes'] !== 'boolean') {
-    src.fail(['showLanes'], '"showLanes" must be true or false');
-  }
-  if (root['edges'] !== undefined) {
-    if (!isObj(root['edges'])) src.fail(['edges'], '"edges" must be a mapping of id to edge');
-    header.edges = parseEdges(src);
-  }
-  if (root['widget'] !== undefined) {
-    header.widget = expectString(src, root['widget'], ['widget'], '"widget"');
-  }
-  if (root['paths'] !== undefined) header.paths = parsePaths(src, root['paths']);
-  if (root['card'] !== undefined) header.card = parseCard(src, root['card']);
-  if (root['static'] !== undefined) header.static = parseStatic(src, root['static']);
+  if (data.widget !== undefined) header.widget = data.widget;
+  if (data.paths) header.paths = data.paths;
+  if (data.card) header.card = data.card;
+  if (data.static) header.static = data.static;
   return header;
 }

@@ -1,0 +1,19 @@
+lanes:
+  l1:
+    label: Lane one
+    svg: { fill: '#f4f4f4', stroke: '#cccccc' }
+  l1:
+    label: Again
+kinds:
+  plain:
+    label: Plain
+    svg: { fill: '#ffffff', title: '#111111', sub: '#555555' }
+repos: {}
+svg:
+  theme: neutral
+  canvas: [720, 300]
+  cols: [130, 360, 590]
+  rows: [48, 160, 260]
+  box: [200, 80]
+  scale: 1
+  offset: [0, 0]

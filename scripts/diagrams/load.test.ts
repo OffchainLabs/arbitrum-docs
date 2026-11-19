@@ -69,29 +69,42 @@ test('reads title, lanes flag, paths, card and static positions', async () => {
   const extras = flows.get('extras')!;
   assert.equal(extras.title, 'Extras');
   assert.equal(extras.showLanes, true);
-  assert.equal(flows.get('demo')!.showLanes, false);
+  assert.equal(flows.get('demo')!.showLanes, true);
   assert.deepEqual(extras.paths, [{ id: 'main', label: 'Main path', steps: ['one', 'two'] }]);
   assert.deepEqual(extras.card, { cta: 'Open the flow', compact: true });
   assert.deepEqual(extras.static, { a: [10, 20] });
   assert.equal(extras.file.endsWith('flows/extras.md'), true);
 });
 
-test('rejects a part with an unknown lane', async () => {
-  await assert.rejects(loadProject(fixture('bad-lane')), /parts\.yaml:\d+:.*lane "l2"/);
-});
+const rejects = (name: string, pattern: RegExp) =>
+  assert.rejects(loadProject(fixture(name)), (error: Error) => {
+    assert.match(error.message, pattern);
+    return true;
+  });
 
-test('rejects a part with an unknown kind', async () => {
-  await assert.rejects(loadProject(fixture('bad-kind')), /parts\.yaml:\d+:.*kind "nope"/);
-});
+test('rejects a part with an unknown lane', () =>
+  rejects('bad-lane', /parts\.yaml:1: .*lane "l2"/));
 
-test('rejects an unknown part in a flow', async () => {
-  await assert.rejects(loadProject(fixture('bad-part-ref')), /demo\.md:\d+: unknown part "zz"/);
-});
+test('rejects a part with an unknown kind', () =>
+  rejects('bad-kind', /parts\.yaml:1: .*kind "nope"/));
 
-test('rejects an edge to an unlisted part', async () => {
-  await assert.rejects(loadProject(fixture('bad-edge-target')), /demo\.md:\d+: edge "ab".*"b"/);
-});
+test('rejects an unknown part in a flow', () =>
+  rejects('bad-part-ref', /demo\.md:3: unknown part "zz"/));
 
-test('rejects a duplicate edge id', async () => {
-  await assert.rejects(loadProject(fixture('dup-edge')), /demo\.md:\d+: duplicate edge/);
-});
+test('rejects an edge to an unlisted part', () =>
+  rejects('bad-edge-target', /demo\.md:5: edge "ab".*"b"/));
+
+test('rejects a duplicate edge id', () =>
+  rejects('dup-edge', /demo\.md:6: duplicate edge id "ab"/));
+
+test('rejects an edge written as a mapping', () =>
+  rejects('bad-edge-shape', /demo\.md:5: edges\.ab: an edge must be a string/));
+
+test('rejects a duplicate part id in parts.yaml', () =>
+  rejects('dup-part', /parts\.yaml:2: duplicate key "a"/));
+
+test('rejects a duplicate lane id in project.yaml', () =>
+  rejects('dup-lane', /project\.yaml:5: duplicate key "l1"/));
+
+test('rejects a part listed twice in a flow', () =>
+  rejects('dup-flow-part', /demo\.md:3: part "a" is listed twice/));

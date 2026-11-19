@@ -9,6 +9,9 @@ function resolveFlow(header: FlowHeader, parts: Map<string, Part>): DiagramFlow 
   const { source } = header;
   const listed = new Map<string, Part>();
   for (const ref of header.partRefs) {
+    if (listed.has(ref.id)) {
+      throw new Error(`${header.file}:${ref.line}: part "${ref.id}" is listed twice`);
+    }
     const base = parts.get(ref.id);
     if (!base) throw new Error(`${header.file}:${ref.line}: unknown part "${ref.id}"`);
     const part = { ...base };
