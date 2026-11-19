@@ -1,0 +1,110 @@
+wallet:
+  label: 'User wallet'
+  tech: 'Any EVM wallet'
+  kind: user
+  lane: off-chain
+fullnode:
+  label: 'Full node'
+  tech: 'Go, nitro'
+  kind: process
+  lane: child
+seq:
+  label: 'Sequencer'
+  tech: 'Go, nitro'
+  kind: process
+  lane: child
+relay:
+  label: 'Feed relay'
+  tech: 'Go, relay'
+  kind: process
+  lane: child
+poster:
+  label: 'Batch poster'
+  tech: 'Go, nitro'
+  kind: process
+  lane: child
+seqinbox:
+  label: 'SequencerInbox'
+  tech: 'Solidity'
+  kind: contract
+  lane: parent
+bridge:
+  label: 'Bridge'
+  tech: 'Solidity'
+  kind: contract
+  lane: parent
+dapp:
+  label: 'Dapp'
+  tech: 'Parent chain account'
+  kind: user
+  lane: parent
+rpc:
+  label: 'RPC node'
+  tech: 'Go, nitro'
+  kind: process
+  lane: child
+fastfeed:
+  label: 'Fast Feed'
+  tech: 'WebSocket'
+  kind: process
+  lane: child
+feed:
+  label: 'Sequencer feed'
+  tech: 'WebSocket'
+  kind: process
+  lane: child
+retryable:
+  label: 'ArbRetryableTx'
+  tech: 'Precompile'
+  kind: contract
+  lane: child
+validator:
+  label: 'Validator'
+  tech: 'Go, nitro'
+  kind: process
+  lane: child
+inbox:
+  label: 'Inbox'
+  tech: 'Solidity'
+  kind: contract
+  lane: parent
+rollup:
+  label: 'Rollup'
+  tech: 'Solidity'
+  kind: contract
+  lane: parent
+prechecker:
+  label: 'Transaction pre-checker'
+  tech: 'tx_pre_checker.go'
+  kind: process
+  lane: child
+tx-queue:
+  label: 'Transaction queue'
+  tech: 'sequencer.go'
+  kind: process
+  lane: child
+engine:
+  label: 'Execution engine'
+  tech: 'ArbOS on geth'
+  kind: process
+  lane: child
+streamer:
+  label: 'Transaction streamer'
+  tech: 'transaction_streamer.go'
+  kind: process
+  lane: child
+waiting:
+  label: 'Waiting list'
+  tech: 'Sequencer queue'
+  kind: process
+  lane: child
+priority-queue:
+  label: 'Priority queue'
+  tech: 'PGA mempool'
+  kind: process
+  lane: child
+block:
+  label: 'Block in progress'
+  tech: 'ArbOS on geth'
+  kind: process
+  lane: child

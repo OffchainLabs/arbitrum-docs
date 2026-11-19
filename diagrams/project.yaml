@@ -1,0 +1,34 @@
+lanes:
+  child:
+    label: Child chain · Arbitrum One
+  parent:
+    label: Parent chain · Ethereum
+    svg: { fill: '#6b1d2a', stroke: '#f3a5b0' }
+  off-chain:
+    label: Off-chain
+kinds:
+  process:
+    label: Nitro process
+    svg: { fill: '#12aaff', title: '#0b1b2e', sub: '#0b2438' }
+  data:
+    label: Data
+    svg: { fill: '#213147', title: '#ffffff', sub: '#c9dcef', stroke: '#9dcced' }
+  contract:
+    label: Parent chain contract
+    svg: { fill: '#e6007a', title: '#ffffff', sub: '#ffffff' }
+  user:
+    label: User
+    svg: { fill: '#12aaff', title: '#0b1b2e', sub: '#0b2438' }
+repos:
+  nitro:
+    url: https://github.com/OffchainLabs/nitro
+  nitro-contracts:
+    url: https://github.com/OffchainLabs/nitro-contracts
+svg:
+  theme: brand-baked
+  canvas: [1600, 900]
+  cols: [40, 295, 550, 805, 1060]
+  rows: [40, 200, 350, 570]
+  box: [210, 84]
+  scale: 1.15
+  offset: [47, 30]
