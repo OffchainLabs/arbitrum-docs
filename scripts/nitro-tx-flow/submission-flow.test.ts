@@ -5,14 +5,11 @@ import { test } from 'node:test';
 
 import { FINALITY_TERM, contractKey } from '../../components/widgets/NitroTxFlow/brand.ts';
 import {
-  type ResolvedPath,
-  flowPaths,
-  transactionLifecycle,
-} from '../../components/widgets/NitroTxFlow/model.ts';
-import {
   transactionSubmission as flow,
   pgaRound,
-} from '../../components/widgets/NitroTxFlow/submissionFlow.ts';
+  transactionLifecycle,
+} from '../../components/widgets/NitroTxFlow/flows.generated.ts';
+import { type ResolvedPath, flowPaths } from '../../components/widgets/NitroTxFlow/model.ts';
 import { createAnchorCompiler } from '../lib/doc-anchors.ts';
 import { buildIndex } from '../lib/doc-links.ts';
 import { checkFlowShape } from './flow-shape.ts';

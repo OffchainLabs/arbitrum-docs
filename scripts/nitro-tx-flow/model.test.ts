@@ -2,11 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import {
-  type Flow,
-  codeRefs,
+  FLOWS,
   transactionLifecycle as flow,
-  flowPaths,
-} from '../../components/widgets/NitroTxFlow/model.ts';
+} from '../../components/widgets/NitroTxFlow/flows.generated.ts';
+import { type Flow, codeRefs, flowPaths } from '../../components/widgets/NitroTxFlow/model.ts';
 import { checkFlowShape } from './flow-shape.ts';
 
 test('the flow has a valid shape', () => {
@@ -81,4 +80,13 @@ test('codeRefs includes refs from detail flows', () => {
   };
   const keys = codeRefs(parent).map((r) => `${r.repo}:${r.path}`);
   assert.deepEqual(keys, ['nitro:only/in/detail.go']);
+});
+
+test('FLOWS has the four widget keys', () => {
+  assert.deepEqual(Object.keys(FLOWS).sort(), [
+    'nitro-transaction-flow',
+    'pga-round',
+    'sequencer-step-3',
+    'transaction-submission-flow',
+  ]);
 });

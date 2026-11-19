@@ -25,6 +25,8 @@
     "cli:check": "node scripts/generate-cli-reference.ts --check",
     "cli:generate": "node scripts/generate-cli-reference.ts",
     "contracts:generate": "node scripts/generate-contract-addresses.ts",
+    "diagrams:check": "node scripts/generate-diagrams.ts --check",
+    "diagrams:generate": "node scripts/generate-diagrams.ts",
     "edge-challenge:fetch": "node scripts/fetch-edge-challenge-data.ts",
     "faq:check": "node scripts/generate-faq.ts --check",
     "faq:fetch": "node scripts/faq-fetch.ts",

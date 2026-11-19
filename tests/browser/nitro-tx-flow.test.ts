@@ -4,7 +4,7 @@ import { after, before, test } from 'node:test';
 import { type Browser, type BrowserContextOptions, type Page, chromium } from 'playwright';
 
 import { BAND_STYLE } from '../../components/widgets/NitroTxFlow/brand.ts';
-import { transactionLifecycle } from '../../components/widgets/NitroTxFlow/model.ts';
+import { transactionLifecycle } from '../../components/widgets/NitroTxFlow/flows.generated.ts';
 import { CANVAS, cardTitle, openFlow, settle } from './flow-page.ts';
 
 const PAGE_PATH = '/how-arbitrum-works/deep-dives/nitro-transaction-flow';

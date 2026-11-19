@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import { before, test } from 'node:test';
 
 import {
+  transactionLifecycle as flow,
+  transactionSubmission,
+} from '../../components/widgets/NitroTxFlow/flows.generated.ts';
+import {
   type Box,
   type FlowLayout,
   NODE_HEIGHT,
@@ -12,11 +16,7 @@ import {
   labelBadgeCounts,
   stepNumbersByEdge,
 } from '../../components/widgets/NitroTxFlow/layout.ts';
-import {
-  type Flow,
-  transactionLifecycle as flow,
-} from '../../components/widgets/NitroTxFlow/model.ts';
-import { transactionSubmission } from '../../components/widgets/NitroTxFlow/submissionFlow.ts';
+import type { Flow } from '../../components/widgets/NitroTxFlow/model.ts';
 
 let layout: FlowLayout;
 
