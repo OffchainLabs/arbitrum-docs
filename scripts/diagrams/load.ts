@@ -1,9 +1,9 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 
-import { type FlowHeader, parseFlowHeader } from './parse-flow.ts';
+import { type FlowHeader, parseFlowHeader, parseSteps } from './parse-flow.ts';
 import { YamlSource, parseParts, parseProjectConfig } from './schema.ts';
-import type { DiagramFlow, LoadedProject, Part } from './types.ts';
+import type { DiagramFlow, DiagramStep, LoadedProject, Part, ProjectConfig } from './types.ts';
 
 function resolveFlow(header: FlowHeader, parts: Map<string, Part>): DiagramFlow {
   const { source } = header;
@@ -52,17 +52,64 @@ async function readYaml(dir: string, name: string): Promise<YamlSource> {
   return new YamlSource(file, await readFile(file, 'utf8'));
 }
 
-/** Load `project.yaml`, `parts.yaml` and every `flows/*.md` header under `dir`. */
+type DetailLines = Map<string, Map<string, number>>;
+
+function checkDetails(flows: Map<string, DiagramFlow>, lines: DetailLines): void {
+  const targets = new Map<string, { step: DiagramStep; line: number }[]>();
+  for (const flow of flows.values()) {
+    const found: { step: DiagramStep; line: number }[] = [];
+    for (const step of flow.steps) {
+      if (!step.detail) continue;
+      const line = lines.get(flow.id)!.get(step.id)!;
+      if (!flows.has(step.detail.flow)) {
+        throw new Error(
+          `${flow.file}:${line}: step "${step.id}" detail flow "${step.detail.flow}" not found`,
+        );
+      }
+      found.push({ step, line });
+    }
+    targets.set(flow.id, found);
+  }
+  const visit = (id: string, stack: string[]): void => {
+    for (const { step, line } of targets.get(id)!) {
+      const next = step.detail!.flow;
+      const at = stack.indexOf(next);
+      if (at !== -1) {
+        const cycle = [...stack.slice(at), next].map((f) => `${f}.md`).join(' -> ');
+        throw new Error(`${flows.get(id)!.file}:${line}: detail cycle: ${cycle}`);
+      }
+      visit(next, [...stack, next]);
+    }
+  };
+  for (const id of flows.keys()) visit(id, [id]);
+}
+
+function stepContext(flow: DiagramFlow, config: ProjectConfig) {
+  return {
+    config,
+    partIds: new Set(flow.parts.map((p) => p.id)),
+    edgeIds: new Set(flow.edges.map((e) => e.id)),
+  };
+}
+
+/** Load `project.yaml`, `parts.yaml` and every `flows/*.md` file under `dir`. */
 export async function loadProject(dir: string): Promise<LoadedProject> {
   const config = parseProjectConfig(await readYaml(dir, 'project.yaml'));
   const parts = parseParts(await readYaml(dir, 'parts.yaml'), config);
   const flowsDir = path.join(dir, 'flows');
   const names = (await readdir(flowsDir)).filter((n) => n.endsWith('.md')).sort();
   const flows = new Map<string, DiagramFlow>();
+  const detailLines: DetailLines = new Map();
   for (const name of names) {
     const file = path.join(flowsDir, name);
-    const header = parseFlowHeader(file, await readFile(file, 'utf8'));
-    flows.set(header.id, resolveFlow(header, parts));
+    const source = await readFile(file, 'utf8');
+    const header = parseFlowHeader(file, source);
+    const flow = resolveFlow(header, parts);
+    const parsed = parseSteps(file, source, stepContext(flow, config));
+    flow.steps = parsed.steps;
+    detailLines.set(flow.id, parsed.detailLines);
+    flows.set(flow.id, flow);
   }
+  checkDetails(flows, detailLines);
   return { config, parts, flows };
 }

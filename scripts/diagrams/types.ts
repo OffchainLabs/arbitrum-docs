@@ -18,9 +18,33 @@ export interface DiagramEdge {
   style: EdgeStyle;
 }
 
-/** A step of a flow. The step sections are parsed in a later task. */
+export interface CodeRef {
+  repo: string;
+  path: string;
+  line?: number;
+}
+
+export interface StepFailure {
+  symptoms: string;
+  impact: string;
+  recovery: string;
+}
+
+/** One step of a flow, read from a `## Title {#id}` section. */
 export interface DiagramStep {
   id: string;
+  title: string;
+  text: string;
+  parts: string[];
+  edges: string[];
+  flag?: string;
+  code?: CodeRef;
+  cites: CodeRef[];
+  finality?: string;
+  lane: string;
+  docs?: { href: string; label: string };
+  failure?: StepFailure;
+  detail?: { part: string; flow: string };
 }
 
 export interface FlowPath {
