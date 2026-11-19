@@ -119,7 +119,7 @@ export const sequencerStep3: Flow = {
       chain: 'child',
     },
     {
-      id: 'queue',
+      id: 'tx-queue',
       label: 'Transaction queue',
       tech: 'sequencer.go',
       kind: 'process',
@@ -141,8 +141,8 @@ export const sequencerStep3: Flow = {
     },
   ],
   edges: [
-    { id: 'checked', source: 'prechecker', target: 'queue', label: 'Checked transaction' },
-    { id: 'ordered', source: 'queue', target: 'engine', label: 'Ordered batch of transactions' },
+    { id: 'checked', source: 'prechecker', target: 'tx-queue', label: 'Checked transaction' },
+    { id: 'ordered', source: 'tx-queue', target: 'engine', label: 'Ordered batch of transactions' },
     { id: 'block', source: 'engine', target: 'streamer', label: 'Block and message' },
   ],
   steps: [
@@ -160,7 +160,7 @@ export const sequencerStep3: Flow = {
       id: 'queue',
       title: 'Queue',
       text: 'SPIKE: the transaction waits in the queue until the sequencer takes it.',
-      actors: ['prechecker', 'queue'],
+      actors: ['prechecker', 'tx-queue'],
       edges: ['checked'],
       failure: SPIKE_FAILURE,
       citations: [],
@@ -170,7 +170,7 @@ export const sequencerStep3: Flow = {
       id: 'execute',
       title: 'Order and execute',
       text: 'SPIKE: the sequencer orders the queued transactions and ArbOS executes them into a block.',
-      actors: ['queue', 'engine'],
+      actors: ['tx-queue', 'engine'],
       edges: ['ordered'],
       failure: SPIKE_FAILURE,
       citations: [],

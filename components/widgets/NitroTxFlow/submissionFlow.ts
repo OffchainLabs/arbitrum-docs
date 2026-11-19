@@ -41,7 +41,13 @@ export const pgaRound: Flow = {
       kind: 'process',
       chain: 'child',
     },
-    { id: 'queue', label: 'Priority queue', tech: 'PGA mempool', kind: 'process', chain: 'child' },
+    {
+      id: 'priority-queue',
+      label: 'Priority queue',
+      tech: 'PGA mempool',
+      kind: 'process',
+      chain: 'child',
+    },
     {
       id: 'block',
       label: 'Block in progress',
@@ -51,8 +57,8 @@ export const pgaRound: Flow = {
     },
   ],
   edges: [
-    { id: 'promote', source: 'waiting', target: 'queue', label: 'At round start' },
-    { id: 'fill', source: 'queue', target: 'block', label: 'Highest priority first' },
+    { id: 'promote', source: 'waiting', target: 'priority-queue', label: 'At round start' },
+    { id: 'fill', source: 'priority-queue', target: 'block', label: 'Highest priority first' },
   ],
   steps: [
     {
@@ -81,7 +87,7 @@ export const pgaRound: Flow = {
         'If two transactions have the same priority, the one that reached the Sequencer first ' +
         'goes first. ' +
         'A transaction whose maxFeePerGas is below the base fee is dropped here.',
-      actors: ['waiting', 'queue'],
+      actors: ['waiting', 'priority-queue'],
       edges: ['promote'],
       code: { repo: 'nitro', path: 'execution/gethexec/pga/heap.go' },
       docs: { href: `${PGA_DOCS}#the-two-stage-mempool`, label: 'The two-stage mempool' },
@@ -104,7 +110,7 @@ export const pgaRound: Flow = {
         'It stops when the queue is empty, the round ends, or the block reaches ' +
         '{var:arbOneBlockGasLimit} gas or {var:arbOneBlockCalldataLimitBytes} bytes of calldata. ' +
         'Anything left in the queue waits for the next round.',
-      actors: ['queue', 'block'],
+      actors: ['priority-queue', 'block'],
       edges: ['fill'],
       code: { repo: 'nitro', path: 'execution/gethexec/pga_tx_orderer.go' },
       docs: { href: `${PGA_DOCS}#pga-rounds`, label: 'PGA rounds' },
@@ -126,7 +132,7 @@ export const pgaRound: Flow = {
         'none. ' +
         'K is the number of rounds per block, {var:arbOnePgaRoundsPerBlock} on Arbitrum One. ' +
         'The boost moves a transaction up the queue. It does not change the fee you pay.',
-      actors: ['queue'],
+      actors: ['priority-queue'],
       edges: [],
       code: { repo: 'nitro', path: 'execution/gethexec/pga/mempool.go' },
       docs: {
