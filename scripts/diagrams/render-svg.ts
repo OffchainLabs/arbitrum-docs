@@ -339,6 +339,9 @@ function boxElements(file: string, canvas: Canvas, config: ProjectConfig, box: B
     }
   }
   const { tech } = box.part;
+  if (tech !== undefined && textWidth(tech, SUB_SIZE) > w) {
+    throw new Error(`${file}: part "${box.part.id}" sublabel "${tech}" is wider than the box`);
+  }
   const count = lines.length + (tech === undefined ? 0 : 1);
   const top = box.y + h / 2 - ((count - 1) * LINE_STEP) / 2 + BASELINE;
   const cx = fmt(canvas.x(box.x + w / 2));
@@ -414,7 +417,8 @@ function bandElements(
  *   lane in row 0 does not fit.
  * - A straight edge, and the last leg of an elbow, may not pass through another box.
  * - Text width is estimated at 0.52 em/char. A box title line must fit the box width minus
- *   32, and an edge label chip must fit the length of a horizontal edge or the box width.
+ *   32. A sublabel must fit the full box width, because the estimate overstates regular
+ *   18-unit text. An edge label chip must fit the length of a horizontal edge or the box width.
  *
  * Args:
  *   flow: the flow; every part needs a `static` [column, row] pin, and `alt` is required.

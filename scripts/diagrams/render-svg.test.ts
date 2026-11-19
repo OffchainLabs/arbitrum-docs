@@ -171,3 +171,10 @@ test('rejects an edge label wider than its edge', async () => {
   };
   assert.throws(() => renderSvg(flow, config, BACKGROUND), /label of edge "ab" is wider/);
 });
+
+test('checks a sublabel against the full box width', async () => {
+  // At 0.52 em/char and 18 units, 21 chars are 196.6: over the inner 178, under the full 210.
+  assert.doesNotThrow(await renderWith({}, { a: { tech: 'from the parent chain' } }));
+  const fn = await renderWith({}, { a: { tech: 'a sublabel far too long for any box' } });
+  assert.throws(fn, /demo\.md: part "a" sublabel "a sublabel far too long for any box" is wider/);
+});
