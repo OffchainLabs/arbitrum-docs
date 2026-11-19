@@ -16,6 +16,7 @@ import { ReferenceList } from '@/components/mdx/ReferenceList';
 import { Term } from '@/components/mdx/Term';
 import { Var } from '@/components/mdx/Var';
 import { EdgeChallengeFlow } from '@/components/widgets/EdgeChallengeFlow';
+import { NitroTxFlow, TxSubmissionFlow } from '@/components/widgets/NitroTxFlow';
 import {
   ChecklistItem,
   ConfigGuidance,
@@ -35,6 +36,8 @@ export function getMDXComponents(components?: MDXComponents) {
     AEL: AddressExplorerLink,
     Callout,
     EdgeChallengeFlow,
+    NitroTxFlow,
+    TxSubmissionFlow,
     ImageZoom,
     // Markdown images arrive with `src`, `width` and `height` that remark-image measured from
     // `public/`. `rounded-lg` matches the Fumadocs default `img` this mapping replaces.

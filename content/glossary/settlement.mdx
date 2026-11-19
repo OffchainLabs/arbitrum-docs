@@ -1,0 +1,6 @@
+---
+id: settlement
+title: 'Settlement'
+---
+
+The point at which the [parent chain](/glossary#parent-chain) accepts a [child chain](/glossary#child-chain) state as final. Settlement happens when the [assertion](/glossary#assertion) that covers a block reaches [confirmation](/glossary#confirmation), after the [challenge period](/glossary#challenge-period). Only then can that block's [child-to-parent chain messages](/glossary#l2-to-l1-message), such as withdrawals, be executed. Settlement comes after [hard finality](/glossary#hard-finality), and it never reorders or reverts the child chain: an assertion that is rejected only stops an invalid state from being confirmed.
