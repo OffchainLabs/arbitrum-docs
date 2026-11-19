@@ -1,0 +1,43 @@
+---
+title: 'Deprecation of eth_sendRawTransactionConditional'
+sidebar_label: 'eth_sendRawTransactionConditional deprecation'
+description: 'Offchain Labs plans to disable eth_sendRawTransactionConditional at the Arbitrum One and Arbitrum Nova sequencer endpoints on January 17, 2027.'
+content_type: concept
+author: anegg0
+sme: leeederek
+---
+
+This notice is for anyone who submits transactions to the <Term id="arbitrum-one">Arbitrum One</Term> or <Term id="arbitrum-nova">Arbitrum Nova</Term> <Term id="sequencer">sequencer</Term> endpoints, and for chain operators who run their own <Term id="arbitrum-nitro">Nitro</Term> sequencer.
+
+Offchain Labs plans to disable `eth_sendRawTransactionConditional` ([ERC-7796](https://ercs.ethereum.org/ERCS/erc-7796)) at the public sequencer endpoints of Arbitrum One and Arbitrum Nova on **January 17, 2027**. A later Nitro release removes the method from the client.
+
+<Callout type="info" title="What this means for you">
+
+- If you submit transactions with `eth_sendRawTransaction`, you do not need to change anything.
+- If you call `eth_sendRawTransactionConditional` on Arbitrum One or Arbitrum Nova, switch to `eth_sendRawTransaction` before January 17, 2027.
+- If you depend on this method, comment on the [forum post: Deprecation notice for eth_sendRawTransactionConditional](https://forum.arbitrum.foundation/t/deprecation-notice-eth-sendrawtransactionconditional/31775) before December 18, 2026. Say what you use it for and what breaks without it.
+
+</Callout>
+
+## What changes
+
+`eth_sendRawTransactionConditional` is `eth_sendRawTransaction` with preconditions: storage-slot values and block or timestamp bounds that must still hold when the sequencer includes the transaction. The method was activated in 2023 through [AIP-2](https://forum.arbitrum.foundation/t/aip-2-activate-support-for-account-abstraction-endpoint-on-one-and-nova/14790) for [ERC-4337](https://ercs.ethereum.org/ERCS/erc-4337) bundlers. Offchain Labs reviewed recent usage on Arbitrum One and found no [ERC-4337](https://ercs.ethereum.org/ERCS/erc-4337) bundler use of the method.
+
+After the method is disabled:
+
+- A call to `eth_sendRawTransactionConditional` at the Arbitrum One or Arbitrum Nova sequencer endpoint returns the method-not-found error `-32601`.
+- `eth_sendRawTransaction` and the existing rate limits on failing submissions do not change.
+- If you run your own Nitro sequencer, the method keeps working until the Nitro release that removes it. The release notes for that version will say so. Move any production or public traffic off this method before then.
+
+## Timeline
+
+All dates are in UTC.
+
+| Date                  | Milestone                                                                                                                 |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| November 18, 2026     | Offchain Labs posts the notice on the <Term id="arbitrum-dao">ArbitrumDAO</Term> forum. The 30-day comment period starts. |
+| December 18, 2026     | The comment period ends. Offchain Labs confirms the decision on the forum. The 30-day grace period starts.                |
+| January 17, 2027      | Offchain Labs disables the method at the Arbitrum One and Arbitrum Nova sequencer endpoints.                              |
+| A later Nitro release | Nitro removes the method.                                                                                                 |
+
+If the comment period shows that someone depends on the method, Offchain Labs can extend the comment period or change the decision. This page will show any change to these dates.
