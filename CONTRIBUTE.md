@@ -312,6 +312,13 @@ defines here. For a diagram that needs the full column, add `data-wide` to the i
 There is no per-image width. If a diagram is unreadable at 600px, it is a wide image; if it is
 unreadable at the full column, redraw it.
 
+### Diagrams of Nitro parts
+
+A diagram of Nitro parts and the messages between them starts as a flow file in `diagrams/flows/`.
+Run `pnpm diagrams:generate` to write the interactive widget data and the static SVG from it.
+Never edit the generated files. [INTERNALS.md](INTERNALS.md#diagram-sources) describes the file
+format.
+
 ## Move or rename a page
 
 ```bash
@@ -344,7 +351,7 @@ pnpm format            # prettier, in place (CI runs format:check)
 ```
 
 These are the ones a content change usually trips. The `Gates` job in `.github/workflows/ci.yml`
-runs them all, plus `vars:check`, `contracts:check`, `gas-target:check` and `pnpm audit`. A second job runs `pnpm build`, serves the result, and checks
+runs them all, plus `vars:check`, `contracts:check`, `gas-target:check`, `diagrams:check` and `pnpm audit`. A second job runs `pnpm build`, serves the result, and checks
 it over HTTP. Both block. There is no pre-commit hook, so nothing runs on `git commit`.
 
 The build job also runs `pnpm test:browser` in Chromium to check tab and accordion reveal and

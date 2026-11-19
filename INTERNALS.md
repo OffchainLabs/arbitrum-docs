@@ -18,6 +18,7 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 - [Global variables](#global-variables)
 - [Glossary and inline references](#glossary-and-inline-references)
 - [Custom MDX components](#custom-mdx-components)
+- [Diagram sources](#diagram-sources)
 - [Page weight and what loads late](#page-weight-and-what-loads-late)
 - [Theme](#theme)
 - [Redirects](#redirects)
@@ -399,8 +400,10 @@ Paths into the Nitro repository live as `nitroPathTo*` keys in `content/vars.jso
 what registers them: `nitro:check-release` verifies each one, plus every content link under
 `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/`, against the GitHub
 contents API at the target tag before it writes anything (`scripts/lib/nitro-upstream-paths.ts`).
-It also verifies the code paths in `components/widgets/NitroTxFlow/model.ts`: `nitro` paths at the
-target tag, `nitro-contracts` paths at the `nitroContractsCommit` resolved for that tag.
+It also verifies the code paths of every flow in `FLOWS` (`scripts/lib/nitro-flow-paths.ts`, which
+reads `components/widgets/NitroTxFlow/flows.ts`, generated from `diagrams/flows/*.md`): `nitro`
+paths at the target tag, `nitro-contracts` paths at the `nitroContractsCommit` resolved for that
+tag.
 The NodeInterface pins for `nitro-contracts` stay in `scripts/generate-precompile-tables.ts`
 because they point at a fixed commit.
 
@@ -546,6 +549,110 @@ renders broken. Commit the file under `public/img/`, or wrap a plain `<img>`:
 ```
 
 Rule `docs/remote-image` blocks the markdown form.
+
+## Diagram sources
+
+Diagrams of Nitro parts and the messages between them live in `diagrams/` as text files. One source
+feeds two outputs, so the interactive widget and the static SVG cannot drift apart.
+
+```text
+diagrams/
+  project.yaml              lanes, kinds, repos and the SVG layout
+  parts.yaml                every part, once
+  flows/<flow-id>.md        one flow: YAML header, then one section per step
+  assets/bg-frag.svg        background drawn under every static SVG
+```
+
+`pnpm diagrams:generate` (`scripts/generate-diagrams.ts`) writes two kinds of output:
+
+- `components/widgets/NitroTxFlow/flows.generated.ts`, the data the Nitro flow widget reads.
+  `FLOWS` holds every flow that has steps, keyed by its `widget:` value or, without one, by its
+  id.
+- `public/img/<svg>.svg` for every flow with `static:` and `svg:`, for example
+  `public/img/haw-transaction-lifecycle.svg`.
+
+Edit `diagrams/project.yaml`, `diagrams/parts.yaml` and `diagrams/flows/*.md`. Never edit
+`flows.generated.ts` or a generated SVG, because the next run overwrites them. `pnpm diagrams:check`
+is a CI gate. It fails when either output differs from what the sources produce.
+
+### A flow file
+
+The file name without `.md` is the flow id. The YAML header takes these keys, and an unknown key
+fails.
+
+| Key         | Meaning                                                                                                                             |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `title`     | Required. The diagram title.                                                                                                        |
+| `parts`     | Required. Part ids from `parts.yaml`. `{ seq: { label: 'Sequencer', tech: 'Go' } }` overrides the label or tech for this flow only. |
+| `edges`     | A mapping of edge id to `<source> -> <target> "label" [dashed\|dotted]`. `<->` draws a double-headed arrow. The label is optional.  |
+| `widget`    | The key in `FLOWS`. Defaults to the flow id.                                                                                        |
+| `showLanes` | `false` hides the lane bands. Defaults to `true`.                                                                                   |
+| `paths`     | A list of `id`, `label` and `steps` (step ids), the ordered paths the widget offers.                                                |
+| `card`      | The widget's step card labels: `detailsToggle`, `symptoms`, `impact`, `recovery` (strings) and `showFlag` (boolean).                |
+| `static`    | A mapping of part id to `[column, row]`, the part's grid cell in the static SVG.                                                    |
+| `svg`       | The output file name, lowercase with dashes, without `.svg`. Needs `alt`.                                                           |
+| `alt`       | The alt text, written to the SVG `<desc>`.                                                                                          |
+
+`tech: ~` drops the sublabel of a part in that flow. Every part and every edge end must be in the
+flow's `parts` list.
+
+A step is a `## Title {#id}` section. A step id must be unique in the file. The first paragraph can
+be metadata, one `key: value` pair per line or several joined with `·`. The other paragraphs are
+the step text, which is required. Lists, code blocks and other headings do not parse.
+
+| Key        | Meaning                                                                                          |
+| ---------- | ------------------------------------------------------------------------------------------------ |
+| `lane`     | Required. A lane id from `project.yaml`.                                                         |
+| `parts`    | Part ids the step uses, comma separated, from the flow's `parts`.                                |
+| `edges`    | Edge ids the step uses, comma separated, from the flow's `edges`.                                |
+| `flag`     | A flag name the step shows.                                                                      |
+| `code`     | The main code path, `<repo>/<path>[:<line>]`. The repo is a key under `repos` in `project.yaml`. |
+| `cites`    | More code references, separated by `,` or `;`. See below.                                        |
+| `finality` | A finality level, from `FINALITY_LABEL` in `components/widgets/NitroTxFlow/brand.ts`.            |
+| `docs`     | A link to a docs page, `[label](href)`.                                                          |
+| `detail`   | `<part> -> <flow-id>` links the step to another flow from that part. A detail cycle fails.       |
+
+A `cites` entry takes one of three forms. A full `<repo>/<path>[:<line>]` stands alone. A bare
+`<file>[:<line>]` resolves against the directory of the step's `code:` path, so the step needs a
+`code:` entry. A bare number reuses the file of the previous entry.
+
+A `### Failure` heading ends the step text. It holds exactly three paragraphs that start with
+`**Symptoms.**`, `**Impact.**` and `**Recovery.**`.
+
+`diagrams/flows/transaction-lifecycle.md` is a complete widget example, and
+`diagrams/flows/tx-lifecycle-overview.md` is a complete static SVG example.
+
+### Project config
+
+`diagrams/project.yaml` holds what every flow shares.
+
+- `lanes` maps a lane id to a `label`. A lane with `svg: { fill, stroke, label }` also draws a
+  band behind its parts in the SVG.
+- `kinds` maps a part kind to a `label` and to `svg` colours: `fill`, `title`, `sub`, and optional
+  `stroke`. The optional `svg.key` replaces `label` in the SVG key.
+- `repos` maps a repo name to its GitHub `url`.
+- `svg` sets the static layout: `canvas`, the `cols` and `rows` coordinates of the grid, the `box`
+  size, `scale`, `offset`, the `background` fragment, a `reserve` area no box may overlap, and the `ink`,
+  `chip` and `font` values. `ink`, `chip`, `font` and `background` are required to render an SVG.
+
+The widget accepts a smaller set than the loader. `scripts/generate-diagrams.ts` rejects a widget
+flow with a part kind other than `process`, `contract` or `user`, a lane other than `child`,
+`parent` or `off-chain`, a part without `tech`, a step lane other than `child` or `parent`, a repo
+other than `nitro` or `nitro-contracts`, or an edge that is dashed, dotted or double-headed.
+
+### Limits of the static renderer
+
+`renderSvg` in `scripts/diagrams/render-svg.ts` throws an error that names the flow file when:
+
+- a part has no `static` pin, or the pin is outside `svg.cols` or `svg.rows`.
+- a part sits in the top-right cell (last column, row 0), which holds the key, or overlaps
+  `svg.reserve`.
+- a lane band would start above the canvas, so a banded lane cannot sit in row 0.
+- an edge starts and ends on one part, or a straight edge passes through another box.
+- text is too wide. The renderer estimates 0.52 em per character. A title line must fit the box
+  width minus 32. A sublabel must fit the box width. An edge label must fit the edge.
+
+Parts sit on grid cells only. The renderer has no free placement.
 
 ## Page weight and what loads late
 
@@ -947,6 +1054,7 @@ CSS depends on Fumadocs' header DOM (see [Theme](#theme)).
 | `references:check` | Every glossary entry has an `id`, ids are unique, and no partial holding a `<Term>` is ESM-imported                                                                                                                                                                                  |
 | `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                                                                               |
 | `gas-target:check` | The gas-target partial matches its `scripts/data/gas-target.json` snapshot; offline, CI never calls an RPC                                                                                                                                                                           |
+| `diagrams:check`   | `flows.generated.ts` and the generated SVGs match the sources in `diagrams/`; offline                                                                                                                                                                                                |
 | `faq:check`        | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                                                                                      |
 | `check-links`      | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                                                                                     |
 | `lint`             | ESLint over `content/`: MDX that compiles but renders wrong, every `<Var>` and `<Term>` resolving, every page under `content/docs` satisfying the page schema in `lib/page-schema.ts` (below)                                                                                        |
@@ -1026,7 +1134,7 @@ time, and the anchor check compiles every page.
 
 ### Hand-run tools
 
-Only `faq:check` and `gas-target:check` are also CI gates. Four workflows run some of them (below):
+Only `faq:check`, `gas-target:check` and `diagrams:check` are also CI gates. Four workflows run some of them (below):
 
 | Command                                 | Does                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -1040,6 +1148,7 @@ Only `faq:check` and `gas-target:check` are also CI gates. Four workflows run so
 | `pnpm faq:fetch`                        | The FAQ snapshots in `content/faq/` from the Notion "FAQ CMS" database (needs `NOTION_TOKEN`)                                                                                                                                                                                                                                                                                                                                        |
 | `pnpm faq:generate` / `:check`          | The six `_troubleshooting-*-partial.mdx` partials from the snapshots; offline                                                                                                                                                                                                                                                                                                                                                        |
 | `pnpm gas-target:fetch`                 | The gas-target snapshot `scripts/data/gas-target.json` from the `ArbGasInfo` precompile on Arbitrum One, Nova and Sepolia (three public RPCs, no credentials)                                                                                                                                                                                                                                                                        |
+| `pnpm diagrams:generate` / `:check`     | `flows.generated.ts` and the static SVGs from `diagrams/`, see [Diagram sources](#diagram-sources); offline                                                                                                                                                                                                                                                                                                                          |
 | `pnpm gas-target:generate` / `:check`   | The `_reference-gas-target-partial.mdx` partial from the snapshot; offline                                                                                                                                                                                                                                                                                                                                                           |
 
 `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` every Monday at 08:00
@@ -1108,6 +1217,9 @@ publishing`, routed by `Target document slugs` and ordered by `FAQ order index`.
   `<Callout type="info">` elements with that single literal attribute. Rejected content leaves
   the destination partial untouched; fix the answer in Notion or put the example in code. The same
   snapshots feed the `FAQPage` JSON-LD that `lib/faq.ts` emits on those six pages.
+- **`components/widgets/NitroTxFlow/flows.generated.ts`** and the SVGs under `public/img/` named by
+  a flow's `svg:` key are written by `pnpm diagrams:generate` from `diagrams/`. Edit the sources,
+  see [Diagram sources](#diagram-sources). `diagrams:check` fails on a hand edit.
 
 Generated `meta.json` files are not formatted: `.prettierignore` excludes `content/**/meta.json`,
 and the generators write them with `format: false`.

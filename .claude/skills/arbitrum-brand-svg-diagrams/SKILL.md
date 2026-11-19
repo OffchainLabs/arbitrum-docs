@@ -35,7 +35,14 @@ scales perfectly; the draw.io exports it replaces are often >1MB.
   `components/widgets/` (see `EdgeChallengeFlow`). This
   skill is for **static concept art only**.
 - Photographic / screenshot content — keep as PNG/WebP.
-- Never propose Mermaid or any text-DSL diagram tool (standing preference).
+
+## New diagrams start as a flow file
+
+A diagram of Arbitrum parts and the messages between them starts as a flow file in
+`diagrams/flows/`, not as hand-written SVG. A flow with `static:` grid pins, `svg:` and `alt:`
+gets a static SVG from `pnpm diagrams:generate`. Edit the flow file and never the generated SVG.
+The file format and the renderer's limits are in the "Diagram sources" section of INTERNALS.md.
+Use the rest of this skill for concept art that is not a flow of parts and edges.
 
 ## Asset sources (the palette comes from here)
 
@@ -837,7 +844,5 @@ few KB.)
 
 Standing team conventions this skill assumes:
 
-- **Static concept art is hand-authored SVG. Never Mermaid or any text-DSL
-  diagram tool** — that is a standing preference, not a default.
 - **Complex or interactive diagrams** are React widgets under
   `components/widgets/`, not this skill.
