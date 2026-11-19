@@ -81,7 +81,6 @@ export interface ProjectConfig {
   >;
   repos: Record<string, { url: string }>;
   svg: {
-    theme: string;
     canvas: [number, number];
     cols: number[];
     rows: number[];

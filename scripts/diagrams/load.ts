@@ -24,7 +24,8 @@ function resolveFlow(header: FlowHeader, parts: Map<string, Part>): DiagramFlow 
     for (const end of [edge.source, edge.target]) {
       if (!listed.has(end)) {
         throw new Error(
-          `${header.file}:${edge.line}: edge "${edge.id}" uses "${end}", which the flow does not list in parts`,
+          `${header.file}:${edge.line}: edge "${edge.id}" uses "${end}", ` +
+            'which the flow does not list in parts',
         );
       }
     }
@@ -53,6 +54,20 @@ function resolveFlow(header: FlowHeader, parts: Map<string, Part>): DiagramFlow 
 async function readYaml(dir: string, name: string): Promise<YamlSource> {
   const file = path.join(dir, name);
   return new YamlSource(file, await readFile(file, 'utf8'));
+}
+
+function checkPaths(header: FlowHeader, flow: DiagramFlow): void {
+  const stepIds = new Set(flow.steps.map((step) => step.id));
+  header.paths?.forEach((flowPath, i) => {
+    const seen = new Set<string>();
+    flowPath.steps.forEach((id, j) => {
+      const where = (message: string) =>
+        header.source.fail(['paths', i, 'steps', j], `path "${flowPath.id}" ${message}`);
+      if (!stepIds.has(id)) where(`lists unknown step "${id}"`);
+      if (seen.has(id)) where(`lists step "${id}" twice`);
+      seen.add(id);
+    });
+  });
 }
 
 type DetailLines = Map<string, Map<string, number>>;
@@ -110,6 +125,7 @@ export async function loadProject(dir: string): Promise<LoadedProject> {
     const flow = resolveFlow(header, parts);
     const parsed = parseSteps(file, source, stepContext(flow, config));
     flow.steps = parsed.steps;
+    checkPaths(header, flow);
     detailLines.set(flow.id, parsed.detailLines);
     flows.set(flow.id, flow);
   }

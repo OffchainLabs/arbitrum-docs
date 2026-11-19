@@ -127,7 +127,16 @@ function placeBoxes(flow: DiagramFlow, config: ProjectConfig): Map<string, Box> 
 /** Keep boxes out of the reserved area and out of the key cell. */
 function checkPlacement(flow: DiagramFlow, config: ProjectConfig, boxes: Map<string, Box>) {
   const { box, scale, offset, reserve, cols } = config.svg;
+  const cells = new Map<string, string>();
   for (const { part, col, row, x, y } of boxes.values()) {
+    const cell = `${col},${row}`;
+    const other = cells.get(cell);
+    if (other !== undefined) {
+      throw new Error(
+        `${flow.file}: parts "${other}" and "${part.id}" share cell [${col}, ${row}]`,
+      );
+    }
+    cells.set(cell, part.id);
     if (col === cols.length - 1 && row === 0) {
       throw new Error(`${flow.file}: part "${part.id}" sits in the key cell, the top-right cell`);
     }

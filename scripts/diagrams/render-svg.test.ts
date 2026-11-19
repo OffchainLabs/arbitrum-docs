@@ -178,3 +178,8 @@ test('checks a sublabel against the full box width', async () => {
   const fn = await renderWith({}, { a: { tech: 'a sublabel far too long for any box' } });
   assert.throws(fn, /demo\.md: part "a" sublabel "a sublabel far too long for any box" is wider/);
 });
+
+test('rejects two parts pinned to one cell', async () => {
+  const fn = await renderWith({ e: [0, 0] });
+  assert.throws(fn, /demo\.md: parts "a" and "e" share cell \[0, 0\]/);
+});

@@ -15,7 +15,6 @@ repos:
   core: { url: 'https://example.com/core' }
   extra: { url: 'https://example.com/extra' }
 svg:
-  theme: neutral
   canvas: [720, 300]
   cols: [130, 360, 590]
   rows: [48, 160, 260]
@@ -134,7 +133,8 @@ test('CRLF equals LF', async () => {
 
 test('expands cite shorthand', async () => {
   const [step] = await steps(
-    '\n## One {#s1}\n\ncode: core/a/b/x.go\ncites: x.go:240, 249; core/c/y.go:41\nlane: l1\n\nText.\n',
+    '\n## One {#s1}\n\ncode: core/a/b/x.go\n' +
+      'cites: x.go:240, 249; core/c/y.go:41\nlane: l1\n\nText.\n',
   );
   assert.deepEqual(step!.cites, [
     { repo: 'core', path: 'a/b/x.go', line: 240 },
@@ -245,3 +245,42 @@ test('rejects an svg name that is not a plain file name', () =>
 
 test('rejects svg without alt', () =>
   rejects({ demo: SVG_HEADER('svg: demo-out') }, /svg needs alt/));
+
+const FAILURE = '**Symptoms.** S.\n\n**Impact.** I.\n\n**Recovery.** R.';
+
+test('rejects a second Failure block', () =>
+  rejects(
+    {
+      demo:
+        `${HEADER}\n## One {#s1}\n\nlane: l1\n\nText.\n` +
+        `\n### Failure\n\n${FAILURE}\n\n### Failure\n\n${FAILURE}\n`,
+    },
+    /demo\.md:\d+: step "s1" has a second ### Failure block/,
+  ));
+
+test('rejects a step id that is not lowercase letters, digits and dashes', () =>
+  rejects(
+    { demo: `${HEADER}\n## One {#Step_1}\n\nlane: l1\n\nText.\n` },
+    /demo\.md:8: step id "Step_1" must be lowercase/,
+  ));
+
+test('accepts a step id with digits and single dashes', async () => {
+  const [step] = await steps('\n## One {#step-2a}\n\nlane: l1\n\nText.\n');
+  assert.equal(step!.id, 'step-2a');
+});
+
+const TWO_STEPS = '\n## One {#s1}\n\nlane: l1\n\nA.\n\n## Two {#s2}\n\nlane: l1\n\nB.\n';
+const withPaths = (steps: string) =>
+  '---\ntitle: Demo\nparts: [a, b]\npaths:\n  - id: p\n    label: P\n' +
+  `    steps: [${steps}]\n---\n${TWO_STEPS}`;
+
+test('keeps path steps that exist', async () => {
+  const { flows } = await loadProject(await project({ demo: withPaths('s1, s2') }));
+  assert.deepEqual(flows.get('demo')!.paths![0]!.steps, ['s1', 's2']);
+});
+
+test('rejects a path step that is not a step of the flow', () =>
+  rejects({ demo: withPaths('s1, s3') }, /demo\.md:7: path "p" lists unknown step "s3"/));
+
+test('rejects a path that lists a step twice', () =>
+  rejects({ demo: withPaths('s1, s1') }, /demo\.md:7: path "p" lists step "s1" twice/));

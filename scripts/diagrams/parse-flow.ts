@@ -1,4 +1,4 @@
-import type { Heading, Paragraph, Yaml } from 'mdast';
+import type { Heading, RootContent, Yaml } from 'mdast';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { frontmatterFromMarkdown } from 'mdast-util-frontmatter';
 import { frontmatter } from 'micromark-extension-frontmatter';
@@ -59,7 +59,8 @@ export function parseEdge(source: YamlSource, id: string, text: string, line: nu
   const match = EDGE.exec(text.trim());
   if (!match) {
     throw new Error(
-      `${source.file}:${line}: edge "${id}" must read <source> -> <target> "label" [dashed|dotted], got "${text}"`,
+      `${source.file}:${line}: edge "${id}" must read ` +
+        `<source> -> <target> "label" [dashed|dotted], got "${text}"`,
     );
   }
   const [, from, arrow, to, label, style] = match;
@@ -145,7 +146,7 @@ export function parseFlowHeader(file: string, text: string): FlowHeader {
   return header;
 }
 
-/** What a step is checked against. `flowIds` is filled by the loader for `detail`. */
+/** What a step is checked against. The loader checks `detail` flows after all files load. */
 export interface StepContext {
   config: ProjectConfig;
   partIds: Set<string>;
@@ -161,6 +162,7 @@ export interface ParsedSteps {
 const KEYS = ['parts', 'edges', 'flag', 'code', 'cites', 'finality', 'lane', 'docs', 'detail'];
 const KEY_PAIR = /^([a-z]+): (.*)$/;
 const HEADING = /^(.*?)\s*\{#([^}\s]+)\}$/;
+const STEP_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const POSITIVE = /^[1-9]\d*$/;
 
 interface Entry {
@@ -287,6 +289,27 @@ function explicitRef(fail: StepFail, key: string, entry: Entry, raw: string, ctx
   return toCodeRef(ref.repo, ref.path, ref.line);
 }
 
+function resolveCite(
+  fail: StepFail,
+  entry: Entry,
+  raw: string,
+  previous: CodeRef | undefined,
+  code: CodeRef | undefined,
+  ctx: StepContext,
+): CodeRef {
+  const ref = splitRef(raw);
+  if (typeof ref === 'string') return fail.at(entry.line, `cites: ${ref}`);
+  if (ref.repo !== undefined) return explicitRef(fail, 'cites', entry, raw, ctx);
+  if (ref.path === '') {
+    if (!previous) return fail.at(entry.line, `cites: "${raw}" has no previous entry to reuse`);
+    return toCodeRef(previous.repo, previous.path, ref.line);
+  }
+  if (!code) return fail.at(entry.line, `cites: "${raw}" needs a code: entry to resolve it`);
+  const dir = path.posix.dirname(code.path);
+  const full = dir === '.' ? ref.path : `${dir}/${ref.path}`;
+  return toCodeRef(code.repo, full, ref.line);
+}
+
 function resolveCites(
   fail: StepFail,
   entry: Entry,
@@ -295,20 +318,7 @@ function resolveCites(
 ): CodeRef[] {
   const cites: CodeRef[] = [];
   for (const raw of entry.value.split(/\s*[,;]\s*/)) {
-    const ref = splitRef(raw);
-    const previous = cites.at(-1);
-    if (typeof ref === 'string') return fail.at(entry.line, `cites: ${ref}`);
-    if (ref.repo !== undefined) {
-      cites.push(explicitRef(fail, 'cites', entry, raw, ctx));
-    } else if (ref.path === '') {
-      if (!previous) return fail.at(entry.line, `cites: "${raw}" has no previous entry to reuse`);
-      cites.push(toCodeRef(previous.repo, previous.path, ref.line));
-    } else {
-      if (!code) return fail.at(entry.line, `cites: "${raw}" needs a code: entry to resolve it`);
-      const dir = path.posix.dirname(code.path);
-      const full = dir === '.' ? ref.path : `${dir}/${ref.path}`;
-      cites.push(toCodeRef(code.repo, full, ref.line));
-    }
+    cites.push(resolveCite(fail, entry, raw, cites.at(-1), code, ctx));
   }
   return cites;
 }
@@ -343,30 +353,80 @@ function checkIds(fail: StepFail, kind: string, entry: Entry, ids: string[], kno
   }
 }
 
-function buildStep(
-  file: string,
-  draft: Draft,
-  ctx: StepContext,
-): [DiagramStep, number | undefined] {
-  const fail = new StepFail(file, draft.id);
+function splitDraft(file: string, draft: Draft) {
   const [first, ...rest] = draft.paragraphs;
   const metaFirst = first !== undefined && isMetadata(first.text.split('\n'));
   const entries = metaFirst ? readMetadata(file, first.text, first.line) : new Map<string, Entry>();
   const prose = (metaFirst ? rest : draft.paragraphs).map((p) => collapse(p.text));
+  return { entries, prose };
+}
+
+function parseValues(fail: StepFail, entries: Map<string, Entry>): Record<string, unknown> {
   const values: Record<string, unknown> = {};
   for (const [key, entry] of entries) {
     const result = fields[key as keyof typeof fields].safeParse(entry.value);
     if (!result.success) fail.at(entry.line, `${key}: ${result.error.issues[0]!.message}`);
     values[key] = result.data;
   }
+  return values;
+}
+
+function checkMembers(
+  fail: StepFail,
+  line: number,
+  entries: Map<string, Entry>,
+  values: Record<string, unknown>,
+  ctx: StepContext,
+) {
   const laneEntry = entries.get('lane');
-  if (!laneEntry) return fail.at(draft.line, 'is missing lane');
+  if (!laneEntry) return fail.at(line, 'is missing lane');
   const lane = values['lane'] as string;
   if (!(lane in ctx.config.lanes)) fail.at(laneEntry.line, `has unknown lane "${lane}"`);
   const parts = (values['parts'] as string[] | undefined) ?? [];
   const edges = (values['edges'] as string[] | undefined) ?? [];
-  if (entries.has('parts')) checkIds(fail, 'part', entries.get('parts')!, parts, ctx.partIds);
-  if (entries.has('edges')) checkIds(fail, 'edge', entries.get('edges')!, edges, ctx.edgeIds);
+  const partsEntry = entries.get('parts');
+  if (partsEntry) checkIds(fail, 'part', partsEntry, parts, ctx.partIds);
+  const edgesEntry = entries.get('edges');
+  if (edgesEntry) checkIds(fail, 'edge', edgesEntry, edges, ctx.edgeIds);
+  return { lane, parts, edges };
+}
+
+function addReferences(
+  fail: StepFail,
+  step: DiagramStep,
+  entries: Map<string, Entry>,
+  ctx: StepContext,
+) {
+  const codeEntry = entries.get('code');
+  if (codeEntry) step.code = explicitRef(fail, 'code', codeEntry, codeEntry.value, ctx);
+  const citesEntry = entries.get('cites');
+  if (citesEntry) step.cites = resolveCites(fail, citesEntry, step.code, ctx);
+}
+
+function addDetail(
+  fail: StepFail,
+  step: DiagramStep,
+  entries: Map<string, Entry>,
+  values: Record<string, unknown>,
+  ctx: StepContext,
+) {
+  const detail = values['detail'] as { part: string; flow: string } | undefined;
+  if (!detail) return;
+  if (!ctx.partIds.has(detail.part)) {
+    fail.at(entries.get('detail')!.line, `detail part "${detail.part}" is not in the flow's parts`);
+  }
+  step.detail = detail;
+}
+
+function buildStep(
+  file: string,
+  draft: Draft,
+  ctx: StepContext,
+): [DiagramStep, number | undefined] {
+  const fail = new StepFail(file, draft.id);
+  const { entries, prose } = splitDraft(file, draft);
+  const values = parseValues(fail, entries);
+  const { lane, parts, edges } = checkMembers(fail, draft.line, entries, values, ctx);
   if (prose.length === 0) return fail.at(draft.line, 'has no text');
   const step: DiagramStep = {
     id: draft.id,
@@ -377,22 +437,12 @@ function buildStep(
     cites: [],
     lane,
   };
-  const codeEntry = entries.get('code');
-  if (codeEntry) step.code = explicitRef(fail, 'code', codeEntry, codeEntry.value, ctx);
-  const citesEntry = entries.get('cites');
-  if (citesEntry) step.cites = resolveCites(fail, citesEntry, step.code, ctx);
+  addReferences(fail, step, entries, ctx);
   for (const key of ['flag', 'finality', 'docs'] as const) {
     if (key in values) Object.assign(step, { [key]: values[key] });
   }
   if (draft.failure) step.failure = readFailure(fail, draft.failure, draft.line);
-  const detail = values['detail'] as { part: string; flow: string } | undefined;
-  if (detail) {
-    const detailEntry = entries.get('detail')!;
-    if (!ctx.partIds.has(detail.part)) {
-      fail.at(detailEntry.line, `detail part "${detail.part}" is not in the flow's parts`);
-    }
-    step.detail = detail;
-  }
+  addDetail(fail, step, entries, values, ctx);
   return [step, entries.get('detail')?.line];
 }
 
@@ -408,10 +458,44 @@ function heading(file: string, node: Heading, source: string, drafts: Draft[]): 
   const match = HEADING.exec(body);
   if (!match) throw new Error(`${file}:${line}: step heading "${body}" is missing {#id}`);
   const [, title, id] = match as unknown as [string, string, string];
+  if (!STEP_ID.test(id)) {
+    throw new Error(
+      `${file}:${line}: step id "${id}" must be lowercase letters and digits joined by dashes`,
+    );
+  }
   if (title === '') throw new Error(`${file}:${line}: step "${id}" has an empty title`);
   if (drafts.some((d) => d.id === id))
     throw new Error(`${file}:${line}: duplicate step id "${id}"`);
   return { id, title, line, paragraphs: [], failure: undefined };
+}
+
+function addHeading(file: string, node: Heading, source: string, drafts: Draft[]): void {
+  const result = heading(file, node, source, drafts);
+  if (result !== 'failure') {
+    drafts.push(result);
+    return;
+  }
+  const line = node.position!.start.line;
+  const current = drafts.at(-1);
+  if (!current) throw new Error(`${file}:${line}: "### Failure" must follow a step heading`);
+  if (current.failure) {
+    throw new Error(`${file}:${line}: step "${current.id}" has a second ### Failure block`);
+  }
+  current.failure = [];
+}
+
+function addNode(file: string, node: RootContent, source: string, drafts: Draft[]): void {
+  if (node.type === 'heading') return addHeading(file, node, source, drafts);
+  const line = node.position!.start.line;
+  if (node.type !== 'paragraph') {
+    throw new Error(
+      `${file}:${line}: a ${node.type} is not allowed in a step section; use paragraphs`,
+    );
+  }
+  const current = drafts.at(-1);
+  if (!current) throw new Error(`${file}:${line}: text before the first step heading`);
+  const text = source.slice(node.position!.start.offset!, node.position!.end.offset!);
+  (current.failure ?? current.paragraphs).push({ text, line });
 }
 
 /** Read the `## Title {#id}` sections after the YAML header of a flow file. */
@@ -419,26 +503,7 @@ export function parseSteps(file: string, source: string, ctx: StepContext): Pars
   const normalized = normalizeSource(source);
   const drafts: Draft[] = [];
   for (const node of parseMarkdown(normalized).children.slice(1)) {
-    const line = node.position!.start.line;
-    const current = drafts.at(-1);
-    if (node.type === 'heading') {
-      const result = heading(file, node, normalized, drafts);
-      if (result === 'failure') {
-        if (!current) throw new Error(`${file}:${line}: "### Failure" must follow a step heading`);
-        current.failure = [];
-      } else {
-        drafts.push(result);
-      }
-    } else if (node.type === 'paragraph') {
-      if (!current) throw new Error(`${file}:${line}: text before the first step heading`);
-      const para = node as Paragraph;
-      const text = normalized.slice(para.position!.start.offset!, para.position!.end.offset!);
-      (current.failure ?? current.paragraphs).push({ text, line });
-    } else {
-      throw new Error(
-        `${file}:${line}: a ${node.type} is not allowed in a step section; use paragraphs`,
-      );
-    }
+    addNode(file, node, normalized, drafts);
   }
   const steps: DiagramStep[] = [];
   const detailLines = new Map<string, number>();

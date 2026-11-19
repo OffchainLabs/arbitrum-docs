@@ -19,7 +19,6 @@ repos:
   prysm:
     url: https://github.com/example/prysm
 svg:
-  theme: neutral
   canvas: [1000, 460]
   cols: [40, 360, 680]
   rows: [100, 220, 340]

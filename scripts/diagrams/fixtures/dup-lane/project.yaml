@@ -10,7 +10,6 @@ kinds:
     svg: { fill: '#ffffff', title: '#111111', sub: '#555555' }
 repos: {}
 svg:
-  theme: neutral
   canvas: [720, 300]
   cols: [130, 360, 590]
   rows: [48, 160, 260]

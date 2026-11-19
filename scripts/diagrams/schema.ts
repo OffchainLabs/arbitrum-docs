@@ -97,7 +97,6 @@ const projectConfig = z.strictObject({
   kinds: z.record(z.string(), kind),
   repos: z.record(z.string(), z.strictObject({ url: text })),
   svg: z.strictObject({
-    theme: text,
     canvas: numberPair,
     cols: z.array(z.number()),
     rows: z.array(z.number()),
