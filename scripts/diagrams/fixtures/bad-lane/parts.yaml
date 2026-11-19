@@ -1,0 +1,2 @@
+a: { label: Alpha, kind: plain, lane: l2 }
+b: { label: Beta, tech: Tech B, kind: plain, lane: l2 }

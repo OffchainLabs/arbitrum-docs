@@ -126,6 +126,7 @@
     "prettier": "^3.9.10",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vfile": "^6.0.3"
+    "vfile": "^6.0.3",
+    "yaml": "2.9.1"
   }
 }

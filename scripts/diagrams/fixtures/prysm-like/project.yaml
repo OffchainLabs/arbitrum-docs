@@ -1,0 +1,28 @@
+lanes:
+  consensus:
+    label: Consensus layer
+    svg: { fill: '#f4f4f4', stroke: '#cccccc' }
+  execution:
+    label: Execution layer
+    svg: { fill: '#eeeeee', stroke: '#bbbbbb' }
+kinds:
+  prysm:
+    label: Prysm
+    svg: { fill: '#ffffff', title: '#111111', sub: '#555555', stroke: '#222222' }
+  other:
+    label: Other client
+    svg: { fill: '#fafafa', title: '#111111', sub: '#555555' }
+  network:
+    label: Network
+    svg: { fill: '#ffffff', title: '#333333', sub: '#666666' }
+repos:
+  prysm:
+    url: https://github.com/example/prysm
+svg:
+  theme: neutral
+  canvas: [720, 300]
+  cols: [130, 360, 590]
+  rows: [48, 160, 260]
+  box: [200, 80]
+  scale: 1
+  offset: [0, 0]
