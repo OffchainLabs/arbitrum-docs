@@ -401,7 +401,8 @@ what registers them: `nitro:check-release` verifies each one, plus every content
 `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/`, against the GitHub
 contents API at the target tag before it writes anything (`scripts/lib/nitro-upstream-paths.ts`).
 It also verifies the code paths of every flow in `FLOWS` (`scripts/lib/nitro-flow-paths.ts`, which
-reads `components/widgets/NitroTxFlow/flows.ts`, generated from `diagrams/flows/*.md`): `nitro`
+reads `components/widgets/NitroTxFlow/flows.ts`, which re-exports `FLOWS` from the generated
+`flows.generated.ts`): `nitro`
 paths at the target tag, `nitro-contracts` paths at the `nitroContractsCommit` resolved for that
 tag.
 The NodeInterface pins for `nitro-contracts` stay in `scripts/generate-precompile-tables.ts`
@@ -580,23 +581,24 @@ is a CI gate. It fails when either output differs from what the sources produce.
 The file name without `.md` is the flow id. The YAML header takes these keys, and an unknown key
 fails.
 
-| Key         | Meaning                                                                                                                             |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `title`     | Required. The diagram title.                                                                                                        |
-| `parts`     | Required. Part ids from `parts.yaml`. `{ seq: { label: 'Sequencer', tech: 'Go' } }` overrides the label or tech for this flow only. |
-| `edges`     | A mapping of edge id to `<source> -> <target> "label" [dashed\|dotted]`. `<->` draws a double-headed arrow. The label is optional.  |
-| `widget`    | The key in `FLOWS`. Defaults to the flow id.                                                                                        |
-| `showLanes` | `false` hides the lane bands. Defaults to `true`.                                                                                   |
-| `paths`     | A list of `id`, `label` and `steps` (step ids), the ordered paths the widget offers.                                                |
-| `card`      | The widget's step card labels: `detailsToggle`, `symptoms`, `impact`, `recovery` (strings) and `showFlag` (boolean).                |
-| `static`    | A mapping of part id to `[column, row]`, the part's grid cell in the static SVG.                                                    |
-| `svg`       | The output file name, lowercase with dashes, without `.svg`. Needs `alt`.                                                           |
-| `alt`       | The alt text, written to the SVG `<desc>`.                                                                                          |
+| Key         | Meaning                                                                                                                                              |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`     | Required. The diagram title.                                                                                                                         |
+| `parts`     | Required. Part ids from `parts.yaml`. `{ seq: { label: 'Sequencer', tech: 'Go' } }` overrides the label or tech for this flow only.                  |
+| `edges`     | A mapping of edge id to `<source> -> <target> "label" [dashed\|dotted]`. `<->` draws a double-headed arrow. The label is optional.                   |
+| `widget`    | The key in `FLOWS`. Defaults to the flow id.                                                                                                         |
+| `showLanes` | `false` hides the lane bands. Defaults to `true`.                                                                                                    |
+| `paths`     | A list of `id`, `label` and `steps`, the ordered paths the widget offers. Each step id must be a step of the flow, once per path.                    |
+| `card`      | The widget's step card labels. The widget needs all five keys: `detailsToggle`, `symptoms`, `impact`, `recovery` (strings) and `showFlag` (boolean). |
+| `static`    | A mapping of part id to `[column, row]`, the part's grid cell in the static SVG. Needs `svg`, and every part needs a cell.                           |
+| `svg`       | The output file name, lowercase with dashes, without `.svg`. Needs `alt` and `static`.                                                               |
+| `alt`       | The alt text, written to the SVG `<desc>`.                                                                                                           |
 
 `tech: ~` drops the sublabel of a part in that flow. Every part and every edge end must be in the
 flow's `parts` list.
 
-A step is a `## Title {#id}` section. A step id must be unique in the file. The first paragraph can
+A step is a `## Title {#id}` section. A step id must be unique in the file and use lowercase letters
+and digits joined by single dashes. The first paragraph can
 be metadata, one `key: value` pair per line or several joined with `·`. The other paragraphs are
 the step text, which is required. Lists, code blocks and other headings do not parse.
 
@@ -631,9 +633,10 @@ A `### Failure` heading ends the step text. It holds exactly three paragraphs th
 - `kinds` maps a part kind to a `label` and to `svg` colours: `fill`, `title`, `sub`, and optional
   `stroke`. The optional `svg.key` replaces `label` in the SVG key.
 - `repos` maps a repo name to its GitHub `url`.
-- `svg` sets the static layout: `canvas`, the `cols` and `rows` coordinates of the grid, the `box`
-  size, `scale`, `offset`, the `background` fragment, a `reserve` area no box may overlap, and the `ink`,
-  `chip` and `font` values. `ink`, `chip`, `font` and `background` are required to render an SVG.
+- `svg` sets the static layout. Loading the project needs `canvas`, the `cols` and `rows`
+  coordinates of the grid, the `box` size, `scale` and `offset`. The optional `reserve` is an area no
+  box may overlap. Rendering an SVG also needs `background` (a fragment file under `diagrams/`),
+  `ink`, `chip` and `font`.
 
 The widget accepts a smaller set than the loader. `scripts/generate-diagrams.ts` rejects a widget
 flow with a part kind other than `process`, `contract` or `user`, a lane other than `child`,
@@ -645,6 +648,7 @@ other than `nitro` or `nitro-contracts`, or an edge that is dashed, dotted or do
 `renderSvg` in `scripts/diagrams/render-svg.ts` throws an error that names the flow file when:
 
 - a part has no `static` pin, or the pin is outside `svg.cols` or `svg.rows`.
+- two parts share one grid cell.
 - a part sits in the top-right cell (last column, row 0), which holds the key, or overlaps
   `svg.reserve`.
 - a lane band would start above the canvas, so a banded lane cannot sit in row 0.
