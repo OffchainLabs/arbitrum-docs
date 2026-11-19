@@ -105,6 +105,7 @@ const projectConfig = z.strictObject({
     scale: z.number(),
     offset: numberPair,
     background: text.optional(),
+    reserve: z.strictObject({ x: numberPair, y: numberPair }).optional(),
     ink: text.optional(),
     chip: text.optional(),
     font: text.optional(),

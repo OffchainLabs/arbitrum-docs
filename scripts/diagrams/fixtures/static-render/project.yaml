@@ -19,10 +19,11 @@ svg:
   theme: neutral
   canvas: [1600, 900]
   cols: [40, 295, 550, 805, 1060]
-  rows: [40, 200, 350, 570]
+  rows: [40, 200, 350, 570, 700]
   box: [210, 84]
   scale: 1.15
   offset: [47, 30]
+  reserve: { x: [0, 330], y: [810, 900] }
   ink: '#eeeeee'
   chip: '#333333'
   font: "Arial, 'Helvetica Neue', sans-serif"

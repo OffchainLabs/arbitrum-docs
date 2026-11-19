@@ -43,17 +43,6 @@ test('draws a dotted edge with round caps and a head at both ends', async () => 
   assert.match(dotted!, /marker-start="url\(#arrow\)"/);
 });
 
-test('keeps content out of the logo zone', async () => {
-  const svg = afterBackground(await render('static-render', 'demo'));
-  const tags = [...svg.matchAll(/<(rect|text) [^>]*>/g)].map((m) => m[0]);
-  assert.ok(tags.length > 0);
-  for (const tag of tags) {
-    const x = Number(/ x="([-\d.]+)"/.exec(tag)![1]);
-    const y = Number(/ y="([-\d.]+)"/.exec(tag)![1]);
-    assert.ok(y < 810 || x >= 330, `in the logo zone: ${tag}`);
-  }
-});
-
 test('renders the prysm-like fixture', async () => {
   const svg = await render('prysm-like', 'overview');
   assert.ok(svg.includes('Engine API'));
@@ -127,4 +116,58 @@ test('rejects a part without a static position', async () => {
   const { config, flows } = await loadProject(fixture('static-render'));
   const flow = { ...flows.get('demo')!, static: { a: [0, 1] as [number, number] } };
   assert.throws(() => renderSvg(flow, config, BACKGROUND), /part "b" has no static position/);
+});
+
+const PINS = { a: [0, 0], b: [2, 0], e: [1, 1], c: [0, 3], d: [2, 3] } as const;
+
+async function renderWith(pins: Record<string, readonly [number, number]>, labels = {}) {
+  const { config, flows } = await loadProject(fixture('static-render'));
+  const demo = flows.get('demo')!;
+  const flow = {
+    ...demo,
+    static: Object.fromEntries(Object.entries({ ...PINS, ...pins }).map(([k, v]) => [k, [...v]])),
+    parts: demo.parts.map((p) => ({ ...p, ...(labels as Record<string, object>)[p.id] })),
+  } as typeof demo;
+  return () => renderSvg(flow, config, BACKGROUND);
+}
+
+test('rejects a box in the reserved area', async () => {
+  // Row 4 is y 700: 700 * 1.15 + 30 = 835, inside y 810..900, and column 0 is inside x 0..330.
+  assert.throws(await renderWith({ c: [0, 4] }), /demo\.md: part "c" overlaps the reserved area/);
+});
+
+test('rejects a band that starts above the canvas', async () => {
+  const pins = { a: [0, 1], b: [2, 1], e: [1, 2], c: [0, 0], d: [2, 0] } as const;
+  assert.throws(await renderWith(pins), /demo\.md: the band of lane "bottom" starts above/);
+});
+
+test('rejects a part in the key cell', async () => {
+  assert.throws(await renderWith({ b: [4, 0] }), /demo\.md: part "b" sits in the key cell/);
+});
+
+test('rejects a straight edge through another box', async () => {
+  assert.throws(await renderWith({ e: [1, 0] }), /demo\.md: edge "ab" passes through part "e"/);
+});
+
+test('rejects the last leg of an elbow through another box', async () => {
+  // ce runs from c (0, 3) to e (2, 1); its last leg crosses column 1 of row 1, where a is.
+  const fn = await renderWith({ a: [1, 1], b: [1, 0], e: [2, 1], d: [3, 3] });
+  assert.throws(fn, /demo\.md: edge "ce" passes through part "a"/);
+});
+
+test('rejects a box title word wider than the box', async () => {
+  const fn = await renderWith({}, { a: { label: 'Supercalifragilisticexpialidocious' } });
+  assert.throws(fn, /demo\.md: part "a" title line "Supercalifragilisticexpialidocious"/);
+});
+
+test('rejects an edge label wider than its edge', async () => {
+  // ab spans columns 0 to 2 in row 0: 550 - 250 = 300 units of room.
+  const { config, flows } = await loadProject(fixture('static-render'));
+  const demo = flows.get('demo')!;
+  const long = 'a label that is far too long for the room it has';
+  const flow = {
+    ...demo,
+    edges: demo.edges.map((e) => (e.id === 'ab' ? { ...e, label: long } : e)),
+  };
+  assert.throws(() => renderSvg(flow, config, BACKGROUND), /label of edge "ab" is wider/);
 });

@@ -20,9 +20,9 @@ repos:
     url: https://github.com/example/prysm
 svg:
   theme: neutral
-  canvas: [720, 300]
+  canvas: [720, 460]
   cols: [130, 360, 590]
-  rows: [48, 160, 260]
+  rows: [100, 220, 340]
   box: [200, 80]
   scale: 1
   offset: [0, 0]

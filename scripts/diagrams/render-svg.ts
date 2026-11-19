@@ -46,7 +46,8 @@ interface Band {
 interface Route {
   edge: DiagramEdge;
   points: Point[];
-  chip?: { cx: number; top: number };
+  /** `room` is the space for the chip along its edge. */
+  chip?: { cx: number; top: number; room: number };
 }
 
 const esc = (value: string) =>
@@ -119,7 +120,35 @@ function placeBoxes(flow: DiagramFlow, config: ProjectConfig): Map<string, Box> 
     }
     boxes.set(part.id, { part, col, row, x, y });
   }
+  checkPlacement(flow, config, boxes);
   return boxes;
+}
+
+/** Keep boxes out of the reserved area and out of the key cell. */
+function checkPlacement(flow: DiagramFlow, config: ProjectConfig, boxes: Map<string, Box>) {
+  const { box, scale, offset, reserve, cols } = config.svg;
+  for (const { part, col, row, x, y } of boxes.values()) {
+    if (col === cols.length - 1 && row === 0) {
+      throw new Error(`${flow.file}: part "${part.id}" sits in the key cell, the top-right cell`);
+    }
+    if (!reserve) continue;
+    const [x0, y0] = [x * scale + offset[0], y * scale + offset[1]];
+    const [x1, y1] = [x0 + box[0] * scale, y0 + box[1] * scale];
+    if (x0 < reserve.x[1] && x1 > reserve.x[0] && y0 < reserve.y[1] && y1 > reserve.y[0]) {
+      throw new Error(`${flow.file}: part "${part.id}" overlaps the reserved area`);
+    }
+  }
+}
+
+/** The ids of placed boxes strictly between two cells of one row or one column. */
+function boxesBetween(boxes: Map<string, Box>, s: Box, t: Box, row: number): string[] {
+  const [lo, hi] = s.row === t.row || s.col !== t.col ? [s.col, t.col] : [s.row, t.row];
+  const inRange = (v: number) => v > Math.min(lo, hi) && v < Math.max(lo, hi);
+  return [...boxes.values()]
+    .filter((b) =>
+      s.col === t.col ? b.col === s.col && inRange(b.row) : b.row === row && inRange(b.col),
+    )
+    .map((b) => b.part.id);
 }
 
 function edgeSides(flow: DiagramFlow, edge: DiagramEdge, s: Box, t: Box): [Side, Side] {
@@ -131,7 +160,6 @@ function edgeSides(flow: DiagramFlow, edge: DiagramEdge, s: Box, t: Box): [Side,
 }
 
 interface Endpoint {
-  key: string;
   edge: number;
   end: 0 | 1;
   order: number;
@@ -150,7 +178,7 @@ function assignPorts(boxes: Map<string, Box>, sides: [Side, Side][], edges: Diag
       const far = boxes.get(ends[1 - end]!)!;
       const order = side === 'left' || side === 'right' ? far.y : far.x;
       const key = `${ends[end]}:${side}`;
-      groups.set(key, [...(groups.get(key) ?? []), { key, edge: i, end, order }]);
+      groups.set(key, [...(groups.get(key) ?? []), { edge: i, end, order }]);
     });
   });
   const offset = new Map<string, number>();
@@ -179,10 +207,11 @@ function gutter(config: ProjectConfig, s: Box, t: Box): number {
   return (cols[left]! + box[0] + cols[left + 1]!) / 2;
 }
 
-function chipFor(points: Point[], bands: Band[]): Route['chip'] {
+function chipFor(points: Point[], bands: Band[], boxWidth: number): Route['chip'] {
   const [a, b] = points.length === 2 ? points : [points[1]!, points[2]!];
   if (a![1] === b![1]) {
-    return { cx: (a![0] + b![0]) / 2, top: a![1] - CHIP_CLEARANCE - CHIP_HEIGHT };
+    const room = Math.abs(b![0] - a![0]);
+    return { cx: (a![0] + b![0]) / 2, top: a![1] - CHIP_CLEARANCE - CHIP_HEIGHT, room };
   }
   let [from, to] = [a![1], b![1]];
   for (const band of bands) {
@@ -190,7 +219,7 @@ function chipFor(points: Point[], bands: Band[]): Route['chip'] {
       if ((from - edge) * (to - edge) < 0) from = edge;
     }
   }
-  return { cx: a![0], top: (from + to) / 2 - CHIP_HEIGHT / 2 };
+  return { cx: a![0], top: (from + to) / 2 - CHIP_HEIGHT / 2, room: boxWidth };
 }
 
 function routeEdges(flow: DiagramFlow, config: ProjectConfig, boxes: Map<string, Box>) {
@@ -199,9 +228,12 @@ function routeEdges(flow: DiagramFlow, config: ProjectConfig, boxes: Map<string,
   const ends = edges.map((e) => [boxes.get(e.source)!, boxes.get(e.target)!] as const);
   const sides = edges.map((e, i) => edgeSides(flow, e, ends[i]![0], ends[i]![1]));
   const ports = assignPorts(boxes, sides, edges);
-  return edges.map((edge, i): Point[] => {
-    const [s, t] = ends[i]!;
+  return ends.map(([s, t], i): Point[] => {
     const [ss, ts] = sides[i]!;
+    const [blocker] = boxesBetween(boxes, s, t, t.row);
+    if (blocker !== undefined) {
+      throw new Error(`${flow.file}: edge "${edges[i]!.id}" passes through part "${blocker}"`);
+    }
     if (s.row === t.row || s.col === t.col) {
       const busier = ports.count.get(`${i}:0`)! >= ports.count.get(`${i}:1`)! ? 0 : 1;
       const offset = ports.offset(i, busier);
@@ -224,6 +256,9 @@ function laneBands(flow: DiagramFlow, config: ProjectConfig, boxes: Map<string, 
     const ys = [...boxes.values()].filter((b) => b.part.lane === id).map((b) => b.y);
     if (!lane.svg || ys.length === 0) continue;
     const top = Math.min(...ys) - BAND.top;
+    if (top * config.svg.scale + config.svg.offset[1] < 0) {
+      throw new Error(`${flow.file}: the band of lane "${id}" starts above the canvas top`);
+    }
     const bottom = Math.max(...ys) + box[1] + BAND.bottom;
     bands.push({
       top,
@@ -287,7 +322,7 @@ function chip(canvas: Canvas, cx: number, top: number, label: string, style: Sty
 
 type Style = ReturnType<typeof requireStyle>;
 
-function boxElements(canvas: Canvas, config: ProjectConfig, box: Box): string[] {
+function boxElements(file: string, canvas: Canvas, config: ProjectConfig, box: Box): string[] {
   const [w, h] = config.svg.box;
   const colours = config.kinds[box.part.kind]!.svg;
   const stroke = colours.stroke
@@ -296,7 +331,13 @@ function boxElements(canvas: Canvas, config: ProjectConfig, box: Box): string[] 
   const out = [
     `<rect ${canvas.rect(box.x, box.y, w, h, BOX_RADIUS)} fill="${colours.fill}"${stroke}/>`,
   ];
-  const lines = wrapTitle(box.part.label, w - 2 * BOX_PADDING);
+  const inner = w - 2 * BOX_PADDING;
+  const lines = wrapTitle(box.part.label, inner);
+  for (const line of lines) {
+    if (textWidth(line, TITLE_SIZE) > inner) {
+      throw new Error(`${file}: part "${box.part.id}" title line "${line}" is wider than the box`);
+    }
+  }
   const { tech } = box.part;
   const count = lines.length + (tech === undefined ? 0 : 1);
   const top = box.y + h / 2 - ((count - 1) * LINE_STEP) / 2 + BASELINE;
@@ -365,6 +406,16 @@ function bandElements(
 /**
  * Render a flow with `static:` positions as a self-contained SVG on the given background.
  *
+ * Layout limits, each checked with an error that names the flow file:
+ * - Parts sit on grid cells only: a `static` pin is a [column, row] index into `svg.cols`
+ *   and `svg.rows`. No box may overlap `svg.reserve`.
+ * - The key takes the top-right cell (last column, row 0), so no part may sit there.
+ * - A lane band reaches 90 units above its top row and 16 below its bottom row, so a banded
+ *   lane in row 0 does not fit.
+ * - A straight edge, and the last leg of an elbow, may not pass through another box.
+ * - Text width is estimated at 0.52 em/char. A box title line must fit the box width minus
+ *   32, and an edge label chip must fit the length of a horizontal edge or the box width.
+ *
  * Args:
  *   flow: the flow; every part needs a `static` [column, row] pin, and `alt` is required.
  *   project: the project config; `svg.ink`, `svg.chip` and `svg.font` are required.
@@ -380,7 +431,12 @@ export function renderSvg(flow: DiagramFlow, project: ProjectConfig, background:
   const bands = laneBands(flow, project, boxes);
   const routes: Route[] = routeEdges(flow, project, boxes).map((points, i) => {
     const edge = flow.edges[i]!;
-    return edge.label === '' ? { edge, points } : { edge, points, chip: chipFor(points, bands) };
+    if (edge.label === '') return { edge, points };
+    const placed = chipFor(points, bands, project.svg.box[0])!;
+    if (textWidth(edge.label, CHIP_SIZE) + CHIP_PADDING > placed.room) {
+      throw new Error(`${flow.file}: the label of edge "${edge.id}" is wider than its edge`);
+    }
+    return { edge, points, chip: placed };
   });
   const elements = [
     ...bandElements(canvas, project, bands, routes, style),
@@ -388,7 +444,7 @@ export function renderSvg(flow: DiagramFlow, project: ProjectConfig, background:
     ...routes.flatMap((r) =>
       r.chip ? chip(canvas, r.chip.cx, r.chip.top, r.edge.label, style) : [],
     ),
-    ...[...boxes.values()].flatMap((box) => boxElements(canvas, project, box)),
+    ...[...boxes.values()].flatMap((box) => boxElements(flow.file, canvas, project, box)),
     ...keyElements(canvas, project, flow, style.ink),
   ];
   const [width, height] = project.svg.canvas;
