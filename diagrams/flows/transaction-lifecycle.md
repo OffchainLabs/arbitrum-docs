@@ -19,7 +19,7 @@ parts: wallet, fullnode
 edges: submit
 flag: --execution.tx-pre-checker.strictness
 code: nitro/execution/gethexec/tx_pre_checker.go
-cites: nitro/execution/gethexec/arb_interface.go:44, nitro/execution/gethexec/node.go:475, nitro/execution/gethexec/tx_pre_checker.go:240, nitro/execution/gethexec/tx_pre_checker.go:249, nitro/execution/gethexec/tx_pre_checker.go:141, nitro/execution/gethexec/tx_pre_checker.go:160, nitro/execution/gethexec/tx_pre_checker.go:164, nitro/execution/gethexec/tx_pre_checker.go:251, nitro/execution/gethexec/tx_pre_checker.go:256, nitro/execution/gethexec/tx_pre_checker.go:44, nitro/execution/gethexec/tx_pre_checker.go:138, nitro/execution/gethexec/tx_pre_checker.go:253, nitro/execution/gethexec/tx_pre_checker.go:57, nitro/cmd/nitro/config/config.go:41, nitro/execution/gethexec/node.go:145, nitro/execution/gethexec/tx_pre_checker.go:49
+cites: arb_interface.go:44, node.go:475, tx_pre_checker.go:240, 249, 141, 160, 164, 251, 256, 44, 138, 253, 57, nitro/cmd/nitro/config/config.go:41, node.go:145, tx_pre_checker.go:49
 lane: child
 
 A wallet sends the signed transaction to a full node. The full node checks the transaction against the state of its latest block. It rejects a transaction with too little gas, a fee cap below the base fee, or a nonce that is already used.
@@ -38,7 +38,7 @@ parts: fullnode, seq
 edges: forward
 flag: --execution.forwarding-target
 code: nitro/execution/gethexec/forwarder.go
-cites: nitro/execution/gethexec/node.go:463, nitro/execution/gethexec/forwarder.go:135, nitro/execution/gethexec/node.go:462, nitro/execution/gethexec/node.go:182, nitro/execution/gethexec/node.go:460, nitro/execution/gethexec/forwarder.go:296, nitro/execution/gethexec/forwarder.go:143, nitro/execution/gethexec/forwarder.go:148, nitro/execution/gethexec/forwarder.go:144, nitro/execution/gethexec/forwarder.go:149, nitro/execution/gethexec/node.go:149, nitro/execution/gethexec/forwarder.go:132, nitro/execution/gethexec/forwarder.go:142, nitro/execution/gethexec/forwarder.go:146, nitro/cmd/nitro/config/config.go:41, nitro/execution/gethexec/node.go:148
+cites: node.go:463, forwarder.go:135, node.go:462, 182, 460, forwarder.go:296, 143, 148, 144, 149, node.go:149, forwarder.go:132, 142, 146, nitro/cmd/nitro/config/config.go:41, node.go:148
 lane: child
 
 The full node forwards the transaction to the sequencer over JSON-RPC. It sends it to the URL in its forwarding target setting. A full node with the target null does not forward and returns an error.
@@ -56,7 +56,7 @@ The full node forwards the transaction to the sequencer over JSON-RPC. It sends 
 parts: seq
 flag: --node.sequencer and --execution.sequencer.enable
 code: nitro/execution/gethexec/sequencer.go
-cites: nitro/execution/gethexec/sequencer.go:629, nitro/execution/gethexec/sequencer.go:1359, nitro/arbnode/transaction_streamer.go:1233, nitro/arbnode/transaction_streamer.go:1249, nitro/execution/gethexec/sequencer.go:67, nitro/execution/gethexec/sequencer.go:355, nitro/cmd/nitro/nitro.go:201, nitro/execution/gethexec/sequencer.go:625, nitro/execution/gethexec/sequencer.go:1159, nitro/execution/gethexec/sequencer.go:218, nitro/execution/gethexec/sequencer.go:641, nitro/execution/gethexec/sequencer.go:100, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:75, nitro/cmd/nitro/config/config.go:41, nitro/execution/gethexec/node.go:143, nitro/execution/gethexec/sequencer.go:92
+cites: sequencer.go:629, 1359, nitro/arbnode/transaction_streamer.go:1233, 1249, sequencer.go:67, 355, nitro/cmd/nitro/nitro.go:201, sequencer.go:625, 1159, 218, 641, 100, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:75, nitro/cmd/nitro/config/config.go:41, node.go:143, sequencer.go:92
 lane: child
 detail: seq -> sequencer-step-3
 
@@ -76,7 +76,7 @@ parts: seq, relay, fullnode
 edges: publish, stream
 flag: --node.feed.output.enable (sequencer), --node.feed.input.url (full node)
 code: nitro/broadcaster/broadcaster.go
-cites: nitro/arbnode/transaction_streamer.go:1255, nitro/arbnode/transaction_streamer.go:1390, nitro/broadcaster/broadcaster.go:77, nitro/relay/relay.go:99, nitro/broadcastclient/broadcastclient.go:409, nitro/arbnode/transaction_streamer.go:794, nitro/arbnode/transaction_streamer.go:874, nitro/arbnode/transaction_streamer.go:1158, nitro/arbnode/transaction_streamer.go:1161, nitro/broadcastclient/broadcastclient.go:224, nitro/broadcastclient/broadcastclient.go:415, nitro/broadcastclient/broadcastclient.go:226, nitro/broadcastclient/broadcastclient.go:443, nitro/arbnode/inbox_reader.go:664, nitro/broadcastclient/broadcastclient.go:77, nitro/broadcastclients/broadcastclients.go:27, nitro/broadcastclients/broadcastclients.go:307, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:84, nitro/broadcastclient/broadcastclient.go:46, nitro/broadcastclient/broadcastclient.go:76, nitro/broadcastclient/broadcastclient.go:45, nitro/wsbroadcastserver/wsbroadcastserver.go:54
+cites: nitro/arbnode/transaction_streamer.go:1255, 1390, broadcaster.go:77, nitro/relay/relay.go:99, nitro/broadcastclient/broadcastclient.go:409, nitro/arbnode/transaction_streamer.go:794, 874, 1158, 1161, nitro/broadcastclient/broadcastclient.go:224, 415, 226, 443, nitro/arbnode/inbox_reader.go:664, nitro/broadcastclient/broadcastclient.go:77, nitro/broadcastclients/broadcastclients.go:27, 307, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:84, nitro/broadcastclient/broadcastclient.go:46, 76, 45, nitro/wsbroadcastserver/wsbroadcastserver.go:54
 finality: soft
 lane: child
 
@@ -96,7 +96,7 @@ parts: seq, poster
 edges: share
 flag: --node.batch-poster.enable
 code: nitro/arbnode/batch_poster.go
-cites: nitro/arbnode/batch_poster.go:1621, nitro/arbnode/batch_poster.go:1009, nitro/arbnode/batch_poster.go:1010, nitro/arbnode/batch_poster.go:1659, nitro/arbnode/batch_poster.go:1623, nitro/arbnode/batch_poster.go:1657, nitro/arbnode/batch_poster.go:2171, nitro/arbnode/batch_poster.go:2158, nitro/arbnode/batch_poster.go:2176, nitro/arbnode/batch_poster.go:185, nitro/arbnode/batch_poster.go:313, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:79, nitro/arbnode/batch_poster.go:168
+cites: batch_poster.go:1621, 1009, 1010, 1659, 1623, 1657, 2171, 2158, 2176, 185, 313, nitro/cmd/nitro/config/config.go:40, node.go:79, batch_poster.go:168
 lane: child
 
 The batch poster reads new messages from the sequencer's message log. It compresses them with Brotli into a batch, up to a size limit.
@@ -115,7 +115,7 @@ parts: poster, seqinbox, bridge
 edges: post, append
 flag: --node.batch-poster.post-4844-blobs
 code: nitro-contracts/src/bridge/SequencerInbox.sol
-cites: nitro/arbnode/batch_poster.go:1897, nitro/arbnode/batch_poster.go:88, nitro/arbnode/batch_poster.go:89, nitro/arbnode/batch_poster.go:1455, nitro/arbnode/batch_poster.go:1458, nitro/arbnode/batch_poster.go:1466, nitro/arbnode/batch_poster.go:1467, nitro/arbnode/batch_poster.go:1509, nitro/arbnode/batch_poster.go:1520, nitro/arbnode/batch_poster.go:1248, nitro/arbnode/batch_poster.go:1254, nitro-contracts/src/bridge/SequencerInbox.sol:733, nitro/arbnode/batch_poster.go:2171, nitro/arbnode/batch_poster.go:2105, nitro/arbnode/batch_poster.go:2162, nitro/util/log.go:62, nitro/util/log.go:65, nitro/arbnode/batch_poster.go:2173, nitro/arbnode/batch_poster.go:2174, nitro/arbnode/batch_poster.go:2106, nitro/arbnode/batch_poster.go:2166, nitro/util/log.go:55, nitro/arbnode/batch_poster.go:79, nitro-contracts/src/bridge/SequencerInbox.sol:352, nitro-contracts/src/bridge/SequencerInbox.sol:368, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:79, nitro/arbnode/batch_poster.go:197
+cites: nitro/arbnode/batch_poster.go:1897, 88, 89, 1455, 1458, 1466, 1467, 1509, 1520, 1248, 1254, SequencerInbox.sol:733, nitro/arbnode/batch_poster.go:2171, 2105, 2162, nitro/util/log.go:62, 65, nitro/arbnode/batch_poster.go:2173, 2174, 2106, 2166, nitro/util/log.go:55, nitro/arbnode/batch_poster.go:79, SequencerInbox.sol:352, 368, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:79, nitro/arbnode/batch_poster.go:197
 finality: batch-posted
 lane: parent
 
@@ -135,7 +135,7 @@ parts: seqinbox, fullnode
 edges: read
 flag: --node.inbox-reader.read-mode
 code: nitro/arbnode/inbox_reader.go
-cites: nitro/arbnode/inbox_reader.go:495, nitro/arbnode/inbox_reader.go:664, nitro/arbnode/inbox_tracker.go:766, nitro/arbnode/transaction_streamer.go:1105, nitro/arbnode/transaction_streamer.go:1019, nitro/arbnode/transaction_streamer.go:1062, nitro/arbnode/transaction_streamer.go:1187, nitro/arbnode/transaction_streamer.go:1190, nitro/arbnode/inbox_reader.go:72, nitro/arbnode/transaction_streamer.go:1080, nitro/arbnode/transaction_streamer.go:1155, nitro/arbnode/inbox_reader.go:312, nitro/arbnode/inbox_reader.go:314, nitro/arbnode/node.go:116, nitro/arbnode/node.go:118, nitro/arbnode/node.go:119, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:77, nitro/arbnode/inbox_reader.go:39
+cites: inbox_reader.go:495, 664, inbox_tracker.go:766, transaction_streamer.go:1105, 1019, 1062, 1187, 1190, inbox_reader.go:72, transaction_streamer.go:1080, 1155, inbox_reader.go:312, 314, node.go:116, 118, 119, nitro/cmd/nitro/config/config.go:40, node.go:77, inbox_reader.go:39
 lane: parent
 
 By default, every full node reads new batches from SequencerInbox in the latest parent chain blocks. If a batch message differs from the message the node stored from the feed, the node keeps the parent chain version. Parent chain finality comes later, when the parent chain finalizes the block that holds the batch.

@@ -35,7 +35,7 @@ card:
 parts: wallet, rpc, seq
 edges: send, forward
 code: nitro/execution/gethexec/sequencer.go
-cites: nitro/execution/gethexec/sequencer.go:614, nitro/execution/gethexec/sequencer.go:617, nitro/execution/gethexec/sequencer.go:782
+cites: sequencer.go:614, 617, 782
 lane: child
 docs: [Transaction lifecycle](/how-arbitrum-works/deep-dives/transaction-lifecycle)
 
@@ -53,7 +53,7 @@ Your wallet sends the signed transaction to an RPC node with eth_sendRawTransact
 
 parts: seq
 code: nitro/execution/gethexec/pga_tx_orderer.go
-cites: nitro/execution/gethexec/sequencer.go:782, nitro/execution/gethexec/pga_tx_orderer.go:84, nitro/execution/gethexec/pga_tx_orderer.go:90, nitro/execution/gethexec/sequencer.go:125, nitro/execution/gethexec/sequencer.go:131, nitro/execution/gethexec/sequencer.go:1239
+cites: sequencer.go:782, pga_tx_orderer.go:84, 90, sequencer.go:125, 131, 1239
 lane: child
 docs: [Priority Gas Auction](/how-arbitrum-works/priority-gas-auction/pga)
 detail: seq -> pga-round
@@ -64,7 +64,7 @@ The transaction waits in the Sequencer's unordered waiting list until the next P
 
 parts: seq
 code: nitro/execution/gethexec/full_sequencing_hooks.go
-cites: nitro/execution/gethexec/pga_tx_orderer.go:92, nitro/execution/gethexec/pga_tx_orderer.go:104, nitro/execution/gethexec/full_sequencing_hooks.go:163, nitro/execution/gethexec/full_sequencing_hooks.go:168
+cites: pga_tx_orderer.go:92, 104, full_sequencing_hooks.go:163, 168
 lane: child
 docs: [Priority Gas Auction](/how-arbitrum-works/priority-gas-auction/pga)
 
@@ -75,7 +75,7 @@ When the round's execute phase starts, the Sequencer takes transactions from the
 parts: seq, fastfeed
 edges: publish-fast
 code: nitro/transactionfeed/message.go
-cites: nitro/arbos/block_processor.go:421, nitro/execution/gethexec/full_sequencing_hooks.go:143, nitro/execution/gethexec/full_sequencing_hooks.go:150, nitro/execution/gethexec/full_sequencing_hooks.go:158, nitro/transactionfeed/message.go:30, nitro/transactionfeed/message.go:35, nitro/transactionfeed/message.go:42
+cites: nitro/arbos/block_processor.go:421, nitro/execution/gethexec/full_sequencing_hooks.go:143, 150, 158, message.go:30, 35, 42
 lane: child
 docs: [Fast Feed](/how-arbitrum-works/priority-gas-auction/fast-feed)
 
@@ -86,7 +86,7 @@ As soon as the Sequencer executes the transaction, it publishes it on the Fast F
 parts: seq, feed
 edges: publish
 code: nitro/broadcaster/broadcaster.go
-cites: nitro/arbnode/transaction_streamer.go:1249, nitro/arbnode/transaction_streamer.go:1255, nitro/broadcaster/broadcaster.go:77
+cites: nitro/arbnode/transaction_streamer.go:1249, 1255, broadcaster.go:77
 finality: soft-confirmation
 lane: child
 docs: [Finality and reorgs](/how-arbitrum-works/reference/finality-and-reorgs)
@@ -98,7 +98,7 @@ The block closes. The Sequencer stores the block, then sends it to nodes on the 
 parts: seq, poster, seqinbox, bridge
 edges: share, post, append
 code: nitro/arbnode/batch_poster.go
-cites: nitro/arbnode/batch_poster.go:1621, nitro/arbnode/batch_poster.go:1212, nitro/arbnode/batch_poster.go:88, nitro/arbnode/batch_poster.go:89, nitro-contracts/src/bridge/SequencerInbox.sol:343, nitro-contracts/src/bridge/SequencerInbox.sol:733
+cites: batch_poster.go:1621, 1212, 88, 89, nitro-contracts/src/bridge/SequencerInbox.sol:343, 733
 lane: parent
 docs: [Batch poster](/how-arbitrum-works/deep-dives/batchposter)
 
@@ -108,7 +108,7 @@ The batch poster reads new messages from the Sequencer and compresses them with 
 
 parts: seqinbox
 code: nitro/arbnode/inbox_reader.go
-cites: nitro/arbnode/inbox_reader.go:213, nitro/arbnode/inbox_reader.go:230, nitro/arbnode/inbox_reader.go:236, nitro/arbnode/inbox_reader.go:244, nitro/arbnode/consensus_execution_syncer.go:126, nitro/arbnode/consensus_execution_syncer.go:155
+cites: inbox_reader.go:213, 230, 236, 244, consensus_execution_syncer.go:126, 155
 finality: hard
 lane: parent
 docs: [Finality and reorgs](/how-arbitrum-works/reference/finality-and-reorgs)
@@ -120,7 +120,7 @@ The parent chain block that holds the batch becomes safe, then finalized. Nodes 
 parts: validator, rollup
 edges: assert
 code: nitro/bold/assertions/poster.go
-cites: nitro/bold/assertions/poster.go:211, nitro/bold/assertions/poster.go:228, nitro/bold/assertions/poster.go:261, nitro-contracts/src/rollup/RollupUserLogic.sol:164, nitro-contracts/src/rollup/RollupCore.sol:412
+cites: poster.go:211, 228, 261, nitro-contracts/src/rollup/RollupUserLogic.sol:164, nitro-contracts/src/rollup/RollupCore.sol:412
 lane: parent
 docs: [Assertions](/how-arbitrum-works/deep-dives/assertions)
 
@@ -130,7 +130,7 @@ A validator computes the child chain state after the posted batches. It posts th
 
 parts: rollup
 code: nitro-contracts/src/rollup/RollupUserLogic.sol
-cites: nitro-contracts/src/rollup/RollupUserLogic.sol:75, nitro-contracts/src/rollup/RollupUserLogic.sol:82, nitro-contracts/src/rollup/RollupUserLogic.sol:104, nitro-contracts/src/rollup/RollupUserLogic.sol:111, nitro-contracts/src/rollup/RollupCore.sol:297, nitro-contracts/src/rollup/RollupCore.sol:300
+cites: RollupUserLogic.sol:75, 82, 104, 111, RollupCore.sol:297, 300
 finality: settled
 lane: parent
 docs: [The reorg model](/how-arbitrum-works/reference/finality-and-reorgs#the-reorg-model)
@@ -142,7 +142,7 @@ On Arbitrum One, the challenge period is {var:arbOneDisputeWindowDays} days. Aft
 parts: dapp, inbox, bridge
 edges: create, enqueue
 code: nitro-contracts/src/bridge/Inbox.sol
-cites: nitro-contracts/src/bridge/Inbox.sol:261, nitro-contracts/src/bridge/AbsInbox.sol:234, nitro-contracts/src/bridge/AbsInbox.sol:298, nitro-contracts/src/bridge/AbsInbox.sol:331, nitro-contracts/src/bridge/Inbox.sol:323, nitro-contracts/src/bridge/AbsBridge.sol:187
+cites: Inbox.sol:261, AbsInbox.sol:234, 298, 331, Inbox.sol:323, AbsBridge.sol:187
 lane: parent
 docs: [Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets)
 
@@ -152,7 +152,7 @@ Your app calls createRetryableTicket on the Inbox contract on the parent chain. 
 
 parts: bridge
 code: nitro/arbnode/delayed_sequencer.go
-cites: nitro/arbnode/delayed_sequencer.go:120, nitro/arbnode/delayed_sequencer.go:124, nitro/arbnode/delayed_sequencer.go:126, nitro/arbnode/delayed_sequencer.go:69, nitro/arbnode/delayed_sequencer.go:70, nitro/arbnode/delayed_sequencer.go:164, nitro-contracts/src/bridge/SequencerInbox.sol:273, nitro-contracts/src/bridge/SequencerInbox.sol:300
+cites: delayed_sequencer.go:120, 124, 126, 69, 70, 164, nitro-contracts/src/bridge/SequencerInbox.sol:273, 300
 lane: parent
 docs: [Forced transactions](/how-arbitrum-works/deep-dives/forced-transactions)
 
@@ -163,7 +163,7 @@ The Sequencer does not read the message at once. By default, it waits until the 
 parts: bridge, seq
 edges: delayed
 code: nitro/execution/gethexec/executionengine.go
-cites: nitro/arbnode/delayed_sequencer.go:183, nitro/execution/gethexec/sequencer.go:1871, nitro/execution/gethexec/executionengine.go:937, nitro/execution/gethexec/executionengine.go:1075, nitro/execution/gethexec/executionengine.go:1085
+cites: nitro/arbnode/delayed_sequencer.go:183, sequencer.go:1871, executionengine.go:937, 1075, 1085
 lane: child
 docs: [Transacting through the Delayed Inbox](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#transacting-via-the-delayed-inbox)
 
@@ -174,7 +174,7 @@ The Sequencer reads the message from the delayed inbox and builds a child chain 
 parts: seq, retryable
 edges: ticket
 code: nitro/arbos/tx_processor.go
-cites: nitro/arbos/tx_processor.go:276, nitro/arbos/tx_processor.go:404, nitro/arbos/tx_processor.go:407, nitro/arbos/tx_processor.go:427, nitro/arbos/retryables/retryable.go:24, nitro-contracts/src/bridge/Inbox.sol:324, nitro/arbnode/delayed.go:232, nitro/arbos/parse_l2.go:364, nitro-contracts/src/bridge/AbsInbox.sol:243, nitro-contracts/src/bridge/AbsInbox.sol:246
+cites: tx_processor.go:276, 404, 407, 427, nitro/arbos/retryables/retryable.go:24, nitro-contracts/src/bridge/Inbox.sol:324, nitro/arbnode/delayed.go:232, parse_l2.go:364, nitro-contracts/src/bridge/AbsInbox.sol:243, 246
 lane: child
 docs: [Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets)
 
@@ -184,7 +184,7 @@ ArbOS creates the ticket with a lifetime of one week. The ArbRetryableTx precomp
 
 parts: retryable
 code: nitro/precompiles/ArbRetryableTx.go
-cites: nitro/arbos/tx_processor.go:322, nitro/arbos/tx_processor.go:439, nitro/arbos/tx_processor.go:484, nitro/arbos/tx_processor.go:514, nitro/arbos/block_processor.go:434, nitro/arbos/block_processor.go:719, nitro/precompiles/ArbRetryableTx.go:50, nitro/precompiles/ArbRetryableTx.go:184, nitro/arbos/retryables/retryable.go:269, nitro/arbos/retryables/retryable.go:173, nitro/arbos/parse_l2.go:371
+cites: nitro/arbos/tx_processor.go:322, 439, 484, 514, nitro/arbos/block_processor.go:434, 719, ArbRetryableTx.go:50, 184, nitro/arbos/retryables/retryable.go:269, 173, nitro/arbos/parse_l2.go:371
 lane: child
 docs: [Retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets)
 
