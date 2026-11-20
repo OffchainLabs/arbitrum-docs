@@ -1,4 +1,4 @@
-import posthog from 'posthog-js';
+import { captureConsentedPosthogEvent } from '@/lib/posthog-consent';
 
 type ChatEvent =
   'user_message_submitted' | 'assistant_message_received' | 'assistant_source_item_clicked';
@@ -6,11 +6,13 @@ type ChatEvent =
 /** Where the chat was used: the panel trigger, or the search dialog's Ask AI. */
 export type ComponentType = 'ChatButton' | 'SearchBar';
 
-/** Sends a chat event with the `inkeep_` names lib/inkeep.ts uses. Never pass message text. */
+/**
+ * Sends a chat event with the `inkeep_` names lib/inkeep.ts uses. Never pass message text. Held in
+ * memory until CookieYes allows analytics and PostHog is ready, with the original time and page.
+ */
 export function captureChatEvent(
   name: ChatEvent,
   properties: { component_type: ComponentType; source_link?: string },
 ): void {
-  if (!posthog.__loaded) return;
-  posthog.capture(`inkeep_${name}`, properties);
+  captureConsentedPosthogEvent(`inkeep_${name}`, properties);
 }

@@ -173,18 +173,18 @@ repo: it puts the page on two sidebar nodes and `pnpm test` fails.
 
 Before writing any content, apply these substitutions:
 
-| Write this                 | Not this               |
-| -------------------------- | ---------------------- |
-| Parent chain / Child chain | L1/L2, Layer 1/Layer 2 |
-| app                        | dapp, dApp             |
-| onchain                    | on-chain               |
-| cross-chain                | crosschain             |
-| Rollup                     | rollup                 |
-| AnyTrust                   | anytrust               |
-| `ERC-20`, `ERC-721`        | ERC20                  |
-| allowlist/denylist         | whitelist/blacklist    |
-| bond                       | stake (for proposing)  |
-| Your Arbitrum chain        | L3 Orbit chain         |
+| Write this                                   | Not this               |
+| -------------------------------------------- | ---------------------- |
+| Parent chain / Child chain                   | L1/L2, Layer 1/Layer 2 |
+| decentralized app on first mention, then app | dapp, dApp             |
+| onchain                                      | on-chain               |
+| cross-chain                                  | crosschain             |
+| Rollup                                       | rollup                 |
+| AnyTrust                                     | anytrust               |
+| `ERC-20`, `ERC-721`                          | ERC20                  |
+| allowlist/denylist                           | whitelist/blacklist    |
+| bond                                         | stake (for proposing)  |
+| Your Arbitrum chain                          | L3 Orbit chain         |
 
 ## Post-creation checklist
 
