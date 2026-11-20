@@ -10,6 +10,7 @@ import {
   Megaphone,
   Server,
   Settings2,
+  ShieldCheck,
 } from 'lucide-react';
 import type { Metadata } from 'next';
 
@@ -63,6 +64,12 @@ const sections = [
     title: 'How Arbitrum works',
     description: 'The protocol itself: sequencing, fraud proofs, bridging, and ArbOS.',
     href: `${docsRoute}/how-arbitrum-works`,
+  },
+  {
+    icon: <ShieldCheck />,
+    title: 'Evaluate Arbitrum',
+    description: 'Guarantees, trust assumptions, operations and compliance controls for reviewers.',
+    href: `${docsRoute}/evaluate`,
   },
   {
     icon: <ArrowRightLeft />,
