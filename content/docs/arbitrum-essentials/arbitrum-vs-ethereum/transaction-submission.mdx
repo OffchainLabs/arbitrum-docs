@@ -99,7 +99,7 @@ The gain is largest on a chain that runs more than one PGA round per block.
 
 <Callout type="warn" title="The early receipt needs an upgraded Nitro node">
 
-The early receipt applies only when the node that serves your `eth_sendRawTransactionSync` call runs <Term id="arbitrum-nitro">Nitro</Term> 3.14.x. Nitro 3.14.x isn't released yet. A node that isn't upgraded still serves the call, but without the early receipt. This applies to your own nodes and to third-party RPC (remote procedure call) providers. If you use a provider, call `web3_clientVersion` on its endpoint to check its Nitro version.
+The early receipt applies only when the node that serves your `eth_sendRawTransactionSync` call runs <Term id="arbitrum-nitro">Nitro</Term> 3.13.x. Nitro 3.13.x isn't released yet. A node that isn't upgraded still serves the call, but without the early receipt. This applies to your own nodes and to third-party RPC (remote procedure call) providers. If you use a provider, call `web3_clientVersion` on its endpoint to check its Nitro version.
 
 The public sequencer endpoint accepts only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional`. Send `eth_sendRawTransactionSync` calls to an RPC node.
 
