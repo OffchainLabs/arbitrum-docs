@@ -43,7 +43,7 @@ To update your code for this behavior, see [Migrate your transaction submission 
 
 ## `eth_sendRawTransaction`
 
-`eth_sendRawTransaction` returns the transaction hash once the sequencer admits the transaction into its queue. It doesn't wait for the sequencer to execute the transaction or include it in a block. Ethereum, Base, Monad, and Polygon work the same way.
+`eth_sendRawTransaction` returns the transaction hash once the sequencer admits the transaction into its queue. It doesn't wait for the sequencer to execute the transaction or include it in a block. Ethereum and other L2 rollups work the same way.
 
 A successful response means the sequencer admitted the transaction. It doesn't mean the transaction is in a block. You confirm inclusion separately, through a receipt, the <Term id="sequencer-feed">sequencer feed</Term>, or the sender's nonce.
 
