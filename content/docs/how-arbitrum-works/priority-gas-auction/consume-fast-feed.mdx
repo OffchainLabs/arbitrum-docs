@@ -119,12 +119,12 @@ This example needs `websockets` 14 or later. Older versions use `extra_headers=`
 
 The Sequencer sends each message as a JSON object inside a binary WebSocket frame, so byte fields arrive as hex-encoded strings. Every message starts with the same envelope fields. The `kind` field tells you which fields follow.
 
-| Field          | Type             | Description                                                       |
-| -------------- | ---------------- | ----------------------------------------------------------------- |
-| `version`      | number           | Message format version, for forward compatibility (currently `2`) |
-| `kind`         | string           | The kind of message: `Transaction` or `PGARoundEnd`               |
-| `timestamp_ms` | number           | Unix time in milliseconds when the Sequencer created the message  |
-| `pga_round`    | number, optional | The PGA round of the message, within the block, starting at 1     |
+| Field          | Type             | Description                                                      |
+| -------------- | ---------------- | ---------------------------------------------------------------- |
+| `version`      | number           | Message format version: `1` or `2`                               |
+| `kind`         | string           | The kind of message: `Transaction` or `PGARoundEnd`              |
+| `timestamp_ms` | number           | Unix time in milliseconds when the Sequencer created the message |
+| `pga_round`    | number, optional | The PGA round of the message, within the block, starting at 1    |
 
 Skip every message whose `kind` your client does not know. The [reference client](https://github.com/OffchainLabs/nitro/tree/v3.12.4/cmd/transaction-feed-client) in the Nitro repository does the same.
 
@@ -163,9 +163,11 @@ Each entry in `logs` carries three fields:
 
 ### PGA round end messages
 
-A message with `kind` set to `PGARoundEnd` tells you that the PGA round in its `pga_round` field has ended. When you receive it, the sequencer has executed and broadcast every transaction that it ordered in that round. You do not have to wait for the first message of the next round to know that a round is complete.
+A message with `kind` set to `PGARoundEnd` tells you that the PGA round in its `pga_round` field has ended. No more transaction messages for this round will follow, so you do not have to wait for the first message of the next round to know that a round is complete. The Sequencer can drop messages under load, so a `PGARoundEnd` message does not prove that you received every transaction of the round.
 
-The feed also sends this message for a round that has no transactions. It carries no `transaction` object. It adds one field to the envelope:
+The feed also sends this message for a round that has no transactions, and for a round that ends early because the block is full. FIFO ordering and delayed-message blocks send no `PGARoundEnd` message.
+
+A `PGARoundEnd` message carries no `transaction` object. It adds one field to the envelope:
 
 | Field          | Type   | Description  |
 | -------------- | ------ | ------------ |
