@@ -163,7 +163,9 @@ Each entry in `logs` carries three fields:
 
 ### PGA round end messages
 
-A message with `kind` set to `PGARoundEnd` tells you that the PGA round in its `pga_round` field has ended. It carries no `transaction` object. It adds one field to the envelope:
+A message with `kind` set to `PGARoundEnd` tells you that the PGA round in its `pga_round` field has ended. When you receive it, the sequencer has executed and broadcast every transaction that it ordered in that round. You do not have to wait for the first message of the next round to know that a round is complete.
+
+The feed also sends this message for a round that has no transactions. It carries no `transaction` object. It adds one field to the envelope:
 
 | Field          | Type   | Description  |
 | -------------- | ------ | ------------ |
