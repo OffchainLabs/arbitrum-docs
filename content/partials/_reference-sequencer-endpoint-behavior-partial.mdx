@@ -34,7 +34,7 @@ Under nominal load, the sequencer endpoint accepts a submission in well under a 
 
 When a submission hits a queue limit, `eth_sendRawTransaction` behaves as follows:
 
-- **Queue full:** it returns an error right away.
+- **Queue full:** it returns an error right away. The sequencer doesn't admit the transaction, so nothing is dropped. You can retry it.
 - **Queue timeout:** the sequencer drops the transaction. `eth_sendRawTransaction` has already returned the transaction hash, so you get no error and no receipt. The transaction is **not** included. Check the sender's nonce, then resubmit the same signed transaction or re-sign it with the same nonce. See [Handle transactions with no receipt](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission#handle-transactions-with-no-receipt).
 
 {/* SME QUESTION: What error does `eth_sendRawTransactionSync` return on queue timeout? Is it still `context deadline exceeded`? */}

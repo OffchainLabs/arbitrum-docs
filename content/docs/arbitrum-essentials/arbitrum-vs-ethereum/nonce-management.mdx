@@ -19,7 +19,7 @@ Arbitrum's sequencer behaves differently. It maintains an in-memory **nonce-fail
 1. When a transaction reaches execution with a nonce higher than the sender's state nonce (the next nonce the account expects, one more than the last executed nonce), the sequencer does **not** reject it immediately. Instead, it places the transaction in the retry buffer and starts a short expiry timer. A transaction whose nonce equals the state nonce is in order and executes, even if an earlier one is still queued.
 2. If the predecessor transaction arrives before the timer fires, the held transaction is revived and put back into the execution queue—it goes through normally, as if it had arrived in order.
 3. If the timer fires first, the sequencer drops the held transaction. What the sender sees depends on the submission method and on whether the new transaction submission behavior has reached the chain:
-   - `eth_sendRawTransaction`, after the change, already returned the transaction hash when the sequencer admitted the transaction. The sender gets no error and no receipt.
+   - `eth_sendRawTransaction`, after the change, already returned the transaction hash when the sequencer admitted the transaction. The sender gets no error and no receipt that the transaction was dropped.
    - `eth_sendRawTransaction`, before the change, returns a `nonce too high` error.
    - `eth_sendRawTransactionSync` returns an error instead of a receipt.
 

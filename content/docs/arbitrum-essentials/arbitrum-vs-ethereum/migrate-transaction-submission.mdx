@@ -18,9 +18,7 @@ This behavior reaches Arbitrum Sepolia first and Arbitrum One later. Make and te
 
 </Callout>
 
-`eth_sendRawTransactionConditional` behavior or semantics are not in-scope for the changes described here 
-
-{/* SME QUESTION: Confirm that eth_sendRawTransactionConditional keeps its current behavior. The announcement doesn't mention it. */}
+`eth_sendRawTransactionConditional` behavior and semantics are out of scope for these changes. Offchain Labs plans to disable that method. See the [notice: Deprecation of eth_sendRawTransactionConditional](/notices/eth-send-raw-transaction-conditional-deprecation-notice).
 
 ## Do you need to change anything?
 
@@ -32,13 +30,13 @@ Find the row that matches how you submit transactions today.
 | Submit user operations through ZeroDev's UltraRelay bundler                                                                    | You get user operation receipts sooner.                                   | Nothing.                                                                                                   |
 | Poll `eth_getTransactionReceipt` and don't need the `blockHash`                                                                | One `eth_sendRawTransactionSync` call returns the receipt and logs sooner. | Switch. See [Replace receipt polling with one call](#replace-receipt-polling-with-one-call).               |
 | Run custom infrastructure to serve `eth_sendRawTransactionSync` calls                                                          | An upgraded Nitro node serves these calls natively.                       | See [Retire custom infrastructure](#retire-custom-infrastructure-for-eth_sendrawtransactionsync).          |
-| Treat an `eth_sendRawTransaction` response as "included"                                                                       | A successful response means the sequencer admitted the transaction into its queue but it no longer signifies that the transaction has been included in a block.       | See [Stop treating a successful response as "included"](#stop-treating-a-successful-response-as-included). |
-| Retry based on `eth_sendRawTransaction` errors from inclusion time                                                             | `eth_sendRawTransaction` will no longer return execution-time or inclusion-time errors.            | See [Move retry logic](#move-retry-logic-to-eth_sendrawtransactionsync).                                   |
-| Need the canonical receipt with the `blockHash`                                                                                | The `eth_sendRawTransactionSync` receipt has a zero `blockHash`.          | Keep polling `eth_getTransactionReceipt`.                                                                  |
+| Treat an `eth_sendRawTransaction` response as "included"                                                                       | A successful response means the sequencer admitted the transaction into its queue. It no longer means the transaction is in a block.       | See [Stop treating a successful response as "included"](#stop-treating-a-successful-eth_sendrawtransaction-response-as-included). |
+| Retry based on `eth_sendRawTransaction` errors from inclusion time                                                             | `eth_sendRawTransaction` no longer returns execution-time or inclusion-time errors.            | See [Move retry logic](#move-retry-logic-to-eth_sendrawtransactionsync).                                   |
+| Need the canonical receipt with the `blockHash`                                                                                | The `eth_sendRawTransactionSync` receipt has a 32-byte zero `blockHash` (`0x00…00`).          | Keep polling `eth_getTransactionReceipt`.                                                                  |
 
 ## Before you begin
 
-- **Find out which node serves your calls.** The early receipt from `eth_sendRawTransactionSync` needs <Term id="arbitrum-nitro">Nitro</Term> 3.14.x on that node. Nitro 3.14.x isn't released yet. If you use a third-party RPC (remote procedure call) provider, call `web3_clientVersion` on its endpoint to check its Nitro version.
+- **Find out which node serves your calls.** After the change, the early receipt from `eth_sendRawTransactionSync` needs <Term id="arbitrum-nitro">Nitro</Term> 3.13.x on that node, with `--execution.rpc.tx-sync-forward=true` set. Nitro 3.13.x isn't released yet. If you use a third-party RPC (remote procedure call) provider, call `web3_clientVersion` on its endpoint to check its Nitro version.
 - **Send `eth_sendRawTransactionSync` calls to an RPC node.** The public <Term id="sequencer">sequencer</Term> endpoint accepts only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional`.
 - **Have a funded test account on Arbitrum Sepolia.** You verify each change there before mainnet. The Arbitrum Sepolia RPC URL is `https://sepolia-rollup.arbitrum.io/rpc`.
 
@@ -51,13 +49,13 @@ export RPC_URL="https://sepolia-rollup.arbitrum.io/rpc"
 export SIGNED_TX="0x..."   # a signed transaction, RLP-encoded (Recursive Length Prefix)
 ```
 
-## Stop treating a successful response as "included"
+## Stop treating a successful `eth_sendRawTransaction` response as "included"
 
 A successful `eth_sendRawTransaction` response means the sequencer admitted the transaction into its queue. It doesn't mean the transaction is in a block. If your code moves on as soon as the call succeeds, pick one of these options.
 
 ### Option 1: Switch to `eth_sendRawTransactionSync`
 
-If your next step needs the transaction's outcome, use this option. `eth_sendRawTransactionSync` returns sooner than `eth_sendRawTransaction` did before the change, so switching doesn't slow your submission path.
+If your workflow needs the transaction's outcome from the receipt after submission, use this option. `eth_sendRawTransactionSync` returns sooner than `eth_sendRawTransaction` did before the change, so switching doesn't slow your submission path.
 
 1. Replace the `eth_sendRawTransaction` call with `eth_sendRawTransactionSync`. The second parameter is an optional timeout in milliseconds:
 
@@ -72,12 +70,12 @@ If your next step needs the transaction's outcome, use this option. `eth_sendRaw
 
 2. Read the result as a transaction receipt, not a hash. Take the hash from `result.transactionHash`.
 3. Check `result.status`. `0x1` means the transaction succeeded. `0x0` means it reverted.
-4. Ignore `result.blockHash`. It's the zero hash, because the node returns the receipt before the block is complete. If you need the block hash, poll `eth_getTransactionReceipt`.
+4. Don't rely on `result.blockHash`. It's the zero hash, because the node returns the receipt before the block is complete. If your client validates the block hash, handle the zero value. If you need the block hash, poll `eth_getTransactionReceipt`.
 5. Verify on Arbitrum Sepolia. Send a valid transaction. The call returns a receipt with `status` set and a zero `blockHash`.
 
 ### Option 2: Keep `eth_sendRawTransaction` and confirm separately
 
-If you only need to know that the sequencer admitted the transaction, and you can confirm inclusion later, use this option.
+If you only need to know that the sequencer admitted the transaction into its queue, and you already confirm inclusion later or can, use this option.
 
 1. Keep the `eth_sendRawTransaction` call. Store the transaction hash it returns.
 2. Poll `eth_getTransactionReceipt` with that hash until it returns a receipt:
@@ -123,9 +121,9 @@ If you only need to know that the sequencer admitted the transaction, and you ca
 
 ## Handle transactions with no receipt
 
-If you keep using `eth_sendRawTransaction`, a transaction can pass the admission checks and still be dropped at block time. You get no error and no receipt. A deadline check keeps these transactions from waiting forever.
+If you keep using `eth_sendRawTransaction`, a transaction can pass the admission checks and still be dropped at block time. You get no error and no receipt that the transaction was dropped. A deadline check keeps these transactions from waiting forever.
 
-1. Set a deadline for each submitted transaction. Make it longer than the queue timeout and the nonce retry window, so the sequencer is done with the transaction.
+1. Set a deadline for each submitted transaction. Make it longer than the queue timeout and the nonce retry window, so the sequencer is done with the transaction. The queue timeout is 12 seconds by default. See [Queue timeout](/how-arbitrum-works/deep-dives/sequencer-transaction-flow#queue-timeout-and-context-deadline-exceeded). If your client timeout is shorter than the queue timeout, the sequencer can admit the transaction after your client stops waiting.
 2. At the deadline, query the receipt once more. If it returns a receipt, the transaction is in a block.
 3. If the receipt is still `null`, read the sender's next nonce:
 
@@ -150,7 +148,7 @@ Track outstanding nonces in your own code. On Arbitrum, `eth_getTransactionCount
 
 ## Replace receipt polling with one call
 
-If you poll `eth_getTransactionReceipt` after every submission and don't need the `blockHash`, one `eth_sendRawTransactionSync` call can replace both.
+If you poll `eth_getTransactionReceipt` after every submission and don't need the `blockHash`, one `eth_sendRawTransactionSync` call can replace both, and it returns sooner.
 
 1. Replace the submit-then-poll code with one `eth_sendRawTransactionSync` call, as shown in [Option 1](#option-1-switch-to-eth_sendrawtransactionsync).
 2. Read the status and logs from the returned receipt.
@@ -163,9 +161,10 @@ If you poll `eth_getTransactionReceipt` after every submission and don't need th
 
 An upgraded Nitro node serves `eth_sendRawTransactionSync` calls natively. If you don't upgrade, the node still serves these calls, but without the early receipt.
 
-1. Upgrade the node that serves your calls to Nitro 3.14.x.
-2. Send a test transaction with `eth_sendRawTransactionSync` directly to that node.
-3. Check that the receipt's `blockHash` is zero. A zero `blockHash` shows that the node returns the early receipt.
-4. Route your `eth_sendRawTransactionSync` traffic to the node, then retire the custom setup.
+1. Upgrade the node that serves your calls to Nitro 3.13.x.
+2. Set `--execution.rpc.tx-sync-forward=true` on that node.
+3. Send a test transaction with `eth_sendRawTransactionSync` directly to that node.
+4. Check that the receipt's `blockHash` is zero. A zero `blockHash` shows that the node returns the early receipt.
+5. Route your `eth_sendRawTransactionSync` traffic to the node, then retire the custom setup.
 
 To set how long a call can wait, see [Timeouts](/arbitrum-essentials/arbitrum-vs-ethereum/transaction-submission#timeouts).

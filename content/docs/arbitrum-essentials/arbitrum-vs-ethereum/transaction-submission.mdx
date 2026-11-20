@@ -74,7 +74,6 @@ A transaction can pass every admission check and still fail when the sequencer b
 | Queue timeout          | The transaction waits in the sequencer's queue longer than the queue timeout.                                                                                                                                           |
 
 {/* SME QUESTION: How long does the sequencer hold a nonce-gap transaction before it drops it? */}
-{/* SME QUESTION: Is the queue timeout still 12 seconds by default? */}
 {/* SME QUESTION: Does a dropped transaction leave a trace, such as a log line or metric? */}
 
 `eth_sendRawTransactionSync` returns most of these errors instead. To detect and resubmit dropped transactions, see [Handle transactions with no receipt](/arbitrum-essentials/arbitrum-vs-ethereum/migrate-transaction-submission#handle-transactions-with-no-receipt).
@@ -99,11 +98,11 @@ The gain is largest on a chain that runs more than one PGA round per block.
 
 <Callout type="warn" title="The early receipt needs an upgraded Nitro node">
 
-The early receipt applies only when the node that serves your `eth_sendRawTransactionSync` call runs <Term id="arbitrum-nitro">Nitro</Term> 3.13.x. Nitro 3.13.x isn't released yet. A node that isn't upgraded still serves the call, but without the early receipt. This applies to your own nodes and to third-party RPC (remote procedure call) providers. If you use a provider, call `web3_clientVersion` on its endpoint to check its Nitro version.
+The early receipt applies only when the node that serves your `eth_sendRawTransactionSync` call runs <Term id="arbitrum-nitro">Nitro</Term> 3.13.x. Nitro 3.13.x isn't released yet. If you run the node, also set `--execution.rpc.tx-sync-forward=true` on it. A node that isn't upgraded still serves the call, but without the early receipt. This applies to your own nodes and to third-party RPC (remote procedure call) providers. If you use a provider, call `web3_clientVersion` on its endpoint to check its Nitro version.
 
 The public sequencer endpoint accepts only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional`. Send `eth_sendRawTransactionSync` calls to an RPC node.
 
-{/* SME QUESTION: The notice gives Nitro 3.14.x. Confirm the exact release and Docker image once it ships. */}
+{/* SME QUESTION: The notice gives Nitro 3.13.x. Confirm the exact release and Docker image once it ships. */}
 {/* SME QUESTION: Does the eth_sendRawTransaction change depend on the caller's node version, or only on the sequencer? The notice ties only the eth_sendRawTransactionSync change to the node version. */}
 {/* SME QUESTION: Does the public sequencer endpoint accept `eth_sendRawTransactionSync` after the change? */}
 
