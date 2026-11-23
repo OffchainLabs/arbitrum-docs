@@ -220,10 +220,10 @@ const docsLink = z
 
 const detailRef = z
   .string()
-  .regex(/^\S+ -> \S+$/, 'must read <part> -> <flow-id>')
+  .regex(/^\S+ -> \S+( -> \S+)?$/, 'must read <part> -> <flow-id>, then optionally -> <step-id>')
   .transform((value) => {
-    const [part, flow] = value.split(' -> ') as [string, string];
-    return { part, flow };
+    const [part, flow, next] = value.split(' -> ') as [string, string, string | undefined];
+    return next ? { part, flow, next } : { part, flow };
   });
 
 const fields = {
@@ -410,7 +410,7 @@ function addDetail(
   values: Record<string, unknown>,
   ctx: StepContext,
 ) {
-  const detail = values['detail'] as { part: string; flow: string } | undefined;
+  const detail = values['detail'] as DiagramStep['detail'];
   if (!detail) return;
   if (!ctx.partIds.has(detail.part)) {
     fail.at(entries.get('detail')!.line, `detail part "${detail.part}" is not in the flow's parts`);

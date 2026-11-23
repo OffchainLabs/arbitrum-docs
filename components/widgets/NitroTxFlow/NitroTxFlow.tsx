@@ -76,6 +76,7 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
   const showAll = useStepCamera(instance, layout, step, canvasRef);
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailSeen, setDetailSeen] = useState(false);
+  const finishedDetail = useRef(false);
   const trigger = useMemo(
     () => ({
       label: `Look inside the ${flow.actors.find((a) => a.id === step.detail?.actor)?.label}`,
@@ -94,6 +95,14 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
     query.addEventListener('change', onChange);
     return () => query.removeEventListener('change', onChange);
   }, []);
+
+  // After Next closes the detail view, focus Next here. The overlay's cleanup runs first and
+  // focuses the node that opened it, which is no longer a button on the next step.
+  useEffect(() => {
+    if (detailOpen || !finishedDetail.current) return;
+    finishedDetail.current = false;
+    barRef.current?.querySelector<HTMLElement>('[data-step-next]')?.focus();
+  }, [detailOpen]);
 
   const nodes = useMemo(
     () => (layout ? flowNodes(flow, layout, step, current.actors, trigger) : []),
@@ -200,6 +209,12 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
           flow={step.detail.flow}
           labels={labels}
           onClose={() => setDetailOpen(false)}
+          onFinish={() => {
+            finishedDetail.current = true;
+            setDetailOpen(false);
+            const next = step.detail?.next;
+            goTo(next ? current.path.steps.findIndex((other) => other.id === next) : index + 1);
+          }}
         />
       )}
     </div>

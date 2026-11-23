@@ -112,6 +112,7 @@ function toStep(flow: DiagramFlow, step: DiagramStep, all: Map<string, DiagramFl
       );
     }
     out.detail = { actor: step.detail.part, flow: toFlow(inner, all) };
+    if (step.detail.next) out.detail.next = step.detail.next;
   }
   return out;
 }

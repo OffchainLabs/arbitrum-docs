@@ -622,7 +622,7 @@ export const transactionSubmission: Flow = {
         { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 1239 },
       ],
       txChain: 'child',
-      detail: { actor: 'seq', flow: pgaRound },
+      detail: { actor: 'seq', flow: pgaRound, next: 'fast-feed' },
     },
     {
       id: 'execute',

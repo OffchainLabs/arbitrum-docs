@@ -22,11 +22,13 @@ interface DetailOverlayProps {
   // The card labels of the flow that opens this one.
   labels: CardLabels;
   onClose: () => void;
+  // Next on the last sub-step: close this view and go to the next step of the opening flow.
+  onFinish: () => void;
 }
 
 // SPIKE: a second diagram in a dialog, with its own sub-steps. Full screen below 768px; a centered
 // panel over a backdrop above.
-export function DetailOverlay({ flow, labels, onClose }: DetailOverlayProps) {
+export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlayProps) {
   const { layout } = useFlowLayout(flow);
   const [instance, setInstance] = useState<ReactFlowInstance<
     ActorNodeType | BandNodeType,
@@ -80,9 +82,14 @@ export function DetailOverlay({ flow, labels, onClose }: DetailOverlayProps) {
           'md:h-auto md:max-h-[92vh] md:w-[min(900px,94vw)] md:rounded-lg md:border md:border-fd-border',
         ].join(' ')}
         onClick={(event) => event.stopPropagation()}
+        // React events bubble through the portal to the opening widget, which would step too.
+        // Stop only the arrows: Escape reaches the window listener above.
         onKeyDown={(event) => {
-          if (event.key === 'ArrowRight') goTo(index + 1);
+          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+          event.stopPropagation();
           if (event.key === 'ArrowLeft') goTo(index - 1);
+          else if (index === flow.steps.length - 1) onFinish();
+          else goTo(index + 1);
         }}
       >
         <div className="flex items-center justify-between border-b border-fd-border px-4 py-2">
@@ -111,6 +118,7 @@ export function DetailOverlay({ flow, labels, onClose }: DetailOverlayProps) {
             barRef={barRef}
             onGo={goTo}
             onShowAll={showAll}
+            onFinish={onFinish}
           />
         </div>
         <StepCard step={step} labels={labels} />

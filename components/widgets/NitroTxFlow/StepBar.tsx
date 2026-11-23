@@ -12,13 +12,24 @@ interface StepBarProps {
   barRef: RefObject<HTMLElement | null>;
   onGo: (index: number) => void;
   onShowAll: () => void;
+  // When set, Next stays active on the last step and calls this instead of stepping.
+  onFinish?: () => void;
 }
 
 // Sticky in normal flow: it sits at the canvas bottom, or at the screen bottom while the canvas
 // bottom is below the fold. Back and Next use aria-disabled, not disabled, so keyboard focus stays
 // on them at the first and last step. Below 768px the spacing shrinks, so the bar fits a phone
 // screen.
-export function StepBar({ index, count, started, barRef, onGo, onShowAll }: StepBarProps) {
+export function StepBar({
+  index,
+  count,
+  started,
+  barRef,
+  onGo,
+  onShowAll,
+  onFinish,
+}: StepBarProps) {
+  const atEnd = index === count - 1;
   return (
     <nav
       ref={barRef}
@@ -60,8 +71,9 @@ export function StepBar({ index, count, started, barRef, onGo, onShowAll }: Step
           border: `1px solid ${BRAND.active}`,
           boxShadow: started ? 'none' : '0 0 0 3px rgba(18, 170, 255, 0.6)',
         }}
-        aria-disabled={index === count - 1}
-        onClick={() => onGo(index + 1)}
+        data-step-next=""
+        aria-disabled={atEnd && !onFinish}
+        onClick={() => (atEnd && onFinish ? onFinish() : onGo(index + 1))}
       >
         Next →
       </button>

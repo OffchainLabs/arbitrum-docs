@@ -610,17 +610,17 @@ and digits joined by single dashes. The first paragraph can
 be metadata, one `key: value` pair per line or several joined with `·`. The other paragraphs are
 the step text, which is required. Lists, code blocks and other headings do not parse.
 
-| Key        | Meaning                                                                                          |
-| ---------- | ------------------------------------------------------------------------------------------------ |
-| `lane`     | Required. A lane id from `project.yaml`.                                                         |
-| `parts`    | Part ids the step uses, comma separated, from the flow's `parts`.                                |
-| `edges`    | Edge ids the step uses, comma separated, from the flow's `edges`.                                |
-| `flag`     | A flag name the step shows.                                                                      |
-| `code`     | The main code path, `<repo>/<path>[:<line>]`. The repo is a key under `repos` in `project.yaml`. |
-| `cites`    | More code references, separated by `,` or `;`. See below.                                        |
-| `finality` | A finality level, from `FINALITY_LABEL` in `components/widgets/NitroTxFlow/brand.ts`.            |
-| `docs`     | A link to a docs page, `[label](href)`.                                                          |
-| `detail`   | `<part> -> <flow-id>` links the step to another flow from that part. A detail cycle fails.       |
+| Key        | Meaning                                                                                                                                                                                                                                                                                            |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lane`     | Required. A lane id from `project.yaml`.                                                                                                                                                                                                                                                           |
+| `parts`    | Part ids the step uses, comma separated, from the flow's `parts`.                                                                                                                                                                                                                                  |
+| `edges`    | Edge ids the step uses, comma separated, from the flow's `edges`.                                                                                                                                                                                                                                  |
+| `flag`     | A flag name the step shows.                                                                                                                                                                                                                                                                        |
+| `code`     | The main code path, `<repo>/<path>[:<line>]`. The repo is a key under `repos` in `project.yaml`.                                                                                                                                                                                                   |
+| `cites`    | More code references, separated by `,` or `;`. See below.                                                                                                                                                                                                                                          |
+| `finality` | A finality level, from `FINALITY_LABEL` in `components/widgets/NitroTxFlow/brand.ts`.                                                                                                                                                                                                              |
+| `docs`     | A link to a docs page, `[label](href)`.                                                                                                                                                                                                                                                            |
+| `detail`   | `<part> -> <flow-id>` links the step to another flow from that part. A detail cycle fails. An optional `-> <step-id>` names the step that Next on the detail flow's last step goes to; without it, Next goes to the next step. That step must come after this one on every path that has this one. |
 
 A `cites` entry takes one of three forms. A full `<repo>/<path>[:<line>]` stands alone. A bare
 `<file>[:<line>]` resolves against the directory of the step's `code:` path, so the step needs a

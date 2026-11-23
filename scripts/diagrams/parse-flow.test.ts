@@ -223,6 +223,69 @@ test('rejects a detail cycle', () =>
     /detail cycle: a\.md -> b\.md -> a\.md/,
   ));
 
+const DETAIL_FLOW = (detail: string, extra = '') => `---
+title: Demo
+parts: [a, b]
+edges:
+  ab: a -> b "calls"
+${extra}---
+
+## One {#s1}
+
+lane: l1
+
+A.
+
+## Two {#s2}
+
+lane: l1
+detail: ${detail}
+
+B.
+
+## Three {#s3}
+
+lane: l1
+
+C.
+`;
+const INNER = '---\ntitle: Inner\nparts: [a]\n---\n';
+
+test('parses detail with a next step', async () => {
+  const flows = { demo: DETAIL_FLOW('a -> inner -> s3'), inner: INNER };
+  const { flows: loaded } = await loadProject(await project(flows));
+  assert.deepEqual(loaded.get('demo')!.steps[1]!.detail, {
+    part: 'a',
+    flow: 'inner',
+    next: 's3',
+  });
+});
+
+test('rejects a detail next step that is not in the flow', () =>
+  rejects(
+    { demo: DETAIL_FLOW('a -> inner -> zz'), inner: INNER },
+    /demo\.md:17: step "s2" detail next step "zz" is not a step of the flow/,
+  ));
+
+test('rejects a detail next step that is not after the detail step', () =>
+  rejects(
+    { demo: DETAIL_FLOW('a -> inner -> s1'), inner: INNER },
+    /demo\.md:17: step "s2" detail next step "s1" does not come after it in path "default"/,
+  ));
+
+test('rejects a detail next step that a path does not reach after the detail step', () =>
+  rejects(
+    {
+      demo: DETAIL_FLOW(
+        'a -> inner -> s3',
+        'paths:\n  - { id: p1, label: P1, steps: [s1, s2, s3] }\n' +
+          '  - { id: p2, label: P2, steps: [s3, s2] }\n',
+      ),
+      inner: INNER,
+    },
+    /step "s2" detail next step "s3" does not come after it in path "p2"/,
+  ));
+
 const SVG_HEADER = (extra: string) => `---
 title: Demo
 parts: [a, { b: { tech: ~ } }]

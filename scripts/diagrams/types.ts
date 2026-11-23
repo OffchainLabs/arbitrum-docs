@@ -44,7 +44,8 @@ export interface DiagramStep {
   lane: string;
   docs?: { href: string; label: string };
   failure?: StepFailure;
-  detail?: { part: string; flow: string };
+  // `next`: the step the reader lands on after the detail flow's last step. Default: the next step.
+  detail?: { part: string; flow: string; next?: string };
 }
 
 export interface FlowPath {

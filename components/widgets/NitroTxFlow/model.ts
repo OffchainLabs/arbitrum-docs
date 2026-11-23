@@ -85,6 +85,8 @@ export const OPERATOR_CARD: CardLabels = {
 export interface StepDetail {
   actor: string;
   flow: Flow;
+  // The step id the reader lands on after the detail flow's last step. Default: the next step.
+  next?: string;
 }
 
 export interface Flow {

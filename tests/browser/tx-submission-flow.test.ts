@@ -184,3 +184,58 @@ test('at 768×1024 every active node is inside the canvas on every step of both 
     });
   }
 });
+
+const DETAIL_INDEX = DIRECT.steps.findIndex((step) => step.detail);
+const DETAIL_STEPS = DIRECT.steps[DETAIL_INDEX]?.detail?.flow.steps.length ?? 0;
+// The PGA round view covers ordering and execution, so its last Next skips to Fast Feed.
+const LANDING_INDEX = DIRECT.steps.findIndex((step) => step.id === 'fast-feed');
+
+/** Opens the detail dialog of the direct path and returns it. */
+async function openDetail(page: Page) {
+  await page.getByRole('button', { name: /^Look inside the / }).click();
+  const dialog = page.getByRole('dialog');
+  await dialog.waitFor();
+  return dialog;
+}
+
+/** True when focus is on the Next button of the widget's own step bar. */
+async function focusIsOnNext(page: Page): Promise<boolean> {
+  return page.evaluate(
+    (canvasSelector) =>
+      document.activeElement ===
+      document.querySelector(canvasSelector)!.querySelector('nav [data-step-next]'),
+    CANVAS,
+  );
+}
+
+test('the last detail step has an active Next that closes the dialog on Fast Feed', async () => {
+  assert.equal(DIRECT.steps[DETAIL_INDEX]!.detail!.next, 'fast-feed');
+  assert.ok(LANDING_INDEX > DETAIL_INDEX + 1);
+  assert.ok(DETAIL_STEPS > 1);
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const dialog = await openDetail(page);
+    const next = dialog.getByRole('button', { name: 'Next →' });
+    for (let index = 1; index < DETAIL_STEPS; index++) await next.click();
+    assert.match((await dialog.textContent()) ?? '', new RegExp(`Step ${DETAIL_STEPS} of`));
+    assert.notEqual(await next.getAttribute('aria-disabled'), 'true');
+    await next.click();
+    await dialog.waitFor({ state: 'detached' });
+    await waitForStep(page, DIRECT, LANDING_INDEX);
+    assert.ok(await focusIsOnNext(page), 'focus is not on the step bar Next');
+  });
+});
+
+test('ArrowRight in the detail dialog steps the dialog, then closes it on Fast Feed', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const dialog = await openDetail(page);
+    for (let index = 1; index < DETAIL_STEPS; index++) {
+      await page.keyboard.press('ArrowRight');
+      assert.match((await dialog.textContent()) ?? '', new RegExp(`Step ${index + 1} of`));
+      assert.equal(new URL(page.url()).hash, `#direct-step-${DETAIL_INDEX + 1}`);
+    }
+    await page.keyboard.press('ArrowRight');
+    await dialog.waitFor({ state: 'detached' });
+    await waitForStep(page, DIRECT, LANDING_INDEX);
+    assert.ok(await focusIsOnNext(page), 'focus is not on the step bar Next');
+  });
+});

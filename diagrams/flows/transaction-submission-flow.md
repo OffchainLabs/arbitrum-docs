@@ -56,7 +56,7 @@ code: nitro/execution/gethexec/pga_tx_orderer.go
 cites: sequencer.go:782, pga_tx_orderer.go:84, 90, sequencer.go:125, 131, 1239
 lane: child
 docs: [Priority Gas Auction](/how-arbitrum-works/priority-gas-auction/pga)
-detail: seq -> pga-round
+detail: seq -> pga-round -> fast-feed
 
 The transaction waits in the Sequencer's unordered waiting list until the next Priority Gas Auction (PGA) round starts. On Arbitrum One, each block has {var:arbOnePgaRoundsPerBlock} rounds of {var:arbOnePgaRoundMs} ms.
 

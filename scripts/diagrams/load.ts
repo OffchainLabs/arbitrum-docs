@@ -72,6 +72,25 @@ function checkPaths(header: FlowHeader, flow: DiagramFlow): void {
 
 type DetailLines = Map<string, Map<string, number>>;
 
+/** `detail.next` names a step of the flow that comes after the detail step on every path. */
+function checkDetailNext(flow: DiagramFlow, step: DiagramStep, at: string): void {
+  const next = step.detail!.next!;
+  if (!flow.steps.some((other) => other.id === next)) {
+    throw new Error(
+      `${at}: step "${step.id}" detail next step "${next}" is not a step of the flow`,
+    );
+  }
+  const paths = flow.paths ?? [{ id: 'default', steps: flow.steps.map((other) => other.id) }];
+  for (const path of paths) {
+    const from = path.steps.indexOf(step.id);
+    if (from !== -1 && path.steps.indexOf(next) <= from) {
+      throw new Error(
+        `${at}: step "${step.id}" detail next step "${next}" does not come after it in path "${path.id}"`,
+      );
+    }
+  }
+}
+
 function checkDetails(flows: Map<string, DiagramFlow>, lines: DetailLines): void {
   const targets = new Map<string, { step: DiagramStep; line: number }[]>();
   for (const flow of flows.values()) {
@@ -84,6 +103,7 @@ function checkDetails(flows: Map<string, DiagramFlow>, lines: DetailLines): void
           `${flow.file}:${line}: step "${step.id}" detail flow "${step.detail.flow}" not found`,
         );
       }
+      if (step.detail.next) checkDetailNext(flow, step, `${flow.file}:${line}`);
       found.push({ step, line });
     }
     targets.set(flow.id, found);
