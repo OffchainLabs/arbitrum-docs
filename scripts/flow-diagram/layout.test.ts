@@ -90,6 +90,32 @@ test('no label box overlaps a node box', () => {
   }
 });
 
+/** The distance from `point` to the nearest point of the polyline `points`. */
+function distanceToPolyline(point: { x: number; y: number }, points: { x: number; y: number }[]) {
+  let best = Infinity;
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1]!;
+    const b = points[i]!;
+    const x = Math.min(Math.max(point.x, Math.min(a.x, b.x)), Math.max(a.x, b.x));
+    const y = Math.min(Math.max(point.y, Math.min(a.y, b.y)), Math.max(a.y, b.y));
+    best = Math.min(best, Math.hypot(point.x - x, point.y - y));
+  }
+  return best;
+}
+
+test('every label is centered on its own edge, in both main flows', async () => {
+  for (const shown of [layout, await computeLayout(transactionSubmission)]) {
+    for (const [id, edge] of Object.entries(shown.edges)) {
+      const center = {
+        x: edge.label.x + edge.label.width / 2,
+        y: edge.label.y + edge.label.height / 2,
+      };
+      const distance = distanceToPolyline(center, edge.points);
+      assert.ok(distance <= 2, `${id}: label center is ${distance.toFixed(1)}px from its edge`);
+    }
+  }
+});
+
 test('every edge has at least 2 points', () => {
   for (const [id, edge] of Object.entries(layout.edges)) {
     assert.ok(edge.points.length >= 2, id);

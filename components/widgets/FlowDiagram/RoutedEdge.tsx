@@ -62,13 +62,17 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
       />
       <EdgeLabelRenderer>
         <div
-          className={`nodrag nopan flex items-center gap-1.5 whitespace-nowrap ${TRANSITION}`}
+          // The chip sits on its edge: an opaque background hides the line, and only the content
+          // dims.
+          className="nodrag nopan whitespace-nowrap"
           style={{
             position: 'absolute',
+            // An active edge has z-index 1 (graph.ts). The label layer comes after the edges, so
+            // at the same z-index the chip paints above it.
+            zIndex: 1,
             transform:
               'translate(-50%, -50%) ' +
               `translate(${box.x + box.width / 2}px, ${box.y + box.height / 2}px)`,
-            opacity,
             padding: '2px 8px 2px 3px',
             borderRadius: 6,
             background: BRAND.chip,
@@ -77,23 +81,25 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
             fontSize: 12,
           }}
         >
-          {stepNumbers.map((n) => (
-            <span
-              key={n}
-              className="inline-flex items-center justify-center"
-              style={{
-                minWidth: 20,
-                height: 20,
-                borderRadius: 10,
-                background: BRAND.badge,
-                color: BRAND.badgeText,
-                fontWeight: 700,
-              }}
-            >
-              {n}
-            </span>
-          ))}
-          {label}
+          <span className={`flex items-center gap-1.5 ${TRANSITION}`} style={{ opacity }}>
+            {stepNumbers.map((n) => (
+              <span
+                key={n}
+                className="inline-flex items-center justify-center"
+                style={{
+                  minWidth: 20,
+                  height: 20,
+                  borderRadius: 10,
+                  background: BRAND.badge,
+                  color: BRAND.badgeText,
+                  fontWeight: 700,
+                }}
+              >
+                {n}
+              </span>
+            ))}
+            {label}
+          </span>
         </div>
       </EdgeLabelRenderer>
     </>

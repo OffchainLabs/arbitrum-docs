@@ -104,7 +104,8 @@ async function snapshot(page: Page): Promise<Snapshot> {
           rect: rect(node),
         })),
         activeLabels: [...canvas.querySelectorAll('.react-flow__edgelabel-renderer > div')]
-          .filter((label) => getComputedStyle(label).opacity === '1')
+          // The chip stays opaque; its content carries the dimming.
+          .filter((label) => getComputedStyle(label.firstElementChild!).opacity === '1')
           .map(rect),
         bandLabels: [...canvas.querySelectorAll('div[aria-hidden="true"]')]
           .filter((div) => bandNames.includes(div.textContent ?? ''))

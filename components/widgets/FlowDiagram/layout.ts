@@ -153,6 +153,9 @@ export async function computeLayout(flow: Flow): Promise<FlowLayout> {
           text: edge.label,
           width: labelWidth(edge, badgeCounts[edge.id] ?? 0),
           height: LABEL_HEIGHT,
+          // On the edge, not beside it, so a label cannot read as a neighbour's. ELK reads this
+          // option from each label, not from the graph.
+          layoutOptions: { 'elk.edgeLabels.inline': 'true' },
         },
       ],
     })),

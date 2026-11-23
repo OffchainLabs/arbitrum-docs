@@ -341,6 +341,32 @@ for (const [name, options] of [
   });
 }
 
+test('on every direct step, each label chip paints above the edge that runs through it', async () => {
+  await withFlow(WIDE, '', async (page) => {
+    // Hit-testing skips pointer-events: none, which React Flow sets on edges and labels.
+    await page.addStyleTag({ content: `${CANVAS} * { pointer-events: auto !important; }` });
+    for (let index = 0; index < DIRECT.steps.length; index++) {
+      if (index > 0) await page.getByRole('button', { name: 'Next →' }).click();
+      await settle(page);
+      const covered = await page.evaluate((canvasSelector) => {
+        const labels = document.querySelectorAll(
+          `${canvasSelector} .react-flow__edgelabel-renderer > *`,
+        );
+        return [...labels].flatMap((label) => {
+          const box = label.getBoundingClientRect();
+          const x = box.left + box.width / 2;
+          const y = box.top + box.height / 2;
+          if (x < 0 || y < 0 || x > innerWidth || y > innerHeight) return [];
+          const top = document.elementFromPoint(x, y);
+          // The site header, the step bar or the key can cover a chip; only an edge must not.
+          return top?.closest('.react-flow__edges') ? [label.textContent] : [];
+        });
+      }, CANVAS);
+      assert.deepEqual(covered, [], `step ${index + 1}: chips under an edge`);
+    }
+  });
+});
+
 const MOTION: BrowserContextOptions = { ...WIDE, reducedMotion: 'no-preference' };
 
 /**
