@@ -317,6 +317,30 @@ test('the detail dialog fits its graph with at most 80px of space around it at 1
   });
 });
 
+for (const [name, options] of [
+  ['768×1024', TABLET],
+  ['1024×1366', { viewport: { width: 1024, height: 1366 } }],
+  ['1280×800', WIDE],
+] as const) {
+  test(`at ${name} the detail dialog is centered over the diagram that opened it`, async () => {
+    await withFlow(options, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+      await openDetail(page);
+      await page.getByRole('dialog').locator('.react-flow__node-actor').first().waitFor();
+      const { dialog, canvas, viewport } = await page.evaluate((canvasSelector) => {
+        const rect = (element: Element) => element.getBoundingClientRect().toJSON() as DOMRect;
+        return {
+          dialog: rect(document.querySelector('[role="dialog"]')!),
+          canvas: rect(document.querySelector(canvasSelector)!),
+          viewport: document.documentElement.clientWidth,
+        };
+      }, CANVAS);
+      const offset = dialog.left + dialog.width / 2 - (canvas.left + canvas.width / 2);
+      assert.ok(Math.abs(offset) <= 2, `the dialog center is ${offset}px from the diagram center`);
+      assert.ok(dialog.left >= 0 && dialog.right <= viewport, 'the dialog leaves the viewport');
+    });
+  });
+}
+
 const MOTION: BrowserContextOptions = { ...WIDE, reducedMotion: 'no-preference' };
 
 /**

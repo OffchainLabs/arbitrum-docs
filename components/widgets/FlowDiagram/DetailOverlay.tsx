@@ -4,6 +4,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactFlowInstance } from '@xyflow/react';
 import {
   type CSSProperties,
+  type RefObject,
   useCallback,
   useEffect,
   useEffectEvent,
@@ -27,6 +28,8 @@ import { naturalCanvasSize, useStepCamera } from './useStepCamera.ts';
 import { motionDuration } from './useStepNavigation.ts';
 
 const FADE_MS = 500;
+// The least space between the panel and a viewport side; the backdrop padding.
+const PANEL_GUTTER = 24;
 
 interface DetailOverlayProps {
   flow: Flow;
@@ -36,11 +39,13 @@ interface DetailOverlayProps {
   onClose: () => void;
   // Next on the last sub-step. Runs as the fade-out starts, so the opening flow moves under it.
   onFinish: () => void;
+  // The canvas of the opening diagram. From 768px, the panel centers over it.
+  anchorRef: RefObject<HTMLElement | null>;
 }
 
-// SPIKE: a second diagram in a dialog, with its own sub-steps. Full screen below 768px; a centered
-// panel over a backdrop above.
-export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlayProps) {
+// SPIKE: a second diagram in a dialog, with its own sub-steps. Full screen below 768px; from
+// 768px, a panel over a backdrop, centered over the opening diagram.
+export function DetailOverlay({ flow, labels, onClose, onFinish, anchorRef }: DetailOverlayProps) {
   const { layout } = useFlowLayout(flow);
   const [instance, setInstance] = useState<ReactFlowInstance<
     ActorNodeType | BandNodeType,
@@ -70,21 +75,39 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
   const sizeVars: CSSProperties = size
     ? ({ '--panel-w': `${size.width}px`, '--canvas-h': `${size.height}px` } as CSSProperties)
     : {};
-  // The rendered title row height and step bar width, kept current while either resizes. Child
-  // refs are set before this one runs.
+  // The rendered title row height and step bar width, and `--shift`, which moves the panel from the
+  // viewport center to the center of the opening diagram, `PANEL_GUTTER` inside the viewport. Kept
+  // current while any of them resizes. Child refs are set before this one runs.
   const headerRef = useRef<HTMLDivElement>(null);
-  const measureRef = useCallback((content: HTMLDivElement | null) => {
-    const header = headerRef.current;
-    const bar = barRef.current;
-    if (!content || !header || !bar) return;
-    const observer = new ResizeObserver(() => {
-      content.style.setProperty('--head-h', `${header.offsetHeight}px`);
-      content.style.setProperty('--bar-w', `${bar.offsetWidth}px`);
-    });
-    observer.observe(header);
-    observer.observe(bar);
-    return () => observer.disconnect();
-  }, []);
+  const measureRef = useCallback(
+    (content: HTMLDivElement | null) => {
+      const header = headerRef.current;
+      const bar = barRef.current;
+      const anchor = anchorRef.current;
+      if (!content || !header || !bar || !anchor) return;
+      const measure = () => {
+        content.style.setProperty('--head-h', `${header.offsetHeight}px`);
+        content.style.setProperty('--bar-w', `${bar.offsetWidth}px`);
+        const width = content.offsetWidth;
+        // The fixed backdrop: its width leaves out a page scrollbar, which `innerWidth` counts.
+        const room = content.parentElement!.clientWidth;
+        const target = anchor.getBoundingClientRect();
+        const left = Math.min(
+          Math.max(target.left + target.width / 2 - width / 2, PANEL_GUTTER),
+          room - PANEL_GUTTER - width,
+        );
+        content.style.setProperty('--shift', `${left - (room - width) / 2}px`);
+      };
+      const observer = new ResizeObserver(measure);
+      for (const element of [header, bar, content, anchor]) observer.observe(element);
+      window.addEventListener('resize', measure);
+      return () => {
+        observer.disconnect();
+        window.removeEventListener('resize', measure);
+      };
+    },
+    [anchorRef],
+  );
   const goTo = (next: number) => setIndex(Math.min(Math.max(next, 0), flow.steps.length - 1));
 
   // Every close fades out first; `onClose` runs when the fade ends and unmounts this view.
@@ -129,6 +152,7 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
               'md:h-auto md:max-h-[92vh] md:rounded-lg md:border md:border-fd-border',
               // At least the step bar plus a 24px gutter on each side.
               'md:w-[min(max(var(--panel-w,900px),calc(var(--bar-w,0px)_+_48px)),900px,94vw)]',
+              'md:translate-x-[var(--shift,0px)]',
             ].join(' ')}
             ref={measureRef}
             style={sizeVars}

@@ -209,6 +209,7 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
         <DetailOverlay
           flow={openDetail.flow}
           labels={labels}
+          anchorRef={canvasRef}
           onClose={() => setOpenDetail(null)}
           onFinish={() => {
             finishedDetail.current = true;
