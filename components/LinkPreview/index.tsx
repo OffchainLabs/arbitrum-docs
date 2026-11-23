@@ -41,10 +41,13 @@ type PointerHandler = (event: PointerEvent) => void;
 export function LinkPreview({
   previewUrl,
   hash,
+  reference = 'a',
   children,
 }: {
   previewUrl: string;
   hash?: string | undefined;
+  // The element in `children` that opens the card. A diagram box is not a link: it passes its own.
+  reference?: string;
   children: ReactNode;
 }) {
   const wrapperRef = useRef<HTMLSpanElement>(null);
@@ -74,7 +77,7 @@ export function LinkPreview({
   });
 
   useEffect(() => {
-    const anchor = wrapperRef.current?.querySelector('a');
+    const anchor = wrapperRef.current?.querySelector<HTMLElement>(reference);
     if (!anchor || matchMedia('(hover: none)').matches) return;
     // A <Term> in the link keeps its own popover; a link in a definition gets no second card.
     if (anchor.querySelector('[data-hover-popover]')) return;
@@ -94,7 +97,7 @@ export function LinkPreview({
       anchor.removeEventListener('pointerenter', onPointerEnter);
       anchor.removeEventListener('pointerdown', onPointerDown);
     };
-  }, [previewUrl, refs]);
+  }, [previewUrl, reference, refs]);
 
   const visible = open && data !== null;
   useEffect(() => {

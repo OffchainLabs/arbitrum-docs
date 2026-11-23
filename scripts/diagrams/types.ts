@@ -5,6 +5,8 @@ export interface Part {
   tech?: string;
   kind: string;
   lane: string;
+  // A docs page path, such as /get-started. The widget previews it when the pointer rests on the box.
+  docs?: string;
 }
 
 export type EdgeStyle = 'solid' | 'dashed' | 'dotted';

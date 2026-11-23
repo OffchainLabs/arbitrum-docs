@@ -13,6 +13,7 @@ import type {
   Flow,
   Step,
 } from '../components/widgets/NitroTxFlow/model.ts';
+import { docsPreviewRoute } from '../lib/shared.ts';
 import { loadProject } from './diagrams/load.ts';
 import { renderSvg } from './diagrams/render-svg.ts';
 import type {
@@ -22,6 +23,7 @@ import type {
   LoadedProject,
   Part,
 } from './diagrams/types.ts';
+import { buildIndex } from './lib/doc-links.ts';
 import { isCheckMode, runScript, writeOrCheck } from './lib/generated-partial.ts';
 
 const KINDS: readonly string[] = ['process', 'contract', 'user'] satisfies ActorKind[];
@@ -61,7 +63,21 @@ function toActor(flow: DiagramFlow, part: Part): Actor {
     tech: part.tech,
     kind: part.kind as ActorKind,
     chain: part.lane as Chain,
+    ...(part.docs === undefined
+      ? {}
+      : { docs: { href: part.docs, previewUrl: `${docsPreviewRoute}${part.docs}/preview.json` } }),
   };
+}
+
+/** Every part `docs` path is the URL of a page under content/docs. */
+export function checkPartDocs(parts: Map<string, Part>, pageUrls: ReadonlySet<string>): void {
+  for (const part of parts.values()) {
+    if (part.docs !== undefined && !pageUrls.has(part.docs)) {
+      throw new Error(
+        `diagrams/parts.yaml: part "${part.id}" docs "${part.docs}" is not a docs page`,
+      );
+    }
+  }
 }
 
 function toCard(flow: DiagramFlow, card: NonNullable<DiagramFlow['card']>): CardLabels {
@@ -230,6 +246,7 @@ async function writeStaticSvgs({ config, flows }: LoadedProject, check: boolean)
 async function main(): Promise<void> {
   const check = isCheckMode();
   const project = await loadProject(DIAGRAMS_DIR);
+  checkPartDocs(project.parts, new Set(buildIndex(REPO_ROOT).byUrl.keys()));
   await writeOrCheck(OUTPUT_PATH, buildContent(project.flows), { check });
   await writeStaticSvgs(project, check);
   const wrote = path.relative(REPO_ROOT, OUTPUT_PATH);

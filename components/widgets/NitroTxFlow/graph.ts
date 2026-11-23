@@ -33,8 +33,11 @@ export function flowNodes(
     type: 'actor',
     position: layout.nodes[actor.id]!,
     // React Flow sets pointer-events: none on a node that is not selectable or draggable, so a
-    // mouse click would fall through to the pane. Only the trigger node takes clicks.
-    ...(trigger && step.detail?.actor === actor.id ? { style: { pointerEvents: 'all' } } : {}),
+    // mouse click would fall through to the pane. Only the trigger node takes clicks, and only a
+    // node with a docs page takes the hover that opens its preview.
+    ...((trigger && step.detail?.actor === actor.id) || actor.docs
+      ? { style: { pointerEvents: 'all' } }
+      : {}),
     data: {
       actor,
       active: step.actors.includes(actor.id),

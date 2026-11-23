@@ -1,5 +1,7 @@
 import { Handle, type Node, type NodeProps, Position } from '@xyflow/react';
 
+import { LinkPreview } from '@/components/LinkPreview';
+
 import { BRAND, CHAIN_LABEL, KIND_STYLE } from './brand.ts';
 import { NODE_HEIGHT, NODE_WIDTH } from './layout.ts';
 import type { Actor } from './model.ts';
@@ -29,8 +31,9 @@ const HIDDEN_HANDLE = { opacity: 0, pointerEvents: 'none' } as const;
 export function ActorNode({ data }: NodeProps<ActorNodeType>) {
   const { actor, active, muted, showChain, trigger } = data;
   const style = KIND_STYLE[actor.kind];
-  return (
+  const box = (
     <div
+      data-preview-anchor=""
       role={trigger ? 'button' : undefined}
       tabIndex={trigger ? 0 : undefined}
       aria-label={trigger?.label}
@@ -65,5 +68,12 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
       </div>
       <Handle type="source" position={Position.Bottom} style={HIDDEN_HANDLE} />
     </div>
+  );
+  // Mouse only, like a prose link preview. A click still opens the detail view on a trigger node.
+  if (!actor.docs) return box;
+  return (
+    <LinkPreview previewUrl={actor.docs.previewUrl} reference="[data-preview-anchor]">
+      {box}
+    </LinkPreview>
   );
 }

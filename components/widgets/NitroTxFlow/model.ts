@@ -8,6 +8,8 @@ export interface Actor {
   tech: string;
   kind: ActorKind;
   chain: Chain;
+  // The page a hover card previews. `previewUrl` is the page's static preview JSON.
+  docs?: { href: string; previewUrl: string };
 }
 
 export interface FlowEdge {

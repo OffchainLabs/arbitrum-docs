@@ -73,6 +73,23 @@ test('every docs href resolves to a page and, with a fragment, to an id on it', 
   }
 });
 
+test('the Sequencer part previews the Sequencer page', () => {
+  const seq = flow.actors.find((actor) => actor.id === 'seq')!;
+  assert.deepEqual(seq.docs, {
+    href: '/how-arbitrum-works/deep-dives/sequencer',
+    previewUrl: '/preview/how-arbitrum-works/deep-dives/sequencer/preview.json',
+  });
+});
+
+test('every part docs href is a docs page, and its preview URL follows from it', () => {
+  const index = buildIndex(repoRoot);
+  for (const actor of [...flow.actors, ...pgaRound.actors, ...transactionLifecycle.actors]) {
+    if (!actor.docs) continue;
+    assert.ok(index.byUrl.has(actor.docs.href), `${actor.id}: ${actor.docs.href}`);
+    assert.equal(actor.docs.previewUrl, `/preview${actor.docs.href}/preview.json`);
+  }
+});
+
 test('every var token names a vars.json key, and only step text holds them', () => {
   const vars: Record<string, unknown> = JSON.parse(
     readFileSync(path.join(repoRoot, 'content/vars.json'), 'utf8'),

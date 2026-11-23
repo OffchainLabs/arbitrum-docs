@@ -299,3 +299,37 @@ test('the last detail Next moves the parent while the dialog fades out', async (
     assert.equal(finished.late.attached, false);
   });
 });
+
+const SEQUENCER_PAGE = '/how-arbitrum-works/deep-dives/sequencer';
+const previewCard = (page: Page) => page.locator('a[target="_blank"]', { hasText: 'Preview' });
+const node = (page: Page, id: string) => page.locator(`.react-flow__node-actor[data-id="${id}"]`);
+
+test('resting the pointer on the Sequencer previews the Sequencer page', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    await node(page, 'seq').hover();
+    await previewCard(page).waitFor();
+    assert.equal(await previewCard(page).getAttribute('href'), SEQUENCER_PAGE);
+    assert.match((await previewCard(page).textContent()) ?? '', /Sequencer/);
+  });
+});
+
+test('a click on a previewed node still opens its detail dialog', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    await node(page, 'seq').hover();
+    await previewCard(page).waitFor();
+    await node(page, 'seq').click();
+    await page.getByRole('dialog').waitFor();
+  });
+});
+
+test('a node whose part has no docs shows no preview', async () => {
+  await withFlow(WIDE, `#direct-step-${LANDING_INDEX + 1}`, async (page) => {
+    const fastFeed = transactionSubmission.actors.find((actor) => actor.id === 'fastfeed')!;
+    assert.equal(fastFeed.docs, undefined);
+    // The node takes no pointer events, so hover() refuses it: move the mouse to its centre.
+    const box = (await node(page, 'fastfeed').boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForTimeout(1000);
+    assert.equal(await previewCard(page).count(), 0);
+  });
+});

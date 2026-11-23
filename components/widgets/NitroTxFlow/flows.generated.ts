@@ -226,7 +226,17 @@ export const transactionLifecycle: Flow = {
       chain: 'off-chain',
     },
     { id: 'fullnode', label: 'Full node', tech: 'Go, nitro', kind: 'process', chain: 'child' },
-    { id: 'seq', label: 'Sequencer', tech: 'Go, nitro', kind: 'process', chain: 'child' },
+    {
+      id: 'seq',
+      label: 'Sequencer',
+      tech: 'Go, nitro',
+      kind: 'process',
+      chain: 'child',
+      docs: {
+        href: '/how-arbitrum-works/deep-dives/sequencer',
+        previewUrl: '/preview/how-arbitrum-works/deep-dives/sequencer/preview.json',
+      },
+    },
     { id: 'relay', label: 'Feed relay', tech: 'Go, relay', kind: 'process', chain: 'child' },
     { id: 'poster', label: 'Batch poster', tech: 'Go, nitro', kind: 'process', chain: 'child' },
     {
@@ -537,7 +547,17 @@ export const transactionSubmission: Flow = {
     },
     { id: 'dapp', label: 'Dapp', tech: 'Parent chain account', kind: 'user', chain: 'parent' },
     { id: 'rpc', label: 'RPC node', tech: 'Go, nitro', kind: 'process', chain: 'child' },
-    { id: 'seq', label: 'Sequencer', tech: 'Go, nitro', kind: 'process', chain: 'child' },
+    {
+      id: 'seq',
+      label: 'Sequencer',
+      tech: 'Go, nitro',
+      kind: 'process',
+      chain: 'child',
+      docs: {
+        href: '/how-arbitrum-works/deep-dives/sequencer',
+        previewUrl: '/preview/how-arbitrum-works/deep-dives/sequencer/preview.json',
+      },
+    },
     { id: 'fastfeed', label: 'Fast Feed', tech: 'WebSocket', kind: 'process', chain: 'child' },
     { id: 'feed', label: 'Sequencer feed', tech: 'WebSocket', kind: 'process', chain: 'child' },
     {

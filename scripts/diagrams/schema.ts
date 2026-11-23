@@ -120,6 +120,10 @@ const partFields = z.strictObject({
   tech: text.optional(),
   kind: text,
   lane: text,
+  docs: z
+    .string()
+    .regex(/^\/[^\s#?]*$/, 'must be a root-absolute page path, such as /get-started')
+    .optional(),
 });
 
 export function parseParts(src: YamlSource, config: ProjectConfig): Map<string, Part> {
@@ -144,8 +148,13 @@ export function parseParts(src: YamlSource, config: ProjectConfig): Map<string, 
   const raw = src.parse(schema, src.value);
   const parts = new Map<string, Part>();
   for (const [id, part] of Object.entries(raw)) {
-    const { tech, ...rest } = part;
-    parts.set(id, tech === undefined ? { id, ...rest } : { id, ...rest, tech });
+    const { tech, docs, ...rest } = part;
+    parts.set(id, {
+      id,
+      ...rest,
+      ...(tech === undefined ? {} : { tech }),
+      ...(docs === undefined ? {} : { docs }),
+    });
   }
   return parts;
 }

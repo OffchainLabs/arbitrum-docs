@@ -584,6 +584,12 @@ Edit `diagrams/project.yaml`, `diagrams/parts.yaml` and `diagrams/flows/*.md`. N
 `flows.generated.ts` or a generated SVG, because the next run overwrites them. `pnpm diagrams:check`
 is a CI gate. It fails when either output differs from what the sources produce.
 
+A part in `parts.yaml` takes `label`, `kind` and `lane`, an optional `tech`, and an optional
+`docs`. `docs` is the path of a docs page, such as `/how-arbitrum-works/deep-dives/sequencer`.
+When the mouse rests on that part's box in the widget, a `LinkPreview` card previews the page.
+Touch and keyboard readers get no card. `pnpm diagrams:generate` fails when `docs` is not the URL
+of a page under `content/docs/`.
+
 ### A flow file
 
 The file name without `.md` is the flow id. The YAML header takes these keys, and an unknown key

@@ -12,6 +12,7 @@ seq:
   label: 'Sequencer'
   tech: 'Go, nitro'
   kind: process
+  docs: /how-arbitrum-works/deep-dives/sequencer
   lane: child
 relay:
   label: 'Feed relay'

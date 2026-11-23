@@ -108,3 +108,12 @@ test('rejects a duplicate lane id in project.yaml', () =>
 
 test('rejects a part listed twice in a flow', () =>
   rejects('dup-flow-part', /demo\.md:3: part "a" is listed twice/));
+
+test('reads a part docs link, and leaves it out when absent', async () => {
+  const { parts } = await loadProject(fixture('minimal'));
+  assert.equal(parts.get('a')!.docs, '/guide/alpha');
+  assert.equal('docs' in parts.get('b')!, false);
+});
+
+test('rejects a part docs link that is not a root-absolute page path', () =>
+  rejects('bad-docs', /parts\.yaml:1: .*docs.*must be a root-absolute page path/));
