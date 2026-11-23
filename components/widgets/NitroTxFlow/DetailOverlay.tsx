@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactFlowInstance } from '@xyflow/react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import type { ActorNodeType } from './ActorNode.tsx';
@@ -16,13 +16,17 @@ import { stepNumbersByEdge } from './layout.ts';
 import type { CardLabels, Flow } from './model.ts';
 import { useFlowLayout } from './useFlowLayout.ts';
 import { useStepCamera } from './useStepCamera.ts';
+import { motionDuration } from './useStepNavigation.ts';
+
+const FADE_MS = 500;
 
 interface DetailOverlayProps {
   flow: Flow;
   // The card labels of the flow that opens this one.
   labels: CardLabels;
+  // Runs after the fade-out, to unmount this view.
   onClose: () => void;
-  // Next on the last sub-step: close this view and go to the next step of the opening flow.
+  // Next on the last sub-step. Runs as the fade-out starts, so the opening flow moves under it.
   onFinish: () => void;
 }
 
@@ -55,23 +59,46 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
   );
   const goTo = (next: number) => setIndex(Math.min(Math.max(next, 0), flow.steps.length - 1));
 
+  // Every close fades out first; `onClose` runs when the fade ends and unmounts this view.
+  const [fadeMs] = useState(() => (motionDuration() ? FADE_MS : 0));
+  const [closing, setClosing] = useState(false);
+  const finish = () => {
+    onFinish();
+    setClosing(true);
+  };
+
+  // An effect event, so a parent render during the fade does not restart the timer.
+  const closed = useEffectEvent(() => onClose());
+  useEffect(() => {
+    if (!closing) return;
+    const timer = setTimeout(closed, fadeMs);
+    return () => clearTimeout(timer);
+  }, [closing, fadeMs]);
+
   useEffect(() => {
     const opener = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') setClosing(true);
     };
     window.addEventListener('keydown', onKey);
     return () => {
       window.removeEventListener('keydown', onKey);
       opener?.focus();
     };
-  }, [onClose]);
+  }, []);
 
   return createPortal(
+    // `starting:` fades in from the first frame; `inert` while closing ignores clicks and keys.
     <div
-      className="fixed inset-0 z-[1000] flex items-center justify-center md:bg-black/60 md:p-6"
-      onClick={onClose}
+      className={[
+        'fixed inset-0 z-[1000] flex items-center justify-center md:bg-black/60 md:p-6',
+        'transition-opacity ease-out starting:opacity-0',
+        closing ? 'opacity-0' : 'opacity-100',
+      ].join(' ')}
+      style={{ transitionDuration: `${fadeMs}ms` }}
+      inert={closing}
+      onClick={() => setClosing(true)}
     >
       <div
         role="dialog"
@@ -88,7 +115,7 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
           if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
           event.stopPropagation();
           if (event.key === 'ArrowLeft') goTo(index - 1);
-          else if (index === flow.steps.length - 1) onFinish();
+          else if (index === flow.steps.length - 1) finish();
           else goTo(index + 1);
         }}
       >
@@ -97,7 +124,7 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
           <button
             ref={closeRef}
             type="button"
-            onClick={onClose}
+            onClick={() => setClosing(true)}
             className="rounded-md border border-fd-border px-3 py-1 text-sm"
           >
             Close
@@ -118,7 +145,7 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
             barRef={barRef}
             onGo={goTo}
             onShowAll={showAll}
-            onFinish={onFinish}
+            onFinish={finish}
           />
         </div>
         <StepCard step={step} labels={labels} />

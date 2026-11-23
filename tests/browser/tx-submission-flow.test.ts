@@ -239,3 +239,63 @@ test('ArrowRight in the detail dialog steps the dialog, then closes it on Fast F
     assert.ok(await focusIsOnNext(page), 'focus is not on the step bar Next');
   });
 });
+
+const MOTION: BrowserContextOptions = { ...WIDE, reducedMotion: 'no-preference' };
+
+/**
+ * Clicks `button`, waits two frames, and reports the dialog layer's opacity, whether the layer is
+ * still in the page, and the hash. Then waits 900ms and reports the same again.
+ */
+function clickAndSample(page: Page, buttonName: string, inDialog: boolean) {
+  return page.evaluate(
+    async ({ buttonName, inDialog }) => {
+      const scope: ParentNode = inDialog ? document.querySelector('[role="dialog"]')! : document;
+      const button = [...scope.querySelectorAll<HTMLElement>('[role="button"], button')].find(
+        (element) =>
+          (element.getAttribute('aria-label') ?? element.textContent)?.startsWith(buttonName),
+      )!;
+      const frame = () => new Promise((resolve) => requestAnimationFrame(resolve));
+      const sample = () => {
+        const layer = document.querySelector('[role="dialog"]')?.parentElement;
+        return {
+          attached: layer !== undefined && layer !== null,
+          opacity: layer ? Number(getComputedStyle(layer).opacity) : null,
+          hash: window.location.hash,
+        };
+      };
+      button.click();
+      await frame();
+      await frame();
+      const early = sample();
+      await new Promise((resolve) => setTimeout(resolve, 900));
+      return { early, late: sample() };
+    },
+    { buttonName, inDialog },
+  );
+}
+
+test('the detail dialog fades in, and fades out on Close', async () => {
+  await withFlow(MOTION, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const opened = await clickAndSample(page, 'Look inside the ', false);
+    assert.ok(opened.early.attached);
+    assert.ok(opened.early.opacity! < 1, `opacity ${opened.early.opacity} right after opening`);
+    assert.equal(opened.late.opacity, 1);
+    const closed = await clickAndSample(page, 'Close', true);
+    assert.ok(closed.early.attached, 'the dialog left before fading out');
+    assert.ok(closed.early.opacity! < 1, `opacity ${closed.early.opacity} right after Close`);
+    assert.equal(closed.late.attached, false);
+  });
+});
+
+test('the last detail Next moves the parent while the dialog fades out', async () => {
+  await withFlow(MOTION, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const dialog = await openDetail(page);
+    const next = dialog.getByRole('button', { name: 'Next →' });
+    for (let index = 1; index < DETAIL_STEPS; index++) await next.click();
+    const finished = await clickAndSample(page, 'Next →', true);
+    assert.ok(finished.early.attached, 'the dialog left before fading out');
+    assert.ok(finished.early.opacity! < 1);
+    assert.equal(finished.early.hash, `#direct-step-${LANDING_INDEX + 1}`);
+    assert.equal(finished.late.attached, false);
+  });
+});

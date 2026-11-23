@@ -17,7 +17,13 @@ import { BRAND } from './brand.ts';
 import { FLOWS, type FlowId } from './flows.ts';
 import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
-import { type Flow, OPERATOR_CARD, type ResolvedPath, flowPaths } from './model.ts';
+import {
+  type Flow,
+  OPERATOR_CARD,
+  type ResolvedPath,
+  type StepDetail,
+  flowPaths,
+} from './model.ts';
 import type { PathCount } from './navigation.ts';
 import { useFlowLayout } from './useFlowLayout.ts';
 import { useStepCamera } from './useStepCamera.ts';
@@ -74,7 +80,8 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
   const stepCount = current.path.steps.length;
   const step = current.path.steps[index]!;
   const showAll = useStepCamera(instance, layout, step, canvasRef);
-  const [detailOpen, setDetailOpen] = useState(false);
+  // The open detail, kept apart from `step`: it stays mounted while it fades out over the next step.
+  const [openDetail, setOpenDetail] = useState<StepDetail | null>(null);
   const [detailSeen, setDetailSeen] = useState(false);
   const finishedDetail = useRef(false);
   const trigger = useMemo(
@@ -83,7 +90,7 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
       blink: !detailSeen,
       onOpen: () => {
         setDetailSeen(true);
-        setDetailOpen(true);
+        setOpenDetail(step.detail ?? null);
       },
     }),
     [flow, step, detailSeen],
@@ -99,10 +106,10 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
   // After Next closes the detail view, focus Next here. The overlay's cleanup runs first and
   // focuses the node that opened it, which is no longer a button on the next step.
   useEffect(() => {
-    if (detailOpen || !finishedDetail.current) return;
+    if (openDetail || !finishedDetail.current) return;
     finishedDetail.current = false;
     barRef.current?.querySelector<HTMLElement>('[data-step-next]')?.focus();
-  }, [detailOpen]);
+  }, [openDetail]);
 
   const nodes = useMemo(
     () => (layout ? flowNodes(flow, layout, step, current.actors, trigger) : []),
@@ -204,15 +211,14 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
       ) : (
         body
       )}
-      {detailOpen && step.detail && (
+      {openDetail && (
         <DetailOverlay
-          flow={step.detail.flow}
+          flow={openDetail.flow}
           labels={labels}
-          onClose={() => setDetailOpen(false)}
+          onClose={() => setOpenDetail(null)}
           onFinish={() => {
             finishedDetail.current = true;
-            setDetailOpen(false);
-            const next = step.detail?.next;
+            const next = openDetail.next;
             goTo(next ? current.path.steps.findIndex((other) => other.id === next) : index + 1);
           }}
         />
