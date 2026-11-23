@@ -29,8 +29,12 @@ const BINARIES: GuideLink = {
   href: '/run-a-node/nitro/docker-and-cli-binaries',
 };
 const TUNING: GuideLink = {
-  label: 'Node tuning and monitoring',
-  href: '/run-a-node/nitro/node-tuning-and-monitoring',
+  label: 'Node tuning',
+  href: '/run-a-node/nitro/node-tuning',
+};
+const MONITORING: GuideLink = {
+  label: 'Node monitoring',
+  href: '/run-a-node/nitro/node-monitoring',
 };
 const DA_TOOLS: GuideLink = {
   label: 'DA tools reference',
@@ -45,7 +49,13 @@ const DA_TOOLS: GuideLink = {
  * derivation would drop it. Keeping it here means every editorial href in the page lives in this
  * file, so a guide that moves is one edit rather than a hunt through the renderer.
  */
-export const introLinks: readonly GuideLink[] = [CONFIGURATION, BINARIES, TUNING, DA_TOOLS];
+export const introLinks: readonly GuideLink[] = [
+  CONFIGURATION,
+  BINARIES,
+  TUNING,
+  MONITORING,
+  DA_TOOLS,
+];
 
 /** Top-level namespace to the curated guide that explains it. */
 export const namespaceLinks: Readonly<Record<string, GuideLink>> = {
@@ -56,13 +66,13 @@ export const namespaceLinks: Readonly<Record<string, GuideLink>> = {
   'file-logging': TUNING,
   'http': CONFIGURATION,
   'init': BINARIES,
-  'metrics': TUNING,
-  'metrics-server': TUNING,
+  'metrics': MONITORING,
+  'metrics-server': MONITORING,
   'node': TUNING,
   'parent-chain': CONFIGURATION,
   'persistent': BINARIES,
-  'pprof': TUNING,
-  'pprof-cfg': TUNING,
+  'pprof': MONITORING,
+  'pprof-cfg': MONITORING,
   'validation': TUNING,
   'ws': CONFIGURATION,
 };

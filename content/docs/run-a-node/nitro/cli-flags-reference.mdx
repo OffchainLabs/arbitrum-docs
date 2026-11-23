@@ -18,10 +18,11 @@ This page lists every CLI flag accepted by the Nitro node binary. For explanatio
 
 - [Configuration system](/run-a-node/nitro/configuration-system)
 - [Docker and CLI binaries](/run-a-node/nitro/docker-and-cli-binaries)
-- [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+- [Node tuning](/run-a-node/nitro/node-tuning)
+- [Node monitoring](/run-a-node/nitro/node-monitoring)
 - [DA tools reference](/run-a-node/nitro/da-tools-reference)
 
-**Total flags:** 798 across 23 namespaces, read from Nitro `v3.12.2`.
+**Total flags:** 804 across 23 namespaces, read from Nitro `v3.12.4`.
 
 </Callout>
 
@@ -117,10 +118,10 @@ Related guide: [Configuration system](/run-a-node/nitro/configuration-system)
 
 ## execution
 
-Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+Related guide: [Node tuning](/run-a-node/nitro/node-tuning)
 
 <Accordions>
-<Accordion title="execution flags (164)">
+<Accordion title="execution flags (170)">
 
 | Flag                                                                                           | Type     | Default                                                                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ---------------------------------------------------------------------------------------------- | -------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -211,6 +212,9 @@ Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-mo
 | `execution.sequencer.expected-surplus-gas-price-mode`                                          | string   | `BlobPrice`                                                                                        | gas price setting to be used in calculating estimated surplus. Allowed values- CalldataPrice, BlobPrice and CalldataPrice7523                                                                                                                                                                                                                                                                                                        |
 | `execution.sequencer.expected-surplus-hard-threshold`                                          | string   | `default`                                                                                          | if expected surplus is lower than this value, new incoming transactions will be denied                                                                                                                                                                                                                                                                                                                                               |
 | `execution.sequencer.expected-surplus-soft-threshold`                                          | string   | `default`                                                                                          | if expected surplus is lower than this value, warnings are posted                                                                                                                                                                                                                                                                                                                                                                    |
+| `execution.sequencer.fifo.size-sampling-grace-blocks`                                          | uint     | `1`                                                                                                | the FIFO size sampling starts once more than this many consecutive blocks ended for data size                                                                                                                                                                                                                                                                                                                                        |
+| `execution.sequencer.fifo.size-sampling-max-exponent`                                          | uint     | `10`                                                                                               | cap on the exponent k of the FIFO size sampling, which admits a transaction with probability ((max-tx-data-size - txSize) / max-tx-data-size)^k; k grows by one for each consecutive block that ended for data size beyond size-sampling-grace-blocks; 0 disables the sampling                                                                                                                                                       |
+| `execution.sequencer.fifo.size-sampling-min-tx-size`                                           | int      | `1024`                                                                                             | transactions up to this many bytes are always admitted by the FIFO size sampling                                                                                                                                                                                                                                                                                                                                                     |
 | `execution.sequencer.filter-set-reporting-interval`                                            | duration | `1m0s`                                                                                             | interval at which the active sequencer reports its current address-filter set ids to the filtering-report service                                                                                                                                                                                                                                                                                                                    |
 | `execution.sequencer.forwarder.connection-timeout`                                             | duration | `30s`                                                                                              | total time to wait before cancelling connection                                                                                                                                                                                                                                                                                                                                                                                      |
 | `execution.sequencer.forwarder.idle-connection-timeout`                                        | duration | `1m0s`                                                                                             | time until idle connections are closed                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -227,10 +231,12 @@ Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-mo
 | `execution.sequencer.nonce-failure-cache-expiry`                                               | duration | `1s`                                                                                               | maximum amount of time to wait for a predecessor before rejecting a tx with nonce too high                                                                                                                                                                                                                                                                                                                                           |
 | `execution.sequencer.nonce-failure-cache-size`                                                 | int      | `1024`                                                                                             | number of transactions with too high of a nonce to keep in memory while waiting for their predecessor                                                                                                                                                                                                                                                                                                                                |
 | `execution.sequencer.pga.dangerous-force-fifo`                                                 | bool     | -                                                                                                  | force FIFO transaction ordering even when the chain collects tips, disabling the priority gas auction (PGA)                                                                                                                                                                                                                                                                                                                          |
+| `execution.sequencer.pga.min-priority-fee-percent-bump-to-replace`                             | uint     | `10`                                                                                               | minimum bump in percent of both the priority fee and the fee cap over a pending transaction with the same nonce for the sequencer to queue a replacement                                                                                                                                                                                                                                                                             |
 | `execution.sequencer.pga.rounds-per-block`                                                     | uint     | `1`                                                                                                | number of PGA rounds per block; the round length is max-block-speed divided by this value                                                                                                                                                                                                                                                                                                                                            |
 | `execution.sequencer.poll-interval`                                                            | duration | `10ms`                                                                                             | interval the sequencer waits before re-checking for pending work when idle                                                                                                                                                                                                                                                                                                                                                           |
 | `execution.sequencer.queue-size`                                                               | int      | `1024`                                                                                             | size of the pending tx queue                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `execution.sequencer.queue-timeout`                                                            | duration | `12s`                                                                                              | maximum amount of time transaction can wait in queue                                                                                                                                                                                                                                                                                                                                                                                 |
+| `execution.sequencer.reject-noop-replacements`                                                 | bool     | `true`                                                                                             | reject a transaction whose sender and nonce are already pending, unless PGA ordering is active and it bumps the fees of the queued one                                                                                                                                                                                                                                                                                               |
 | `execution.sequencer.sender-whitelist`                                                         | strings  | -                                                                                                  | comma separated whitelist of authorized senders (if empty, everyone is allowed)                                                                                                                                                                                                                                                                                                                                                      |
 | `execution.stylus-target.allow-fallback`                                                       | bool     | `true`                                                                                             | if true, fall back to an alternative compiler when compilation of a Stylus program fails                                                                                                                                                                                                                                                                                                                                             |
 | `execution.stylus-target.allow-offchain-activation`                                            | bool     | -                                                                                                  | if true, serve Stylus activations requested by calls not executed onchain, such as eth_call and eth_estimateGas; onchain activation is always served                                                                                                                                                                                                                                                                                 |
@@ -285,6 +291,7 @@ Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-mo
 | `execution.tx-indexer.min-batch-delay`                                                         | duration | `1s`                                                                                               | minimum delay between transaction indexing/unindexing batches; the bigger the delay, the more blocks can be included in each batch                                                                                                                                                                                                                                                                                                   |
 | `execution.tx-indexer.threads`                                                                 | int      | `GOMAXPROCS`                                                                                       | number of threads used to RLP decode blocks during indexing/unindexing of historical transactions                                                                                                                                                                                                                                                                                                                                    |
 | `execution.tx-indexer.tx-lookup-limit`                                                         | uint     | `126230400`                                                                                        | retain the ability to lookup transactions by hash for the past N blocks (0 = all blocks)                                                                                                                                                                                                                                                                                                                                             |
+| `execution.tx-pre-checker.max-pending-conditional-txs`                                         | int      | -                                                                                                  | maximum number of conditional transactions (eth_sendRawTransactionConditional) in flight on this node at once; new ones are rejected while it is reached, 0 disables the limit                                                                                                                                                                                                                                                       |
 | `execution.tx-pre-checker.required-state-age`                                                  | int      | `2`                                                                                                | how long ago should the storage conditions from eth_SendRawTransactionConditional be true, 0 = don't check old state                                                                                                                                                                                                                                                                                                                 |
 | `execution.tx-pre-checker.required-state-max-blocks`                                           | uint     | `4`                                                                                                | maximum number of blocks to look back while looking for the &lt;required-state-age&gt; seconds old state, 0 = don't limit the search                                                                                                                                                                                                                                                                                                 |
 | `execution.tx-pre-checker.strictness`                                                          | uint     | `20`                                                                                               | how strict to be when checking txs before forwarding them. 0 = accept anything, 10 = should never reject anything that'd succeed, 20 = likely won't reject anything that'd succeed, 30 = full validation which may reject txs that would succeed                                                                                                                                                                                     |
@@ -294,7 +301,7 @@ Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-mo
 
 ## file-logging
 
-Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+Related guide: [Node tuning](/run-a-node/nitro/node-tuning)
 
 <Accordions>
 <Accordion title="file-logging flags (8)">
@@ -440,7 +447,7 @@ Related guide: [Configuration system](/run-a-node/nitro/configuration-system)
 
 ## metrics
 
-Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+Related guide: [Node monitoring](/run-a-node/nitro/node-monitoring)
 
 <Accordions>
 <Accordion title="metrics flags (1)">
@@ -454,7 +461,7 @@ Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-mo
 
 ## metrics-server
 
-Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+Related guide: [Node monitoring](/run-a-node/nitro/node-monitoring)
 
 <Accordions>
 <Accordion title="metrics-server flags (3)">
@@ -470,7 +477,7 @@ Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-mo
 
 ## node
 
-Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+Related guide: [Node tuning](/run-a-node/nitro/node-tuning)
 
 <Accordions>
 <Accordion title="node flags (478)">
@@ -1009,7 +1016,7 @@ Related guide: [Docker and CLI binaries](/run-a-node/nitro/docker-and-cli-binari
 
 ## pprof
 
-Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+Related guide: [Node monitoring](/run-a-node/nitro/node-monitoring)
 
 <Accordions>
 <Accordion title="pprof flags (1)">
@@ -1023,7 +1030,7 @@ Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-mo
 
 ## pprof-cfg
 
-Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+Related guide: [Node monitoring](/run-a-node/nitro/node-monitoring)
 
 <Accordions>
 <Accordion title="pprof-cfg flags (2)">
@@ -1053,7 +1060,7 @@ Related guide: [Configuration system](/run-a-node/nitro/configuration-system)
 
 ## validation
 
-Related guide: [Node tuning and monitoring](/run-a-node/nitro/node-tuning-and-monitoring)
+Related guide: [Node tuning](/run-a-node/nitro/node-tuning)
 
 <Accordions>
 <Accordion title="validation flags (26)">

@@ -80,7 +80,14 @@ export function Conversation({ className, children }: { className?: string; chil
             'linear-gradient(to bottom, transparent, white 1rem, white calc(100% - 1rem), transparent)',
         }}
       >
-        <div ref={listRef} role="log" className="flex min-h-full flex-col gap-8 px-3 pt-2 pb-6">
+        {/* `ph-no-capture` keeps PostHog autocapture off every question and answer, so a click on
+          a link in one cannot send its text. Only lib/ai/events.ts, which never sends message
+          text, reports from the chat. */}
+        <div
+          ref={listRef}
+          role="log"
+          className="ph-no-capture flex min-h-full flex-col gap-8 px-3 pt-2 pb-6"
+        >
           <ConversationContext value={context}>{children}</ConversationContext>
         </div>
       </div>

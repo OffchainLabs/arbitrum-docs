@@ -76,7 +76,10 @@ interface CalloutStyle {
 }
 
 const green = { light: '#1a7f37', dark: '#3fb950' };
-const yellow = { light: '#9a6700', dark: '#d29922' };
+const yellow = {
+  light: '#d29922',
+  dark: '#d29922',
+}; /* Alternatively both light & dark could be #fb923c */
 
 /** Keyed by every type Fumadocs accepts, so pages written for Fumadocs' Callout keep working. */
 const calloutStyles: Record<string, CalloutStyle> = {
@@ -109,7 +112,7 @@ export function Callout({
         <span className="inline-flex shrink-0 items-center">
           <Icon />
         </span>
-        <span className="text-[17px] leading-[1.3] font-semibold text-[#1f2328] dark:text-[#b5c2d3]">
+        <span className="font-mono text-[0.8125rem]/[1.3] tracking-[0.06em] uppercase text-[#1f2328] dark:text-[#b5c2d3]">
           {title || label}
         </span>
       </div>

@@ -32,7 +32,7 @@ If you send ordinary transactions through a wallet or an app, the Fast Feed does
 
 ## What the Fast Feed publishes
 
-Each message is a `FeedMessage` envelope that carries one transaction plus the metadata you need to place it in time and in order. It holds a timestamp, the PGA round, a tentative block number and position, the signed transaction and its hash, and a partial receipt. The [message reference](/how-arbitrum-works/priority-gas-auction/consume-fast-feed#what-the-fast-feed-publishes) lists every field.
+The Fast Feed sends two kinds of message. A transaction message carries one transaction plus the metadata you need to place it in time and in order. It holds a timestamp, the PGA round, a tentative block number and position, the signed transaction and its hash, and a partial receipt. A PGA round end message tells you that a PGA round has ended. The [message reference](/how-arbitrum-works/priority-gas-auction/consume-fast-feed#what-the-fast-feed-publishes) lists every field.
 
 ## Limits to design for
 
