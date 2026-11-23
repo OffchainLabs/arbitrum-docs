@@ -29,7 +29,7 @@ The endpoint hashes the key with Keccak-256, compares it against the active tick
 - Send only ping and pong frames.
 - Read as fast as the feed arrives. The endpoint drops a client that lags behind, so parse and process off the read loop.
 
-Every frame is a binary WebSocket frame that carries one JSON object with one transaction. The [what the Fast Feed publishes](#what-the-fast-feed-publishes) section lists every field.
+Every frame is a binary WebSocket frame that carries one JSON object. Read `version` first. A version 1 message is always a transaction. In version 2, `kind` tells you what the message holds: one transaction, or the end of a PGA round. The [what the Fast Feed publishes](#what-the-fast-feed-publishes) section lists every field.
 
 <Tabs groupId="ws-client" items={["Command line", "Node.js", "Python"]}>
 <Tab value="Command line">
@@ -56,7 +56,21 @@ ws.on('unexpected-response', (req, res) => {
 
 ws.on('message', (data) => {
   const msg = JSON.parse(data.toString());
-  // msg.pga_round, msg.transaction.tx_hash, msg.transaction.receipt, ...
+  let kind;
+  if (msg.version === 1) kind = 'Transaction';
+  else if (msg.version === 2) kind = msg.kind;
+  else return; // Skip versions that this client does not know.
+  switch (kind) {
+    case 'Transaction':
+      // msg.pga_round, msg.transaction.tx_hash, msg.transaction.receipt, ...
+      break;
+    case 'PGARoundEnd':
+      // msg.pga_round, msg.block_number
+      break;
+    default:
+      // Skip kinds that this client does not know.
+      break;
+  }
 });
 
 ws.on('close', (code, reason) => {
@@ -81,7 +95,19 @@ async def main():
         async with websockets.connect(os.environ["FEED_URL"], additional_headers=headers) as ws:
             async for frame in ws:
                 msg = json.loads(frame)
-                # msg["pga_round"], msg["transaction"]["tx_hash"], msg["transaction"]["receipt"], ...
+                if msg["version"] == 1:
+                    kind = "Transaction"
+                elif msg["version"] == 2:
+                    kind = msg.get("kind")
+                else:
+                    continue  # Skip versions that this client does not know.
+                if kind == "Transaction":
+                    # msg["pga_round"], msg["transaction"]["tx_hash"], msg["transaction"]["receipt"], ...
+                    pass
+                elif kind == "PGARoundEnd":
+                    # msg["pga_round"], msg["block_number"]
+                    pass
+                # Skip kinds that this client does not know.
     except websockets.InvalidStatus as e:
         # 401: unknown key or no active ticket. 429: every ticket already has a connection.
         print(f"Rejected: HTTP {e.response.status_code}")
@@ -99,16 +125,24 @@ This example needs `websockets` 14 or later. Older versions use `extra_headers=`
 
 ## What the Fast Feed publishes
 
-Each message is a `FeedMessage` envelope that carries one transaction plus the metadata that you need to place it in time and in order. The Sequencer sends each message as a JSON object inside a binary WebSocket frame, so byte fields arrive as hex-encoded strings.
+The Sequencer sends each message as a JSON object inside a binary WebSocket frame, so byte fields arrive as hex-encoded strings. Every message starts with the same envelope fields. The `version` field tells you how to read the rest. In version 2, the `kind` field tells you which fields follow.
 
-| Field          | Type             | Description                                                                |
-| -------------- | ---------------- | -------------------------------------------------------------------------- |
-| `version`      | number           | Protocol version, for forward compatibility (currently `1`)                |
-| `timestamp_ms` | number           | Unix time in milliseconds when the Sequencer created the message           |
-| `pga_round`    | number, optional | The PGA round this transaction belongs to, within the block, starting at 1 |
-| `transaction`  | object           | The transaction data and its partial receipt                               |
+| Field          | Type             | Description                                                                                                |
+| -------------- | ---------------- | ---------------------------------------------------------------------------------------------------------- |
+| `version`      | number           | Message format version: `1` or `2`                                                                         |
+| `kind`         | string           | Version 2 only. `Transaction` or `PGARoundEnd`. Absent in version 1, where every message is a transaction. |
+| `timestamp_ms` | number           | Unix time in milliseconds when the Sequencer created the message                                           |
+| `pga_round`    | number, optional | The PGA round of the message, within the block, starting at 1                                              |
 
-The `transaction` object carries the transaction itself:
+Skip every message whose `kind` your client does not know. The [reference client](https://github.com/OffchainLabs/nitro/tree/v3.12.4/cmd/transaction-feed-client) in the Nitro repository does the same.
+
+<Callout type="info" title="A PGA round is not a ticket round">
+  A PGA round is an ordering window that lasts a fraction of a block. The `pga_round` field and the `PGARoundEnd` message refer to this round. A ticket round is the 24-hour period for which you buy Fast Feed tickets. Do not mix up the two.
+</Callout>
+
+### Transaction messages
+
+A message with `kind` set to `Transaction` carries one transaction in a `transaction` object, plus the envelope fields. The `transaction` object carries the transaction itself:
 
 | Field          | Type   | Description                                        |
 | -------------- | ------ | -------------------------------------------------- |
@@ -134,6 +168,41 @@ Each entry in `logs` carries three fields:
 - `address`: the hex-encoded address of the contract that emitted the event
 - `topics`: the hex-encoded topics of the event, in order
 - `data`: the hex-encoded event data
+
+### PGA round end messages
+
+A message with `kind` set to `PGARoundEnd` tells you that round `pga_round` of block `block_number` has ended. No more transaction messages for this round will follow. The Sequencer can drop messages under load, so a `PGARoundEnd` message does not prove that you received every transaction of the round.
+
+The feed also sends this message for a round that has no transactions, and for a round that ends early because the block is full. FIFO ordering and delayed-message blocks send no `PGARoundEnd` message.
+
+`PGARoundEnd` exists only in version 2, so make your client work without it. Under version 1, a round has ended when the next transaction has a different `pga_round` or `transaction.block_number`.
+
+A `PGARoundEnd` message carries no `transaction` object. It adds one field to the envelope:
+
+| Field          | Type   | Description                         |
+| -------------- | ------ | ----------------------------------- |
+| `block_number` | number | The block that the round belongs to |
+
+```json
+{
+  "version": 2,
+  "kind": "PGARoundEnd",
+  "timestamp_ms": 1759795200012,
+  "pga_round": 3,
+  "block_number": 1234
+}
+```
+
+### Support both versions
+
+Version 1 messages have no `kind` field, and each one carries a transaction. Version 2 adds the `kind` field and the `PGARoundEnd` message, which has no `transaction` object. The fields of a transaction message are the same in both versions.
+
+Check `version` before you read any other field:
+
+1. If `version` is `1`, treat the message as a `Transaction` message.
+2. If `version` is `2`, read `kind`.
+3. Skip messages with a `kind` or a `version` that your client does not know.
+4. Make your client work when no `PGARoundEnd` message arrives.
 
 ## Reconnect after a drop
 
