@@ -344,8 +344,9 @@ for (const [name, options] of [
 const MOTION: BrowserContextOptions = { ...WIDE, reducedMotion: 'no-preference' };
 
 /**
- * Clicks `button`, waits two frames, and reports the dialog layer's opacity, whether the layer is
- * still in the page, and the hash. Then waits 900ms and reports the same again.
+ * Clicks `button`, waits 2 to 10 frames for the dialog layer's opacity to leave 1, and reports
+ * that opacity, whether the layer is still in the page, and the hash. Then waits 1400ms and
+ * reports the same again.
  */
 function clickAndSample(page: Page, buttonName: string, inDialog: boolean) {
   return page.evaluate(
@@ -365,10 +366,16 @@ function clickAndSample(page: Page, buttonName: string, inDialog: boolean) {
         };
       };
       button.click();
+      // Two frames let the click's state reach the page. A fade can start a frame or two later;
+      // 10 frames in all is a sixth of the fade.
       await frame();
       await frame();
-      const early = sample();
-      await new Promise((resolve) => setTimeout(resolve, 900));
+      let early = sample();
+      for (let count = 2; count < 10 && !(early.attached && early.opacity! < 1); count++) {
+        await frame();
+        early = sample();
+      }
+      await new Promise((resolve) => setTimeout(resolve, 1400));
       return { early, late: sample() };
     },
     { buttonName, inDialog },

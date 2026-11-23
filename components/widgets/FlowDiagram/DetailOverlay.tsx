@@ -27,7 +27,7 @@ import { useFlowLayout } from './useFlowLayout.ts';
 import { naturalCanvasSize, useStepCamera } from './useStepCamera.ts';
 import { motionDuration } from './useStepNavigation.ts';
 
-const FADE_MS = 500;
+const FADE_MS = 1000;
 // The least space between the panel and a viewport side; the backdrop padding.
 const PANEL_GUTTER = 24;
 
