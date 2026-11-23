@@ -16,8 +16,7 @@ export function flowNodes(
   pathActors: Set<string>,
   trigger?: NodeTrigger,
 ): (ActorNodeType | BandNodeType)[] {
-  const bandList = flow.showChains === false ? [] : layout.bands;
-  const bands: BandNodeType[] = bandList.map((band, i) => ({
+  const bands: BandNodeType[] = layout.bands.map((band, i) => ({
     id: `band-${band.chain}-${i}`,
     type: 'band',
     position: { x: band.box.x, y: band.box.y },

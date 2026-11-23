@@ -2,7 +2,15 @@
 
 import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactFlowInstance } from '@xyflow/react';
-import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
+import {
+  type CSSProperties,
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import type { ActorNodeType } from './ActorNode.tsx';
 import type { BandNodeType } from './BandNode.tsx';
@@ -15,7 +23,7 @@ import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
 import type { CardLabels, Flow } from './model.ts';
 import { useFlowLayout } from './useFlowLayout.ts';
-import { useStepCamera } from './useStepCamera.ts';
+import { naturalCanvasSize, useStepCamera } from './useStepCamera.ts';
 import { motionDuration } from './useStepNavigation.ts';
 
 const FADE_MS = 500;
@@ -57,6 +65,26 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
     () => (layout ? flowEdges(flow, layout, step, stepNumbers, edgeIds) : []),
     [flow, layout, step, stepNumbers, edgeIds],
   );
+  // The panel and canvas shrink to the graph at zoom 1; the classes below cap them.
+  const size = layout ? naturalCanvasSize(layout) : null;
+  const sizeVars: CSSProperties = size
+    ? ({ '--panel-w': `${size.width}px`, '--canvas-h': `${size.height}px` } as CSSProperties)
+    : {};
+  // The rendered title row height and step bar width, kept current while either resizes. Child
+  // refs are set before this one runs.
+  const headerRef = useRef<HTMLDivElement>(null);
+  const measureRef = useCallback((content: HTMLDivElement | null) => {
+    const header = headerRef.current;
+    const bar = barRef.current;
+    if (!content || !header || !bar) return;
+    const observer = new ResizeObserver(() => {
+      content.style.setProperty('--head-h', `${header.offsetHeight}px`);
+      content.style.setProperty('--bar-w', `${bar.offsetWidth}px`);
+    });
+    observer.observe(header);
+    observer.observe(bar);
+    return () => observer.disconnect();
+  }, []);
   const goTo = (next: number) => setIndex(Math.min(Math.max(next, 0), flow.steps.length - 1));
 
   // Every close fades out first; `onClose` runs when the fade ends and unmounts this view.
@@ -98,8 +126,12 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
             aria-describedby={undefined}
             className={[
               'flex h-full w-full flex-col overflow-y-auto bg-fd-background',
-              'md:h-auto md:max-h-[92vh] md:w-[min(900px,94vw)] md:rounded-lg md:border md:border-fd-border',
+              'md:h-auto md:max-h-[92vh] md:rounded-lg md:border md:border-fd-border',
+              // At least the step bar plus a 24px gutter on each side.
+              'md:w-[min(max(var(--panel-w,900px),calc(var(--bar-w,0px)_+_48px)),900px,94vw)]',
             ].join(' ')}
+            ref={measureRef}
+            style={sizeVars}
             onOpenAutoFocus={(event) => {
               event.preventDefault();
               closeRef.current?.focus();
@@ -116,7 +148,10 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
               else goTo(index + 1);
             }}
           >
-            <div className="flex items-center justify-between border-b border-fd-border px-4 py-2">
+            <div
+              ref={headerRef}
+              className="flex items-center justify-between border-b border-fd-border px-4 py-2"
+            >
               <Dialog.Title className="text-base font-semibold">{flow.title}</Dialog.Title>
               <button
                 ref={closeRef}
@@ -129,7 +164,12 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
             </div>
             <div
               ref={canvasRef}
-              className="relative flex h-[600px] w-full shrink-0 flex-col md:h-[720px]"
+              className={[
+                'relative flex w-full shrink-0 flex-col',
+                'h-[min(var(--canvas-h,600px),600px)]',
+                // 92vh less the title row, so the sticky step bar never covers the canvas.
+                'md:h-[min(var(--canvas-h,720px),720px,calc(92vh_-_var(--head-h,3rem)))]',
+              ].join(' ')}
               style={{ background: BRAND.gradient }}
             >
               {layout && (

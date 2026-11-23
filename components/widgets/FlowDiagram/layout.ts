@@ -177,7 +177,8 @@ export async function computeLayout(flow: Flow): Promise<FlowLayout> {
   return {
     nodes,
     edges,
-    bands: computeBands(flow, nodes, width),
+    // A flow that hides its chains draws no bands, so the camera must not frame them.
+    bands: flow.showChains === false ? [] : computeBands(flow, nodes, width),
     width,
     height: graph.height ?? 0,
   };

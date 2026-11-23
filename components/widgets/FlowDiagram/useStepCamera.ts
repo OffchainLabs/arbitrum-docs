@@ -12,20 +12,21 @@ const CAMERA_TOP = 40;
 const CAMERA_BOTTOM = 56;
 
 /**
- * Frames `boxes` at zoom <= 1 inside the canvas, between the top room for the key and band names
+ * Frames `boxes` at zoom <= 1 inside the canvas, between `top` (room for the key and band names)
  * and the bottom room for the step bar.
  */
 function frame<N extends Node, E extends Edge>(
   instance: ReactFlowInstance<N, E>,
   canvas: HTMLElement,
   boxes: Box[],
+  top: number,
 ) {
   const minX = Math.min(...boxes.map((box) => box.x));
   const minY = Math.min(...boxes.map((box) => box.y));
   const maxX = Math.max(...boxes.map((box) => box.x + box.width));
   const maxY = Math.max(...boxes.map((box) => box.y + box.height));
   const width = canvas.clientWidth;
-  const frameHeight = canvas.clientHeight - CAMERA_TOP - CAMERA_BOTTOM;
+  const frameHeight = canvas.clientHeight - top - CAMERA_BOTTOM;
   const zoom = Math.min(
     1,
     (width - 2 * CAMERA_MARGIN) / (maxX - minX),
@@ -34,7 +35,7 @@ function frame<N extends Node, E extends Edge>(
   void instance.setViewport(
     {
       x: width / 2 - ((minX + maxX) / 2) * zoom,
-      y: CAMERA_TOP + frameHeight / 2 - ((minY + maxY) / 2) * zoom,
+      y: top + frameHeight / 2 - ((minY + maxY) / 2) * zoom,
       zoom,
     },
     { duration: motionDuration() },
@@ -54,18 +55,33 @@ function allBoxes(layout: FlowLayout): Box[] {
   ];
 }
 
+/** The dialog canvas size that frames the whole graph at zoom 1. A dialog has no top room. */
+export function naturalCanvasSize(layout: FlowLayout) {
+  const boxes = allBoxes(layout);
+  const width =
+    Math.max(...boxes.map((box) => box.x + box.width)) - Math.min(...boxes.map((box) => box.x));
+  const height =
+    Math.max(...boxes.map((box) => box.y + box.height)) - Math.min(...boxes.map((box) => box.y));
+  return {
+    width: Math.ceil(width + 2 * CAMERA_MARGIN),
+    height: Math.ceil(height + 2 * CAMERA_MARGIN + CAMERA_BOTTOM),
+  };
+}
+
 /**
  * Frames the active nodes and their edge labels on each step change and each canvas resize
  * (crossing 768px, or rotating a phone). Returns `showAll`, which frames the whole graph the same
- * way.
+ * way. `inDialog` frames the whole graph on every step, with no top room: a dialog has no key or
+ * band names.
  */
 export function useStepCamera<N extends Node, E extends Edge>(
   instance: ReactFlowInstance<N, E> | null,
   layout: FlowLayout | null,
   step: Step,
   canvasRef: RefObject<HTMLDivElement | null>,
-  frameAll = false,
+  inDialog = false,
 ) {
+  const top = inDialog ? 0 : CAMERA_TOP;
   const [canvasSize, setCanvasSize] = useState('');
 
   useEffect(() => {
@@ -81,12 +97,12 @@ export function useStepCamera<N extends Node, E extends Edge>(
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!instance || !layout || !canvas) return;
-    frame(instance, canvas, frameAll ? allBoxes(layout) : activeBoxes(layout, step));
-  }, [instance, layout, step, canvasRef, canvasSize, frameAll]);
+    frame(instance, canvas, inDialog ? allBoxes(layout) : activeBoxes(layout, step), top);
+  }, [instance, layout, step, canvasRef, canvasSize, inDialog, top]);
 
   return () => {
     const canvas = canvasRef.current;
     if (!instance || !layout || !canvas) return;
-    frame(instance, canvas, allBoxes(layout));
+    frame(instance, canvas, allBoxes(layout), top);
   };
 }

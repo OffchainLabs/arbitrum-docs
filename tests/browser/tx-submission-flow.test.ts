@@ -285,6 +285,38 @@ test('a click on the backdrop closes the detail dialog', async () => {
   });
 });
 
+test('the detail dialog fits its graph with at most 80px of space around it at 1280×800', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const dialog = await openDetail(page);
+    await dialog.locator('.react-flow__node-actor').first().waitFor();
+    const gaps = await page.waitForFunction(() => {
+      const root = document.querySelector('[role="dialog"]')!;
+      const canvas = root.querySelector('.react-flow')!.parentElement!.parentElement!;
+      const bar = canvas.querySelector('nav')!.getBoundingClientRect();
+      const parts = [
+        ...root.querySelectorAll('.react-flow__node-actor, .react-flow__edgelabel-renderer > *'),
+      ].map((part) => part.getBoundingClientRect());
+      if (parts.length === 0) return null;
+      const box = canvas.getBoundingClientRect();
+      return {
+        top: Math.min(...parts.map((part) => part.top)) - box.top,
+        bottom: bar.top - Math.max(...parts.map((part) => part.bottom)),
+        left: Math.min(...parts.map((part) => part.left)) - box.left,
+        right: box.right - Math.max(...parts.map((part) => part.right)),
+        barWidth: bar.width,
+        canvasWidth: box.width,
+      };
+    });
+    const { top, bottom, left, right, barWidth, canvasWidth } = (await gaps.jsonValue())!;
+    assert.ok(top <= 80, `${top}px above the graph`);
+    assert.ok(bottom <= 80, `${bottom}px between the graph and the step bar`);
+    // A graph narrower than the step bar keeps the canvas as wide as the bar plus its margins.
+    if (canvasWidth > barWidth + 48) {
+      assert.ok(left <= 80 && right <= 80, `${left}px left and ${right}px right of the graph`);
+    }
+  });
+});
+
 const MOTION: BrowserContextOptions = { ...WIDE, reducedMotion: 'no-preference' };
 
 /**
