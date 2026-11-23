@@ -1,8 +1,8 @@
 'use client';
 
+import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactFlowInstance } from '@xyflow/react';
 import { useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 import type { ActorNodeType } from './ActorNode.tsx';
 import type { BandNodeType } from './BandNode.tsx';
@@ -75,82 +75,80 @@ export function DetailOverlay({ flow, labels, onClose, onFinish }: DetailOverlay
     return () => clearTimeout(timer);
   }, [closing, fadeMs]);
 
-  useEffect(() => {
-    const opener = document.activeElement as HTMLElement | null;
-    closeRef.current?.focus();
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setClosing(true);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      opener?.focus();
-    };
-  }, []);
+  // Read during the first render: Radix moves focus into the dialog before any effect here runs.
+  const [opener] = useState(() => document.activeElement as HTMLElement | null);
+  useEffect(() => () => opener?.focus(), [opener]);
 
-  return createPortal(
-    // `starting:` fades in from the first frame; `inert` while closing ignores clicks and keys.
-    <div
-      className={[
-        'fixed inset-0 z-[1000] flex items-center justify-center md:bg-black/60 md:p-6',
-        'transition-opacity ease-out starting:opacity-0',
-        closing ? 'opacity-0' : 'opacity-100',
-      ].join(' ')}
-      style={{ transitionDuration: `${fadeMs}ms` }}
-      inert={closing}
-      onClick={() => setClosing(true)}
-    >
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={flow.title}
-        className={[
-          'flex h-full w-full flex-col overflow-y-auto bg-fd-background',
-          'md:h-auto md:max-h-[92vh] md:w-[min(900px,94vw)] md:rounded-lg md:border md:border-fd-border',
-        ].join(' ')}
-        onClick={(event) => event.stopPropagation()}
-        // React events bubble through the portal to the opening widget, which would step too.
-        // Stop only the arrows: Escape reaches the window listener above.
-        onKeyDown={(event) => {
-          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-          event.stopPropagation();
-          if (event.key === 'ArrowLeft') goTo(index - 1);
-          else if (index === flow.steps.length - 1) finish();
-          else goTo(index + 1);
-        }}
-      >
-        <div className="flex items-center justify-between border-b border-fd-border px-4 py-2">
-          <h2 className="text-base font-semibold">{flow.title}</h2>
-          <button
-            ref={closeRef}
-            type="button"
-            onClick={() => setClosing(true)}
-            className="rounded-md border border-fd-border px-3 py-1 text-sm"
-          >
-            Close
-          </button>
-        </div>
-        <div
-          ref={canvasRef}
-          className="relative flex h-[600px] w-full shrink-0 flex-col md:h-[720px]"
-          style={{ background: BRAND.gradient }}
+  // Radix traps Tab, hides the rest of the page from assistive technology, and reports Escape and
+  // a press on the backdrop as a close. The dialog stays open in Radix until the fade-out ends.
+  return (
+    <Dialog.Root open onOpenChange={(open) => !open && setClosing(true)}>
+      <Dialog.Portal>
+        {/* `starting:` fades in from the first frame; `inert` while closing ignores clicks and keys. */}
+        <Dialog.Overlay
+          className={[
+            'fixed inset-0 z-[1000] flex items-center justify-center md:bg-black/60 md:p-6',
+            'transition-opacity ease-out starting:opacity-0',
+            closing ? 'opacity-0' : 'opacity-100',
+          ].join(' ')}
+          style={{ transitionDuration: `${fadeMs}ms` }}
+          inert={closing}
         >
-          {layout && (
-            <FlowCanvas nodes={nodes} edges={edges} onInit={setInstance} onMove={() => {}} />
-          )}
-          <StepBar
-            index={index}
-            count={flow.steps.length}
-            started
-            barRef={barRef}
-            onGo={goTo}
-            onShowAll={showAll}
-            onFinish={finish}
-          />
-        </div>
-        <StepCard step={step} labels={labels} />
-      </div>
-    </div>,
-    document.body,
+          <Dialog.Content
+            aria-describedby={undefined}
+            className={[
+              'flex h-full w-full flex-col overflow-y-auto bg-fd-background',
+              'md:h-auto md:max-h-[92vh] md:w-[min(900px,94vw)] md:rounded-lg md:border md:border-fd-border',
+            ].join(' ')}
+            onOpenAutoFocus={(event) => {
+              event.preventDefault();
+              closeRef.current?.focus();
+            }}
+            // Without a Radix trigger, its own close focus lands on the body; the effect above
+            // returns focus to the opener instead.
+            onCloseAutoFocus={(event) => event.preventDefault()}
+            // React events bubble through the portal to the opening widget, which would step too.
+            onKeyDown={(event) => {
+              if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+              event.stopPropagation();
+              if (event.key === 'ArrowLeft') goTo(index - 1);
+              else if (index === flow.steps.length - 1) finish();
+              else goTo(index + 1);
+            }}
+          >
+            <div className="flex items-center justify-between border-b border-fd-border px-4 py-2">
+              <Dialog.Title className="text-base font-semibold">{flow.title}</Dialog.Title>
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={() => setClosing(true)}
+                className="rounded-md border border-fd-border px-3 py-1 text-sm"
+              >
+                Close
+              </button>
+            </div>
+            <div
+              ref={canvasRef}
+              className="relative flex h-[600px] w-full shrink-0 flex-col md:h-[720px]"
+              style={{ background: BRAND.gradient }}
+            >
+              {layout && (
+                <FlowCanvas nodes={nodes} edges={edges} onInit={setInstance} onMove={() => {}} />
+              )}
+              <StepBar
+                index={index}
+                count={flow.steps.length}
+                started
+                barRef={barRef}
+                onGo={goTo}
+                onShowAll={showAll}
+                onFinish={finish}
+              />
+            </div>
+            <StepCard step={step} labels={labels} />
+          </Dialog.Content>
+        </Dialog.Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

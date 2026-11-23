@@ -240,6 +240,51 @@ test('ArrowRight in the detail dialog steps the dialog, then closes it on Fast F
   });
 });
 
+/** True when keyboard focus is inside the detail dialog. */
+const focusInDialog = (page: Page) =>
+  page.evaluate(
+    () => !!document.querySelector('[role="dialog"]')?.contains(document.activeElement),
+  );
+
+test('Tab and Shift+Tab keep focus inside the detail dialog', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    await openDetail(page);
+    for (const key of ['Tab', 'Shift+Tab']) {
+      for (let press = 0; press < 12; press++) {
+        await page.keyboard.press(key);
+        assert.ok(await focusInDialog(page), `focus left the dialog after ${press + 1} ${key}`);
+      }
+    }
+  });
+});
+
+test('the page behind the detail dialog is hidden from assistive technology', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const dialog = await openDetail(page);
+    const nextButtons = page.getByRole('button', { name: 'Next →' });
+    assert.equal(await nextButtons.count(), 1);
+    assert.equal(await dialog.getByRole('button', { name: 'Next →' }).count(), 1);
+  });
+});
+
+test('Escape closes the detail dialog and returns focus to its opener', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const dialog = await openDetail(page);
+    await page.keyboard.press('Escape');
+    await dialog.waitFor({ state: 'detached' });
+    const opener = await page.evaluate(() => document.activeElement?.getAttribute('aria-label'));
+    assert.match(opener ?? '', /^Look inside the /);
+  });
+});
+
+test('a click on the backdrop closes the detail dialog', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const dialog = await openDetail(page);
+    await page.mouse.click(5, 5);
+    await dialog.waitFor({ state: 'detached' });
+  });
+});
+
 const MOTION: BrowserContextOptions = { ...WIDE, reducedMotion: 'no-preference' };
 
 /**
