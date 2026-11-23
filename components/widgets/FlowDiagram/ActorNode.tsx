@@ -66,7 +66,7 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
       <Handle type="target" position={Position.Top} style={HIDDEN_HANDLE} />
       <div style={{ color: style.title, fontSize: 15, fontWeight: 600 }}>{actor.label}</div>
       <div style={{ color: style.sub, fontSize: 12 }}>
-        {showChain && lane !== undefined ? `${actor.tech} · ${lane}` : actor.tech}
+        {[actor.tech, showChain ? lane : undefined].filter(Boolean).join(' · ')}
       </div>
       <Handle type="source" position={Position.Bottom} style={HIDDEN_HANDLE} />
     </div>

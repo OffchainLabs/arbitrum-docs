@@ -1,7 +1,7 @@
 export interface Actor {
   id: string;
   label: string;
-  tech: string;
+  tech?: string;
   // A kind id and a lane id of `PROJECT`.
   kind: string;
   chain: string;

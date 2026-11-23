@@ -51,9 +51,6 @@ function toCodeRef(
 }
 
 function toActor(flow: DiagramFlow, part: Part, config: ProjectConfig): Actor {
-  if (part.tech === undefined) {
-    throw new Error(`${flow.file}: part "${part.id}" needs a tech for the widget`);
-  }
   if (config.kinds[part.kind]?.widget === undefined) {
     throw new Error(
       `${flow.file}: part "${part.id}" has kind "${part.kind}", which has no widget colors in ` +
@@ -69,7 +66,7 @@ function toActor(flow: DiagramFlow, part: Part, config: ProjectConfig): Actor {
   return {
     id: part.id,
     label: part.label,
-    tech: part.tech,
+    ...(part.tech === undefined ? {} : { tech: part.tech }),
     kind: part.kind,
     chain: part.lane,
     ...(part.docs === undefined

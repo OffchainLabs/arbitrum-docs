@@ -85,6 +85,12 @@ test('accepts a flow whose ids project.yaml declares', () => {
   assert.deepEqual(flow.steps[0]!.code, { repo: 'app', path: 'x.go', line: 3 });
 });
 
+test('accepts a part without a tech and emits no tech for it', () => {
+  const flow = widgetFlow();
+  flow.parts = [{ id: 'a', label: 'A', kind: 'box', lane: 'main' }];
+  assert.equal('tech' in toWidget(flow).actors[0]!, false);
+});
+
 test('rejects a finality that project.yaml does not declare', () =>
   assert.throws(
     () => toWidget(widgetFlow({ finality: 'nope' })),

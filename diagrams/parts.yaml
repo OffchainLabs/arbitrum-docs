@@ -5,33 +5,31 @@ wallet:
   lane: off-chain
 fullnode:
   label: 'Full node'
-  tech: 'Go, nitro'
+  tech: 'nitro'
   kind: process
   lane: child
 seq:
   label: 'Sequencer'
-  tech: 'Go, nitro'
+  tech: 'nitro'
   kind: process
   docs: /how-arbitrum-works/deep-dives/sequencer
   lane: child
 relay:
   label: 'Feed relay'
-  tech: 'Go, relay'
+  tech: 'relay'
   kind: process
   lane: child
 poster:
   label: 'Batch poster'
-  tech: 'Go, nitro'
+  tech: 'nitro'
   kind: process
   lane: child
 seqinbox:
   label: 'SequencerInbox'
-  tech: 'Solidity'
   kind: contract
   lane: parent
 bridge:
   label: 'Bridge'
-  tech: 'Solidity'
   kind: contract
   lane: parent
 dapp:
@@ -41,7 +39,7 @@ dapp:
   lane: parent
 rpc:
   label: 'RPC node'
-  tech: 'Go, nitro'
+  tech: 'nitro'
   kind: process
   lane: child
 fastfeed:
@@ -61,17 +59,15 @@ retryable:
   lane: child
 validator:
   label: 'Validator'
-  tech: 'Go, nitro'
+  tech: 'nitro'
   kind: process
   lane: child
 inbox:
   label: 'Inbox'
-  tech: 'Solidity'
   kind: contract
   lane: parent
 rollup:
   label: 'Rollup'
-  tech: 'Solidity'
   kind: contract
   lane: parent
 prechecker:
