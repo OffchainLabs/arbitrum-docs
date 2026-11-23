@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
-import { FLOWS } from '../../components/widgets/NitroTxFlow/flows.ts';
-import type { Flow } from '../../components/widgets/NitroTxFlow/model.ts';
-import { fillVars } from '../../components/widgets/NitroTxFlow/text.ts';
+import { FLOWS } from '../../components/widgets/FlowDiagram/flows.ts';
+import type { Flow } from '../../components/widgets/FlowDiagram/model.ts';
+import { fillVars } from '../../components/widgets/FlowDiagram/text.ts';
 
 test('fillVars replaces tokens with vars values', () => {
   assert.equal(

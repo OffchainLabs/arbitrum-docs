@@ -84,7 +84,7 @@ jobs:
             - [ ] Update the Nitro support policy page
               (`content/docs/run-a-node/nitro-support-policy.mdx`)
             - [ ] Review the release notes for node configuration changes the docs describe
-            - [ ] Re-review components/widgets/NitroTxFlow/model.ts (step text, flags, citations)
+            - [ ] Re-review components/widgets/FlowDiagram/model.ts (step text, flags, citations)
               against the new tag.
             - [ ] Run the gates locally: this PR gets no CI run of its own
 

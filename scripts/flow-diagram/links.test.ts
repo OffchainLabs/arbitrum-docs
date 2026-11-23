@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
-import { codeUrl } from '../../components/widgets/NitroTxFlow/links.ts';
+import { PROJECT } from '../../components/widgets/FlowDiagram/flows.generated.ts';
+import { codeUrl as codeUrlIn } from '../../components/widgets/FlowDiagram/links.ts';
+import type { CodeRef } from '../../components/widgets/FlowDiagram/model.ts';
+
+const codeUrl = (ref: CodeRef, values: Record<string, unknown>) =>
+  codeUrlIn(ref, PROJECT.repos, values);
 
 const pins = {
   nitroRepositorySlug: 'nitro',
@@ -44,4 +50,15 @@ test('a nitro-contracts ref with a line adds an L anchor', () => {
     'https://github.com/OffchainLabs/nitro-contracts/blob/' +
       '4341b132cfbdcc980ead03765ca5224ff6cb5d97/src/bridge/SequencerInbox.sol#L7',
   );
+});
+
+test('an undeclared repo throws', () => {
+  assert.throws(() => codeUrl({ repo: 'nope', path: 'a.go' }, pins), /Unknown repo "nope"/);
+});
+
+test('every repo code link fills from content/vars.json', () => {
+  const values = JSON.parse(readFileSync('content/vars.json', 'utf8')) as Record<string, unknown>;
+  for (const repo of Object.keys(PROJECT.repos)) {
+    assert.doesNotThrow(() => codeUrl({ repo, path: 'a' }, values), repo);
+  }
 });

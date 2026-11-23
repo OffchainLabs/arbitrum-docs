@@ -3,9 +3,9 @@ import { useState } from 'react';
 
 import { vars } from '@/content/vars';
 
-import { FINALITY_LABEL, FINALITY_TERM } from './brand.ts';
+import { PROJECT } from './flows.ts';
 import { codeUrl } from './links.ts';
-import type { CardLabels, Finality, Step } from './model.ts';
+import type { CardLabels, Step } from './model.ts';
 import { fillVars } from './text.ts';
 
 const BADGE_CLASS = [
@@ -51,7 +51,7 @@ export function StepCard({ step, labels }: { step: Step; labels: CardLabels }) {
               value={
                 <a
                   className="underline"
-                  href={codeUrl(step.code, vars)}
+                  href={codeUrl(step.code, PROJECT.repos, vars)}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -74,9 +74,8 @@ export function StepCard({ step, labels }: { step: Step; labels: CardLabels }) {
 }
 
 /** A finality with a glossary entry links to it. */
-function FinalityBadge({ finality }: { finality: Finality }) {
-  const term = FINALITY_TERM[finality];
-  const label = FINALITY_LABEL[finality];
+function FinalityBadge({ finality }: { finality: string }) {
+  const { label, term } = PROJECT.finality[finality]!;
   if (term === undefined) return <span className={BADGE_CLASS}>{label}</span>;
   return (
     <a className={`${BADGE_CLASS} underline`} href={`/glossary#${term}`}>

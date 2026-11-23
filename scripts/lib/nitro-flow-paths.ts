@@ -1,5 +1,5 @@
-import { FLOWS } from '../../components/widgets/NitroTxFlow/flows.ts';
-import { type CodeRef, type Step, codeRefs } from '../../components/widgets/NitroTxFlow/model.ts';
+import { FLOWS } from '../../components/widgets/FlowDiagram/flows.ts';
+import { type CodeRef, type Step, codeRefs } from '../../components/widgets/FlowDiagram/model.ts';
 
 /** Every code ref a step cites, including those inside its detail flow. */
 function stepRefs(step: Step): CodeRef[] {
@@ -11,9 +11,7 @@ function stepRefs(step: Step): CodeRef[] {
  * The code refs of every flow in the Nitro flow widget for `repo`, each labelled with the flow and
  * the first top-level step that cites it, directly or in its detail flow.
  */
-export function modelPaths(
-  repo: 'nitro' | 'nitro-contracts',
-): Array<{ path: string; label: string }> {
+export function modelPaths(repo: string): Array<{ path: string; label: string }> {
   const seen = new Set<string>();
   const result: Array<{ path: string; label: string }> = [];
   for (const flow of Object.values(FLOWS)) {

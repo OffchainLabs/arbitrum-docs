@@ -1,7 +1,8 @@
 import type { Viewport } from '@xyflow/react';
 import { type RefObject, useEffect, useState } from 'react';
 
-import { BAND_STYLE, BRAND } from './brand.ts';
+import { BRAND } from './brand.ts';
+import { PROJECT } from './flows.ts';
 import { type Band, type Box, type FlowLayout, activeBoxes } from './layout.ts';
 import type { Step } from './model.ts';
 import { siteHeaderPx } from './useStepNavigation.ts';
@@ -20,7 +21,7 @@ interface BandLabelsProps {
 // 0.55 em per character at 13px, plus padding and the accent bar. The edge chips in layout.ts use
 // 0.52 em at 12px.
 function bandLabelWidth(chain: Band['chain']): number {
-  return Math.ceil(BAND_STYLE[chain].name.length * 0.55 * 13) + 34;
+  return Math.ceil(PROJECT.lanes[chain]!.label.length * 0.55 * 13) + 34;
 }
 
 /**
@@ -82,7 +83,7 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
       if (overlaps) y = obstacle.bottom + 6;
     }
     if (y + BAND_LABEL_HEIGHT > Math.min(box.bottom - BAND_LABEL_INSET, floor)) return null;
-    const style = BAND_STYLE[band.chain];
+    const lane = PROJECT.lanes[band.chain]!;
     return (
       <div
         key={`${band.chain}-${index}`}
@@ -101,8 +102,8 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
           opacity: band.chain === step.txChain ? 1 : 0.8,
         }}
       >
-        <span style={{ width: 4, height: 14, borderRadius: 2, background: style.accent }} />
-        {style.name}
+        <span style={{ width: 4, height: 14, borderRadius: 2, background: lane.widget!.accent }} />
+        {lane.label}
       </div>
     );
   });

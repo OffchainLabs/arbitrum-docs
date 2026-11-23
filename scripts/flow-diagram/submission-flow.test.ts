@@ -3,13 +3,17 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
 
-import { FINALITY_TERM, contractKey } from '../../components/widgets/NitroTxFlow/brand.ts';
 import {
+  PROJECT,
   transactionSubmission as flow,
   pgaRound,
   transactionLifecycle,
-} from '../../components/widgets/NitroTxFlow/flows.generated.ts';
-import { type ResolvedPath, flowPaths } from '../../components/widgets/NitroTxFlow/model.ts';
+} from '../../components/widgets/FlowDiagram/flows.generated.ts';
+import {
+  type ResolvedPath,
+  flowPaths,
+  kindKey,
+} from '../../components/widgets/FlowDiagram/model.ts';
 import { createAnchorCompiler } from '../lib/doc-anchors.ts';
 import { buildIndex } from '../lib/doc-links.ts';
 import { checkFlowShape } from './flow-shape.ts';
@@ -124,7 +128,7 @@ test('every var token names a vars.json key, and only step text holds them', () 
 
 test('every finality term has a glossary entry with that id', () => {
   for (const step of flow.steps.filter((s) => s.finality)) {
-    const term = FINALITY_TERM[step.finality!];
+    const term = PROJECT.finality[step.finality!]?.term;
     assert.ok(term, `${step.id}: no glossary term for ${step.finality}`);
     const file = path.join(repoRoot, 'content/glossary', `${term}.mdx`);
     assert.ok(existsSync(file), `${step.id}: missing ${file}`);
@@ -138,6 +142,53 @@ test('no step text calls settlement hard finality', () => {
 });
 
 test('the legend names contracts by chain only when every contract is on the parent chain', () => {
-  assert.equal(contractKey(transactionLifecycle), 'Parent chain contract');
-  assert.equal(contractKey(flow), 'Contract');
+  const contract = PROJECT.kinds['contract']!;
+  assert.equal(kindKey(transactionLifecycle, 'contract', contract), 'Parent chain contract');
+  assert.equal(kindKey(flow, 'contract', contract), 'Contract');
+});
+
+test('the legend lists the process, contract and user kinds with their labels', () => {
+  assert.deepEqual(
+    Object.entries(PROJECT.kinds).map(([id, kind]) => [
+      id,
+      kindKey(transactionLifecycle, id, kind),
+    ]),
+    [
+      ['process', 'Nitro process'],
+      ['contract', 'Parent chain contract'],
+      ['user', 'User'],
+    ],
+  );
+});
+
+test('band names, actor sub-line lane names and card labels', () => {
+  const bands = Object.values(PROJECT.lanes).filter((lane) => lane.widget);
+  assert.deepEqual(
+    bands.map((lane) => lane.label),
+    ['Child chain · Arbitrum One', 'Parent chain · Ethereum'],
+  );
+  assert.deepEqual(
+    Object.values(PROJECT.lanes).map((lane) => lane.short),
+    ['off-chain', 'child chain', 'parent chain'],
+  );
+  assert.deepEqual(PROJECT.card, {
+    detailsToggle: 'Show operator details',
+    symptoms: 'What the operator sees',
+    impact: 'Impact on the transaction',
+    recovery: 'Recovery',
+    showFlag: true,
+  });
+});
+
+test('finality labels', () => {
+  assert.deepEqual(
+    Object.fromEntries(Object.entries(PROJECT.finality).map(([id, { label }]) => [id, label])),
+    {
+      'soft': 'Soft finality',
+      'batch-posted': 'Batch posted on parent chain',
+      'soft-confirmation': 'Soft confirmation',
+      'hard': 'Hard finality',
+      'settled': 'Settlement',
+    },
+  );
 });

@@ -15,7 +15,7 @@ export function useFlowLayout(flow: Flow) {
         if (mounted) setLayout(result);
       },
       (error: unknown) => {
-        console.error(`NitroTxFlow: the ELK layout of flow "${flow.id}" failed.`, error);
+        console.error(`FlowDiagram: the ELK layout of flow "${flow.id}" failed.`, error);
         if (mounted) setFailed(true);
       },
     );

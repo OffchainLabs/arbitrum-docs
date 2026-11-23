@@ -76,9 +76,13 @@ export class YamlSource {
 export const text = z.string().trim().min(1, 'must not be empty');
 export const numberPair = z.tuple([z.number(), z.number()]);
 
+const textPair = z.tuple([text, text]);
+
 const lane = z.strictObject({
   label: text,
+  short: text.optional(),
   svg: z.strictObject({ fill: text, stroke: text, label: text.optional() }).optional(),
+  widget: z.strictObject({ accent: text, fill: textPair, border: textPair }).optional(),
 });
 
 const kind = z.strictObject({
@@ -90,26 +94,59 @@ const kind = z.strictObject({
     stroke: text.optional(),
     key: text.optional(),
   }),
+  widget: z
+    .strictObject({
+      fill: text,
+      title: text,
+      sub: text,
+      offLane: z.strictObject({ lane: text, label: text }).optional(),
+    })
+    .optional(),
 });
 
-const projectConfig = z.strictObject({
-  lanes: z.record(z.string(), lane),
-  kinds: z.record(z.string(), kind),
-  repos: z.record(z.string(), z.strictObject({ url: text })),
-  svg: z.strictObject({
-    canvas: numberPair,
-    cols: z.array(z.number()),
-    rows: z.array(z.number()),
-    box: numberPair,
-    scale: z.number(),
-    offset: numberPair,
-    background: text.optional(),
-    reserve: z.strictObject({ x: numberPair, y: numberPair }).optional(),
-    ink: text.optional(),
-    chip: text.optional(),
-    font: text.optional(),
-  }),
-});
+const projectConfig = z
+  .strictObject({
+    lanes: z.record(z.string(), lane),
+    kinds: z.record(z.string(), kind),
+    repos: z.record(z.string(), z.strictObject({ url: text, code: text.optional() })),
+    finality: z
+      .record(z.string(), z.strictObject({ label: text, term: text.optional() }))
+      .optional(),
+    card: z
+      .strictObject({
+        detailsToggle: text,
+        symptoms: text,
+        impact: text,
+        recovery: text,
+        showFlag: z.boolean(),
+      })
+      .optional(),
+    svg: z.strictObject({
+      canvas: numberPair,
+      cols: z.array(z.number()),
+      rows: z.array(z.number()),
+      box: numberPair,
+      scale: z.number(),
+      offset: numberPair,
+      background: text.optional(),
+      reserve: z.strictObject({ x: numberPair, y: numberPair }).optional(),
+      ink: text.optional(),
+      chip: text.optional(),
+      font: text.optional(),
+    }),
+  })
+  .superRefine((config, ctx) => {
+    for (const [id, kind] of Object.entries(config.kinds)) {
+      const lane = kind.widget?.offLane?.lane;
+      if (lane !== undefined && !(lane in config.lanes)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['kinds', id, 'widget', 'offLane', 'lane'],
+          message: `kind "${id}" offLane has unknown lane "${lane}"`,
+        });
+      }
+    }
+  });
 
 export function parseProjectConfig(src: YamlSource): ProjectConfig {
   return src.parse(projectConfig, src.value) as ProjectConfig;

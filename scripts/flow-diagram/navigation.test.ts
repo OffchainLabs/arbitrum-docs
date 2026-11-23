@@ -5,7 +5,7 @@ import {
   clampStep,
   parseStepHash,
   stepHash,
-} from '../../components/widgets/NitroTxFlow/navigation.ts';
+} from '../../components/widgets/FlowDiagram/navigation.ts';
 
 const ONE = [{ id: '', stepCount: 7 }];
 const TWO = [

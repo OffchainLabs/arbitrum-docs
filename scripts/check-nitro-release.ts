@@ -12,7 +12,7 @@
  * `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/` against the GitHub
  * contents API at the pinned tag (see scripts/lib/nitro-upstream-paths.ts; `check-links` skips
  * external URLs). It also verifies the code paths the Nitro flow widget links
- * (every flow in components/widgets/NitroTxFlow/flows.ts): `nitro` paths at the tag,
+ * (every flow in components/widgets/FlowDiagram/flows.ts): `nitro` paths at the tag,
  * `nitro-contracts` paths at the resolved contracts commit. When a newer release exists it says
  * so and sets the `newer_release` step output, which the weekly workflow turns into an issue.
  * It never writes: which release the docs describe, and every pin under it, is a human decision, taken after

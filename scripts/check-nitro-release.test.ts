@@ -6,8 +6,8 @@ import path from 'node:path';
 import { type TestContext, test } from 'node:test';
 import { URL, fileURLToPath } from 'node:url';
 
-import { FLOWS } from '../components/widgets/NitroTxFlow/flows.ts';
-import { codeRefs } from '../components/widgets/NitroTxFlow/model.ts';
+import { FLOWS } from '../components/widgets/FlowDiagram/flows.ts';
+import { codeRefs } from '../components/widgets/FlowDiagram/model.ts';
 import { modelPaths } from './lib/nitro-flow-paths.ts';
 
 const SCRIPT = fileURLToPath(new URL('./check-nitro-release.ts', import.meta.url));

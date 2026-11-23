@@ -1,29 +1,70 @@
+# The widget stacks its rows in this lane order. A lane with `widget:` is drawn as a band, and a
+# step's lane must be one. Each `widget:` pair is [inactive, active]. Ink tint on the child chain:
+# no fill tint reaches 3:1 against the widget gradient, so the solid border marks the band edge.
 lanes:
-  child:
-    label: Child chain · Arbitrum One
-  parent:
-    label: Parent chain · Ethereum
-    svg: { fill: '#6b1d2a', stroke: '#f3a5b0', label: Parent chain }
   off-chain:
     label: Off-chain
+    short: off-chain
+  child:
+    label: Child chain · Arbitrum One
+    short: child chain
+    widget:
+      accent: '#9dcced'
+      fill: ['rgba(11, 27, 46, 0.3)', 'rgba(11, 27, 46, 0.45)']
+      border: ['#9dcced', '#eaf5ff']
+  parent:
+    label: Parent chain · Ethereum
+    short: parent chain
+    svg: { fill: '#6b1d2a', stroke: '#f3a5b0', label: Parent chain }
+    widget:
+      accent: '#e6007a'
+      fill: ['rgba(230, 0, 122, 0.10)', 'rgba(230, 0, 122, 0.22)']
+      border: ['rgba(230, 0, 122, 0.5)', 'rgba(255, 120, 190, 0.95)']
+# A kind with `widget:` colors is in the widget key. `offLane`: the key reads `offLane.label`
+# instead of `label` when a part of the kind in the flow is not on `offLane.lane`.
 kinds:
   process:
     label: Nitro process
     svg: { fill: '#12aaff', title: '#0b1b2e', sub: '#0b2438', key: Process }
+    widget: { fill: '#213147', title: '#ffffff', sub: '#c9dcef' }
   data:
     label: Data
     svg: { fill: '#213147', title: '#ffffff', sub: '#c9dcef', stroke: '#9dcced' }
   contract:
     label: Parent chain contract
     svg: { fill: '#e6007a', title: '#ffffff', sub: '#ffffff' }
+    widget:
+      fill: '#e6007a'
+      title: '#ffffff'
+      sub: '#ffffff'
+      offLane: { lane: parent, label: Contract }
   user:
     label: User
     svg: { fill: '#12aaff', title: '#0b1b2e', sub: '#0b2438' }
+    widget: { fill: '#12aaff', title: '#0b1b2e', sub: '#0b2438' }
+# `code`: the base of a code link. The widget fills each {var:name} from content/vars.json and
+# appends /<path>, then #L<line> when the ref has a line.
 repos:
   nitro:
     url: https://github.com/OffchainLabs/nitro
+    code: https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}
   nitro-contracts:
     url: https://github.com/OffchainLabs/nitro-contracts
+    code: https://github.com/OffchainLabs/nitro-contracts/blob/{var:nitroContractsCommit}
+# A step's `finality:` names one of these. `term` is a glossary entry id; the badge links to it.
+finality:
+  soft: { label: Soft finality }
+  batch-posted: { label: Batch posted on parent chain }
+  soft-confirmation: { label: Soft confirmation, term: soft-confirmation }
+  hard: { label: Hard finality, term: hard-finality }
+  settled: { label: Settlement, term: settlement }
+# The step card labels. A flow's own `card:` replaces them.
+card:
+  detailsToggle: Show operator details
+  symptoms: What the operator sees
+  impact: Impact on the transaction
+  recovery: Recovery
+  showFlag: true
 svg:
   canvas: [1600, 900]
   cols: [40, 295, 550, 805, 1060]

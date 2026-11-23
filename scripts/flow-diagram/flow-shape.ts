@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 
-import type { Flow } from '../../components/widgets/NitroTxFlow/model.ts';
+import type { Flow } from '../../components/widgets/FlowDiagram/model.ts';
 
 /** Asserts the structure every flow needs: unique ids, known actors and edges, step text. */
 export function checkFlowShape(flow: Flow): void {

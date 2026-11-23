@@ -1,7 +1,8 @@
 import type { ElkNode } from 'elkjs/lib/elk-api';
 import ELK from 'elkjs/lib/elk.bundled.js';
 
-import { type Chain, type Flow, type FlowEdge, type Step, flowPaths } from './model.ts';
+import { PROJECT } from './flows.ts';
+import { type Flow, type FlowEdge, type Step, flowPaths } from './model.ts';
 
 export const NODE_WIDTH = 220;
 export const NODE_HEIGHT = 72;
@@ -28,7 +29,8 @@ export interface EdgeLayout {
 }
 
 export interface Band {
-  chain: 'child' | 'parent';
+  // A lane with widget band colors.
+  chain: string;
   actors: string[];
   box: Box;
 }
@@ -48,10 +50,10 @@ export function labelWidth(edge: FlowEdge, badgeCount: number): number {
   return Math.ceil(edge.label.length * 0.52 * 12) + 12 + badgeCount * 26;
 }
 
-const CHAIN_ORDER: Record<Chain, number> = { 'off-chain': 0, 'child': 1, 'parent': 2 };
+const LANE_ORDER = Object.keys(PROJECT.lanes);
 
-// One row per actor. Rows are grouped by chain (off-chain, child, parent), so each chain gets one
-// band; within a chain, actors are ordered by the first step that lists them.
+// One row per actor. Rows are grouped by lane, in project lane order, so each lane gets one band;
+// within a lane, actors are ordered by the first step that lists them.
 export function firstInteractionRank(flow: Flow): Record<string, number> {
   const chainOf = new Map(flow.actors.map((actor) => [actor.id, actor.chain]));
   const order: string[] = [];
@@ -61,7 +63,7 @@ export function firstInteractionRank(flow: Flow): Record<string, number> {
     }
   }
   const sorted = order
-    .map((id, first) => ({ id, first, chain: CHAIN_ORDER[chainOf.get(id)!] }))
+    .map((id, first) => ({ id, first, chain: LANE_ORDER.indexOf(chainOf.get(id)!) }))
     .sort((a, b) => a.chain - b.chain || a.first - b.first);
   return Object.fromEntries(sorted.map(({ id }, row) => [id, row]));
 }
@@ -86,7 +88,7 @@ export function labelBadgeCounts(flow: Flow): Record<string, number> {
   return counts;
 }
 
-// One band per run of adjacent rows on the same chain. A chain whose rows are not adjacent gets
+// One band per run of adjacent rows on the same band lane. A lane whose rows are not adjacent gets
 // more than one band.
 export function computeBands(flow: Flow, nodes: Record<string, Point>, width: number): Band[] {
   const rows = flow.actors
@@ -98,7 +100,7 @@ export function computeBands(flow: Flow, nodes: Record<string, Point>, width: nu
     const chain = rows[start]!.chain;
     let end = start;
     while (end + 1 < rows.length && rows[end + 1]!.chain === chain) end++;
-    if (chain === 'child' || chain === 'parent') {
+    if (PROJECT.lanes[chain]?.widget) {
       const firstTop = nodes[rows[start]!.id]!.y;
       const lastBottom = nodes[rows[end]!.id]!.y + NODE_HEIGHT;
       const prev = rows[start - 1];

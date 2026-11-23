@@ -1,14 +1,14 @@
 import type { Node, NodeProps } from '@xyflow/react';
 
-import { BAND_STYLE } from './brand.ts';
+import { PROJECT } from './flows.ts';
 import type { Band } from './layout.ts';
 
 export type BandNodeType = Node<{ band: Band; active: boolean }, 'band'>;
 
-/** The translucent band behind one chain's rows. It has no header; `BandLabels` names it. */
+/** The translucent band behind one lane's rows. It has no header; `BandLabels` names it. */
 export function BandNode({ data }: NodeProps<BandNodeType>) {
   const { band, active } = data;
-  const style = BAND_STYLE[band.chain];
+  const style = PROJECT.lanes[band.chain]!.widget!;
   return (
     <div
       className={[

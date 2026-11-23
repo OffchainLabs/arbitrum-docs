@@ -4,8 +4,8 @@ import { test } from 'node:test';
 import {
   FLOWS,
   transactionLifecycle as flow,
-} from '../../components/widgets/NitroTxFlow/flows.generated.ts';
-import { type Flow, codeRefs, flowPaths } from '../../components/widgets/NitroTxFlow/model.ts';
+} from '../../components/widgets/FlowDiagram/flows.generated.ts';
+import { type Flow, codeRefs, flowPaths } from '../../components/widgets/FlowDiagram/model.ts';
 import { checkFlowShape } from './flow-shape.ts';
 
 test('the flow has a valid shape', () => {

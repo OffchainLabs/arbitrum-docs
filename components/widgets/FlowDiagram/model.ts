@@ -1,13 +1,10 @@
-export type ActorKind = 'process' | 'contract' | 'user';
-export type Chain = 'child' | 'parent' | 'off-chain';
-export type Finality = 'soft' | 'batch-posted' | 'soft-confirmation' | 'hard' | 'settled';
-
 export interface Actor {
   id: string;
   label: string;
   tech: string;
-  kind: ActorKind;
-  chain: Chain;
+  // A kind id and a lane id of `PROJECT`.
+  kind: string;
+  chain: string;
   // The page a hover card previews. `previewUrl` is the page's static preview JSON.
   docs?: { href: string; previewUrl: string };
 }
@@ -20,7 +17,7 @@ export interface FlowEdge {
 }
 
 export interface CodeRef {
-  repo: 'nitro' | 'nitro-contracts';
+  repo: string;
   path: string;
   line?: number;
 }
@@ -39,12 +36,12 @@ export interface Step {
   edges: string[];
   flag?: string;
   code?: CodeRef;
-  finality?: Finality;
+  finality?: string;
   failure?: Failure;
   docs?: DocsLink;
   citations: CodeRef[];
-  // Where the user's transaction is during this step; that chain's band is highlighted.
-  txChain: 'child' | 'parent';
+  // Where the user's transaction is during this step; that lane's band is highlighted.
+  txChain: string;
   // SPIKE: an inner flow the reader opens by clicking `actor` on this step.
   detail?: StepDetail;
 }
@@ -76,13 +73,35 @@ export interface CardLabels {
   showFlag: boolean;
 }
 
-export const OPERATOR_CARD: CardLabels = {
-  detailsToggle: 'Show operator details',
-  symptoms: 'What the operator sees',
-  impact: 'Impact on the transaction',
-  recovery: 'Recovery',
-  showFlag: true,
-};
+export interface LaneInfo {
+  label: string;
+  // The lane name in an actor's sub-line.
+  short?: string;
+  // Present when the lane is drawn as a band. Each pair is [inactive, active].
+  widget?: { accent: string; fill: [string, string]; border: [string, string] };
+}
+
+export interface KindInfo {
+  label: string;
+  widget: {
+    fill: string;
+    title: string;
+    sub: string;
+    offLane?: { lane: string; label: string };
+  };
+}
+
+/** The labels and colors a project declares in `diagrams/project.yaml`. */
+export interface Project {
+  // In row order.
+  lanes: Record<string, LaneInfo>;
+  // Only the kinds with widget colors, in key order.
+  kinds: Record<string, KindInfo>;
+  finality: Record<string, { label: string; term?: string }>;
+  // A code link base per repo, with {var:name} tokens.
+  repos: Record<string, { code: string }>;
+  card: CardLabels;
+}
 
 export interface StepDetail {
   actor: string;
@@ -132,4 +151,12 @@ export function codeRefs(flow: Flow): CodeRef[] {
   };
   collect(flow);
   return [...seen.values()];
+}
+
+/** The key text of `kind`: `offLane.label` when a part of that kind is not on `offLane.lane`. */
+export function kindKey(flow: Flow, id: string, kind: KindInfo): string {
+  const { offLane } = kind.widget;
+  if (!offLane) return kind.label;
+  const parts = flow.actors.filter((actor) => actor.kind === id);
+  return parts.every((actor) => actor.chain === offLane.lane) ? kind.label : offLane.label;
 }

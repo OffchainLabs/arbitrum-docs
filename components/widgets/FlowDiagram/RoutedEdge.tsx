@@ -1,6 +1,6 @@
 import { BaseEdge, type Edge, EdgeLabelRenderer, type EdgeProps } from '@xyflow/react';
 
-import { BRAND, KIND_STYLE } from './brand.ts';
+import { BRAND } from './brand.ts';
 import type { EdgeLayout, Point } from './layout.ts';
 
 export type RoutedEdgeType = Edge<
@@ -85,8 +85,8 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
                 minWidth: 20,
                 height: 20,
                 borderRadius: 10,
-                background: KIND_STYLE.user.fill,
-                color: KIND_STYLE.user.title,
+                background: BRAND.badge,
+                color: BRAND.badgeText,
                 fontWeight: 700,
               }}
             >

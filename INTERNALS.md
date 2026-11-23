@@ -409,7 +409,7 @@ what registers them: `nitro:check-release` verifies each one, plus every content
 `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/`, against the GitHub
 contents API at the target tag before it writes anything (`scripts/lib/nitro-upstream-paths.ts`).
 It also verifies the code paths of every flow in `FLOWS` (`scripts/lib/nitro-flow-paths.ts`, which
-reads `components/widgets/NitroTxFlow/flows.ts`, which re-exports `FLOWS` from the generated
+reads `components/widgets/FlowDiagram/flows.ts`, which re-exports `FLOWS` from the generated
 `flows.generated.ts`): `nitro`
 paths at the target tag, `nitro-contracts` paths at the `nitroContractsCommit` resolved for that
 tag.
@@ -566,7 +566,7 @@ feeds two outputs, so the interactive widget and the static SVG cannot drift apa
 
 ```text
 diagrams/
-  project.yaml              lanes, kinds, repos and the SVG layout
+  project.yaml              lanes, kinds, repos, finality, card and the SVG layout
   parts.yaml                every part, once
   flows/<flow-id>.md        one flow: YAML header, then one section per step
   assets/bg-frag.svg        background drawn under every static SVG
@@ -574,9 +574,17 @@ diagrams/
 
 `pnpm diagrams:generate` (`scripts/generate-diagrams.ts`) writes two kinds of output:
 
-- `components/widgets/NitroTxFlow/flows.generated.ts`, the data the Nitro flow widget reads.
+- `components/widgets/FlowDiagram/flows.generated.ts`, the data the flow widget reads.
   `FLOWS` holds every flow that has steps, keyed by its `widget:` value or, without one, by its
-  id.
+  id. `PROJECT` holds the part of `project.yaml` the widget reads: every lane, the kinds with
+  `widget:` colours, `finality`, the repos with a `code:` link, and `card`. A page renders a flow
+  with `<FlowDiagram flow="<key>" />`, from `components/widgets/FlowDiagram/index.tsx`.
+
+The widget code holds no project content. Labels, colours, repos and card text come from
+`PROJECT`; `components/widgets/FlowDiagram/brand.ts` holds only the form values (gradient,
+connector, glow, chip, font, opacities). Another project reuses the widget with its own
+`diagrams/` folder.
+
 - `public/img/<svg>.svg` for every flow with `static:` and `svg:`, for example
   `public/img/haw-transaction-lifecycle.svg`.
 
@@ -603,7 +611,7 @@ fails.
 | `widget`    | The key in `FLOWS`. Defaults to the flow id.                                                                                                         |
 | `showLanes` | `false` hides the lane bands. Defaults to `true`.                                                                                                    |
 | `paths`     | A list of `id`, `label` and `steps`, the ordered paths the widget offers. Each step id must be a step of the flow, once per path.                    |
-| `card`      | The widget's step card labels. The widget needs all five keys: `detailsToggle`, `symptoms`, `impact`, `recovery` (strings) and `showFlag` (boolean). |
+| `card`      | Overrides the `card` from `project.yaml`. Needs all five keys: `detailsToggle`, `symptoms`, `impact`, `recovery` (strings) and `showFlag` (boolean). |
 | `static`    | A mapping of part id to `[column, row]`, the part's grid cell in the static SVG. Needs `svg`, and every part needs a cell.                           |
 | `svg`       | The output file name, lowercase with dashes, without `.svg`. Needs `alt` and `static`.                                                               |
 | `alt`       | The alt text, written to the SVG `<desc>`.                                                                                                           |
@@ -624,7 +632,7 @@ the step text, which is required. Lists, code blocks and other headings do not p
 | `flag`     | A flag name the step shows.                                                                                                                                                                                                                                                                        |
 | `code`     | The main code path, `<repo>/<path>[:<line>]`. The repo is a key under `repos` in `project.yaml`.                                                                                                                                                                                                   |
 | `cites`    | More code references, separated by `,` or `;`. See below.                                                                                                                                                                                                                                          |
-| `finality` | A finality level, from `FINALITY_LABEL` in `components/widgets/NitroTxFlow/brand.ts`.                                                                                                                                                                                                              |
+| `finality` | A finality id from `finality` in `project.yaml`.                                                                                                                                                                                                                                                   |
 | `docs`     | A link to a docs page, `[label](href)`.                                                                                                                                                                                                                                                            |
 | `detail`   | `<part> -> <flow-id>` links the step to another flow from that part. A detail cycle fails. An optional `-> <step-id>` names the step that Next on the detail flow's last step goes to; without it, Next goes to the next step. That step must come after this one on every path that has this one. |
 
@@ -643,19 +651,30 @@ A `### Failure` heading ends the step text. It holds exactly three paragraphs th
 `diagrams/project.yaml` holds what every flow shares.
 
 - `lanes` maps a lane id to a `label`. A lane with `svg: { fill, stroke, label }` also draws a
-  band behind its parts in the SVG.
+  band behind its parts in the SVG. `short` is the lane name in a widget box's sub-line. A lane
+  with `widget: { accent, fill, border }` is a band in the widget, named by `label`; `fill` and
+  `border` are `[inactive, active]` pairs. The widget stacks its rows in lane order.
 - `kinds` maps a part kind to a `label` and to `svg` colours: `fill`, `title`, `sub`, and optional
-  `stroke`. The optional `svg.key` replaces `label` in the SVG key.
-- `repos` maps a repo name to its GitHub `url`.
+  `stroke`. The optional `svg.key` replaces `label` in the SVG key. `widget: { fill, title, sub }`
+  holds the widget colours, and puts the kind in the widget key. With
+  `widget.offLane: { lane, label }`, the widget key reads `offLane.label` when a part of that kind
+  in the flow is not on `offLane.lane`.
+- `repos` maps a repo name to its GitHub `url`. `code` is the base of a widget code link, such as
+  `https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}`. The
+  widget fills each `{var:name}` from `content/vars.json`, then appends `/<path>` and `#L<line>`.
+- `finality` maps a finality id to a `label` and an optional glossary `term` id. The step card
+  badge links to `/glossary#<term>`.
+- `card` holds the default step card labels, with the five keys of a flow's `card`.
 - `svg` sets the static layout. Loading the project needs `canvas`, the `cols` and `rows`
   coordinates of the grid, the `box` size, `scale` and `offset`. The optional `reserve` is an area no
   box may overlap. Rendering an SVG also needs `background` (a fragment file under `diagrams/`),
   `ink`, `chip` and `font`.
 
-The widget accepts a smaller set than the loader. `scripts/generate-diagrams.ts` rejects a widget
-flow with a part kind other than `process`, `contract` or `user`, a lane other than `child`,
-`parent` or `off-chain`, a part without `tech`, a step lane other than `child` or `parent`, a repo
-other than `nitro` or `nitro-contracts`, or an edge that is dashed, dotted or double-headed.
+The widget accepts a smaller set than the loader. `scripts/generate-diagrams.ts` checks every widget
+flow against `project.yaml`. It rejects a part whose kind has no `widget:` colours, a part whose
+lane has no `short` when the flow shows lanes, a part without `tech`, a step lane without `widget:`
+band colours, a finality id that `finality` does not declare, a repo without `code`, and an edge
+that is dashed, dotted or double-headed. It also fails when `project.yaml` has no `card`.
 
 ### Limits of the static renderer
 
@@ -1334,7 +1353,7 @@ publishing`, routed by `Target document slugs` and ordered by `FAQ order index`.
   `<Callout type="info">` elements with that single literal attribute. Rejected content leaves
   the destination partial untouched; fix the answer in Notion or put the example in code. The same
   snapshots feed the `FAQPage` JSON-LD that `lib/faq.ts` emits on those six pages.
-- **`components/widgets/NitroTxFlow/flows.generated.ts`** and the SVGs under `public/img/` named by
+- **`components/widgets/FlowDiagram/flows.generated.ts`** and the SVGs under `public/img/` named by
   a flow's `svg:` key are written by `pnpm diagrams:generate` from `diagrams/`. Edit the sources,
   see [Diagram sources](#diagram-sources). `diagrams:check` fails on a hand edit.
 

@@ -74,15 +74,37 @@ export interface DiagramFlow {
 }
 
 export interface ProjectConfig {
-  lanes: Record<string, { label: string; svg?: { fill: string; stroke: string; label?: string } }>;
+  lanes: Record<
+    string,
+    {
+      label: string;
+      short?: string;
+      svg?: { fill: string; stroke: string; label?: string };
+      widget?: { accent: string; fill: [string, string]; border: [string, string] };
+    }
+  >;
   kinds: Record<
     string,
     {
       label: string;
       svg: { fill: string; title: string; sub: string; stroke?: string; key?: string };
+      widget?: {
+        fill: string;
+        title: string;
+        sub: string;
+        offLane?: { lane: string; label: string };
+      };
     }
   >;
-  repos: Record<string, { url: string }>;
+  repos: Record<string, { url: string; code?: string }>;
+  finality?: Record<string, { label: string; term?: string }>;
+  card?: {
+    detailsToggle: string;
+    symptoms: string;
+    impact: string;
+    recovery: string;
+    showFlag: boolean;
+  };
   svg: {
     canvas: [number, number];
     cols: number[];

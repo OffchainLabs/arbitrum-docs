@@ -177,9 +177,12 @@ entries do not carry this contract.
 - **Generated pages.** `content/docs/stylus/stylus-by-example/` and
   `content/docs/run-a-node/nitro/cli-flags-reference.mdx`. Change their generators, not the pages.
   The six `content/partials/_troubleshooting-*-partial.mdx` come from `content/faq/*.json`; edit them in Notion.
-  `components/widgets/NitroTxFlow/flows.generated.ts` and the SVGs named by a flow's `svg:` key
+  `components/widgets/FlowDiagram/flows.generated.ts` and the SVGs named by a flow's `svg:` key
   (`public/img/haw-transaction-lifecycle.svg`) come from `diagrams/`; edit `diagrams/project.yaml`,
-  `diagrams/parts.yaml` and `diagrams/flows/*.md`, then run `pnpm diagrams:generate`.
+  `diagrams/parts.yaml` and `diagrams/flows/*.md`, then run `pnpm diagrams:generate`. The widget
+  code holds no content: labels, colours, repos, finality and card text come from `PROJECT` in
+  that file, built from `diagrams/project.yaml`. A page renders a flow with
+  `<FlowDiagram flow="<key>" />`.
 
 Details for each are in [INTERNALS.md](INTERNALS.md).
 

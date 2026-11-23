@@ -88,6 +88,9 @@ test('rejects a part with an unknown lane', () =>
 test('rejects a part with an unknown kind', () =>
   rejects('bad-kind', /parts\.yaml:1: .*kind "nope"/));
 
+test('rejects a kind offLane with an unknown lane', () =>
+  rejects('bad-off-lane', /project\.yaml:12: .*offLane has unknown lane "l2"/));
+
 test('rejects an unknown part in a flow', () =>
   rejects('bad-part-ref', /demo\.md:3: unknown part "zz"/));
 

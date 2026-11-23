@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { type Browser, type BrowserContextOptions, type Page, chromium } from 'playwright';
 
-import { transactionSubmission } from '../../components/widgets/NitroTxFlow/flows.generated.ts';
-import { type ResolvedPath, flowPaths } from '../../components/widgets/NitroTxFlow/model.ts';
+import { transactionSubmission } from '../../components/widgets/FlowDiagram/flows.generated.ts';
+import { type ResolvedPath, flowPaths } from '../../components/widgets/FlowDiagram/model.ts';
 import { CANVAS, cardTitle, openFlow, settle } from './flow-page.ts';
 
 const PAGE_PATH = '/how-arbitrum-works/deep-dives/transaction-submission-flow';

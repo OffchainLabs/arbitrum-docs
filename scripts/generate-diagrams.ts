@@ -2,17 +2,14 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { FINALITY_LABEL } from '../components/widgets/NitroTxFlow/brand.ts';
 import type {
   Actor,
-  ActorKind,
   CardLabels,
-  Chain,
   CodeRef,
-  Finality,
   Flow,
+  Project,
   Step,
-} from '../components/widgets/NitroTxFlow/model.ts';
+} from '../components/widgets/FlowDiagram/model.ts';
 import { docsPreviewRoute } from '../lib/shared.ts';
 import { loadProject } from './diagrams/load.ts';
 import { renderSvg } from './diagrams/render-svg.ts';
@@ -22,47 +19,59 @@ import type {
   DiagramStep,
   LoadedProject,
   Part,
+  ProjectConfig,
 } from './diagrams/types.ts';
 import { buildIndex } from './lib/doc-links.ts';
 import { isCheckMode, runScript, writeOrCheck } from './lib/generated-partial.ts';
 
-const KINDS: readonly string[] = ['process', 'contract', 'user'] satisfies ActorKind[];
-const CHAINS: readonly string[] = ['child', 'parent', 'off-chain'] satisfies Chain[];
-const REPOS: readonly string[] = ['nitro', 'nitro-contracts'] satisfies CodeRef['repo'][];
 const CARD_KEYS = ['detailsToggle', 'symptoms', 'impact', 'recovery'] as const;
 
-function toCodeRef(flow: DiagramFlow, step: DiagramStep, ref: DiagramCodeRef): CodeRef {
-  if (!REPOS.includes(ref.repo)) {
+/** The project.yaml and the flows that the widget mapping reads. */
+interface Context {
+  config: ProjectConfig;
+  all: Map<string, DiagramFlow>;
+}
+
+function toCodeRef(
+  flow: DiagramFlow,
+  step: DiagramStep,
+  ref: DiagramCodeRef,
+  config: ProjectConfig,
+): CodeRef {
+  if (config.repos[ref.repo]?.code === undefined) {
     throw new Error(
-      `${flow.file}: step "${step.id}" uses repo "${ref.repo}", which the widget lacks`,
+      `${flow.file}: step "${step.id}" uses repo "${ref.repo}", which has no code link in ` +
+        'project.yaml',
     );
   }
-  const repo = ref.repo as CodeRef['repo'];
+  const { repo } = ref;
   return ref.line === undefined
     ? { repo, path: ref.path }
     : { repo, path: ref.path, line: ref.line };
 }
 
-function toActor(flow: DiagramFlow, part: Part): Actor {
+function toActor(flow: DiagramFlow, part: Part, config: ProjectConfig): Actor {
   if (part.tech === undefined) {
     throw new Error(`${flow.file}: part "${part.id}" needs a tech for the widget`);
   }
-  if (!KINDS.includes(part.kind)) {
+  if (config.kinds[part.kind]?.widget === undefined) {
     throw new Error(
-      `${flow.file}: part "${part.id}" has kind "${part.kind}", which the widget lacks`,
+      `${flow.file}: part "${part.id}" has kind "${part.kind}", which has no widget colors in ` +
+        'project.yaml',
     );
   }
-  if (!CHAINS.includes(part.lane)) {
+  if (flow.showLanes && config.lanes[part.lane]?.short === undefined) {
     throw new Error(
-      `${flow.file}: part "${part.id}" has lane "${part.lane}", which the widget lacks`,
+      `${flow.file}: part "${part.id}" has lane "${part.lane}", which has no short name in ` +
+        'project.yaml',
     );
   }
   return {
     id: part.id,
     label: part.label,
     tech: part.tech,
-    kind: part.kind as ActorKind,
-    chain: part.lane as Chain,
+    kind: part.kind,
+    chain: part.lane,
     ...(part.docs === undefined
       ? {}
       : { docs: { href: part.docs, previewUrl: `${docsPreviewRoute}${part.docs}/preview.json` } }),
@@ -95,20 +104,23 @@ function toCard(flow: DiagramFlow, card: NonNullable<DiagramFlow['card']>): Card
   return { ...(labels as Record<(typeof CARD_KEYS)[number], string>), showFlag };
 }
 
-function stepOptionals(flow: DiagramFlow, step: DiagramStep) {
+function stepOptionals(flow: DiagramFlow, step: DiagramStep, config: ProjectConfig) {
   const { flag, finality, docs, failure } = step;
   return {
     ...(flag === undefined ? {} : { flag }),
-    ...(step.code === undefined ? {} : { code: toCodeRef(flow, step, step.code) }),
-    ...(finality === undefined ? {} : { finality: toFinality(flow, step, finality) }),
+    ...(step.code === undefined ? {} : { code: toCodeRef(flow, step, step.code, config) }),
+    ...(finality === undefined ? {} : { finality: toFinality(flow, step, finality, config) }),
     ...(failure === undefined ? {} : { failure: { ...failure } }),
     ...(docs === undefined ? {} : { docs: { href: docs.href, label: docs.label } }),
   };
 }
 
-function toStep(flow: DiagramFlow, step: DiagramStep, all: Map<string, DiagramFlow>): Step {
-  if (step.lane !== 'child' && step.lane !== 'parent') {
-    throw new Error(`${flow.file}: step "${step.id}" lane "${step.lane}" must be child or parent`);
+function toStep(flow: DiagramFlow, step: DiagramStep, ctx: Context): Step {
+  if (ctx.config.lanes[step.lane]?.widget === undefined) {
+    throw new Error(
+      `${flow.file}: step "${step.id}" lane "${step.lane}" has no widget band colors in ` +
+        'project.yaml',
+    );
   }
   const out: Step = {
     id: step.id,
@@ -116,32 +128,40 @@ function toStep(flow: DiagramFlow, step: DiagramStep, all: Map<string, DiagramFl
     text: step.text,
     actors: step.parts,
     edges: step.edges,
-    ...stepOptionals(flow, step),
-    citations: step.cites.map((ref) => toCodeRef(flow, step, ref)),
+    ...stepOptionals(flow, step, ctx.config),
+    citations: step.cites.map((ref) => toCodeRef(flow, step, ref, ctx.config)),
     txChain: step.lane,
   };
   if (step.detail) {
-    const inner = all.get(step.detail.flow);
+    const inner = ctx.all.get(step.detail.flow);
     if (!inner) {
       throw new Error(
         `${flow.file}: step "${step.id}" detail flow "${step.detail.flow}" not found`,
       );
     }
-    out.detail = { actor: step.detail.part, flow: toFlow(inner, all) };
+    out.detail = { actor: step.detail.part, flow: toFlow(inner, ctx) };
     if (step.detail.next) out.detail.next = step.detail.next;
   }
   return out;
 }
 
-function toFinality(flow: DiagramFlow, step: DiagramStep, value: string): Finality {
-  if (!(value in FINALITY_LABEL)) {
-    throw new Error(`${flow.file}: step "${step.id}" has unknown finality "${value}"`);
+function toFinality(
+  flow: DiagramFlow,
+  step: DiagramStep,
+  value: string,
+  config: ProjectConfig,
+): string {
+  if (!Object.hasOwn(config.finality ?? {}, value)) {
+    throw new Error(
+      `${flow.file}: step "${step.id}" has finality "${value}", which project.yaml does not ` +
+        'declare',
+    );
   }
-  return value as Finality;
+  return value;
 }
 
-/** Map a generic diagram flow to the `Flow` the NitroTxFlow widget reads. */
-export function toFlow(flow: DiagramFlow, all: Map<string, DiagramFlow>): Flow {
+/** Map a generic diagram flow to the `Flow` the FlowDiagram widget reads. */
+export function toFlow(flow: DiagramFlow, ctx: Context): Flow {
   for (const edge of flow.edges) {
     if (edge.both || edge.style !== 'solid') {
       throw new Error(
@@ -153,9 +173,9 @@ export function toFlow(flow: DiagramFlow, all: Map<string, DiagramFlow>): Flow {
     id: flow.id,
     title: flow.title,
     ...(flow.showLanes ? {} : { showChains: false }),
-    actors: flow.parts.map((part) => toActor(flow, part)),
+    actors: flow.parts.map((part) => toActor(flow, part, ctx.config)),
     edges: flow.edges.map(({ id, source, target, label }) => ({ id, source, target, label })),
-    steps: flow.steps.map((step) => toStep(flow, step, all)),
+    steps: flow.steps.map((step) => toStep(flow, step, ctx)),
     ...(flow.paths === undefined
       ? {}
       : { paths: flow.paths.map(({ id, label, steps }) => ({ id, label, steps: [...steps] })) }),
@@ -168,7 +188,7 @@ const OUTPUT_PATH = path.join(
   REPO_ROOT,
   'components',
   'widgets',
-  'NitroTxFlow',
+  'FlowDiagram',
   'flows.generated.ts',
 );
 const CONST_NAMES: Record<string, string> = {
@@ -190,7 +210,23 @@ function emitConst(flow: Flow): string {
   return `export const ${constName(flow.id)}: Flow = ${body};`;
 }
 
-function buildContent(flows: Map<string, DiagramFlow>): string {
+/** The part of project.yaml the widget reads: no SVG settings, and only kinds with widget colors. */
+export function toProject(config: ProjectConfig): Project {
+  if (config.card === undefined) throw new Error('diagrams/project.yaml: card is required');
+  const lanes: Project['lanes'] = {};
+  for (const [id, { svg: _svg, ...lane }] of Object.entries(config.lanes)) lanes[id] = lane;
+  const kinds: Project['kinds'] = {};
+  for (const [id, { label, widget }] of Object.entries(config.kinds)) {
+    if (widget !== undefined) kinds[id] = { label, widget };
+  }
+  const repos: Project['repos'] = {};
+  for (const [id, { code }] of Object.entries(config.repos)) {
+    if (code !== undefined) repos[id] = { code };
+  }
+  return { lanes, kinds, finality: config.finality ?? {}, repos, card: config.card };
+}
+
+export function buildContent(flows: Map<string, DiagramFlow>, config: ProjectConfig): string {
   const consts: string[] = [];
   const emitted = new Set<string>();
   const keys: [string, string, boolean][] = [];
@@ -200,7 +236,7 @@ function buildContent(flows: Map<string, DiagramFlow>): string {
     for (const step of flow.steps) {
       if (step.detail) emit(flows.get(step.detail.flow)!);
     }
-    consts.push(emitConst(toFlow(flow, flows)));
+    consts.push(emitConst(toFlow(flow, { config, all: flows })));
     keys.push([flow.widget ?? flow.id, constName(flow.id), flow.widget !== undefined]);
   };
   for (const flow of flows.values()) {
@@ -211,7 +247,8 @@ function buildContent(flows: Map<string, DiagramFlow>): string {
     [
       '// AUTOGENERATED. Do not edit by hand. Run `pnpm diagrams:generate` after editing ' +
         'diagrams/.',
-      "import type { Flow } from './model.ts';",
+      "import type { Flow, Project } from './model.ts';",
+      `export const PROJECT: Project = ${JSON.stringify(toProject(config))};`,
       consts.join('\n\n'),
       `export type FlowId = ${keys.map(([key]) => `'${key}'`).join(' | ')};`,
       `export const FLOWS: Record<FlowId, Flow> = {\n${keys
@@ -247,7 +284,7 @@ async function main(): Promise<void> {
   const check = isCheckMode();
   const project = await loadProject(DIAGRAMS_DIR);
   checkPartDocs(project.parts, new Set(buildIndex(REPO_ROOT).byUrl.keys()));
-  await writeOrCheck(OUTPUT_PATH, buildContent(project.flows), { check });
+  await writeOrCheck(OUTPUT_PATH, buildContent(project.flows, project.config), { check });
   await writeStaticSvgs(project, check);
   const wrote = path.relative(REPO_ROOT, OUTPUT_PATH);
   console.log(check ? 'diagrams: up to date.' : `diagrams: wrote ${wrote}`);

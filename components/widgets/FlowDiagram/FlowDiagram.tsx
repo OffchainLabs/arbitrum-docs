@@ -14,16 +14,10 @@ import type { RoutedEdgeType } from './RoutedEdge.tsx';
 import { StepBar } from './StepBar.tsx';
 import { StepCard } from './StepCard.tsx';
 import { BRAND } from './brand.ts';
-import { FLOWS, type FlowId } from './flows.ts';
+import { FLOWS, type FlowId, PROJECT } from './flows.ts';
 import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
-import {
-  type Flow,
-  OPERATOR_CARD,
-  type ResolvedPath,
-  type StepDetail,
-  flowPaths,
-} from './model.ts';
+import { type Flow, type ResolvedPath, type StepDetail, flowPaths } from './model.ts';
 import type { PathCount } from './navigation.ts';
 import { useFlowLayout } from './useFlowLayout.ts';
 import { useStepCamera } from './useStepCamera.ts';
@@ -64,7 +58,7 @@ const VIEWS = Object.fromEntries(
 ) as Record<FlowId, FlowView>;
 
 /** A registered flow on one canvas. The layout runs once per flow, so tabs do not move nodes. */
-export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
+export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
   const { flow, counts, paths } = VIEWS[flowId];
   const { layout, failed } = useFlowLayout(flow);
   const [instance, setInstance] = useState<ReactFlowInstance<
@@ -119,7 +113,7 @@ export default function TxFlowDiagram({ flowId }: { flowId: FlowId }) {
     () => (layout ? flowEdges(flow, layout, step, current.stepNumbers, current.edges) : []),
     [flow, layout, step, current],
   );
-  const labels = flow.card ?? OPERATOR_CARD;
+  const labels = flow.card ?? PROJECT.card;
   const stepLabel = `Step ${index + 1} of ${stepCount}: ${step.title}`;
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'ArrowRight') goTo(index + 1);

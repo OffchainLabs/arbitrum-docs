@@ -4,7 +4,7 @@ import { before, test } from 'node:test';
 import {
   transactionLifecycle as flow,
   transactionSubmission,
-} from '../../components/widgets/NitroTxFlow/flows.generated.ts';
+} from '../../components/widgets/FlowDiagram/flows.generated.ts';
 import {
   type Box,
   type FlowLayout,
@@ -15,8 +15,8 @@ import {
   firstInteractionRank,
   labelBadgeCounts,
   stepNumbersByEdge,
-} from '../../components/widgets/NitroTxFlow/layout.ts';
-import type { Flow } from '../../components/widgets/NitroTxFlow/model.ts';
+} from '../../components/widgets/FlowDiagram/layout.ts';
+import type { Flow } from '../../components/widgets/FlowDiagram/model.ts';
 
 let layout: FlowLayout;
 

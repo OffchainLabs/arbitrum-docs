@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { type Browser, type BrowserContextOptions, type Page, chromium } from 'playwright';
 
-import { BAND_STYLE } from '../../components/widgets/NitroTxFlow/brand.ts';
-import { transactionLifecycle } from '../../components/widgets/NitroTxFlow/flows.generated.ts';
+import {
+  PROJECT,
+  transactionLifecycle,
+} from '../../components/widgets/FlowDiagram/flows.generated.ts';
 import { CANVAS, cardTitle, openFlow, settle } from './flow-page.ts';
 
 const PAGE_PATH = '/how-arbitrum-works/deep-dives/nitro-transaction-flow';
@@ -74,7 +76,9 @@ async function next(page: Page) {
 }
 
 async function snapshot(page: Page): Promise<Snapshot> {
-  const bandNames = Object.values(BAND_STYLE).map((style) => style.name);
+  const bandNames = Object.values(PROJECT.lanes)
+    .filter((lane) => lane.widget)
+    .map((lane) => lane.label);
   return page.evaluate(
     ({ canvasSelector, bandNames }) => {
       const rect = (element: Element) => {
@@ -328,7 +332,7 @@ test('the child chain label is on screen on steps 1 to 5 at 1280×800', async ()
     await settle(page);
     await eachStep(page, (shot, index) => {
       if (index > 4) return;
-      const label = shot.bandLabels.find((band) => band.name === BAND_STYLE.child.name);
+      const label = shot.bandLabels.find((band) => band.name === PROJECT.lanes['child']!.label);
       assert.ok(label, `step ${index + 1}: child chain label shown`);
       assert.ok(label.rect.top >= 0 && label.rect.bottom <= shot.innerHeight);
       assert.ok(inside(label.rect, shot.canvas));
@@ -361,11 +365,11 @@ for (const stepNumber of [5, 6]) {
           return value;
         };
         return [...document.querySelectorAll('.react-flow__node-band')].map((node) => {
-          const chain = node.getAttribute('data-id')!.split('-')[1] as 'child' | 'parent';
+          const chain = node.getAttribute('data-id')!.split('-')[1]!;
           const border = getComputedStyle(node.firstElementChild!).borderTopColor;
-          return { chain, active: border === computed(styles[chain].border[1]) };
+          return { chain, active: border === computed(styles[chain]!.widget!.border[1]) };
         });
-      }, BAND_STYLE);
+      }, PROJECT.lanes);
       assert.ok(bands.length >= 2);
       for (const band of bands) assert.equal(band.active, band.chain === txChain, band.chain);
     });
