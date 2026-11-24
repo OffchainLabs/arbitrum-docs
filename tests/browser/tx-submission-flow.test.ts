@@ -456,12 +456,24 @@ test('a click on a previewed node still opens its detail dialog', async () => {
   });
 });
 
+test('every part with docs previews its own page on the first step that shows it', async () => {
+  for (const actor of transactionSubmission.actors.filter((each) => each.docs)) {
+    const path = PATHS.find((each) => each.steps.some((step) => step.actors.includes(actor.id)))!;
+    const index = path.steps.findIndex((step) => step.actors.includes(actor.id));
+    await withFlow(WIDE, `#${path.id}-step-${index + 1}`, async (page) => {
+      await node(page, actor.id).hover();
+      await previewCard(page).waitFor();
+      assert.equal(await previewCard(page).getAttribute('href'), actor.docs!.href, actor.id);
+    });
+  }
+});
+
 test('a node whose part has no docs shows no preview', async () => {
-  await withFlow(WIDE, `#direct-step-${LANDING_INDEX + 1}`, async (page) => {
-    const fastFeed = transactionSubmission.actors.find((actor) => actor.id === 'fastfeed')!;
-    assert.equal(fastFeed.docs, undefined);
+  await withFlow(WIDE, '#direct-step-1', async (page) => {
+    const wallet = transactionSubmission.actors.find((actor) => actor.id === 'wallet')!;
+    assert.equal(wallet.docs, undefined);
     // The node takes no pointer events, so hover() refuses it: move the mouse to its centre.
-    const box = (await node(page, 'fastfeed').boundingBox())!;
+    const box = (await node(page, 'wallet').boundingBox())!;
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.waitForTimeout(1000);
     assert.equal(await previewCard(page).count(), 0);
