@@ -13,8 +13,7 @@ import { PathTabs, panelId, tabId } from './PathTabs.tsx';
 import type { RoutedEdgeType } from './RoutedEdge.tsx';
 import { StepBar } from './StepBar.tsx';
 import { StepCard } from './StepCard.tsx';
-import { BRAND } from './brand.ts';
-import { FLOWS, type FlowId, PROJECT } from './flows.ts';
+import { CANVAS_STYLE, FLOWS, type FlowId, PROJECT, THEME } from './flows.ts';
 import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
 import { type Flow, type ResolvedPath, type StepDetail, flowPaths } from './model.ts';
@@ -124,11 +123,11 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
       aria-roledescription="diagram"
       aria-label={`${flow.title}. ${stepLabel}`}
       className="relative flex h-[520px] w-full flex-col md:h-[720px]"
-      style={{ background: BRAND.gradient, scrollMarginTop: SITE_HEADER }}
+      style={{ ...CANVAS_STYLE, scrollMarginTop: SITE_HEADER }}
     >
       <Legend flow={flow} narrow={narrow} />
       {failed && (
-        <p className="m-auto px-4 text-center" style={{ color: BRAND.chipText }}>
+        <p className="m-auto px-4 text-center" style={{ color: THEME.ink }}>
           The diagram could not be drawn.
         </p>
       )}

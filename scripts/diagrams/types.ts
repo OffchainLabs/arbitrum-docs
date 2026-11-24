@@ -115,9 +115,6 @@ export interface ProjectConfig {
     background?: string;
     /** A canvas area no box may overlap, in final SVG units. */
     reserve?: { x: [number, number]; y: [number, number] };
-    ink?: string;
-    chip?: string;
-    font?: string;
   };
 }
 

@@ -1,6 +1,6 @@
 import { BaseEdge, type Edge, EdgeLabelRenderer, type EdgeProps } from '@xyflow/react';
 
-import { BRAND } from './brand.ts';
+import { THEME } from './flows.ts';
 import type { EdgeLayout, Point } from './layout.ts';
 
 export type RoutedEdgeType = Edge<
@@ -45,7 +45,7 @@ const TRANSITION = 'motion-safe:transition-[opacity,stroke] motion-safe:duration
 export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
   if (!data) return null;
   const { label, stepNumbers, active, route } = data;
-  const opacity = active ? 1 : BRAND.dimmed;
+  const opacity = active ? 1 : THEME.dimmed;
   const box = route.label;
   return (
     <>
@@ -55,7 +55,7 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
         markerEnd={markerEnd}
         className={TRANSITION}
         style={{
-          stroke: active ? BRAND.active : BRAND.connector,
+          stroke: active ? THEME.active : THEME.connector,
           strokeWidth: active ? 3 : 1.5,
           opacity,
         }}
@@ -75,9 +75,9 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
               `translate(${box.x + box.width / 2}px, ${box.y + box.height / 2}px)`,
             padding: '2px 8px 2px 3px',
             borderRadius: 6,
-            background: BRAND.chip,
-            color: BRAND.chipText,
-            fontFamily: BRAND.font,
+            background: THEME.chip,
+            color: THEME.ink,
+            fontFamily: THEME.font,
             fontSize: 12,
           }}
         >
@@ -90,8 +90,8 @@ export function RoutedEdge({ id, markerEnd, data }: EdgeProps<RoutedEdgeType>) {
                   minWidth: 20,
                   height: 20,
                   borderRadius: 10,
-                  background: BRAND.badge,
-                  color: BRAND.badgeText,
+                  background: THEME.badge,
+                  color: THEME.badgeText,
                   fontWeight: 700,
                 }}
               >

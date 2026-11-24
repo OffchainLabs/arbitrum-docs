@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { loadProject } from './load.ts';
+import { loadProject, loadTheme } from './load.ts';
 
 const fixture = (name: string) => new URL(`./fixtures/${name}`, import.meta.url).pathname;
 
@@ -34,6 +34,7 @@ test('loads a Prysm-like vocabulary', async () => {
   assert.deepEqual(Object.keys(config.kinds).sort(), ['network', 'other', 'prysm']);
   assert.equal(config.repos['prysm']!.url, 'https://github.com/example/prysm');
   assert.equal(overview.parts.length, 5);
+  assert.equal((await loadTheme(fixture('prysm-like'))).ink, '#222222');
 });
 
 test('parses an arrow inside a quoted label', async () => {

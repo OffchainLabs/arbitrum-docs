@@ -75,6 +75,3 @@ svg:
   offset: [47, 30]
   background: assets/bg-frag.svg
   reserve: { x: [0, 330], y: [810, 900] }
-  ink: '#eaf5ff'
-  chip: '#152c4e'
-  font: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"

@@ -180,9 +180,11 @@ entries do not carry this contract.
   The six `content/partials/_troubleshooting-*-partial.mdx` come from `content/faq/*.json`; edit them in Notion.
   `components/widgets/FlowDiagram/flows.generated.ts` and the SVGs named by a flow's `svg:` key
   (`public/img/haw-transaction-lifecycle.svg`) come from `diagrams/`; edit `diagrams/project.yaml`,
-  `diagrams/parts.yaml` and `diagrams/flows/*.md`, then run `pnpm diagrams:generate`. The widget
-  code holds no content: labels, colours, repos, finality and card text come from `PROJECT` in
-  that file, built from `diagrams/project.yaml`. A page renders a flow with
+  `diagrams/theme.yaml`, `diagrams/parts.yaml` and `diagrams/flows/*.md`, then run
+  `pnpm diagrams:generate`. The widget code holds no content and no colour literal (`pnpm test`
+  checks): labels, colours, repos, finality and card text come from `PROJECT` in that file, built
+  from `diagrams/project.yaml`, and the shared colours and font from `THEME`, built from
+  `diagrams/theme.yaml`. A page renders a flow with
   `<FlowDiagram flow="<key>" />`.
 
 Details for each are in [INTERNALS.md](INTERNALS.md).

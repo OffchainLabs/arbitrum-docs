@@ -1,6 +1,7 @@
 import { LineCounter, type Node, isPair, isScalar, parseDocument, visit } from 'yaml';
 import { z } from 'zod';
 
+import type { Theme } from '../../components/widgets/FlowDiagram/model.ts';
 import type { Part, ProjectConfig } from './types.ts';
 
 type Path = (string | number)[];
@@ -130,9 +131,6 @@ const projectConfig = z
       offset: numberPair,
       background: text.optional(),
       reserve: z.strictObject({ x: numberPair, y: numberPair }).optional(),
-      ink: text.optional(),
-      chip: text.optional(),
-      font: text.optional(),
     }),
   })
   .superRefine((config, ctx) => {
@@ -150,6 +148,25 @@ const projectConfig = z
 
 export function parseProjectConfig(src: YamlSource): ProjectConfig {
   return src.parse(projectConfig, src.value) as ProjectConfig;
+}
+
+const theme = z.strictObject({
+  gradient: text,
+  connector: text,
+  active: text,
+  activeGlow: text,
+  startGlow: text,
+  focus: text,
+  chip: text,
+  ink: text,
+  badge: text,
+  badgeText: text,
+  font: text,
+  dimmed: z.number().min(0).max(1),
+});
+
+export function parseTheme(src: YamlSource): Theme {
+  return src.parse(theme, src.value);
 }
 
 const partFields = z.strictObject({

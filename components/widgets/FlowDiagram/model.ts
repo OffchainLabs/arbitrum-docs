@@ -103,6 +103,22 @@ export interface Project {
   card: CardLabels;
 }
 
+/** The colors and font of `diagrams/theme.yaml`, shared by the widget and the static SVG. */
+export interface Theme {
+  gradient: string;
+  connector: string;
+  active: string;
+  activeGlow: string;
+  startGlow: string;
+  focus: string;
+  chip: string;
+  ink: string;
+  badge: string;
+  badgeText: string;
+  font: string;
+  dimmed: number;
+}
+
 export interface StepDetail {
   actor: string;
   flow: Flow;

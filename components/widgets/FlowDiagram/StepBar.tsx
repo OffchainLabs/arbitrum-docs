@@ -1,9 +1,9 @@
 import type { RefObject } from 'react';
 
-import { BRAND } from './brand.ts';
+import { THEME } from './flows.ts';
 
-// The site focus ring, #016be5, has about 2.8:1 contrast on the chip color; chipText is lighter.
-const FOCUS = 'focus-visible:outline-[#eaf5ff]';
+// THEME.focus, not the site focus ring, which has too little contrast on THEME.chip.
+const FOCUS = 'focus-visible:outline-(--flow-focus)';
 
 interface StepBarProps {
   index: number;
@@ -39,10 +39,10 @@ export function StepBar({
         'text-sm md:gap-2',
       ].join(' ')}
       style={{
-        background: BRAND.chip,
-        color: BRAND.chipText,
-        fontFamily: BRAND.font,
-        border: `1px solid ${BRAND.connector}`,
+        background: THEME.chip,
+        color: THEME.ink,
+        fontFamily: THEME.font,
+        border: `1px solid ${THEME.connector}`,
       }}
     >
       <button
@@ -51,7 +51,7 @@ export function StepBar({
           'rounded-md px-2 py-1 whitespace-nowrap aria-disabled:opacity-40 md:px-3',
           FOCUS,
         ].join(' ')}
-        style={{ border: `1px solid ${BRAND.connector}` }}
+        style={{ border: `1px solid ${THEME.connector}` }}
         aria-disabled={index === 0}
         onClick={() => onGo(index - 1)}
       >
@@ -68,8 +68,8 @@ export function StepBar({
           started ? '' : 'motion-safe:animate-pulse',
         ].join(' ')}
         style={{
-          border: `1px solid ${BRAND.active}`,
-          boxShadow: started ? 'none' : '0 0 0 3px rgba(18, 170, 255, 0.6)',
+          border: `1px solid ${THEME.active}`,
+          boxShadow: started ? 'none' : THEME.startGlow,
         }}
         data-step-next=""
         aria-disabled={atEnd && !onFinish}

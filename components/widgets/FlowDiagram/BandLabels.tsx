@@ -1,8 +1,7 @@
 import type { Viewport } from '@xyflow/react';
 import { type RefObject, useEffect, useState } from 'react';
 
-import { BRAND } from './brand.ts';
-import { PROJECT } from './flows.ts';
+import { PROJECT, THEME } from './flows.ts';
 import { type Band, type Box, type FlowLayout, activeBoxes, nodeBox } from './layout.ts';
 import type { Step } from './model.ts';
 import { siteHeaderPx } from './useStepNavigation.ts';
@@ -122,9 +121,9 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
         style={{
           left: x,
           top: y,
-          background: BRAND.chip,
-          color: BRAND.chipText,
-          fontFamily: BRAND.font,
+          background: THEME.chip,
+          color: THEME.ink,
+          fontFamily: THEME.font,
           opacity: band.chain === step.txChain ? 1 : 0.8,
         }}
       >
