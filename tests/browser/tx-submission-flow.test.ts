@@ -460,8 +460,17 @@ test('Full screen fills the window and frames each step, at 1280×800 and 375×8
           await page.locator(CANVAS).getByRole('button', { name: 'Next →' }).click();
           await waitForStep(page, DIRECT, index);
         }
-        const shot = await frameShot(page, DIRECT.steps[index]!.actors);
-        for (const box of shot.activeNodes) {
+        const step = DIRECT.steps[index]!;
+        const shot = await frameShot(page, step.actors);
+        // On a phone a step keeps zoom ≥0.6 and centers on its first active node, so only that
+        // node is sure to be inside.
+        const boxes =
+          options === PHONE
+            ? shot.nodes.filter((node) => node.id === step.actors[0]).map((node) => node.rect)
+            : shot.activeNodes;
+        if (options === PHONE) assert.ok(shot.zoom >= 0.6, `${name} step ${index + 1} zoom`);
+        assert.ok(boxes.length > 0, `${name} step ${index + 1}: active node drawn`);
+        for (const box of boxes) {
           assert.ok(inside(box, shot.canvas), `${name} step ${index + 1}: ${JSON.stringify(box)}`);
         }
       }
