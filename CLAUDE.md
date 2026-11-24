@@ -159,7 +159,8 @@ entries do not carry this contract.
   and sets the response headers from `lib/http-headers.ts` (security headers, report-only CSP,
   `Link` on `/`, CORS on the markdown surface). The `og/` and `llms.mdx/` routes have
   `dynamicParams = false`. `app/preview/` serves the static link-preview JSON, untracked and without
-  CORS. `proxy.ts` only records PostHog `llms_file_fetched` events, in production.
+  CORS. `proxy.ts` rewrites a page URL to its mirror when `Accept` prefers `text/markdown`
+  (`lib/markdown-negotiation.ts`), and records PostHog `llms_file_fetched` events, in production.
 - **Analytics consent.** CookieYes (`components/analytics/cookie-consent.tsx`, keyed by
   `NEXT_PUBLIC_COOKIEYES_ID`) owns the banner. `lib/analytics-consent.ts` reads consent by banner
   law; `lib/posthog-consent.ts` and `lib/hubspot.ts` gate PostHog and HubSpot on it, in production
