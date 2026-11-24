@@ -2,8 +2,7 @@ import { Handle, type Node, type NodeProps, Position } from '@xyflow/react';
 
 import { LinkPreview } from '@/components/LinkPreview';
 
-import { BRAND } from './brand.ts';
-import { PROJECT } from './flows.ts';
+import { PROJECT, THEME } from './flows.ts';
 import { NODE_HEIGHT, NODE_WIDTH } from './layout.ts';
 import type { Actor } from './model.ts';
 
@@ -51,7 +50,7 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
       className={[
         'relative flex flex-col justify-center px-3.5',
         'motion-safe:transition-[opacity,box-shadow,border-color] motion-safe:duration-200',
-        trigger ? 'cursor-pointer focus-visible:outline-[#eaf5ff]' : '',
+        trigger ? 'cursor-pointer focus-visible:outline-(--flow-focus)' : '',
         trigger?.blink ? 'motion-safe:animate-trigger-pulse' : '',
       ].join(' ')}
       style={{
@@ -59,10 +58,10 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
         height: NODE_HEIGHT,
         background: style.fill,
         borderRadius: 10,
-        border: `3px solid ${active ? BRAND.active : 'transparent'}`,
-        boxShadow: active ? BRAND.activeGlow : 'none',
-        opacity: active ? 1 : BRAND.dimmed,
-        fontFamily: BRAND.font,
+        border: `3px solid ${active ? THEME.active : 'transparent'}`,
+        boxShadow: active ? THEME.activeGlow : 'none',
+        opacity: active ? 1 : THEME.dimmed,
+        fontFamily: THEME.font,
       }}
     >
       <Handle type="target" position={Position.Top} style={HIDDEN_HANDLE} />
@@ -75,8 +74,8 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
             minWidth: 22,
             height: 22,
             borderRadius: 11,
-            background: BRAND.badge,
-            color: BRAND.badgeText,
+            background: THEME.badge,
+            color: THEME.badgeText,
             fontSize: 12,
             fontWeight: 700,
           }}
@@ -90,7 +89,7 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
         <span
           aria-hidden="true"
           className="absolute -top-3 right-3 rounded-full px-2 py-0.5 text-[11px] font-semibold"
-          style={{ background: BRAND.badge, color: BRAND.badgeText }}
+          style={{ background: THEME.badge, color: THEME.badgeText }}
         >
           Look inside ›
         </span>

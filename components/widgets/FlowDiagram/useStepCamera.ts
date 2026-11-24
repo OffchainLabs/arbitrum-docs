@@ -1,50 +1,20 @@
 import type { Edge, Node, ReactFlowInstance } from '@xyflow/react';
 import { type RefObject, useEffect, useState } from 'react';
 
+import { CAMERA_BOTTOM, CAMERA_MARGIN, cameraViewport } from './camera.ts';
 import { type Box, type FlowLayout, activeBoxes, nodeBox } from './layout.ts';
 import type { Step } from './model.ts';
 import { motionDuration } from './useStepNavigation.ts';
 
-const CAMERA_MARGIN = 24;
 // Room for the Key button at the top of the canvas, when no key strip is measured.
 const CAMERA_TOP = 40;
 // Space between the key strip and the graph.
 const KEY_GAP = 12;
-// Room for the step bar at the bottom of the canvas, when no dock is measured.
-const CAMERA_BOTTOM = 56;
 // Space between the graph and the top of the dock.
 const DOCK_GAP = 8;
 
-/**
- * Frames `boxes` at zoom <= 1 inside the canvas, between `top` (room for the key)
- * and `bottom` (room for the step bar or dock).
- */
-function frame<N extends Node, E extends Edge>(
-  instance: ReactFlowInstance<N, E>,
-  canvas: HTMLElement,
-  boxes: Box[],
-  top: number,
-  bottom: number,
-) {
-  const minX = Math.min(...boxes.map((box) => box.x));
-  const minY = Math.min(...boxes.map((box) => box.y));
-  const maxX = Math.max(...boxes.map((box) => box.x + box.width));
-  const maxY = Math.max(...boxes.map((box) => box.y + box.height));
-  const width = canvas.clientWidth;
-  const frameHeight = canvas.clientHeight - top - bottom;
-  const zoom = Math.min(
-    1,
-    (width - 2 * CAMERA_MARGIN) / (maxX - minX),
-    (frameHeight - 2 * CAMERA_MARGIN) / (maxY - minY),
-  );
-  void instance.setViewport(
-    {
-      x: width / 2 - ((minX + maxX) / 2) * zoom,
-      y: top + frameHeight / 2 - ((minY + maxY) / 2) * zoom,
-      zoom,
-    },
-    { duration: motionDuration() },
-  );
+function sizeOf(canvas: HTMLElement) {
+  return { width: canvas.clientWidth, height: canvas.clientHeight };
 }
 
 /** The room the key takes at the canvas top: the strip's height, or the Key button's room. */
@@ -89,6 +59,8 @@ function dockRoom(dock: HTMLElement | null | undefined): number {
 interface CameraOptions {
   // Frame the whole graph on every step, with no top room: a dialog has no key.
   inDialog?: boolean;
+  // A screen under 768px: a step keeps zoom >= `PHONE_MIN_ZOOM`.
+  narrow?: boolean;
   // The step dock, framed above while docked.
   dockRef?: RefObject<HTMLElement | null>;
   // Whether the reader moved the dock. A change refits the camera.
@@ -98,15 +70,17 @@ interface CameraOptions {
 /**
  * Frames the active nodes and their edge labels on each step change, each canvas resize
  * (crossing 768px, or rotating a phone) and each dock resize (a new step's caption, or details
- * opened), above the dock, and when the reader moves or puts back the dock. `showAll` frames the
- * whole graph the same way until the step changes or `showStep`; `overview` says it is on.
+ * opened), above the dock, and when the reader moves or puts back the dock. When `narrow`, a step
+ * keeps zoom >= `PHONE_MIN_ZOOM`; a step too wide or tall for that centers on its first active
+ * node instead. `showAll` fits the whole graph with no zoom floor until the step changes or
+ * `showStep`; `overview` says it is on.
  */
 export function useStepCamera<N extends Node, E extends Edge>(
   instance: ReactFlowInstance<N, E> | null,
   layout: FlowLayout | null,
   step: Step,
   canvasRef: RefObject<HTMLDivElement | null>,
-  { inDialog = false, dockRef, dockMoved = false }: CameraOptions = {},
+  { inDialog = false, narrow = false, dockRef, dockMoved = false }: CameraOptions = {},
 ) {
   // A dialog has no key. Read at each frame, since the key strip wraps with the canvas width.
   const topRoom = (canvas: HTMLElement) => (inDialog ? 0 : keyRoom(canvas));
@@ -131,9 +105,24 @@ export function useStepCamera<N extends Node, E extends Edge>(
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!instance || !layout || !canvas) return;
-    const boxes = inDialog || overview ? allBoxes(layout) : activeBoxes(layout, step);
-    frame(instance, canvas, boxes, topRoom(canvas), dockRoom(dockRef?.current));
-  }, [instance, layout, step, canvasRef, canvasSize, inDialog, dockRef, dockMoved, overview]);
+    const focus = nodeBox(layout.nodes[step.actors[0]!]!);
+    const fitAll = inDialog || overview;
+    const boxes = fitAll ? allBoxes(layout) : activeBoxes(layout, step);
+    const options = { narrow, fitAll, bottom: dockRoom(dockRef?.current) };
+    const viewport = cameraViewport(boxes, focus, sizeOf(canvas), topRoom(canvas), options);
+    void instance.setViewport(viewport, { duration: motionDuration() });
+  }, [
+    instance,
+    layout,
+    step,
+    canvasRef,
+    canvasSize,
+    inDialog,
+    narrow,
+    dockRef,
+    dockMoved,
+    overview,
+  ]);
 
   return {
     // Frames the whole graph, and keeps it framed until the step changes or `showStep`.
@@ -141,7 +130,10 @@ export function useStepCamera<N extends Node, E extends Edge>(
       const canvas = canvasRef.current;
       if (!instance || !layout || !canvas) return;
       setOverviewStep(step);
-      frame(instance, canvas, allBoxes(layout), topRoom(canvas), dockRoom(dockRef?.current));
+      const boxes = allBoxes(layout);
+      const options = { narrow, fitAll: true, bottom: dockRoom(dockRef?.current) };
+      const viewport = cameraViewport(boxes, boxes[0]!, sizeOf(canvas), topRoom(canvas), options);
+      void instance.setViewport(viewport, { duration: motionDuration() });
     },
     overview,
     showStep: () => setOverviewStep(null),

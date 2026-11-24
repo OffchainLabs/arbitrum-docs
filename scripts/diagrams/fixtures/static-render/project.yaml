@@ -23,6 +23,3 @@ svg:
   scale: 1.15
   offset: [47, 30]
   reserve: { x: [0, 330], y: [810, 900] }
-  ink: '#eeeeee'
-  chip: '#333333'
-  font: "Arial, 'Helvetica Neue', sans-serif"

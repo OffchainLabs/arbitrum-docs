@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
+import type { Theme } from '../components/widgets/FlowDiagram/model.ts';
 import type { DiagramFlow, DiagramStep, Part, ProjectConfig } from './diagrams/types.ts';
 import { buildContent, checkPartDocs, toFlow } from './generate-diagrams.ts';
 
@@ -57,6 +58,21 @@ const config: ProjectConfig = {
     showFlag: false,
   },
   svg: { canvas: [1, 1], cols: [0], rows: [0], box: [1, 1], scale: 1, offset: [0, 0] },
+};
+
+const theme: Theme = {
+  gradient: 'linear-gradient(#000000, #ffffff)',
+  connector: '#111111',
+  active: '#222222',
+  activeGlow: '0 0 0 5px #333333',
+  startGlow: '0 0 0 3px #444444',
+  focus: '#555555',
+  chip: '#666666',
+  ink: '#777777',
+  badge: '#888888',
+  badgeText: '#999999',
+  font: 'sans-serif',
+  dimmed: 0.5,
 };
 
 function widgetFlow(step: Partial<DiagramStep> = {}, kind = 'box'): DiagramFlow {
@@ -135,7 +151,7 @@ test('rejects a part lane without a short name when the flow shows lanes', () =>
 
 test('emits PROJECT: lanes without svg, kinds with widget colors, repos with code links', () => {
   const flow = widgetFlow();
-  const content = buildContent(new Map([[flow.id, flow]]), config);
+  const content = buildContent(new Map([[flow.id, flow]]), config, theme);
   const match = /^export const PROJECT: Project = (.*);$/m.exec(content);
   assert.ok(match, 'no PROJECT constant');
   assert.deepEqual(JSON.parse(match[1]!), {
@@ -163,4 +179,12 @@ test('emits PROJECT: lanes without svg, kinds with widget colors, repos with cod
       showFlag: false,
     },
   });
+});
+
+test('emits THEME unchanged', () => {
+  const flow = widgetFlow();
+  const content = buildContent(new Map([[flow.id, flow]]), config, theme);
+  const match = /^export const THEME: Theme = (.*);$/m.exec(content);
+  assert.ok(match, 'no THEME constant');
+  assert.deepEqual(JSON.parse(match[1]!), theme);
 });

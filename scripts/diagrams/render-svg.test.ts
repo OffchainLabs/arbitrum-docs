@@ -1,15 +1,16 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { loadProject } from './load.ts';
+import { loadProject, loadTheme } from './load.ts';
 import { renderSvg } from './render-svg.ts';
 
 const fixture = (name: string) => new URL(`./fixtures/${name}`, import.meta.url).pathname;
 const BACKGROUND = '<g transform="scale(2)"><rect width="800" height="450" fill="#808080"/></g>';
+const THEME = await loadTheme(fixture('static-render'));
 
 async function render(name: string, flowId: string): Promise<string> {
   const { config, flows } = await loadProject(fixture(name));
-  return renderSvg(flows.get(flowId)!, config, BACKGROUND);
+  return renderSvg(flows.get(flowId)!, config, THEME, BACKGROUND);
 }
 
 const afterBackground = (svg: string) => svg.slice(svg.indexOf(BACKGROUND) + BACKGROUND.length);
@@ -115,7 +116,10 @@ test('lists the kinds used in the key, with the svg key label', async () => {
 test('rejects a part without a static position', async () => {
   const { config, flows } = await loadProject(fixture('static-render'));
   const flow = { ...flows.get('demo')!, static: { a: [0, 1] as [number, number] } };
-  assert.throws(() => renderSvg(flow, config, BACKGROUND), /part "b" has no static position/);
+  assert.throws(
+    () => renderSvg(flow, config, THEME, BACKGROUND),
+    /part "b" has no static position/,
+  );
 });
 
 const PINS = { a: [0, 0], b: [2, 0], e: [1, 1], c: [0, 3], d: [2, 3] } as const;
@@ -128,7 +132,7 @@ async function renderWith(pins: Record<string, readonly [number, number]>, label
     static: Object.fromEntries(Object.entries({ ...PINS, ...pins }).map(([k, v]) => [k, [...v]])),
     parts: demo.parts.map((p) => ({ ...p, ...(labels as Record<string, object>)[p.id] })),
   } as typeof demo;
-  return () => renderSvg(flow, config, BACKGROUND);
+  return () => renderSvg(flow, config, THEME, BACKGROUND);
 }
 
 test('rejects a box in the reserved area', async () => {
@@ -169,7 +173,7 @@ test('rejects an edge label wider than its edge', async () => {
     ...demo,
     edges: demo.edges.map((e) => (e.id === 'ab' ? { ...e, label: long } : e)),
   };
-  assert.throws(() => renderSvg(flow, config, BACKGROUND), /label of edge "ab" is wider/);
+  assert.throws(() => renderSvg(flow, config, THEME, BACKGROUND), /label of edge "ab" is wider/);
 });
 
 test('checks a sublabel against the full box width', async () => {

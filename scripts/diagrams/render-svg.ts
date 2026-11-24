@@ -1,3 +1,4 @@
+import type { Theme } from '../../components/widgets/FlowDiagram/model.ts';
 import type { DiagramEdge, DiagramFlow, Part, ProjectConfig } from './types.ts';
 
 /** Layout constants in canvas units before `svg.scale`. Brand floors: 21 title, 18 sub, 17 chip. */
@@ -95,15 +96,9 @@ class Canvas {
   }
 }
 
-function requireStyle(flow: DiagramFlow, config: ProjectConfig) {
-  const { ink, chip, font } = config.svg;
-  for (const [key, value] of Object.entries({ ink, chip, font })) {
-    if (value === undefined) {
-      throw new Error(`${flow.file}: project.yaml svg.${key} is required to render an SVG`);
-    }
-  }
+function requireStyle(flow: DiagramFlow, theme: Theme) {
   if (flow.alt === undefined) throw new Error(`${flow.file}: alt is required to render an SVG`);
-  return { ink: ink!, chip: chip!, font: font!, alt: flow.alt };
+  return { ink: theme.ink, chip: theme.chip, font: theme.font, alt: flow.alt };
 }
 
 function placeBoxes(flow: DiagramFlow, config: ProjectConfig): Map<string, Box> {
@@ -431,14 +426,20 @@ function bandElements(
  *
  * Args:
  *   flow: the flow; every part needs a `static` [column, row] pin, and `alt` is required.
- *   project: the project config; `svg.ink`, `svg.chip` and `svg.font` are required.
+ *   project: the project config.
+ *   theme: the shared colors and font; the SVG reads `ink`, `chip` and `font`.
  *   background: an SVG fragment drawn first, under everything else.
  *
  * Returns:
  *   The SVG document text, ending with a newline.
  */
-export function renderSvg(flow: DiagramFlow, project: ProjectConfig, background: string): string {
-  const style = requireStyle(flow, project);
+export function renderSvg(
+  flow: DiagramFlow,
+  project: ProjectConfig,
+  theme: Theme,
+  background: string,
+): string {
+  const style = requireStyle(flow, theme);
   const canvas = new Canvas(project);
   const boxes = placeBoxes(flow, project);
   const bands = laneBands(flow, project, boxes);

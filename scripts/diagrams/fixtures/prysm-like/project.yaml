@@ -25,6 +25,3 @@ svg:
   box: [280, 80]
   scale: 1
   offset: [0, 0]
-  ink: '#222222'
-  chip: '#dddddd'
-  font: sans-serif

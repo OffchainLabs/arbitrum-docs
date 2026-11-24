@@ -1,7 +1,7 @@
 import type { ActorNodeType, NodeTrigger } from './ActorNode.tsx';
 import type { BandNodeType } from './BandNode.tsx';
 import type { RoutedEdgeType } from './RoutedEdge.tsx';
-import { BRAND } from './brand.ts';
+import { THEME } from './flows.ts';
 import type { FlowLayout } from './layout.ts';
 import type { Flow, Step } from './model.ts';
 
@@ -79,7 +79,7 @@ export function flowEdges(
         },
         markerEnd: {
           type: 'arrowclosed',
-          color: active ? BRAND.active : BRAND.connector,
+          color: active ? THEME.active : THEME.connector,
           width: 16,
           height: 16,
           markerUnits: 'userSpaceOnUse',

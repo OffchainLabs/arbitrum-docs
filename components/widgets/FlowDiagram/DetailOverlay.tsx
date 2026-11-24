@@ -19,7 +19,7 @@ import { FlowCanvas } from './FlowCanvas.tsx';
 import type { RoutedEdgeType } from './RoutedEdge.tsx';
 import { StepBar } from './StepBar.tsx';
 import { StepCard } from './StepCard.tsx';
-import { BRAND } from './brand.ts';
+import { CANVAS_STYLE } from './flows.ts';
 import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
 import type { CardLabels, Flow } from './model.ts';
@@ -189,7 +189,7 @@ export function DetailOverlay({ flow, labels, onClose, onFinish, anchorRef }: De
                 // 92vh less the title row, so the sticky step bar never covers the canvas.
                 'md:h-[min(var(--canvas-h,720px),720px,calc(92vh_-_var(--head-h,3rem)))]',
               ].join(' ')}
-              style={{ background: BRAND.gradient }}
+              style={CANVAS_STYLE}
             >
               {layout && <FlowCanvas nodes={nodes} edges={edges} onInit={setInstance} />}
               <StepBar

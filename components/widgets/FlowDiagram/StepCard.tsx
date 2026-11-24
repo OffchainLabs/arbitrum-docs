@@ -3,8 +3,7 @@ import { useId, useRef, useState } from 'react';
 
 import { vars } from '@/content/vars';
 
-import { BRAND } from './brand.ts';
-import { PROJECT } from './flows.ts';
+import { PROJECT, THEME } from './flows.ts';
 import { codeUrl } from './links.ts';
 import type { CardLabels, Step } from './model.ts';
 import { fillVars } from './text.ts';
@@ -21,7 +20,7 @@ const INLINE_CODE = /`([^`]+)`/g;
 const TAB_LIST = 'mt-2 flex gap-4 border-b';
 const TAB_CLASS = '-mb-px border-b-2 px-0.5 pb-1 text-sm font-medium';
 // Per variant: the rule, an idle tab, the selected tab. The caption's selected underline is the
-// brand blue of the edge step badges, set inline from BRAND.
+// brand blue of the edge step badges, set inline from THEME.
 const TAB_STATE = {
   card: {
     list: 'border-fd-border',
@@ -155,7 +154,7 @@ export function StepCard({
                   tabIndex={tab === key ? 0 : -1}
                   onClick={() => setSelected(key)}
                   className={`${TAB_CLASS} ${tab === key ? tabState.selected : tabState.idle}`}
-                  style={caption && tab === key ? { borderBottomColor: BRAND.badge } : undefined}
+                  style={caption && tab === key ? { borderBottomColor: THEME.badge } : undefined}
                 >
                   {label}
                 </button>
@@ -243,7 +242,7 @@ function FinalityTrack({ track, step }: { track: FinalityTrackData; step: Step }
           'inline-block rounded-full px-2 py-0.5 font-medium',
           reached ? 'bg-white/15' : 'border border-dashed border-white/30 opacity-60',
         ].join(' ');
-        const style = now ? { boxShadow: `0 0 0 1.5px ${BRAND.badge}` } : undefined;
+        const style = now ? { boxShadow: `0 0 0 1.5px ${THEME.badge}` } : undefined;
         return (
           <li
             key={level}

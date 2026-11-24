@@ -1,0 +1,12 @@
+gradient: 'linear-gradient(180deg, #000000 0%, #ffffff 100%)'
+connector: '#999999'
+active: '#ffffff'
+activeGlow: '0 0 0 5px #888888'
+startGlow: '0 0 0 3px #888888'
+focus: '#ffffff'
+chip: '#333333'
+ink: '#eeeeee'
+badge: '#777777'
+badgeText: '#000000'
+font: "Arial, 'Helvetica Neue', sans-serif"
+dimmed: 0.35

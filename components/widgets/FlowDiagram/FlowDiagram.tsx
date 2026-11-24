@@ -12,8 +12,7 @@ import { PathTabs, panelId, tabId } from './PathTabs.tsx';
 import type { RoutedEdgeType } from './RoutedEdge.tsx';
 import { Key, StepBar } from './StepBar.tsx';
 import { StepCard } from './StepCard.tsx';
-import { BRAND } from './brand.ts';
-import { FLOWS, type FlowId, PROJECT } from './flows.ts';
+import { CANVAS_STYLE, FLOWS, type FlowId, PROJECT, THEME } from './flows.ts';
 import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
 import { type Flow, type ResolvedPath, type StepDetail, flowPaths } from './model.ts';
@@ -86,6 +85,7 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
   const dock = useDockPosition(canvasRef, barRef);
   const dockMoved = dock.offset !== null;
   const { showAll, overview, showStep } = useStepCamera(instance, layout, step, canvasRef, {
+    narrow,
     dockRef: barRef,
     dockMoved,
   });
@@ -191,7 +191,7 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
         ' ',
       )}
       style={{
-        background: BRAND.gradient,
+        ...CANVAS_STYLE,
         height: fullScreen
           ? undefined
           : `max(${CANVAS_MIN}px, min(${narrow ? CANVAS_NARROW : CANVAS_WIDE}px, calc(100svh - ${SITE_HEADER})))`,
@@ -214,21 +214,21 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
             escHint ? 'opacity-100' : 'opacity-0',
           ].join(' ')}
           style={{
-            background: BRAND.chip,
-            color: BRAND.chipText,
-            fontFamily: BRAND.font,
-            border: `1px solid ${BRAND.connector}`,
+            background: THEME.chip,
+            color: THEME.ink,
+            fontFamily: THEME.font,
+            border: `1px solid ${THEME.connector}`,
           }}
         >
           Press <Key>Esc</Key> to exit full screen
         </div>
       )}
       {failed && (
-        <p className="m-auto px-4 text-center" style={{ color: BRAND.chipText }}>
+        <p className="m-auto px-4 text-center" style={{ color: THEME.ink }}>
           The diagram could not be drawn.
         </p>
       )}
-      {layout && <FlowCanvas nodes={nodes} edges={edges} onInit={setInstance} />}
+      {layout && <FlowCanvas nodes={nodes} edges={edges} onInit={setInstance} panX={narrow} />}
       {/* The step dock. Sticky in normal flow: it sits at the canvas bottom, or at the screen
           bottom while the canvas bottom is below the fold, so the step's caption stays on
           screen with Next. Below 768px it spans the canvas, so the step bar fits a phone. The
@@ -244,15 +244,15 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
           dockMoved ? 'absolute rounded-lg' : 'sticky bottom-0 mx-auto mt-auto md:bottom-3 md:mb-3',
         ].join(' ')}
         style={{
-          background: BRAND.chip,
-          color: BRAND.chipText,
-          fontFamily: BRAND.font,
+          background: THEME.chip,
+          color: THEME.ink,
+          fontFamily: THEME.font,
           left: dock.offset?.x,
           top: dock.offset?.y,
           // Docked and edge to edge below 768px: a top border only.
-          borderTop: `1px solid ${BRAND.connector}`,
-          borderInline: narrow && !dockMoved ? 'none' : `1px solid ${BRAND.connector}`,
-          borderBottom: narrow && !dockMoved ? 'none' : `1px solid ${BRAND.connector}`,
+          borderTop: `1px solid ${THEME.connector}`,
+          borderInline: narrow && !dockMoved ? 'none' : `1px solid ${THEME.connector}`,
+          borderBottom: narrow && !dockMoved ? 'none' : `1px solid ${THEME.connector}`,
         }}
       >
         {/* The step bar comes first in the DOM, the grip and the caption above it only on screen:
@@ -279,14 +279,14 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
           title="Drag to move. Double-click to put it back."
           className={[
             'order-first flex h-4 w-full shrink-0 items-center justify-center',
-            'cursor-grab touch-none active:cursor-grabbing focus-visible:outline-[#eaf5ff]',
+            'cursor-grab touch-none active:cursor-grabbing focus-visible:outline-(--flow-focus)',
           ].join(' ')}
           {...dock.gripProps}
         >
           <span
             aria-hidden="true"
             className="h-1 w-10 rounded-full"
-            style={{ background: BRAND.connector }}
+            style={{ background: THEME.connector }}
           />
         </button>
         {/* The caption scrolls inside a capped height, so it never takes over the canvas. */}

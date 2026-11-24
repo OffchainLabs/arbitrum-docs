@@ -1,8 +1,9 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 
+import type { Theme } from '../../components/widgets/FlowDiagram/model.ts';
 import { type FlowHeader, parseFlowHeader, parseSteps } from './parse-flow.ts';
-import { YamlSource, parseParts, parseProjectConfig } from './schema.ts';
+import { YamlSource, parseParts, parseProjectConfig, parseTheme } from './schema.ts';
 import type { DiagramFlow, DiagramStep, LoadedProject, Part, ProjectConfig } from './types.ts';
 
 function resolveFlow(header: FlowHeader, parts: Map<string, Part>): DiagramFlow {
@@ -128,6 +129,11 @@ function stepContext(flow: DiagramFlow, config: ProjectConfig) {
     partIds: new Set(flow.parts.map((p) => p.id)),
     edgeIds: new Set(flow.edges.map((e) => e.id)),
   };
+}
+
+/** Load `theme.yaml` under `dir`: the colors and font the widget and the static SVG share. */
+export async function loadTheme(dir: string): Promise<Theme> {
+  return parseTheme(await readYaml(dir, 'theme.yaml'));
 }
 
 /** Load `project.yaml`, `parts.yaml` and every `flows/*.md` file under `dir`. */

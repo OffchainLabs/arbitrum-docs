@@ -316,16 +316,13 @@ test('each step frames its active nodes and labels at zoom ≥0.6 at 1280×900',
   });
 });
 
-test('at 375×812 every active node and label is inside the canvas on every step', async () => {
+test('at 375×812 each step frames at zoom ≥0.6 with its first active node inside', async () => {
   await withFlow(PHONE, '', async (page) => {
     await eachStep(page, (shot, index) => {
-      // The swimlane layout frames steps 1 and 6 at zoom 0.57 and step 7 at 0.37. Lanes sit side
-      // by side, so a step that spans two lanes is wider than the phone canvas.
-      const floor = index === 6 ? 0.35 : 0.55;
-      assert.ok(shot.zoom >= floor, `step ${index + 1} zoom ${shot.zoom}`);
-      for (const box of activeBoxes(shot, index)) {
-        assert.ok(inside(box, shot.canvas), `step ${index + 1}: ${JSON.stringify(box)}`);
-      }
+      assert.ok(shot.zoom >= 0.6, `step ${index + 1} zoom ${shot.zoom}`);
+      const first = shot.nodes.find((node) => node.id === STEPS[index]!.actors[0]);
+      assert.ok(first, `step ${index + 1}: first active node drawn`);
+      assert.ok(inside(first.rect, shot.canvas), `step ${index + 1}: ${JSON.stringify(first)}`);
     });
   });
 });
@@ -529,5 +526,35 @@ test('a one-finger vertical swipe over the canvas at 375px scrolls the page', as
       .catch(() => undefined);
     const after = await page.evaluate(() => window.scrollY);
     assert.ok(after - before > 100, `scrollY ${before} -> ${after}`);
+  });
+});
+
+test('at 375×812 a one-finger horizontal drag over the canvas pans the diagram', async () => {
+  await withFlow(PHONE, '', async (page) => {
+    await page.locator(CANVAS).evaluate((canvas) => canvas.scrollIntoView({ block: 'start' }));
+    await settle(page);
+    const canvas = await page.locator(CANVAS).boundingBox();
+    assert.ok(canvas);
+    const point = { x: canvas.x + canvas.width * 0.75, y: canvas.y + canvas.height / 2 };
+    const state = () =>
+      page.evaluate(() => {
+        const transform =
+          document.querySelector<HTMLElement>('.react-flow__viewport')!.style.transform;
+        return { x: Number(/translate\((-?[\d.]+)px/.exec(transform)?.[1]), scrollY: scrollY };
+      });
+    const before = await state();
+    const session = await page.context().newCDPSession(page);
+    await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point] });
+    for (let move = 1; move <= 10; move++) {
+      await session.send('Input.dispatchTouchEvent', {
+        type: 'touchMove',
+        touchPoints: [{ x: point.x - move * 15, y: point.y }],
+      });
+    }
+    await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await settle(page);
+    const after = await state();
+    assert.ok(Math.abs(after.x - before.x + 150) <= 1, `viewport x ${before.x} -> ${after.x}`);
+    assert.equal(after.scrollY, before.scrollY);
   });
 });

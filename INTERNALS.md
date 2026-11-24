@@ -567,6 +567,7 @@ feeds two outputs, so the interactive widget and the static SVG cannot drift apa
 ```text
 diagrams/
   project.yaml              lanes, kinds, repos, finality, card and the SVG layout
+  theme.yaml                the colours and font that the widget and the SVG share
   parts.yaml                every part, once
   flows/<flow-id>.md        one flow: YAML header, then one section per step
   assets/bg-frag.svg        background drawn under every static SVG
@@ -577,18 +578,27 @@ diagrams/
 - `components/widgets/FlowDiagram/flows.generated.ts`, the data the flow widget reads.
   `FLOWS` holds every flow that has steps, keyed by its `widget:` value or, without one, by its
   id. `PROJECT` holds the part of `project.yaml` the widget reads: every lane, the kinds with
-  `widget:` colours, `finality`, the repos with a `code:` link, and `card`. A page renders a flow
-  with `<FlowDiagram flow="<key>" />`, from `components/widgets/FlowDiagram/index.tsx`.
+  `widget:` colours, `finality`, the repos with a `code:` link, and `card`. `THEME` holds
+  `theme.yaml` unchanged. A page renders a flow with `<FlowDiagram flow="<key>" />`, from
+  `components/widgets/FlowDiagram/index.tsx`.
 
-The widget code holds no project content. Labels, colours, repos and card text come from
-`PROJECT`; `components/widgets/FlowDiagram/brand.ts` holds only the form values (gradient,
-connector, glow, chip, font, opacities). Another project reuses the widget with its own
-`diagrams/` folder.
+The widget code holds no project content and no colour. Labels, per-lane and per-kind colours,
+repos and card text come from `PROJECT`. The form values (gradient, connector, glows, focus ring,
+chip, font, opacity) come from `THEME`. Another project reuses the widget with its own `diagrams/`
+folder, and changes the look by changing `diagrams/theme.yaml`. `pnpm test` fails when a file in
+`components/widgets/FlowDiagram/` other than `flows.generated.ts` holds a hex or `rgb(` colour.
+
+The camera fits each step's active parts in the canvas at zoom 1 or less. On a screen under 768px,
+it never zooms below 0.6 (`PHONE_MIN_ZOOM` in `components/widgets/FlowDiagram/camera.ts`). A step
+too wide or tall for that zoom centers on its first active part, and a one-finger horizontal drag
+pans the diagram. A vertical swipe still scrolls the page. Show all and the detail dialog fit the
+whole graph with no zoom floor.
 
 - `public/img/<svg>.svg` for every flow with `static:` and `svg:`, for example
   `public/img/haw-transaction-lifecycle.svg`.
 
-Edit `diagrams/project.yaml`, `diagrams/parts.yaml` and `diagrams/flows/*.md`. Never edit
+Edit `diagrams/project.yaml`, `diagrams/theme.yaml`, `diagrams/parts.yaml` and
+`diagrams/flows/*.md`. Never edit
 `flows.generated.ts` or a generated SVG, because the next run overwrites them. `pnpm diagrams:check`
 is a CI gate. It fails when either output differs from what the sources produce.
 
@@ -662,7 +672,8 @@ A `### Failure` heading ends the step text. It holds exactly three paragraphs th
 - `lanes` maps a lane id to a `label`. A lane with `svg: { fill, stroke, label }` also draws a
   band behind its parts in the SVG. `short` is the lane name in a widget box's sub-line. A lane
   with `widget: { accent, fill, border }` is a band in the widget, named by `label`; `fill` and
-  `border` are `[inactive, active]` pairs. The widget draws its lane columns from left to right in lane order.
+  `border` are `[inactive, active]` pairs. The widget draws its lane columns from left to right in
+  lane order.
 - `kinds` maps a part kind to a `label` and to `svg` colours: `fill`, `title`, `sub`, and optional
   `stroke`. The optional `svg.key` replaces `label` in the SVG key. `widget: { fill, title, sub }`
   holds the widget colours, and puts the kind in the widget key. With
@@ -676,8 +687,14 @@ A `### Failure` heading ends the step text. It holds exactly three paragraphs th
 - `card` holds the default step card labels, with the six keys of a flow's `card`.
 - `svg` sets the static layout. Loading the project needs `canvas`, the `cols` and `rows`
   coordinates of the grid, the `box` size, `scale` and `offset`. The optional `reserve` is an area no
-  box may overlap. Rendering an SVG also needs `background` (a fragment file under `diagrams/`),
-  `ink`, `chip` and `font`.
+  box may overlap. Rendering an SVG also needs `background`, a fragment file under `diagrams/`.
+
+`diagrams/theme.yaml` holds the colours and font that the widget and the static SVG share, one
+key per role. A comment above each key names what it colours. Every key is required, and a
+missing or unknown key fails `pnpm diagrams:generate` with the file, line and key. The SVG reads
+`ink`, `chip` and `font`; the widget reads every key. A Tailwind class cannot read a runtime
+value, so each widget canvas sets `focus` as the `--flow-focus` CSS variable, and the focus ring
+classes read `focus-visible:outline-(--flow-focus)`.
 
 The widget accepts a smaller set than the loader. `scripts/generate-diagrams.ts` checks every widget
 flow against `project.yaml`. It rejects a part whose kind has no `widget:` colours, a part whose

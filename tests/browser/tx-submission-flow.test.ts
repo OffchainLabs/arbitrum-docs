@@ -304,6 +304,36 @@ test('each submission step frames its active nodes at zoom ≥0.6 at 1280×900',
   }
 });
 
+/** Calls `check` on every step of every tab, starting each tab from its step 1. */
+async function eachPathStep(
+  options: BrowserContextOptions,
+  check: (page: Page, path: ResolvedPath, index: number) => Promise<void>,
+) {
+  for (const path of PATHS) {
+    await withFlow(options, `#${path.id}-step-1`, async (page) => {
+      for (let index = 0; index < path.steps.length; index++) {
+        if (index > 0) {
+          await page.getByRole('button', { name: 'Next →' }).click();
+          await waitForStep(page, path, index);
+        }
+        await check(page, path, index);
+      }
+    });
+  }
+}
+
+test('at 375×812 each step of both tabs frames at zoom ≥0.6, first node inside', async () => {
+  await eachPathStep(PHONE, async (page, path, index) => {
+    const step = path.steps[index]!;
+    const shot = await frameShot(page, step.actors);
+    const name = `${path.id} step ${index + 1}`;
+    assert.ok(shot.zoom >= 0.6, `${name} zoom ${shot.zoom}`);
+    const first = shot.nodes.find((node) => node.id === step.actors[0]);
+    assert.ok(first, `${name}: first active node drawn`);
+    assert.ok(inside(first.rect, shot.canvas), `${name}: ${JSON.stringify(first)}`);
+  });
+});
+
 test('after Show all at 375×812 every node is inside the canvas', async () => {
   for (const path of PATHS) {
     await withFlow(PHONE, `#${path.id}-step-1`, async (page) => {

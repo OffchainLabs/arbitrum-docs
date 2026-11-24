@@ -1,12 +1,11 @@
 import { useState } from 'react';
 
-import { BRAND } from './brand.ts';
-import { PROJECT } from './flows.ts';
+import { PROJECT, THEME } from './flows.ts';
 import { type Flow, kindKey } from './model.ts';
 
-const CHIP_STYLE = { background: BRAND.chip, color: BRAND.chipText, fontFamily: BRAND.font };
+const CHIP_STYLE = { background: THEME.chip, color: THEME.ink, fontFamily: THEME.font };
 // The strip's bottom rule: the connector color at 30%.
-const KEY_RULE = 'rgba(157, 204, 237, 0.3)';
+const KEY_RULE = `color-mix(in srgb, ${THEME.connector} 30%, transparent)`;
 
 /**
  * The color key: the node kinds, then the chains whose bands the flow draws, each with a swatch
@@ -31,8 +30,8 @@ export function Legend({ flow, narrow }: { flow: Flow; narrow: boolean }) {
           onClick={() => setOpen((value) => !value)}
           className={[
             'absolute top-3 left-3 z-20 rounded-md px-3 py-1 text-xs',
-            // The site focus ring, #016be5, has about 2.8:1 contrast on the chip color.
-            'focus-visible:outline-[#eaf5ff]',
+            // THEME.focus, not the site focus ring, which has too little contrast on THEME.chip.
+            'focus-visible:outline-(--flow-focus)',
           ].join(' ')}
           style={CHIP_STYLE}
         >
@@ -59,7 +58,7 @@ export function Legend({ flow, narrow }: { flow: Flow; narrow: boolean }) {
             <span key={id} className="flex items-center gap-2">
               <span
                 className="inline-block size-3 rounded-sm"
-                style={{ background: kind.widget.fill, outline: `1px solid ${BRAND.connector}` }}
+                style={{ background: kind.widget.fill, outline: `1px solid ${THEME.connector}` }}
               />
               {kindKey(flow, id, kind)}
             </span>
