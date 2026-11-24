@@ -1,6 +1,7 @@
 {
   "title": "Ecosystem support",
   "pages": [
+    "bridges-and-interop",
     "bp-kms-signing-services",
     "bridge-ui",
     "bridged-usdc",

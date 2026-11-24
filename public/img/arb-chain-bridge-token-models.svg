@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img">
+<title>Two ways a token reaches your Arbitrum chain</title>
+<desc>Left, lock-and-mint with the canonical token bridge: a gateway on the parent chain locks the token, and a gateway on your Arbitrum chain mints a copy. Deposits and withdrawals move the token only between the parent chain and your chain. Right, burn-and-mint with LayerZero OFT, xERC20 or native USDC: the token issuer's bridge connects the parent chain, your Arbitrum chain and other chains. The bridge burns the token on the source chain and mints it on the destination chain.</desc>
+<defs>
+<linearGradient id="brandbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#152c4e"/><stop offset="0.55" stop-color="#1b4add"/><stop offset="1" stop-color="#12aaff"/></linearGradient>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#9dcced"/></marker>
+<marker id="arrowstart" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M10 0 L0 5 L10 10 z" fill="#9dcced"/></marker>
+</defs>
+<rect x="0" y="0" width="1200" height="620" fill="url(#brandbg)"/>
+<g font-family="Inter, 'Helvetica Neue', Arial, sans-serif">
+<rect x="30" y="30" width="555" height="560" rx="16" fill="#213147"/>
+<text x="307" y="78" font-size="26" font-weight="bold" fill="#ffffff" text-anchor="middle">Lock-and-mint</text>
+<text x="307" y="106" font-size="18" font-weight="normal" fill="#c9dcef" text-anchor="middle">Canonical token bridge</text>
+<rect x="90" y="130" width="435" height="130" rx="10" fill="#12aaff"/>
+<text x="307.5" y="170" font-size="21" font-weight="bold" fill="#0b1b2e" text-anchor="middle">Parent chain</text>
+<rect x="120" y="190" width="375" height="50" rx="8" fill="#e6007a"/>
+<text x="307.5" y="222" font-size="18" font-weight="normal" fill="#ffffff" text-anchor="middle">Gateway locks the token</text>
+<rect x="90" y="360" width="435" height="130" rx="10" fill="#12aaff"/>
+<text x="307.5" y="400" font-size="21" font-weight="bold" fill="#0b1b2e" text-anchor="middle">Your Arbitrum chain</text>
+<rect x="120" y="420" width="375" height="50" rx="8" fill="#e6007a"/>
+<text x="307.5" y="452" font-size="18" font-weight="normal" fill="#ffffff" text-anchor="middle">Gateway mints a copy</text>
+<path d="M260 262 L260 356" fill="none" stroke="#9dcced" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M355 356 L355 262" fill="none" stroke="#9dcced" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="248" y="315" font-size="17" font-weight="normal" fill="#ffffff" text-anchor="end">Deposit</text>
+<text x="367" y="315" font-size="17" font-weight="normal" fill="#ffffff" text-anchor="start">Withdraw</text>
+<text x="307" y="535" font-size="18" font-weight="normal" fill="#c9dcef" text-anchor="middle">The token moves only between</text>
+<text x="307" y="560" font-size="18" font-weight="normal" fill="#c9dcef" text-anchor="middle">the parent chain and your chain.</text>
+<rect x="615" y="30" width="555" height="560" rx="16" fill="#213147"/>
+<text x="892" y="78" font-size="26" font-weight="bold" fill="#ffffff" text-anchor="middle">Burn-and-mint</text>
+<text x="892" y="106" font-size="18" font-weight="normal" fill="#c9dcef" text-anchor="middle">LayerZero OFT, xERC20, native USDC</text>
+<rect x="742" y="130" width="300" height="64" rx="10" fill="#12aaff"/>
+<text x="892.0" y="170" font-size="21" font-weight="bold" fill="#0b1b2e" text-anchor="middle">Parent chain</text>
+<rect x="762" y="270" width="260" height="74" rx="10" fill="#e6007a"/>
+<text x="892" y="302" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">Token issuer's bridge</text>
+<text x="892" y="328" font-size="17" font-weight="normal" fill="#ffffff" text-anchor="middle">burns, then mints</text>
+<rect x="645" y="420" width="245" height="64" rx="10" fill="#12aaff"/>
+<text x="767.5" y="460" font-size="21" font-weight="bold" fill="#0b1b2e" text-anchor="middle">Your Arbitrum chain</text>
+<rect x="905" y="420" width="235" height="64" rx="10" fill="#12aaff"/>
+<text x="1022.5" y="460" font-size="21" font-weight="bold" fill="#0b1b2e" text-anchor="middle">Other chains</text>
+<path d="M892 199 L892 265" fill="none" stroke="#9dcced" stroke-width="3" marker-start="url(#arrowstart)" marker-end="url(#arrow)"/>
+<path d="M830 349 L767 415" fill="none" stroke="#9dcced" stroke-width="3" marker-start="url(#arrowstart)" marker-end="url(#arrow)"/>
+<path d="M954 349 L1022 415" fill="none" stroke="#9dcced" stroke-width="3" marker-start="url(#arrowstart)" marker-end="url(#arrow)"/>
+<text x="892" y="535" font-size="18" font-weight="normal" fill="#c9dcef" text-anchor="middle">The bridge burns the token on the source</text>
+<text x="892" y="560" font-size="18" font-weight="normal" fill="#c9dcef" text-anchor="middle">chain and mints it on the destination chain.</text>
+</g>
+</svg>
