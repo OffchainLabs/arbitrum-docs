@@ -8,6 +8,11 @@ fullnode:
   tech: 'nitro'
   kind: process
   lane: child
+fullnode-late:
+  label: 'Full node'
+  tech: 'nitro'
+  kind: process
+  lane: child
 seq:
   label: 'Sequencer'
   tech: 'nitro'
@@ -31,6 +36,11 @@ seqinbox:
   docs: /how-arbitrum-works/deep-dives/batchposter
   lane: parent
 bridge:
+  label: 'Bridge'
+  kind: contract
+  docs: /how-arbitrum-works/deep-dives/l1-to-l2-messaging
+  lane: parent
+bridge-late:
   label: 'Bridge'
   kind: contract
   docs: /how-arbitrum-works/deep-dives/l1-to-l2-messaging

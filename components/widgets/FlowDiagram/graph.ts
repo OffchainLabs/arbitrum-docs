@@ -6,14 +6,13 @@ import type { FlowLayout } from './layout.ts';
 import type { Flow, Step } from './model.ts';
 
 /**
- * React Flow nodes: one band per chain run behind the actors, then the actors. An actor that no
- * step of the selected path lists is muted.
+ * React Flow nodes: one band per lane column behind the actors, then the actors that `layout`
+ * places.
  */
 export function flowNodes(
   flow: Flow,
   layout: FlowLayout,
   step: Step,
-  pathActors: Set<string>,
   trigger?: NodeTrigger,
 ): (ActorNodeType | BandNodeType)[] {
   const bands: BandNodeType[] = layout.bands.map((band, i) => ({
@@ -27,62 +26,62 @@ export function flowNodes(
     zIndex: -1,
     style: { pointerEvents: 'none' },
   }));
-  const actors: ActorNodeType[] = flow.actors.map((actor) => ({
-    id: actor.id,
-    type: 'actor',
-    position: layout.nodes[actor.id]!,
-    // React Flow sets pointer-events: none on a node that is not selectable or draggable, so a
-    // mouse click would fall through to the pane. Only the trigger node takes clicks, and only a
-    // node with a docs page takes the hover that opens its preview.
-    ...((trigger && step.detail?.actor === actor.id) || actor.docs
-      ? { style: { pointerEvents: 'all' } }
-      : {}),
-    data: {
-      actor,
-      active: step.actors.includes(actor.id),
-      muted: !pathActors.has(actor.id),
-      showChain: flow.showChains !== false,
-      trigger: step.detail?.actor === actor.id ? trigger : undefined,
-    },
-    draggable: false,
-    connectable: false,
-  }));
+  const actors: ActorNodeType[] = flow.actors
+    .filter((actor) => actor.id in layout.nodes)
+    .map((actor) => ({
+      id: actor.id,
+      type: 'actor',
+      position: layout.nodes[actor.id]!,
+      // React Flow sets pointer-events: none on a node that is not selectable or draggable, so a
+      // mouse click would fall through to the pane. Only the trigger node takes clicks, and only
+      // a node with a docs page takes the hover that opens its preview.
+      ...((trigger && step.detail?.actor === actor.id) || actor.docs
+        ? { style: { pointerEvents: 'all' } }
+        : {}),
+      data: {
+        actor,
+        active: step.actors.includes(actor.id),
+        showChain: flow.showChains !== false,
+        trigger: step.detail?.actor === actor.id ? trigger : undefined,
+      },
+      draggable: false,
+      connectable: false,
+    }));
   return [...bands, ...actors];
 }
 
 /**
- * React Flow edges, routed by the layout, with the step numbers that size their label boxes. An
- * edge that no step of the selected path uses is muted.
+ * React Flow edges that `layout` routes, with the step numbers that size their label boxes.
  */
 export function flowEdges(
   flow: Flow,
   layout: FlowLayout,
   step: Step,
   stepNumbers: Record<string, number[]>,
-  pathEdges: Set<string>,
 ): RoutedEdgeType[] {
-  return flow.edges.map((edge) => {
-    const active = step.edges.includes(edge.id);
-    return {
-      id: edge.id,
-      type: 'routed',
-      source: edge.source,
-      target: edge.target,
-      data: {
-        label: edge.label,
-        stepNumbers: stepNumbers[edge.id] ?? [],
-        active,
-        muted: !pathEdges.has(edge.id),
-        route: layout.edges[edge.id]!,
-      },
-      markerEnd: {
-        type: 'arrowclosed',
-        color: active ? BRAND.active : BRAND.connector,
-        width: 16,
-        height: 16,
-        markerUnits: 'userSpaceOnUse',
-      },
-      zIndex: active ? 1 : 0,
-    };
-  });
+  return flow.edges
+    .filter((edge) => edge.id in layout.edges)
+    .map((edge) => {
+      const active = step.edges.includes(edge.id);
+      return {
+        id: edge.id,
+        type: 'routed',
+        source: edge.source,
+        target: edge.target,
+        data: {
+          label: edge.label,
+          stepNumbers: stepNumbers[edge.id] ?? [],
+          active,
+          route: layout.edges[edge.id]!,
+        },
+        markerEnd: {
+          type: 'arrowclosed',
+          color: active ? BRAND.active : BRAND.connector,
+          width: 16,
+          height: 16,
+          markerUnits: 'userSpaceOnUse',
+        },
+        zIndex: active ? 1 : 0,
+      };
+    });
 }

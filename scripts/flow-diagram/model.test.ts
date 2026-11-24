@@ -90,3 +90,15 @@ test('FLOWS has the four widget keys', () => {
     'transaction-submission-flow',
   ]);
 });
+
+test('checkFlowShape rejects a step edge whose end is in no step part of its path', () => {
+  const step = { ...flow.steps[0]!, actors: ['a'], edges: ['ab'] };
+  const bad: Flow = {
+    ...flow,
+    actors: [flow.actors[0]!, flow.actors[1]!].map((actor, i) => ({ ...actor, id: 'ab'[i]! })),
+    edges: [{ id: 'ab', source: 'a', target: 'b' }] as Flow['edges'],
+    steps: [step],
+    paths: undefined,
+  };
+  assert.throws(() => checkFlowShape(bad), /path "".*step .*edge "ab".*"b"/);
+});

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 
-import type { Flow } from '../../components/widgets/FlowDiagram/model.ts';
+import { type Flow, flowPaths } from '../../components/widgets/FlowDiagram/model.ts';
 
 /** Asserts the structure every flow needs: unique ids, known actors and edges, step text. */
 export function checkFlowShape(flow: Flow): void {
@@ -23,5 +23,21 @@ export function checkFlowShape(flow: Flow): void {
     assert.ok(step.text.trim(), `${flow.id}: ${step.id} text`);
     for (const id of step.actors) assert.ok(actors.has(id), `${flow.id}: ${step.id} actor ${id}`);
     for (const id of step.edges) assert.ok(edges.has(id), `${flow.id}: ${step.id} edge ${id}`);
+  }
+  const edgesById = new Map(flow.edges.map((edge) => [edge.id, edge]));
+  for (const path of flowPaths(flow)) {
+    const pathActors = new Set(path.steps.flatMap((step) => step.actors));
+    for (const step of path.steps) {
+      for (const id of step.edges) {
+        const edge = edgesById.get(id)!;
+        for (const end of [edge.source, edge.target]) {
+          const where = `${flow.id} path "${path.id}" step ${step.id}`;
+          assert.ok(
+            pathActors.has(end),
+            `${where}: edge "${id}" end "${end}" is in no step of the path`,
+          );
+        }
+      }
+    }
   }
 }

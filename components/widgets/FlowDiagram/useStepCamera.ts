@@ -1,7 +1,7 @@
 import type { Edge, Node, ReactFlowInstance } from '@xyflow/react';
 import { type RefObject, useEffect, useState } from 'react';
 
-import { type Box, type FlowLayout, NODE_HEIGHT, NODE_WIDTH, activeBoxes } from './layout.ts';
+import { type Box, type FlowLayout, activeBoxes, nodeBox } from './layout.ts';
 import type { Step } from './model.ts';
 import { motionDuration } from './useStepNavigation.ts';
 
@@ -46,11 +46,7 @@ function frame<N extends Node, E extends Edge>(
 function allBoxes(layout: FlowLayout): Box[] {
   return [
     ...layout.bands.map((band) => band.box),
-    ...Object.values(layout.nodes).map((point) => ({
-      ...point,
-      width: NODE_WIDTH,
-      height: NODE_HEIGHT,
-    })),
+    ...Object.values(layout.nodes).map(nodeBox),
     ...Object.values(layout.edges).map((edge) => edge.label),
   ];
 }

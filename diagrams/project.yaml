@@ -1,5 +1,5 @@
-# The widget stacks its rows in this lane order. A lane with `widget:` is drawn as a band, and a
-# step's lane must be one. Each `widget:` pair is [inactive, active]. Ink tint on the child chain:
+# The widget draws its lane columns left to right in this lane order. A lane with `widget:` is
+# drawn as a band, and a step's lane must be one. Each `widget:` pair is [inactive, active]. Ink tint on the child chain:
 # no fill tint reaches 3:1 against the widget gradient, so the solid border marks the band edge.
 lanes:
   off-chain:

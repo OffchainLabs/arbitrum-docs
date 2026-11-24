@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { before, test } from 'node:test';
 
 import {
+  PROJECT,
   transactionLifecycle as flow,
+  pgaRound,
+  sequencerStep3,
   transactionSubmission,
 } from '../../components/widgets/FlowDiagram/flows.generated.ts';
 import {
@@ -12,16 +15,38 @@ import {
   NODE_WIDTH,
   computeBands,
   computeLayout,
-  firstInteractionRank,
-  labelBadgeCounts,
+  firstStepIndex,
   stepNumbersByEdge,
 } from '../../components/widgets/FlowDiagram/layout.ts';
-import type { Flow } from '../../components/widgets/FlowDiagram/model.ts';
+import {
+  type Flow,
+  type ResolvedPath,
+  type Step,
+  flowPaths,
+} from '../../components/widgets/FlowDiagram/model.ts';
 
-let layout: FlowLayout;
+interface Case {
+  name: string;
+  flow: Flow;
+  path: ResolvedPath;
+  layout: FlowLayout;
+}
+
+const cases: Case[] = [];
+
+function layoutOf(flowId: string, pathId: string): FlowLayout {
+  const found = cases.find((c) => c.flow.id === flowId && c.path.id === pathId);
+  if (!found) throw new Error(`no layout for ${flowId}/${pathId}`);
+  return found.layout;
+}
 
 before(async () => {
-  layout = await computeLayout(flow);
+  for (const shown of [flow, transactionSubmission, pgaRound, sequencerStep3]) {
+    for (const path of flowPaths(shown)) {
+      const name = `${shown.id}/${path.id || 'main'}`;
+      cases.push({ name, flow: shown, path, layout: await computeLayout(shown, path.steps) });
+    }
+  }
 });
 
 function overlaps(a: Box, b: Box): boolean {
@@ -32,61 +57,149 @@ function nodeBoxes(l: FlowLayout): Box[] {
   return Object.values(l.nodes).map((p) => ({ ...p, width: NODE_WIDTH, height: NODE_HEIGHT }));
 }
 
-test('firstInteractionRank ranks each actor by its first step and edge', () => {
-  assert.deepEqual(firstInteractionRank(flow), {
-    wallet: 0,
-    fullnode: 1,
-    seq: 2,
-    relay: 3,
-    poster: 4,
-    seqinbox: 5,
-    bridge: 6,
+function pathEdges(c: Case) {
+  const used = new Set(c.path.steps.flatMap((step) => step.edges));
+  return c.flow.edges.filter((edge) => used.has(edge.id));
+}
+
+test('firstStepIndex gives each part the index of the first step that lists it', () => {
+  const step = (id: string, actors: string[]): Step => ({
+    id,
+    title: id,
+    text: '',
+    actors,
+    edges: [],
+    citations: [],
+    txChain: 'child',
   });
+  const steps = [step('one', ['a', 'b']), step('two', ['b', 'c']), step('three', ['d', 'a'])];
+  assert.deepEqual(firstStepIndex(steps), { a: 0, b: 0, c: 1, d: 2 });
 });
 
-test('each actor sits in its own row, in rank order', () => {
-  const rank = firstInteractionRank(flow);
-  const ordered = Object.keys(rank).sort((a, b) => rank[a]! - rank[b]!);
-  for (let i = 1; i < ordered.length; i++) {
-    assert.ok(layout.nodes[ordered[i]!]!.y > layout.nodes[ordered[i - 1]!]!.y, ordered[i]);
+test('every edge points down', () => {
+  for (const c of cases) {
+    for (const edge of pathEdges(c)) {
+      const source = c.layout.nodes[edge.source]!;
+      const target = c.layout.nodes[edge.target]!;
+      assert.ok(target.y > source.y, `${c.name} ${edge.id}: ${target.y} <= ${source.y}`);
+    }
   }
 });
 
+test('each lane is one vertical column', () => {
+  const lanes = Object.keys(PROJECT.lanes);
+  for (const c of cases) {
+    const chainOf = new Map(c.flow.actors.map((actor) => [actor.id, actor.chain]));
+    const spans = lanes
+      .map((lane) => {
+        const xs = Object.entries(c.layout.nodes)
+          .filter(([id]) => chainOf.get(id) === lane)
+          .map(([, point]) => point.x);
+        return {
+          lane,
+          left: Math.min(...xs),
+          right: Math.max(...xs) + NODE_WIDTH,
+          count: xs.length,
+        };
+      })
+      .filter((span) => span.count > 0);
+    for (let i = 1; i < spans.length; i++) {
+      const prev = spans[i - 1]!;
+      const next = spans[i]!;
+      assert.ok(prev.right < next.left, `${c.name}: ${prev.lane} reaches into ${next.lane}`);
+    }
+  }
+});
+
+test('a source part used in a later step never sits above one used earlier', () => {
+  for (const c of cases) {
+    const first = firstStepIndex(c.path.steps);
+    const targets = new Set(pathEdges(c).map((edge) => edge.target));
+    const sources = Object.keys(c.layout.nodes).filter((id) => !targets.has(id));
+    for (const a of sources) {
+      for (const b of sources) {
+        if (first[a]! < first[b]!) {
+          assert.ok(c.layout.nodes[a]!.y <= c.layout.nodes[b]!.y, `${c.name}: ${b} above ${a}`);
+        }
+      }
+    }
+  }
+});
+
+test('the Rollup sits below the Validator on both submission tabs', () => {
+  for (const pathId of ['direct', 'retryable']) {
+    const l = layoutOf(transactionSubmission.id, pathId);
+    assert.ok(l.nodes.rollup!.y > l.nodes.validator!.y, pathId);
+  }
+});
+
+test('the Validator sits below every part of an earlier step on both submission tabs', () => {
+  for (const pathId of ['direct', 'retryable']) {
+    const c = cases.find((k) => k.flow.id === transactionSubmission.id && k.path.id === pathId)!;
+    const first = firstStepIndex(c.path.steps);
+    const validator = c.layout.nodes.validator!;
+    for (const [id, point] of Object.entries(c.layout.nodes)) {
+      if (first[id]! < first.validator!) assert.ok(validator.y > point.y, `${pathId}: ${id}`);
+    }
+  }
+});
+
+test("a path's layout holds only the parts and edges its steps use", () => {
+  for (const c of cases) {
+    const actors = new Set(c.path.steps.flatMap((step) => step.actors));
+    assert.deepEqual(Object.keys(c.layout.nodes).sort(), [...actors].sort(), c.name);
+    const edges = pathEdges(c).map((edge) => edge.id);
+    assert.deepEqual(Object.keys(c.layout.edges).sort(), edges.sort(), c.name);
+  }
+  const direct = layoutOf(transactionSubmission.id, 'direct');
+  for (const id of ['dapp', 'inbox', 'bridge']) assert.ok(!(id in direct.nodes), id);
+});
+
 test('every edge segment is horizontal or vertical', () => {
-  for (const [id, edge] of Object.entries(layout.edges)) {
-    for (let i = 1; i < edge.points.length; i++) {
-      const a = edge.points[i - 1]!;
-      const b = edge.points[i]!;
-      assert.ok(Math.abs(a.x - b.x) <= 0.5 || Math.abs(a.y - b.y) <= 0.5, `${id} segment ${i}`);
+  for (const c of cases) {
+    for (const [id, edge] of Object.entries(c.layout.edges)) {
+      assert.ok(edge.points.length >= 2, `${c.name} ${id}`);
+      for (let i = 1; i < edge.points.length; i++) {
+        const a = edge.points[i - 1]!;
+        const b = edge.points[i]!;
+        const straight = Math.abs(a.x - b.x) <= 0.5 || Math.abs(a.y - b.y) <= 0.5;
+        assert.ok(straight, `${c.name} ${id} segment ${i}`);
+      }
     }
   }
 });
 
 test('no two node boxes overlap', () => {
-  const boxes = nodeBoxes(layout);
-  for (let i = 0; i < boxes.length; i++) {
-    for (let j = i + 1; j < boxes.length; j++) {
-      assert.ok(!overlaps(boxes[i]!, boxes[j]!), `nodes ${i} and ${j}`);
+  for (const c of cases) {
+    const boxes = nodeBoxes(c.layout);
+    for (let i = 0; i < boxes.length; i++) {
+      for (let j = i + 1; j < boxes.length; j++) {
+        assert.ok(!overlaps(boxes[i]!, boxes[j]!), `${c.name}: nodes ${i} and ${j}`);
+      }
     }
   }
 });
 
 test('no two label boxes overlap', () => {
-  const entries = Object.entries(layout.edges);
-  for (let i = 0; i < entries.length; i++) {
-    for (let j = i + 1; j < entries.length; j++) {
-      assert.ok(
-        !overlaps(entries[i]![1].label, entries[j]![1].label),
-        `labels ${entries[i]![0]} and ${entries[j]![0]}`,
-      );
+  for (const c of cases) {
+    const entries = Object.entries(c.layout.edges);
+    for (let i = 0; i < entries.length; i++) {
+      for (let j = i + 1; j < entries.length; j++) {
+        assert.ok(
+          !overlaps(entries[i]![1].label, entries[j]![1].label),
+          `${c.name}: labels ${entries[i]![0]} and ${entries[j]![0]}`,
+        );
+      }
     }
   }
 });
 
 test('no label box overlaps a node box', () => {
-  const boxes = nodeBoxes(layout);
-  for (const [id, edge] of Object.entries(layout.edges)) {
-    for (const box of boxes) assert.ok(!overlaps(edge.label, box), `label ${id}`);
+  for (const c of cases) {
+    const boxes = nodeBoxes(c.layout);
+    for (const [id, edge] of Object.entries(c.layout.edges)) {
+      for (const box of boxes) assert.ok(!overlaps(edge.label, box), `${c.name}: label ${id}`);
+    }
   }
 });
 
@@ -103,104 +216,85 @@ function distanceToPolyline(point: { x: number; y: number }, points: { x: number
   return best;
 }
 
-test('every label is centered on its own edge, in both main flows', async () => {
-  for (const shown of [layout, await computeLayout(transactionSubmission)]) {
-    for (const [id, edge] of Object.entries(shown.edges)) {
+test('every label is centered on its own edge', () => {
+  for (const c of cases) {
+    for (const [id, edge] of Object.entries(c.layout.edges)) {
       const center = {
         x: edge.label.x + edge.label.width / 2,
         y: edge.label.y + edge.label.height / 2,
       };
       const distance = distanceToPolyline(center, edge.points);
-      assert.ok(distance <= 2, `${id}: label center is ${distance.toFixed(1)}px from its edge`);
+      assert.ok(distance <= 2, `${c.name} ${id}: label center is ${distance.toFixed(1)}px away`);
     }
-  }
-});
-
-test('every edge has at least 2 points', () => {
-  for (const [id, edge] of Object.entries(layout.edges)) {
-    assert.ok(edge.points.length >= 2, id);
   }
 });
 
 test('layout is identical across two runs', async () => {
-  assert.deepEqual(await computeLayout(flow), layout);
+  for (const c of cases) {
+    assert.deepEqual(await computeLayout(c.flow, c.path.steps), c.layout, c.name);
+  }
 });
 
-test('bands: one child band and one parent band, each holding its own actors', () => {
-  assert.equal(layout.bands.length, 2);
-  const child = layout.bands.find((b) => b.chain === 'child');
-  const parent = layout.bands.find((b) => b.chain === 'parent');
-  assert.deepEqual([...child!.actors].sort(), ['fullnode', 'poster', 'relay', 'seq']);
+test('the submission direct path has exactly one band per chain', () => {
+  assert.deepEqual(
+    layoutOf(transactionSubmission.id, 'direct').bands.map((band) => band.chain),
+    ['child', 'parent'],
+  );
+});
+
+test('the lifecycle bands each hold their own chain parts', () => {
+  const bands = layoutOf(flow.id, '').bands;
+  assert.equal(bands.length, 2);
+  const child = bands.find((b) => b.chain === 'child');
+  const parent = bands.find((b) => b.chain === 'parent');
+  assert.deepEqual([...child!.actors].sort(), [
+    'fullnode',
+    'fullnode-late',
+    'poster',
+    'relay',
+    'seq',
+  ]);
   assert.deepEqual([...parent!.actors].sort(), ['bridge', 'seqinbox']);
 });
 
 test('the wallet is in no band', () => {
-  for (const band of layout.bands) assert.ok(!band.actors.includes('wallet'));
+  for (const c of cases) {
+    for (const band of c.layout.bands) assert.ok(!band.actors.includes('wallet'), c.name);
+  }
 });
 
 test('bands do not overlap each other', () => {
-  for (let i = 0; i < layout.bands.length; i++) {
-    for (let j = i + 1; j < layout.bands.length; j++) {
-      assert.ok(!overlaps(layout.bands[i]!.box, layout.bands[j]!.box));
+  for (const c of cases) {
+    const { bands } = c.layout;
+    for (let i = 0; i < bands.length; i++) {
+      for (let j = i + 1; j < bands.length; j++) {
+        assert.ok(!overlaps(bands[i]!.box, bands[j]!.box), c.name);
+      }
     }
   }
 });
 
-test('a chain whose rows are not adjacent gets two bands', () => {
+test('computeBands gives each band lane one column over the full graph height', () => {
   const fake: Flow = {
     id: 'fake',
     title: 'Fake',
     edges: [],
     steps: [],
     actors: [
+      { id: 'w', label: 'W', tech: '', kind: 'user', chain: 'off-chain' },
       { id: 'a', label: 'A', tech: '', kind: 'process', chain: 'child' },
       { id: 'b', label: 'B', tech: '', kind: 'contract', chain: 'parent' },
       { id: 'c', label: 'C', tech: '', kind: 'process', chain: 'child' },
     ],
   };
-  const nodes = { a: { x: 0, y: 0 }, b: { x: 0, y: 150 }, c: { x: 0, y: 300 } };
-  const bands = computeBands(fake, nodes, 220);
-  assert.deepEqual(
-    bands.map((b) => [b.chain, b.actors]),
-    [
-      ['child', ['a']],
-      ['parent', ['b']],
-      ['child', ['c']],
-    ],
-  );
-});
-
-test('labelBadgeCounts takes the largest count over paths, not the last path', () => {
-  // The first path uses step 1 twice, so its edges count 2 there and 1 in the later path.
-  const first = flow.steps[0]!;
-  const longest = [...flow.steps, first];
-  const twoPaths = {
-    ...flow,
-    paths: [
-      { id: 'b', label: 'B', steps: longest.map((s) => s.id) },
-      { id: 'a', label: 'A', steps: [first.id] },
-    ],
+  const nodes = {
+    w: { x: 0, y: 0 },
+    a: { x: 300, y: 0 },
+    c: { x: 560, y: 150 },
+    b: { x: 852, y: 50 },
   };
-  const counts = labelBadgeCounts(twoPaths);
-  const want = stepNumbersByEdge(longest);
-  for (const id of first.edges) assert.equal(want[id]!.length, 2, id);
-  for (const id of Object.keys(want)) assert.equal(counts[id], want[id]!.length, id);
-});
-
-test('firstInteractionRank groups the submission flow by chain: off-chain, child, parent', () => {
-  const rank = firstInteractionRank(transactionSubmission);
-  const chainOf = new Map(transactionSubmission.actors.map((actor) => [actor.id, actor.chain]));
-  const chains = Object.keys(rank)
-    .sort((a, b) => rank[a]! - rank[b]!)
-    .map((id) => chainOf.get(id));
-  const runs = chains.filter((chain, i) => chain !== chains[i - 1]);
-  assert.deepEqual(runs, ['off-chain', 'child', 'parent']);
-});
-
-test('the submission flow layout has exactly one band per chain', async () => {
-  const submission = await computeLayout(transactionSubmission);
-  assert.deepEqual(
-    submission.bands.map((band) => band.chain),
-    ['child', 'parent'],
-  );
+  assert.deepEqual(computeBands(fake, nodes, 400), [
+    { chain: 'child', actors: ['a', 'c'], box: { x: 276, y: 0, width: 528, height: 400 } },
+    { chain: 'parent', actors: ['b'], box: { x: 828, y: 0, width: 268, height: 400 } },
+  ]);
 });

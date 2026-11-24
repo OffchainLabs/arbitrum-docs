@@ -2,14 +2,16 @@ import type { ElkNode } from 'elkjs/lib/elk-api';
 import ELK from 'elkjs/lib/elk.bundled.js';
 
 import { PROJECT } from './flows.ts';
-import { type Flow, type FlowEdge, type Step, flowPaths } from './model.ts';
+import { placeLabels } from './labels.ts';
+import { type Actor, type Flow, type FlowEdge, type Step } from './model.ts';
 
 export const NODE_WIDTH = 220;
 export const NODE_HEIGHT = 72;
 
 const LABEL_HEIGHT = 24;
-const BAND_INSET = 16;
-const BAND_EDGE = 32;
+const COLUMN_GAP = 40;
+const LANE_GAP = 72;
+const BAND_MARGIN = 24;
 
 export interface Point {
   x: number;
@@ -21,6 +23,11 @@ export interface Box {
   y: number;
   width: number;
   height: number;
+}
+
+/** The box a part's node fills when its top-left corner is at `point`. */
+export function nodeBox(point: Point): Box {
+  return { ...point, width: NODE_WIDTH, height: NODE_HEIGHT };
 }
 
 export interface EdgeLayout {
@@ -52,20 +59,38 @@ export function labelWidth(edge: FlowEdge, badgeCount: number): number {
 
 const LANE_ORDER = Object.keys(PROJECT.lanes);
 
-// One row per actor. Rows are grouped by lane, in project lane order, so each lane gets one band;
-// within a lane, actors are ordered by the first step that lists them.
-export function firstInteractionRank(flow: Flow): Record<string, number> {
-  const chainOf = new Map(flow.actors.map((actor) => [actor.id, actor.chain]));
-  const order: string[] = [];
-  for (const step of flow.steps) {
-    for (const id of step.actors) {
-      if (!order.includes(id)) order.push(id);
-    }
-  }
-  const sorted = order
-    .map((id, first) => ({ id, first, chain: LANE_ORDER.indexOf(chainOf.get(id)!) }))
-    .sort((a, b) => a.chain - b.chain || a.first - b.first);
-  return Object.fromEntries(sorted.map(({ id }, row) => [id, row]));
+const BASE_OPTIONS: Record<string, string> = {
+  'elk.algorithm': 'layered',
+  'elk.direction': 'DOWN',
+  'elk.edgeRouting': 'ORTHOGONAL',
+  // One graph, so the time order holds across parts that share no edge.
+  'elk.separateConnectedComponents': 'false',
+  'elk.spacing.nodeNode': '40',
+  'elk.spacing.edgeEdge': '24',
+  'elk.layered.spacing.nodeNodeBetweenLayers': '80',
+  'elk.layered.spacing.edgeNodeBetweenLayers': '24',
+};
+
+const PRESET_OPTIONS: Record<string, string> = {
+  ...BASE_OPTIONS,
+  'elk.layered.layering.strategy': 'INTERACTIVE',
+  'elk.layered.crossingMinimization.strategy': 'INTERACTIVE',
+  'elk.layered.nodePlacement.strategy': 'INTERACTIVE',
+  'elk.layered.cycleBreaking.strategy': 'INTERACTIVE',
+};
+
+/**
+ * The index of the first step that lists each part.
+ *
+ * @param steps The steps of one path.
+ * @returns Part id to step index.
+ */
+export function firstStepIndex(steps: readonly Step[]): Record<string, number> {
+  const first: Record<string, number> = {};
+  steps.forEach((step, index) => {
+    for (const id of step.actors) first[id] ??= index;
+  });
+  return first;
 }
 
 // The 1-based numbers of the steps that use each edge. The label chips show them as badges.
@@ -77,120 +102,209 @@ export function stepNumbersByEdge(steps: readonly Step[]): Record<string, number
   return numbers;
 }
 
-// Per edge, the largest badge count over the flow's paths, so one chip width fits every path.
-export function labelBadgeCounts(flow: Flow): Record<string, number> {
-  const counts: Record<string, number> = {};
-  for (const path of flowPaths(flow)) {
-    for (const [id, numbers] of Object.entries(stepNumbersByEdge(path.steps))) {
-      counts[id] = Math.max(counts[id] ?? 0, numbers.length);
-    }
-  }
-  return counts;
-}
-
-// One band per run of adjacent rows on the same band lane. A lane whose rows are not adjacent gets
-// more than one band.
-export function computeBands(flow: Flow, nodes: Record<string, Point>, width: number): Band[] {
-  const rows = flow.actors
-    .filter((actor) => actor.id in nodes)
-    .sort((a, b) => nodes[a.id]!.y - nodes[b.id]!.y);
+/**
+ * One band per lane that has widget colors and holds a part: one column over the full graph
+ * height, from the lane's leftmost part to its rightmost part, with a margin on each side.
+ *
+ * @param flow The flow whose actors give each part its lane.
+ * @param nodes Part id to top-left position. Parts not in `nodes` are left out.
+ * @param height The graph height.
+ * @returns The bands in project lane order.
+ */
+export function computeBands(flow: Flow, nodes: Record<string, Point>, height: number): Band[] {
   const bands: Band[] = [];
-  let start = 0;
-  while (start < rows.length) {
-    const chain = rows[start]!.chain;
-    let end = start;
-    while (end + 1 < rows.length && rows[end + 1]!.chain === chain) end++;
-    if (PROJECT.lanes[chain]?.widget) {
-      const firstTop = nodes[rows[start]!.id]!.y;
-      const lastBottom = nodes[rows[end]!.id]!.y + NODE_HEIGHT;
-      const prev = rows[start - 1];
-      const next = rows[end + 1];
-      const top = prev ? (nodes[prev.id]!.y + NODE_HEIGHT + firstTop) / 2 : firstTop - BAND_EDGE;
-      const bottom = next ? (lastBottom + nodes[next.id]!.y) / 2 : lastBottom + BAND_EDGE;
-      bands.push({
-        chain,
-        actors: rows.slice(start, end + 1).map((actor) => actor.id),
-        box: { x: -BAND_INSET, y: top, width: width + 2 * BAND_INSET, height: bottom - top },
-      });
-    }
-    start = end + 1;
+  for (const chain of LANE_ORDER) {
+    if (!PROJECT.lanes[chain]?.widget) continue;
+    const actors = flow.actors.filter((actor) => actor.chain === chain && actor.id in nodes);
+    if (actors.length === 0) continue;
+    const xs = actors.map((actor) => nodes[actor.id]!.x);
+    const left = Math.min(...xs) - BAND_MARGIN;
+    const right = Math.max(...xs) + NODE_WIDTH + BAND_MARGIN;
+    bands.push({
+      chain,
+      actors: actors.map((actor) => actor.id),
+      box: { x: left, y: 0, width: right - left, height },
+    });
   }
   return bands;
 }
 
-export async function computeLayout(flow: Flow): Promise<FlowLayout> {
-  const rank = firstInteractionRank(flow);
-  const badgeCounts = labelBadgeCounts(flow);
-  const input: ElkNode = {
+function seedPartitions(
+  actors: Actor[],
+  edges: FlowEdge[],
+  first: Record<string, number>,
+): Record<string, number> {
+  const targets = new Set(edges.map((edge) => edge.target));
+  const partition: Record<string, number> = {};
+  for (const actor of actors) {
+    if (!targets.has(actor.id)) partition[actor.id] = first[actor.id] ?? 0;
+  }
+  return partition;
+}
+
+// Decision 1a: a part that no edge points to takes its first step index. Every other part takes
+// the largest partition of the parts that point to it, propagated until no partition changes.
+function partitions(
+  actors: Actor[],
+  edges: FlowEdge[],
+  first: Record<string, number>,
+): Record<string, number> {
+  const partition = seedPartitions(actors, edges, first);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const edge of edges) {
+      const source = partition[edge.source];
+      const target = partition[edge.target];
+      if (source === undefined || (target !== undefined && target >= source)) continue;
+      partition[edge.target] = source;
+      changed = true;
+    }
+  }
+  return partition;
+}
+
+function elkEdges(edges: FlowEdge[]) {
+  return edges.map((edge) => ({ id: edge.id, sources: [edge.source], targets: [edge.target] }));
+}
+
+// Pass 1: each part's time row, as a y.
+async function rowTops(
+  actors: Actor[],
+  edges: FlowEdge[],
+  partition: Record<string, number>,
+): Promise<Record<string, number>> {
+  const graph = await elk.layout({
     id: 'root',
     layoutOptions: {
-      'elk.algorithm': 'layered',
-      'elk.direction': 'DOWN',
+      ...BASE_OPTIONS,
+      'elk.layered.layering.strategy': 'LONGEST_PATH_SOURCE',
       'elk.partitioning.activate': 'true',
-      // One graph, so the row order holds across actors that share no edge.
-      'elk.separateConnectedComponents': 'false',
-      'elk.edgeRouting': 'ORTHOGONAL',
-      'elk.edgeLabels.placement': 'CENTER',
-      'elk.spacing.nodeNode': '60',
-      'elk.spacing.edgeLabel': '6',
-      'elk.spacing.edgeEdge': '24',
-      'elk.layered.spacing.nodeNodeBetweenLayers': '60',
-      'elk.layered.spacing.edgeNodeBetweenLayers': '24',
     },
-    children: flow.actors.map((actor) => ({
+    children: actors.map((actor) => ({
       id: actor.id,
       width: NODE_WIDTH,
       height: NODE_HEIGHT,
-      layoutOptions: { 'elk.partitioning.partition': String(rank[actor.id]) },
+      layoutOptions: { 'elk.partitioning.partition': String(partition[actor.id] ?? 0) },
     })),
-    edges: flow.edges.map((edge) => ({
-      id: edge.id,
-      sources: [edge.source],
-      targets: [edge.target],
-      labels: [
-        {
-          id: `${edge.id}-label`,
-          text: edge.label,
-          width: labelWidth(edge, badgeCounts[edge.id] ?? 0),
-          height: LABEL_HEIGHT,
-          // On the edge, not beside it, so a label cannot read as a neighbour's. ELK reads this
-          // option from each label, not from the graph.
-          layoutOptions: { 'elk.edgeLabels.inline': 'true' },
-        },
-      ],
+    edges: elkEdges(edges),
+  });
+  return Object.fromEntries((graph.children ?? []).map((child) => [child.id, child.y ?? 0]));
+}
+
+// Lanes are columns in project lane order. Inside a lane, each part takes the first column whose
+// parts are all at least NODE_HEIGHT away in y.
+function columnLefts(actors: Actor[], y: Record<string, number>): Record<string, number> {
+  const x: Record<string, number> = {};
+  let laneLeft = 0;
+  for (const lane of LANE_ORDER) {
+    const ids = actors
+      .filter((actor) => actor.chain === lane)
+      .map((actor) => actor.id)
+      .sort((a, b) => y[a]! - y[b]!);
+    if (ids.length === 0) continue;
+    const columns: string[][] = [];
+    for (const id of ids) {
+      let column = columns.findIndex((parts) =>
+        parts.every((other) => Math.abs(y[other]! - y[id]!) >= NODE_HEIGHT),
+      );
+      if (column < 0) column = columns.push([]) - 1;
+      columns[column]!.push(id);
+      x[id] = laneLeft + column * (NODE_WIDTH + COLUMN_GAP);
+    }
+    laneLeft += columns.length * (NODE_WIDTH + COLUMN_GAP) - COLUMN_GAP + LANE_GAP;
+  }
+  return x;
+}
+
+// Pass 2: ELK keeps the preset positions and routes the edges.
+async function routeWithPresets(
+  actors: Actor[],
+  edges: FlowEdge[],
+  x: Record<string, number>,
+  y: Record<string, number>,
+): Promise<ElkNode> {
+  return elk.layout({
+    id: 'root',
+    layoutOptions: PRESET_OPTIONS,
+    children: actors.map((actor) => ({
+      id: actor.id,
+      width: NODE_WIDTH,
+      height: NODE_HEIGHT,
+      x: x[actor.id],
+      y: y[actor.id],
     })),
-  };
-  const graph = await elk.layout(input);
+    edges: elkEdges(edges),
+  });
+}
+
+function routesOf(graph: ElkNode): Record<string, Point[]> {
+  const routes: Record<string, Point[]> = {};
+  for (const edge of graph.edges ?? []) {
+    const section = edge.sections?.[0];
+    if (!section) throw new Error(`ELK returned no route for edge ${edge.id}`);
+    routes[edge.id] = [section.startPoint, ...(section.bendPoints ?? []), section.endPoint];
+  }
+  return routes;
+}
+
+/**
+ * Lays out one path as vertical swimlanes: lanes are columns, time runs top to bottom.
+ *
+ * @param flow The flow that holds the parts and edges.
+ * @param steps The steps of one path. Only the parts and edges they use are laid out.
+ * @returns Node positions, edge routes with label boxes, bands and the graph size.
+ */
+export async function computeLayout(flow: Flow, steps: readonly Step[]): Promise<FlowLayout> {
+  const usedActors = new Set(steps.flatMap((step) => step.actors));
+  const usedEdges = new Set(steps.flatMap((step) => step.edges));
+  const actors = flow.actors.filter((actor) => usedActors.has(actor.id));
+  const edges = flow.edges.filter((edge) => usedEdges.has(edge.id));
+  for (const edge of edges) {
+    for (const end of [edge.source, edge.target]) {
+      if (!usedActors.has(end)) {
+        throw new Error(`Flow "${flow.id}" edge "${edge.id}" end "${end}" is in no step's parts`);
+      }
+    }
+  }
+
+  const y = await rowTops(actors, edges, partitions(actors, edges, firstStepIndex(steps)));
+  const graph = await routeWithPresets(actors, edges, columnLefts(actors, y), y);
 
   const nodes: Record<string, Point> = {};
   for (const child of graph.children ?? []) nodes[child.id] = { x: child.x ?? 0, y: child.y ?? 0 };
 
-  const edges: Record<string, EdgeLayout> = {};
-  for (const edge of graph.edges ?? []) {
-    const section = edge.sections?.[0];
-    const label = edge.labels?.[0];
-    if (!section || !label) throw new Error(`ELK returned no route or label for edge ${edge.id}`);
-    edges[edge.id] = {
-      points: [section.startPoint, ...(section.bendPoints ?? []), section.endPoint],
-      label: { x: label.x ?? 0, y: label.y ?? 0, width: label.width ?? 0, height: LABEL_HEIGHT },
-    };
+  const routes = routesOf(graph);
+  const badgeCounts = stepNumbersByEdge(steps);
+  const sizes = Object.fromEntries(
+    edges.map((edge) => [
+      edge.id,
+      { width: labelWidth(edge, badgeCounts[edge.id]?.length ?? 0), height: LABEL_HEIGHT },
+    ]),
+  );
+  const nodeBoxes = Object.values(nodes).map(nodeBox);
+  const labels = placeLabels(routes, sizes, nodeBoxes);
+
+  const edgeLayouts: Record<string, EdgeLayout> = {};
+  for (const [id, points] of Object.entries(routes)) {
+    edgeLayouts[id] = { points, label: labels[id]! };
   }
 
-  const width = graph.width ?? 0;
+  const height = graph.height ?? 0;
   return {
     nodes,
-    edges,
+    edges: edgeLayouts,
     // A flow that hides its chains draws no bands, so the camera must not frame them.
-    bands: flow.showChains === false ? [] : computeBands(flow, nodes, width),
-    width,
-    height: graph.height ?? 0,
+    bands: flow.showChains === false ? [] : computeBands(flow, nodes, height),
+    width: graph.width ?? 0,
+    height,
   };
 }
 
 // The boxes the camera frames and the band names avoid: active nodes and active edge labels.
 export function activeBoxes(layout: FlowLayout, step: Step): Box[] {
   return [
-    ...step.actors.map((id) => ({ ...layout.nodes[id]!, width: NODE_WIDTH, height: NODE_HEIGHT })),
+    ...step.actors.map((id) => nodeBox(layout.nodes[id]!)),
     ...step.edges.map((id) => layout.edges[id]!.label),
   ];
 }

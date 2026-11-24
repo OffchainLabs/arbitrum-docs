@@ -33,8 +33,14 @@ function withFlow(
   hash: string,
   run: (page: Page) => Promise<void>,
 ) {
-  const flowPage = { path: PAGE_PATH, actorCount: transactionSubmission.actors.length };
+  // A tab draws only the parts its steps use; a hash without a tab opens the first tab.
+  const path = hash.startsWith(`#${RETRYABLE.id}-`) ? RETRYABLE : DIRECT;
+  const flowPage = { path: PAGE_PATH, actorCount: pathActors(path).size };
   return openFlow(browser, flowPage, options, hash, run);
+}
+
+function pathActors(path: ResolvedPath): Set<string> {
+  return new Set(path.steps.flatMap((step) => step.actors));
 }
 
 /** Waits until the card and the hash show step `index` (0-based) of `path`, then settles. */
@@ -87,22 +93,18 @@ test('#retryable-step-5 opens the auto-redeem step on tab 2', async () => {
   });
 });
 
-test('node boxes are the same on both tabs at 1280×800', async () => {
+test('each tab shows only the parts its steps use', async () => {
   await withFlow(WIDE, '', async (page) => {
-    const boxes = () =>
+    const ids = () =>
       page.evaluate(() =>
-        [...document.querySelectorAll<HTMLElement>('.react-flow__node-actor')].map((node) => ({
-          id: node.getAttribute('data-id'),
-          transform: node.style.transform,
-          width: node.offsetWidth,
-          height: node.offsetHeight,
-        })),
+        [...document.querySelectorAll('.react-flow__node-actor')]
+          .map((node) => node.getAttribute('data-id')!)
+          .sort(),
       );
-    const onTab1 = await boxes();
-    assert.equal(onTab1.length, transactionSubmission.actors.length);
+    assert.deepEqual(await ids(), [...pathActors(DIRECT)].sort());
     await tab(page, RETRYABLE).click();
     await waitForStep(page, RETRYABLE, 0);
-    assert.deepEqual(await boxes(), onTab1);
+    assert.deepEqual(await ids(), [...pathActors(RETRYABLE)].sort());
   });
 });
 
@@ -180,6 +182,90 @@ test('at 768×1024 every active node is inside the canvas on every step of both 
           { canvasSelector: CANVAS, actors },
         );
         assert.deepEqual(outside, [], `${path.id} step ${index + 1}`);
+      }
+    });
+  }
+});
+
+interface Rect {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
+function inside(inner: Rect, outer: Rect): boolean {
+  const slack = 0.5;
+  return (
+    inner.left >= outer.left - slack &&
+    inner.right <= outer.right + slack &&
+    inner.top >= outer.top - slack &&
+    inner.bottom <= outer.bottom + slack
+  );
+}
+
+/** The camera zoom, the canvas, every node, and the active nodes and edge labels of `actors`. */
+function frameShot(page: Page, actors: readonly string[]) {
+  return page.evaluate(
+    ({ canvasSelector, actors }) => {
+      const rect = (element: Element) => {
+        const box = element.getBoundingClientRect();
+        return { left: box.left, right: box.right, top: box.top, bottom: box.bottom };
+      };
+      const canvas = document.querySelector(canvasSelector)!;
+      const transform =
+        document.querySelector<HTMLElement>('.react-flow__viewport')!.style.transform;
+      const nodes = [...canvas.querySelectorAll('.react-flow__node-actor')].map((node) => ({
+        id: node.getAttribute('data-id')!,
+        rect: rect(node),
+      }));
+      return {
+        zoom: Number(/scale\(([\d.]+)\)/.exec(transform)?.[1]),
+        canvas: rect(canvas),
+        nodes,
+        activeNodes: nodes.filter((node) => actors.includes(node.id)).map((node) => node.rect),
+        activeLabels: [...canvas.querySelectorAll('.react-flow__edgelabel-renderer > div')]
+          // The chip stays opaque; its content carries the dimming.
+          .filter((label) => getComputedStyle(label.firstElementChild!).opacity === '1')
+          .map(rect),
+      };
+    },
+    { canvasSelector: CANVAS, actors },
+  );
+}
+
+test('each submission step frames its active nodes at zoom ≥0.6 at 1280×900', async () => {
+  for (const path of PATHS) {
+    const options = { viewport: { width: 1280, height: 900 } };
+    await withFlow(options, `#${path.id}-step-1`, async (page) => {
+      for (let index = 0; index < path.steps.length; index++) {
+        if (index > 0) {
+          await page.getByRole('button', { name: 'Next →' }).click();
+          await waitForStep(page, path, index);
+        }
+        const step = path.steps[index]!;
+        const shot = await frameShot(page, step.actors);
+        const name = `${path.id} step ${index + 1}`;
+        assert.ok(shot.zoom >= 0.6, `${name} zoom ${shot.zoom}`);
+        assert.equal(shot.activeNodes.length, step.actors.length, `${name} active nodes`);
+        assert.equal(shot.activeLabels.length, step.edges.length, `${name} active labels`);
+        for (const box of [...shot.activeNodes, ...shot.activeLabels]) {
+          assert.ok(inside(box, shot.canvas), `${name}: ${JSON.stringify(box)}`);
+        }
+      }
+    });
+  }
+});
+
+test('after Show all at 375×812 every node is inside the canvas', async () => {
+  for (const path of PATHS) {
+    await withFlow(PHONE, `#${path.id}-step-1`, async (page) => {
+      await page.getByRole('button', { name: 'Show all' }).click();
+      await settle(page);
+      const shot = await frameShot(page, []);
+      assert.equal(shot.nodes.length, pathActors(path).size, path.id);
+      for (const node of shot.nodes) {
+        assert.ok(inside(node.rect, shot.canvas), `${path.id} ${node.id} zoom ${shot.zoom}`);
       }
     });
   }

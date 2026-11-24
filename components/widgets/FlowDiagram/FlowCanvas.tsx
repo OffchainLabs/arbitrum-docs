@@ -33,7 +33,7 @@ export function FlowCanvas({ nodes, edges, onInit, onMove }: FlowCanvasProps) {
         edgeTypes={edgeTypes}
         onInit={onInit}
         onMove={(_, next) => onMove(next)}
-        minZoom={0.3}
+        minZoom={0.1}
         // At the bottom right, the step bar covers it on phones.
         attributionPosition="top-right"
         panOnDrag={false}

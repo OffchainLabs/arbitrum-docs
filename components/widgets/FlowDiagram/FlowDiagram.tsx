@@ -19,7 +19,7 @@ import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
 import { type Flow, type ResolvedPath, type StepDetail, flowPaths } from './model.ts';
 import type { PathCount } from './navigation.ts';
-import { useFlowLayout } from './useFlowLayout.ts';
+import { useFlowLayouts } from './useFlowLayouts.ts';
 import { useStepCamera } from './useStepCamera.ts';
 import { SITE_HEADER, useStepNavigation } from './useStepNavigation.ts';
 
@@ -28,8 +28,6 @@ const NARROW_QUERY = '(max-width: 767px)';
 interface PathView {
   path: ResolvedPath;
   stepNumbers: Record<string, number[]>;
-  actors: Set<string>;
-  edges: Set<string>;
 }
 
 interface FlowView {
@@ -43,8 +41,6 @@ function flowView(flow: Flow): FlowView {
   const paths = flowPaths(flow).map((path) => ({
     path,
     stepNumbers: stepNumbersByEdge(path.steps),
-    actors: new Set(path.steps.flatMap((step) => step.actors)),
-    edges: new Set(path.steps.flatMap((step) => step.edges)),
   }));
   return {
     flow,
@@ -57,10 +53,10 @@ const VIEWS = Object.fromEntries(
   Object.entries(FLOWS).map(([id, flow]) => [id, flowView(flow)]),
 ) as Record<FlowId, FlowView>;
 
-/** A registered flow on one canvas. The layout runs once per flow, so tabs do not move nodes. */
+/** A registered flow on one canvas, with one layout per path. A tab shows only its own parts. */
 export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
   const { flow, counts, paths } = VIEWS[flowId];
-  const { layout, failed } = useFlowLayout(flow);
+  const { layouts, failed } = useFlowLayouts(flow);
   const [instance, setInstance] = useState<ReactFlowInstance<
     ActorNodeType | BandNodeType,
     RoutedEdgeType
@@ -73,6 +69,7 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
   const current = paths[path]!;
   const stepCount = current.path.steps.length;
   const step = current.path.steps[index]!;
+  const layout = layouts?.[path] ?? null;
   const showAll = useStepCamera(instance, layout, step, canvasRef);
   // The open detail, kept apart from `step`: it stays mounted while it fades out over the next step.
   const [openDetail, setOpenDetail] = useState<StepDetail | null>(null);
@@ -106,11 +103,11 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
   }, [openDetail]);
 
   const nodes = useMemo(
-    () => (layout ? flowNodes(flow, layout, step, current.actors, trigger) : []),
-    [flow, layout, step, current, trigger],
+    () => (layout ? flowNodes(flow, layout, step, trigger) : []),
+    [flow, layout, step, trigger],
   );
   const edges = useMemo(
-    () => (layout ? flowEdges(flow, layout, step, current.stepNumbers, current.edges) : []),
+    () => (layout ? flowEdges(flow, layout, step, current.stepNumbers) : []),
     [flow, layout, step, current],
   );
   const labels = flow.card ?? PROJECT.card;

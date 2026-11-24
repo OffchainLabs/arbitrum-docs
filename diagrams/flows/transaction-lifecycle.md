@@ -1,16 +1,16 @@
 ---
 title: 'Transaction lifecycle'
 widget: nitro-transaction-flow
-parts: [wallet, fullnode, seq, relay, poster, seqinbox, bridge]
+parts: [wallet, fullnode, seq, relay, poster, seqinbox, bridge, fullnode-late]
 edges:
   submit: 'wallet -> fullnode "eth_sendRawTransaction"'
   forward: 'fullnode -> seq "Forwards tx (JSON-RPC)"'
   publish: 'seq -> relay "Feed (WebSocket)"'
-  stream: 'relay -> fullnode "Feed (WebSocket)"'
+  stream: 'relay -> fullnode-late "Feed (WebSocket)"'
   share: 'seq -> poster "Message log"'
   post: 'poster -> seqinbox "Batch (parent chain tx)"'
   append: 'seqinbox -> bridge "Append to accumulator"'
-  read: 'seqinbox -> fullnode "Batch events (JSON-RPC)"'
+  read: 'seqinbox -> fullnode-late "Batch events (JSON-RPC)"'
 ---
 
 ## Submit {#submit}
@@ -72,7 +72,7 @@ The sequencer puts the transaction in its queue, orders it, and executes it into
 
 ## Feed {#feed}
 
-parts: seq, relay, fullnode
+parts: seq, relay, fullnode-late
 edges: publish, stream
 flag: --node.feed.output.enable (sequencer), --node.feed.input.url (full node)
 code: nitro/broadcaster/broadcaster.go
@@ -131,7 +131,7 @@ The batch poster sends the batch to SequencerInbox in a parent chain transaction
 
 ## Read back {#read-back}
 
-parts: seqinbox, fullnode
+parts: seqinbox, fullnode-late
 edges: read
 flag: --node.inbox-reader.read-mode
 code: nitro/arbnode/inbox_reader.go

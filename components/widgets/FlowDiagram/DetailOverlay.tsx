@@ -23,7 +23,7 @@ import { BRAND } from './brand.ts';
 import { flowEdges, flowNodes } from './graph.ts';
 import { stepNumbersByEdge } from './layout.ts';
 import type { CardLabels, Flow } from './model.ts';
-import { useFlowLayout } from './useFlowLayout.ts';
+import { useFlowLayouts } from './useFlowLayouts.ts';
 import { naturalCanvasSize, useStepCamera } from './useStepCamera.ts';
 import { motionDuration } from './useStepNavigation.ts';
 
@@ -46,7 +46,8 @@ interface DetailOverlayProps {
 // SPIKE: a second diagram in a dialog, with its own sub-steps. Full screen below 768px; from
 // 768px, a panel over a backdrop, centered over the opening diagram.
 export function DetailOverlay({ flow, labels, onClose, onFinish, anchorRef }: DetailOverlayProps) {
-  const { layout } = useFlowLayout(flow);
+  // A detail flow has one path.
+  const layout = useFlowLayouts(flow).layouts?.[0] ?? null;
   const [instance, setInstance] = useState<ReactFlowInstance<
     ActorNodeType | BandNodeType,
     RoutedEdgeType
@@ -59,16 +60,10 @@ export function DetailOverlay({ flow, labels, onClose, onFinish, anchorRef }: De
   // A detail graph is small: keep every part in view and let the highlight show the sub-step.
   const showAll = useStepCamera(instance, layout, step, canvasRef, true);
   const stepNumbers = useMemo(() => stepNumbersByEdge(flow.steps), [flow]);
-  // A detail flow has one path that uses every actor and edge, so nothing is muted.
-  const actorIds = useMemo(() => new Set(flow.actors.map((actor) => actor.id)), [flow]);
-  const edgeIds = useMemo(() => new Set(flow.edges.map((edge) => edge.id)), [flow]);
-  const nodes = useMemo(
-    () => (layout ? flowNodes(flow, layout, step, actorIds) : []),
-    [flow, layout, step, actorIds],
-  );
+  const nodes = useMemo(() => (layout ? flowNodes(flow, layout, step) : []), [flow, layout, step]);
   const edges = useMemo(
-    () => (layout ? flowEdges(flow, layout, step, stepNumbers, edgeIds) : []),
-    [flow, layout, step, stepNumbers, edgeIds],
+    () => (layout ? flowEdges(flow, layout, step, stepNumbers) : []),
+    [flow, layout, step, stepNumbers],
   );
   // The panel and canvas shrink to the graph at zoom 1; the classes below cap them.
   const size = layout ? naturalCanvasSize(layout) : null;

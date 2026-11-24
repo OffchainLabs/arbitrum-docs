@@ -3,7 +3,7 @@ import { type RefObject, useEffect, useState } from 'react';
 
 import { BRAND } from './brand.ts';
 import { PROJECT } from './flows.ts';
-import { type Band, type Box, type FlowLayout, activeBoxes } from './layout.ts';
+import { type Band, type Box, type FlowLayout, activeBoxes, nodeBox } from './layout.ts';
 import type { Step } from './model.ts';
 import { siteHeaderPx } from './useStepNavigation.ts';
 
@@ -24,11 +24,29 @@ function bandLabelWidth(chain: Band['chain']): number {
   return Math.ceil(PROJECT.lanes[chain]!.label.length * 0.55 * 13) + 34;
 }
 
+interface Edges {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
+// Whether a band name at (x, y) with this width overlaps `obstacle`.
+function covers(obstacle: Edges, x: number, y: number, width: number): boolean {
+  return (
+    x < obstacle.right &&
+    obstacle.left < x + width &&
+    y < obstacle.bottom &&
+    obstacle.top < y + BAND_LABEL_HEIGHT
+  );
+}
+
 /**
- * Band names, outside the React Flow transform. Each sits at the top right of the visible part
- * of its band, below the site header and above the step bar, and moves below any active node,
- * edge label or the React Flow attribution it would cover. It is hidden when the visible part of
- * the band is too thin.
+ * Band names, outside the React Flow transform. Each sits at the top left of the visible part
+ * of its band column, below the site header and above the step bar, and moves below any node,
+ * active edge label, the key or the React Flow attribution it would cover. It may extend past its
+ * band's right edge, and slides left to stay on the canvas. It is hidden when it does not fit the
+ * canvas width or the visible part of its band column vertically.
  */
 export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLabelsProps) {
   const [, setScrollTick] = useState(0);
@@ -51,14 +69,16 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
     top: box.y * viewport.zoom + viewport.y,
     bottom: (box.y + box.height) * viewport.zoom + viewport.y,
   });
-  const obstacles = activeBoxes(layout, step).map(toCanvas);
-  const attribution = canvas.querySelector('.react-flow__attribution')?.getBoundingClientRect();
-  if (attribution) {
+  // Every node, so a name never hides a part, and the active edge labels.
+  const nodes = Object.values(layout.nodes).map(nodeBox);
+  const obstacles = [...nodes, ...activeBoxes(layout, step)].map(toCanvas);
+  for (const element of canvas.querySelectorAll('.react-flow__attribution, [data-flow-key]')) {
+    const pinned = element.getBoundingClientRect();
     obstacles.push({
-      left: attribution.left - rect.left,
-      right: attribution.right - rect.left,
-      top: attribution.top - rect.top,
-      bottom: attribution.bottom - rect.top,
+      left: pinned.left - rect.left,
+      right: pinned.right - rect.left,
+      top: pinned.top - rect.top,
+      bottom: pinned.bottom - rect.top,
     });
   }
   obstacles.sort((a, b) => a.top - b.top);
@@ -71,17 +91,23 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
 
   return layout.bands.map((band, index) => {
     const box = toCanvas(band.box);
-    const x = Math.min(box.right, canvas.clientWidth) - BAND_LABEL_INSET;
     const width = bandLabelWidth(band.chain);
+    // A name may pass its band edge; a narrow band slides it left to stay on the canvas.
+    const x = Math.min(
+      Math.max(box.left, 0) + BAND_LABEL_INSET,
+      canvas.clientWidth - width - BAND_LABEL_INSET,
+    );
     let y = Math.max(box.top + BAND_LABEL_INSET, visibleTop);
-    for (const obstacle of obstacles) {
-      const overlaps =
-        x - width < obstacle.right &&
-        obstacle.left < x &&
-        y < obstacle.bottom &&
-        obstacle.top < y + BAND_LABEL_HEIGHT;
-      if (overlaps) y = obstacle.bottom + 6;
+    // Moving below one obstacle can land on an earlier, taller one, so repeat until none covers.
+    for (let moved = true; moved;) {
+      moved = false;
+      for (const obstacle of obstacles) {
+        if (!covers(obstacle, x, y, width)) continue;
+        y = obstacle.bottom + 6;
+        moved = true;
+      }
     }
+    if (x + width > canvas.clientWidth) return null;
     if (y + BAND_LABEL_HEIGHT > Math.min(box.bottom - BAND_LABEL_INSET, floor)) return null;
     const lane = PROJECT.lanes[band.chain]!;
     return (
@@ -95,7 +121,6 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
         style={{
           left: x,
           top: y,
-          transform: 'translateX(-100%)',
           background: BRAND.chip,
           color: BRAND.chipText,
           fontFamily: BRAND.font,

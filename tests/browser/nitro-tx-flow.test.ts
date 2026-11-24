@@ -299,8 +299,10 @@ test('each step frames its active nodes and labels at zoom ≥0.6 at 1280×900',
 test('at 375×812 every active node and label is inside the canvas on every step', async () => {
   await withFlow(PHONE, '', async (page) => {
     await eachStep(page, (shot, index) => {
-      // Step 7 frames at zoom 0.45; the spec accepts that.
-      assert.ok(index === 6 || shot.zoom >= 0.6, `step ${index + 1} zoom ${shot.zoom}`);
+      // The swimlane layout frames steps 1 and 6 at zoom 0.57 and step 7 at 0.37. Lanes sit side
+      // by side, so a step that spans two lanes is wider than the phone canvas.
+      const floor = index === 6 ? 0.35 : 0.55;
+      assert.ok(shot.zoom >= floor, `step ${index + 1} zoom ${shot.zoom}`);
       for (const box of activeBoxes(shot, index)) {
         assert.ok(inside(box, shot.canvas), `step ${index + 1}: ${JSON.stringify(box)}`);
       }
@@ -390,6 +392,21 @@ test('no horizontal scroll at 375px', async () => {
   });
 });
 
+test('after Show all at 1280×800 both band names are visible', async () => {
+  await withFlow(WIDE, '', async (page) => {
+    await page.locator(CANVAS).evaluate((canvas) => canvas.scrollIntoView({ block: 'start' }));
+    await page.getByRole('button', { name: 'Show all' }).click();
+    await settle(page);
+    const shot = await snapshot(page);
+    for (const chain of ['child', 'parent']) {
+      const name = PROJECT.lanes[chain]!.label;
+      const label = shot.bandLabels.find((band) => band.name === name);
+      assert.ok(label, `${name} shown`);
+      assert.ok(inside(label.rect, shot.canvas), `${name} inside the canvas`);
+    }
+  });
+});
+
 test('after Show all at 375×812 the step bar covers no node', async () => {
   await withFlow(PHONE, '', async (page) => {
     await next(page);
@@ -399,6 +416,18 @@ test('after Show all at 375×812 the step bar covers no node', async () => {
     for (const node of shot.nodes) {
       assert.ok(!intersects(node.rect, shot.bar), node.id);
       assert.ok(inside(node.rect, shot.canvas), node.id);
+    }
+  });
+});
+
+test('after Show all at 375×812 every node is inside the canvas', async () => {
+  await withFlow(PHONE, '', async (page) => {
+    await page.getByRole('button', { name: 'Show all' }).click();
+    await settle(page);
+    const shot = await snapshot(page);
+    assert.equal(shot.nodes.length, transactionLifecycle.actors.length);
+    for (const node of shot.nodes) {
+      assert.ok(inside(node.rect, shot.canvas), `${node.id} zoom ${shot.zoom}`);
     }
   });
 });

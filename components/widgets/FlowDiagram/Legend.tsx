@@ -14,6 +14,7 @@ export function Legend({ flow, narrow }: { flow: Flow; narrow: boolean }) {
       {narrow && (
         <button
           type="button"
+          data-flow-key=""
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
           className={[
@@ -29,6 +30,7 @@ export function Legend({ flow, narrow }: { flow: Flow; narrow: boolean }) {
       {/* Rendered conditionally: the `hidden` attribute loses to the `flex` class. */}
       {(!narrow || open) && (
         <div
+          data-flow-key=""
           className={[
             'absolute left-3 z-20 flex flex-col gap-1 rounded-md p-2 text-xs',
             narrow ? 'top-12' : 'top-3',

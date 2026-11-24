@@ -1,7 +1,7 @@
 ---
 title: 'Transaction submission'
 widget: transaction-submission-flow
-parts: [wallet, dapp, rpc, seq, fastfeed, feed, retryable, poster, validator, inbox, bridge, seqinbox, rollup]
+parts: [wallet, dapp, rpc, seq, fastfeed, feed, retryable, poster, validator, inbox, bridge, bridge-late, seqinbox, rollup]
 edges:
   send: 'wallet -> rpc "eth_sendRawTransaction"'
   forward: 'rpc -> seq "Forwards the transaction"'
@@ -9,7 +9,7 @@ edges:
   publish: 'seq -> feed "Each stored block"'
   share: 'seq -> poster "Message log"'
   post: 'poster -> seqinbox "Batch (parent chain tx)"'
-  append: 'seqinbox -> bridge "Append to accumulator"'
+  append: 'seqinbox -> bridge-late "Append to accumulator"'
   assert: 'validator -> rollup "Assertion"'
   create: 'dapp -> inbox "createRetryableTicket"'
   enqueue: 'inbox -> bridge "Delayed message"'
@@ -95,7 +95,7 @@ The block closes. The Sequencer stores the block, then sends it to nodes on the 
 
 ## Batch and post {#batch}
 
-parts: seq, poster, seqinbox, bridge
+parts: seq, poster, seqinbox, bridge-late
 edges: share, post, append
 code: nitro/arbnode/batch_poster.go
 cites: batch_poster.go:1621, 1212, 88, 89, nitro-contracts/src/bridge/SequencerInbox.sol:343, 733

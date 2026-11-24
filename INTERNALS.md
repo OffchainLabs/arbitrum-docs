@@ -619,6 +619,15 @@ fails.
 `tech: ~` drops the sublabel of a part in that flow. Every part and every edge end must be in the
 flow's `parts` list.
 
+The widget draws each path in its own layout. Lanes are columns, left to right, and time runs from
+top to bottom. Three rules follow.
+
+- The edges a path uses must form no cycle. Split a part that a path uses early and late into two
+  parts, as `fullnode-late` and `bridge-late` do.
+- Both ends of every edge a step uses must be parts of that path's steps. `pnpm test` fails
+  otherwise, and the widget would show every tab as not drawn.
+- A tab draws only the parts its steps use.
+
 A step is a `## Title {#id}` section. A step id must be unique in the file and use lowercase letters
 and digits joined by single dashes. The first paragraph can
 be metadata, one `key: value` pair per line or several joined with `·`. The other paragraphs are
@@ -653,7 +662,7 @@ A `### Failure` heading ends the step text. It holds exactly three paragraphs th
 - `lanes` maps a lane id to a `label`. A lane with `svg: { fill, stroke, label }` also draws a
   band behind its parts in the SVG. `short` is the lane name in a widget box's sub-line. A lane
   with `widget: { accent, fill, border }` is a band in the widget, named by `label`; `fill` and
-  `border` are `[inactive, active]` pairs. The widget stacks its rows in lane order.
+  `border` are `[inactive, active]` pairs. The widget draws its lane columns from left to right in lane order.
 - `kinds` maps a part kind to a `label` and to `svg` colours: `fill`, `title`, `sub`, and optional
   `stroke`. The optional `svg.key` replaces `label` in the SVG key. `widget: { fill, title, sub }`
   holds the widget colours, and puts the kind in the widget key. With

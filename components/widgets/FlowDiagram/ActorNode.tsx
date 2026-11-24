@@ -18,7 +18,6 @@ export type ActorNodeType = Node<
   {
     actor: Actor;
     active: boolean;
-    muted: boolean;
     showChain: boolean;
     trigger?: NodeTrigger | undefined;
   },
@@ -30,7 +29,7 @@ export type ActorNodeType = Node<
 const HIDDEN_HANDLE = { opacity: 0, pointerEvents: 'none' } as const;
 
 export function ActorNode({ data }: NodeProps<ActorNodeType>) {
-  const { actor, active, muted, showChain, trigger } = data;
+  const { actor, active, showChain, trigger } = data;
   const style = PROJECT.kinds[actor.kind]!.widget;
   const lane = PROJECT.lanes[actor.chain]!.short;
   const box = (
@@ -59,7 +58,7 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
         borderRadius: 10,
         border: `3px solid ${active ? BRAND.active : 'transparent'}`,
         boxShadow: active ? BRAND.activeGlow : 'none',
-        opacity: active ? 1 : muted ? BRAND.muted : BRAND.dimmed,
+        opacity: active ? 1 : BRAND.dimmed,
         fontFamily: BRAND.font,
       }}
     >
