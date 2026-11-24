@@ -219,8 +219,10 @@ On the current branch, not yet merged:
 - **Edge labels** name what travels: "Signed transaction", "Forwarded transaction", "Sequenced
   messages", "Compressed batch", "Accumulator entry", "Send root".
 - **Node sub-lines** say what each node does: RPC node "Forwards to the Sequencer", Sequencer
-  "Orders and executes", Batch poster "Posts batches", Fast Feed "Paid, per transaction" and
-  Sequencer feed "Free, per block" (`fast-feed.mdx:106-113`), Proposer "Posts assertions".
+  "Orders and executes", Batch poster "Posts batches", Fast Feed "Paid, streams each
+  transaction" and Sequencer feed "Free, streams each block" (`fast-feed.mdx:106-113`: the Fast
+  Feed is a paid subscription and publishes each transaction; the Sequencer feed is free and
+  publishes each block), Proposer "Posts assertions".
 - **Step 8 uses a Proposer node**, not "Validator" (`STYLE-GUIDE.md:58`). Its first sentence now
   says "A proposer".
 - **Step 9 draws the Outbox**, with a "Send root" edge from the Rollup.
