@@ -58,7 +58,7 @@ export function DetailOverlay({ flow, labels, onClose, onFinish, anchorRef }: De
   const closeRef = useRef<HTMLButtonElement>(null);
   const step = flow.steps[index]!;
   // A detail graph is small: keep every part in view and let the highlight show the sub-step.
-  const showAll = useStepCamera(instance, layout, step, canvasRef, { inDialog: true });
+  const { showAll } = useStepCamera(instance, layout, step, canvasRef, { inDialog: true });
   const stepNumbers = useMemo(() => stepNumbersByEdge(flow.steps), [flow]);
   const nodes = useMemo(() => (layout ? flowNodes(flow, layout, step) : []), [flow, layout, step]);
   const edges = useMemo(
@@ -191,9 +191,7 @@ export function DetailOverlay({ flow, labels, onClose, onFinish, anchorRef }: De
               ].join(' ')}
               style={CANVAS_STYLE}
             >
-              {layout && (
-                <FlowCanvas nodes={nodes} edges={edges} onInit={setInstance} onMove={() => {}} />
-              )}
+              {layout && <FlowCanvas nodes={nodes} edges={edges} onInit={setInstance} />}
               <StepBar
                 index={index}
                 count={flow.steps.length}
@@ -202,6 +200,7 @@ export function DetailOverlay({ flow, labels, onClose, onFinish, anchorRef }: De
                 onGo={goTo}
                 onShowAll={showAll}
                 onFinish={finish}
+                keyHint={false}
               />
             </div>
             <StepCard step={step} labels={labels} />

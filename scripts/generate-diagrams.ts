@@ -25,7 +25,7 @@ import type {
 import { buildIndex } from './lib/doc-links.ts';
 import { isCheckMode, runScript, writeOrCheck } from './lib/generated-partial.ts';
 
-const CARD_KEYS = ['detailsToggle', 'symptoms', 'impact', 'recovery'] as const;
+const CARD_KEYS = ['overviewTab', 'failureTab', 'symptoms', 'impact', 'recovery'] as const;
 
 /** The project.yaml and the flows that the widget mapping reads. */
 interface Context {

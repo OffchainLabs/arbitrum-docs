@@ -7,7 +7,7 @@ import {
   PROJECT,
   transactionLifecycle,
 } from '../../components/widgets/FlowDiagram/flows.generated.ts';
-import { CANVAS, cardTitle, openFlow, overlappingBandNames, settle } from './flow-page.ts';
+import { CANVAS, cardTitle, openFlow, settle } from './flow-page.ts';
 
 const PAGE_PATH = '/how-arbitrum-works/deep-dives/nitro-transaction-flow';
 const STEPS = transactionLifecycle.steps;
@@ -42,7 +42,6 @@ interface Snapshot {
   zoom: number;
   nodes: { id: string; rect: Rect }[];
   activeLabels: Rect[];
-  bandLabels: { name: string; rect: Rect }[];
   key: Rect | null;
   attribution: Rect | null;
   innerHeight: number;
@@ -76,11 +75,8 @@ async function next(page: Page) {
 }
 
 async function snapshot(page: Page): Promise<Snapshot> {
-  const bandNames = Object.values(PROJECT.lanes)
-    .filter((lane) => lane.widget)
-    .map((lane) => lane.label);
   return page.evaluate(
-    ({ canvasSelector, bandNames }) => {
+    ({ canvasSelector }) => {
       const rect = (element: Element) => {
         const box = element.getBoundingClientRect();
         return { left: box.left, right: box.right, top: box.top, bottom: box.bottom };
@@ -88,16 +84,16 @@ async function snapshot(page: Page): Promise<Snapshot> {
       const canvas = document.querySelector(canvasSelector)!;
       const transform = (document.querySelector('.react-flow__viewport') as HTMLElement).style
         .transform;
-      const legend = [...canvas.querySelectorAll('div')].find(
-        (div) => div.classList.contains('flex-col') && div.textContent?.includes('Nitro process'),
-      );
+      // The key strip from 768px, or the open key box below.
+      const legend = canvas.querySelector('div[data-flow-key]');
       const keyButton = [...canvas.querySelectorAll('button')].find(
         (button) => button.textContent === 'Key',
       );
       const attribution = canvas.querySelector('.react-flow__attribution');
       return {
         canvas: rect(canvas),
-        bar: rect(document.querySelector('nav[aria-label="Transaction steps"]')!),
+        // The whole step dock: the caption and the step bar.
+        bar: rect(document.querySelector('[data-step-dock]')!),
         zoom: Number(/scale\(([\d.]+)\)/.exec(transform)?.[1]),
         nodes: [...canvas.querySelectorAll('.react-flow__node-actor')].map((node) => ({
           id: node.getAttribute('data-id')!,
@@ -107,15 +103,12 @@ async function snapshot(page: Page): Promise<Snapshot> {
           // The chip stays opaque; its content carries the dimming.
           .filter((label) => getComputedStyle(label.firstElementChild!).opacity === '1')
           .map(rect),
-        bandLabels: [...canvas.querySelectorAll('div[aria-hidden="true"]')]
-          .filter((div) => bandNames.includes(div.textContent ?? ''))
-          .map((div) => ({ name: div.textContent!, rect: rect(div) })),
         key: legend ? rect(legend) : keyButton ? rect(keyButton) : null,
         attribution: attribution ? rect(attribution) : null,
         innerHeight: window.innerHeight,
       };
     },
-    { canvasSelector: CANVAS, bandNames },
+    { canvasSelector: CANVAS },
   );
 }
 
@@ -244,14 +237,41 @@ test('reaching either end keeps keyboard focus inside the widget', async () => {
   });
 });
 
-test('operator details are hidden until the toggle is checked', async () => {
+test('the failure text shows on the "If it fails" tab, the flag in the footer', async () => {
+  assert.ok(STEPS[0]!.failure && STEPS[0]!.flag);
   await withFlow(WIDE, '', async (page) => {
-    const term = page.getByText('What the operator sees', { exact: true });
+    const term = page.getByText('What the operator sees.', { exact: true });
     assert.equal(await term.count(), 0);
-    await page.getByLabel('Show operator details').check();
+    const flag = page.locator('[data-step-dock] code', { hasText: STEPS[0]!.flag! });
+    assert.ok(await flag.isVisible(), 'the flag is in the footer on the first tab');
+    await page.getByRole('tab', { name: 'If it fails' }).click();
     await term.waitFor();
-    assert.ok(await page.getByText('Impact on the transaction', { exact: true }).isVisible());
-    assert.ok(await page.getByText('Recovery', { exact: true }).isVisible());
+    assert.ok(await page.getByText('Impact on the transaction.', { exact: true }).isVisible());
+    assert.ok(await page.getByText('Recovery.', { exact: true }).isVisible());
+  });
+});
+
+test('arrow keys on the step tabs switch tabs and do not step the diagram', async () => {
+  await withFlow(WIDE, '', async (page) => {
+    const failureTab = page.getByRole('tab', { name: 'If it fails' });
+    await page.getByRole('tab', { name: 'What happens' }).focus();
+    await page.keyboard.press('ArrowRight');
+    assert.equal(await failureTab.getAttribute('aria-selected'), 'true');
+    assert.equal(await page.evaluate(() => document.activeElement?.textContent), 'If it fails');
+    assert.equal(await cardTitle(page), STEPS[0]!.title);
+  });
+});
+
+test('the selected tab stays on the next step with failure text', async () => {
+  const index = STEPS.findIndex((step, i) => step.failure && STEPS[i + 1]?.failure);
+  assert.ok(index >= 0);
+  await withFlow(WIDE, `#step-${index + 1}`, async (page) => {
+    await page.getByRole('tab', { name: 'If it fails' }).click();
+    await next(page);
+    assert.equal(
+      await page.getByRole('tab', { name: 'If it fails' }).getAttribute('aria-selected'),
+      'true',
+    );
   });
 });
 
@@ -309,46 +329,30 @@ test('at 375×812 each step frames at zoom ≥0.6 with its first active node ins
 
 for (const device of [WIDE, PHONE]) {
   const width = device.viewport!.width;
-  test(`band names never intersect each other at ${width}px`, async () => {
-    await withFlow(device, '', async (page) => {
-      for (let index = 0; index < STEPS.length; index++) {
-        if (index > 0) await next(page);
-        assert.deepEqual(await overlappingBandNames(page), [], `step ${index + 1}`);
-      }
-    });
-  });
-}
-
-for (const device of [WIDE, PHONE]) {
-  const width = device.viewport!.width;
-  test(`band labels clear active boxes, bar, key and attribution at ${width}px`, async () => {
+  test(`the key covers no active node or label at ${width}px`, async () => {
     await withFlow(device, '', async (page) => {
       await eachStep(page, (shot, index) => {
-        assert.ok(shot.key, 'the key or the Key button is on the canvas');
-        assert.ok(shot.attribution, 'the React Flow attribution is on the canvas');
-        const obstacles = [...activeBoxes(shot, index), shot.bar, shot.key, shot.attribution];
-        for (const label of shot.bandLabels) {
-          for (const box of obstacles) {
-            assert.ok(!intersects(label.rect, box), `step ${index + 1}: ${label.name}`);
-          }
+        assert.ok(shot.key, 'the key strip or the Key button is on the canvas');
+        for (const box of activeBoxes(shot, index)) {
+          assert.ok(!intersects(box, shot.key), `step ${index + 1}: ${JSON.stringify(box)}`);
         }
       });
     });
   });
 }
 
-test('the child chain label is on screen on steps 1 to 5 at 1280×800', async () => {
+test('the key names both chains at 1280×800, and in the Key box at 375×812', async () => {
+  const names = ['child', 'parent'].map((chain) => PROJECT.lanes[chain]!.label);
   await withFlow(WIDE, '', async (page) => {
-    // On load the canvas top is low on the screen; a reader scrolls it into view first.
-    await page.locator(CANVAS).evaluate((canvas) => canvas.scrollIntoView({ block: 'start' }));
-    await settle(page);
-    await eachStep(page, (shot, index) => {
-      if (index > 4) return;
-      const label = shot.bandLabels.find((band) => band.name === PROJECT.lanes['child']!.label);
-      assert.ok(label, `step ${index + 1}: child chain label shown`);
-      assert.ok(label.rect.top >= 0 && label.rect.bottom <= shot.innerHeight);
-      assert.ok(inside(label.rect, shot.canvas));
-    });
+    for (const name of names) {
+      assert.ok(await page.locator('[data-flow-key]', { hasText: name }).isVisible(), name);
+    }
+  });
+  await withFlow(PHONE, '', async (page) => {
+    await page.getByRole('button', { name: 'Key' }).click();
+    for (const name of names) {
+      assert.ok(await page.locator('div[data-flow-key]', { hasText: name }).isVisible(), name);
+    }
   });
 });
 
@@ -401,17 +405,15 @@ test('no horizontal scroll at 375px', async () => {
   });
 });
 
-test('after Show all at 1280×800 both band names are visible', async () => {
+test('after Show all at 1280×800 no node is under the key strip', async () => {
   await withFlow(WIDE, '', async (page) => {
     await page.locator(CANVAS).evaluate((canvas) => canvas.scrollIntoView({ block: 'start' }));
     await page.getByRole('button', { name: 'Show all' }).click();
     await settle(page);
     const shot = await snapshot(page);
-    for (const chain of ['child', 'parent']) {
-      const name = PROJECT.lanes[chain]!.label;
-      const label = shot.bandLabels.find((band) => band.name === name);
-      assert.ok(label, `${name} shown`);
-      assert.ok(inside(label.rect, shot.canvas), `${name} inside the canvas`);
+    assert.ok(shot.key);
+    for (const node of shot.nodes) {
+      assert.ok(!intersects(node.rect, shot.key), `${node.id} is under the key strip`);
     }
   });
 });

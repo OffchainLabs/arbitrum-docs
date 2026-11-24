@@ -66,7 +66,9 @@ export interface ResolvedPath {
 }
 
 export interface CardLabels {
-  detailsToggle: string;
+  // The step caption's two tabs: the step text, and the failure paragraphs.
+  overviewTab: string;
+  failureTab: string;
   symptoms: string;
   impact: string;
   recovery: string;
@@ -76,7 +78,7 @@ export interface CardLabels {
 export interface LaneInfo {
   label: string;
   // The lane name in an actor's sub-line.
-  short?: string;
+  short?: string | null;
   // Present when the lane is drawn as a band. Each pair is [inactive, active].
   widget?: { accent: string; fill: [string, string]; border: [string, string] };
 }

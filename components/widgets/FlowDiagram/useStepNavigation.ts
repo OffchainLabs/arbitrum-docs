@@ -27,10 +27,15 @@ export function motionDuration(): number {
 /**
  * The current path and step, synced with the `#step-n` or `#<path>-step-n` hash. A hash that is
  * not a step hash (a heading link) keeps the current position. `goTo` also scrolls the canvas on
- * screen when it is not fully visible, so the step bar does not cover the active step.
+ * screen when it is not fully visible, so the step bar does not cover the active step, unless
+ * `scrollOnStep` is false: a full screen canvas is fixed, and the page behind it must not move.
  * `paths` must be a stable array: it is an effect dependency.
  */
-export function useStepNavigation(paths: PathCount[], canvasRef: RefObject<HTMLElement | null>) {
+export function useStepNavigation(
+  paths: PathCount[],
+  canvasRef: RefObject<HTMLElement | null>,
+  scrollOnStep = true,
+) {
   const [position, setPosition] = useState<StepPosition>(
     () => parseStepHash(window.location.hash, paths) ?? { path: 0, index: 0 },
   );
@@ -70,7 +75,7 @@ export function useStepNavigation(paths: PathCount[], canvasRef: RefObject<HTMLE
     setStarted(true);
     setPosition({ path, index: target });
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !scrollOnStep) return;
     const box = canvas.getBoundingClientRect();
     if (box.top < siteHeaderPx(canvas) || box.bottom > window.innerHeight) {
       canvas.scrollIntoView({ block: 'start', behavior: motionDuration() ? 'smooth' : 'auto' });

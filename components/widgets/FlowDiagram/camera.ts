@@ -32,8 +32,8 @@ function axisOffset(
 }
 
 /**
- * The viewport that frames `boxes` at zoom <= 1 inside `canvas`, between `top` (room for the key
- * and band names) and the bottom room for the step bar. When `narrow` and not `fitAll`, zoom stays
+ * The viewport that frames `boxes` at zoom <= 1 inside `canvas`, between `top` (room for the key)
+ * and `bottom` (room for the step bar or dock). When `narrow` and not `fitAll`, zoom stays
  * >= `PHONE_MIN_ZOOM`. On an axis where the boxes then do not fit, the view centers on `focus` and
  * stops at the boxes' ends plus the margin.
  */
@@ -42,13 +42,13 @@ export function cameraViewport(
   focus: Box,
   canvas: Size,
   top: number,
-  { narrow, fitAll }: { narrow: boolean; fitAll: boolean },
+  { narrow, fitAll, bottom = CAMERA_BOTTOM }: { narrow: boolean; fitAll: boolean; bottom?: number },
 ): Viewport {
   const minX = Math.min(...boxes.map((box) => box.x));
   const minY = Math.min(...boxes.map((box) => box.y));
   const maxX = Math.max(...boxes.map((box) => box.x + box.width));
   const maxY = Math.max(...boxes.map((box) => box.y + box.height));
-  const frameHeight = canvas.height - top - CAMERA_BOTTOM;
+  const frameHeight = canvas.height - top - bottom;
   const fit = Math.min(
     1,
     (canvas.width - 2 * CAMERA_MARGIN) / (maxX - minX),

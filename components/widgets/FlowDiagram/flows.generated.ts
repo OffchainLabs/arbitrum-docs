@@ -3,7 +3,7 @@ import type { Flow, Project, Theme } from './model.ts';
 
 export const PROJECT: Project = {
   lanes: {
-    'off-chain': { label: 'Off-chain', short: 'off-chain' },
+    'off-chain': { label: 'Offchain', short: null },
     'child': {
       label: 'Child chain · Arbitrum One',
       short: 'child chain',
@@ -55,7 +55,8 @@ export const PROJECT: Project = {
     },
   },
   card: {
-    detailsToggle: 'Show operator details',
+    overviewTab: 'What happens',
+    failureTab: 'If it fails',
     symptoms: 'What the operator sees',
     impact: 'Impact on the transaction',
     recovery: 'Recovery',
@@ -130,7 +131,7 @@ export const pgaRound: Flow = {
     {
       id: 'promote',
       title: 'Move to the priority queue',
-      text: 'When a round starts, the Sequencer moves the waiting list into a priority queue. The queue key is the priority fee per gas, the smaller of maxPriorityFeePerGas and maxFeePerGas minus the base fee, plus any boost from earlier rounds. If two transactions have the same priority, the one that reached the Sequencer first goes first. A transaction whose maxFeePerGas is below the base fee is dropped here.',
+      text: 'When a round starts, the Sequencer moves the waiting list into a priority queue. The queue key is the priority fee per gas, the smaller of `maxPriorityFeePerGas` and `maxFeePerGas` minus the base fee, plus any boost from earlier rounds. If two transactions have the same priority, the one that reached the Sequencer first goes first. A transaction whose `maxFeePerGas` is below the base fee is dropped here.',
       actors: ['waiting', 'priority-queue'],
       edges: ['promote'],
       code: { repo: 'nitro', path: 'execution/gethexec/pga/heap.go' },
@@ -298,7 +299,7 @@ export const transactionLifecycle: Flow = {
     {
       id: 'wallet',
       label: 'User wallet',
-      tech: 'Any EVM wallet',
+      tech: 'Set to Arbitrum One',
       kind: 'user',
       chain: 'off-chain',
     },
@@ -372,7 +373,7 @@ export const transactionLifecycle: Flow = {
           'The wallet gets an error from the full node, for example a fee cap below the base fee or a nonce that is too low.',
         impact: 'The full node does not forward the transaction, so the sequencer never sees it.',
         recovery:
-          '--execution.tx-pre-checker.strictness sets how much the full node checks. Below 10 the node skips these checks but still runs its filtered address check. The default is 20.',
+          '`--execution.tx-pre-checker.strictness` sets how much the full node checks. Below 10 the node skips these checks but still runs its filtered address check. The default is 20.',
       },
       citations: [
         { repo: 'nitro', path: 'execution/gethexec/arb_interface.go', line: 44 },
@@ -397,7 +398,7 @@ export const transactionLifecycle: Flow = {
     {
       id: 'forward',
       title: 'Forward',
-      text: 'The full node forwards the transaction to the sequencer over JSON-RPC. It sends it to the URL in its forwarding target setting. A full node with the target null does not forward and returns an error.',
+      text: 'The full node forwards the transaction to the sequencer over JSON-RPC. It sends it to the URL in its forwarding target setting. A full node with the target `null` does not forward and returns an error.',
       actors: ['fullnode', 'seq'],
       edges: ['forward'],
       flag: '--execution.forwarding-target',
@@ -408,7 +409,7 @@ export const transactionLifecycle: Flow = {
         impact:
           'The full node returns the error to the wallet, and the sequencer does not get the transaction.',
         recovery:
-          'Add backup targets with --execution.secondary-forwarding-target. If the error matches its retry list, the node tries them in order.',
+          'Add backup targets with `--execution.secondary-forwarding-target`. If the error matches its retry list, the node tries them in order.',
       },
       citations: [
         { repo: 'nitro', path: 'execution/gethexec/node.go', line: 463 },
@@ -440,9 +441,9 @@ export const transactionLifecycle: Flow = {
       code: { repo: 'nitro', path: 'execution/gethexec/sequencer.go' },
       failure: {
         symptoms:
-          'The metric "arb/sequencer/transactions/dropped/queuetimeout" goes up. If --node.sequencer and --execution.sequencer.enable differ, the node logs "consensus and execution must agree if sequencing is enabled or not".',
+          'The metric `arb/sequencer/transactions/dropped/queuetimeout` goes up. If `--node.sequencer` and `--execution.sequencer.enable` differ, the node logs "consensus and execution must agree if sequencing is enabled or not".',
         impact:
-          'The sequencer drops a transaction that waits in its queue longer than --execution.sequencer.queue-timeout plus the Timeboost express lane advantage. The queue timeout is 12 seconds by default. The submitter gets the timeout error back.',
+          'The sequencer drops a transaction that waits in its queue longer than `--execution.sequencer.queue-timeout` plus the Timeboost express lane advantage. The queue timeout is 12 seconds by default. The submitter gets the timeout error back.',
         recovery: 'TODO: Nitro engineer',
       },
       citations: [
@@ -475,14 +476,14 @@ export const transactionLifecycle: Flow = {
       edges: ['publish', 'stream'],
       flag: '--node.feed.output.enable (sequencer), --node.feed.input.url (full node)',
       code: { repo: 'nitro', path: 'broadcaster/broadcaster.go' },
-      finality: 'soft',
+      finality: 'soft-confirmation',
       failure: {
         symptoms:
           'The full node logs "failed connect to sequencer broadcast, waiting and retrying" or "Server connection timed out without receiving data".',
         impact:
           'The node reconnects with a backoff that doubles up to a maximum. Until then, it gets new transactions only from batches on the parent chain.',
         recovery:
-          'Add backup feeds with --node.feed.input.secondary-url. The node starts one when its primary feeds send nothing for 5 seconds.',
+          'Add backup feeds with `--node.feed.input.secondary-url`. The node starts one when its primary feeds send nothing for 5 seconds.',
       },
       citations: [
         { repo: 'nitro', path: 'arbnode/transaction_streamer.go', line: 1255 },
@@ -523,7 +524,7 @@ export const transactionLifecycle: Flow = {
         symptoms:
           'The batch poster logs "error getting message from streamer", or "error posting batch" with "error adding message to batch" in the error.',
         impact:
-          'The batch poster drops the batch it was building and tries again after --node.batch-poster.error-delay, 10 seconds by default. The transaction stays out of a batch until an attempt succeeds.',
+          'The batch poster drops the batch it was building and tries again after `--node.batch-poster.error-delay`, 10 seconds by default. The transaction stays out of a batch until an attempt succeeds.',
         recovery: 'TODO: Nitro engineer',
       },
       citations: [
@@ -555,9 +556,9 @@ export const transactionLifecycle: Flow = {
       finality: 'batch-posted',
       failure: {
         symptoms:
-          'The batch poster logs "error posting batch". If posting keeps failing for more than a minute, the metric "arb/batchPoster/action/failure" goes up. For some known errors, that wait is 5 minutes.',
+          'The batch poster logs "error posting batch". If posting keeps failing for more than a minute, the metric `arb/batchPoster/action/failure` goes up. For some known errors, that wait is 5 minutes.',
         impact:
-          'SequencerInbox reverts with NotBatchPoster when the sender is not on its batch poster list. The batch does not reach the Bridge.',
+          'SequencerInbox reverts with `NotBatchPoster` when the sender is not on its batch poster list. The batch does not reach the Bridge.',
         recovery: 'TODO: Nitro engineer',
       },
       citations: [
@@ -602,11 +603,11 @@ export const transactionLifecycle: Flow = {
       code: { repo: 'nitro', path: 'arbnode/inbox_reader.go' },
       failure: {
         symptoms:
-          'The node logs "TransactionStreamer: Reorg detected!" with confirmed set to true.',
+          'The node logs "TransactionStreamer: Reorg detected!" with `confirmed` set to `true`.',
         impact:
           'The node replaces its stored messages from that point with the parent chain version. The result of a transaction it showed from the feed can change.',
         recovery:
-          'With --node.inbox-reader.read-mode set to safe or finalized, the node reads batches only up to the latest safe or finalized parent chain block. That setting turns off feed input and output, and a sequencer cannot use it.',
+          'With `--node.inbox-reader.read-mode` set to `safe` or `finalized`, the node reads batches only up to the latest safe or finalized parent chain block. That setting turns off feed input and output, and a sequencer cannot use it.',
       },
       citations: [
         { repo: 'nitro', path: 'arbnode/inbox_reader.go', line: 495 },
@@ -641,16 +642,27 @@ export const transactionSubmission: Flow = {
     {
       id: 'wallet',
       label: 'User wallet',
-      tech: 'Any EVM wallet',
+      tech: 'Set to Arbitrum One',
       kind: 'user',
       chain: 'off-chain',
     },
     { id: 'dapp', label: 'Dapp', tech: 'Parent chain account', kind: 'user', chain: 'parent' },
-    { id: 'rpc', label: 'RPC node', tech: 'nitro', kind: 'process', chain: 'child' },
+    {
+      id: 'rpc',
+      label: 'RPC node',
+      tech: 'Forwards to the Sequencer',
+      kind: 'process',
+      chain: 'child',
+      docs: {
+        href: '/how-arbitrum-works/deep-dives/sequencer-transaction-flow',
+        previewUrl:
+          '/preview/how-arbitrum-works/deep-dives/sequencer-transaction-flow/preview.json',
+      },
+    },
     {
       id: 'seq',
       label: 'Sequencer',
-      tech: 'nitro',
+      tech: 'Orders and executes',
       kind: 'process',
       chain: 'child',
       docs: {
@@ -661,7 +673,7 @@ export const transactionSubmission: Flow = {
     {
       id: 'fastfeed',
       label: 'Fast Feed',
-      tech: 'WebSocket',
+      tech: 'Paid, streams each transaction',
       kind: 'process',
       chain: 'child',
       docs: {
@@ -669,7 +681,17 @@ export const transactionSubmission: Flow = {
         previewUrl: '/preview/how-arbitrum-works/priority-gas-auction/fast-feed/preview.json',
       },
     },
-    { id: 'feed', label: 'Sequencer feed', tech: 'WebSocket', kind: 'process', chain: 'child' },
+    {
+      id: 'feed',
+      label: 'Sequencer feed',
+      tech: 'Free, streams each block',
+      kind: 'process',
+      chain: 'child',
+      docs: {
+        href: '/run-a-node/sequencer/read-sequencer-feed',
+        previewUrl: '/preview/run-a-node/sequencer/read-sequencer-feed/preview.json',
+      },
+    },
     {
       id: 'retryable',
       label: 'ArbRetryableTx',
@@ -684,7 +706,7 @@ export const transactionSubmission: Flow = {
     {
       id: 'poster',
       label: 'Batch poster',
-      tech: 'nitro',
+      tech: 'Posts batches',
       kind: 'process',
       chain: 'child',
       docs: {
@@ -693,15 +715,11 @@ export const transactionSubmission: Flow = {
       },
     },
     {
-      id: 'validator',
-      label: 'Validator',
-      tech: 'nitro',
+      id: 'proposer',
+      label: 'Proposer',
+      tech: 'Posts assertions',
       kind: 'process',
       chain: 'child',
-      docs: {
-        href: '/how-arbitrum-works/bold/gentle-introduction',
-        previewUrl: '/preview/how-arbitrum-works/bold/gentle-introduction/preview.json',
-      },
     },
     {
       id: 'inbox',
@@ -753,16 +771,27 @@ export const transactionSubmission: Flow = {
         previewUrl: '/preview/how-arbitrum-works/deep-dives/assertions/preview.json',
       },
     },
+    {
+      id: 'outbox',
+      label: 'Outbox',
+      kind: 'contract',
+      chain: 'parent',
+      docs: {
+        href: '/how-arbitrum-works/deep-dives/l2-to-l1-messaging',
+        previewUrl: '/preview/how-arbitrum-works/deep-dives/l2-to-l1-messaging/preview.json',
+      },
+    },
   ],
   edges: [
-    { id: 'send', source: 'wallet', target: 'rpc', label: 'eth_sendRawTransaction' },
-    { id: 'forward', source: 'rpc', target: 'seq', label: 'Forwards the transaction' },
+    { id: 'send', source: 'wallet', target: 'rpc', label: 'Signed transaction' },
+    { id: 'forward', source: 'rpc', target: 'seq', label: 'Forwarded transaction' },
     { id: 'publish-fast', source: 'seq', target: 'fastfeed', label: 'Each executed transaction' },
     { id: 'publish', source: 'seq', target: 'feed', label: 'Each stored block' },
-    { id: 'share', source: 'seq', target: 'poster', label: 'Message log' },
-    { id: 'post', source: 'poster', target: 'seqinbox', label: 'Batch (parent chain tx)' },
-    { id: 'append', source: 'seqinbox', target: 'bridge-late', label: 'Append to accumulator' },
-    { id: 'assert', source: 'validator', target: 'rollup', label: 'Assertion' },
+    { id: 'share', source: 'seq', target: 'poster', label: 'Sequenced messages' },
+    { id: 'post', source: 'poster', target: 'seqinbox', label: 'Compressed batch' },
+    { id: 'append', source: 'seqinbox', target: 'bridge-late', label: 'Accumulator entry' },
+    { id: 'assert', source: 'proposer', target: 'rollup', label: 'Assertion' },
+    { id: 'confirm', source: 'rollup', target: 'outbox', label: 'Send root' },
     { id: 'create', source: 'dapp', target: 'inbox', label: 'createRetryableTicket' },
     { id: 'enqueue', source: 'inbox', target: 'bridge', label: 'Delayed message' },
     { id: 'delayed', source: 'bridge', target: 'seq', label: 'Delayed message' },
@@ -777,20 +806,20 @@ export const transactionSubmission: Flow = {
     {
       id: 'submit',
       title: 'Submit',
-      text: 'Your wallet sends the signed transaction to an RPC node with eth_sendRawTransaction or eth_sendRawTransactionSync. The RPC node forwards it to the Sequencer. Before the Sequencer admits the transaction to its queue, it runs pre-checks. A used nonce, too little balance, a fee cap error or a full queue returns an error at once. Otherwise, eth_sendRawTransaction returns the transaction hash when the transaction enters the queue.',
+      text: 'Your wallet sends the signed transaction to an RPC node with `eth_sendRawTransaction` or `eth_sendRawTransactionSync`. The RPC node forwards it to the Sequencer. Before the Sequencer admits the transaction to its queue, it runs pre-checks. A used nonce, too little balance, a fee cap error or a full queue returns an error at once. Otherwise, `eth_sendRawTransaction` returns the transaction hash when the transaction enters the queue.',
       actors: ['wallet', 'rpc', 'seq'],
       edges: ['send', 'forward'],
       code: { repo: 'nitro', path: 'execution/gethexec/sequencer.go' },
       failure: {
-        symptoms: 'eth_sendRawTransaction returned the transaction hash, but no receipt appears.',
+        symptoms: '`eth_sendRawTransaction` returned the transaction hash, but no receipt appears.',
         impact:
-          'A transaction that passes the pre-checks can still be dropped before it reaches a block, for example because of a nonce gap, a fee cap below the base fee, or a queue timeout. eth_sendRawTransaction does not return these errors, and a dropped transaction has no receipt.',
+          'A transaction that passes the pre-checks can still be dropped before it reaches a block, for example because of a nonce gap, a fee cap below the base fee, or a queue timeout. `eth_sendRawTransaction` does not return these errors, and a dropped transaction has no receipt.',
         recovery:
-          'If you need these errors, send the transaction with eth_sendRawTransactionSync. It returns inclusion errors as well as pre-check errors.',
+          'If you need these errors, send the transaction with `eth_sendRawTransactionSync`. It returns inclusion errors as well as pre-check errors.',
       },
       docs: {
-        href: '/how-arbitrum-works/deep-dives/transaction-lifecycle',
-        label: 'Transaction lifecycle',
+        href: '/how-arbitrum-works/deep-dives/sequencer-transaction-flow#how-transactions-reach-the-sequencer',
+        label: 'How transactions reach the Sequencer',
       },
       citations: [
         { repo: 'nitro', path: 'execution/gethexec/sequencer.go', line: 614 },
@@ -821,7 +850,7 @@ export const transactionSubmission: Flow = {
     {
       id: 'execute',
       title: 'Order and execute',
-      text: "When the round's execute phase starts, the Sequencer takes transactions from the priority queue, highest priority first. ArbOS executes each one into the block the Sequencer is building. If you sent the transaction with eth_sendRawTransactionSync, the call returns here with a partial receipt. Its blockHash is 0x000…000, because the block is not sealed yet. If the block then fails, for example after a disk write error or a Sequencer crash, that receipt is retracted. To get the canonical receipt with its blockHash, poll eth_getTransactionReceipt.",
+      text: "When the round's execute phase starts, the Sequencer takes transactions from the priority queue, highest priority first. ArbOS executes each one into the block the Sequencer is building. If you sent the transaction with `eth_sendRawTransactionSync`, the call returns here with a partial receipt. Its `blockHash` is `0x000…000`, because the block is not sealed yet. If the block then fails, for example after a disk write error or a Sequencer crash, that receipt is retracted. To get the canonical receipt with its `blockHash`, poll `eth_getTransactionReceipt`.",
       actors: ['seq'],
       edges: [],
       code: { repo: 'nitro', path: 'execution/gethexec/full_sequencing_hooks.go' },
@@ -836,7 +865,7 @@ export const transactionSubmission: Flow = {
     },
     {
       id: 'fast-feed',
-      title: 'Fast Feed',
+      title: 'Publish on the Fast Feed',
       text: 'As soon as the Sequencer executes the transaction, it publishes it on the Fast Feed, inside the PGA round and before the block closes. Each message carries the PGA round, a tentative block number and a partial receipt with no block hash. The Fast Feed is a paid, authenticated stream. It is an early signal, not a confirmation level.',
       actors: ['seq', 'fastfeed'],
       edges: ['publish-fast'],
@@ -855,8 +884,8 @@ export const transactionSubmission: Flow = {
     },
     {
       id: 'feed',
-      title: 'Sequencer feed',
-      text: 'The block closes. The Sequencer stores the block, then sends it to nodes on the Sequencer feed. Nodes serve it under the latest block tag. This is a soft confirmation. It is a promise from the Sequencer that the parent chain does not back yet.',
+      title: 'Publish the block',
+      text: 'The block closes. The Sequencer stores the block, then sends it to nodes on the Sequencer feed. Nodes serve it under the `latest` block tag. This is a soft confirmation. It is a promise from the Sequencer that the parent chain does not back yet.',
       actors: ['seq', 'feed'],
       edges: ['publish'],
       code: { repo: 'nitro', path: 'broadcaster/broadcaster.go' },
@@ -892,8 +921,8 @@ export const transactionSubmission: Flow = {
     },
     {
       id: 'finalize',
-      title: 'Parent chain finalizes',
-      text: 'The parent chain block that holds the batch becomes safe, then finalized. Nodes then serve the child chain block under the safe and finalized block tags. This is hard finality. Only a deep parent chain reorg can revert a safe block. A finalized block reverts only if the parent chain reverts a finalized block.',
+      title: 'Finalize on the parent chain',
+      text: 'The parent chain block that holds the batch becomes safe, then finalized. Nodes then serve the child chain block under the `safe` and `finalized` block tags. This is hard finality. Only a deep parent chain reorg can revert a safe block. A finalized block reverts only if the parent chain reverts a finalized block.',
       actors: ['seqinbox'],
       edges: [],
       code: { repo: 'nitro', path: 'arbnode/inbox_reader.go' },
@@ -915,8 +944,8 @@ export const transactionSubmission: Flow = {
     {
       id: 'assert',
       title: 'Assert',
-      text: 'A validator computes the child chain state after the posted batches. It posts that state as an assertion to the Rollup contract on the parent chain.',
-      actors: ['validator', 'rollup'],
+      text: 'A proposer computes the child chain state after the posted batches. It posts that state as an assertion to the Rollup contract on the parent chain.',
+      actors: ['proposer', 'rollup'],
       edges: ['assert'],
       code: { repo: 'nitro', path: 'bold/assertions/poster.go' },
       docs: { href: '/how-arbitrum-works/deep-dives/assertions', label: 'Assertions' },
@@ -933,13 +962,13 @@ export const transactionSubmission: Flow = {
       id: 'settle',
       title: 'Settle',
       text: "On Arbitrum One, the challenge period is {var:arbOneDisputeWindowDays} days. After it ends, a validator confirms the assertion on the Rollup contract. If another assertion competes with it, only the winner of the challenge can be confirmed. Confirmation sends the assertion's send root to the Outbox, so withdrawals from the blocks it covers can run. An assertion never reorgs the child chain. A rejected assertion only keeps an invalid state from being confirmed.",
-      actors: ['rollup'],
-      edges: [],
+      actors: ['rollup', 'outbox'],
+      edges: ['confirm'],
       code: { repo: 'nitro-contracts', path: 'src/rollup/RollupUserLogic.sol' },
       finality: 'settled',
       docs: {
-        href: '/how-arbitrum-works/reference/finality-and-reorgs#the-reorg-model',
-        label: 'The reorg model',
+        href: '/how-arbitrum-works/deep-dives/l2-to-l1-messaging',
+        label: 'Child to parent chain messaging',
       },
       citations: [
         { repo: 'nitro-contracts', path: 'src/rollup/RollupUserLogic.sol', line: 75 },
@@ -954,7 +983,7 @@ export const transactionSubmission: Flow = {
     {
       id: 'create-ticket',
       title: 'Create the ticket',
-      text: 'Your app calls createRetryableTicket on the Inbox contract on the parent chain. The ETH you send must cover maxSubmissionCost + l2CallValue + gasLimit × maxFeePerGas, or the call reverts. maxSubmissionCost must also cover the submission fee for your calldata. Inbox passes the message to the Bridge, which adds it to the delayed inbox.',
+      text: 'Your app calls `createRetryableTicket` on the Inbox contract on the parent chain. The ETH you send must cover `maxSubmissionCost + l2CallValue + gasLimit × maxFeePerGas`, or the call reverts. `maxSubmissionCost` must also cover the submission fee for your calldata. Inbox passes the message to the Bridge, which adds it to the delayed inbox.',
       actors: ['dapp', 'inbox', 'bridge'],
       edges: ['create', 'enqueue'],
       code: { repo: 'nitro-contracts', path: 'src/bridge/Inbox.sol' },
@@ -1018,7 +1047,7 @@ export const transactionSubmission: Flow = {
     {
       id: 'ticket-created',
       title: 'Ticket created',
-      text: "ArbOS creates the ticket with a lifetime of one week. The ArbRetryableTx precompile emits TicketCreated with the ticket ID. The ticket's sender on the child chain is an alias, the parent chain address plus 0x1111000000000000000000000000000000001111. If a contract sent the message, call AddressAliasHelper.undoL1ToL2Alias to get the contract's address back. Inbox also aliases a refund address that is a contract.",
+      text: "ArbOS creates the ticket with a lifetime of one week. The ArbRetryableTx precompile emits `TicketCreated` with the ticket ID. The ticket's sender on the child chain is an alias, the parent chain address plus `0x1111000000000000000000000000000000001111`. If a contract sent the message, call `AddressAliasHelper.undoL1ToL2Alias` to get the contract's address back. Inbox also aliases a refund address that is a contract.",
       actors: ['seq', 'retryable'],
       edges: ['ticket'],
       code: { repo: 'nitro', path: 'arbos/tx_processor.go' },
@@ -1043,16 +1072,16 @@ export const transactionSubmission: Flow = {
     {
       id: 'auto-redeem',
       title: 'Auto-redeem',
-      text: "ArbOS checks the sender's child chain balance, which includes the ETH you deposited. If it covers gasLimit × maxFeePerGas, maxFeePerGas is at least the base fee, and gasLimit is at least 21,000, ArbOS schedules a redeem. The redeem runs in the same block, right after the ticket. ArbOS refunds the unused fees to excessFeeRefundAddress.",
+      text: "ArbOS checks the sender's child chain balance, which includes the ETH you deposited. If it covers `gasLimit × maxFeePerGas`, `maxFeePerGas` is at least the base fee, and `gasLimit` is at least 21,000, ArbOS schedules a redeem. The redeem runs in the same block, right after the ticket. ArbOS refunds the unused fees to `excessFeeRefundAddress`.",
       actors: ['retryable'],
       edges: [],
       code: { repo: 'nitro', path: 'precompiles/ArbRetryableTx.go' },
       failure: {
-        symptoms: 'TicketCreated appears, but no successful redeem of the ticket follows.',
+        symptoms: '`TicketCreated` appears, but no successful redeem of the ticket follows.',
         impact:
           "The ticket's call has not run. The ticket waits in the retryable buffer and expires one week after it was created, unless someone keeps it alive.",
         recovery:
-          'Anyone can call ArbRetryableTx.redeem with the ticket ID to try again with more gas. ArbRetryableTx.keepalive adds one more week to the lifetime. If the ticket expires, ArbOS sends the call value to callValueRefundAddress.',
+          'Anyone can call `ArbRetryableTx.redeem` with the ticket ID to try again with more gas. `ArbRetryableTx.keepalive` adds one more week to the lifetime. If the ticket expires, ArbOS sends the call value to `callValueRefundAddress`.',
       },
       docs: {
         href: '/how-arbitrum-works/deep-dives/l1-to-l2-messaging#retryable-tickets',
@@ -1077,7 +1106,7 @@ export const transactionSubmission: Flow = {
   paths: [
     {
       id: 'direct',
-      label: 'Send to the Sequencer',
+      label: 'Transaction sent to the Sequencer',
       steps: [
         'submit',
         'wait-round',
@@ -1092,7 +1121,7 @@ export const transactionSubmission: Flow = {
     },
     {
       id: 'retryable',
-      label: 'Send a retryable from the parent chain',
+      label: 'Retryable ticket sent from the parent chain',
       steps: [
         'create-ticket',
         'wait-parent',
@@ -1108,7 +1137,8 @@ export const transactionSubmission: Flow = {
     },
   ],
   card: {
-    detailsToggle: 'Show details',
+    overviewTab: 'What happens',
+    failureTab: 'If it fails',
     symptoms: 'What you see',
     impact: 'Impact on the transaction',
     recovery: 'What to do',

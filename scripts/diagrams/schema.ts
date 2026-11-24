@@ -81,7 +81,8 @@ const textPair = z.tuple([text, text]);
 
 const lane = z.strictObject({
   label: text,
-  short: text.optional(),
+  // null: the lane's parts show no lane word on purpose. Missing: generation fails.
+  short: text.nullable().optional(),
   svg: z.strictObject({ fill: text, stroke: text, label: text.optional() }).optional(),
   widget: z.strictObject({ accent: text, fill: textPair, border: textPair }).optional(),
 });
@@ -115,7 +116,8 @@ const projectConfig = z
       .optional(),
     card: z
       .strictObject({
-        detailsToggle: text,
+        overviewTab: text,
+        failureTab: text,
         symptoms: text,
         impact: text,
         recovery: text,

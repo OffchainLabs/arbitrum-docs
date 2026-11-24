@@ -15,7 +15,7 @@ interface FlowCanvasProps {
   nodes: FlowNode[];
   edges: RoutedEdgeType[];
   onInit: (flow: ReactFlowInstance<FlowNode, RoutedEdgeType>) => void;
-  onMove: (viewport: Viewport) => void;
+  onMove?: (viewport: Viewport) => void;
   // A one-finger horizontal drag pans the graph sideways.
   panX?: boolean;
 }
@@ -76,7 +76,7 @@ export function FlowCanvas({ nodes, edges, onInit, onMove, panX = false }: FlowC
           flow.current = instance;
           onInit(instance);
         }}
-        onMove={(_, next) => onMove(next)}
+        onMove={onMove && ((_, next) => onMove(next))}
         minZoom={0.1}
         // At the bottom right, the step bar covers it on phones.
         attributionPosition="top-right"

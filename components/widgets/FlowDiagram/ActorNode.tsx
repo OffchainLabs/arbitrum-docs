@@ -19,6 +19,8 @@ export type ActorNodeType = Node<
     active: boolean;
     showChain: boolean;
     trigger?: NodeTrigger | undefined;
+    // The step number, on an active node of a step that lights no edge to carry it.
+    stepNumber?: number | undefined;
   },
   'actor'
 >;
@@ -28,9 +30,10 @@ export type ActorNodeType = Node<
 const HIDDEN_HANDLE = { opacity: 0, pointerEvents: 'none' } as const;
 
 export function ActorNode({ data }: NodeProps<ActorNodeType>) {
-  const { actor, active, showChain, trigger } = data;
+  const { actor, active, showChain, trigger, stepNumber } = data;
   const style = PROJECT.kinds[actor.kind]!.widget;
-  const lane = PROJECT.lanes[actor.chain]!.short;
+  // A lane whose short name is null (off-chain) shows no lane word.
+  const lane = showChain ? PROJECT.lanes[actor.chain]!.short : null;
   const box = (
     <div
       data-preview-anchor=""
@@ -45,7 +48,7 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
         }
       }}
       className={[
-        'flex flex-col justify-center px-3.5',
+        'relative flex flex-col justify-center px-3.5',
         'motion-safe:transition-[opacity,box-shadow,border-color] motion-safe:duration-200',
         trigger ? 'cursor-pointer focus-visible:outline-(--flow-focus)' : '',
         trigger?.blink ? 'motion-safe:animate-trigger-pulse' : '',
@@ -62,9 +65,41 @@ export function ActorNode({ data }: NodeProps<ActorNodeType>) {
       }}
     >
       <Handle type="target" position={Position.Top} style={HIDDEN_HANDLE} />
+      {stepNumber !== undefined && (
+        // The same badge as an edge label's, so every step number shows on the canvas.
+        <span
+          aria-hidden="true"
+          className="absolute -top-3 -left-3 inline-flex items-center justify-center"
+          style={{
+            minWidth: 22,
+            height: 22,
+            borderRadius: 11,
+            background: THEME.badge,
+            color: THEME.badgeText,
+            fontSize: 12,
+            fontWeight: 700,
+          }}
+        >
+          {stepNumber}
+        </span>
+      )}
+      {trigger && (
+        // The node opens a detail view: say so, not only with the pulse, which reduced motion
+        // turns off. The node itself is the button and carries the full label.
+        <span
+          aria-hidden="true"
+          className="absolute -top-3 right-3 rounded-full px-2 py-0.5 text-[11px] font-semibold"
+          style={{ background: THEME.badge, color: THEME.badgeText }}
+        >
+          Look inside ›
+        </span>
+      )}
       <div style={{ color: style.title, fontSize: 15, fontWeight: 600 }}>{actor.label}</div>
+      {/* The lane phrase does not break, so a long sub-line wraps after the dot. */}
       <div style={{ color: style.sub, fontSize: 12 }}>
-        {[actor.tech, showChain ? lane : undefined].filter(Boolean).join(' · ')}
+        {actor.tech}
+        {actor.tech && lane && ' · '}
+        {lane && <span className="whitespace-nowrap">{lane}</span>}
       </div>
       <Handle type="source" position={Position.Bottom} style={HIDDEN_HANDLE} />
     </div>

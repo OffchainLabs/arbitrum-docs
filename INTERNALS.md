@@ -613,18 +613,18 @@ of a page under `content/docs/`.
 The file name without `.md` is the flow id. The YAML header takes these keys, and an unknown key
 fails.
 
-| Key         | Meaning                                                                                                                                              |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`     | Required. The diagram title.                                                                                                                         |
-| `parts`     | Required. Part ids from `parts.yaml`. `{ seq: { label: 'Sequencer', tech: 'Go' } }` overrides the label or tech for this flow only.                  |
-| `edges`     | A mapping of edge id to `<source> -> <target> "label" [dashed\|dotted]`. `<->` draws a double-headed arrow. The label is optional.                   |
-| `widget`    | The key in `FLOWS`. Defaults to the flow id.                                                                                                         |
-| `showLanes` | `false` hides the lane bands. Defaults to `true`.                                                                                                    |
-| `paths`     | A list of `id`, `label` and `steps`, the ordered paths the widget offers. Each step id must be a step of the flow, once per path.                    |
-| `card`      | Overrides the `card` from `project.yaml`. Needs all five keys: `detailsToggle`, `symptoms`, `impact`, `recovery` (strings) and `showFlag` (boolean). |
-| `static`    | A mapping of part id to `[column, row]`, the part's grid cell in the static SVG. Needs `svg`, and every part needs a cell.                           |
-| `svg`       | The output file name, lowercase with dashes, without `.svg`. Needs `alt` and `static`.                                                               |
-| `alt`       | The alt text, written to the SVG `<desc>`.                                                                                                           |
+| Key         | Meaning                                                                                                                                                         |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`     | Required. The diagram title.                                                                                                                                    |
+| `parts`     | Required. Part ids from `parts.yaml`. `{ seq: { label: 'Sequencer', tech: 'Go' } }` overrides the label or tech for this flow only.                             |
+| `edges`     | A mapping of edge id to `<source> -> <target> "label" [dashed\|dotted]`. `<->` draws a double-headed arrow. The label is optional.                              |
+| `widget`    | The key in `FLOWS`. Defaults to the flow id.                                                                                                                    |
+| `showLanes` | `false` hides the lane bands. Defaults to `true`.                                                                                                               |
+| `paths`     | A list of `id`, `label` and `steps`, the ordered paths the widget offers. Each step id must be a step of the flow, once per path.                               |
+| `card`      | Overrides the `card` from `project.yaml`. Needs all six keys: `overviewTab`, `failureTab`, `symptoms`, `impact`, `recovery` (strings) and `showFlag` (boolean). |
+| `static`    | A mapping of part id to `[column, row]`, the part's grid cell in the static SVG. Needs `svg`, and every part needs a cell.                                      |
+| `svg`       | The output file name, lowercase with dashes, without `.svg`. Needs `alt` and `static`.                                                                          |
+| `alt`       | The alt text, written to the SVG `<desc>`.                                                                                                                      |
 
 `tech: ~` drops the sublabel of a part in that flow. Every part and every edge end must be in the
 flow's `parts` list.
@@ -684,7 +684,7 @@ A `### Failure` heading ends the step text. It holds exactly three paragraphs th
   widget fills each `{var:name}` from `content/vars.json`, then appends `/<path>` and `#L<line>`.
 - `finality` maps a finality id to a `label` and an optional glossary `term` id. The step card
   badge links to `/glossary#<term>`.
-- `card` holds the default step card labels, with the five keys of a flow's `card`.
+- `card` holds the default step card labels, with the six keys of a flow's `card`.
 - `svg` sets the static layout. Loading the project needs `canvas`, the `cols` and `rows`
   coordinates of the grid, the `box` size, `scale` and `offset`. The optional `reserve` is an area no
   box may overlap. Rendering an SVG also needs `background`, a fragment file under `diagrams/`.

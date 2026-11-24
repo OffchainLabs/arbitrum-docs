@@ -5,7 +5,7 @@ import type { Band } from './layout.ts';
 
 export type BandNodeType = Node<{ band: Band; active: boolean }, 'band'>;
 
-/** The translucent band behind one lane's rows. It has no header; `BandLabels` names it. */
+/** The translucent band behind one lane's rows. It has no header; the Key names it. */
 export function BandNode({ data }: NodeProps<BandNodeType>) {
   const { band, active } = data;
   const style = PROJECT.lanes[band.chain]!.widget!;

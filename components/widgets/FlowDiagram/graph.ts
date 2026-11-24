@@ -7,13 +7,14 @@ import type { Flow, Step } from './model.ts';
 
 /**
  * React Flow nodes: one band per lane column behind the actors, then the actors that `layout`
- * places.
+ * places. `stepNumber`, when given, shows on the active nodes of a step that lights no edge.
  */
 export function flowNodes(
   flow: Flow,
   layout: FlowLayout,
   step: Step,
   trigger?: NodeTrigger,
+  stepNumber?: number,
 ): (ActorNodeType | BandNodeType)[] {
   const bands: BandNodeType[] = layout.bands.map((band, i) => ({
     id: `band-${band.chain}-${i}`,
@@ -43,6 +44,8 @@ export function flowNodes(
         active: step.actors.includes(actor.id),
         showChain: flow.showChains !== false,
         trigger: step.detail?.actor === actor.id ? trigger : undefined,
+        stepNumber:
+          step.edges.length === 0 && step.actors.includes(actor.id) ? stepNumber : undefined,
       },
       draggable: false,
       connectable: false,
