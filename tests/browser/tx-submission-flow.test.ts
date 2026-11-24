@@ -275,6 +275,18 @@ async function eachPathStep(
   }
 }
 
+test('at 375×812 each step of both tabs frames at zoom ≥0.6, first node inside', async () => {
+  await eachPathStep(PHONE, async (page, path, index) => {
+    const step = path.steps[index]!;
+    const shot = await frameShot(page, step.actors);
+    const name = `${path.id} step ${index + 1}`;
+    assert.ok(shot.zoom >= 0.6, `${name} zoom ${shot.zoom}`);
+    const first = shot.nodes.find((node) => node.id === step.actors[0]);
+    assert.ok(first, `${name}: first active node drawn`);
+    assert.ok(inside(first.rect, shot.canvas), `${name}: ${JSON.stringify(first)}`);
+  });
+});
+
 for (const device of [WIDE, PHONE]) {
   const width = device.viewport!.width;
   test(`band names never intersect each other on both tabs at ${width}px`, async () => {

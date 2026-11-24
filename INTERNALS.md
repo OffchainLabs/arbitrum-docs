@@ -585,6 +585,12 @@ The widget code holds no project content. Labels, colours, repos and card text c
 connector, glow, chip, font, opacities). Another project reuses the widget with its own
 `diagrams/` folder.
 
+The camera fits each step's active parts in the canvas at zoom 1 or less. On a screen under 768px,
+it never zooms below 0.6 (`PHONE_MIN_ZOOM` in `components/widgets/FlowDiagram/camera.ts`). A step
+too wide or tall for that zoom centers on its first active part, and a one-finger horizontal drag
+pans the diagram. A vertical swipe still scrolls the page. Show all and the detail dialog fit the
+whole graph with no zoom floor.
+
 - `public/img/<svg>.svg` for every flow with `static:` and `svg:`, for example
   `public/img/haw-transaction-lifecycle.svg`.
 

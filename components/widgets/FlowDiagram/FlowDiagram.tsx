@@ -70,7 +70,7 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
   const stepCount = current.path.steps.length;
   const step = current.path.steps[index]!;
   const layout = layouts?.[path] ?? null;
-  const showAll = useStepCamera(instance, layout, step, canvasRef);
+  const showAll = useStepCamera(instance, layout, step, canvasRef, { narrow });
   // The open detail, kept apart from `step`: it stays mounted while it fades out over the next step.
   const [openDetail, setOpenDetail] = useState<StepDetail | null>(null);
   const [detailSeen, setDetailSeen] = useState(false);
@@ -150,6 +150,7 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
             setViewport(reactFlow.getViewport());
           }}
           onMove={setViewport}
+          panX={narrow}
         />
       )}
       <StepBar
