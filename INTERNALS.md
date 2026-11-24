@@ -662,7 +662,8 @@ A `### Failure` heading ends the step text. It holds exactly three paragraphs th
 - `lanes` maps a lane id to a `label`. A lane with `svg: { fill, stroke, label }` also draws a
   band behind its parts in the SVG. `short` is the lane name in a widget box's sub-line. A lane
   with `widget: { accent, fill, border }` is a band in the widget, named by `label`; `fill` and
-  `border` are `[inactive, active]` pairs. The widget draws its lane columns from left to right in lane order.
+  `border` are `[inactive, active]` pairs. The widget draws its lane columns from left to right in
+  lane order.
 - `kinds` maps a part kind to a `label` and to `svg` colours: `fill`, `title`, `sub`, and optional
   `stroke`. The optional `svg.key` replaces `label` in the SVG key. `widget: { fill, title, sub }`
   holds the widget colours, and puts the kind in the widget key. With

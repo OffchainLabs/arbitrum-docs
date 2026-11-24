@@ -7,7 +7,7 @@ import {
   PROJECT,
   transactionLifecycle,
 } from '../../components/widgets/FlowDiagram/flows.generated.ts';
-import { CANVAS, cardTitle, openFlow, settle } from './flow-page.ts';
+import { CANVAS, cardTitle, openFlow, overlappingBandNames, settle } from './flow-page.ts';
 
 const PAGE_PATH = '/how-arbitrum-works/deep-dives/nitro-transaction-flow';
 const STEPS = transactionLifecycle.steps;
@@ -309,6 +309,18 @@ test('at 375×812 every active node and label is inside the canvas on every step
     });
   });
 });
+
+for (const device of [WIDE, PHONE]) {
+  const width = device.viewport!.width;
+  test(`band names never intersect each other at ${width}px`, async () => {
+    await withFlow(device, '', async (page) => {
+      for (let index = 0; index < STEPS.length; index++) {
+        if (index > 0) await next(page);
+        assert.deepEqual(await overlappingBandNames(page), [], `step ${index + 1}`);
+      }
+    });
+  });
+}
 
 for (const device of [WIDE, PHONE]) {
   const width = device.viewport!.width;

@@ -5,7 +5,7 @@ import { type Browser, type BrowserContextOptions, type Page, chromium } from 'p
 
 import { transactionSubmission } from '../../components/widgets/FlowDiagram/flows.generated.ts';
 import { type ResolvedPath, flowPaths } from '../../components/widgets/FlowDiagram/model.ts';
-import { CANVAS, cardTitle, openFlow, settle } from './flow-page.ts';
+import { CANVAS, cardTitle, openFlow, overlappingBandNames, settle } from './flow-page.ts';
 
 const PAGE_PATH = '/how-arbitrum-works/deep-dives/transaction-submission-flow';
 const PATHS = flowPaths(transactionSubmission);
@@ -256,6 +256,34 @@ test('each submission step frames its active nodes at zoom ≥0.6 at 1280×900',
     });
   }
 });
+
+/** Calls `check` on every step of every tab, starting each tab from its step 1. */
+async function eachPathStep(
+  options: BrowserContextOptions,
+  check: (page: Page, path: ResolvedPath, index: number) => Promise<void>,
+) {
+  for (const path of PATHS) {
+    await withFlow(options, `#${path.id}-step-1`, async (page) => {
+      for (let index = 0; index < path.steps.length; index++) {
+        if (index > 0) {
+          await page.getByRole('button', { name: 'Next →' }).click();
+          await waitForStep(page, path, index);
+        }
+        await check(page, path, index);
+      }
+    });
+  }
+}
+
+for (const device of [WIDE, PHONE]) {
+  const width = device.viewport!.width;
+  test(`band names never intersect each other on both tabs at ${width}px`, async () => {
+    await eachPathStep(device, async (page, path, index) => {
+      const overlaps = await overlappingBandNames(page);
+      assert.deepEqual(overlaps, [], `${path.id} step ${index + 1}`);
+    });
+  });
+}
 
 test('after Show all at 375×812 every node is inside the canvas', async () => {
   for (const path of PATHS) {

@@ -44,9 +44,9 @@ function covers(obstacle: Edges, x: number, y: number, width: number): boolean {
 /**
  * Band names, outside the React Flow transform. Each sits at the top left of the visible part
  * of its band column, below the site header and above the step bar, and moves below any node,
- * active edge label, the key or the React Flow attribution it would cover. It may extend past its
- * band's right edge, and slides left to stay on the canvas. It is hidden when it does not fit the
- * canvas width or the visible part of its band column vertically.
+ * active edge label, the key, the React Flow attribution or earlier band name it would cover. It
+ * may extend past its band's right edge, and slides left to stay on the canvas. It is hidden when
+ * it does not fit the canvas width or the visible part of its band column vertically.
  */
 export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLabelsProps) {
   const [, setScrollTick] = useState(0);
@@ -97,6 +97,7 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
       Math.max(box.left, 0) + BAND_LABEL_INSET,
       canvas.clientWidth - width - BAND_LABEL_INSET,
     );
+    if (x < 0) return null;
     let y = Math.max(box.top + BAND_LABEL_INSET, visibleTop);
     // Moving below one obstacle can land on an earlier, taller one, so repeat until none covers.
     for (let moved = true; moved;) {
@@ -107,8 +108,8 @@ export function BandLabels({ layout, step, viewport, canvasRef, barRef }: BandLa
         moved = true;
       }
     }
-    if (x + width > canvas.clientWidth) return null;
     if (y + BAND_LABEL_HEIGHT > Math.min(box.bottom - BAND_LABEL_INSET, floor)) return null;
+    obstacles.push({ left: x, right: x + width, top: y, bottom: y + BAND_LABEL_HEIGHT });
     const lane = PROJECT.lanes[band.chain]!;
     return (
       <div
