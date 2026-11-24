@@ -148,20 +148,20 @@ proves the render. Type checking passes on a page that serves literal `:::` or
 
 ## Layout
 
-| Path                    | Purpose                                                    |
-| ----------------------- | ---------------------------------------------------------- |
-| `content/docs/`         | MDX pages and the `meta.json` files that order the sidebar |
-| `content/partials/`     | Reusable `_`-prefixed fragments, included into pages       |
-| `content/glossary/`     | Glossary terms for `<Term>` (hand-written)                 |
-| `content/vars.json`     | Global variables                                           |
-| `app/(docs)/[...slug]/` | Docs route                                                 |
-| `components/mdx.tsx`    | The MDX component registry                                 |
-| `app/preview/`          | Static JSON behind the hover link previews                 |
-| `components/widgets/`   | The four interactive widgets, each used by one page        |
-| `lib/source.ts`         | Fumadocs source adapter                                    |
-| `proxy.ts`              | PostHog tracking for markdown and `llms*.txt` fetches      |
-| `source.config.ts`      | Fumadocs MDX config: the two collections                   |
-| `lib/page-schema.ts`    | The frontmatter schema every page must satisfy             |
+| Path                    | Purpose                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| `content/docs/`         | MDX pages and the `meta.json` files that order the sidebar  |
+| `content/partials/`     | Reusable `_`-prefixed fragments, included into pages        |
+| `content/glossary/`     | Glossary terms for `<Term>` (hand-written)                  |
+| `content/vars.json`     | Global variables                                            |
+| `app/(docs)/[...slug]/` | Docs route                                                  |
+| `components/mdx.tsx`    | The MDX component registry                                  |
+| `app/preview/`          | Static JSON behind the hover link previews                  |
+| `components/widgets/`   | The four interactive widgets, each used by one page         |
+| `lib/source.ts`         | Fumadocs source adapter                                     |
+| `proxy.ts`              | `Accept: text/markdown` negotiation; PostHog fetch tracking |
+| `source.config.ts`      | Fumadocs MDX config: the two collections                    |
+| `lib/page-schema.ts`    | The frontmatter schema every page must satisfy              |
 
 ## Write a page
 

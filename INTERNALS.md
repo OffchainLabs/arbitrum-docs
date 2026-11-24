@@ -935,8 +935,24 @@ with a path that already starts with `/`, which would create a protocol-relative
 
 **Markdown mirrors.** `app/llms.mdx/docs/[[...slug]]/route.ts` serves every page as markdown at
 `/llms.mdx/docs/<slug>/content.md`, as `text/markdown; charset=utf-8`. `next.config.ts` rewrites
-`/<slug>.md` (and `/index.md`) onto it after checking static routes and public files. There is no
-`Accept` header negotiation: an article URL always serves HTML. `content/docs/index.mdx` provides
+`/<slug>.md` (and `/index.md`) onto it after checking static routes and public files.
+
+**`Accept` negotiation.** A page URL, `/` included, serves its mirror when the `Accept` header
+prefers `text/markdown` or `text/x-markdown` over HTML; `text/plain` and `*/*` get HTML. `proxy.ts`
+decides with `isMarkdownPreferred` from `fumadocs-core/negotiation`, which compares q-values, and
+rewrites to the page's `/<slug>.md` twin (`/index.md` for `/`, `lib/markdown-negotiation.ts`), which
+the rewrites above take on to the mirror; Next runs `next.config.ts` rewrites after the proxy's. Its
+matcher lets any
+path in when `Accept` names markdown, so a browser's page request never runs the proxy. The proxy
+rewrites only a page URL: `next.config.ts` inlines every page URL from `buildIndex` as `DOCS_PAGE_PATHS`.
+Any other path, such as an unknown slug or the home page's `/opengraph-image-<hash>`, keeps its own
+response and is not tracked. Redirects run before the proxy, so an alias redirects first. In
+`next dev`, a page added after startup is not negotiated until a restart. The mirror route sends
+`Vary: Accept`; the HTML page cannot, because Next replaces `Vary` on an app page and a `Vary` set
+in the proxy is dropped. So a shared cache past Vercel that stored the HTML can hand HTML to a
+markdown request, and never the markdown to a browser.
+
+`content/docs/index.mdx` provides
 the root markdown overview; it is excluded from the sidebar and the article route's static
 parameters. The sitemap lists `/` only once. `/og/docs` and `/llms.mdx/docs` remain machine
 endpoints. `/llms.txt` lists every page with its title, summary and `.md` link, and
@@ -975,6 +991,9 @@ is off.
 - `/llms.txt`, `/llms-full.txt` and the markdown routes: `Access-Control-Allow-Origin: *`, so a
   browser-side agent can fetch them, as it could from the Docusaurus site.
 
+The mirror route also sets `Access-Control-Allow-Origin: *` and `Vary: Accept` itself: `headers()`
+matches the request path, and a page path negotiated to markdown is not on the list above.
+
 **`/.well-known/`** holds the MCP discovery card, `public/.well-known/mcp/server-card.json`. It
 advertises the Inkeep MCP server over these docs, the same service behind search. Nothing
 regenerates it; the HTTP smoke suite checks that it is served.
@@ -982,12 +1001,12 @@ regenerates it; the HTTP smoke suite checks that it is served.
 ### Request tracking
 
 `proxy.ts` records a PostHog `llms_file_fetched` event for `/llms.txt`, `/llms-full.txt`,
-`/<slug>.md`, `/index.md` and the `/llms.mdx/` mirror. Its `config.matcher` selects markdown and
-LLM requests; HTML navigation does not run the proxy.
+`/<slug>.md`, `/index.md`, the `/llms.mdx/` mirror, and a page URL negotiated to markdown. Its
+`config.matcher` selects markdown and LLM requests; HTML navigation does not run the proxy.
 
 - **Production only**: it checks `VERCEL_ENV === 'production'`, so nothing fires locally or on a
   preview, and no key is needed to run the app.
-- **Both markdown shapes count as `/<slug>.md`** (or `/index.md` for the root), so one page is one
+- **Every markdown shape counts as `/<slug>.md`** (or `/index.md` for the root), so one page is one
   series. The matcher sees
   the request before the rewrite, and a rewrite does not re-enter the proxy, so each request counts
   once.
@@ -1002,8 +1021,10 @@ LLM requests; HTML navigation does not run the proxy.
   Next 16 does not set and drops the promise silently. A non-OK PostHog response is logged, since
   `fetch` resolves on HTTP errors.
 
-Classification lives in `lib/llms-tracking.ts`, which imports only `lib/shared.ts`, so
-`scripts/lib/llms-tracking.test.ts` tests the real module.
+Classification lives in `lib/llms-tracking.ts`, which imports only `lib/shared.ts`, and the
+`Accept` negotiation in `lib/markdown-negotiation.ts`, which imports nothing, so
+`scripts/lib/llms-tracking.test.ts` and `scripts/lib/markdown-negotiation.test.ts` test the real
+modules.
 
 ## Static routing at the site root
 

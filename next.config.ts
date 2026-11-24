@@ -14,20 +14,21 @@ resolveSiteUrl(process.env);
 
 const withMDX = createMDX();
 
+const pageUrls = new Set(buildIndex(process.cwd()).byUrl.keys());
+
 const config: NextConfig = {
   reactStrictMode: true,
   devIndicators: false,
   poweredByHeader: false,
+  // Inlined at build. `proxy.ts` rewrites only these paths to their markdown mirror.
+  env: { DOCS_PAGE_PATHS: [...pageUrls].join('\n') },
   async headers() {
     return siteHeaders({ isProduction: process.env.VERCEL_ENV === 'production' });
   },
   // Only real documentation destinations receive markdown twins, excluding public files. Exact
   // aliases that share a destination and status are then grouped to reduce the route count.
   async redirects() {
-    return compactRedirects([
-      ...redirects,
-      ...markdownTwins(redirects, new Set(buildIndex(process.cwd()).byUrl.keys())),
-    ]);
+    return compactRedirects([...redirects, ...markdownTwins(redirects, pageUrls)]);
   },
   async rewrites() {
     return [
