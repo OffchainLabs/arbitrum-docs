@@ -126,21 +126,28 @@ test('a source part used in a later step never sits above one used earlier', () 
   }
 });
 
-test('the Rollup sits below the Validator on both submission tabs', () => {
+test('the Rollup sits below the Proposer on both submission tabs', () => {
   for (const pathId of ['direct', 'retryable']) {
     const l = layoutOf(transactionSubmission.id, pathId);
-    assert.ok(l.nodes.rollup!.y > l.nodes.validator!.y, pathId);
+    assert.ok(l.nodes.rollup!.y > l.nodes.proposer!.y, pathId);
   }
 });
 
-test('the Validator sits below every part of an earlier step on both submission tabs', () => {
+test('the Proposer sits below every part of an earlier step on both submission tabs', () => {
   for (const pathId of ['direct', 'retryable']) {
     const c = cases.find((k) => k.flow.id === transactionSubmission.id && k.path.id === pathId)!;
     const first = firstStepIndex(c.path.steps);
-    const validator = c.layout.nodes.validator!;
+    const proposer = c.layout.nodes.proposer!;
     for (const [id, point] of Object.entries(c.layout.nodes)) {
-      if (first[id]! < first.validator!) assert.ok(validator.y > point.y, `${pathId}: ${id}`);
+      if (first[id]! < first.proposer!) assert.ok(proposer.y > point.y, `${pathId}: ${id}`);
     }
+  }
+});
+
+test('the Outbox sits below the Rollup on both submission tabs', () => {
+  for (const pathId of ['direct', 'retryable']) {
+    const l = layoutOf(transactionSubmission.id, pathId);
+    assert.ok(l.nodes.outbox!.y > l.nodes.rollup!.y, pathId);
   }
 });
 

@@ -30,7 +30,7 @@ A wallet sends the signed transaction to a full node. The full node checks the t
 
 **Impact.** The full node does not forward the transaction, so the sequencer never sees it.
 
-**Recovery.** --execution.tx-pre-checker.strictness sets how much the full node checks. Below 10 the node skips these checks but still runs its filtered address check. The default is 20.
+**Recovery.** `--execution.tx-pre-checker.strictness` sets how much the full node checks. Below 10 the node skips these checks but still runs its filtered address check. The default is 20.
 
 ## Forward {#forward}
 
@@ -41,7 +41,7 @@ code: nitro/execution/gethexec/forwarder.go
 cites: node.go:463, forwarder.go:135, node.go:462, 182, 460, forwarder.go:296, 143, 148, 144, 149, node.go:149, forwarder.go:132, 142, 146, nitro/cmd/nitro/config/config.go:41, node.go:148
 lane: child
 
-The full node forwards the transaction to the sequencer over JSON-RPC. It sends it to the URL in its forwarding target setting. A full node with the target null does not forward and returns an error.
+The full node forwards the transaction to the sequencer over JSON-RPC. It sends it to the URL in its forwarding target setting. A full node with the target `null` does not forward and returns an error.
 
 ### Failure
 
@@ -49,7 +49,7 @@ The full node forwards the transaction to the sequencer over JSON-RPC. It sends 
 
 **Impact.** The full node returns the error to the wallet, and the sequencer does not get the transaction.
 
-**Recovery.** Add backup targets with --execution.secondary-forwarding-target. If the error matches its retry list, the node tries them in order.
+**Recovery.** Add backup targets with `--execution.secondary-forwarding-target`. If the error matches its retry list, the node tries them in order.
 
 ## Sequence {#sequence}
 
@@ -64,9 +64,9 @@ The sequencer puts the transaction in its queue, orders it, and executes it into
 
 ### Failure
 
-**Symptoms.** The metric "arb/sequencer/transactions/dropped/queuetimeout" goes up. If --node.sequencer and --execution.sequencer.enable differ, the node logs "consensus and execution must agree if sequencing is enabled or not".
+**Symptoms.** The metric `arb/sequencer/transactions/dropped/queuetimeout` goes up. If `--node.sequencer` and `--execution.sequencer.enable` differ, the node logs "consensus and execution must agree if sequencing is enabled or not".
 
-**Impact.** The sequencer drops a transaction that waits in its queue longer than --execution.sequencer.queue-timeout plus the Timeboost express lane advantage. The queue timeout is 12 seconds by default. The submitter gets the timeout error back.
+**Impact.** The sequencer drops a transaction that waits in its queue longer than `--execution.sequencer.queue-timeout` plus the Timeboost express lane advantage. The queue timeout is 12 seconds by default. The submitter gets the timeout error back.
 
 **Recovery.** TODO: Nitro engineer
 
@@ -77,7 +77,7 @@ edges: publish, stream
 flag: --node.feed.output.enable (sequencer), --node.feed.input.url (full node)
 code: nitro/broadcaster/broadcaster.go
 cites: nitro/arbnode/transaction_streamer.go:1255, 1390, broadcaster.go:77, nitro/relay/relay.go:99, nitro/broadcastclient/broadcastclient.go:409, nitro/arbnode/transaction_streamer.go:794, 874, 1158, 1161, nitro/broadcastclient/broadcastclient.go:224, 415, 226, 443, nitro/arbnode/inbox_reader.go:664, nitro/broadcastclient/broadcastclient.go:77, nitro/broadcastclients/broadcastclients.go:27, 307, nitro/cmd/nitro/config/config.go:40, nitro/arbnode/node.go:84, nitro/broadcastclient/broadcastclient.go:46, 76, 45, nitro/wsbroadcastserver/wsbroadcastserver.go:54
-finality: soft
+finality: soft-confirmation
 lane: child
 
 Feed relays pass each new message on the sequencer's feed to full nodes over WebSocket. Each full node that reads the feed adds the message to its message log as unconfirmed. A feed message never replaces a message the node already has from a batch.
@@ -88,7 +88,7 @@ Feed relays pass each new message on the sequencer's feed to full nodes over Web
 
 **Impact.** The node reconnects with a backoff that doubles up to a maximum. Until then, it gets new transactions only from batches on the parent chain.
 
-**Recovery.** Add backup feeds with --node.feed.input.secondary-url. The node starts one when its primary feeds send nothing for 5 seconds.
+**Recovery.** Add backup feeds with `--node.feed.input.secondary-url`. The node starts one when its primary feeds send nothing for 5 seconds.
 
 ## Batch {#batch}
 
@@ -105,7 +105,7 @@ The batch poster reads new messages from the sequencer's message log. It compres
 
 **Symptoms.** The batch poster logs "error getting message from streamer", or "error posting batch" with "error adding message to batch" in the error.
 
-**Impact.** The batch poster drops the batch it was building and tries again after --node.batch-poster.error-delay, 10 seconds by default. The transaction stays out of a batch until an attempt succeeds.
+**Impact.** The batch poster drops the batch it was building and tries again after `--node.batch-poster.error-delay`, 10 seconds by default. The transaction stays out of a batch until an attempt succeeds.
 
 **Recovery.** TODO: Nitro engineer
 
@@ -123,9 +123,9 @@ The batch poster sends the batch to SequencerInbox in a parent chain transaction
 
 ### Failure
 
-**Symptoms.** The batch poster logs "error posting batch". If posting keeps failing for more than a minute, the metric "arb/batchPoster/action/failure" goes up. For some known errors, that wait is 5 minutes.
+**Symptoms.** The batch poster logs "error posting batch". If posting keeps failing for more than a minute, the metric `arb/batchPoster/action/failure` goes up. For some known errors, that wait is 5 minutes.
 
-**Impact.** SequencerInbox reverts with NotBatchPoster when the sender is not on its batch poster list. The batch does not reach the Bridge.
+**Impact.** SequencerInbox reverts with `NotBatchPoster` when the sender is not on its batch poster list. The batch does not reach the Bridge.
 
 **Recovery.** TODO: Nitro engineer
 
@@ -142,8 +142,8 @@ By default, every full node reads new batches from SequencerInbox in the latest 
 
 ### Failure
 
-**Symptoms.** The node logs "TransactionStreamer: Reorg detected!" with confirmed set to true.
+**Symptoms.** The node logs "TransactionStreamer: Reorg detected!" with `confirmed` set to `true`.
 
 **Impact.** The node replaces its stored messages from that point with the parent chain version. The result of a transaction it showed from the feed can change.
 
-**Recovery.** With --node.inbox-reader.read-mode set to safe or finalized, the node reads batches only up to the latest safe or finalized parent chain block. That setting turns off feed input and output, and a sequencer cannot use it.
+**Recovery.** With `--node.inbox-reader.read-mode` set to `safe` or `finalized`, the node reads batches only up to the latest safe or finalized parent chain block. That setting turns off feed input and output, and a sequencer cannot use it.

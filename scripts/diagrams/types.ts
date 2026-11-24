@@ -78,7 +78,7 @@ export interface ProjectConfig {
     string,
     {
       label: string;
-      short?: string;
+      short?: string | null;
       svg?: { fill: string; stroke: string; label?: string };
       widget?: { accent: string; fill: [string, string]; border: [string, string] };
     }
@@ -99,7 +99,8 @@ export interface ProjectConfig {
   repos: Record<string, { url: string; code?: string }>;
   finality?: Record<string, { label: string; term?: string }>;
   card?: {
-    detailsToggle: string;
+    overviewTab: string;
+    failureTab: string;
     symptoms: string;
     impact: string;
     recovery: string;

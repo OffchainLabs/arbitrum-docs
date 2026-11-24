@@ -301,7 +301,7 @@ export async function computeLayout(flow: Flow, steps: readonly Step[]): Promise
   };
 }
 
-// The boxes the camera frames and the band names avoid: active nodes and active edge labels.
+// The boxes the camera frames: active nodes and active edge labels.
 export function activeBoxes(layout: FlowLayout, step: Step): Box[] {
   return [
     ...step.actors.map((id) => nodeBox(layout.nodes[id]!)),

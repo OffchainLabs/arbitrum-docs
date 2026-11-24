@@ -1,6 +1,7 @@
 wallet:
   label: 'User wallet'
-  tech: 'Any EVM wallet'
+  # The chain the wallet signs for. Its lane, off-chain, shows no lane word.
+  tech: 'Set to Arbitrum One'
   kind: user
   lane: off-chain
 fullnode:
@@ -54,6 +55,7 @@ rpc:
   label: 'RPC node'
   tech: 'nitro'
   kind: process
+  docs: /how-arbitrum-works/deep-dives/sequencer-transaction-flow
   lane: child
 fastfeed:
   label: 'Fast Feed'
@@ -65,6 +67,7 @@ feed:
   label: 'Sequencer feed'
   tech: 'WebSocket'
   kind: process
+  docs: /run-a-node/sequencer/read-sequencer-feed
   lane: child
 retryable:
   label: 'ArbRetryableTx'
@@ -162,4 +165,9 @@ proposer:
 delayed-inbox:
   label: 'Delayed inbox'
   kind: contract
+  lane: parent
+outbox:
+  label: 'Outbox'
+  kind: contract
+  docs: /how-arbitrum-works/deep-dives/l2-to-l1-messaging
   lane: parent

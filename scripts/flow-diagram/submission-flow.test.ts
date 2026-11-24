@@ -169,10 +169,11 @@ test('band names, actor sub-line lane names and card labels', () => {
   );
   assert.deepEqual(
     Object.values(PROJECT.lanes).map((lane) => lane.short),
-    ['off-chain', 'child chain', 'parent chain'],
+    [null, 'child chain', 'parent chain'],
   );
   assert.deepEqual(PROJECT.card, {
-    detailsToggle: 'Show operator details',
+    overviewTab: 'What happens',
+    failureTab: 'If it fails',
     symptoms: 'What the operator sees',
     impact: 'Impact on the transaction',
     recovery: 'Recovery',

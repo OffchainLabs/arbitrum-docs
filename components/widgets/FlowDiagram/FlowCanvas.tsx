@@ -14,7 +14,7 @@ interface FlowCanvasProps {
   nodes: FlowNode[];
   edges: RoutedEdgeType[];
   onInit: (flow: ReactFlowInstance<FlowNode, RoutedEdgeType>) => void;
-  onMove: (viewport: Viewport) => void;
+  onMove?: (viewport: Viewport) => void;
 }
 
 /**
@@ -32,7 +32,7 @@ export function FlowCanvas({ nodes, edges, onInit, onMove }: FlowCanvasProps) {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         onInit={onInit}
-        onMove={(_, next) => onMove(next)}
+        onMove={onMove && ((_, next) => onMove(next))}
         minZoom={0.1}
         // At the bottom right, the step bar covers it on phones.
         attributionPosition="top-right"

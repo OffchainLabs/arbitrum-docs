@@ -48,7 +48,14 @@ const config: ProjectConfig = {
     app: { url: 'https://example.com/app', code: 'https://example.com/app/blob/{var:tag}' },
   },
   finality: { done: { label: 'Done', term: 'done' } },
-  card: { detailsToggle: 'Details', symptoms: 'S', impact: 'I', recovery: 'R', showFlag: false },
+  card: {
+    overviewTab: 'O',
+    failureTab: 'F',
+    symptoms: 'S',
+    impact: 'I',
+    recovery: 'R',
+    showFlag: false,
+  },
   svg: { canvas: [1, 1], cols: [0], rows: [0], box: [1, 1], scale: 1, offset: [0, 0] },
 };
 
@@ -147,6 +154,13 @@ test('emits PROJECT: lanes without svg, kinds with widget colors, repos with cod
     kinds: { box: { label: 'Box', widget: { fill: '#777777', title: '#888888', sub: '#999999' } } },
     finality: { done: { label: 'Done', term: 'done' } },
     repos: { app: { code: 'https://example.com/app/blob/{var:tag}' } },
-    card: { detailsToggle: 'Details', symptoms: 'S', impact: 'I', recovery: 'R', showFlag: false },
+    card: {
+      overviewTab: 'O',
+      failureTab: 'F',
+      symptoms: 'S',
+      impact: 'I',
+      recovery: 'R',
+      showFlag: false,
+    },
   });
 });

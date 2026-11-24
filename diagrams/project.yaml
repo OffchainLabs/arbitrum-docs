@@ -3,8 +3,9 @@
 # no fill tint reaches 3:1 against the widget gradient, so the solid border marks the band edge.
 lanes:
   off-chain:
-    label: Off-chain
-    short: off-chain
+    label: Offchain
+    # No lane word on the node's sub-line: the wallet's own line names the chain it signs for.
+    short: null
   child:
     label: Child chain · Arbitrum One
     short: child chain
@@ -60,7 +61,8 @@ finality:
   settled: { label: Settlement, term: settlement }
 # The step card labels. A flow's own `card:` replaces them.
 card:
-  detailsToggle: Show operator details
+  overviewTab: What happens
+  failureTab: If it fails
   symptoms: What the operator sees
   impact: Impact on the transaction
   recovery: Recovery

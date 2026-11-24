@@ -120,21 +120,68 @@ test('ArrowRight on a focused tab moves tab focus and does not change the step',
   });
 });
 
-test('the settlement badge links to /glossary#settlement', async () => {
+test('the finality track links each level, and marks the level a step reaches', async () => {
+  const track = (page: Page) => page.getByRole('list', { name: 'Finality' });
+  await withFlow(WIDE, '#direct-step-1', async (page) => {
+    assert.equal(await track(page).getByText('(reached)').count(), 0, 'nothing reached on step 1');
+    const settlement = track(page).getByRole('link', { name: /^Settlement/ });
+    assert.equal(await settlement.getAttribute('href'), '/glossary#settlement');
+  });
   await withFlow(WIDE, '#direct-step-9', async (page) => {
-    const badge = page.getByRole('link', { name: 'Settlement', exact: true });
-    assert.equal(await badge.getAttribute('href'), '/glossary#settlement');
+    assert.equal(await track(page).getByText('(reached)').count(), 3);
+    const current = track(page).locator('[aria-current="step"]');
+    assert.match((await current.textContent()) ?? '', /Settlement/);
+  });
+  await withFlow(WIDE, '#direct-step-6', async (page) => {
+    // Step 6 reaches no new level: soft confirmation still holds, and none is current.
+    assert.equal(await track(page).getByText('(reached)').count(), 1);
+    assert.equal(await track(page).locator('[aria-current="step"]').count(), 0);
   });
 });
 
-test('the card shows "Show details" and no Flag row', async () => {
+test('a step that lights no edge shows its number on its node', async () => {
+  await withFlow(WIDE, '#direct-step-2', async (page) => {
+    assert.equal(DIRECT.steps[1]!.edges.length, 0);
+    const seq = page.locator('.react-flow__node-actor[data-id="seq"]');
+    assert.equal(await seq.locator('span', { hasText: /^2$/ }).count(), 1);
+    assert.ok(await seq.getByText('Look inside ›').isVisible(), 'the detail chip shows');
+  });
+  await withFlow(WIDE, '#direct-step-1', async (page) => {
+    assert.equal(await page.locator('.react-flow__node-actor span', { hasText: /^1$/ }).count(), 0);
+  });
+});
+
+test('Show all folds the caption to its title, and "Back to this step" unfolds it', async () => {
+  await withFlow(WIDE, '#direct-step-3', async (page) => {
+    const dock = page.locator('[data-step-dock]');
+    const text = dock.getByText(/^When the round/);
+    assert.ok(await text.isVisible());
+    await page.getByRole('button', { name: 'Show all' }).click();
+    await text.waitFor({ state: 'detached' });
+    await settle(page);
+    const shot = await frameShot(page, []);
+    for (const node of shot.nodes) assert.ok(inside(node.rect, shot.canvas), node.id);
+    await dock.getByRole('button', { name: 'Back to this step' }).click();
+    await text.waitFor();
+  });
+});
+
+test('the caption has "What happens" and "If it fails" tabs, and no flag', async () => {
   await withFlow(WIDE, '', async (page) => {
-    assert.equal(await page.getByLabel('Show operator details').count(), 0);
-    await page.getByLabel('Show details', { exact: true }).check();
-    await page.getByText('Impact on the transaction', { exact: true }).waitFor();
-    assert.ok(await page.getByText('What you see', { exact: true }).isVisible());
-    assert.ok(await page.getByText('What to do', { exact: true }).isVisible());
-    assert.equal(await page.locator('dt', { hasText: /^Flag$/ }).count(), 0);
+    await page.getByRole('tab', { name: 'If it fails' }).click();
+    await page.getByText('Impact on the transaction.', { exact: true }).waitFor();
+    assert.ok(await page.getByText('What you see.', { exact: true }).isVisible());
+    assert.ok(await page.getByText('What to do.', { exact: true }).isVisible());
+    assert.equal(await page.locator('[data-step-dock]', { hasText: 'Flag:' }).count(), 0);
+  });
+});
+
+test('a step with no failure text has no tabs, and shows its code link', async () => {
+  const index = DIRECT.steps.findIndex((step) => !step.failure && step.code);
+  await withFlow(WIDE, `#direct-step-${index + 1}`, async (page) => {
+    assert.equal(await page.locator('[data-step-dock]').getByRole('tab').count(), 0);
+    const code = page.locator('[data-step-dock] a', { hasText: DIRECT.steps[index]!.code!.path });
+    assert.ok(await code.isVisible());
   });
 });
 
@@ -363,6 +410,143 @@ test('Escape closes the detail dialog and returns focus to its opener', async ()
   });
 });
 
+const fullScreenButton = (page: Page) =>
+  page.locator(CANVAS).getByRole('button', { name: /^(Exit full screen|Full screen)$/ });
+
+test('Full screen fills the window and frames each step, at 1280×800 and 375×812', async () => {
+  for (const [name, options] of [
+    ['1280×800', WIDE],
+    ['375×812', PHONE],
+  ] as const) {
+    await withFlow(options, '#direct-step-1', async (page) => {
+      await fullScreenButton(page).click();
+      assert.equal(await fullScreenButton(page).getAttribute('aria-pressed'), 'true');
+      await settle(page);
+      const root = await page.getByRole('region', { name: /diagram$/ }).boundingBox();
+      const size = page.viewportSize()!;
+      assert.deepEqual(root, { x: 0, y: 0, width: size.width, height: size.height }, name);
+      for (let index = 0; index < DIRECT.steps.length; index++) {
+        if (index > 0) {
+          await page.locator(CANVAS).getByRole('button', { name: 'Next →' }).click();
+          await waitForStep(page, DIRECT, index);
+        }
+        const shot = await frameShot(page, DIRECT.steps[index]!.actors);
+        for (const box of shot.activeNodes) {
+          assert.ok(inside(box, shot.canvas), `${name} step ${index + 1}: ${JSON.stringify(box)}`);
+        }
+      }
+    });
+  }
+});
+
+test('Escape leaves full screen and restores the scroll position', async () => {
+  await withFlow(WIDE, '#direct-step-1', async (page) => {
+    await page.evaluate(() => window.scrollTo({ top: 300, behavior: 'instant' }));
+    const before = await page.evaluate(() => window.scrollY);
+    await fullScreenButton(page).click();
+    await page.locator(CANVAS).getByRole('button', { name: 'Next →' }).click();
+    await waitForStep(page, DIRECT, 1);
+    assert.equal(await page.evaluate(() => window.scrollY), before, 'the page moved behind');
+    await page.keyboard.press('Escape');
+    assert.equal(await fullScreenButton(page).getAttribute('aria-pressed'), 'false');
+    assert.equal(await page.evaluate(() => window.scrollY), before);
+    assert.equal(await page.evaluate(() => document.documentElement.style.overflow), '');
+  });
+});
+
+test('full screen shows the Escape hint at 1280×800, then fades it, and none at 375×812', async () => {
+  await withFlow(WIDE, '#direct-step-1', async (page) => {
+    await fullScreenButton(page).click();
+    const hint = page.getByRole('status').filter({ hasText: 'to exit full screen' });
+    await hint.waitFor();
+    assert.equal(await hint.evaluate((element) => getComputedStyle(element).opacity), '1');
+    await page.waitForFunction(
+      (element) => getComputedStyle(element!).opacity === '0',
+      await hint.elementHandle(),
+      { timeout: 5000 },
+    );
+  });
+  await withFlow(PHONE, '#direct-step-1', async (page) => {
+    await fullScreenButton(page).click();
+    const hint = page.getByRole('status').filter({ hasText: 'to exit full screen' });
+    assert.equal(await hint.isVisible(), false);
+  });
+});
+
+test('Escape in the detail dialog closes only the dialog, not full screen', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    await fullScreenButton(page).click();
+    const dialog = await openDetail(page);
+    await page.keyboard.press('Escape');
+    await dialog.waitFor({ state: 'detached' });
+    assert.equal(await fullScreenButton(page).getAttribute('aria-pressed'), 'true');
+  });
+});
+
+test('the step bar keeps its width when the widget gains focus, so a click lands', async () => {
+  await withFlow(WIDE, '#direct-step-1', async (page) => {
+    const bar = page.locator(CANVAS).getByRole('navigation', { name: 'Transaction steps' });
+    const before = await bar.boundingBox();
+    await page.locator(CANVAS).getByRole('button', { name: 'Show all' }).focus();
+    assert.deepEqual(await bar.boundingBox(), before);
+  });
+});
+
+const DOCK = '[data-step-dock]';
+const grip = (page: Page) => page.getByRole('button', { name: 'Move the step caption' });
+
+test('with the diagram scrolled into view at 1280×800, the caption is on screen by Next', async () => {
+  await withFlow(WIDE, '#direct-step-3', async (page) => {
+    await page.locator(CANVAS).evaluate((canvas) => canvas.scrollIntoView({ block: 'start' }));
+    await settle(page);
+    const title = page.locator(DOCK).getByRole('heading', { name: DIRECT.steps[2]!.title });
+    const box = (await title.boundingBox())!;
+    assert.ok(box.y >= 0 && box.y + box.height <= 800, `caption title at ${box.y}`);
+    await page.locator(CANVAS).getByRole('button', { name: 'Next →' }).click();
+    await waitForStep(page, DIRECT, 3);
+    await page.locator(DOCK).getByRole('heading', { name: DIRECT.steps[3]!.title }).waitFor();
+  });
+});
+
+test('a drag on the grip moves the dock inside the canvas, and the camera then uses it all', async () => {
+  await withFlow(WIDE, '#direct-step-3', async (page) => {
+    await page.locator(CANVAS).evaluate((canvas) => canvas.scrollIntoView({ block: 'start' }));
+    await settle(page);
+    const docked = (await page.locator(DOCK).boundingBox())!;
+    const handle = (await grip(page).boundingBox())!;
+    await page.mouse.move(handle.x + handle.width / 2, handle.y + handle.height / 2);
+    await page.mouse.down();
+    // Far past the canvas top, so the clamp shows.
+    await page.mouse.move(handle.x + handle.width / 2, handle.y - 2000, { steps: 6 });
+    await page.mouse.up();
+    await settle(page);
+    const canvas = (await page.locator(CANVAS).boundingBox())!;
+    const moved = (await page.locator(DOCK).boundingBox())!;
+    assert.equal(await page.locator(DOCK).getAttribute('data-moved'), '');
+    assert.ok(Math.abs(moved.y - canvas.y) <= 1, `dock top ${moved.y}, canvas top ${canvas.y}`);
+    assert.ok(moved.y < docked.y);
+    // The active nodes now sit below the moved dock, framed on the whole canvas.
+    const shot = await frameShot(page, DIRECT.steps[2]!.actors);
+    for (const box of shot.activeNodes) assert.ok(inside(box, shot.canvas), JSON.stringify(box));
+    await grip(page).dblclick();
+    assert.equal(await page.locator(DOCK).getAttribute('data-moved'), null);
+  });
+});
+
+test('arrow keys on the grip move the dock and do not step; Home puts it back', async () => {
+  await withFlow(WIDE, '#direct-step-3', async (page) => {
+    const docked = (await page.locator(DOCK).boundingBox())!;
+    await grip(page).focus();
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    const moved = (await page.locator(DOCK).boundingBox())!;
+    assert.ok(Math.abs(docked.y - moved.y - 32) <= 1, `moved ${docked.y - moved.y}px`);
+    assert.equal(new URL(page.url()).hash, '#direct-step-3');
+    await page.keyboard.press('Home');
+    assert.equal(await page.locator(DOCK).getAttribute('data-moved'), null);
+  });
+});
+
 test('a click on the backdrop closes the detail dialog', async () => {
   await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
     const dialog = await openDetail(page);
@@ -547,6 +731,10 @@ test('every part with docs previews its own page on the first step that shows it
     const path = PATHS.find((each) => each.steps.some((step) => step.actors.includes(actor.id)))!;
     const index = path.steps.findIndex((step) => step.actors.includes(actor.id));
     await withFlow(WIDE, `#${path.id}-step-${index + 1}`, async (page) => {
+      // A reader scrolls the diagram into view first. Until then the canvas bottom is below the
+      // fold, and the sticky step dock covers the lower part of the framed step.
+      await page.locator(CANVAS).evaluate((canvas) => canvas.scrollIntoView({ block: 'start' }));
+      await settle(page);
       await node(page, actor.id).hover();
       await previewCard(page).waitFor();
       assert.equal(await previewCard(page).getAttribute('href'), actor.docs!.href, actor.id);

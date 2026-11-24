@@ -26,7 +26,7 @@ cites: nitro/execution/gethexec/pga_tx_orderer.go:90, 156, nitro/execution/gethe
 lane: child
 docs: [The two-stage mempool](/how-arbitrum-works/priority-gas-auction/pga#the-two-stage-mempool)
 
-When a round starts, the Sequencer moves the waiting list into a priority queue. The queue key is the priority fee per gas, the smaller of maxPriorityFeePerGas and maxFeePerGas minus the base fee, plus any boost from earlier rounds. If two transactions have the same priority, the one that reached the Sequencer first goes first. A transaction whose maxFeePerGas is below the base fee is dropped here.
+When a round starts, the Sequencer moves the waiting list into a priority queue. The queue key is the priority fee per gas, the smaller of `maxPriorityFeePerGas` and `maxFeePerGas` minus the base fee, plus any boost from earlier rounds. If two transactions have the same priority, the one that reached the Sequencer first goes first. A transaction whose `maxFeePerGas` is below the base fee is dropped here.
 
 ## Fill the block {#fill}
 
