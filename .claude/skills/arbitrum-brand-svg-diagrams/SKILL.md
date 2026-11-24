@@ -38,11 +38,13 @@ scales perfectly; the draw.io exports it replaces are often >1MB.
 
 ## New diagrams start as a flow file
 
-A diagram of Arbitrum parts and the messages between them starts as a flow file in
-`diagrams/flows/`, not as hand-written SVG. A flow with `static:` grid pins, `svg:` and `alt:`
-gets a static SVG from `pnpm diagrams:generate`. Edit the flow file and never the generated SVG.
-The file format and the renderer's limits are in the "Diagram sources" section of INTERNALS.md.
+Start every new diagram from `diagrams/AUTHORING.md`. It sorts the input: a diagram of
+Arbitrum parts and the messages between them becomes a flow file in `diagrams/flows/`, and
+`pnpm diagrams:generate` writes its static SVG. Edit the flow file and never the generated SVG.
 Use the rest of this skill for concept art that is not a flow of parts and edges.
+
+Flow diagrams take their colours from `diagrams/theme.yaml` and `diagrams/project.yaml`, not
+from this skill. `ink` in `theme.yaml` is the light text on a chip, not this skill's dark ink.
 
 ## Asset sources (the palette comes from here)
 

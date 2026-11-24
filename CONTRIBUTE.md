@@ -315,6 +315,8 @@ unreadable at the full column, redraw it.
 ### Diagrams of Nitro parts
 
 A diagram of Nitro parts and the messages between them starts as a flow file in `diagrams/flows/`.
+To make one from a raster or a description with a coding assistant, follow
+[diagrams/AUTHORING.md](diagrams/AUTHORING.md).
 Run `pnpm diagrams:generate` to write the interactive widget data and the static SVG from it.
 Put the widget on a page with `<FlowDiagram flow="<key>" />`. Never edit the generated files. [INTERNALS.md](INTERNALS.md#diagram-sources) describes the file
 format.

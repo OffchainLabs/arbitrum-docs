@@ -562,7 +562,9 @@ Rule `docs/remote-image` blocks the markdown form.
 ## Diagram sources
 
 Diagrams of Nitro parts and the messages between them live in `diagrams/` as text files. One source
-feeds two outputs, so the interactive widget and the static SVG cannot drift apart.
+feeds two outputs, so the interactive widget and the static SVG cannot drift apart. To make a new
+diagram from a raster or a description with a coding assistant, follow
+[diagrams/AUTHORING.md](diagrams/AUTHORING.md).
 
 ```text
 diagrams/

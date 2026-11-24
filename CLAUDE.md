@@ -185,7 +185,8 @@ entries do not carry this contract.
   checks): labels, colours, repos, finality and card text come from `PROJECT` in that file, built
   from `diagrams/project.yaml`, and the shared colours and font from `THEME`, built from
   `diagrams/theme.yaml`. A page renders a flow with
-  `<FlowDiagram flow="<key>" />`.
+  `<FlowDiagram flow="<key>" />`. For any new diagram, from a raster or a description, follow
+  [diagrams/AUTHORING.md](diagrams/AUTHORING.md).
 
 Details for each are in [INTERNALS.md](INTERNALS.md).
 

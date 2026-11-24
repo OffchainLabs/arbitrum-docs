@@ -20,6 +20,8 @@ MDX docs under `content/docs/`, served at `/<slug>`, deployed on Vercel.
    and the gates to run before you push.
 5. [STYLE-GUIDE.md](STYLE-GUIDE.md): the house prose rules. Read it before writing or editing any
    prose in `content/`.
+6. [diagrams/AUTHORING.md](diagrams/AUTHORING.md): for any diagram work, from a raster or a
+   description.
 
 Fumadocs information comes from https://www.fumadocs.dev/llms.txt. Do not guess its APIs.
 
