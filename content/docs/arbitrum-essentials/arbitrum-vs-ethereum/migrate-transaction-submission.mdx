@@ -75,7 +75,7 @@ If your workflow needs the transaction's outcome from the receipt after submissi
 
 ### Option 2: Keep `eth_sendRawTransaction` and confirm separately
 
-If you only need to know that the sequencer admitted the transaction into its queue, and you already confirm inclusion later or can, use this option.
+If you only need to know that the sequencer admitted the transaction into its queue, and you already confirm inclusion later or can add that check, use this option.
 
 1. Keep the `eth_sendRawTransaction` call. Store the transaction hash it returns.
 2. Poll `eth_getTransactionReceipt` with that hash until it returns a receipt:
@@ -123,7 +123,7 @@ If you only need to know that the sequencer admitted the transaction into its qu
 
 If you keep using `eth_sendRawTransaction`, a transaction can pass the admission checks and still be dropped at block time. You get no error and no receipt that the transaction was dropped. A deadline check keeps these transactions from waiting forever.
 
-1. Set a deadline for each submitted transaction. Make it longer than the queue timeout and the nonce retry window, so the sequencer is done with the transaction. The queue timeout is 12 seconds by default. See [Queue timeout](/how-arbitrum-works/deep-dives/sequencer-transaction-flow#queue-timeout-and-context-deadline-exceeded). If your client timeout is shorter than the queue timeout, the sequencer can admit the transaction after your client stops waiting.
+1. Set a deadline for each submitted transaction. Make it longer than the queue timeout and the nonce retry window, so the sequencer is done with the transaction. The queue timeout is 12 seconds by default, and the nonce retry window is 1 second by default (`--execution.sequencer.nonce-failure-cache-expiry`). See [Queue timeout](/how-arbitrum-works/deep-dives/sequencer-transaction-flow#queue-timeout-and-context-deadline-exceeded). If your client timeout is shorter than the queue timeout, the sequencer can admit the transaction after your client stops waiting.
 2. At the deadline, query the receipt once more. If it returns a receipt, the transaction is in a block.
 3. If the receipt is still `null`, read the sender's next nonce:
 
