@@ -12,6 +12,8 @@
     "transaction-lifecycle",
     "forced-transactions",
     "sequencer-transaction-flow",
+    "nitro-transaction-flow",
+    "transaction-submission-flow",
     "token-bridging",
     "gas-and-fees",
     "stf",

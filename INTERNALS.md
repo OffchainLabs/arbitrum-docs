@@ -18,6 +18,7 @@ see [README.md](README.md). For the path from a first edit to an open PR, see
 - [Global variables](#global-variables)
 - [Glossary and inline references](#glossary-and-inline-references)
 - [Custom MDX components](#custom-mdx-components)
+- [Diagram sources](#diagram-sources)
 - [Page weight and what loads late](#page-weight-and-what-loads-late)
 - [Theme](#theme)
 - [Redirects](#redirects)
@@ -407,6 +408,11 @@ Paths into the Nitro repository live as `nitroPathTo*` keys in `content/vars.jso
 what registers them: `nitro:check-release` verifies each one, plus every content link under
 `github.com/OffchainLabs/<nitroRepositorySlug>/blob/<nitroVersionTag>/`, against the GitHub
 contents API at the target tag before it writes anything (`scripts/lib/nitro-upstream-paths.ts`).
+It also verifies the code paths of every flow in `FLOWS` (`scripts/lib/nitro-flow-paths.ts`, which
+reads `components/widgets/FlowDiagram/flows.ts`, which re-exports `FLOWS` from the generated
+`flows.generated.ts`): `nitro`
+paths at the target tag, `nitro-contracts` paths at the `nitroContractsCommit` resolved for that
+tag.
 The NodeInterface pins for `nitro-contracts` stay in `scripts/generate-precompile-tables.ts`
 because they point at a fixed commit.
 
@@ -552,6 +558,166 @@ renders broken. Commit the file under `public/img/`, or wrap a plain `<img>`:
 ```
 
 Rule `docs/remote-image` blocks the markdown form.
+
+## Diagram sources
+
+Diagrams of Nitro parts and the messages between them live in `diagrams/` as text files. One source
+feeds two outputs, so the interactive widget and the static SVG cannot drift apart. To make a new
+diagram from a raster or a description with a coding assistant, follow
+[diagrams/AUTHORING.md](diagrams/AUTHORING.md).
+
+```text
+diagrams/
+  project.yaml              lanes, kinds, repos, finality, card and the SVG layout
+  theme.yaml                the colours and font that the widget and the SVG share
+  parts.yaml                every part, once
+  flows/<flow-id>.md        one flow: YAML header, then one section per step
+  assets/bg-frag.svg        background drawn under every static SVG
+```
+
+`pnpm diagrams:generate` (`scripts/generate-diagrams.ts`) writes two kinds of output:
+
+- `components/widgets/FlowDiagram/flows.generated.ts`, the data the flow widget reads.
+  `FLOWS` holds every flow that has steps, keyed by its `widget:` value or, without one, by its
+  id. `PROJECT` holds the part of `project.yaml` the widget reads: every lane, the kinds with
+  `widget:` colours, `finality`, the repos with a `code:` link, and `card`. `THEME` holds
+  `theme.yaml` unchanged. A page renders a flow with `<FlowDiagram flow="<key>" />`, from
+  `components/widgets/FlowDiagram/index.tsx`.
+
+The widget code holds no project content and no colour. Labels, per-lane and per-kind colours,
+repos and card text come from `PROJECT`. The form values (gradient, connector, glows, focus ring,
+chip, font, opacity) come from `THEME`. Another project reuses the widget with its own `diagrams/`
+folder, and changes the look by changing `diagrams/theme.yaml`. `pnpm test` fails when a file in
+`components/widgets/FlowDiagram/` other than `flows.generated.ts` holds a hex or `rgb(` colour.
+
+The camera fits each step's active parts in the canvas at zoom 1 or less. On a screen under 768px,
+it never zooms below 0.6 (`PHONE_MIN_ZOOM` in `components/widgets/FlowDiagram/camera.ts`). A step
+too wide or tall for that zoom centers on its first active part, and a one-finger horizontal drag
+pans the diagram. A vertical swipe still scrolls the page. Show all and the detail dialog fit the
+whole graph with no zoom floor.
+
+- `public/img/<svg>.svg` for every flow with `static:` and `svg:`, for example
+  `public/img/haw-transaction-lifecycle.svg`.
+
+Edit `diagrams/project.yaml`, `diagrams/theme.yaml`, `diagrams/parts.yaml` and
+`diagrams/flows/*.md`. Never edit
+`flows.generated.ts` or a generated SVG, because the next run overwrites them. `pnpm diagrams:check`
+is a CI gate. It fails when either output differs from what the sources produce.
+
+A part in `parts.yaml` takes `label`, `kind` and `lane`, an optional `tech`, and an optional
+`docs`. `docs` is the path of a docs page, such as `/how-arbitrum-works/deep-dives/sequencer`.
+When the mouse rests on that part's box in the widget, a `LinkPreview` card previews the page.
+Touch and keyboard readers get no card. `pnpm diagrams:generate` fails when `docs` is not the URL
+of a page under `content/docs/`.
+
+### A flow file
+
+The file name without `.md` is the flow id. The YAML header takes these keys, and an unknown key
+fails.
+
+| Key         | Meaning                                                                                                                                                         |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`     | Required. The diagram title.                                                                                                                                    |
+| `parts`     | Required. Part ids from `parts.yaml`. `{ seq: { label: 'Sequencer', tech: 'Go' } }` overrides the label or tech for this flow only.                             |
+| `edges`     | A mapping of edge id to `<source> -> <target> "label" [dashed\|dotted]`. `<->` draws a double-headed arrow. The label is optional.                              |
+| `widget`    | The key in `FLOWS`. Defaults to the flow id.                                                                                                                    |
+| `showLanes` | `false` hides the lane bands. Defaults to `true`.                                                                                                               |
+| `paths`     | A list of `id`, `label` and `steps`, the ordered paths the widget offers. Each step id must be a step of the flow, once per path.                               |
+| `card`      | Overrides the `card` from `project.yaml`. Needs all six keys: `overviewTab`, `failureTab`, `symptoms`, `impact`, `recovery` (strings) and `showFlag` (boolean). |
+| `static`    | A mapping of part id to `[column, row]`, the part's grid cell in the static SVG. Needs `svg`, and every part needs a cell.                                      |
+| `svg`       | The output file name, lowercase with dashes, without `.svg`. Needs `alt` and `static`.                                                                          |
+| `alt`       | The alt text, written to the SVG `<desc>`.                                                                                                                      |
+
+`tech: ~` drops the sublabel of a part in that flow. Every part and every edge end must be in the
+flow's `parts` list.
+
+The widget draws each path in its own layout. Lanes are columns, left to right, and time runs from
+top to bottom. Three rules follow.
+
+- The edges a path uses must form no cycle. Split a part that a path uses early and late into two
+  parts, as `fullnode-late` and `bridge-late` do.
+- Both ends of every edge a step uses must be parts of that path's steps. `pnpm test` fails
+  otherwise, and the widget would show every tab as not drawn.
+- A tab draws only the parts its steps use.
+
+A step is a `## Title {#id}` section. A step id must be unique in the file and use lowercase letters
+and digits joined by single dashes. The first paragraph can
+be metadata, one `key: value` pair per line or several joined with `·`. The other paragraphs are
+the step text, which is required. Lists, code blocks and other headings do not parse.
+
+| Key        | Meaning                                                                                                                                                                                                                                                                                            |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `lane`     | Required. A lane id from `project.yaml`.                                                                                                                                                                                                                                                           |
+| `parts`    | Part ids the step uses, comma separated, from the flow's `parts`.                                                                                                                                                                                                                                  |
+| `edges`    | Edge ids the step uses, comma separated, from the flow's `edges`.                                                                                                                                                                                                                                  |
+| `flag`     | A flag name the step shows.                                                                                                                                                                                                                                                                        |
+| `code`     | The main code path, `<repo>/<path>[:<line>]`. The repo is a key under `repos` in `project.yaml`.                                                                                                                                                                                                   |
+| `cites`    | More code references, separated by `,` or `;`. See below.                                                                                                                                                                                                                                          |
+| `finality` | A finality id from `finality` in `project.yaml`.                                                                                                                                                                                                                                                   |
+| `docs`     | A link to a docs page, `[label](href)`.                                                                                                                                                                                                                                                            |
+| `detail`   | `<part> -> <flow-id>` links the step to another flow from that part. A detail cycle fails. An optional `-> <step-id>` names the step that Next on the detail flow's last step goes to; without it, Next goes to the next step. That step must come after this one on every path that has this one. |
+
+A `cites` entry takes one of three forms. A full `<repo>/<path>[:<line>]` stands alone. A bare
+`<file>[:<line>]` resolves against the directory of the step's `code:` path, so the step needs a
+`code:` entry. A bare number reuses the file of the previous entry.
+
+A `### Failure` heading ends the step text. It holds exactly three paragraphs that start with
+`**Symptoms.**`, `**Impact.**` and `**Recovery.**`.
+
+`diagrams/flows/transaction-lifecycle.md` is a complete widget example, and
+`diagrams/flows/tx-lifecycle-overview.md` is a complete static SVG example.
+
+### Project config
+
+`diagrams/project.yaml` holds what every flow shares.
+
+- `lanes` maps a lane id to a `label`. A lane with `svg: { fill, stroke, label }` also draws a
+  band behind its parts in the SVG. `short` is the lane name in a widget box's sub-line. A lane
+  with `widget: { accent, fill, border }` is a band in the widget, named by `label`; `fill` and
+  `border` are `[inactive, active]` pairs. The widget draws its lane columns from left to right in
+  lane order.
+- `kinds` maps a part kind to a `label` and to `svg` colours: `fill`, `title`, `sub`, and optional
+  `stroke`. The optional `svg.key` replaces `label` in the SVG key. `widget: { fill, title, sub }`
+  holds the widget colours, and puts the kind in the widget key. With
+  `widget.offLane: { lane, label }`, the widget key reads `offLane.label` when a part of that kind
+  in the flow is not on `offLane.lane`.
+- `repos` maps a repo name to its GitHub `url`. `code` is the base of a widget code link, such as
+  `https://github.com/OffchainLabs/{var:nitroRepositorySlug}/blob/{var:nitroVersionTag}`. The
+  widget fills each `{var:name}` from `content/vars.json`, then appends `/<path>` and `#L<line>`.
+- `finality` maps a finality id to a `label` and an optional glossary `term` id. The step card
+  badge links to `/glossary#<term>`.
+- `card` holds the default step card labels, with the six keys of a flow's `card`.
+- `svg` sets the static layout. Loading the project needs `canvas`, the `cols` and `rows`
+  coordinates of the grid, the `box` size, `scale` and `offset`. The optional `reserve` is an area no
+  box may overlap. Rendering an SVG also needs `background`, a fragment file under `diagrams/`.
+
+`diagrams/theme.yaml` holds the colours and font that the widget and the static SVG share, one
+key per role. A comment above each key names what it colours. Every key is required, and a
+missing or unknown key fails `pnpm diagrams:generate` with the file, line and key. The SVG reads
+`ink`, `chip` and `font`; the widget reads every key. A Tailwind class cannot read a runtime
+value, so each widget canvas sets `focus` as the `--flow-focus` CSS variable, and the focus ring
+classes read `focus-visible:outline-(--flow-focus)`.
+
+The widget accepts a smaller set than the loader. `scripts/generate-diagrams.ts` checks every widget
+flow against `project.yaml`. It rejects a part whose kind has no `widget:` colours, a part whose
+lane has no `short` when the flow shows lanes, a part without `tech`, a step lane without `widget:`
+band colours, a finality id that `finality` does not declare, a repo without `code`, and an edge
+that is dashed, dotted or double-headed. It also fails when `project.yaml` has no `card`.
+
+### Limits of the static renderer
+
+`renderSvg` in `scripts/diagrams/render-svg.ts` throws an error that names the flow file when:
+
+- a part has no `static` pin, or the pin is outside `svg.cols` or `svg.rows`.
+- two parts share one grid cell.
+- a part sits in the top-right cell (last column, row 0), which holds the key, or overlaps
+  `svg.reserve`.
+- a lane band would start above the canvas, so a banded lane cannot sit in row 0.
+- an edge starts and ends on one part, or a straight edge passes through another box.
+- text is too wide. The renderer estimates 0.52 em per character. A title line must fit the box
+  width minus 32. A sublabel must fit the box width. An edge label must fit the edge.
+
+Parts sit on grid cells only. The renderer has no free placement.
 
 ## Page weight and what loads late
 
@@ -1073,6 +1239,7 @@ CSS depends on Fumadocs' header DOM (see [Theme](#theme)).
 | `references:check` | Every glossary entry has an `id`, ids are unique, and no partial holding a `<Term>` is ESM-imported                                                                                                                                                                                                                                                    |
 | `contracts:check`  | The contract-address partial matches `@arbitrum/sdk` and its data file                                                                                                                                                                                                                                                                                 |
 | `gas-target:check` | The gas-target partial matches its `scripts/data/gas-target.json` snapshot; offline, CI never calls an RPC                                                                                                                                                                                                                                             |
+| `diagrams:check`   | `flows.generated.ts` and the generated SVGs match the sources in `diagrams/`; offline                                                                                                                                                                                                                                                                  |
 | `faq:check`        | The six FAQ partials match their `content/faq/*.json` snapshots                                                                                                                                                                                                                                                                                        |
 | `check-links`      | Internal links and their `#fragments` resolve in pages, partials and glossary entries, using the real MDX transforms; a missing include is a finding with a line                                                                                                                                                                                       |
 | `lint`             | ESLint over `content/`: MDX that compiles but renders wrong, every `<Var>` and `<Term>` resolving, every page under `content/docs` satisfying the page schema in `lib/page-schema.ts` (below)                                                                                                                                                          |
@@ -1152,21 +1319,22 @@ time, and the anchor check compiles every page.
 
 ### Hand-run tools
 
-Only `faq:check` and `gas-target:check` are also CI gates. Four workflows run some of them (below):
+Only `faq:check`, `gas-target:check` and `diagrams:check` are also CI gates. Four workflows run some of them (below):
 
-| Command                                 | Does                                                                                                                                                                                                                                                                                                                               |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm move-doc <from> <to>`             | Moves a page, see [Redirects](#redirects)                                                                                                                                                                                                                                                                                          |
-| `pnpm nitro:check-release [--to <tag>]` | Reports a newer Nitro release and a stale go-ethereum submodule pin, verifies every `nitroPathTo*` pin and Nitro source link at the pinned tag, writes nothing; `--to <tag>` is the only writer: it bumps the pinned release, the node image and the marked image tags to that tag, or repairs the submodule pin at the pinned tag |
-| `pnpm precompiles:generate` / `:check`  | Precompile tables from the pinned Nitro refs (fetches from GitHub); upstream doc comments, signatures and event names are escaped, never interpolated as MDX                                                                                                                                                                       |
-| `pnpm contracts:generate`               | The contract-address partial                                                                                                                                                                                                                                                                                                       |
-| `pnpm cli:generate` / `:check`          | The Nitro CLI flags page from the pinned tag's Go source                                                                                                                                                                                                                                                                           |
-| `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example` at the commit pinned as `repoRef` in `scripts/data/stylus-examples.data.ts` (fetches from GitHub, or reads `--source-path`)                                                                                                                                      |
-| `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                  |
-| `pnpm faq:fetch`                        | The FAQ snapshots in `content/faq/` from the Notion "FAQ CMS" database (needs `NOTION_TOKEN`)                                                                                                                                                                                                                                      |
-| `pnpm faq:generate` / `:check`          | The six `_troubleshooting-*-partial.mdx` partials from the snapshots; offline                                                                                                                                                                                                                                                      |
-| `pnpm gas-target:fetch`                 | The gas-target snapshot `scripts/data/gas-target.json` from the `ArbGasInfo` precompile on Arbitrum One, Nova and Sepolia (three public RPCs, no credentials)                                                                                                                                                                      |
-| `pnpm gas-target:generate` / `:check`   | The `_reference-gas-target-partial.mdx` partial from the snapshot; offline                                                                                                                                                                                                                                                         |
+| Command                                 | Does                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pnpm move-doc <from> <to>`             | Moves a page, see [Redirects](#redirects)                                                                                                                                                                                                                                                                                                                                                                                            |
+| `pnpm nitro:check-release [--to <tag>]` | Reports a newer Nitro release and a stale go-ethereum or nitro-contracts submodule pin, verifies every `nitroPathTo*` pin, Nitro source link and code path of the Nitro flow widget at the pinned tag (contracts paths at the contracts commit), writes nothing; `--to <tag>` is the only writer: it bumps the pinned release, the node image and the marked image tags to that tag, or repairs the submodule pins at the pinned tag |
+| `pnpm precompiles:generate` / `:check`  | Precompile tables from the pinned Nitro refs (fetches from GitHub); upstream doc comments, signatures and event names are escaped, never interpolated as MDX                                                                                                                                                                                                                                                                         |
+| `pnpm contracts:generate`               | The contract-address partial                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `pnpm cli:generate` / `:check`          | The Nitro CLI flags page from the pinned tag's Go source                                                                                                                                                                                                                                                                                                                                                                             |
+| `pnpm stylus:generate` / `:check`       | The Stylus by Example pages from `offchainlabs/stylus-by-example` at the commit pinned as `repoRef` in `scripts/data/stylus-examples.data.ts` (fetches from GitHub, or reads `--source-path`)                                                                                                                                                                                                                                        |
+| `pnpm edge-challenge:fetch`             | The BoLD challenge snapshot from Arbitrum Sepolia                                                                                                                                                                                                                                                                                                                                                                                    |
+| `pnpm faq:fetch`                        | The FAQ snapshots in `content/faq/` from the Notion "FAQ CMS" database (needs `NOTION_TOKEN`)                                                                                                                                                                                                                                                                                                                                        |
+| `pnpm faq:generate` / `:check`          | The six `_troubleshooting-*-partial.mdx` partials from the snapshots; offline                                                                                                                                                                                                                                                                                                                                                        |
+| `pnpm gas-target:fetch`                 | The gas-target snapshot `scripts/data/gas-target.json` from the `ArbGasInfo` precompile on Arbitrum One, Nova and Sepolia (three public RPCs, no credentials)                                                                                                                                                                                                                                                                        |
+| `pnpm diagrams:generate` / `:check`     | `flows.generated.ts` and the static SVGs from `diagrams/`, see [Diagram sources](#diagram-sources); offline                                                                                                                                                                                                                                                                                                                          |
+| `pnpm gas-target:generate` / `:check`   | The `_reference-gas-target-partial.mdx` partial from the snapshot; offline                                                                                                                                                                                                                                                                                                                                                           |
 
 `upstream-refresh.yml` runs `nitro:check-release` and `precompiles:generate` every Monday at 08:00
 UTC. It never writes `content/vars.json`. It opens `automated/upstream-refresh` as a maintenance
@@ -1234,6 +1402,9 @@ publishing`, routed by `Target document slugs` and ordered by `FAQ order index`.
   `<Callout type="info">` elements with that single literal attribute. Rejected content leaves
   the destination partial untouched; fix the answer in Notion or put the example in code. The same
   snapshots feed the `FAQPage` JSON-LD that `lib/faq.ts` emits on those six pages.
+- **`components/widgets/FlowDiagram/flows.generated.ts`** and the SVGs under `public/img/` named by
+  a flow's `svg:` key are written by `pnpm diagrams:generate` from `diagrams/`. Edit the sources,
+  see [Diagram sources](#diagram-sources). `diagrams:check` fails on a hand edit.
 
 Generated `meta.json` files are not formatted: `.prettierignore` excludes `content/**/meta.json`,
 and the generators write them with `format: false`.

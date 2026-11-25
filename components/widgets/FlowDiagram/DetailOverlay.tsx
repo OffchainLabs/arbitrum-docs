@@ -1,0 +1,212 @@
+'use client';
+
+import * as Dialog from '@radix-ui/react-dialog';
+import type { ReactFlowInstance } from '@xyflow/react';
+import {
+  type CSSProperties,
+  type RefObject,
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import type { ActorNodeType } from './ActorNode.tsx';
+import type { BandNodeType } from './BandNode.tsx';
+import { FlowCanvas } from './FlowCanvas.tsx';
+import type { RoutedEdgeType } from './RoutedEdge.tsx';
+import { StepBar } from './StepBar.tsx';
+import { StepCard } from './StepCard.tsx';
+import { CANVAS_STYLE } from './flows.ts';
+import { flowEdges, flowNodes } from './graph.ts';
+import { stepNumbersByEdge } from './layout.ts';
+import type { CardLabels, Flow } from './model.ts';
+import { useFlowLayouts } from './useFlowLayouts.ts';
+import { naturalCanvasSize, useStepCamera } from './useStepCamera.ts';
+import { motionDuration } from './useStepNavigation.ts';
+
+const FADE_MS = 1000;
+// The least space between the panel and a viewport side; the backdrop padding.
+const PANEL_GUTTER = 24;
+
+interface DetailOverlayProps {
+  flow: Flow;
+  // The card labels of the flow that opens this one.
+  labels: CardLabels;
+  // Runs after the fade-out, to unmount this view.
+  onClose: () => void;
+  // Next on the last sub-step. Runs as the fade-out starts, so the opening flow moves under it.
+  onFinish: () => void;
+  // The canvas of the opening diagram. From 768px, the panel centers over it.
+  anchorRef: RefObject<HTMLElement | null>;
+}
+
+// SPIKE: a second diagram in a dialog, with its own sub-steps. Full screen below 768px; from
+// 768px, a panel over a backdrop, centered over the opening diagram.
+export function DetailOverlay({ flow, labels, onClose, onFinish, anchorRef }: DetailOverlayProps) {
+  // A detail flow has one path.
+  const layout = useFlowLayouts(flow).layouts?.[0] ?? null;
+  const [instance, setInstance] = useState<ReactFlowInstance<
+    ActorNodeType | BandNodeType,
+    RoutedEdgeType
+  > | null>(null);
+  const [index, setIndex] = useState(0);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const step = flow.steps[index]!;
+  // A detail graph is small: keep every part in view and let the highlight show the sub-step.
+  // The dialog frames the whole graph on every step, so its step bar has no Show all.
+  useStepCamera(instance, layout, step, canvasRef, { inDialog: true });
+  const stepNumbers = useMemo(() => stepNumbersByEdge(flow.steps), [flow]);
+  const nodes = useMemo(() => (layout ? flowNodes(flow, layout, step) : []), [flow, layout, step]);
+  const edges = useMemo(
+    () => (layout ? flowEdges(flow, layout, step, stepNumbers) : []),
+    [flow, layout, step, stepNumbers],
+  );
+  // The panel and canvas shrink to the graph at zoom 1; the classes below cap them.
+  const size = layout ? naturalCanvasSize(layout) : null;
+  const sizeVars: CSSProperties = size
+    ? ({ '--panel-w': `${size.width}px`, '--canvas-h': `${size.height}px` } as CSSProperties)
+    : {};
+  // The rendered title row height and step bar width, and `--shift`, which moves the panel from the
+  // viewport center to the center of the opening diagram, `PANEL_GUTTER` inside the viewport. Kept
+  // current while any of them resizes. Child refs are set before this one runs.
+  const headerRef = useRef<HTMLDivElement>(null);
+  const measureRef = useCallback(
+    (content: HTMLDivElement | null) => {
+      const header = headerRef.current;
+      const bar = barRef.current;
+      const anchor = anchorRef.current;
+      if (!content || !header || !bar || !anchor) return;
+      const measure = () => {
+        content.style.setProperty('--head-h', `${header.offsetHeight}px`);
+        content.style.setProperty('--bar-w', `${bar.offsetWidth}px`);
+        const width = content.offsetWidth;
+        // The fixed backdrop: its width leaves out a page scrollbar, which `innerWidth` counts.
+        const room = content.parentElement!.clientWidth;
+        const target = anchor.getBoundingClientRect();
+        const left = Math.min(
+          Math.max(target.left + target.width / 2 - width / 2, PANEL_GUTTER),
+          room - PANEL_GUTTER - width,
+        );
+        content.style.setProperty('--shift', `${left - (room - width) / 2}px`);
+      };
+      const observer = new ResizeObserver(measure);
+      for (const element of [header, bar, content, anchor]) observer.observe(element);
+      window.addEventListener('resize', measure);
+      return () => {
+        observer.disconnect();
+        window.removeEventListener('resize', measure);
+      };
+    },
+    [anchorRef],
+  );
+  const goTo = (next: number) => setIndex(Math.min(Math.max(next, 0), flow.steps.length - 1));
+
+  // Every close fades out first; `onClose` runs when the fade ends and unmounts this view.
+  const [fadeMs] = useState(() => (motionDuration() ? FADE_MS : 0));
+  const [closing, setClosing] = useState(false);
+  const finish = () => {
+    onFinish();
+    setClosing(true);
+  };
+
+  // An effect event, so a parent render during the fade does not restart the timer.
+  const closed = useEffectEvent(() => onClose());
+  useEffect(() => {
+    if (!closing) return;
+    const timer = setTimeout(closed, fadeMs);
+    return () => clearTimeout(timer);
+  }, [closing, fadeMs]);
+
+  // Read during the first render: Radix moves focus into the dialog before any effect here runs.
+  const [opener] = useState(() => document.activeElement as HTMLElement | null);
+  useEffect(() => () => opener?.focus(), [opener]);
+
+  // Radix traps Tab, hides the rest of the page from assistive technology, and reports Escape and
+  // a press on the backdrop as a close. The dialog stays open in Radix until the fade-out ends.
+  return (
+    <Dialog.Root open onOpenChange={(open) => !open && setClosing(true)}>
+      <Dialog.Portal>
+        {/* `starting:` fades in from the first frame; `inert` while closing ignores clicks and keys. */}
+        <Dialog.Overlay
+          className={[
+            'fixed inset-0 z-[1000] flex items-center justify-center md:bg-black/60 md:p-6',
+            'transition-opacity ease-out starting:opacity-0',
+            closing ? 'opacity-0' : 'opacity-100',
+          ].join(' ')}
+          style={{ transitionDuration: `${fadeMs}ms` }}
+          inert={closing}
+        >
+          <Dialog.Content
+            aria-describedby={undefined}
+            className={[
+              'flex h-full w-full flex-col overflow-y-auto bg-fd-background',
+              'md:h-auto md:max-h-[92vh] md:rounded-lg md:border md:border-fd-border',
+              // At least the step bar plus a 24px gutter on each side.
+              'md:w-[min(max(var(--panel-w,900px),calc(var(--bar-w,0px)_+_48px)),900px,94vw)]',
+              'md:translate-x-[var(--shift,0px)]',
+            ].join(' ')}
+            ref={measureRef}
+            style={sizeVars}
+            onOpenAutoFocus={(event) => {
+              event.preventDefault();
+              closeRef.current?.focus();
+            }}
+            // Without a Radix trigger, its own close focus lands on the body; the effect above
+            // returns focus to the opener instead.
+            onCloseAutoFocus={(event) => event.preventDefault()}
+            // React events bubble through the portal to the opening widget, which would step too.
+            onKeyDown={(event) => {
+              if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+              event.stopPropagation();
+              if (event.key === 'ArrowLeft') goTo(index - 1);
+              else if (index === flow.steps.length - 1) finish();
+              else goTo(index + 1);
+            }}
+          >
+            <div
+              ref={headerRef}
+              className="flex items-center justify-between border-b border-fd-border px-4 py-2"
+            >
+              <Dialog.Title className="text-base font-semibold">{flow.title}</Dialog.Title>
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={() => setClosing(true)}
+                className="rounded-md border border-fd-border px-3 py-1 text-sm"
+              >
+                Close
+              </button>
+            </div>
+            <div
+              ref={canvasRef}
+              className={[
+                'relative flex w-full shrink-0 flex-col',
+                'h-[min(var(--canvas-h,600px),600px)]',
+                // 92vh less the title row, so the sticky step bar never covers the canvas.
+                'md:h-[min(var(--canvas-h,720px),720px,calc(92vh_-_var(--head-h,3rem)))]',
+              ].join(' ')}
+              style={CANVAS_STYLE}
+            >
+              {layout && <FlowCanvas nodes={nodes} edges={edges} onInit={setInstance} />}
+              <StepBar
+                index={index}
+                count={flow.steps.length}
+                started
+                barRef={barRef}
+                onGo={goTo}
+                onFinish={finish}
+                keyHint={false}
+              />
+            </div>
+            <StepCard step={step} labels={labels} />
+          </Dialog.Content>
+        </Dialog.Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
+}

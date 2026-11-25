@@ -1,0 +1,20 @@
+lanes:
+  l1:
+    label: Lane one
+kinds:
+  plain:
+    label: Plain
+    svg: { fill: '#ffffff', title: '#111111', sub: '#555555' }
+    widget:
+      fill: '#ffffff'
+      title: '#111111'
+      sub: '#555555'
+      offLane: { lane: l2, label: Other }
+repos: {}
+svg:
+  canvas: [720, 300]
+  cols: [130, 360, 590]
+  rows: [48, 160, 260]
+  box: [200, 80]
+  scale: 1
+  offset: [0, 0]

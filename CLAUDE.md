@@ -43,13 +43,14 @@ pnpm vars:check        # the announcement banner keys in content/vars.json are v
 pnpm references:check  # glossary ids are present and unique; no partial holding a <Term> is ESM-imported
 pnpm contracts:check   # the contract-address partial is current
 pnpm gas-target:check # the gas-target partial matches scripts/data/gas-target.json
+pnpm diagrams:check    # flows.generated.ts and the static SVGs match diagrams/
 pnpm faq:check         # the six FAQ partials match content/faq/*.json
 pnpm check-links       # internal links and #fragments resolve
 pnpm format:check      # prettier (pnpm format writes)
 
 # By hand only
 pnpm move-doc <from> <to> [--dry-run]  # move a page, rewrite links, update meta.json, add a redirect
-pnpm nitro:check-release               # report a newer Nitro release and stale pins, verify paths; --to <tag> is the only writer
+pnpm nitro:check-release               # report a newer Nitro release and stale pins, verify paths, incl. the Nitro flow widget's code links; --to <tag> is the only writer
 pnpm precompiles:generate              # precompile tables (:check compares)
 pnpm contracts:generate                # contract-address partial
 pnpm cli:generate                      # Nitro CLI flags page (:check compares)
@@ -59,6 +60,7 @@ pnpm faq:fetch                         # FAQ snapshots from Notion (NOTION_TOKEN
 pnpm faq:generate                      # the six FAQ partials from the snapshots (:check compares)
 pnpm gas-target:fetch                 # gas-target snapshot from ArbGasInfo over three public RPCs; then gas-target:generate
 pnpm gas-target:generate              # the gas-target partial from the snapshot (:check compares)
+pnpm diagrams:generate                # flows.generated.ts and public/img SVGs from diagrams/ (:check compares)
 ```
 
 CI (`.github/workflows/ci.yml`) runs the gates in one job, then `pnpm build` plus
@@ -176,6 +178,15 @@ entries do not carry this contract.
 - **Generated pages.** `content/docs/stylus/stylus-by-example/` and
   `content/docs/run-a-node/nitro/cli-flags-reference.mdx`. Change their generators, not the pages.
   The six `content/partials/_troubleshooting-*-partial.mdx` come from `content/faq/*.json`; edit them in Notion.
+  `components/widgets/FlowDiagram/flows.generated.ts` and the SVGs named by a flow's `svg:` key
+  (`public/img/haw-transaction-lifecycle.svg`) come from `diagrams/`; edit `diagrams/project.yaml`,
+  `diagrams/theme.yaml`, `diagrams/parts.yaml` and `diagrams/flows/*.md`, then run
+  `pnpm diagrams:generate`. The widget code holds no content and no colour literal (`pnpm test`
+  checks): labels, colours, repos, finality and card text come from `PROJECT` in that file, built
+  from `diagrams/project.yaml`, and the shared colours and font from `THEME`, built from
+  `diagrams/theme.yaml`. A page renders a flow with
+  `<FlowDiagram flow="<key>" />`. For any new diagram, from a raster or a description, follow
+  [diagrams/AUTHORING.md](diagrams/AUTHORING.md).
 
 Details for each are in [INTERNALS.md](INTERNALS.md).
 

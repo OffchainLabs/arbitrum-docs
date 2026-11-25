@@ -56,6 +56,9 @@ jobs:
       - name: Gas-target partial matches its snapshot
         run: pnpm gas-target:check
 
+      - name: Widget flow data matches the Markdown sources
+        run: pnpm diagrams:check
+
       - name: FAQ partials match their Notion snapshots
         run: pnpm faq:check
 

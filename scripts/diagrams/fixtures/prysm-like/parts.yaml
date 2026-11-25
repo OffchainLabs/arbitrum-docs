@@ -1,0 +1,6 @@
+consensus-network: { label: Consensus P2P network, kind: network, lane: consensus }
+execution-network: { label: Execution P2P network, kind: network, lane: execution }
+beacon-node: { label: Beacon node, tech: Prysm, kind: prysm, lane: consensus }
+execution-client:
+  { label: Execution client, tech: 'Geth, Nethermind, Besu, Reth', kind: other, lane: execution }
+validator-client: { label: Validator client, kind: prysm, lane: consensus }

@@ -1,0 +1,349 @@
+import assert from 'node:assert/strict';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { after, test } from 'node:test';
+
+import { loadProject } from './load.ts';
+
+const PROJECT = `lanes:
+  l1: { label: Lane one }
+  l2: { label: Lane two }
+kinds:
+  plain: { label: Plain, svg: { fill: '#ffffff', title: '#111111', sub: '#555555' } }
+repos:
+  core: { url: 'https://example.com/core' }
+  extra: { url: 'https://example.com/extra' }
+svg:
+  canvas: [720, 300]
+  cols: [130, 360, 590]
+  rows: [48, 160, 260]
+  box: [200, 80]
+  scale: 1
+  offset: [0, 0]
+`;
+const PARTS = `a: { label: Alpha, kind: plain, lane: l1 }
+b: { label: Beta, kind: plain, lane: l2 }
+`;
+const HEADER = `---
+title: Demo
+parts: [a, b]
+edges:
+  ab: a -> b "calls"
+---
+`;
+
+const made: string[] = [];
+after(() => Promise.all(made.map((dir) => rm(dir, { recursive: true, force: true }))));
+
+async function project(flows: Record<string, string>) {
+  const dir = await mkdtemp(path.join(tmpdir(), 'diagrams-'));
+  made.push(dir);
+  await mkdir(path.join(dir, 'flows'));
+  await writeFile(path.join(dir, 'project.yaml'), PROJECT);
+  await writeFile(path.join(dir, 'parts.yaml'), PARTS);
+  for (const [name, body] of Object.entries(flows)) {
+    await writeFile(path.join(dir, 'flows', `${name}.md`), body);
+  }
+  return dir;
+}
+
+async function steps(body: string, name = 'demo') {
+  const { flows } = await loadProject(await project({ [name]: HEADER + body }));
+  return flows.get(name)!.steps;
+}
+
+const rejects = async (flows: Record<string, string>, pattern: RegExp) =>
+  assert.rejects(
+    async () => loadProject(await project(flows)),
+    (error: Error) => {
+      assert.match(error.message, pattern);
+      return true;
+    },
+  );
+
+const FULL = `
+## Submit {#s1}
+
+parts: a, b · edges: ab · lane: l1
+flag: fast · finality: soft
+code: core/a/b/x.go:12
+cites: x.go:240, 249; core/c/y.go:41
+docs: [Read more](/docs/page#frag)
+
+First paragraph
+on two lines.
+
+Second paragraph.
+
+### Failure
+
+**Symptoms.** It stalls.
+
+**Impact.** Users wait.
+
+**Recovery.** Retry later.
+`;
+
+test('parses metadata, prose and failure', async () => {
+  const [step] = await steps(FULL);
+  assert.deepEqual(step, {
+    id: 's1',
+    title: 'Submit',
+    text: 'First paragraph on two lines.\n\nSecond paragraph.',
+    parts: ['a', 'b'],
+    edges: ['ab'],
+    flag: 'fast',
+    code: { repo: 'core', path: 'a/b/x.go', line: 12 },
+    cites: [
+      { repo: 'core', path: 'a/b/x.go', line: 240 },
+      { repo: 'core', path: 'a/b/x.go', line: 249 },
+      { repo: 'core', path: 'c/y.go', line: 41 },
+    ],
+    finality: 'soft',
+    lane: 'l1',
+    docs: { href: '/docs/page#frag', label: 'Read more' },
+    failure: { symptoms: 'It stalls.', impact: 'Users wait.', recovery: 'Retry later.' },
+  });
+});
+
+test('keeps a colon paragraph as prose', async () => {
+  const [step] = await steps('\n## One {#s1}\n\nlane: l1\n\nNote: the feed is fast.\n');
+  assert.equal(step!.text, 'Note: the feed is fast.');
+});
+
+test('treats a first paragraph with no known key as prose', async () => {
+  const body = '\n## One {#s1}\n\nNote: the feed is fast.\n';
+  await rejects({ demo: HEADER + body }, /step "s1" is missing lane/);
+});
+
+test('keeps inline markup verbatim', async () => {
+  const prose = 'Calls `eth_call` with {var:arbOneBlockGasLimit} gas.';
+  const [step] = await steps(`\n## One {#s1}\n\nlane: l1\n\n${prose}\n`);
+  assert.equal(step!.text, prose);
+});
+
+test('CRLF equals LF', async () => {
+  const lf = await steps(FULL);
+  const crlf = await steps(FULL.replaceAll('\n', '\r\n'), 'crlf');
+  const spaced = await steps(FULL.replaceAll('\n', '  \n'), 'spaced');
+  assert.deepEqual(crlf, lf);
+  assert.deepEqual(spaced, lf);
+});
+
+test('expands cite shorthand', async () => {
+  const [step] = await steps(
+    '\n## One {#s1}\n\ncode: core/a/b/x.go\n' +
+      'cites: x.go:240, 249; core/c/y.go:41\nlane: l1\n\nText.\n',
+  );
+  assert.deepEqual(step!.cites, [
+    { repo: 'core', path: 'a/b/x.go', line: 240 },
+    { repo: 'core', path: 'a/b/x.go', line: 249 },
+    { repo: 'core', path: 'c/y.go', line: 41 },
+  ]);
+});
+
+test('keeps cite order and duplicates', async () => {
+  const [step] = await steps(
+    '\n## One {#s1}\n\ncode: core/x.go\ncites: x.go:2, x.go:2\nlane: l1\n\nText.\n',
+  );
+  assert.deepEqual(step!.cites, [
+    { repo: 'core', path: 'x.go', line: 2 },
+    { repo: 'core', path: 'x.go', line: 2 },
+  ]);
+});
+
+test('parses detail', async () => {
+  const flows = {
+    demo: `${HEADER}\n## One {#s1}\n\nlane: l1 · detail: a -> inner\n\nText.\n`,
+    inner: '---\ntitle: Inner\nparts: [a]\n---\n',
+  };
+  const { flows: loaded } = await loadProject(await project(flows));
+  assert.deepEqual(loaded.get('demo')!.steps[0]!.detail, { part: 'a', flow: 'inner' });
+});
+
+const one = (meta: string) => `${HEADER}\n## One {#s1}\n\n${meta}\n\nText.\n`;
+
+test('rejects a heading without an id', () =>
+  rejects({ demo: `${HEADER}\n## One\n\nlane: l1\n\nText.\n` }, /demo\.md:8: .*missing \{#id\}/));
+
+test('rejects an unknown repo in code', () =>
+  rejects({ demo: one('lane: l1\ncode: nitr0/a.go') }, /demo\.md:11: .*unknown repo "nitr0"/));
+
+test('rejects an unknown repo in a cite', () =>
+  rejects({ demo: one('lane: l1\ncites: nitr0/a.go:1') }, /unknown repo "nitr0"/));
+
+test('rejects a non-positive line', () =>
+  rejects({ demo: one('lane: l1\ncode: core/a.go:0') }, /line must be a positive integer/));
+
+test('rejects a bare cite without code', () =>
+  rejects({ demo: one('lane: l1\ncites: x.go:1') }, /step "s1" cites.*code/));
+
+test('rejects a line-only cite without a previous entry', () =>
+  rejects({ demo: one('lane: l1\ncites: 249') }, /step "s1" cites.*previous/));
+
+test('rejects an unknown edge', () =>
+  rejects({ demo: one('lane: l1\nedges: zz') }, /demo\.md:11: step "s1" edge "zz"/));
+
+test('rejects an unknown part', () =>
+  rejects({ demo: one('lane: l1\nparts: zz') }, /step "s1" part "zz"/));
+
+test('rejects an unknown lane', () =>
+  rejects({ demo: one('lane: nope') }, /step "s1" has unknown lane "nope"/));
+
+test('rejects an unknown metadata key', () =>
+  rejects({ demo: one('lane: l1\ncolour: red') }, /demo\.md:11: .*unknown key "colour"/));
+
+test('rejects a duplicate step id', () =>
+  rejects(
+    { demo: `${HEADER}\n## One {#s1}\n\nlane: l1\n\nA.\n\n## Two {#s1}\n\nlane: l1\n\nB.\n` },
+    /duplicate step id "s1"/,
+  ));
+
+test('rejects a detail to a missing flow', () =>
+  rejects(
+    { demo: one('lane: l1\ndetail: a -> nope') },
+    /demo\.md:11: .*detail flow "nope" not found/,
+  ));
+
+test('rejects a detail on a part the flow does not list', () =>
+  rejects(
+    {
+      demo: one('lane: l1\ndetail: zz -> demo'),
+    },
+    /step "s1" detail part "zz"/,
+  ));
+
+test('rejects a detail cycle', () =>
+  rejects(
+    {
+      a: `${HEADER}\n## One {#s1}\n\nlane: l1 · detail: a -> b\n\nText.\n`,
+      b: `${HEADER}\n## One {#s1}\n\nlane: l1 · detail: a -> a\n\nText.\n`,
+    },
+    /detail cycle: a\.md -> b\.md -> a\.md/,
+  ));
+
+const DETAIL_FLOW = (detail: string, extra = '') => `---
+title: Demo
+parts: [a, b]
+edges:
+  ab: a -> b "calls"
+${extra}---
+
+## One {#s1}
+
+lane: l1
+
+A.
+
+## Two {#s2}
+
+lane: l1
+detail: ${detail}
+
+B.
+
+## Three {#s3}
+
+lane: l1
+
+C.
+`;
+const INNER = '---\ntitle: Inner\nparts: [a]\n---\n';
+
+test('parses detail with a next step', async () => {
+  const flows = { demo: DETAIL_FLOW('a -> inner -> s3'), inner: INNER };
+  const { flows: loaded } = await loadProject(await project(flows));
+  assert.deepEqual(loaded.get('demo')!.steps[1]!.detail, {
+    part: 'a',
+    flow: 'inner',
+    next: 's3',
+  });
+});
+
+test('rejects a detail next step that is not in the flow', () =>
+  rejects(
+    { demo: DETAIL_FLOW('a -> inner -> zz'), inner: INNER },
+    /demo\.md:17: step "s2" detail next step "zz" is not a step of the flow/,
+  ));
+
+test('rejects a detail next step that is not after the detail step', () =>
+  rejects(
+    { demo: DETAIL_FLOW('a -> inner -> s1'), inner: INNER },
+    /demo\.md:17: step "s2" detail next step "s1" does not come after it in path "default"/,
+  ));
+
+test('rejects a detail next step that a path does not reach after the detail step', () =>
+  rejects(
+    {
+      demo: DETAIL_FLOW(
+        'a -> inner -> s3',
+        'paths:\n  - { id: p1, label: P1, steps: [s1, s2, s3] }\n' +
+          '  - { id: p2, label: P2, steps: [s3, s2] }\n',
+      ),
+      inner: INNER,
+    },
+    /step "s2" detail next step "s3" does not come after it in path "p2"/,
+  ));
+
+const SVG_HEADER = (extra: string) => `---
+title: Demo
+parts: [a, { b: { tech: ~ } }]
+${extra}
+---
+`;
+
+test('reads svg and alt, and a null tech removes the part tech', async () => {
+  const { flows } = await loadProject(
+    await project({ demo: SVG_HEADER('svg: demo-out\nalt: The whole picture.') }),
+  );
+  const demo = flows.get('demo')!;
+  assert.equal(demo.svg, 'demo-out');
+  assert.equal(demo.alt, 'The whole picture.');
+  assert.equal('tech' in demo.parts[1]!, false);
+});
+
+test('rejects an svg name that is not a plain file name', () =>
+  rejects({ demo: SVG_HEADER('svg: ../out\nalt: Alt.') }, /demo\.md:4: svg: /));
+
+test('rejects svg without alt', () =>
+  rejects({ demo: SVG_HEADER('svg: demo-out') }, /svg needs alt/));
+
+const FAILURE = '**Symptoms.** S.\n\n**Impact.** I.\n\n**Recovery.** R.';
+
+test('rejects a second Failure block', () =>
+  rejects(
+    {
+      demo:
+        `${HEADER}\n## One {#s1}\n\nlane: l1\n\nText.\n` +
+        `\n### Failure\n\n${FAILURE}\n\n### Failure\n\n${FAILURE}\n`,
+    },
+    /demo\.md:\d+: step "s1" has a second ### Failure block/,
+  ));
+
+test('rejects a step id that is not lowercase letters, digits and dashes', () =>
+  rejects(
+    { demo: `${HEADER}\n## One {#Step_1}\n\nlane: l1\n\nText.\n` },
+    /demo\.md:8: step id "Step_1" must be lowercase/,
+  ));
+
+test('accepts a step id with digits and single dashes', async () => {
+  const [step] = await steps('\n## One {#step-2a}\n\nlane: l1\n\nText.\n');
+  assert.equal(step!.id, 'step-2a');
+});
+
+const TWO_STEPS = '\n## One {#s1}\n\nlane: l1\n\nA.\n\n## Two {#s2}\n\nlane: l1\n\nB.\n';
+const withPaths = (steps: string) =>
+  '---\ntitle: Demo\nparts: [a, b]\npaths:\n  - id: p\n    label: P\n' +
+  `    steps: [${steps}]\n---\n${TWO_STEPS}`;
+
+test('keeps path steps that exist', async () => {
+  const { flows } = await loadProject(await project({ demo: withPaths('s1, s2') }));
+  assert.deepEqual(flows.get('demo')!.paths![0]!.steps, ['s1', 's2']);
+});
+
+test('rejects a path step that is not a step of the flow', () =>
+  rejects({ demo: withPaths('s1, s3') }, /demo\.md:7: path "p" lists unknown step "s3"/));
+
+test('rejects a path that lists a step twice', () =>
+  rejects({ demo: withPaths('s1, s1') }, /demo\.md:7: path "p" lists step "s1" twice/));
