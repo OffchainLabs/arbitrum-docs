@@ -217,6 +217,31 @@ function columnLefts(actors: Actor[], y: Record<string, number>): Record<string,
   return x;
 }
 
+// Moves each part up to the row under its lowest incoming part or the part above it in its
+// column, whichever is lower. Time rows span every lane, so a part in one lane would otherwise
+// wait below rows that only other lanes use. Edges still point down, and each column keeps its
+// order. A part never moves down: the time rows already meet both limits.
+function compactRows(
+  actors: Actor[],
+  edges: FlowEdge[],
+  x: Record<string, number>,
+  y: Record<string, number>,
+): Record<string, number> {
+  const tops = [...new Set(Object.values(y))].sort((a, b) => a - b);
+  const ids = actors.map((actor) => actor.id).sort((a, b) => y[a]! - y[b]! || x[a]! - x[b]!);
+  const row: Record<string, number> = {};
+  const columnRow = new Map<number, number>();
+  for (const id of ids) {
+    let next = (columnRow.get(x[id]!) ?? -1) + 1;
+    for (const edge of edges) {
+      if (edge.target === id) next = Math.max(next, row[edge.source]! + 1);
+    }
+    row[id] = next;
+    columnRow.set(x[id]!, next);
+  }
+  return Object.fromEntries(ids.map((id) => [id, tops[row[id]!]!]));
+}
+
 // Pass 2: ELK keeps the preset positions and routes the edges.
 async function routeWithPresets(
   actors: Actor[],
@@ -268,8 +293,10 @@ export async function computeLayout(flow: Flow, steps: readonly Step[]): Promise
     }
   }
 
-  const y = await rowTops(actors, edges, partitions(actors, edges, firstStepIndex(steps)));
-  const graph = await routeWithPresets(actors, edges, columnLefts(actors, y), y);
+  const timeRows = await rowTops(actors, edges, partitions(actors, edges, firstStepIndex(steps)));
+  const x = columnLefts(actors, timeRows);
+  const y = compactRows(actors, edges, x, timeRows);
+  const graph = await routeWithPresets(actors, edges, x, y);
 
   const nodes: Record<string, Point> = {};
   for (const child of graph.children ?? []) nodes[child.id] = { x: child.x ?? 0, y: child.y ?? 0 };

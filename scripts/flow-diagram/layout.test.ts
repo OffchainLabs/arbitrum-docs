@@ -111,15 +111,35 @@ test('each lane is one vertical column', () => {
   }
 });
 
-test('a source part used in a later step never sits above one used earlier', () => {
+// Rows are the distinct node tops, top to bottom. Compaction leaves no empty row below a part.
+function rowsOf(l: FlowLayout): number[] {
+  return [...new Set(Object.values(l.nodes).map((point) => point.y))].sort((a, b) => a - b);
+}
+
+test('no part can move up a row: it sits under an incoming part or the part above it', () => {
+  for (const c of cases) {
+    const rows = rowsOf(c.layout);
+    const nodes = c.layout.nodes;
+    const edges = pathEdges(c);
+    for (const [id, point] of Object.entries(nodes)) {
+      const row = rows.indexOf(point.y);
+      if (row === 0) continue;
+      const above = rows[row - 1];
+      const fromEdge = edges.some((edge) => edge.target === id && nodes[edge.source]!.y === above);
+      const fromColumn = Object.values(nodes).some((n) => n.x === point.x && n.y === above);
+      assert.ok(fromEdge || fromColumn, `${c.name}: ${id} could move up a row`);
+    }
+  }
+});
+
+test('parts in one lane column keep the order of their first step', () => {
   for (const c of cases) {
     const first = firstStepIndex(c.path.steps);
-    const targets = new Set(pathEdges(c).map((edge) => edge.target));
-    const sources = Object.keys(c.layout.nodes).filter((id) => !targets.has(id));
-    for (const a of sources) {
-      for (const b of sources) {
-        if (first[a]! < first[b]!) {
-          assert.ok(c.layout.nodes[a]!.y <= c.layout.nodes[b]!.y, `${c.name}: ${b} above ${a}`);
+    const nodes = Object.entries(c.layout.nodes);
+    for (const [a, pa] of nodes) {
+      for (const [b, pb] of nodes) {
+        if (pa.x === pb.x && first[a]! < first[b]!) {
+          assert.ok(pa.y < pb.y, `${c.name}: ${b} above ${a}`);
         }
       }
     }
@@ -133,14 +153,12 @@ test('the Rollup sits below the Proposer on both submission tabs', () => {
   }
 });
 
-test('the Proposer sits below every part of an earlier step on both submission tabs', () => {
+test('the Rollup sits in the row right under the Bridge on both submission tabs', () => {
   for (const pathId of ['direct', 'retryable']) {
-    const c = cases.find((k) => k.flow.id === transactionSubmission.id && k.path.id === pathId)!;
-    const first = firstStepIndex(c.path.steps);
-    const proposer = c.layout.nodes.proposer!;
-    for (const [id, point] of Object.entries(c.layout.nodes)) {
-      if (first[id]! < first.proposer!) assert.ok(proposer.y > point.y, `${pathId}: ${id}`);
-    }
+    const l = layoutOf(transactionSubmission.id, pathId);
+    const rows = rowsOf(l);
+    const bridge = rows.indexOf(l.nodes['bridge-late']!.y);
+    assert.equal(rows.indexOf(l.nodes.rollup!.y), bridge + 1, pathId);
   }
 });
 
