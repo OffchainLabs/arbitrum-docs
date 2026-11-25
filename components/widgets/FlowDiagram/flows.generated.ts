@@ -75,6 +75,7 @@ export const THEME: Theme = {
   ink: '#eaf5ff',
   badge: '#12aaff',
   badgeText: '#0b1b2e',
+  attribution: '#4b5563',
   font: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
   dimmed: 0.35,
 };

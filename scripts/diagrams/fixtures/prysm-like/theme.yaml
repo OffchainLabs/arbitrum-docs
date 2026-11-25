@@ -8,5 +8,6 @@ chip: '#dddddd'
 ink: '#222222'
 badge: '#777777'
 badgeText: '#000000'
+attribution: '#555555'
 font: sans-serif
 dimmed: 0.35

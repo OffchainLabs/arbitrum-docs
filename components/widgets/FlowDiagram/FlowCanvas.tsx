@@ -59,9 +59,11 @@ export function FlowCanvas({ nodes, edges, onInit, onMove, panX = false }: FlowC
   const touch = panX
     ? String.raw`[&_.react-flow\_\_pane]:[touch-action:pan-y_pinch-zoom]!`
     : String.raw`[&_.react-flow\_\_pane]:touch-manipulation!`;
+  // React Flow colors the attribution link grey, with no variable to override.
+  const attribution = String.raw`[&_.react-flow\_\_attribution_a]:text-(--flow-ink)!`;
   return (
     <div
-      className={`absolute inset-0 ${touch}`}
+      className={`absolute inset-0 ${touch} ${attribution}`}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerEnd}

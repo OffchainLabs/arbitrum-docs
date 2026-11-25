@@ -71,6 +71,7 @@ const theme: Theme = {
   ink: '#777777',
   badge: '#888888',
   badgeText: '#999999',
+  attribution: '#aaaaaa',
   font: 'sans-serif',
   dimmed: 0.5,
 };

@@ -16,6 +16,7 @@ chip: '#666666'
 ink: '#777777'
 badge: '#888888'
 badgeText: '#999999'
+attribution: '#aaaaaa'
 font: sans-serif
 dimmed: 0.5
 `;
@@ -37,7 +38,7 @@ test('loads every theme key', async () => {
   assert.equal(theme.ink, '#777777');
   assert.equal(theme.font, 'sans-serif');
   assert.equal(theme.dimmed, 0.5);
-  assert.equal(Object.keys(theme).length, 12);
+  assert.equal(Object.keys(theme).length, 13);
 });
 
 test('rejects a missing theme key and names the file and the key', async () =>

@@ -163,6 +163,7 @@ const theme = z.strictObject({
   ink: text,
   badge: text,
   badgeText: text,
+  attribution: text,
   font: text,
   dimmed: z.number().min(0).max(1),
 });

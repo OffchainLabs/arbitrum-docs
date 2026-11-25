@@ -117,6 +117,7 @@ export interface Theme {
   ink: string;
   badge: string;
   badgeText: string;
+  attribution: string;
   font: string;
   dimmed: number;
 }
