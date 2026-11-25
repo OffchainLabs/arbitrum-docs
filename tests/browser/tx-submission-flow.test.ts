@@ -382,6 +382,14 @@ async function openDetail(page: Page) {
   return dialog;
 }
 
+test('the detail dialog frames the whole graph, so its step bar has no Show all', async () => {
+  await withFlow(WIDE, `#direct-step-${DETAIL_INDEX + 1}`, async (page) => {
+    const dialog = await openDetail(page);
+    await dialog.getByRole('button', { name: 'Next →' }).waitFor();
+    assert.equal(await dialog.getByRole('button', { name: 'Show all' }).count(), 0);
+  });
+});
+
 /** True when focus is on the Next button of the widget's own step bar. */
 async function focusIsOnNext(page: Page): Promise<boolean> {
   return page.evaluate(

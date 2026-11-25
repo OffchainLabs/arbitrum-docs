@@ -15,7 +15,9 @@ interface StepBarProps {
   // Docked: a plain row inside the widget's step dock, which carries the position and colors.
   docked?: boolean;
   onGo: (index: number) => void;
-  onShowAll: () => void;
+  // When set, the bar has a Show all button. Not in the detail dialog, which always shows the
+  // whole graph.
+  onShowAll?: () => void;
   // When set, the whole graph shows: Show all reads "Back to this step" and calls this.
   onShowStep?: () => void;
   // When set, Next stays active on the last step and calls this instead of stepping.
@@ -131,13 +133,15 @@ export function StepBar({
           <Key>→</Key> keys
         </span>
       )}
-      <button
-        type="button"
-        className={`px-1 py-1 text-xs whitespace-nowrap underline md:px-2 ${FOCUS}`}
-        onClick={onShowStep ?? onShowAll}
-      >
-        {onShowStep ? 'Back to this step' : 'Show all'}
-      </button>
+      {(onShowStep ?? onShowAll) && (
+        <button
+          type="button"
+          className={`px-1 py-1 text-xs whitespace-nowrap underline md:px-2 ${FOCUS}`}
+          onClick={onShowStep ?? onShowAll}
+        >
+          {onShowStep ? 'Back to this step' : 'Show all'}
+        </button>
+      )}
       {onToggleFullScreen && (
         <button
           type="button"
