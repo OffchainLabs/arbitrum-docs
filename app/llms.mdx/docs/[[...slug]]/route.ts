@@ -14,8 +14,16 @@ export async function GET(_req: Request, { params }: RouteContext<'/llms.mdx/doc
   const page = source.getPage(slug.slice(0, -1));
   if (!page) notFound();
 
+  // `proxy.ts` serves this body at the page's own URL when `Accept` prefers markdown, so that URL
+  // has two representations. The HTML page cannot say so (Next replaces `Vary` on an app page);
+  // declaring it here keeps a shared cache from handing the markdown to a browser. `headers()` in
+  // next.config.ts matches the request path, so a page URL gets its CORS header only from here.
   return new Response(await getLLMText(page), {
-    headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
+    headers: {
+      'Content-Type': 'text/markdown; charset=utf-8',
+      'Vary': 'Accept',
+      'Access-Control-Allow-Origin': '*',
+    },
   });
 }
 

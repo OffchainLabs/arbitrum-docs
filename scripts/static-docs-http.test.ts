@@ -54,14 +54,83 @@ const assertModifiedTimeMatchesBody = (html: string, label: string): void => {
 };
 
 test('built static docs routing', { skip: !baseUrl }, async (t) => {
-  await t.test('a docs page is prerendered HTML, whatever the Accept header', async () => {
-    for (const accept of ['text/html', 'text/markdown']) {
+  await t.test('a docs page is prerendered HTML unless Accept prefers markdown', async () => {
+    for (const accept of [
+      'text/html',
+      '*/*',
+      'text/plain',
+      'text/html, text/markdown;q=0.5',
+      'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    ]) {
       const response = await get(livePath, { headers: { accept } });
       assert.equal(response.status, 200, accept);
       assert.match(response.headers.get('cache-control') ?? '', /s-maxage=/, accept);
       assert.match(response.headers.get('content-type') ?? '', /text\/html/, accept);
       assert.match(documentOnly(await response.text()), /Copy Markdown/, accept);
     }
+  });
+
+  await t.test('a page URL serves its markdown mirror when Accept prefers markdown', async () => {
+    for (const [path, twin] of [
+      [livePath, `${livePath}.md`],
+      ['/', '/index.md'],
+      ['/oracles/DIA/dia', '/oracles/DIA/dia.md'],
+    ]) {
+      const expected = await (await get(twin)).text();
+      for (const accept of [
+        'text/markdown',
+        'text/markdown, text/html, */*',
+        'text/x-markdown',
+        'TEXT/MARKDOWN',
+      ]) {
+        const response = await get(path, { headers: { accept } });
+        const label = `${path} ${accept}`;
+        assert.equal(response.status, 200, label);
+        assert.match(response.headers.get('content-type') ?? '', /text\/markdown/, label);
+        assert.match(response.headers.get('vary') ?? '', /\bAccept\b/i, label);
+        assert.equal(response.headers.get('access-control-allow-origin'), '*', label);
+        assert.equal(await response.text(), expected, label);
+      }
+    }
+  });
+
+  await t.test('Accept negotiation leaves every other route alone', async () => {
+    const accept = 'text/markdown';
+    for (const [path, status, type] of [
+      ['/does-not-exist', 404, null],
+      ['/llms.txt', 200, /text\/plain/],
+      ['/sitemap.xml', 200, /xml/],
+      ['/icon.png', 200, /image\/png/],
+      [`/og/docs${livePath}/image.png`, 200, /image\/png/],
+      [`/preview${livePath}/preview.json`, 200, /json/],
+      [`${livePath}.md`, 200, /text\/markdown/],
+    ] as const) {
+      const response = await get(path, { headers: { accept } });
+      assert.equal(response.status, status, path);
+      if (type) assert.match(response.headers.get('content-type') ?? '', type, path);
+      await response.text();
+    }
+  });
+
+  await t.test('the home social card is an image when Accept prefers markdown', async () => {
+    const image = meta(await head('/'), 'og:image');
+    assert.ok(image, 'no og:image on /');
+    const url = new URL(image);
+    const response = await get(`${url.pathname}${url.search}`, {
+      headers: { accept: 'text/markdown, */*' },
+    });
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get('content-type') ?? '', /image\/png/);
+    await response.arrayBuffer();
+  });
+
+  await t.test('a redirect alias still redirects when Accept prefers markdown', async () => {
+    const response = await get('/welcome/get-started', {
+      headers: { accept: 'text/markdown' },
+      redirect: 'manual',
+    });
+    await response.text();
+    assert.equal(response.status, 308);
   });
 
   await t.test('both markdown URLs serve the same page as markdown', async () => {
