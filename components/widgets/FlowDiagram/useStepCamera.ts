@@ -1,7 +1,7 @@
 import type { Edge, Node, ReactFlowInstance } from '@xyflow/react';
 import { type RefObject, useEffect, useState } from 'react';
 
-import { CAMERA_BOTTOM, CAMERA_MARGIN, cameraViewport } from './camera.ts';
+import { CAMERA_BOTTOM, CAMERA_MARGIN, cameraViewport, overviewHeight } from './camera.ts';
 import { type Box, type FlowLayout, activeBoxes, nodeBox } from './layout.ts';
 import type { Step } from './model.ts';
 import { motionDuration } from './useStepNavigation.ts';
@@ -65,6 +65,9 @@ interface CameraOptions {
   dockRef?: RefObject<HTMLElement | null>;
   // Whether the reader moved the dock. A change refits the camera.
   dockMoved?: boolean;
+  // Show all grows the canvas to `overviewHeight`, so the whole graph reads at zoom 1. Off in
+  // the detail dialog, which sizes its canvas to the graph.
+  growOverview?: boolean;
 }
 
 /**
@@ -72,15 +75,22 @@ interface CameraOptions {
  * (crossing 768px, or rotating a phone) and each dock resize (a new step's caption, or details
  * opened), above the dock, and when the reader moves or puts back the dock. When `narrow`, a step
  * keeps zoom >= `PHONE_MIN_ZOOM`; a step too wide or tall for that centers on its first active
- * node instead. `showAll` fits the whole graph with no zoom floor until the step changes or
- * `showStep`; `overview` says it is on.
+ * node instead. `showAll` frames the whole graph until the step changes or `showStep`; `overview`
+ * says it is on. With `growOverview`, `grownHeight` is then the canvas height that shows it at
+ * zoom 1 (or the width fit, with the phone floor); otherwise the graph fits the canvas.
  */
 export function useStepCamera<N extends Node, E extends Edge>(
   instance: ReactFlowInstance<N, E> | null,
   layout: FlowLayout | null,
   step: Step,
   canvasRef: RefObject<HTMLDivElement | null>,
-  { inDialog = false, narrow = false, dockRef, dockMoved = false }: CameraOptions = {},
+  {
+    inDialog = false,
+    narrow = false,
+    dockRef,
+    dockMoved = false,
+    growOverview = false,
+  }: CameraOptions = {},
 ) {
   // A dialog has no key. Read at each frame, since the key strip wraps with the canvas width.
   const topRoom = (canvas: HTMLElement) => (inDialog ? 0 : keyRoom(canvas));
@@ -89,6 +99,8 @@ export function useStepCamera<N extends Node, E extends Edge>(
   // caption folding to its title, then frames the whole graph again, not the step.
   const [overviewStep, setOverviewStep] = useState<Step | null>(null);
   const overview = overviewStep === step;
+  const grow = overview && growOverview;
+  const [grownHeight, setGrownHeight] = useState<number | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -106,10 +118,21 @@ export function useStepCamera<N extends Node, E extends Edge>(
     const canvas = canvasRef.current;
     if (!instance || !layout || !canvas) return;
     const focus = nodeBox(layout.nodes[step.actors[0]!]!);
-    const fitAll = inDialog || overview;
-    const boxes = fitAll ? allBoxes(layout) : activeBoxes(layout, step);
+    // A grown overview keeps the phone zoom floor: the canvas is tall enough for it.
+    const fitAll = inDialog || (overview && !grow);
+    const boxes = inDialog || overview ? allBoxes(layout) : activeBoxes(layout, step);
     const options = { narrow, fitAll, bottom: dockRoom(dockRef?.current) };
-    const viewport = cameraViewport(boxes, focus, sizeOf(canvas), topRoom(canvas), options);
+    const top = topRoom(canvas);
+    let size = sizeOf(canvas);
+    if (grow) {
+      const height = overviewHeight(boxes, size.width, top, options);
+      setGrownHeight(height);
+      // The canvas grows on the next render; frame for its new height now.
+      size = { width: size.width, height: Math.max(size.height, height) };
+    } else {
+      setGrownHeight(null);
+    }
+    const viewport = cameraViewport(boxes, focus, size, top, options);
     void instance.setViewport(viewport, { duration: motionDuration() });
   }, [
     instance,
@@ -122,20 +145,15 @@ export function useStepCamera<N extends Node, E extends Edge>(
     dockRef,
     dockMoved,
     overview,
+    grow,
   ]);
 
   return {
-    // Frames the whole graph, and keeps it framed until the step changes or `showStep`.
-    showAll: () => {
-      const canvas = canvasRef.current;
-      if (!instance || !layout || !canvas) return;
-      setOverviewStep(step);
-      const boxes = allBoxes(layout);
-      const options = { narrow, fitAll: true, bottom: dockRoom(dockRef?.current) };
-      const viewport = cameraViewport(boxes, boxes[0]!, sizeOf(canvas), topRoom(canvas), options);
-      void instance.setViewport(viewport, { duration: motionDuration() });
-    },
+    // Frames the whole graph, and keeps it framed until the step changes or `showStep`. The
+    // effect above frames it, at the grown height when `growOverview`.
+    showAll: () => setOverviewStep(step),
     overview,
+    grownHeight: grow ? grownHeight : null,
     showStep: () => setOverviewStep(null),
   };
 }

@@ -20,7 +20,12 @@ import type { PathCount } from './navigation.ts';
 import { useDockPosition } from './useDockPosition.ts';
 import { useFlowLayouts } from './useFlowLayouts.ts';
 import { useStepCamera } from './useStepCamera.ts';
-import { SITE_HEADER, useStepNavigation } from './useStepNavigation.ts';
+import {
+  SITE_HEADER,
+  motionDuration,
+  siteHeaderPx,
+  useStepNavigation,
+} from './useStepNavigation.ts';
 
 const NARROW_QUERY = '(max-width: 767px)';
 const ESC_HINT_MS = 3000;
@@ -84,11 +89,42 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
   const layout = layouts?.[path] ?? null;
   const dock = useDockPosition(canvasRef, barRef);
   const dockMoved = dock.offset !== null;
-  const { showAll, overview, showStep } = useStepCamera(instance, layout, step, canvasRef, {
-    narrow,
-    dockRef: barRef,
-    dockMoved,
-  });
+  const { showAll, overview, grownHeight, showStep } = useStepCamera(
+    instance,
+    layout,
+    step,
+    canvasRef,
+    { narrow, dockRef: barRef, dockMoved, growOverview: true },
+  );
+  // From 768px the content column is too narrow for the whole graph, so Show all also enters
+  // full screen, where the graph has the screen width. Leaving full screen then ends Show all.
+  const showAllInFullScreen = useRef(false);
+  const showAllWide = () => {
+    if (!narrow && !fullScreen) {
+      showAllInFullScreen.current = true;
+      dock.reset();
+      setFullScreen(true);
+    }
+    showAll();
+  };
+  useEffect(() => {
+    if (fullScreen || !showAllInFullScreen.current) return;
+    showAllInFullScreen.current = false;
+    showStep();
+  }, [fullScreen, showStep]);
+  const backToStep = () => {
+    if (showAllInFullScreen.current) {
+      setFullScreen(false);
+      return;
+    }
+    showStep();
+    // The canvas shrinks back from the grown overview: bring its top into view when it went off
+    // screen while the reader scrolled down the whole graph.
+    const canvas = canvasRef.current;
+    if (!fullScreen && canvas && canvas.getBoundingClientRect().top < siteHeaderPx(canvas)) {
+      canvas.scrollIntoView({ block: 'start', behavior: motionDuration() ? 'smooth' : 'auto' });
+    }
+  };
   // The open detail, kept apart from `step`: it stays mounted while it fades out over the next step.
   const [openDetail, setOpenDetail] = useState<StepDetail | null>(null);
   const [detailSeen, setDetailSeen] = useState(false);
@@ -181,6 +217,9 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
     if (event.key === 'ArrowLeft') goTo(index - 1);
   };
 
+  const baseHeight = `max(${CANVAS_MIN}px, min(${narrow ? CANVAS_NARROW : CANVAS_WIDE}px, calc(100svh - ${SITE_HEADER})))`;
+  // Show all grows the canvas, never shrinks it, so the whole graph reads at zoom 1.
+  const canvasHeight = grownHeight ? `max(${baseHeight}, ${grownHeight}px)` : baseHeight;
   const canvas = (
     <div
       ref={canvasRef}
@@ -192,9 +231,9 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
       )}
       style={{
         ...CANVAS_STYLE,
-        height: fullScreen
-          ? undefined
-          : `max(${CANVAS_MIN}px, min(${narrow ? CANVAS_NARROW : CANVAS_WIDE}px, calc(100svh - ${SITE_HEADER})))`,
+        height: fullScreen ? undefined : canvasHeight,
+        // In full screen the grown canvas overflows the screen, and the body scrolls.
+        minHeight: fullScreen && grownHeight ? grownHeight : undefined,
         // No site header shows above a full screen canvas, and goTo reads this margin as its
         // height.
         scrollMarginTop: fullScreen ? 0 : SITE_HEADER,
@@ -264,47 +303,46 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
           started={started}
           docked
           onGo={goTo}
-          onShowAll={showAll}
+          onShowAll={showAllWide}
+          onShowStep={overview ? backToStep : undefined}
           fullScreen={fullScreen}
           onToggleFullScreen={() => {
             dock.reset();
             setFullScreen((on) => !on);
           }}
         />
-        {/* touch-none: a drag on the grip moves the dock, not the page. */}
-        <button
-          type="button"
-          aria-label="Move the step caption"
-          aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight Home"
-          title="Drag to move. Double-click to put it back."
-          className={[
-            'order-first flex h-4 w-full shrink-0 items-center justify-center',
-            'cursor-grab touch-none active:cursor-grabbing focus-visible:outline-(--flow-focus)',
-          ].join(' ')}
-          {...dock.gripProps}
-        >
-          <span
-            aria-hidden="true"
-            className="h-1 w-10 rounded-full"
-            style={{ background: THEME.connector }}
-          />
-        </button>
-        {/* The caption scrolls inside a capped height, so it never takes over the canvas. */}
-        <div
-          className={[
-            '-order-1 overflow-y-auto',
-            fullScreen ? 'max-h-[35dvh]' : 'max-h-[160px] md:max-h-[240px]',
-          ].join(' ')}
-        >
-          <StepCard
-            step={step}
-            labels={labels}
-            caption
-            track={track}
-            collapsed={overview}
-            onShowStep={showStep}
-          />
-        </div>
+        {/* Show all leaves the step bar alone in the dock, so the dock covers less of the graph. */}
+        {!overview && (
+          <>
+            {/* touch-none: a drag on the grip moves the dock, not the page. */}
+            <button
+              type="button"
+              aria-label="Move the step caption"
+              aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight Home"
+              title="Drag to move. Double-click to put it back."
+              className={[
+                'order-first flex h-4 w-full shrink-0 items-center justify-center',
+                'cursor-grab touch-none active:cursor-grabbing focus-visible:outline-(--flow-focus)',
+              ].join(' ')}
+              {...dock.gripProps}
+            >
+              <span
+                aria-hidden="true"
+                className="h-1 w-10 rounded-full"
+                style={{ background: THEME.connector }}
+              />
+            </button>
+            {/* The caption scrolls inside a capped height, so it never takes over the canvas. */}
+            <div
+              className={[
+                '-order-1 overflow-y-auto',
+                fullScreen ? 'max-h-[35dvh]' : 'max-h-[160px] md:max-h-[240px]',
+              ].join(' ')}
+            >
+              <StepCard step={step} labels={labels} caption track={track} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -318,8 +356,9 @@ export default function FlowDiagramView({ flowId }: { flowId: FlowId }) {
     </>
   );
 
-  // In full screen the canvas fills the space under the tabs.
-  const bodyClass = fullScreen ? 'flex min-h-0 flex-1 flex-col' : undefined;
+  // In full screen the canvas fills the space under the tabs, and scrolls when Show all grows it.
+  // The dock sticks to the bottom of this scroll area.
+  const bodyClass = fullScreen ? 'flex min-h-0 flex-1 flex-col overflow-y-auto' : undefined;
 
   return (
     // overflow-clip, not overflow-hidden: hidden creates a scroll container and breaks the bar.

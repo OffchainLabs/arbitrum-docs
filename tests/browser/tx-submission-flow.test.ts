@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { type Browser, type BrowserContextOptions, type Page, chromium } from 'playwright';
 
+import { PHONE_MIN_ZOOM } from '../../components/widgets/FlowDiagram/camera.ts';
 import { transactionSubmission } from '../../components/widgets/FlowDiagram/flows.generated.ts';
 import { type ResolvedPath, flowPaths } from '../../components/widgets/FlowDiagram/model.ts';
 import { CANVAS, cardTitle, openFlow, settle } from './flow-page.ts';
@@ -151,18 +152,32 @@ test('a step that lights no edge shows its number on its node', async () => {
   });
 });
 
-test('Show all folds the caption to its title, and "Back to this step" unfolds it', async () => {
+test('Show all at 1280×800 opens full screen with no caption, and "Back to this step" leaves it', async () => {
   await withFlow(WIDE, '#direct-step-3', async (page) => {
     const dock = page.locator('[data-step-dock]');
     const text = dock.getByText(/^When the round/);
     assert.ok(await text.isVisible());
     await page.getByRole('button', { name: 'Show all' }).click();
     await text.waitFor({ state: 'detached' });
+    await dock.getByRole('button', { name: 'Exit full screen' }).waitFor();
     await settle(page);
     const shot = await frameShot(page, []);
+    assert.ok(shot.zoom >= PHONE_MIN_ZOOM, `zoom ${shot.zoom}`);
     for (const node of shot.nodes) assert.ok(inside(node.rect, shot.canvas), node.id);
     await dock.getByRole('button', { name: 'Back to this step' }).click();
     await text.waitFor();
+    await dock.getByRole('button', { name: 'Full screen' }).waitFor();
+  });
+});
+
+test('Escape ends a Show all that opened full screen', async () => {
+  await withFlow(WIDE, '#direct-step-3', async (page) => {
+    const dock = page.locator('[data-step-dock]');
+    await page.getByRole('button', { name: 'Show all' }).click();
+    await dock.getByRole('button', { name: 'Exit full screen' }).waitFor();
+    await page.keyboard.press('Escape');
+    await dock.getByText(/^When the round/).waitFor();
+    assert.ok(await dock.getByRole('button', { name: 'Show all' }).isVisible());
   });
 });
 
@@ -239,6 +254,11 @@ interface Rect {
   right: number;
   top: number;
   bottom: number;
+}
+
+/** True when `inner` is inside the height of `outer`. A whole-graph view on a phone pans sideways. */
+function withinHeight(inner: Rect, outer: Rect): boolean {
+  return inner.top >= outer.top - 0.5 && inner.bottom <= outer.bottom + 0.5;
 }
 
 function inside(inner: Rect, outer: Rect): boolean {
@@ -334,15 +354,16 @@ test('at 375×812 each step of both tabs frames at zoom ≥0.6, first node insid
   });
 });
 
-test('after Show all at 375×812 every node is inside the canvas', async () => {
+test('after Show all at 375×812 every node is inside the canvas height, at the zoom floor', async () => {
   for (const path of PATHS) {
     await withFlow(PHONE, `#${path.id}-step-1`, async (page) => {
       await page.getByRole('button', { name: 'Show all' }).click();
       await settle(page);
       const shot = await frameShot(page, []);
       assert.equal(shot.nodes.length, pathActors(path).size, path.id);
+      assert.ok(shot.zoom >= PHONE_MIN_ZOOM, `${path.id} zoom ${shot.zoom}`);
       for (const node of shot.nodes) {
-        assert.ok(inside(node.rect, shot.canvas), `${path.id} ${node.id} zoom ${shot.zoom}`);
+        assert.ok(withinHeight(node.rect, shot.canvas), `${path.id} ${node.id} zoom ${shot.zoom}`);
       }
     });
   }

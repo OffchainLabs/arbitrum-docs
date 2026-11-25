@@ -67,9 +67,6 @@ interface StepCardProps {
   caption?: boolean;
   // In a caption, replaces the step's own finality badge, so every step shows the ladder.
   track?: FinalityTrackData | undefined;
-  // Show all is on: the caption folds to its track and title, with a way back to the step.
-  collapsed?: boolean;
-  onShowStep?: () => void;
 }
 
 type Tab = 'overview' | 'failure';
@@ -80,14 +77,7 @@ type Tab = 'overview' | 'failure';
  * it fails. The content swaps in place, so it never opens below the caption's capped height. A card
  * below the canvas in the detail dialog; a caption above the step bar in the widget.
  */
-export function StepCard({
-  step,
-  labels,
-  caption = false,
-  track,
-  collapsed = false,
-  onShowStep,
-}: StepCardProps) {
+export function StepCard({ step, labels, caption = false, track }: StepCardProps) {
   const id = useId();
   const tabRefs = useRef<Record<Tab, HTMLButtonElement | null>>({ overview: null, failure: null });
   // Kept across steps, so a reader can walk the failure modes. A step without one shows its text.
@@ -126,94 +116,85 @@ export function StepCard({
       <h3 className={caption ? 'text-base font-semibold' : 'text-lg font-semibold'}>
         {step.title}
       </h3>
-      {collapsed && (
-        <button type="button" className="mt-1 text-[13px] underline" onClick={onShowStep}>
-          Back to this step
-        </button>
+      {step.failure && (
+        <div
+          role="tablist"
+          aria-label={`${step.title}: details`}
+          onKeyDown={onTabKeyDown}
+          className={`${TAB_LIST} ${tabState.list}`}
+        >
+          {tabs.map(([key, label]) => (
+            <button
+              key={key}
+              ref={(element) => {
+                tabRefs.current[key] = element;
+              }}
+              type="button"
+              role="tab"
+              id={`${id}-${key}-tab`}
+              aria-controls={`${id}-panel`}
+              aria-selected={tab === key}
+              tabIndex={tab === key ? 0 : -1}
+              onClick={() => setSelected(key)}
+              className={`${TAB_CLASS} ${tab === key ? tabState.selected : tabState.idle}`}
+              style={caption && tab === key ? { borderBottomColor: THEME.badge } : undefined}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       )}
-      {!collapsed && (
-        <>
-          {step.failure && (
-            <div
-              role="tablist"
-              aria-label={`${step.title}: details`}
-              onKeyDown={onTabKeyDown}
-              className={`${TAB_LIST} ${tabState.list}`}
-            >
-              {tabs.map(([key, label]) => (
-                <button
-                  key={key}
-                  ref={(element) => {
-                    tabRefs.current[key] = element;
-                  }}
-                  type="button"
-                  role="tab"
-                  id={`${id}-${key}-tab`}
-                  aria-controls={`${id}-panel`}
-                  aria-selected={tab === key}
-                  tabIndex={tab === key ? 0 : -1}
-                  onClick={() => setSelected(key)}
-                  className={`${TAB_CLASS} ${tab === key ? tabState.selected : tabState.idle}`}
-                  style={caption && tab === key ? { borderBottomColor: THEME.badge } : undefined}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          )}
 
-          <div
-            id={`${id}-panel`}
-            role={step.failure ? 'tabpanel' : undefined}
-            aria-labelledby={step.failure ? `${id}-${tab}-tab` : undefined}
-          >
-            {tab === 'overview' && (
-              <p className={caption ? 'mt-1 leading-snug' : 'mt-1'}>
-                {withCode(fillVars(step.text, vars), codeClass)}
-              </p>
-            )}
-            {tab === 'failure' && step.failure && (
-              <div className={`grid gap-1.5 ${caption ? 'mt-1.5 leading-snug' : 'mt-2'}`}>
-                <Detail term={labels.symptoms} value={withCode(step.failure.symptoms, codeClass)} />
-                <Detail term={labels.impact} value={withCode(step.failure.impact, codeClass)} />
-                <Detail term={labels.recovery} value={withCode(step.failure.recovery, codeClass)} />
-              </div>
-            )}
+      <div
+        id={`${id}-panel`}
+        role={step.failure ? 'tabpanel' : undefined}
+        aria-labelledby={step.failure ? `${id}-${tab}-tab` : undefined}
+      >
+        {tab === 'overview' && (
+          <p className={caption ? 'mt-1 leading-snug' : 'mt-1'}>
+            {withCode(fillVars(step.text, vars), codeClass)}
+          </p>
+        )}
+        {tab === 'failure' && step.failure && (
+          <div className={`grid gap-1.5 ${caption ? 'mt-1.5 leading-snug' : 'mt-2'}`}>
+            <Detail term={labels.symptoms} value={withCode(step.failure.symptoms, codeClass)} />
+            <Detail term={labels.impact} value={withCode(step.failure.impact, codeClass)} />
+            <Detail term={labels.recovery} value={withCode(step.failure.recovery, codeClass)} />
           </div>
+        )}
+      </div>
 
-          {(step.docs || step.code || showFlag) && (
-            <p
-              className={[
-                'flex flex-wrap items-baseline gap-x-4 gap-y-1',
-                caption ? 'mt-2 text-[13px]' : 'mt-3 text-sm',
-              ].join(' ')}
-            >
-              {step.docs && (
-                <a className="underline" href={step.docs.href}>
-                  {step.docs.label}
-                </a>
-              )}
-              {step.code && (
-                <span>
-                  Code:{' '}
-                  <a
-                    className="underline"
-                    href={codeUrl(step.code, PROJECT.repos, vars)}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {step.code.path}
-                  </a>
-                </span>
-              )}
-              {showFlag && (
-                <span>
-                  Flag: <code className={codeClass}>{step.flag}</code>
-                </span>
-              )}
-            </p>
+      {(step.docs || step.code || showFlag) && (
+        <p
+          className={[
+            'flex flex-wrap items-baseline gap-x-4 gap-y-1',
+            caption ? 'mt-2 text-[13px]' : 'mt-3 text-sm',
+          ].join(' ')}
+        >
+          {step.docs && (
+            <a className="underline" href={step.docs.href}>
+              {step.docs.label}
+            </a>
           )}
-        </>
+          {step.code && (
+            <span>
+              Code:{' '}
+              <a
+                className="underline"
+                href={codeUrl(step.code, PROJECT.repos, vars)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {step.code.path}
+              </a>
+            </span>
+          )}
+          {showFlag && (
+            <span>
+              Flag: <code className={codeClass}>{step.flag}</code>
+            </span>
+          )}
+        </p>
       )}
     </div>
   );

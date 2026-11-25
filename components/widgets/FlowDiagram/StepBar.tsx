@@ -16,6 +16,8 @@ interface StepBarProps {
   docked?: boolean;
   onGo: (index: number) => void;
   onShowAll: () => void;
+  // When set, the whole graph shows: Show all reads "Back to this step" and calls this.
+  onShowStep?: () => void;
   // When set, Next stays active on the last step and calls this instead of stepping.
   onFinish?: () => void;
   // The arrow key hint. Off in the detail dialog, where its width would widen the dialog past
@@ -48,6 +50,7 @@ export function StepBar({
   barRef,
   onGo,
   onShowAll,
+  onShowStep,
   onFinish,
   docked = false,
   keyHint = true,
@@ -131,9 +134,9 @@ export function StepBar({
       <button
         type="button"
         className={`px-1 py-1 text-xs whitespace-nowrap underline md:px-2 ${FOCUS}`}
-        onClick={onShowAll}
+        onClick={onShowStep ?? onShowAll}
       >
-        Show all
+        {onShowStep ? 'Back to this step' : 'Show all'}
       </button>
       {onToggleFullScreen && (
         <button

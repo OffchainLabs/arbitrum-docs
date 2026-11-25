@@ -6,6 +6,7 @@ import {
   CAMERA_MARGIN,
   PHONE_MIN_ZOOM,
   cameraViewport,
+  overviewHeight,
 } from '../../components/widgets/FlowDiagram/camera.ts';
 import type { Box } from '../../components/widgets/FlowDiagram/layout.ts';
 
@@ -82,4 +83,46 @@ test('a small step frames at zoom 1, centered in the frame', () => {
   assert.equal(screenCenterX(single[0]!, viewport), PHONE.width / 2);
   const frameHeight = PHONE.height - TOP - CAMERA_BOTTOM;
   assert.equal(viewport.y + 136, TOP + frameHeight / 2);
+});
+
+// A column of five nodes, 1480 tall: too tall for any canvas at zoom 1.
+const COLUMN = [0, 1, 2, 3, 4].map((row) => node(0, row * 352));
+const DESKTOP_WIDTH = 900;
+
+test('the overview height frames a tall graph at zoom 1 when it fits the width', () => {
+  const height = overviewHeight(COLUMN, DESKTOP_WIDTH, TOP, { narrow: false });
+  assert.equal(height, TOP + CAMERA_BOTTOM + 2 * CAMERA_MARGIN + 1480);
+  const canvas = { width: DESKTOP_WIDTH, height };
+  const viewport = cameraViewport(COLUMN, COLUMN[0]!, canvas, TOP, {
+    narrow: false,
+    fitAll: false,
+  });
+  assert.equal(viewport.zoom, 1);
+});
+
+test('the overview height of a graph wider than the canvas uses the width fit', () => {
+  const height = overviewHeight(ROW, TABLET.width, TOP, { narrow: false });
+  const zoom = (TABLET.width - 2 * CAMERA_MARGIN) / 1100;
+  assert.equal(height, Math.ceil(TOP + CAMERA_BOTTOM + 2 * CAMERA_MARGIN + 72 * zoom));
+  const canvas = { width: TABLET.width, height };
+  const viewport = cameraViewport(ROW, ROW[0]!, canvas, TOP, { narrow: false, fitAll: false });
+  assert.ok(Math.abs(viewport.zoom - zoom) < 1e-9);
+});
+
+test('on a narrow screen the overview height keeps the phone zoom floor', () => {
+  // 1100 wide and 1072 tall: at 375px the width fit is under the floor.
+  const grid = [...ROW, node(0, 1000)];
+  const height = overviewHeight(grid, PHONE.width, TOP, { narrow: true });
+  assert.equal(height, Math.ceil(TOP + CAMERA_BOTTOM + 2 * CAMERA_MARGIN + 1072 * PHONE_MIN_ZOOM));
+  const canvas = { width: PHONE.width, height };
+  const viewport = cameraViewport(grid, grid[0]!, canvas, TOP, STEP);
+  assert.equal(viewport.zoom, PHONE_MIN_ZOOM);
+});
+
+test('the overview height leaves room for the dock it is given', () => {
+  const plain = overviewHeight(COLUMN, DESKTOP_WIDTH, TOP, { narrow: false });
+  assert.equal(
+    overviewHeight(COLUMN, DESKTOP_WIDTH, TOP, { narrow: false, bottom: 100 }),
+    plain - CAMERA_BOTTOM + 100,
+  );
 });

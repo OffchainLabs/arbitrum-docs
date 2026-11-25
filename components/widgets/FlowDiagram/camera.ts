@@ -31,6 +31,32 @@ function axisOffset(
   return Math.min(highest, Math.max(lowest, start + size / 2 - focus * zoom));
 }
 
+function bounds(boxes: Box[]) {
+  return {
+    minX: Math.min(...boxes.map((box) => box.x)),
+    minY: Math.min(...boxes.map((box) => box.y)),
+    maxX: Math.max(...boxes.map((box) => box.x + box.width)),
+    maxY: Math.max(...boxes.map((box) => box.y + box.height)),
+  };
+}
+
+/**
+ * The canvas height that frames `boxes` at zoom 1, or at the zoom that fits `width` when the
+ * boxes are wider. When `narrow`, zoom stays >= `PHONE_MIN_ZOOM` and the reader drags sideways.
+ * `cameraViewport` with `fitAll: false` frames the boxes in a canvas of this height at that zoom.
+ */
+export function overviewHeight(
+  boxes: Box[],
+  width: number,
+  top: number,
+  { narrow, bottom = CAMERA_BOTTOM }: { narrow: boolean; bottom?: number },
+): number {
+  const { minX, minY, maxX, maxY } = bounds(boxes);
+  const fit = Math.min(1, (width - 2 * CAMERA_MARGIN) / (maxX - minX));
+  const zoom = narrow ? Math.max(fit, PHONE_MIN_ZOOM) : fit;
+  return Math.ceil(top + bottom + 2 * CAMERA_MARGIN + (maxY - minY) * zoom);
+}
+
 /**
  * The viewport that frames `boxes` at zoom <= 1 inside `canvas`, between `top` (room for the key)
  * and `bottom` (room for the step bar or dock). When `narrow` and not `fitAll`, zoom stays
@@ -44,10 +70,7 @@ export function cameraViewport(
   top: number,
   { narrow, fitAll, bottom = CAMERA_BOTTOM }: { narrow: boolean; fitAll: boolean; bottom?: number },
 ): Viewport {
-  const minX = Math.min(...boxes.map((box) => box.x));
-  const minY = Math.min(...boxes.map((box) => box.y));
-  const maxX = Math.max(...boxes.map((box) => box.x + box.width));
-  const maxY = Math.max(...boxes.map((box) => box.y + box.height));
+  const { minX, minY, maxX, maxY } = bounds(boxes);
   const frameHeight = canvas.height - top - bottom;
   const fit = Math.min(
     1,

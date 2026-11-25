@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
 import { type Browser, type BrowserContextOptions, type Page, chromium } from 'playwright';
 
+import { PHONE_MIN_ZOOM } from '../../components/widgets/FlowDiagram/camera.ts';
 import {
   PROJECT,
   transactionLifecycle,
@@ -122,6 +123,11 @@ function activeBoxes(shot: Snapshot, stepIndex: number): Rect[] {
 
 function intersects(a: Rect, b: Rect): boolean {
   return a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+}
+
+/** True when `inner` is inside the height of `outer`. A whole-graph view on a phone pans sideways. */
+function withinHeight(inner: Rect, outer: Rect): boolean {
+  return inner.top >= outer.top - 0.5 && inner.bottom <= outer.bottom + 0.5;
 }
 
 function inside(inner: Rect, outer: Rect): boolean {
@@ -418,27 +424,32 @@ test('after Show all at 1280×800 no node is under the key strip', async () => {
   });
 });
 
-test('after Show all at 375×812 the step bar covers no node', async () => {
+// Show all grows the canvas past the screen, and the dock sticks to the screen bottom while the
+// reader scrolls. At the canvas bottom it sits below the graph.
+test('after Show all at 375×812 the step bar covers no node at the canvas bottom', async () => {
   await withFlow(PHONE, '', async (page) => {
     await next(page);
     await page.getByRole('button', { name: 'Show all' }).click();
     await settle(page);
+    await page.locator(CANVAS).evaluate((canvas) => canvas.scrollIntoView({ block: 'end' }));
+    await settle(page);
     const shot = await snapshot(page);
     for (const node of shot.nodes) {
       assert.ok(!intersects(node.rect, shot.bar), node.id);
-      assert.ok(inside(node.rect, shot.canvas), node.id);
+      assert.ok(withinHeight(node.rect, shot.canvas), node.id);
     }
   });
 });
 
-test('after Show all at 375×812 every node is inside the canvas', async () => {
+test('after Show all at 375×812 every node is inside the canvas height, at the zoom floor', async () => {
   await withFlow(PHONE, '', async (page) => {
     await page.getByRole('button', { name: 'Show all' }).click();
     await settle(page);
     const shot = await snapshot(page);
     assert.equal(shot.nodes.length, transactionLifecycle.actors.length);
+    assert.ok(shot.zoom >= PHONE_MIN_ZOOM, `zoom ${shot.zoom}`);
     for (const node of shot.nodes) {
-      assert.ok(inside(node.rect, shot.canvas), `${node.id} zoom ${shot.zoom}`);
+      assert.ok(withinHeight(node.rect, shot.canvas), `${node.id} zoom ${shot.zoom}`);
     }
   });
 });
