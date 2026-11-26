@@ -18,7 +18,17 @@ Nitro stores state history as reverse diffs in the cold database, also called th
 
 ### `--execution.caching.archive`
 
-Enables archive mode. Under PathDB, archive mode also builds the state history index, an extra dataset Nitro persists in the hot database (<Term id="pebble">Pebble</Term>). That index is what allows RPC calls to read state older than `pathdb-max-diff-layers + 1` blocks from the head.
+Enables archive mode. Under PathDB, archive mode also builds the state history index, an extra dataset Nitro persists in the hot database (<Term id="pebble">Pebble</Term>). That index is what allows RPC calls to read state older than `pathdb-max-diff-layers + 1` blocks from the head. The exception is `eth_getProof`, which also needs `--execution.caching.trienode-history`, described below.
+
+### `--execution.caching.trienode-history`
+
+Sets how many recent blocks of trienode history Nitro retains. `eth_getProof` needs trienode history to prove historical state, as defined above. The default, `-1`, turns trienode history off, and `0` keeps it with no limit. The flag is available from Nitro v3.12.0. Like the state history index, trienode history serves RPC calls only when `--execution.caching.archive` is also set.
+
+**Archive mode alone does not let `eth_getProof` read historical state.** Without trienode history, an archive node on PathDB still serves `eth_call`, `eth_getBalance` and `eth_getStorageAt` for old blocks. For those same blocks, `eth_getProof` fails with `historical state … is not available`.
+
+Nitro starts recording trienode history at the startup that turns it on. It does not build trienode history for earlier blocks, so the window you can prove grows from that block onward.
+
+If you turn trienode history off, let the node process blocks, and then turn it on again, Nitro exits at startup with `gap between state [#…] and trienode history [#…]`. To turn it back on, stop the node, delete the `trienode` folder in the node's ancient directory (`l2chaindata/ancient/trienode` unless you set `--persistent.ancient`), and start the node.
 
 ### `--execution.caching.pathdb-max-diff-layers`
 
