@@ -51,7 +51,12 @@ peerDependencyRules:
 #   pattern expansion. 9.x and 10.x have no patched release. It comes from eslint (10.2.6) and
 #   @trivago/prettier-plugin-sort-imports (9.0.9), both dev tools that only match patterns from
 #   this repo's own config. Remove the entry once both parents allow minimatch 11.
+# - GHSA-fc5q-39xc-vjpf (high): picomatch 4.0.7 and below, a ReDoS (regular expression denial of
+#   service) through repeated extglobs. 4.0.7 is the latest release. It comes from fumadocs-core
+#   (through tinyglobby), fumadocs-mdx, vite and vitest, which match glob patterns that this
+#   repo writes, not visitor input. Remove the entry once a patched picomatch ships.
 auditConfig:
   ignoreGhsas:
     - GHSA-848j-6mx2-7j84
     - GHSA-g3hv-75wg-m249
+    - GHSA-fc5q-39xc-vjpf

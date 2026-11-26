@@ -69,12 +69,43 @@ test('the markdown and llms routes are readable cross-origin, and match the prox
   ]) {
     assert.ok(!hasCors(path), `${path} must not be readable cross-origin`);
   }
-  // proxy.ts tracks exactly these paths; the two lists describe the same surface.
+  // proxy.ts tracks exactly these paths; the two lists describe the same surface. The matcher's
+  // object entry, the `Accept`-gated page paths, is not part of this list.
   const proxy = readFileSync(new URL('../../proxy.ts', import.meta.url), 'utf8');
-  const matcher = /matcher:\s*\[([^\]]*)\]/.exec(proxy)?.[1] ?? '';
-  const tracked = [...matcher.matchAll(/'([^']*)'/g)].map((m) => m[1].replace(/\\\\/g, '\\'));
-  assert.deepEqual(tracked, [...LLM_SURFACE_SOURCES]);
+  assert.deepEqual(matcherStrings(proxy), [...LLM_SURFACE_SOURCES]);
 });
+
+test('matcherStrings reads every string entry, before and after an object entry', () => {
+  const proxy = `export const config = {
+  matcher: [
+    '/a',
+    { source: '/(x)', has: [{ type: 'header', key: 'k', value: 'v' }] },
+    '/b\\\\.md',
+  ],
+};`;
+  assert.deepEqual(matcherStrings(proxy), ['/a', '/b\\.md']);
+});
+
+/** The top-level string entries of proxy.ts's `config.matcher`, skipping object entries. */
+function matcherStrings(proxy: string): string[] {
+  const start = proxy.indexOf('[', proxy.indexOf('matcher:'));
+  assert.ok(start >= 0, 'proxy.ts has a matcher array');
+  const entries: string[] = [];
+  let depth = 0;
+  for (let i = start + 1; i < proxy.length; i += 1) {
+    const char = proxy[i];
+    if (char === "'") {
+      const end = proxy.indexOf("'", i + 1);
+      if (depth === 0) entries.push(proxy.slice(i + 1, end).replace(/\\\\/g, '\\'));
+      i = end;
+    } else if (char === '{' || char === '[') depth += 1;
+    else if (char === '}' || char === ']') {
+      if (depth === 0) return entries;
+      depth -= 1;
+    }
+  }
+  assert.fail('the matcher array is not closed');
+}
 
 // Compare complete CSP source expressions within their directives, not URL substrings.
 const directivesOf = (csp: string): Map<string, string[]> =>
@@ -93,11 +124,21 @@ test('the CSP allows the origins the site talks to', () => {
     'https://us-assets.i.posthog.com',
     'https://api.inkeep.com',
     'https://api.io.inkeep.com',
+    'https://cdn-cookieyes.com',
+    'https://*.cookieyes.com',
+    'https://*.hs-banner.com',
+    'https://*.hubspot.com',
   ]);
   assert.deepEqual(directives.get('script-src'), [
     "'self'",
     "'unsafe-inline'",
     'https://us-assets.i.posthog.com',
+    'https://cdn-cookieyes.com',
+    'https://*.hs-scripts.com',
+    'https://*.hs-analytics.net',
+    'https://*.hs-banner.com',
+    'https://js.hubspot.com',
+    'https://js.hsadspixel.net',
   ]);
   assert.deepEqual(directives.get('frame-ancestors'), ["'none'"]);
   assert.deepEqual(directives.get('style-src'), ["'self'", "'unsafe-inline'"]);

@@ -45,6 +45,12 @@ On RPC calls that return transactions, the following fields are added to the ret
 
 - `eth_sendRawTransactionConditional` submits a raw signed transaction with extra preconditions that the sequencer must verify before accepting it. If any condition fails, the transaction is rejected with JSON-RPC error -32003 (rejected). For the parameters and the response, see [`eth_sendRawTransactionConditional`](/json-rpc-spike/eth_sendRawTransactionConditional).
 
+<Callout type="warn" title="Deprecated">
+
+Offchain Labs plans to disable `eth_sendRawTransactionConditional` at the Arbitrum One and Arbitrum Nova sequencer endpoints on January 17, 2027. To learn what changes and what to do, read the [notice: Deprecation of eth_sendRawTransactionConditional](/notices/eth-send-raw-transaction-conditional-deprecation-notice).
+
+</Callout>
+
 | `ConditionalOptions` payload        | Description                                                                                                                                                                               |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `knownAccounts`                     | map of address → (storageRootHash { `slot: expectedValue` }). The transaction is rejected unless each account's storage root matches, or each listed slot still holds the expected value. |

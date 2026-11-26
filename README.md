@@ -101,6 +101,7 @@ or a documented fallback.
 | `NEXT_PUBLIC_SITE_URL`        | `metadataBase`, `app/sitemap.ts`, `app/robots.ts`, request tracking                 | `http://localhost:3000` locally; a **production build fails**                                                                                                           |
 | `NEXT_PUBLIC_POSTHOG_KEY`     | page feedback (`lib/posthog.ts`), web analytics, and request tracking in `proxy.ts` | feedback submissions and tracking events are dropped with a server-side log                                                                                             |
 | `NEXT_PUBLIC_VERCEL_ENV`      | the production gate on web analytics and the Inkeep event bridge                    | neither fires; Vercel sets this one, you never do                                                                                                                       |
+| `NEXT_PUBLIC_COOKIEYES_ID`    | the CookieYes consent banner (`components/analytics/cookie-consent.tsx`)            | no banner and no HubSpot; PostHog counts every visit cookieless. Scope the production website key to Production and the staging key to Preview and Development          |
 | `VERCEL_DEEP_CLONE`           | `hasFullGitHistory()` in `source.config.ts`, which gates the last-modified dates    | a shallow Vercel clone resolves no dates: no "Last updated" line, no `<lastmod>`, no `article:modified_time`, and nothing warns. Set it to `true` on the Vercel project |
 
 Set the PostHog token the same way as the Inkeep key, in a local `.env` (gitignored):
@@ -114,9 +115,11 @@ NEXT_PUBLIC_POSTHOG_KEY=phc_<posthog-project-token>
 though two of its three consumers read it on the server. Set it on Vercel for Preview and
 Production.
 
-Page feedback needs the key locally. Web analytics does not fire locally or on a preview deployment
-no matter what you set, because `components/analytics/posthog-provider.tsx` also requires
-`NEXT_PUBLIC_VERCEL_ENV` to be `production` and only Vercel sets that. Request tracking is gated the
+Page feedback needs the key locally. Web analytics and HubSpot do not run locally or on a preview
+deployment no matter what you set, because `lib/posthog-consent.ts` and `lib/hubspot.ts` also
+require `NEXT_PUBLIC_VERCEL_ENV` to be
+`production` and only Vercel sets that. The CookieYes banner does show wherever
+`NEXT_PUBLIC_COOKIEYES_ID` is set. Request tracking is gated the
 same way, on the server-side `VERCEL_ENV`, so nothing is sent locally or from a preview and no key
 is needed for either. See [Analytics](INTERNALS.md#analytics).
 
@@ -145,20 +148,20 @@ proves the render. Type checking passes on a page that serves literal `:::` or
 
 ## Layout
 
-| Path                    | Purpose                                                    |
-| ----------------------- | ---------------------------------------------------------- |
-| `content/docs/`         | MDX pages and the `meta.json` files that order the sidebar |
-| `content/partials/`     | Reusable `_`-prefixed fragments, included into pages       |
-| `content/glossary/`     | Glossary terms for `<Term>` (hand-written)                 |
-| `content/vars.json`     | Global variables                                           |
-| `app/(docs)/[...slug]/` | Docs route                                                 |
-| `components/mdx.tsx`    | The MDX component registry                                 |
-| `app/preview/`          | Static JSON behind the hover link previews                 |
-| `components/widgets/`   | The four interactive widgets, each used by one page        |
-| `lib/source.ts`         | Fumadocs source adapter                                    |
-| `proxy.ts`              | PostHog tracking for markdown and `llms*.txt` fetches      |
-| `source.config.ts`      | Fumadocs MDX config: the two collections                   |
-| `lib/page-schema.ts`    | The frontmatter schema every page must satisfy             |
+| Path                    | Purpose                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| `content/docs/`         | MDX pages and the `meta.json` files that order the sidebar  |
+| `content/partials/`     | Reusable `_`-prefixed fragments, included into pages        |
+| `content/glossary/`     | Glossary terms for `<Term>` (hand-written)                  |
+| `content/vars.json`     | Global variables                                            |
+| `app/(docs)/[...slug]/` | Docs route                                                  |
+| `components/mdx.tsx`    | The MDX component registry                                  |
+| `app/preview/`          | Static JSON behind the hover link previews                  |
+| `components/widgets/`   | The four interactive widgets, each used by one page         |
+| `lib/source.ts`         | Fumadocs source adapter                                     |
+| `proxy.ts`              | `Accept: text/markdown` negotiation; PostHog fetch tracking |
+| `source.config.ts`      | Fumadocs MDX config: the two collections                    |
+| `lib/page-schema.ts`    | The frontmatter schema every page must satisfy              |
 
 ## Write a page
 

@@ -28,7 +28,7 @@ Arbitrum Nova and Arbitrum Sepolia started as Nitro chains, so they don't have c
 
 ## Required artifacts
 
-- Latest Docker Image: <code>offchainlabs/arb-node:v1.4.6-551a39b3</code>
+- Latest Docker Image: <code>offchainlabs/arb-node:v1.4.7-dd4595f8</code>
 - Latest classic snapshot for Arbitrum One: [<Var name="arbOneClassicArchiveSnapshot" />](https://snapshot.arbitrum.foundation/arb1/classic-archive.tar)
 
 ## Required parameters
@@ -49,7 +49,7 @@ Arbitrum Nova and Arbitrum Sepolia started as Nitro chains, so they don't have c
 - Here is an example of how to run a classic archive node for Arbitrum One (only needed for archive requests on pre-Nitro blocks, so you'll probably want to enable the archive mode in your Nitro node as well):
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.6-551a39b3 --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
+docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.7-dd4595f8 --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
 ```
 
 ## Note on permissions
