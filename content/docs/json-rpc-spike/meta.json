@@ -1,0 +1,28 @@
+{
+  "title": "JSON-RPC reference",
+  "icon": "Braces",
+  "description": "The JSON-RPC methods that Arbitrum adds, generated from the Nitro source.",
+  "root": true,
+  "pages": [
+    "---arb_---",
+    "arb_getRawBlockMetadata",
+    "arb_checkPublisherHealth",
+    "---arbdebug_---",
+    "arbdebug_pricingModel",
+    "arbdebug_timeoutQueueHistory",
+    "arbdebug_timeoutQueue",
+    "---eth_---",
+    "eth_sendRawTransactionSync",
+    "eth_sendRawTransactionConditional",
+    "---daprovider_---",
+    "daprovider_store",
+    "daprovider_startChunkedStore",
+    "daprovider_sendChunk",
+    "daprovider_commitChunkedStore",
+    "---das_---",
+    "das_startChunkedStore",
+    "das_sendChunk",
+    "das_commitChunkedStore",
+    "das_healthCheck"
+  ]
+}

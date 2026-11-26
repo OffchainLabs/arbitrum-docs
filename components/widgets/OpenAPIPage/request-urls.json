@@ -1,0 +1,17 @@
+{
+  "arb_getRawBlockMetadata": "https://arb1.arbitrum.io/rpc",
+  "arb_checkPublisherHealth": "https://arb1.arbitrum.io/rpc",
+  "arbdebug_pricingModel": "https://arb1.arbitrum.io/rpc",
+  "arbdebug_timeoutQueueHistory": "$NITRO_RPC_URL",
+  "arbdebug_timeoutQueue": "https://arb1.arbitrum.io/rpc",
+  "eth_sendRawTransactionSync": "$NITRO_RPC_URL",
+  "eth_sendRawTransactionConditional": "$NITRO_RPC_URL",
+  "daprovider_store": "$DA_SERVER_URL",
+  "daprovider_startChunkedStore": "$DA_SERVER_URL",
+  "daprovider_sendChunk": "$DA_SERVER_URL",
+  "daprovider_commitChunkedStore": "$DA_SERVER_URL",
+  "das_startChunkedStore": "$DA_SERVER_URL",
+  "das_sendChunk": "$DA_SERVER_URL",
+  "das_commitChunkedStore": "$DA_SERVER_URL",
+  "das_healthCheck": "$DA_SERVER_URL"
+}

@@ -2,6 +2,7 @@ import { docs } from 'collections/dynamic';
 import { loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 
+import { openapiPageMarkdown } from './openapi';
 import { docsContentRoute, docsImageRoute, docsPreviewRoute, docsRoute } from './shared';
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
@@ -53,8 +54,11 @@ export function getPagePreviewUrl(page: (typeof source)['$inferPage']) {
 
 export async function getLLMText(page: (typeof source)['$inferPage']) {
   const processed = await page.data.getText('processed');
+  const preload = page.data._openapi?.preload;
+  const schemaId = Array.isArray(preload) && typeof preload[0] === 'string' ? preload[0] : '';
+  const api = schemaId ? await openapiPageMarkdown(schemaId, page.slugs.at(-1) ?? '') : '';
 
   return `# ${page.data.title} (${page.url})
 
-${processed}`;
+${processed}${api}`;
 }
