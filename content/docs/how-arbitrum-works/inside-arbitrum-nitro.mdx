@@ -326,11 +326,11 @@ Some Arbitrum nodes will choose to act as _validators_. This means they monitor 
 
 Not all nodes will choose to do this. Because the rollup protocol doesn't decide what the chain will do but merely confirms the correct behavior, which is fully determined by the inbox messages, a node can ignore the rollup protocol and compute the correct behavior itself. For more on what such nodes might do, see the Full Nodes section.
 
-<Term id="offchain-labs">Offchain Labs</Term> provides open source validator software, including a pre-built Docker image.
+<Term id="offchain">Offchain</Term> provides open source validator software, including a pre-built Docker image.
 
 Every validator can choose its own approach, but we expect validators to follow three common strategies:
 
-- The _<Term id="active-validator">active validator</Term>_ strategy tries to advance the state of the chain by proposing new assertions. An active validator is always staked, since creating an assertion requires staking. A chain really only needs one honest active validator; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain Labs runs an active validator.
+- The _<Term id="active-validator">active validator</Term>_ strategy tries to advance the state of the chain by proposing new assertions. An active validator is always staked, since creating an assertion requires staking. A chain really only needs one honest active validator; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain runs an active validator.
 - The _<Term id="defensive-validator">defensive validator</Term>_ strategy watches the rollup protocol operate. If only correct assertions are proposed, this strategy doesn't stake. But if an incorrect assertion is proposed, this strategy intervenes by posting a correct assertion or staking on a correct assertion posted by another party. This strategy avoids staking when things are going well, but if someone is dishonest, it stakes in order to defend the correct outcome.
 - The _watchtower validator_ strategy never stakes. It watches the rollup protocol and, if an incorrect assertion is proposed, raises the alarm (by whatever means it chooses) so others can intervene. This strategy assumes that other parties willing to stake will intervene to take some of the dishonest proposer's stake, and that this can occur within the challenge period. (In practice, this will allow several days for a response.)
 
@@ -366,7 +366,7 @@ The Sequencer is a specially designated full node granted limited power to contr
 
 Clients interact with the Sequencer exactly the same way they would with any full node, for example, by giving their wallet software a network URL that points to the Sequencer.
 
-Currently, the Sequencer on the Arbitrum One and Arbitrum Nova chains is run by Offchain Labs.
+Currently, the Sequencer on the Arbitrum One and Arbitrum Nova chains is run by Offchain.
 
 ### Instant confirmation
 
@@ -401,7 +401,7 @@ A malicious Sequencer, on the other hand, could cause some pain. If it refuses t
 
 PGA does not widen that power. The mempool stays private, and PGA gives nobody—including bidders—the right to view or reorder another user's transactions, so Arbitrum's protections against harmful MEV are unchanged.
 
-On Arbitrum One, Offchain Labs currently runs a Sequencer, which is well-behaved—we promise! This will be useful, but it's not decentralized. Over time, we'll switch to decentralized sequencing, as described below.
+On Arbitrum One, Offchain currently runs a Sequencer, which is well-behaved—we promise! This will be useful, but it's not decentralized. Over time, we'll switch to decentralized sequencing, as described below.
 
 Because the Sequencer will be run by a trusted party at first and later decentralized, we haven't built in a mechanism to directly punish a misbehaving Sequencer: we're asking users to trust the centralized Sequencer at first, until we switch to decentralized sequencing later.
 
@@ -411,9 +411,9 @@ The Sequencer still controls transaction ordering, but the rule it follows is a 
 
 To configure PGA on your Arbitrum chain, see [PGA for Arbitrum chains](/launch-arbitrum-chain/chain-config/sequencer/pga).
 
-An ordering policy has limits worth stating plainly. PGA allocates ordering through an open, per-transaction fee competition layered on top of the existing Sequencer. It is **not** a decentralized or "fair-ordering" Sequencer, and it does not, by itself, remove trust in the Sequencer operator. The Sequencer on Arbitrum One is still a single node run by Offchain Labs.
+An ordering policy has limits worth stating plainly. PGA allocates ordering through an open, per-transaction fee competition layered on top of the existing Sequencer. It is **not** a decentralized or "fair-ordering" Sequencer, and it does not, by itself, remove trust in the Sequencer operator. The Sequencer on Arbitrum One is still a single node run by Offchain.
 
-Truly decentralized sequencing—replacing the single Sequencer with a committee that establishes ordering as long as a supermajority is honest—remains an active research and engineering direction rather than a shipped feature. Research by a team at Cornell Tech, including Offchain Labs co-founder Steven Goldfeder, produced an early decentralized fair-ordering algorithm, and ideas in that lineage continue to inform the longer-term design. An ordering policy sits above this layer: decentralized sequencing changes who enforces the ordering rules, not the rules themselves.
+Truly decentralized sequencing—replacing the single Sequencer with a committee that establishes ordering as long as a supermajority is honest—remains an active research and engineering direction rather than a shipped feature. Research by a team at Cornell Tech, including Offchain co-founder Steven Goldfeder, produced an early decentralized fair-ordering algorithm, and ideas in that lineage continue to inform the longer-term design. An ordering policy sits above this layer: decentralized sequencing changes who enforces the ordering rules, not the rules themselves.
 
 ## Bridging
 

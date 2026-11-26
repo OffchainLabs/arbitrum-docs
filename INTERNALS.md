@@ -915,7 +915,7 @@ flight payload. `scripts/static-docs-http.test.ts` asserts this against a runnin
 ## Analytics
 
 Five paths send events to one PostHog project. They share only the project token and the ingest
-host. A sixth integration, HubSpot tracking, reports to the Offchain Labs HubSpot portal.
+host. A sixth integration, HubSpot tracking, reports to the Offchain HubSpot portal.
 
 | Path                                   | Where                                                   | Runs                                 |
 | -------------------------------------- | ------------------------------------------------------- | ------------------------------------ |
@@ -956,7 +956,7 @@ repaints it in dark mode from the `--color-fd-*` tokens.
 ### PostHog
 
 `lib/posthog-consent.ts`, connected by `components/analytics/posthog-analytics.tsx`, is the same
-consent integration Offchain Labs runs on its other sites. Keep a change to the consent rules in
+consent integration Offchain runs on its other sites. Keep a change to the consent rules in
 step with them. It starts only when
 `NEXT_PUBLIC_VERCEL_ENV` is `production` and `NEXT_PUBLIC_POSTHOG_KEY` is set.
 
@@ -1013,7 +1013,7 @@ dropped.
 ### HubSpot
 
 `lib/hubspot.ts`, connected by `components/analytics/hubspot-tracking.tsx`, inserts the HubSpot
-loader (`js.hs-scripts.com/50627473.js?businessUnitId=4314583`, the Offchain Labs portal and the
+loader (`js.hs-scripts.com/50627473.js?businessUnitId=4314583`, the Offchain portal and the
 Arbitrum business unit, as arbitrum.io loads it) only once CookieYes reports analytics consent,
 and only in production. It is never a static tag or a React `<Script>`: React can hoist an async
 script ahead of CookieYes. Withdrawal pushes `doNotTrack` and `setHubSpotConsent`; HubSpot's own

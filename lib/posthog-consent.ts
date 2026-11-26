@@ -474,7 +474,7 @@ export function connectPosthogConsent(apiKey: string): () => void {
       // other campaign parameters (gclid, fbclid, msclkid and the rest) are read from the URL
       // at init, so a delayed start sends them only on an immediate landing, and then only
       // with consent (see `stripCookielessProperties`). Deliberate, to stay in step with
-      // the other Offchain Labs sites; the real-SDK test "restores UTMs but not ad click IDs" locks
+      // the other Offchain sites; the real-SDK test "restores UTMs but not ad click IDs" locks
       // it in.
       campaigns: Object.fromEntries(
         [...url.searchParams].filter(([key]) => key.startsWith('utm_')),

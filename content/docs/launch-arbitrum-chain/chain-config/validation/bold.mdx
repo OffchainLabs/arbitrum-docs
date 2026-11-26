@@ -31,7 +31,7 @@ BoLD brings new security benefits to Arbitrum chains, regardless of whether thei
 
 <Callout type="warn">
 
-It is strongly recommended that existing and prospective Arbitrum chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and <Term id="challenge">challenge</Term> the state of your chain. The risks are summarized below. Rigorous testing and research has been poured into the parameters chosen for Arbitrum One and so we cannot formally support or endorse use of permissionless Arbitrum BoLD in other configurations. Please note that when a chain upgrades to use Arbitrum BoLD, any withdrawals (to the parent chain) will be delayed by an additional <Term id="challenge-period">Challenge Period</Term>. The default challenge period is <Var name="arbOneDisputeWindowDays" /> days. We recommend informing the <Term id="offchain-labs">Offchain Labs</Term> teams of your timelines and intent to upgrade so adequate warning can be provided to your chain's users on the [Arbitrum Bridge](https://bridge.arbitrum.io/).
+It is strongly recommended that existing and prospective Arbitrum chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and <Term id="challenge">challenge</Term> the state of your chain. The risks are summarized below. Rigorous testing and research has been poured into the parameters chosen for Arbitrum One and so we cannot formally support or endorse use of permissionless Arbitrum BoLD in other configurations. Please note that when a chain upgrades to use Arbitrum BoLD, any withdrawals (to the parent chain) will be delayed by an additional <Term id="challenge-period">Challenge Period</Term>. The default challenge period is <Var name="arbOneDisputeWindowDays" /> days. We recommend informing the <Term id="offchain">Offchain</Term> teams of your timelines and intent to upgrade so adequate warning can be provided to your chain's users on the [Arbitrum Bridge](https://bridge.arbitrum.io/).
 
 </Callout>
 
@@ -51,7 +51,7 @@ Disputes on a BoLD-enabled chain are resolved in a round-robin style format wher
 
 #### Being on the latest version of Arbitrum technology
 
-Adopting Arbitrum BoLD for your Arbitrum chain will require upgrading the Nitro node software and deploying a new set of contracts on your parent chain. While not specifically related to Arbitrum BoLD, it is always strongly recommended that Arbitrum <Term id="chain-owner">chain owners</Term> upgrade and keep their chain on the latest stable releases of both Nitro node software and the relevant onchain contracts. This is critical to ensure your Arbitrum chain benefits from the latest security improvements and features that the Offchain Labs team is constantly churning out.
+Adopting Arbitrum BoLD for your Arbitrum chain will require upgrading the Nitro node software and deploying a new set of contracts on your parent chain. While not specifically related to Arbitrum BoLD, it is always strongly recommended that Arbitrum <Term id="chain-owner">chain owners</Term> upgrade and keep their chain on the latest stable releases of both Nitro node software and the relevant onchain contracts. This is critical to ensure your Arbitrum chain benefits from the latest security improvements and features that the Offchain team is constantly churning out.
 
 #### Secured by interactive fraud-proofs
 
@@ -93,7 +93,7 @@ If the bond sizes are set too low, an adversary can cheaply create a challenge a
 
 ### Conclusion for Arbitrum chains considering BoLD Permissionless Validation
 
-Due to the uniquely different tokenomics, sizes, and varying types of Arbitrum chains deployed (or in active development) today, <Term id="offchain-labs">Offchain Labs</Term> does not provide a "one-size-fits-all" recommendation for how best to safely set up and enable permissionless validation for Arbitrum chains. Instead, we recommend teams adopt Arbitrum BoLD but keep validation permissioned.
+Due to the uniquely different tokenomics, sizes, and varying types of Arbitrum chains deployed (or in active development) today, <Term id="offchain">Offchain</Term> does not provide a "one-size-fits-all" recommendation for how best to safely set up and enable permissionless validation for Arbitrum chains. Instead, we recommend teams adopt Arbitrum BoLD but keep validation permissioned.
 
 Should Arbitrum chain teams strongly desire to adopt Arbitrum BoLD in permissionless mode, we do not endorse using configurations that differ from those on [Arbitrum One](https://github.com/OffchainLabs/nitro-contracts/blob/bold-merge/scripts/files/configs/arb1.ts). We especially do not recommend teams use custom **ERC-20** tokens as the bonding asset and/or with low bond minimums. If your team would like to have permissionless validation for your Arbitrum chain, please reach out to us [via this form](https://docs.google.com/forms/d/e/1FAIpQLSe5YWxFbJ8DgWcDNbIW2YYuTRmegtx2FHObym00_sOt0kq4wA/viewform) so that we can schedule some time to understand your needs better.
 

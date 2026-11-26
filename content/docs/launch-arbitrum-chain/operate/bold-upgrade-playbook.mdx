@@ -66,7 +66,7 @@ What `perform` actually requires is narrower than the [base guide](/launch-arbit
 
 <Callout type="warn">
 
-Confirm this sequence with the Offchain Labs team before executing it on a production chain. The reasoning above is drawn from the contract source, but a mainnet BoLD upgrade is a high-consequence, one-way operation, and your chain may use customized contracts for which it does not hold.
+Confirm this sequence with the Offchain team before executing it on a production chain. The reasoning above is drawn from the contract source, but a mainnet BoLD upgrade is a high-consequence, one-way operation, and your chain may use customized contracts for which it does not hold.
 
 </Callout>
 
@@ -193,7 +193,7 @@ On Arbitrum One and Arbitrum Nova the `stakeToken` is **WETH**, the **ERC-20** w
 
 Before you execute the upgrade:
 
-- Confirm the `stakeToken` address in your upgrade configuration is a compliant **ERC-20** on the parent chain. **WETH** is the recommended choice, and Offchain Labs does not recommend custom tokens as the bond asset.
+- Confirm the `stakeToken` address in your upgrade configuration is a compliant **ERC-20** on the parent chain. **WETH** is the recommended choice, and Offchain does not recommend custom tokens as the bond asset.
 - Ensure each validator wallet holds enough of that token to meet `stakeAmt`, in addition to parent-chain native currency for gas. With the default auto-deposit flags and a **WETH**-compatible `stakeToken`, native currency alone is enough — the node wraps and approves it automatically.
 - Plan for first-time bonding on the new contract. Validators bond only once, but existing bonds do not carry over from the old Rollup contract, so every validator must bond again after the upgrade.
 

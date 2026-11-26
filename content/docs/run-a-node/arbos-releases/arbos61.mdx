@@ -60,9 +60,9 @@ This change is limited to Stylus. The 24 KB limit for Solidity contracts is deli
 
 **This applies only to Arbitrum One and Nova. It does not affect any other Arbitrum chain: the BaseFeeManager delegation is scoped to those two chains, and chain owners elsewhere keep full control of their own minimum base fee.**
 
-ArbOS 61 grants Offchain Labs — acting as a service provider to the Arbitrum Foundation, on behalf of and for the benefit of the ArbitrumDAO — the ability to modify the `minimumL2BaseFee` and `L2BaseFee` values on Arbitrum One and Nova to any value between 0.01 gwei and 0.10 gwei, inclusive.
+ArbOS 61 grants Offchain — acting as a service provider to the Arbitrum Foundation, on behalf of and for the benefit of the ArbitrumDAO — the ability to modify the `minimumL2BaseFee` and `L2BaseFee` values on Arbitrum One and Nova to any value between 0.01 gwei and 0.10 gwei, inclusive.
 
-The mechanism is a newly deployed `BaseFeeManager` contract containing an access list. The ArbitrumDAO uses that access list to designate Offchain Labs as the party permitted to make these calls, in the same pattern as the `ResourceConstraintManager` contract deployed alongside ArbOS 51 Dia.
+The mechanism is a newly deployed `BaseFeeManager` contract containing an access list. The ArbitrumDAO uses that access list to designate Offchain as the party permitted to make these calls, in the same pattern as the `ResourceConstraintManager` contract deployed alongside ArbOS 51 Dia.
 
 Terms and safeguards:
 
@@ -82,7 +82,7 @@ ArbOS 61 introduces a mechanism for an Arbitrum chain to collect tips as priorit
 
 Turning the feature on takes two steps: enabling tip collection itself, and updating the sequencer's sorting logic to take the `PriorityFee` field into account.
 
-The ArbOS 61 AIP grants Offchain Labs the authority to toggle tip collection on Arbitrum One and Nova. That toggle is not flipped at ArbOS 61 activation — enabling it on Arbitrum One is bundled with the separate Priority Gas Auctions (PGA) and Fast Feed vote.
+The ArbOS 61 AIP grants Offchain the authority to toggle tip collection on Arbitrum One and Nova. That toggle is not flipped at ArbOS 61 activation — enabling it on Arbitrum One is bundled with the separate Priority Gas Auctions (PGA) and Fast Feed vote.
 
 For configuration details, see the [Priority fees](/launch-arbitrum-chain/chain-config/costs/priority-fees) section.
 
@@ -121,7 +121,7 @@ Contracts that rely on multi-value WASM can no longer be activated or reactivate
 
 **This applies to every chain that upgrades to ArbOS 61.**
 
-During testing of ArbOS 60 on Arbitrum Sepolia, an ecosystem partner reported, and Offchain Labs subsequently confirmed, that two interacting bugs in the gas refund logic caused small, unintended changes to gas refund behavior.
+During testing of ArbOS 60 on Arbitrum Sepolia, an ecosystem partner reported, and Offchain subsequently confirmed, that two interacting bugs in the gas refund logic caused small, unintended changes to gas refund behavior.
 
 The required fixes modify the State Transition Function and can only be applied through a new ArbOS version. The corrected release is therefore versioned as ArbOS 61.
 

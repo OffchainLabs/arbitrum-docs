@@ -72,7 +72,7 @@ export function createHubspotTracking() {
       const script = document.createElement('script');
       script.id = 'hs-script-loader';
       script.async = true;
-      // The Offchain Labs portal and the Arbitrum business unit, as arbitrum.io loads it.
+      // The Offchain portal and the Arbitrum business unit, as arbitrum.io loads it.
       script.src = 'https://js.hs-scripts.com/50627473.js?businessUnitId=4314583';
       document.head.appendChild(script);
     }
