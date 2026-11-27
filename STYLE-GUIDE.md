@@ -164,4 +164,4 @@ so leave both spellings alone until it is decided.
   diagrams follow the `arbitrum-brand-svg-diagrams` skill under `.claude/skills/`, which covers the
   palette, asset location, and an Excalidraw editing workflow.
 
-This file is the live copy of the Offchain Labs pattern guide.
+This file is the live copy of the Offchain pattern guide.

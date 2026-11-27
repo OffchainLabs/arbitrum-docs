@@ -106,7 +106,7 @@ export function Footer() {
       </div>
 
       <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-white/20 px-4 py-5 text-white/50">
-        <span className="normal-case">© {new Date().getFullYear()} Offchain Labs</span>
+        <span className="normal-case">© {new Date().getFullYear()} Offchain</span>
         <span className="flex gap-6">
           <FooterLink href="https://arbitrum.io/privacy">Privacy Policy</FooterLink>
           <FooterLink href="https://arbitrum.io/tos">Terms of Service</FooterLink>

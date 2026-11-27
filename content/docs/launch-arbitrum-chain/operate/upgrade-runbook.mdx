@@ -307,7 +307,7 @@ The ArbOS version cannot be lowered. Recovery means rolling forward:
 
 1. **Restore node availability first.** If nodes are failing to start, resolve that with the WASM root troubleshooting above. Getting nodes running on the new ArbOS version is almost always faster than any attempt to unwind.
 2. **Don't downgrade Nitro below the active ArbOS version.** A node too old for the active ArbOS version stops with a fatal out-of-date error, so downgrading to "get back to a working state" makes the outage worse.
-3. **Escalate rather than improvise.** If the chain is producing blocks but validation is broken, the chain is still live and withdrawals are the pressure point. Contact Offchain Labs support before attempting contract-level changes.
+3. **Escalate rather than improvise.** If the chain is producing blocks but validation is broken, the chain is still live and withdrawals are the pressure point. Contact Offchain support before attempting contract-level changes.
 
 <Callout type="warn" title="Reverting contracts after assertions exist">
 

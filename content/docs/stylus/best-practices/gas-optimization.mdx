@@ -26,7 +26,7 @@ _Figure: Stylus WASM executes natively, avoiding EVM interpretation overhead._
 | Keccak256 hashing                     | 30 gas + 6 gas/word     | native `keccak` hostio | Varies (small per byte) |
 | Storage operations (`SLOAD`/`SSTORE`) | EVM cost                | Same EVM cost          | None (1x)               |
 
-The EVM-side costs are fixed protocol prices: `ecrecover` = 3,000 gas, `MLOAD`/`MSTORE` = 3 gas/word, and `KECCAK256` = 30 gas + 6 gas per 32-byte word. The Stylus-side figures and the multipliers are directional — drawn from Offchain Labs' Stylus benchmarks — and vary with workload, input size, and ArbOS version. Benchmark your own contract to get numbers you can rely on. Note that Keccak256 is already cheap per byte on the EVM, so hashing is not a headline saving; Stylus' large wins come from compute-heavy logic, memory, and native cryptography.
+The EVM-side costs are fixed protocol prices: `ecrecover` = 3,000 gas, `MLOAD`/`MSTORE` = 3 gas/word, and `KECCAK256` = 30 gas + 6 gas per 32-byte word. The Stylus-side figures and the multipliers are directional — drawn from Offchain's Stylus benchmarks — and vary with workload, input size, and ArbOS version. Benchmark your own contract to get numbers you can rely on. Note that Keccak256 is already cheap per byte on the EVM, so hashing is not a headline saving; Stylus' large wins come from compute-heavy logic, memory, and native cryptography.
 
 **Key insight**: [Storage operations](/stylus/advanced/hostio-exports#storage-operations) map to the same underlying EVM `SLOAD`/`SSTORE` costs in Stylus as in Solidity, so they are not where Stylus saves gas. Optimize by reducing storage access and maximizing compute efficiency.
 

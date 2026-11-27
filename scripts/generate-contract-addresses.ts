@@ -52,7 +52,16 @@ async function main(): Promise<void> {
   const check = isCheckMode();
 
   const { chains } = data;
-  const networks = Object.fromEntries(chains.map((c) => [c.key, getArbitrumNetwork(c.childId)]));
+  const networks = Object.fromEntries(
+    chains.map((c) => {
+      const network = getArbitrumNetwork(c.childId);
+      const rollup = data.rollupOverride[c.key];
+      return [
+        c.key,
+        rollup ? { ...network, ethBridge: { ...network.ethBridge, rollup } } : network,
+      ];
+    }),
+  );
   const content = buildContent({ chains, networks, data });
 
   try {

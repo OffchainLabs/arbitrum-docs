@@ -110,6 +110,24 @@ export function formatMgas(gasPerSecond: number): string {
   return Number.isInteger(mgas) ? String(mgas) : mgas.toFixed(1);
 }
 
+/**
+ * A window in seconds, followed by a readable duration once it reaches a minute: `9` renders as
+ * `9 s`, `329` as `329 s (~5 min)`, `13485` as `13,485 s (~3.7 h)`, `86400` as `86,400 s (1 day)`.
+ * The `~` marks a rounded value.
+ */
+export function formatWindow(seconds: number): string {
+  const exact = `${thousands.format(seconds)} s`;
+  const approx = (value: number, unit: string, decimals: number): string => {
+    const rounded = Number(value.toFixed(decimals));
+    return `(${rounded === value ? '' : '~'}${rounded} ${unit})`;
+  };
+  if (seconds < 60) return exact;
+  if (seconds < 3_600) return `${exact} ${approx(seconds / 60, 'min', 0)}`;
+  if (seconds < 86_400) return `${exact} ${approx(seconds / 3_600, 'h', 1)}`;
+  const days = seconds / 86_400;
+  return `${exact} ${approx(days, days === 1 ? 'day' : 'days', 1)}`;
+}
+
 function renderChain(chain: Chain, targets: ChainGasTargets): string {
   if ('speedLimit' in targets) {
     return (
@@ -118,11 +136,9 @@ function renderChain(chain: Chain, targets: ChainGasTargets): string {
     );
   }
   const rows = targets.constraints.map(
-    ([target, window]) => `| **${formatMgas(target)}** | ${thousands.format(window)} |`,
+    ([target, window]) => `| ${formatWindow(window)} | **${formatMgas(target)}** |`,
   );
-  return ['| Gas target (Mgas/s) | Adjustment window (seconds) |', '| --- | --- |', ...rows].join(
-    '\n',
-  );
+  return ['| Adjustment window | Gas target (Mgas/s) |', '| --- | --- |', ...rows].join('\n');
 }
 
 /**

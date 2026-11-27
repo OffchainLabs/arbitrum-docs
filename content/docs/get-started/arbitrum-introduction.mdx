@@ -31,7 +31,7 @@ Rather than weaken security or decentralization, the Ethereum roadmap moves exec
 
 A Rollup orders many transactions into a <Term id="batch">batch</Term>, executes them on its own infrastructure, and posts compressed data and a state commitment back to Ethereum. You inherit Ethereum's security, throughput rises by orders of magnitude, and fees drop.
 
-To go deeper, read [How Arbitrum works](/how-arbitrum-works/inside-arbitrum-nitro).
+To go deeper, read [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro).
 
 ## Why does Ethereum process so few transactions per second?
 
@@ -74,7 +74,7 @@ To learn about the validator types, read [Run a validator node](/run-a-node/more
 
 ## How does a fraud proof work?
 
-**In short:** two validators disagree about an executed transaction. Ethereum holds the posted data, so only one of them can be telling the truth.
+**In short:** two validators disagree about an executed transaction. Ethereum holds the posted data, so at most one of them can be telling the truth.
 
 Re-executing every transaction on Ethereum would cost too much. Instead, each party bisects its history of commitments until both arrive at the single instruction they disagree about.
 
@@ -108,7 +108,7 @@ The low fees come from five other things:
 4. **No global re-execution.** Ethereum nodes do not re-execute Arbitrum transactions.
 5. **Single-sequencer execution.** One sequencer is active at a time, so computation runs on one machine instead of thousands.
 
-To go deeper, read [How Arbitrum works](/how-arbitrum-works/inside-arbitrum-nitro).
+To go deeper, read [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro).
 
 ## Is using Arbitrum the same as using Ethereum?
 
@@ -116,7 +116,7 @@ To go deeper, read [How Arbitrum works](/how-arbitrum-works/inside-arbitrum-nitr
 
 Layer 2 protocols optimize for different goals. Arbitrum put Ethereum compatibility first, so you can use your existing Ethereum wallets, and you can build and deploy contracts with your existing Ethereum libraries and tooling.
 
-Arbitrum reaches that compatibility by running a fork of [Geth](/how-arbitrum-works/reference/geth), the most widely used Ethereum implementation, modified to work as a trustless child chain. Most of the code that runs on Arbitrum is the same code that runs on Ethereum. Offchain Labs calls this approach <Term id="arbitrum-nitro">Nitro</Term>, and you can read the [Nitro codebase](https://github.com/OffchainLabs/nitro).
+Arbitrum reaches that compatibility by running a fork of [Geth](/how-arbitrum-works/reference/geth), the most widely used Ethereum implementation, modified to work as a trustless child chain. Most of the code that runs on Arbitrum is the same code that runs on Ethereum. Offchain calls this approach <Term id="arbitrum-nitro">Nitro</Term>, and you can read the [Nitro codebase](https://github.com/OffchainLabs/nitro).
 
 For the differences that remain, read the [Comparison overview](/arbitrum-essentials/arbitrum-vs-ethereum/comparison-overview).
 
@@ -134,7 +134,7 @@ That decentralization has a price, and not every application needs to pay it. Wh
 
 ## What is AnyTrust?
 
-AnyTrust is a different data availability option. It works like an Arbitrum Rollup, which posts data in batches to Ethereum, with one change: a small committee keeps the data available instead. Everything else stays the same.
+AnyTrust changes where the data lives. An Arbitrum Rollup posts its batch data to Ethereum. An AnyTrust chain works the same way, except that a small committee keeps the data available instead. Everything else stays the same.
 
 Because the data stays offchain in the normal case, an AnyTrust chain charges much lower fees. In exchange, AnyTrust does not offer the same decentralization, trustlessness, and permissionless security guarantees as a Rollup.
 
@@ -151,8 +151,8 @@ Many. Running multiple chains in parallel is a core advantage of offchain scalin
 Here is a snapshot of the chains running today:
 
 - On Ethereum, as layer 2:
-  - [Arbitrum One](https://portal.arbitrum.io/), an <Term id="arbitrum-rollup-chain">Arbitrum Rollup chain</Term> that the [Arbitrum Foundation](https://arbitrum.foundation) operates
-  - [Arbitrum Nova](https://nova.arbitrum.io/), an <Term id="arbitrum-anytrust-chain">AnyTrust chain</Term> that the [Arbitrum Foundation](https://arbitrum.foundation) operates
+  - [Arbitrum One](/arbitrum-essentials/public-chains#arbitrum-one), an <Term id="arbitrum-rollup-chain">Arbitrum Rollup chain</Term> that the [Arbitrum Foundation](https://arbitrum.foundation) operates
+  - [Arbitrum Nova](/arbitrum-essentials/public-chains#arbitrum-nova), an <Term id="arbitrum-anytrust-chain">AnyTrust chain</Term> that the [Arbitrum Foundation](https://arbitrum.foundation) operates
   - Arbitrum chains that developers launch and operate themselves
 - On an EVM layer 2, as <Term id="layer-3-l3">layer 3</Term>:
   - Arbitrum chains on Arbitrum One and Arbitrum Nova

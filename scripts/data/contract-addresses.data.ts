@@ -30,11 +30,25 @@ export const chains: ReadonlyArray<Chain<ChainKey>> = [
   { key: 'sepolia', label: 'Arbitrum Sepolia', childId: 421614, parentId: 11155111 },
 ];
 
-/** Core proxy admin, deployed on the parent chain (L1). */
+/**
+ * Rollup addresses that replace a stale `@arbitrum/sdk` value. `@arbitrum/sdk` 4.1.0 still lists
+ * the pre-BoLD Arbitrum Sepolia rollup `0xd80810638dbDF9081b72C1B33c65375e807281C8`, which is
+ * paused; the Sequencer Inbox and the Bridge both point to the BoLD rollup below. Delete an entry
+ * once the SDK ships the same address.
+ */
+export const rollupOverride: AddressesByChain<ChainKey> = {
+  sepolia: '0x042B2E6C5E99d4c521bd49beeD5E99651D9B0Cf4',
+};
+
+/**
+ * Core proxy admin, deployed on the parent chain (L1): the EIP-1967 admin of the Bridge, both
+ * inboxes, the Outbox, and the ChallengeManager. The rollup proxy is administered by the
+ * UpgradeExecutor directly, not by this contract.
+ */
 export const coreProxyAdmin: Record<ChainKey, string> = {
   arbOne: '0x554723262467F125Ac9e1cDFa9Ce15cc53822dbD',
   nova: '0x71D78dC7cCC0e037e12de1E50f5470903ce37148',
-  sepolia: '0x1ed74a4e4F4C42b86A7002e9951e98DBcC890686',
+  sepolia: '0xdd63bCAA89d7c3199Ef220c1Dd59C49F821078B8',
 };
 
 /** Fraud-proof contracts, deployed on the parent chain (L1). Key order is row order. */

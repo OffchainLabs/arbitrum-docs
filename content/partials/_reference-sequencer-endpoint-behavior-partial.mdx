@@ -19,7 +19,7 @@ Arbitrum One has two public endpoints with different roles. The public RPC URL i
 
 ### Latency and timeout behavior
 
-Under normal load, the sequencer endpoint accepts a transaction in less than a second. The sequencer puts each submission in a bounded in-memory queue. By default, the queue holds 1,024 transactions.
+Under normal load, the sequencer endpoint accepts a transaction in less than a second. The sequencer puts each submission in a bounded in-memory queue. By default, the queue holds up to 1,024 transactions.
 
 The queue timeout is 12 seconds by default. It limits how long a transaction can wait in the queue before the sequencer picks it up or rejects it. The timeout is **not** an end-to-end inclusion latency guarantee. If the sequencer does not pick up the transaction before the timeout, `eth_sendRawTransaction` returns `context deadline exceeded`. In that case, the sequencer did **not** accept the transaction, and you can safely retry it.
 

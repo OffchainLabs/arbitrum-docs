@@ -38,8 +38,8 @@
     },
     {
       "id": "fb5b8842-c55b-4d2a-a738-aedab14d2e3c",
-      "question": "Why am I getting error \"429 Too Many Requests” when using one of Offchain Labs’ Public RPCs?",
-      "answer": "Offchain Labs offers public RPCs for free, but limits requests to prevent denial of service (DoS) attacks. Hitting the rate limit can result from either the frequency of your requests or the resources required to process them. If you are hitting our rate limit, we recommend [running your own node](https://developer.arbitrum.io/node-running/how-tos/running-a-full-node) or [using a third-party node provider](https://developer.arbitrum.io/node-running/node-providers)."
+      "question": "Why am I getting error \"429 Too Many Requests” when using one of Offchain’s Public RPCs?",
+      "answer": "Offchain offers public RPCs for free, but limits requests to prevent denial of service (DoS) attacks. Hitting the rate limit can result from either the frequency of your requests or the resources required to process them. If you are hitting our rate limit, we recommend [running your own node](https://developer.arbitrum.io/node-running/how-tos/running-a-full-node) or [using a third-party node provider](https://developer.arbitrum.io/node-running/node-providers)."
     },
     {
       "id": "863c71b3-89b0-4c20-8301-d5cd2ac31d7c",
