@@ -108,7 +108,7 @@
     "@types/unist": "^3.0.3",
     "eslint": "^10.14.0",
     "jiti": "^2.7.0",
-    "jsdom": "^28.1.0",
+    "jsdom": "^31.0.1",
     "mdast-util-from-markdown": "^2.1.0",
     "mdast-util-frontmatter": "^2.0.1",
     "mdast-util-gfm": "^3.1.0",
