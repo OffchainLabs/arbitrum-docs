@@ -38,7 +38,7 @@
   "sepoliaForceIncludePeriodBlocks": 7200,
   "sepoliaForceIncludePeriodHours": 24,
   "sepoliaBaesStakeEth": 1,
-  "sepoliaGasFloorGwei": "0.2",
+  "sepoliaGasFloorGwei": "0.02",
   "sepoliaBlockGasLimit": "32,000,000",
   "l1SlotTimeSeconds": 12,
   "l2BlockTimeMs": 250,
