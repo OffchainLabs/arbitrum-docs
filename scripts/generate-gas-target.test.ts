@@ -14,6 +14,7 @@ import {
   type GasTargetsSnapshot,
   buildContent,
   formatMgas,
+  formatWindow,
   validateSnapshot,
 } from './lib/gas-target.ts';
 import { assertInertMdx } from './lib/generated-partial.ts';
@@ -44,6 +45,27 @@ describe('formatMgas', () => {
   });
 });
 
+describe('formatWindow', () => {
+  it('renders a window under a minute in seconds only', () => {
+    assert.equal(formatWindow(9), '9 s');
+  });
+
+  it('adds rounded minutes, marked with ~', () => {
+    assert.equal(formatWindow(329), '329 s (~5 min)');
+    assert.equal(formatWindow(2_105), '2,105 s (~35 min)');
+  });
+
+  it('adds hours with one decimal', () => {
+    assert.equal(formatWindow(13_485), '13,485 s (~3.7 h)');
+    assert.equal(formatWindow(7_200), '7,200 s (2 h)');
+  });
+
+  it('adds days, singular for exactly one', () => {
+    assert.equal(formatWindow(86_400), '86,400 s (1 day)');
+    assert.equal(formatWindow(172_800), '172,800 s (2 days)');
+  });
+});
+
 describe('buildContent', () => {
   const content = buildContent(SNAPSHOT, CHAINS);
 
@@ -58,12 +80,15 @@ describe('buildContent', () => {
   it('renders a multi-constraint chain as a table under its own ### heading', () => {
     assert.match(
       content,
-      /### Multi Chain\n\n\| Gas target \(Mgas\/s\) \| Adjustment window \(seconds\) \|\n\| --- \| --- \|\n\| \*\*60\*\* \| 9 \|\n/,
+      /### Multi Chain\n\n\| Adjustment window \| Gas target \(Mgas\/s\) \|\n\| --- \| --- \|\n\| 9 s \| \*\*60\*\* \|\n/,
     );
   });
 
   it('formats a non-round target with one decimal and a window with thousands separators', () => {
-    assert.match(content, /\| \*\*7\.5\*\* \| 2,105 \|\n\| \*\*10\*\* \| 86,400 \|\n/);
+    assert.match(
+      content,
+      /\| 2,105 s \(~35 min\) \| \*\*7\.5\*\* \|\n\| 86,400 s \(1 day\) \| \*\*10\*\* \|\n/,
+    );
   });
 
   it('renders a single-target chain as one sentence', () => {
