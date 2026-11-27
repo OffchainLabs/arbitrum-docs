@@ -22,13 +22,13 @@ Enables archive mode. Under PathDB, archive mode also builds the state history i
 
 ### `--execution.caching.trienode-history`
 
-Sets how many recent blocks of trienode history Nitro retains. `eth_getProof` needs trienode history to prove historical state, as defined above. The default, `-1`, turns trienode history off, and `0` keeps it with no limit. The flag is available from Nitro v3.12.0. Like the state history index, trienode history serves RPC calls only when `--execution.caching.archive` is also set.
+Sets how many recent blocks of trienode history Nitro retains. `eth_getProof` needs trienode history to prove historical state, as defined above. The default, `-1`, or any negative value, turns trienode history off, and `0` keeps it with no limit. The flag is available from Nitro v3.12.0. Like the state history index, trienode history serves RPC calls only when `--execution.caching.archive` is also set.
 
 **Archive mode alone does not let `eth_getProof` read historical state.** Without trienode history, an archive node on PathDB still serves `eth_call`, `eth_getBalance` and `eth_getStorageAt` for old blocks. For those same blocks, `eth_getProof` fails with `historical state … is not available`.
 
-Nitro starts recording trienode history at the startup that turns it on. It does not build trienode history for earlier blocks, so the window you can prove grows from that block onward.
+Nitro starts recording trienode history at the startup that turns it on. It does not build trienode history for earlier blocks, so the window you can prove grows from that block onward. Until Nitro finishes indexing the trienode history, `eth_getProof` fails with `trienode histories haven't been fully indexed yet`.
 
-If you turn trienode history off, let the node process blocks, and then turn it on again, Nitro exits at startup with `gap between state [#…] and trienode history [#…]`. To turn it back on, stop the node, delete the `trienode` folder in the node's ancient directory (`l2chaindata/ancient/trienode` unless you set `--persistent.ancient`), and start the node.
+If you turn trienode history off, let the node process blocks, and then turn it on again, Nitro exits at startup with `gap between state [#…] and trienode history [#…]`. To turn it back on, stop the node, delete the `trienode` folder in the node's ancient directory (`l2chaindata/ancient/trienode` unless you set `--persistent.ancient`), and start the node. This deletes the trienode history recorded before you turned it off, so the window you can prove starts again from that startup.
 
 ### `--execution.caching.pathdb-max-diff-layers`
 
