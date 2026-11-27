@@ -35,7 +35,7 @@
   "novaBlockGasLimit": "32,000,000",
   "sepoliaDisputeWindowBlocks": 20,
   "sepoliaDisputeWindowMinutes": "4.0",
-  "sepoliaForceIncludePeriodBlocks": 5760,
+  "sepoliaForceIncludePeriodBlocks": 7200,
   "sepoliaForceIncludePeriodHours": 24,
   "sepoliaBaesStakeEth": 1,
   "sepoliaGasFloorGwei": "0.2",
